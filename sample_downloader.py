@@ -20,4 +20,3 @@ for pid,url in plist.items():
 			file.write(in_content)
 		with open(outfile, "w") as file:
 			file.write(out_content)
-			

@@ -80,14 +80,28 @@ def factor(formula,pos):
 		while formula[pos].isdigit():
 			value = 10 * value + int(formula[pos])
 			pos += 1
-		res = calcNode()
-		res.content = value
-		return res,pos
+		if formula[pos].isalpha() or formula[pos] == '(':
+			# pattern like "123A"
+			tmp = calcNode()
+			tmp.content = value
+			res = calcNode()
+			res.lch = tmp
+			res.rch,pos = factor(formula,pos)
+			res.operator = mul
+			return res,pos
+		else:
+			res = calcNode()
+			res.content = value
+			return res,pos
 	else:
 		raise CalcParseError
 
 
-def parseToNode(formula):
+def parseToCalcNode(formula):
+	'''
+		入力
+			
+	'''
 	res,pos = expr(formula+"$",0) #$は使わないことにする
 	if pos != len(formula):
 		raise CalcParseError
