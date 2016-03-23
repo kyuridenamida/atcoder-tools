@@ -2,7 +2,7 @@
 AtCoderの入力形式とかをがんばって解析するツールなどなどです．
 
 # 動作環境
-Python3とbeautifulsoup4があれば動くと思います．Python2では動きませか．
+Python3とbeautifulsoup4があれば動くと思います．Python2では動きません．
 
 bs4は，
 
