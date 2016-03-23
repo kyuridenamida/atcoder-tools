@@ -1,8 +1,31 @@
 
 class CalcParseError(Exception): pass
 class EvaluteError(Exception): pass
+class UnknownOperatorError(Exception): pass
 
+def add(a,b):
+	return a+b
 
+def sub(a,b):
+	return a-b
+
+def mul(a,b):
+	return a*b
+
+def div(a,b):
+	return int(a/b)
+
+def operator_to_string(operator):
+	if operator == add:
+		return "+"
+	elif operator == sub:
+		return "-"
+	elif operator == mul:
+		return "*"
+	elif operator == div:
+		return "/"
+	else:
+		raise UnknownOperatorError		
 
 class calcNode:
 	def __init__(self,formula=None):
@@ -18,6 +41,18 @@ class calcNode:
 			self.lch = None
 			self.rch = None
 
+	def __str__(self,depth=0):
+		if self.operator != None:
+			lv = self.lch.__str__(depth=depth+1)
+			rv = self.rch.__str__(depth=depth+1)
+			res = ("%s%s%s") % (lv,operator_to_string(self.operator),rv)
+			if depth > 0 and (self.operator == add or self.operator == sub):
+				res = "(%s)" % res
+			return res
+		elif isinstance(self.content,int):
+				return str(self.content)
+		else:
+			return self.content
 
 	def get_all_varnames(self):
 		if self.operator != None:
@@ -41,18 +76,6 @@ class calcNode:
 				raise EvaluteError
 			else:
 				return variables[self.content]
-		
-def add(a,b):
-	return a+b
-
-def sub(a,b):
-	return a-b
-
-def mul(a,b):
-	return a*b
-
-def div(a,b):
-	return int(a/b)
 
 def expr(formula,pos):
 	res,pos = term(formula,pos)
@@ -94,11 +117,20 @@ def factor(formula,pos):
 		res = calcNode()
 		res.content = varname
 		return res,pos
-	elif formula[pos].isdigit():
+	elif formula[pos].isdigit() or formula[pos] == '-':
+		if formula[pos] == '-':
+			sign = -1
+			pos += 1
+			if not formula[pos].isdigit():
+				raise CalcParseError
+		else:
+			sign = +1
 		value = 0
 		while formula[pos].isdigit():
 			value = 10 * value + int(formula[pos])
 			pos += 1
+		value *= sign
+
 		if formula[pos].isalpha() or formula[pos] == '(':
 			# pattern like "123A"
 			tmp = calcNode()

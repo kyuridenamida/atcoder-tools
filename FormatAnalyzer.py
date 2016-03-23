@@ -1,5 +1,5 @@
 import copy
-import Calculator 
+from Calculator import calcNode
 from collections import OrderedDict
 from utils import is_int, is_float, fixed_variable_name
 
@@ -56,8 +56,8 @@ class FormatNode:
 					for k,v in value_dic.items():
 						dic[k] = v[0]
 					return dic
-				minv = Calculator.parseToCalcNode(str(self.index.minVal)).evaluate(converted_dictionary(value_dic))
-				maxv = Calculator.parseToCalcNode(str(self.index.maxVal)).evaluate(converted_dictionary(value_dic))
+				minv = self.index.minVal.evaluate(converted_dictionary(value_dic))
+				maxv = self.index.maxVal.evaluate(converted_dictionary(value_dic))
 				for _ in range(minv,maxv+1):
 					for child in self.pointers :
 						pos = child.simulate(tokens,value_dic,pos)
@@ -82,16 +82,20 @@ class FormatNode:
 
 class Index:
 	def __init__(self):
-		self.maxVal = -1000000000000000000
-		self.minVal = +1000000000000000000
+		self.maxVal = calcNode("-1000000000000000000")
+		# print(self.maxVal)
+		self.minVal = calcNode("1000000000000000000")
+		# print(self.minVal)
 	def reflesh_min(self,v):
 		if v.isdigit():
-			self.minVal = min([int(v),self.minVal])
+			if self.minVal.evaluate() > calcNode(v).evaluate():
+				self.minVal = calcNode(v)
 	def reflesh_max(self,v):
 		if v.isdigit():
-			self.maxVal = max([int(v),self.maxVal])
+			if self.maxVal.evaluate() < calcNode(v).evaluate():
+				self.maxVal = calcNode(v)
 		else:
-			self.maxVal = v
+			self.maxVal = calcNode(v)
 
 class VarInfo:
 	def __init__(self,idxsize):
@@ -99,6 +103,7 @@ class VarInfo:
 		self.indexes = [Index() for _ in range(idxsize)] 
 
 def format_analyse(parsed_tokens):
+
 	'''
 		入力
 			parsed_tokens # list(list(str)) : 変数毎の変数名/インデックスがtokenizedなトークンリスト
@@ -115,8 +120,11 @@ def format_analyse(parsed_tokens):
 		varname = token[0]
 		if varname not in dic:
 			dic[varname] = VarInfo(len(idxs))
+
 		dic[varname].appearances.append(pos)
-		for i,idx in zip(range(len(idxs)),idxs):
+		print(idxs)
+		for i,idx in enumerate(idxs):
+			print(idxs)
 			dic[varname].indexes[i].reflesh_min(idx)
 			dic[varname].indexes[i].reflesh_max(idx)
 		pos += 1

@@ -136,7 +136,7 @@ def hoge(format,samples):
 				sample = sample[0].replace("\n"," ")
 				tokens = [x for x in sample.split(" ") if x != ""]
 				current_dic = res.verifyAndGetTypes(tokens,current_dic)
-			#print(res.cpp_source_gen(current_dic,value_info))
+			print(res.cpp_source_gen(current_dic,value_info))
 			return True
 
 		except:
@@ -152,7 +152,7 @@ if __name__ == "__main__":
 	succ = fail = 0
 
 
-	for i in range(1,50):
+	for i in range(45,46):
 		plist = atcoder.get_problem_list("arc%03d"%i)
 		
 		for k,v in plist.items():
@@ -167,11 +167,11 @@ if __name__ == "__main__":
 			except KeyboardInterrupt:
 				sys.exit(-1)
 			except Exception as e:
-				# print('=== エラー内容 ===')
-				# print('type:' + str(type(e)))
-				# print('e自身:' + str(e))
-				# print("fail,",v)
-				# pass
+				print('=== エラー内容 ===')
+				print('type:' + str(type(e)))
+				print('e自身:' + str(e))
+				print("fail,",v)
+				pass
 				fail += 1
 		if(succ+fail>0):
 			print (1.*succ/(succ+fail));
