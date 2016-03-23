@@ -130,28 +130,35 @@ def format_analyse(parsed_tokens):
 		pos += 1
 
 	#フォーマットノードの構築
-	used = set()
+	processed = set()
 	root = FormatNode(pointers=[])
 	for i in range(len(parsed_tokens)):
 		varname = parsed_tokens[i][0]
-		idxs = parsed_tokens[i][1:]
-		
-		if varname in used:
+		if varname in processed:
 			continue
 
-		if len(dic[varname].appearances) != 1:
-			# assume it's a arithmetic sequence
+		dim = len(dic[varname].indexes)
+		if dim == 0:
+			root.pointers.append(FormatNode(varname))
+			processed.add(varname)
+		elif dim == 1:
+			# assume it's a arithmetic sequence 
 			span = dic[varname].appearances[1] - dic[varname].appearances[0]
 			zipped_varnames = [token[0] for token in parsed_tokens[i:i+span]]
 			for vname in zipped_varnames:
-				used.add(vname)
+				processed.add(vname)
 			root.pointers.append( 
-				FormatNode(pointers=[FormatNode(varname=vname) for vname in zipped_varnames],
-					 index=dic[varname].indexes[0]
+				FormatNode(pointers=[FormatNode(varname=vname) for vname in zipped_varnames]
+					,index=dic[varname].indexes[0]
 				)
 			)
+		elif dim == 2:
+			innerNode =	FormatNode(pointers=[FormatNode(varname=vname) for vname in zipped_varnames]
+							,index=dic[varname].indexes[1]
+						)
+			root.pointers.append(FormatNode(pointers=[innerNode],index=dic[varname].indexes[0]))
 		else:
-			root.pointers.append(FormatNode(varname))
-			used.add(varname)
+			raise NotImplementedError
+
 
 	return root,dic

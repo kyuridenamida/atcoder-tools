@@ -52,9 +52,18 @@ def cpp_definition(self,type_dic,value_info):
 		elif len(v.indexes) == 0:
 			type_template_before = "%s";
 			type_template_after  = ""
+		elif len(v.indexes) == 2:
+			type_template_before = "vector<vector<%s>>";
+			type_template_after  = "("+str(v.indexes[1].maxVal)+"+1,vector<%s>("+str(v.indexes[0].maxVal)+"+1))"
 		else:
 			raise NotImplementedError
-		res += tab + type_template_before % (convert_to_cpptype_string(type_dic[k][1])) + " " + fixed_variable_name(k) + type_template_after + ";\n"
+
+		res += tab + type_template_before % (convert_to_cpptype_string(type_dic[k][1])) + " " + fixed_variable_name(k)
+		if len(v.indexes) == 2:
+			res += type_template_after % (convert_to_cpptype_string(type_dic[k][1]))
+		else:
+			res += type_template_after
+		res += ";\n"
 	return res
 
 
@@ -68,10 +77,10 @@ def cpp_solve_func(self,type_dic,value_info):
 		
 		if len(v.indexes) == 1:
 			type_template_before = "vector<%s>";
-			type_template_after  = "("+str(v.indexes[0].maxVal)+"+1)"
 		elif len(v.indexes) == 0:
 			type_template_before = "%s";
-			type_template_after  = ""
+		elif len(v.indexes) == 2:
+			type_template_before = "vector<vector<%s>>";
 		else:
 			raise NotImplementedError
 		lst.append(type_template_before % (convert_to_cpptype_string(type_dic[k][1])) + " " + fixed_variable_name(k))
@@ -126,7 +135,7 @@ def hoge(format,samples):
 
 
 	for candidate_format in FormatTokenizer.get_all_format_probabilities(tokens):
-		#print(candidate_format)
+		print(candidate_format)
 		res,value_info = FormatAnalyzer.format_analyse(candidate_format)
 		#print(res)
 		
@@ -147,12 +156,12 @@ def hoge(format,samples):
 if __name__ == "__main__":
 	
 	atcoder = AtCoder(AccountInformation.username,AccountInformation.password)
-	#informat,samples = atcoder.get_all("http://abc025.contest.atcoder.jp/tasks/abc025_c")
-	#ys.exit(-1)
+	informat,samples = atcoder.get_all("http://abc025.contest.atcoder.jp/tasks/abc025_b")
+	sys.exit(-1)
 	succ = fail = 0
 
 
-	for i in range(45,46):
+	for i in range(25,26):
 		plist = atcoder.get_problem_list("arc%03d"%i)
 		
 		for k,v in plist.items():
