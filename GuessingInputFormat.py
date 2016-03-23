@@ -40,65 +40,6 @@ def convert_to_cpptype_string(vtype):
 	else:
 		raise NotImplementedError
 
-finalAnswer = []
-
-def deviding_pattern(text,vars):
-	# 変数名に数字は含まれない　分割は3つまで考える
-	candidate = [[text]]
-	candidate += [[text[:i],text[i:]] for i in range(1,len(text))]
-	for i in range(1,len(text)):
-		for j in range(i+1,len(text)):
-			candidate += [[text[:i],text[i:j],text[j:]]]
-
-	res = []
-	for c in candidate:
-		flag = True
-		if not is_variable_name(c[0]): 
-			flag = False
-		for desc in c[1:]:
-			if not is_description(desc):
-				flag = False
-			if is_variable_name(desc) and desc not in vars:
-				flag = False
-		
-		if c[0] in vars and vars[c[0]] != len(c):
-			flag = False;
-
-		if flag:
-			res.append(c)
-	# print(res)
-	return res
-
-
-def dfs(finalAnswer,tokens,currentState,pos,vars,lim):
-	'''
-		limの枝刈りのみで終了した場合はTrueが返ってくる
-	'''
-	if len(vars) > lim :
-		return True
-	if pos == len(tokens):
-		finalAnswer.append(copy.deepcopy(currentState))
-		return False
-	flag = False
-	for d in deviding_pattern(tokens[pos],vars):
-		nextVars = copy.deepcopy(vars)
-		nextVars[d[0]] = len(d)
-		currentState.append(d)
-		if dfs(finalAnswer,tokens,currentState,pos+1,nextVars,lim) :
-			flag = True
-		currentState.pop()
-	return flag
-
-def get_all_format_probabilities(tokens):
-	finalAnswer = []
-	lim = 1
-	while len(finalAnswer) == 0:
-		if not dfs(finalAnswer,tokens,[],0,{},lim):
-			break
-		lim += 1
-		# print(lim)
-	return finalAnswer
-
 def is_arithmetic_sequence(seq):
 	if len(seq) <= 1 :
 		return True
@@ -331,15 +272,132 @@ def format_analyse(parsed_tokens):
 
 
 
+def deviding_pattern(text,vars):
+	# 変数名に数字は含まれない　分割は3つまで考える
+	candidate = [[text]]
+	candidate += [[text[:i],text[i:]] for i in range(1,len(text))]
+	for i in range(1,len(text)):
+		for j in range(i+1,len(text)):
+			candidate += [[text[:i],text[i:j],text[j:]]]
+
+	res = []
+	for c in candidate:
+		flag = True
+		if not is_variable_name(c[0]): 
+			flag = False
+		for desc in c[1:]:
+			if not is_description(desc):
+				flag = False
+			if is_variable_name(desc) and desc not in vars:
+				flag = False
+		
+		if c[0] in vars and vars[c[0]] != len(c):
+			flag = False;
+
+		if flag:
+			res.append(c)
+	# print(res)
+	return res
+
+
+def dfs(finalAnswer,tokens,currentState,pos,vars,lim):
+	'''
+		limの枝刈りのみで終了した場合はTrueが返ってくる
+	'''
+	if len(vars) > lim :
+		return True
+	if pos == len(tokens):
+		finalAnswer.append(copy.deepcopy(currentState))
+		return False
+	flag = False
+	for d in deviding_pattern(tokens[pos],vars):
+		nextVars = copy.deepcopy(vars)
+		nextVars[d[0]] = len(d)
+		currentState.append(d)
+		if dfs(finalAnswer,tokens,currentState,pos+1,nextVars,lim) :
+			flag = True
+		currentState.pop()
+	return flag
+
+def get_all_format_probabilities(tokens):
+	finalAnswer = []
+	lim = 1
+	while len(finalAnswer) == 0:
+		if not dfs(finalAnswer,tokens,[],0,{},lim):
+			break
+		lim += 1
+		# print(lim)
+	return finalAnswer
+
+
+def deviding_pattern(text,vars):
+	# 変数名に数字は含まれない　分割は3つまで考える
+	candidate = [[text]]
+	candidate += [[text[:i],text[i:]] for i in range(1,len(text))]
+	for i in range(1,len(text)):
+		for j in range(i+1,len(text)):
+			candidate += [[text[:i],text[i:j],text[j:]]]
+
+	res = []
+	for c in candidate:
+		flag = True
+		if not is_variable_name(c[0]): 
+			flag = False
+		for desc in c[1:]:
+			if not is_description(desc):
+				flag = False
+			if is_variable_name(desc) and desc not in vars:
+				flag = False
+		
+		if c[0] in vars and vars[c[0]] != len(c):
+			flag = False;
+
+		if flag:
+			res.append(c)
+	# print(res)
+	return res
+
+
+def dfs(finalAnswer,tokens,currentState,pos,vars,lim):
+	'''
+		limの枝刈りのみで終了した場合はTrueが返ってくる
+	'''
+	if len(vars) > lim :
+		return True
+	if pos == len(tokens):
+		finalAnswer.append(copy.deepcopy(currentState))
+		return False
+	flag = False
+	for d in deviding_pattern(tokens[pos],vars):
+		nextVars = copy.deepcopy(vars)
+		nextVars[d[0]] = len(d)
+		currentState.append(d)
+		if dfs(finalAnswer,tokens,currentState,pos+1,nextVars,lim) :
+			flag = True
+		currentState.pop()
+	return flag
+
+def get_all_format_probabilities(tokens):
+	finalAnswer = []
+	lim = 1
+	while len(finalAnswer) == 0:
+		if not dfs(finalAnswer,tokens,[],0,{},lim):
+			break
+		lim += 1
+		# print(lim)
+	return finalAnswer
+
 def hoge(format,samples):
 	format = format.replace("{","").replace("}"," ").replace("\n"," ").replace("…"," ").replace(",","").replace("\ "," ")
-
+	print(format)
 	tokens = [x for x in format.split(" ") if x != "" and is_ascii(x) and not is_noise(x)];
 	print(tokens)
 
 	for candidate_format in get_all_format_probabilities(tokens):
+		print(candidate_format)
 		res,value_info = format_analyse(candidate_format)
 		print(res)
+		
 		current_dic = {}
 		for sample in samples:
 			sample = sample[0].replace("\n"," ")
@@ -347,3 +405,4 @@ def hoge(format,samples):
 			current_dic = res.verifyAndGetTypes(tokens,current_dic)
 
 		print(res.cpp_source_gen(current_dic,value_info))
+		
