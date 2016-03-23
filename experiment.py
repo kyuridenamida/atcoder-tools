@@ -166,7 +166,7 @@ if __name__ == "__main__":
 	succ = fail = 0
 
 
-	for i in range(1,10):
+	for i in range(1,50):
 		plist = atcoder.get_problem_list("arc%03d"%i)
 		
 		for k,v in plist.items():
@@ -189,20 +189,20 @@ if __name__ == "__main__":
 				fail += 1
 		if(succ+fail>0):
 			print (1.*succ/(succ+fail));
-	# for i in range(1,35):
-	# 	plist = atcoder.get_problem_list("abc%03d"%i)
+	for i in range(1,35):
+		plist = atcoder.get_problem_list("abc%03d"%i)
 		
-	# 	for k,v in plist.items():
-	# 		try:
-	# 			informat,samples = atcoder.get_all(v)
-	# 			if not hoge(informat,samples):
-	# 				raise Exception
-	# 			print("succ",v)
-	# 			succ += 1
+		for k,v in plist.items():
+			try:
+				informat,samples = atcoder.get_all(v)
+				if not hoge(informat,samples):
+					raise Exception
+				print("succ",v)
+				succ += 1
 			
-	# 		except:
-	# 			print("fail,",v)
-	# 			pass
-	# 			fail += 1
-	# 	if(succ+fail>0):
-	# 		print (1.*succ/(succ+fail));
+			except:
+				print("fail,",v)
+				pass
+				fail += 1
+		if(succ+fail>0):
+			print (1.*succ/(succ+fail));

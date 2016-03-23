@@ -15,8 +15,8 @@ def deviding_pattern(text,variables):
 	def is_description(index):
 		if not index[-1].isalpha() and not index[-1].isdigit():
 			return False
-		if index.find('_') != -1 :
-			return False
+		# if index.find('_') != -1 :
+			# return False
 		if index.find(',') != -1 :
 			return False
 		return True
@@ -44,6 +44,7 @@ def deviding_pattern(text,variables):
 					if not subvar in variables:
 						flag = False
 			except CalcParseError:
+				flag = False
 				pass
 		
 		if c[0] in variables and variables[c[0]] != len(c):
