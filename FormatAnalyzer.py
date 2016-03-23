@@ -56,8 +56,8 @@ class FormatNode:
 					for k,v in value_dic.items():
 						dic[k] = v[0]
 					return dic
-				minv = Calculator.parseToCalcNode(str(self.index.minVal)).evalute(converted_dictionary(value_dic))
-				maxv = Calculator.parseToCalcNode(str(self.index.maxVal)).evalute(converted_dictionary(value_dic))
+				minv = Calculator.parseToCalcNode(str(self.index.minVal)).evaluate(converted_dictionary(value_dic))
+				maxv = Calculator.parseToCalcNode(str(self.index.maxVal)).evaluate(converted_dictionary(value_dic))
 				for _ in range(minv,maxv+1):
 					for child in self.pointers :
 						pos = child.simulate(tokens,value_dic,pos)
@@ -101,9 +101,9 @@ class VarInfo:
 def format_analyse(parsed_tokens):
 	'''
 		入力
-			parsed_tokens#list(list(str)) : 変数毎の変数名/インデックスがtokenizedなトークンリスト
+			parsed_tokens # list(list(str)) : 変数毎の変数名/インデックスがtokenizedなトークンリスト
 		出力
-			res,dic#FormatNode,OrderedDict<str:VarInfo> : フォーマット情報のノードと変数の情報を保持した辞書を同時に返す
+			res,dic # FormatNode,OrderedDict<str:VarInfo> : フォーマット情報のノードと変数の情報を保持した辞書を同時に返す
 	'''
 
 	dic = OrderedDict()

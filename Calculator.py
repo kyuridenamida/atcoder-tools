@@ -5,36 +5,55 @@ class EvaluteError(Exception): pass
 
 
 class calcNode:
-	def __init__(self):
-		self.content = None
-		self.operator = None
-		self.lch = None
-		self.rch = None
-
-	def evalute(self,vars={}):
-		if self.operator != None:
-			lv = self.lch.evalute(vars)
-			rv = self.rch.evalute(vars)
-			return self.operator(lv,rv)
+	def __init__(self,formula=None):
+		if formula:
+			root = parseToCalcNode(formula)
+			self.content = root.content
+			self.lch = root.lch
+			self.rch = root.rch
+			self.operator = root.operator
 		else:
-			if isinstance(self.content,int):
+			self.content = None
+			self.operator = None
+			self.lch = None
+			self.rch = None
+
+
+	def get_all_varnames(self):
+		if self.operator != None:
+			lv = self.lch.get_all_varnames()
+			rv = self.rch.get_all_varnames()
+			return lv + rv
+		elif isinstance(self.content,int):
+				return []
+		else:
+			return [self.content]
+
+	def evaluate(self,variables={}):
+		if self.operator != None:
+			lv = self.lch.evaluate(variables)
+			rv = self.rch.evaluate(variables)
+			return self.operator(lv,rv)
+		elif isinstance(self.content,int):
 				return int(self.content)
+		else:
+			if self.content not in variables:
+				raise EvaluteError
 			else:
-				if self.content not in vars:
-					raise EvaluteError
-				else:
-					return vars[self.content]
+				return variables[self.content]
 		
 def add(a,b):
 	return a+b
+
 def sub(a,b):
 	return a-b
+
 def mul(a,b):
 	return a*b
+
 def div(a,b):
 	return int(a/b)
 
-formula = ""
 def expr(formula,pos):
 	res,pos = term(formula,pos)
 	while formula[pos] == '+' or formula[pos] == '-':
@@ -97,10 +116,14 @@ def factor(formula,pos):
 		raise CalcParseError
 
 
+
 def parseToCalcNode(formula):
 	'''
 		入力
-			
+			formula # str : 式
+		出力
+			#calcNode : 構文木の根ノード
+
 	'''
 	res,pos = expr(formula+"$",0) #$は使わないことにする
 	if pos != len(formula):
@@ -109,4 +132,4 @@ def parseToCalcNode(formula):
 
 if __name__ == '__main__':
 
-	print(parseToNode("N-1-1+1000*N*N").evalute({"N":10}))
+	print(calcNode("N-1-1+1000*N*N").evaluate({"N":10}))
