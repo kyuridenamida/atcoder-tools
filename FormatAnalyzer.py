@@ -92,7 +92,7 @@ class Index:
 				self.minVal = calcNode(v)
 	def reflesh_max(self,v):
 		if v.isdigit():
-			if self.maxVal.evaluate() < calcNode(v).evaluate():
+			if self.maxVal.get_all_varnames() == [] and self.maxVal.evaluate() < calcNode(v).evaluate():
 				self.maxVal = calcNode(v)
 		else:
 			self.maxVal = calcNode(v)
@@ -102,7 +102,7 @@ class VarInfo:
 		self.appearances = []
 		self.indexes = [Index() for _ in range(idxsize)] 
 
-def format_analyse(parsed_tokens):
+def format_analyse(parsed_tokens,to_1d_flag=False):
 
 	'''
 		入力
@@ -122,9 +122,8 @@ def format_analyse(parsed_tokens):
 			dic[varname] = VarInfo(len(idxs))
 
 		dic[varname].appearances.append(pos)
-		print(idxs)
+		# print(idxs)
 		for i,idx in enumerate(idxs):
-			print(idxs)
 			dic[varname].indexes[i].reflesh_min(idx)
 			dic[varname].indexes[i].reflesh_max(idx)
 		pos += 1
@@ -138,6 +137,10 @@ def format_analyse(parsed_tokens):
 			continue
 
 		dim = len(dic[varname].indexes)
+
+		if dim == 2 and to_1d_flag:
+			dic[varname].indexes = dic[varname].indexes[:-1]
+			dim = 1
 		if dim == 0:
 			root.pointers.append(FormatNode(varname))
 			processed.add(varname)
@@ -153,9 +156,8 @@ def format_analyse(parsed_tokens):
 				)
 			)
 		elif dim == 2:
-			innerNode =	FormatNode(pointers=[FormatNode(varname=vname) for vname in zipped_varnames]
-							,index=dic[varname].indexes[1]
-						)
+			processed.add(varname)
+			innerNode =	FormatNode(pointers=[FormatNode(varname=varname)],index=dic[varname].indexes[1])
 			root.pointers.append(FormatNode(pointers=[innerNode],index=dic[varname].indexes[0]))
 		else:
 			raise NotImplementedError

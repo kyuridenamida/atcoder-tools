@@ -111,7 +111,7 @@ def factor(formula,pos):
 		return res,pos
 	elif formula[pos].isalpha():
 		varname = ""
-		while formula[pos].isalpha():
+		while formula[pos].isalpha() or formula[pos] == '_':
 			varname += formula[pos]
 			pos += 1
 		res = calcNode()

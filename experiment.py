@@ -54,7 +54,7 @@ def cpp_definition(self,type_dic,value_info):
 			type_template_after  = ""
 		elif len(v.indexes) == 2:
 			type_template_before = "vector<vector<%s>>";
-			type_template_after  = "("+str(v.indexes[1].maxVal)+"+1,vector<%s>("+str(v.indexes[0].maxVal)+"+1))"
+			type_template_after  = "("+str(v.indexes[0].maxVal)+"+1,vector<%s>("+str(v.indexes[1].maxVal)+"+1))"
 		else:
 			raise NotImplementedError
 
@@ -90,20 +90,21 @@ def cpp_solve_func(self,type_dic,value_info):
 	return formal_params,real_params
 
 
-def cpp_input(self,depth=1,index=[]):
+def cpp_input(self,depth=1,indexes=[]):
 	type(self.varname)
 	tab = "    " * (depth-1)
 	res = ""
 	if self.pointers != None:
 		if self.index != None :
-			res += tab + "for(int i = %s ; i <= %s ; i++){\n" % (str(self.index.minVal),str(self.index.maxVal))
-			index = index + ["i"]
+			loopv = "i" if indexes == [] else "j"
+			res += tab + "for(int %s = %s ; %s <= %s ; %s++){\n" % (loopv,str(self.index.minVal),loopv,str(self.index.maxVal),loopv)
+			indexes = indexes + [loopv]
 		for child in self.pointers:
-			res += child.cpp_input(depth+1,index)
+			res += child.cpp_input(depth+1,indexes)
 		if self.index != None :
 			res += tab + "}\n"
 	else:
-		res += tab + "cin >> %s%s;\n" % (fixed_variable_name(self.varname),"" if index == [] else "["+index[0]+"]")
+		res += tab + "cin >> %s%s;\n" % (fixed_variable_name(self.varname),"" if indexes == [] else "["+"][".join(indexes)+"]")
 	return res
 
 FormatAnalyzer.FormatNode.cpp_source_gen = cpp_source_gen
@@ -131,37 +132,41 @@ def hoge(format,samples):
 	format = normalize_index(format)
 	format = format.replace("{","").replace("}","")
 	tokens = [x for x in format.split(" ") if x != "" and is_ascii(x) and not is_noise(x)];
-	#print(tokens)
+	# print(tokens)
 
+	tokenize_result = FormatTokenizer.get_all_format_probabilities(tokens)
+	# print(">",tokenize_result)
+	for to_1d_flag in [False,True]:
+		for candidate_format in tokenize_result:
+			# print(candidate_format)
+			res,value_info = FormatAnalyzer.format_analyse(candidate_format,to_1d_flag)
+			# print(">",to_1d_flag,res,candidate_format)
+			try:
+				current_dic = {}
+				for sample in samples:
+					sample = sample[0].replace("\n"," ")
+					tokens = [x for x in sample.split(" ") if x != ""]
+					current_dic = res.verifyAndGetTypes(tokens,current_dic)
+				# print(res.cpp_source_gen(current_dic,value_info))
+				return True
+			except:
+				pass
 
-	for candidate_format in FormatTokenizer.get_all_format_probabilities(tokens):
-		print(candidate_format)
-		res,value_info = FormatAnalyzer.format_analyse(candidate_format)
-		#print(res)
-		
-		try:
-			current_dic = {}
-			for sample in samples:
-				sample = sample[0].replace("\n"," ")
-				tokens = [x for x in sample.split(" ") if x != ""]
-				current_dic = res.verifyAndGetTypes(tokens,current_dic)
-			print(res.cpp_source_gen(current_dic,value_info))
-			return True
-
-		except:
-			pass
 	return False
 
 
 if __name__ == "__main__":
 	
 	atcoder = AtCoder(AccountInformation.username,AccountInformation.password)
-	informat,samples = atcoder.get_all("http://abc025.contest.atcoder.jp/tasks/abc025_b")
-	sys.exit(-1)
+	# informat,samples = atcoder.get_all("https://arc025.contest.atcoder.jp/tasks/arc025_2")
+	# if not hoge(informat,samples):
+	# 	raise Exception
+
+	# sys.exit(-1)
 	succ = fail = 0
 
 
-	for i in range(25,26):
+	for i in range(1,10):
 		plist = atcoder.get_problem_list("arc%03d"%i)
 		
 		for k,v in plist.items():
@@ -176,9 +181,9 @@ if __name__ == "__main__":
 			except KeyboardInterrupt:
 				sys.exit(-1)
 			except Exception as e:
-				print('=== エラー内容 ===')
-				print('type:' + str(type(e)))
-				print('e自身:' + str(e))
+				# print('=== エラー内容 ===')
+				# print('type:' + str(type(e)))
+				# print('e自身:' + str(e))
 				print("fail,",v)
 				pass
 				fail += 1
