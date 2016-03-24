@@ -13,7 +13,7 @@ def mul(a,b):
 	return a*b
 
 def div(a,b):
-	return int(a/b)
+	return a // b
 
 def operator_to_string(operator):
 	if operator == add:
@@ -27,7 +27,7 @@ def operator_to_string(operator):
 	else:
 		raise UnknownOperatorError		
 
-class calcNode:
+class CalcNode:
 	def __init__(self,formula=None):
 		if formula:
 			root = parseToCalcNode(formula)
@@ -80,7 +80,7 @@ class calcNode:
 def expr(formula,pos):
 	res,pos = term(formula,pos)
 	while formula[pos] == '+' or formula[pos] == '-':
-		tmp = calcNode()
+		tmp = CalcNode()
 		tmp.operator = add if formula[pos] == '+' else sub
 		pos += 1
 		tmp.lch = res
@@ -92,7 +92,7 @@ def expr(formula,pos):
 def term(formula,pos):
 	res,pos = factor(formula,pos)
 	while formula[pos] == '*' or formula[pos] == '/':
-		tmp = calcNode()
+		tmp = CalcNode()
 		tmp.operator = mul if formula[pos] == '*' else div
 		pos += 1
 		tmp.lch = res
@@ -114,7 +114,7 @@ def factor(formula,pos):
 		while formula[pos].isalpha() or formula[pos] == '_':
 			varname += formula[pos]
 			pos += 1
-		res = calcNode()
+		res = CalcNode()
 		res.content = varname
 		return res,pos
 	elif formula[pos].isdigit() or formula[pos] == '-':
@@ -133,15 +133,15 @@ def factor(formula,pos):
 
 		if formula[pos].isalpha() or formula[pos] == '(':
 			# pattern like "123A"
-			tmp = calcNode()
+			tmp = CalcNode()
 			tmp.content = value
-			res = calcNode()
+			res = CalcNode()
 			res.lch = tmp
 			res.rch,pos = factor(formula,pos)
 			res.operator = mul
 			return res,pos
 		else:
-			res = calcNode()
+			res = CalcNode()
 			res.content = value
 			return res,pos
 	else:
@@ -154,7 +154,7 @@ def parseToCalcNode(formula):
 		入力
 			formula # str : 式
 		出力
-			#calcNode : 構文木の根ノード
+			#CalcNode : 構文木の根ノード
 
 	'''
 	res,pos = expr(formula+"$",0) #$は使わないことにする
@@ -164,4 +164,4 @@ def parseToCalcNode(formula):
 
 if __name__ == '__main__':
 
-	print(calcNode("N-1-1+1000*N*N").evaluate({"N":10}))
+	print(CalcNode("N-1-1+1000*N*N").evaluate({"N":10}))

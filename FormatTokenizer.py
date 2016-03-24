@@ -1,5 +1,5 @@
 import copy
-from Calculator import calcNode,CalcParseError
+from Calculator import CalcNode,CalcParseError
 
 from utils import fixed_variable_name
 def deviding_pattern(text,variables):
@@ -15,8 +15,6 @@ def deviding_pattern(text,variables):
 	def is_description(index):
 		if not index[-1].isalpha() and not index[-1].isdigit():
 			return False
-		# if index.find('_') != -1 :
-			# return False
 		if index.find(',') != -1 :
 			return False
 		return True
@@ -40,7 +38,7 @@ def deviding_pattern(text,variables):
 			if not is_description(index):
 				flag = False
 			try:
-				for subvar in calcNode(index).get_all_varnames():
+				for subvar in CalcNode(index).get_all_varnames():
 					if not subvar in variables:
 						flag = False
 			except CalcParseError:

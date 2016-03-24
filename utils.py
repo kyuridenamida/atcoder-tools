@@ -24,7 +24,7 @@ def is_arithmetic_sequence(seq):
 def normalize_index(text):
 	return text.replace("{(","").replace(")}","")
 	
-def devide_consecutive_vars(text):
+def divide_consecutive_vars(text):
 	res_text = ""
 	i = 0
 	while i < len(text):
@@ -46,7 +46,14 @@ def devide_consecutive_vars(text):
 			i += 1
 	return res_text
 
+def is_ascii(s):
+    return all(ord(c) < 128 for c in s)
+
+def is_noise(s):
+	return s == ":" or s == "...." or s == "..." or s == ".." or s == "."
+
+
 if __name__ == "__main__":
-	print(devide_consecutive_vars("hello_1234world1"))
+	print(divide_consecutive_vars("hello_1234world1"))
 	print(normalize_index("A_{(H,W)}"))
 	

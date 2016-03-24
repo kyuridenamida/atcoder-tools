@@ -1,15 +1,12 @@
 import copy
-from Calculator import calcNode
+from Calculator import CalcNode
 from collections import OrderedDict
 from utils import is_int, is_float, fixed_variable_name
-
 import re
-
 
 class TypesUnmatchedError(Exception): pass
 class ParseError(Exception): pass
 class UpCastingError(Exception): pass
-class NotImplementedError(Exception): pass
 
 def upcast(frm,to):
 	if frm == to:
@@ -18,6 +15,32 @@ def upcast(frm,to):
 		return float
 	raise UpCastingError
 
+
+
+class Index:
+	def __init__(self):
+		self.max_index = None
+		self.min_index = None
+	def reflesh_min(self,v):
+		if v.isdigit():
+			if self.min_index == None or self.min_index.evaluate() > CalcNode(v).evaluate():
+				self.min_index = CalcNode(v)
+	def reflesh_max(self,v):
+		if v.isdigit():
+			if self.max_index == None or (self.max_index.get_all_varnames() == [] and self.max_index.evaluate() < CalcNode(v).evaluate()):
+				self.max_index = CalcNode(v)
+		else:
+			self.max_index = CalcNode(v)
+	def zero_indexed(self):
+		res = Index()
+		res.min_index = CalcNode("0")
+		res.max_index = CalcNode(str(self.max_index)+"-("+str(self.min_index)+")")
+		return res
+
+class VariableInformation:
+	def __init__(self,idxsize):
+		self.indexes = [Index() for _ in range(idxsize)] 
+		self.type = None
 
 class FormatNode:
 	def __init__(self,varname=None,pointers=None,index=None):
@@ -56,8 +79,8 @@ class FormatNode:
 					for k,v in value_dic.items():
 						dic[k] = v[0]
 					return dic
-				minv = self.index.minVal.evaluate(converted_dictionary(value_dic))
-				maxv = self.index.maxVal.evaluate(converted_dictionary(value_dic))
+				minv = self.index.min_index.evaluate(converted_dictionary(value_dic))
+				maxv = self.index.max_index.evaluate(converted_dictionary(value_dic))
 				for _ in range(minv,maxv+1):
 					for child in self.pointers :
 						pos = child.simulate(tokens,value_dic,pos)
@@ -71,36 +94,11 @@ class FormatNode:
 		res = ""
 		if self.pointers != None:
 			if self.index != None :
-				res += "(%s<=i<=%s)*" % (str(self.index.minVal),str(self.index.maxVal))
+				res += "(%s<=i<=%s)*" % (str(self.index.min_index),str(self.index.max_index))
 			res += "[" + " ".join([child.__str__() for child in self.pointers]) + "]"
 		else:
 			res = fixed_variable_name(self.varname)
 		return res
-
-
-
-
-class Index:
-	def __init__(self):
-		self.maxVal = calcNode("-1000000000000000000")
-		# print(self.maxVal)
-		self.minVal = calcNode("1000000000000000000")
-		# print(self.minVal)
-	def reflesh_min(self,v):
-		if v.isdigit():
-			if self.minVal.evaluate() > calcNode(v).evaluate():
-				self.minVal = calcNode(v)
-	def reflesh_max(self,v):
-		if v.isdigit():
-			if self.maxVal.get_all_varnames() == [] and self.maxVal.evaluate() < calcNode(v).evaluate():
-				self.maxVal = calcNode(v)
-		else:
-			self.maxVal = calcNode(v)
-
-class VarInfo:
-	def __init__(self,idxsize):
-		self.appearances = []
-		self.indexes = [Index() for _ in range(idxsize)] 
 
 def format_analyse(parsed_tokens,to_1d_flag=False):
 
@@ -108,9 +106,10 @@ def format_analyse(parsed_tokens,to_1d_flag=False):
 		入力
 			parsed_tokens # list(list(str)) : 変数毎の変数名/インデックスがtokenizedなトークンリスト
 		出力
-			res,dic # FormatNode,OrderedDict<str:VarInfo> : フォーマット情報のノードと変数の情報を保持した辞書を同時に返す
+			res,dic # FormatNode,OrderedDict<str:VariableInformation> : フォーマット情報のノードと変数の情報を保持した辞書を同時に返す
 	'''
 
+	appearances = {}
 	dic = OrderedDict()
 	pos = 0
 
@@ -119,9 +118,9 @@ def format_analyse(parsed_tokens,to_1d_flag=False):
 		idxs = token[1:]
 		varname = token[0]
 		if varname not in dic:
-			dic[varname] = VarInfo(len(idxs))
-
-		dic[varname].appearances.append(pos)
+			dic[varname] = VariableInformation(len(idxs))
+			appearances[varname] = []
+		appearances[varname].append(pos)
 		# print(idxs)
 		for i,idx in enumerate(idxs):
 			dic[varname].indexes[i].reflesh_min(idx)
@@ -146,7 +145,7 @@ def format_analyse(parsed_tokens,to_1d_flag=False):
 			processed.add(varname)
 		elif dim == 1:
 			# assume it's a arithmetic sequence 
-			span = dic[varname].appearances[1] - dic[varname].appearances[0]
+			span = appearances[varname][1] - appearances[varname][0]
 			zipped_varnames = [token[0] for token in parsed_tokens[i:i+span]]
 			for vname in zipped_varnames:
 				processed.add(vname)
@@ -161,6 +160,5 @@ def format_analyse(parsed_tokens,to_1d_flag=False):
 			root.pointers.append(FormatNode(pointers=[innerNode],index=dic[varname].indexes[0]))
 		else:
 			raise NotImplementedError
-
 
 	return root,dic
