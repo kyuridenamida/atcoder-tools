@@ -1,5 +1,5 @@
 from utils import normalized
-
+import re
 import urllib.request
 from collections import OrderedDict
 from bs4 import BeautifulSoup
@@ -73,3 +73,13 @@ class AtCoder:
 				get_all()関数のwrapper
 		'''
 		return self.get_all(url)[1]
+
+	def get_all_contestids(self):
+		req = self.opener.open("http://atcoder.jp/")
+		soup = BeautifulSoup(req,"html.parser")
+		text = str(soup)
+		url_re = re.compile(r'http://([A-Za-z0-9\'~+\-_]+).contest.atcoder.jp/')
+		res = url_re.findall(text)
+		res = sorted(res)
+		return res
+			
