@@ -1,9 +1,13 @@
+import sys
 import os
 import glob
 import subprocess
+sys.path.append("core")
 from AtCoder import AtCoder 
 import AccountInformation 
 from CppCodeGenerator import code_generator
+import FormatPredictor	
+
 
 FAIL = '\033[91m'
 OKGREEN = '\033[92m'
@@ -81,6 +85,7 @@ def prepare_workspace(contestid):
 	atcoder = AtCoder(AccountInformation.username,AccountInformation.password)
 	plist = atcoder.get_problem_list(contestid)
 	for pid,url in plist.items():
+
 		information,samples = atcoder.get_all(url)
 		result = FormatPredictor.format_predictor(information,samples)
 
@@ -94,6 +99,7 @@ def prepare_workspace(contestid):
 			samples = atcoder.get_samples(url)
 		except:
 			print("Problem %s: failed to get samples...." % pid)
+			samples = []
 
 		for num,(in_content,out_content) in enumerate(samples):
 			casename = "%s_%d" % (pid,num+1)
@@ -103,46 +109,12 @@ def prepare_workspace(contestid):
 				file.write(in_content)
 			with open(outfile, "w") as file:
 				file.write(out_content)
-
+		print("prepared %s!" % pid)
+		os.system("subl %s/%s.cpp" % (dirname,pid))
 
 
 if __name__ == "__main__":
 	import sys
-	from functools import reduce
-	import AccountInformation
-	from AtCoder import AtCoder
-	import FormatPredictor	
-	import os
-
-	if len(sys.argv) == 3:
+	if len(sys.argv) == 2:
 		contestid = sys.argv[1]
-		pid = sys.argv[2]
-		atcoder = AtCoder(AccountInformation.username,AccountInformation.password)
-		
-		plist = atcoder.get_problem_list(contestid)
-		url = plist[pid]
-		information,samples = atcoder.get_all(url)
-		
-		result = FormatPredictor.format_predictor(information,samples)
-		dirname = "workspace/%s" % pid
-		os.makedirs(dirname, exist_ok=True)
-		
-		if not result:
-			raise Exception
-		with open("%s/%s.cpp" % (dirname,pid), "w") as f:
-			f.write(code_generator(result))
-
-		samples = atcoder.get_samples(url)
-		for num,(in_content,out_content) in enumerate(samples):
-			casename = "%s_%d" % (pid,num+1)
-			infile = "%s/in_%s.txt" % (dirname,casename)
-			outfile = "%s/out_%s.txt" % (dirname,casename)
-			with open(infile, "w") as file:
-				file.write(in_content)
-			with open(outfile, "w") as file:
-				file.write(out_content)
-		#with open("%s/%s.cpp" % (dirname,pid), "w") as f:
-		#	atcoder.submit_source_code(contestid,pid,"C\+\+1.*\(GCC",f.read())
-
-	else:
-		print("# of argvs must be 2 (contestid(ex:arc001) and problemid(ex:A)).")
+		prepare_workspace(contestid)
