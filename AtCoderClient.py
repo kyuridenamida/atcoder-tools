@@ -81,7 +81,19 @@ def test_and_submit(contestid,pid,exec_file=None,cpp_file=None,
 			else:
 				print("%sfailed%s"%(FAIL,ENDC))
 
+
+pytemplate = \
+'''import sys
+sys.path.append("../../../")
+sys.path.append("../../../core")
+from AtCoderClient import test_and_submit
+
+if __name__ == "__main__":
+	test_and_submit(contestid='%s',pid='%s',no_submit_flag=False,forced_submit_flag=False)
+'''
+
 def prepare_workspace(contestid):
+
 	atcoder = AtCoder(AccountInformation.username,AccountInformation.password)
 	plist = atcoder.get_problem_list(contestid)
 	for pid,url in plist.items():
@@ -92,7 +104,8 @@ def prepare_workspace(contestid):
 		dirname = "workspace/%s/%s" % (contestid,pid)
 		os.makedirs(dirname, exist_ok=True)
 
-		with open("%s/%s.cpp" % (dirname,pid), "w") as f:
+		#追加書き込みモードなのは事故を防ぐため!
+		with open("%s/%s.cpp" % (dirname,pid), "a") as f:
 			f.write(code_generator(result))
 
 		try:
@@ -100,6 +113,9 @@ def prepare_workspace(contestid):
 		except:
 			print("Problem %s: failed to get samples...." % pid)
 			samples = []
+
+		with open("%s/test.py" % dirname, "w") as f:
+			f.write(pytemplate % (contestid,pid))
 
 		for num,(in_content,out_content) in enumerate(samples):
 			casename = "%s_%d" % (pid,num+1)
@@ -110,6 +126,8 @@ def prepare_workspace(contestid):
 			with open(outfile, "w") as file:
 				file.write(out_content)
 		print("prepared %s!" % pid)
+
+
 		os.system("subl %s/%s.cpp" % (dirname,pid))
 
 

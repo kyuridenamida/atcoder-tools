@@ -11,8 +11,7 @@ def convert_to_cpptype_string(vtype):
 		raise NotImplementedError
 
 template_success = \
-'''
-#include <bits/stdc++.h>
+'''#include <bits/stdc++.h>
 using namespace std;
 
 void solve(%s){
@@ -30,8 +29,7 @@ int main(){
 '''
 
 template_failed = \
-'''
-// failed to generate code
+'''// failed to generate code
 
 #include <bits/stdc++.h>
 using namespace std;
