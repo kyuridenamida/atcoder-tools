@@ -9,10 +9,11 @@ from CppCodeGenerator import code_generator
 import FormatPredictor	
 
 
-FAIL = '\033[91m'
-OKGREEN = '\033[92m'
-OKBLUE = '\033[94m'
-ENDC = '\033[0m'
+# FAIL = '\033[91m'
+# OKGREEN = '\033[92m'
+# OKBLUE = '\033[94m'
+# ENDC = '\033[0m'
+FAIL = OKGREEN = OKBLUE = ENDC = ''
 
 class NoExecutableFileError(Exception): pass
 class IrregularInOutFileError(Exception): pass
