@@ -42,12 +42,21 @@ def test_and_submit(contestid,pid,exec_file=None,cpp_file=None,
 			raise IrregularInOutFileError
 		with open(infile, "r") as inf, open(outfile, "rb") as ouf:
 			ans_data = ouf.read()
-			out_data = subprocess.check_output([exec_file, ""],stdin=inf)
+			out_data = ""
+			status = "WA"
+			try:
+				out_data = subprocess.check_output([exec_file, ""],stdin=inf,timeout=1)
+			except subprocess.TimeoutExpired:
+				status = "TLE(1s)"
+			except:
+				status = "RE"
+
 			if out_data == ans_data:
-				print("# %s %s" % (os.path.basename(infile),"%sPassed%s"%(OKGREEN,ENDC)))
+				status = "AC"
+				print("# %s %s" % (os.path.basename(infile),"%s%s%s"%(OKGREEN,status,ENDC)))
 				succ += 1
 			else:
-				print("# %s %s" % (os.path.basename(infile),"%sFailed%s"%(FAIL,ENDC)))
+				print("# %s %s" % (os.path.basename(infile),"%s%s%s"%(FAIL,status,ENDC)))
 				print("[Input]")
 				with open(infile, "r") as inf2:
 					print(inf2.read(),end='')
@@ -97,6 +106,14 @@ def prepare_workspace(contestid):
 
 	atcoder = AtCoder(AccountInformation.username,AccountInformation.password)
 	plist = atcoder.get_problem_list(contestid)
+	for pid,url in reversed([x for x in plist.items()]):
+		while True:	
+			try:
+				os.system("open %s" % url)
+				break
+			except:
+				pass
+
 	for pid,url in plist.items():
 
 		information,samples = atcoder.get_all(url)
@@ -127,8 +144,6 @@ def prepare_workspace(contestid):
 			with open(outfile, "w") as file:
 				file.write(out_content)
 		print("prepared %s!" % pid)
-
-
 		os.system("subl %s/%s.cpp" % (dirname,pid))
 
 
