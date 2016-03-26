@@ -38,7 +38,8 @@ class Index:
 		return res
 
 class VariableInformation:
-	def __init__(self,idxsize):
+	def __init__(self,name,idxsize):
+		self.name = name
 		self.indexes = [Index() for _ in range(idxsize)] 
 		self.type = None
 
@@ -118,7 +119,7 @@ def format_analyse(parsed_tokens,to_1d_flag=False):
 		idxs = token[1:]
 		varname = token[0]
 		if varname not in dic:
-			dic[varname] = VariableInformation(len(idxs))
+			dic[varname] = VariableInformation(varname,len(idxs))
 			appearances[varname] = []
 		appearances[varname].append(pos)
 		# print(idxs)
