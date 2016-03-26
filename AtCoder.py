@@ -82,4 +82,29 @@ class AtCoder:
 		res = url_re.findall(text)
 		res = sorted(res)
 		return res
-			
+
+	def submit_source_code(self,contestid,pid,lang,source):
+		url = "https://%s.contest.atcoder.jp/submit" % contestid
+		req = self.opener.open(url)
+		soup = BeautifulSoup(req,"html.parser")
+		session_id = soup.find("input",attrs={"type":"hidden"}).get("value")
+
+		task_select_area = soup.find('select',attrs={"id":"submit-task-selector"})
+		task_field_name = task_select_area.get("name")
+		task_number = task_select_area.find("option",text=re.compile('%s -' % pid)).get("value")
+
+		language_select_area = soup.find('select',attrs={"id":"submit-language-selector-%s" % task_number})
+		language_field_name = language_select_area.get("name")
+		language_number = language_select_area.find("option",text=re.compile('%s' % lang)).get("value")
+		#print(session_id)
+		postdata = {
+			"__session" : session_id,
+			task_field_name : task_number,
+			language_field_name : language_number,
+			"source_code" : source
+		}
+		encoded_postdata = urllib.parse.urlencode(postdata).encode('utf-8')
+		req = self.opener.open(url, encoded_postdata)
+		html = req.read().decode('utf-8')
+		return True
+		
