@@ -50,7 +50,6 @@ def deviding_pattern(text,variables):
 
 		if flag:
 			res.append(c)
-	# print(res)
 	return res
 
 
@@ -89,5 +88,4 @@ def get_all_format_probabilities(tokens):
 		if not dfs(finalAnswer,tokens,[],0,{},lim):
 			break
 		lim += 1
-		# print(lim)
 	return finalAnswer

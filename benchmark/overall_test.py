@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
+import sys
+sys.path.append("../core")
 from AtCoder import AtCoder
 import AccountInformation
 import FormatAnalyzer
 import FormatPredictor
 import CppCodeGenerator
-import sys
 
 class NoPatternFoundError(Exception) : pass
 

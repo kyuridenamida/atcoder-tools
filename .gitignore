@@ -1,3 +1,4 @@
 *AccountInformation*
 *.pyc
 .DS_Store
+/workspace
