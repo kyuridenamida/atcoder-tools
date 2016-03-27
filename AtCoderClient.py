@@ -8,12 +8,12 @@ import AccountInformation
 from CppCodeGenerator import code_generator
 import FormatPredictor
 
-
-# FAIL = '\033[91m'
-# OKGREEN = '\033[92m'
-# OKBLUE = '\033[94m'
-# ENDC = '\033[0m'
-FAIL = OKGREEN = OKBLUE = ENDC = ''
+# このへんのコメントアウト弄るとカラフルじゃなくなったり，なったりします．
+FAIL = '\033[91m'
+OKGREEN = '\033[92m'
+OKBLUE = '\033[94m'
+ENDC = '\033[0m'
+#FAIL = OKGREEN = OKBLUE = ENDC = ''
 
 
 class NoExecutableFileError(Exception):
@@ -107,18 +107,26 @@ def test_and_submit(contestid, pid, exec_file=None, cpp_file=None,
         with open(cpp_file, "r") as f:
             if atcoder.submit_source_code(contestid, pid, "C\+\+1.*\(GCC", f.read()):
                 print("%sdone%s" % (OKGREEN, ENDC))
+                os.system(
+                    "echo 'If you want to resubmit, delete this file.' > submission_lock_file")
             else:
                 print("%sfailed%s" % (FAIL, ENDC))
 
 
 pytemplate = \
     '''import sys
+import os
 sys.path.append("../../../")
 sys.path.append("../../../core")
 from AtCoderClient import test_and_submit
 
 if __name__ == "__main__":
-	test_and_submit(contestid='%s',pid='%s',no_submit_flag=False,forced_submit_flag=False)
+    no_submit_flag = False
+    if os.path.exists("./submission_lock_file"):
+        no_submit_flag = True
+    test_and_submit(contestid='%s',pid='%s',no_submit_flag=no_submit_flag,forced_submit_flag=False)
+    if os.path.exists("./submission_lock_file"):
+        print("Some solution has been submitted.")
 '''
 
 
@@ -135,22 +143,33 @@ def prepare_workspace(contestid):
     # 			pass
 
     for pid, url in plist.items():
-
-        information, samples = atcoder.get_all(url)
-        result = FormatPredictor.format_predictor(information, samples)
+        try:
+            information, samples = atcoder.get_all(url)
+            result = FormatPredictor.format_predictor(information, samples)
+        except:
+            result = None
+            samples = []
+            print("Problem %s: failed to get information." % pid)
 
         dirname = "workspace/%s/%s" % (contestid, pid)
         os.makedirs(dirname, exist_ok=True)
 
-        # 追加書き込みモードなのは事故を防ぐため!
-        with open("%s/%s.cpp" % (dirname, pid), "a") as f:
-            f.write(code_generator(result))
+        # 既に存在しているならバックアップを取る
+        solution_name = "%s/%s.cpp" % (dirname, pid)
+        if os.path.exists(solution_name):
+            backup_id = 1
+            while True:
+                backup_name = "%s.%d" % (solution_name, backup_id)
+                if not os.path.exists(backup_name):
+                    os.system('cp "%s" "%s"' % (solution_name, backup_name))
+                    break
+                backup_id += 1
 
-        try:
-            samples = atcoder.get_samples(url)
-        except:
-            print("Problem %s: failed to get samples...." % pid)
-            samples = []
+        if result == None:
+            print("Problem %s: failed to analyze input format." % pid)
+
+        with open(solution_name, "w") as f:
+            f.write(code_generator(result))
 
         with open("%s/test.py" % dirname, "w") as f:
             f.write(pytemplate % (contestid, pid))
@@ -172,3 +191,5 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         contestid = sys.argv[1]
         prepare_workspace(contestid)
+    else:
+        print("%s [contest_id]" % sys.argv[0])
