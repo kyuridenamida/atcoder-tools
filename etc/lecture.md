@@ -189,7 +189,7 @@ ARC001〜ARC004の範囲ならどちらの方針でも正しく動きそうで�
 まあとりあえずそのへんどう処理するかはおいおい考えるとして，
 とりあえず入力と出力を切り分けてみます．**2.の方針のほうが多分多くのケースを網羅できるんですが**，今回は1.の方針でやってみましょう．
 
-```
+```py
 opener = opener.open("http://arc001.contest.atcoder.jp/tasks/arc001_1")
 soup = BeautifulSoup(req,"html.parser")
 tags = soup.select('.prettyprint')
