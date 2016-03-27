@@ -12,7 +12,7 @@ I develop convenient modules for AtCoder users, especially about pulling data fr
 
 This tool provide modules related the following thing:
 
-- Log-in, Extracting pulled data(Ex. examples), Automatic submission
+- Log-in, Extracting information(Ex. examples) from pulled data, Automatic submission
 - Input format analysis by backtracking algorithm which works fast.
 - automatic cpp's template code generation using a result of analysis.
 
