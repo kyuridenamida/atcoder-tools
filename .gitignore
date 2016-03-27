@@ -2,4 +2,4 @@
 *.pyc
 .DS_Store
 /workspace
-.
+do_format.py
