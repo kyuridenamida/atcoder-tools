@@ -95,7 +95,7 @@ $ git clone https://github.com/kyuridenamida/ToolsForAtCoder.git
 │   ├── AtCoder.py -- deals with login, getting information of a contest.
 │   ├── Calculator.py -- calculates a formula as string text with variables.
 │   ├── FormatAnalyzer.py -- detects the loop structures in the format using FormatTokenizer.py's result 
-│   │                        and determine what type the variables are.
+│   │                        and determines what type the variables are.
 │   ├── FormatPredictor.py -- gets the structured input format using FormatAnalyzer.py's result.
 │   ├── FormatTokenizer.py -- convert plain input format text into candidate tokenized formats.
 │   └── utils.py -- Utilities
