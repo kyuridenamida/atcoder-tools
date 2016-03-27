@@ -1,25 +1,106 @@
-# え，何これは
-AtCoderの入力形式とかをがんばって解析するツールなどなどです．
+ToolsForAtCoder
+====
 
-# 動作環境
-Python3とbeautifulsoup4があれば動くと思います．Python2では動きません．
+Convenient modules written in Python 3.4 for [AtCoder](http://atcoder.jp/) users!
+This tool can analyze the input format with high accuracy (90% Accuracy for ARC or ABC).
 
-bs4は，
+AtCoderを解析する際に便利なモジュール群です．このツールには入力解析機能があり，ARCやABCについては高精度(90%)での入力解析を実現しています．
+
+## Description
+
+I develop convenient modules for AtCoder users, especially about pulling data from AtCoder sites, input format analysis or automatic code generation.
+
+This tool provide modules related the following thing:
+
+- Log-in, Extracting pulled data(Ex. examples), Automatic submission
+- Input format analysis by backtracking algorithm which works fast.
+- automatic cpp's template code generation using a result of analysis.
+
+便利なモジュール群，特にAtCoderからデータを取ってきたり，入力フォーマット解析，コードの自動生成などに関するものを実装しています．
+
+このツールは以下に関するモジュールを提供しています．
+- AtCoderへのログイン，入出力例データなどの抽出，自動提出
+- 枝刈り探索による高速な入力解析
+- 解析結果を用いたテンプレートコードの自動生成
+
+At the time, you can generate only cpp's template code.
+However you can make another language's template easily by modifying the code!
+
+コード生成は現時点でcppにのみ対応していますが，cppのコード生成部分を少し弄れば他の言語にも容易に対応することができます．
+
+## Demo
+https://www.youtube.com/watch?v=Ee3EWs_xHG8
+[![DEMO VIDEO](https://img.youtube.com/vi/Ee3EWs_xHG8/0.jpg)](https://www.youtube.com/watch?v=Ee3EWs_xHG8)
+
+## Requirement
+
+- Beautiful soup 4
+
+## Usage
+
+
+If you want to use this tool as an atcoder client (beta ver), the following example will be helpful. 
+
+クライアントとしてこのツールを使いたい人(C++ユーザー)は以下のような感じで実行すると良いです．
 
 ```
-pip install beautifulsoup4
+$ echo "password = 'atcoder password'; username = 'atcoder username'" > ./AccountInformation.py # Be careful with the password management!!!
+$ python3 ./AtCoderClient.py [contestid]
+$ cd ./workspace/[contestid]/[problem_id]/
+$ # create excetuable program
+$ python3 test.py
 ```
 
-で入ります．多分
+If you're a developer who wants to use some modules for analysis, please read the codes or please ask me anything!
 
-# ファイル構成
+開発者の方はソース読むか，気軽にkyuridenamidaに質問してください．
 
-- (gitignore)AccountInformation.py : passwordという変数とusernameという変数が格納されています．
-- AtCoder.py : AtCoderからデータをダウンロードしてくるコードです
-- Calculator.py : 文字列に関する簡易計算機です．構文木を構築して，それを評価したりできます．四則演算や括弧，変数に対応しています．
-- FormatAnalyzer.py : FormatTokenizerでtokenizeされたものを与えると，入力の繰り返し部分などを検出して木構造型のデータ構造を構築します．
-- FormatTokenizer.py : 入力に現れる変数列のstring列を与えて，変数名/添字に分解してくれるプログラムです．
-- experiment.py : これを実行してみると全コンテストに対してデータの取得を試みて，成功した比率が表示されます．experimentalなソースなので汚いです．
-- lecture.md : 開発と並行してAtCoderを用いたWebスクレイピング入門を書いたので良かったら読んでください
-- sample_downloader.py : サンプルダウンロードするスクリプトです．
-- utils.py : 汎用的に使いそうな関数とかを定義しています
+## Install
+
+```
+$ pip install beautifulsoup4
+$ git clone https://github.com/kyuridenamida/ToolsForAtCoder.git
+```
+
+## Contribution
+
+1. Fork it ( https://github.com/kyuridenamida/ToolsForAtCoder/fork )
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
+
+
+## Licence
+
+[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+
+## Author
+
+[kyuridenamida](https://github.com/kyuridenamida) 
+
+[@kyuridenamida](https://twitter.com/kyuridenamida)
+
+# Files
+
+```
+.
+├── AccountInformation.py -- Account information! This file is not on the repository!
+├── AtCoderClient.py -- A beta client for cpp users.
+├── CppCodeGenerator.py -- A beta module too. You can apply this code to other lang.
+├── README.md 
+├── benchmark
+│   ├── overall_test.py -- does testing with all public problems on AtCoder. 
+│   ├── support_list.html -- Test result(html ver)
+│   └── support_list.md -- Test result(markdown ver)
+├── core 
+│   ├── AtCoder.py -- deals with login, getting information of a contest.
+│   ├── Calculator.py -- calculates a formula as string text with variables.
+│   ├── FormatAnalyzer.py -- detects the loop structures in the format using FormatTokenizer.py's result 
+│   │                        and determine what type the variables are.
+│   ├── FormatPredictor.py -- gets the structured input format using FormatAnalyzer.py's result.
+│   ├── FormatTokenizer.py -- convert plain input format text into candidate tokenized formats.
+│   └── utils.py -- Utilities
+└── etc
+    └── lecture.md
+```

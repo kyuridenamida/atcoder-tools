@@ -106,13 +106,13 @@ def prepare_workspace(contestid):
 
 	atcoder = AtCoder(AccountInformation.username,AccountInformation.password)
 	plist = atcoder.get_problem_list(contestid)
-	for pid,url in reversed([x for x in plist.items()]):
-		while True:	
-			try:
-				os.system("open %s" % url)
-				break
-			except:
-				pass
+	# for pid,url in reversed([x for x in plist.items()]):
+	# 	while True:	
+	# 		try:
+	# 			os.system("open %s" % url)
+	# 			break
+	# 		except:
+	# 			pass
 
 	for pid,url in plist.items():
 
@@ -144,7 +144,7 @@ def prepare_workspace(contestid):
 			with open(outfile, "w") as file:
 				file.write(out_content)
 		print("prepared %s!" % pid)
-		os.system("subl %s/%s.cpp" % (dirname,pid))
+		# os.system("subl %s/%s.cpp" % (dirname,pid))
 
 
 if __name__ == "__main__":
