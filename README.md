@@ -29,7 +29,13 @@ However you can make another language's template easily by modifying the code!
 コード生成は現時点でcppにのみ対応していますが，cppのコード生成部分を少し弄れば他の言語にも容易に対応することができます．
 
 ## Demo
-[![DEMO VIDEO](https://img.youtube.com/vi/Ee3EWs_xHG8/0.jpg)](https://www.youtube.com/watch?v=Ee3EWs_xHG8)
+<object width="425" height="350">
+  <param name="movie" value="http://www.youtube.com/user/wwwLoveWatercom?v=Ee3EWs_xHG8" />
+  <param name="wmode" value="transparent" />
+  <embed src="http://www.youtube.com/user/wwwLoveWatercom?v=Ee3EWs_xHG8"
+         type="application/x-shockwave-flash"
+         wmode="transparent" width="425" height="350" />
+</object>
 
 ## Requirement
 
