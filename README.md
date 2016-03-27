@@ -29,7 +29,7 @@ However you can make another language's template easily by modifying the code!
 コード生成は現時点でcppにのみ対応していますが，cppのコード生成部分を少し弄れば他の言語にも容易に対応することができます．
 
 ## Demo
-[![DEMO VIDEO](https://img.youtube.com/vi/Ee3EWs_xHG8/0.jpg)](https://www.youtube.com/watch?v=Ee3EWs_xHG8)
+[Video demo for 'Tools For AtCoder'](https://youtu.be/Ee3EWs_xHG8)
 
 ## Requirement
 
@@ -95,7 +95,7 @@ $ git clone https://github.com/kyuridenamida/ToolsForAtCoder.git
 │   ├── AtCoder.py -- deals with login, getting information of a contest.
 │   ├── Calculator.py -- calculates a formula as string text with variables.
 │   ├── FormatAnalyzer.py -- detects the loop structures in the format using FormatTokenizer.py's result 
-│   │                        and determine what type the variables are.
+│   │                        and determines what type the variables are.
 │   ├── FormatPredictor.py -- gets the structured input format using FormatAnalyzer.py's result.
 │   ├── FormatTokenizer.py -- convert plain input format text into candidate tokenized formats.
 │   └── utils.py -- Utilities
