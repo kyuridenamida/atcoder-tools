@@ -1,7 +1,7 @@
 ToolsForAtCoder
 ====
 
-Convenient modules written in Python 3.4 for [AtCoder](http://atcoder.jp/) users!
+Convenient modules for [AtCoder](http://atcoder.jp/) users, written in Python 3.4!
 This tool can analyze the input format with high accuracy (90% Accuracy for ARC or ABC).
 
 AtCoderを解析する際に便利なモジュール群です．このツールには入力解析機能があり，ARCやABCについては高精度(90%)での入力解析を実現しています．
