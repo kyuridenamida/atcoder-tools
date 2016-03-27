@@ -16,6 +16,9 @@ This tool provide modules related the following thing:
 - Input format analysis by backtracking algorithm which works fast.
 - automatic cpp's template code generation using a result of analysis.
 
+At the time, you can generate only cpp's template code.
+However you can make another language's template easily by modifying the code!
+
 便利なモジュール群，特にAtCoderからデータを取ってきたり，入力フォーマット解析，コードの自動生成などに関するものを実装しています．
 
 このツールは以下に関するモジュールを提供しています．
@@ -23,17 +26,14 @@ This tool provide modules related the following thing:
 - 枝刈り探索による高速な入力解析
 - 解析結果を用いたテンプレートコードの自動生成
 
-At the time, you can generate only cpp's template code.
-However you can make another language's template easily by modifying the code!
-
 コード生成は現時点でcppにのみ対応していますが，cppのコード生成部分を少し弄れば他の言語にも容易に対応することができます．
 
 ## Demo
-https://www.youtube.com/watch?v=Ee3EWs_xHG8
 [![DEMO VIDEO](https://img.youtube.com/vi/Ee3EWs_xHG8/0.jpg)](https://www.youtube.com/watch?v=Ee3EWs_xHG8)
 
 ## Requirement
 
+- Python 3.4
 - Beautiful soup 4
 
 ## Usage
@@ -77,9 +77,7 @@ $ git clone https://github.com/kyuridenamida/ToolsForAtCoder.git
 
 ## Author
 
-[kyuridenamida](https://github.com/kyuridenamida) 
-
-[@kyuridenamida](https://twitter.com/kyuridenamida)
+[kyuridenamida](https://github.com/kyuridenamida) ([@kyuridenamida](https://twitter.com/kyuridenamida))
 
 # Files
 
