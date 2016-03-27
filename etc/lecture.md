@@ -47,7 +47,7 @@ name部分が重要に注目してください．"name"と"password"になって
 
 ディクショナリをPOSTデータの実質の形式(password=パスワード&name=ユーザー名)にしてくれる関数urllib.parse.urlencode()があるので，それを使います．
 
-```
+```py
 username,password = 'ユーザー名','パスワード'
 postdata = {
     'name': username,
@@ -80,7 +80,7 @@ print(req.read().decode('utf-8')) # req.read()だけだとバイナリで表示�
 soupのオブジェクトを作って，select関数で.linkwrapperクラスのタグを全列挙してみましょう．
 
 以下のコードにドットがついているのはcssのclassだからだと思います．
-```
+```py
 req = opener.open("http://arc001.contest.atcoder.jp/assignments")
 soup = BeautifulSoup(req,"html.parser")
 for tag in soup.select('.linkwrapper'):
@@ -105,12 +105,12 @@ for tag in soup.select('.linkwrapper'):
 せっかくなので問題番号とそれに紐付いたURLというタプルのリストを作ってみましょう．
 PythonはすごいのでリストXに対してX[0::2]とすると2個飛ばしでリストを抜き出してくれます．
 こんなかんじになります．
-```
+```py
 X = []
 for tag in soup.select('.linkwrapper')[0::2]:
 	problemid = tag.text
 	url = "http://arc001.contest.atcoder.jp"+tag.get("href")
-  	X.append((problemid,url)
+  	X.append((problemid,url))
 print(X)
 ```
 ここで，tagのメンバとかメソッドでtextとかget("href")とかありますが，これはそれぞれタグの囲まれている中身やタグの属性を取得してくれる便利なやつです．
@@ -123,7 +123,7 @@ print(X)
 
 ところで，リスト内包表記という記法を使ってタプルのリストを作るソースが以下のようになります．
 こういうワンライナーな使い方をすると可読性が低い気もしますが書きやすいです．
-```
+```py
 print([(tag.text,"http://arc001.contest.atcoder.jp"+tag.get("href")) for tag in soup.select('.linkwrapper')[0::2]])
 ```
 
@@ -142,7 +142,7 @@ print([(tag.text,"http://arc001.contest.atcoder.jp"+tag.get("href")) for tag in 
 #### ARC001で試してみる
 ARC001のA問題(http://arc001.contest.atcoder.jp/tasks/arc001_1 )に対して，preタグでフィルタをかけてみましょう．
 
-```
+```py
 req = opener.open("http://arc001.contest.atcoder.jp/tasks/arc001_1")
 soup = BeautifulSoup(req,"html.parser")
 for tag in soup.select('pre'):
