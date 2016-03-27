@@ -73,7 +73,7 @@ $ git clone https://github.com/kyuridenamida/ToolsForAtCoder.git
 
 ## Licence
 
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+[MIT](https://github.com/kyuridenamida/ToolsForAtCoder/blob/master/LICENCE)
 
 ## Author
 
