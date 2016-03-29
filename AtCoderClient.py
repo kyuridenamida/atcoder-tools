@@ -7,13 +7,16 @@ from AtCoder import AtCoder
 import AccountInformation
 from CppCodeGenerator import code_generator
 import FormatPredictor
-
+from multiprocessing import Pool
+from multiprocessing import Process
+from multiprocessing import cpu_count
+from time import sleep
 # このへんのコメントアウト弄るとカラフルじゃなくなったり，なったりします．
 FAIL = '\033[91m'
 OKGREEN = '\033[92m'
 OKBLUE = '\033[94m'
 ENDC = '\033[0m'
-#FAIL = OKGREEN = OKBLUE = ENDC = ''
+FAIL = OKGREEN = OKBLUE = ENDC = ''
 
 
 class NoExecutableFileError(Exception):
@@ -34,6 +37,7 @@ class MultipleCppFilesError(Exception):
 
 def test_and_submit(contestid, pid, exec_file=None, cpp_file=None,
                     forced_submit_flag=False, no_submit_flag=False):
+    
     exec_files = [fname for fname in glob.glob(
         './*') if os.access(fname, os.X_OK) and fname != "./test.py"]
 
@@ -50,6 +54,8 @@ def test_and_submit(contestid, pid, exec_file=None, cpp_file=None,
 
     succ = 0
     total = 0
+    
+
     for infile, outfile in zip(infiles, outfiles):
         if os.path.basename(infile)[2:] != os.path.basename(outfile)[3:]:
             print("The output for '%s' is not '%s'!!!" % (infile, outfile))
@@ -89,7 +95,7 @@ def test_and_submit(contestid, pid, exec_file=None, cpp_file=None,
     else:
         print("Passed all testcases!!!")
 
-    if not no_submit_flag and (succ == total or forced_submit_flag):
+    if not no_submit_flag and ( total > 0 and succ == total or forced_submit_flag):
         atcoder = AtCoder(AccountInformation.username,
                           AccountInformation.password)
 
@@ -121,70 +127,86 @@ sys.path.append("../../../core")
 from AtCoderClient import test_and_submit
 
 if __name__ == "__main__":
+    forced_submit_flag = False
+    if len(sys.argv) >= 2 and sys.argv[1] == "--f":
+        forced_submit_flag = True
     no_submit_flag = False
     if os.path.exists("./submission_lock_file"):
         no_submit_flag = True
-    test_and_submit(contestid='%s',pid='%s',no_submit_flag=no_submit_flag,forced_submit_flag=False)
+    test_and_submit(contestid='%s',pid='%s',no_submit_flag=no_submit_flag,forced_submit_flag=forced_submit_flag)
     if os.path.exists("./submission_lock_file"):
         print("Some solution has been submitted.")
 '''
 
 
+
+def prepare_procedure(argv):
+    atcoder,pid,url = argv
+    try:
+        information, samples = atcoder.get_all(url)
+        result = FormatPredictor.format_predictor(information, samples)
+    except:
+        result = None
+        samples = []
+        print("Problem %s: failed to get information." % pid)
+
+    dirname = "workspace/%s/%s" % (contestid, pid)
+    os.makedirs(dirname, exist_ok=True)
+
+    # 既に存在しているならバックアップを取る
+    solution_name = "%s/%s.cpp" % (dirname, pid)
+    if os.path.exists(solution_name):
+        backup_id = 1
+        while True:
+            backup_name = "%s.%d" % (solution_name, backup_id)
+            if not os.path.exists(backup_name):
+                os.system('cp "%s" "%s"' % (solution_name, backup_name))
+                break
+            backup_id += 1
+
+    if result == None:
+        print("Problem %s: failed to analyze input format." % pid)
+
+    with open(solution_name, "w") as f:
+        f.write(code_generator(result))
+
+    with open("%s/test.py" % dirname, "w") as f:
+        f.write(pytemplate % (contestid, pid))
+
+    for num, (in_content, out_content) in enumerate(samples):
+        casename = "%s_%d" % (pid, num + 1)
+        infile = "%s/in_%s.txt" % (dirname, casename)
+        outfile = "%s/out_%s.txt" % (dirname, casename)
+        with open(infile, "w") as file:
+            file.write(in_content)
+        with open(outfile, "w") as file:
+            file.write(out_content)
+    os.system("subl '%s/%s.cpp' -b" % (dirname,pid))
+    print("prepared %s!" % pid)
+
+
+
 def prepare_workspace(contestid):
-
     atcoder = AtCoder(AccountInformation.username, AccountInformation.password)
-    plist = atcoder.get_problem_list(contestid)
-    # for pid,url in reversed([x for x in plist.items()]):
-    # 	while True:
-    # 		try:
-    # 			os.system("open %s" % url)
-    # 			break
-    # 		except:
-    # 			pass
 
-    for pid, url in plist.items():
+    while True:
+        plist = atcoder.get_problem_list(contestid)
+        if plist :
+            break
+        sleep(0.5)
+        print("retrying to get task list.")
+    #for pid,url in reversed([x for x in plist.items()]):
+
+    while True:
         try:
-            information, samples = atcoder.get_all(url)
-            result = FormatPredictor.format_predictor(information, samples)
+            os.system("open %s" % plist['A'])
+            break
         except:
-            result = None
-            samples = []
-            print("Problem %s: failed to get information." % pid)
+            pass2
 
-        dirname = "workspace/%s/%s" % (contestid, pid)
-        os.makedirs(dirname, exist_ok=True)
+    p = Pool(processes=cpu_count())
 
-        # 既に存在しているならバックアップを取る
-        solution_name = "%s/%s.cpp" % (dirname, pid)
-        if os.path.exists(solution_name):
-            backup_id = 1
-            while True:
-                backup_name = "%s.%d" % (solution_name, backup_id)
-                if not os.path.exists(backup_name):
-                    os.system('cp "%s" "%s"' % (solution_name, backup_name))
-                    break
-                backup_id += 1
-
-        if result == None:
-            print("Problem %s: failed to analyze input format." % pid)
-
-        with open(solution_name, "w") as f:
-            f.write(code_generator(result))
-
-        with open("%s/test.py" % dirname, "w") as f:
-            f.write(pytemplate % (contestid, pid))
-
-        for num, (in_content, out_content) in enumerate(samples):
-            casename = "%s_%d" % (pid, num + 1)
-            infile = "%s/in_%s.txt" % (dirname, casename)
-            outfile = "%s/out_%s.txt" % (dirname, casename)
-            with open(infile, "w") as file:
-                file.write(in_content)
-            with open(outfile, "w") as file:
-                file.write(out_content)
-        print("prepared %s!" % pid)
-        # os.system("subl %s/%s.cpp" % (dirname,pid))
-
+    p.map(prepare_procedure, [(atcoder,pid,url) for pid,url in plist.items()])
 
 if __name__ == "__main__":
     import sys
