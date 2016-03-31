@@ -16,7 +16,7 @@ FAIL = '\033[91m'
 OKGREEN = '\033[92m'
 OKBLUE = '\033[94m'
 ENDC = '\033[0m'
-FAIL = OKGREEN = OKBLUE = ENDC = ''
+# FAIL = OKGREEN = OKBLUE = ENDC = ''
 
 
 class NoExecutableFileError(Exception):
@@ -39,7 +39,7 @@ def test_and_submit(contestid, pid, exec_file=None, cpp_file=None,
                     forced_submit_flag=False, no_submit_flag=False):
     
     exec_files = [fname for fname in glob.glob(
-        './*') if os.access(fname, os.X_OK) and fname != "./test.py"]
+        './*') if os.access(fname, os.X_OK) and fname != "./test.py" and not fname.endswith(".cpp") and not fname.endswith(".txt")] # cppやtxtを省くのは一応の Cygwin 対策
 
     if exec_file is None:
         if len(exec_files) == 0:
