@@ -181,7 +181,7 @@ def prepare_procedure(argv):
             file.write(in_content)
         with open(outfile, "w") as file:
             file.write(out_content)
-    os.system("subl '%s/%s.cpp' -b" % (dirname,pid))
+    #os.system("subl '%s/%s.cpp' -b" % (dirname,pid))
     print("prepared %s!" % pid)
 
 
@@ -197,12 +197,12 @@ def prepare_workspace(contestid):
         print("retrying to get task list.")
     #for pid,url in reversed([x for x in plist.items()]):
 
-    while True:
-        try:
-            os.system("open %s" % plist['A'])
-            break
-        except:
-            pass2
+    # while True:
+    #     try:
+    #         os.system("open %s" % plist['A'])
+    #         break
+    #     except:
+    #         pass
 
     p = Pool(processes=cpu_count())
 
