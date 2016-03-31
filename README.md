@@ -10,7 +10,7 @@ AtCoderを解析する際に便利なモジュール群です．このツール�
 
 I develop convenient modules for AtCoder users, especially about pulling data from AtCoder sites, input format analysis or automatic code generation.
 
-This tool provides modules related the following thing:
+This tool provides modules related to the following things.
 
 - Log-in, Extracting information(Ex. examples) from pulled data, Automatic submission
 - Input format analysis by backtracking algorithm which works fast.
