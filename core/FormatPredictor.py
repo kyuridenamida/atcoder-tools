@@ -28,15 +28,21 @@ def format_predictor(format, samples):
             try:
                 current_dic = {}
                 for sample in samples:
-                    sample = sample[0].replace("\n", " ")
-                    tokens = [x for x in sample.split(" ") if x != ""]
+                    sample = sample[0].replace(" ", "[SP] ")
+                    sample = sample.replace("\n", "[NL] ")
+                    # print(samples)
+                    # tokens = [(name,sep)]*
+                    tokens = [(x[:-4], ' ' if x[-4:] == '[SP]' else '\n' if x[-4:] == '[NL]' else 'ERR') for x in sample.split(" ") if x != ""] # "abc[SP]" -> "abc
+                    # print(tokens)
                     current_dic = rootnode.verifyAndGetTypes(
                         tokens, current_dic)
-
+                    
                 for k, var in current_dic.items():
                     varinfo[k].type = var[1]
-                return FormatPredictResult(rootnode, varinfo)
-            except:
+                res = FormatPredictResult(rootnode, varinfo)
+                # print(str(rootnode))
+                return res
+            except Exception as e:
                 pass
 
     return None

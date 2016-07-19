@@ -24,7 +24,6 @@ def upcast(frm, to):
         return float
     raise UpCastingError
 
-
 class Index:
 
     def __init__(self):
@@ -65,6 +64,8 @@ class FormatNode:
         self.varname = varname
         self.pointers = pointers
         self.index = index
+        self.sep = None
+        self.terminal_sep = None
 
     def verifyAndGetTypes(self, tokens, init_dic={}):
         value_dic = copy.deepcopy(init_dic)
@@ -100,12 +101,18 @@ class FormatNode:
                     converted_dictionary(value_dic))
                 maxv = self.index.max_index.evaluate(
                     converted_dictionary(value_dic))
+                
                 for _ in range(minv, maxv + 1):
                     for child in self.pointers:
                         pos = child.simulate(tokens, value_dic, pos)
+                        if maxv - minv != 1 and self.sep == None:
+                            self.sep = tokens[pos-1][1];
+                self.terminal_sep = tokens[pos-1][1]
                 return pos
         else:
-            checkAndReflesh(value_dic, self.varname, tokens[pos])
+        
+            checkAndReflesh(value_dic, self.varname, tokens[pos][0])
+            self.terminal_sep = tokens[pos][1]
             pos += 1
             return pos
 
@@ -119,7 +126,7 @@ class FormatNode:
                                    for child in self.pointers]) + "]"
         else:
             res = fixed_variable_name(self.varname)
-        return res
+        return res + "(sep:[" +  str(ord(str(self.sep)[0])) + "] terminal_sep = [" +  str(ord(str(self.terminal_sep)[0])) + "]" + ")"
 
 
 def format_analyse(parsed_tokens, to_1d_flag=False):

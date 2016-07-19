@@ -6,7 +6,7 @@ import subprocess
 sys.path.append("core")
 from AtCoder import AtCoder
 import AccountInformation
-from CppCodeGenerator import code_generator
+from CppCodeGeneratorForTester import code_generator
 import FormatPredictor
 from multiprocessing import Pool
 from multiprocessing import Process
@@ -182,7 +182,7 @@ def prepare_procedure(argv):
             file.write(in_content)
         with open(outfile, "w") as file:
             file.write(out_content)
-    # os.system("notepad++ '%s/%s.cpp'" % (dirname,pid))
+    os.system("notepad++ '%s/%s.cpp'" % (dirname,pid))
     print("prepared %s!" % pid)
 
 
@@ -200,7 +200,7 @@ def prepare_workspace(contestid):
 
     while True:
         try:
-            # os.system('"C:/Program Files (x86)/Google/Chrome/Application/chrome.exe" %s' % plist['A'])
+            os.system('"C:/Program Files (x86)/Google/Chrome/Application/chrome.exe" %s' % plist['A'])
             break
         except:
             pass
