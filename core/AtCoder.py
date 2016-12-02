@@ -1,4 +1,5 @@
 from utils import normalized, pure_japanese_text
+import getpass
 import re
 import urllib.request
 from collections import OrderedDict
@@ -19,7 +20,13 @@ class InputParseError(Exception):
 
 class AtCoder:
 
-    def __init__(self, username, password):
+    def __init__(self, username=None, password=None):
+        if username is None:
+            username = input('input your username: ')
+
+        if password is None:
+            password = getpass.getpass('input your passowrd: ')
+
         self.cj = http.cookiejar.CookieJar()
 
         self.opener = urllib.request.build_opener(

@@ -6,8 +6,15 @@ import subprocess
 sys.path.append(".")
 sys.path.append("core")
 from AtCoder import AtCoder
-import AccountInformation
-from templates.cpp.cpp_code_generator import code_generator
+
+try:
+    import AccountInformation
+except ImportError:
+    class AccountInformation:
+        username = None
+        password = None
+
+from templates.java.java_code_generator import code_generator
 import FormatPredictor
 from multiprocessing import Pool
 from multiprocessing import Process
@@ -202,22 +209,19 @@ def prepare_workspace(contestid):
 
     while True:
         plist = atcoder.get_problem_list(contestid)
-        if plist :
+        if plist:
             break
-        sleep(0.5)
+        sleep(1.5)
         print("retrying to get task list.")
-    #for pid,url in reversed([x for x in plist.items()]):
-
     while True:
         try:
-            # os.system('"C:/Program Files (x86)/Google/Chrome/Application/chrome.exe" %s' % plist['A'])
             break
         except:
             pass
 
     p = Pool(processes=cpu_count())
 
-    p.map(prepare_procedure, [(atcoder,pid,url) for pid,url in plist.items()])
+    p.map(prepare_procedure, [(atcoder, pid, url) for pid, url in plist.items()])
 
 if __name__ == "__main__":
     import sys
