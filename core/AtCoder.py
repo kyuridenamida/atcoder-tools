@@ -25,7 +25,7 @@ class AtCoder:
             username = input('input your username: ')
 
         if password is None:
-            password = getpass.getpass('input your passowrd: ')
+            password = getpass.getpass('input your password: ')
 
         self.cj = http.cookiejar.CookieJar()
 
