@@ -1,5 +1,19 @@
 import re
+import unicodedata
 
+def is_japanese(ch):
+    # Thank you!
+    # http://minus9d.hatenablog.com/entry/2015/07/16/231608
+    try:
+        name = unicodedata.name(ch) 
+        if"CJK UNIFIED" in name or "HIRAGANA" in name or "KATAKANA" in name:
+            return True
+    except:
+        pass
+    return False
+    
+def pure_japanese_text(content):
+    return "".join([x for x in content if is_japanese(x)])
 
 def normalized(content):
     return content.strip().replace('\r', '') + "\n"
