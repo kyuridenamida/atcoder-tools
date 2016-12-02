@@ -1,7 +1,7 @@
 atcoder-tools
 ====
 
-* ToolsForAtCoder changes the name to atcoder-tools on 12/03/2016 *
+** ToolsForAtCoder changes the name to atcoder-tools on 12/03/2016 **
 
 Convenient modules for [AtCoder](http://atcoder.jp/) users, written in Python 3.4!
 This tool can analyze the input format with high accuracy (90% Accuracy for ARC or ABC).
