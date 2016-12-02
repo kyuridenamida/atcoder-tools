@@ -1,5 +1,7 @@
 import sys
-sys.path.append("../core")
+import os
+mydir = os.path.dirname(__file__)
+
 from functools import reduce
 from TemplateEngine import render
 
@@ -51,7 +53,7 @@ def generate_declaration(v):
 
     if dim == 0:
         type_template_before = "{type}".format(type=typename)
-        type_template_after = "()"
+        type_template_after = ""
     elif dim == 1:
         type_template_before = "vector<{type}>".format(type=typename)
         type_template_after = "({size}+1)".format(size=v.indexes[0].zero_indexed().max_index)
@@ -65,7 +67,7 @@ def generate_declaration(v):
     else:
         raise NotImplementedError
 
-    line = "{declaration} {name} = {declaration}{constructor};".format(
+    line = "{declaration} {name}{constructor};".format(
         name=v.name,
         declaration=type_template_before,
         constructor=type_template_after
@@ -73,7 +75,7 @@ def generate_declaration(v):
     return line
 
 
-def generate_params(var_information):
+def generate_arguments(var_information):
     '''
     :param var_information: 全変数の情報
     :return: 仮引数、実引数の文字列表現(順序は両者同じ);
@@ -113,7 +115,6 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
     :return: 入力コードの列
     '''
     lines = []
-
     def declare_if_ready():
         '''
             サブルーチンです。例えば
@@ -122,8 +123,7 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
                 vector<int> a(N);
             を宣言してしまうと悲しいので、既に必要な変数が全て入力されたものから宣言していく。
         '''
-        global lines, inputted, undeclared, var_information
-
+        nonlocal lines, inputted, undeclared, var_information
         will_declare = []
         for vname in undeclared:
             related_vars = reduce(lambda a, b: a + b,
@@ -145,18 +145,18 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
     if node.pointers != None:
         '''
             何かしらの塊を処理(インデックスを持っている場合はループ)
-            [a,b,c] or [ai,bi,ci](mi<=i<=mx) みたいな感じ
+            [a,b,c] or [ai,bi,ci](min<=i<=max) みたいな感じ
         '''
 
         if node.index is None:
             for child in node.pointers:
-                lines += generate_inputpart(child, var_information,
+                lines += generate_input_part(child, var_information,
                                             inputted, undeclared, depth + 1, indexes)
         else:
             loopv = "i" if indexes == [] else "j"
 
             # ループの開始
-            lines.append("for(int {x} = {start} ; {x} <= {end} ; {x}++){".format(
+            lines.append("for(int {x} = {start} ; {x} <= {end} ; {x}++){{".format(
                 x=loopv,
                 start=node.index.zero_indexed().min_index,
                 end=node.index.zero_indexed().max_index)
@@ -183,14 +183,13 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
 
 
 def code_generator(predict_result=None):
-    with open("template_success.cpp","r") as f:
+    with open("{dir}/template_success.cpp".format(dir=mydir),"r") as f:
         template_success = f.read()
-    with open("template_failure.cpp", "r") as f:
+    with open("{dir}/template_failure.cpp".format(dir=mydir), "r") as f:
         template_failure = f.read()
 
     if predict_result is not None:
-        formal_params, real_params = generate_params(predict_result.var_information)
-
+        formal_arguments, actual_arguments = generate_arguments(predict_result.var_information)
         input_part_lines = generate_input_part(
             node=predict_result.analyzed_root,
             var_information=predict_result.var_information,
@@ -200,10 +199,11 @@ def code_generator(predict_result=None):
             indexes=[]
         )
 
+
         code = render(template_success,
-                      formal_params=formal_params,
-                      real_params=real_params,
-                      inputpart_lines=input_part_lines)
+                      formal_arguments=formal_arguments,
+                      actual_arguments=actual_arguments,
+                      input_part=input_part_lines)
     else:
         code = template_failure
     return code

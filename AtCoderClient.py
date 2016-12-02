@@ -3,10 +3,11 @@ import sys
 import os
 import glob
 import subprocess
+sys.path.append(".")
 sys.path.append("core")
 from AtCoder import AtCoder
 import AccountInformation
-from CppCodeGenerator import code_generator
+from templates.cpp.cpp_code_generator import code_generator
 import FormatPredictor
 from multiprocessing import Pool
 from multiprocessing import Process
