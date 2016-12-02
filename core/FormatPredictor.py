@@ -17,7 +17,7 @@ def format_predictor(format, samples):
     format = divide_consecutive_vars(format)
     format = normalize_index(format)
     format = format.replace("{", "").replace("}", "")
-    
+
     tokens = [x for x in format.split(
         " ") if x != "" and is_ascii(x) and not is_noise(x)]
     tokenize_result = FormatTokenizer.get_all_format_probabilities(tokens)
@@ -33,7 +33,7 @@ def format_predictor(format, samples):
                     sample = sample.replace("\n", "[NL] ")
                     # print(samples)
                     # tokens = [(name,sep)]*
-                    tokens = [(x[:-4], ' ' if x[-4:] == '[SP]' else '\n' if x[-4:] == '[NL]' else 'ERR') for x in sample.split(" ") if x != ""] # "abc[SP]" -> "abc
+                    tokens = [(x[:-4], '     ' if x[-4:] == '[SP]' else '\n' if x[-4:] == '[NL]' else 'ERR') for x in sample.split(" ") if x != ""] # "abc[SP]" -> "abc
                     # print(tokens)
                     current_dic = rootnode.verifyAndGetTypes(
                         tokens, current_dic)
