@@ -1,4 +1,4 @@
-ToolsForAtCoder
+atcoder-tools
 ====
 
 * ToolsForAtCoder changes the name to atcoder-tools on 12/03/2016 *
