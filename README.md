@@ -1,6 +1,8 @@
 ToolsForAtCoder
 ====
 
+* ToolsForAtCoder changes the name to atcoder-tools on 12/03/2016 *
+
 Convenient modules for [AtCoder](http://atcoder.jp/) users, written in Python 3.4!
 This tool can analyze the input format with high accuracy (90% Accuracy for ARC or ABC).
 
@@ -44,11 +46,18 @@ If you want to use this tool as an atcoder client (beta ver), the following exam
 クライアントとしてこのツールを使いたい人(C++ユーザー)は以下のような感じで実行すると良いです．
 
 ```
-$ echo "password = 'atcoder password'; username = 'atcoder username'" > ./AccountInformation.py # Be careful with the password management!!!
 $ python3 ./AtCoderClient.py [contestid]
+AtCoder username: username
+AtCoder password: ***
 $ cd ./workspace/[contestid]/[problem_id]/
 $ # create excetuable program
 $ python3 test.py
+```
+
+If you feel annoyed at typing password many times, you can prepare the account information file.
+
+```
+$ echo "password = 'AtCoder password'; username = 'AtCoder username'" > ./AccountInformation.py # Be careful with the password management!!!
 ```
 
 If you're a developer who wants to use some modules for analysis, please read the codes or please ask me anything!
@@ -83,22 +92,34 @@ $ git clone https://github.com/kyuridenamida/ToolsForAtCoder.git
 
 ```
 .
-├── AccountInformation.py -- Account information! This file is not on the repository!
-├── AtCoderClient.py -- A beta client for cpp users.
-├── CppCodeGenerator.py -- A beta module too. You can apply this code to other lang.
+├── AccountInformation.py -- (option) Account information! This file is not on the repository! 
+├── AtCoderClient.py -- A client for preparing workplace.
 ├── README.md 
+├── tools
+│   └── tester.py -- tests with samples using some executable file in your directory. You should add
+│                     this directory to PATH environment variable, so you can use this everywhere.
+├── templates
+│   ├── cpp
+│   │     ├── cpp_code_generator.py -- You can get some hint to make other templates from this file.
+│   │     ├── template_failure.cpp
+│   │     └── template_success.cpp
+│   └── java
+│          ├── java_code_generator.py 
+│          ├── template_failure.java
+│          └── template_success.java
 ├── benchmark
 │   ├── overall_test.py -- does testing with all public problems on AtCoder. 
 │   ├── support_list.html -- Test result(html ver)
 │   └── support_list.md -- Test result(markdown ver)
 ├── core 
-│   ├── AtCoder.py -- deals with login, getting information of a contest.
+│   ├── AtCoder.py -- deals with logging-in, getting information of a contest and submitting source code.
 │   ├── Calculator.py -- calculates a formula as string text with variables.
 │   ├── FormatAnalyzer.py -- detects the loop structures in the format using FormatTokenizer.py's result 
 │   │                        and determines what type the variables are.
 │   ├── FormatPredictor.py -- gets the structured input format using FormatAnalyzer.py's result.
-│   ├── FormatTokenizer.py -- convert plain input format text into candidate tokenized formats.
+│   ├── FormatTokenizer.py -- converts a plain input format text into all possible tokenized formats.
+│   ├── TemplateEngine.py -- generates source file with given variables.
 │   └── utils.py -- Utilities
 └── etc
-    └── lecture.md
+     └── lecture.md
 ```

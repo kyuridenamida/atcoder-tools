@@ -22,10 +22,10 @@ class AtCoder:
 
     def __init__(self, username=None, password=None):
         if username is None:
-            username = input('input your username: ')
+            username = input('AtCoder username: ')
 
         if password is None:
-            password = getpass.getpass('input your password: ')
+            password = getpass.getpass('AtCoder password: ')
 
         self.cj = http.cookiejar.CookieJar()
 

@@ -59,7 +59,7 @@ def prepare_procedure(argv):
 
     # 自動生成済みコードを格納
     with open(solution_name, "w") as f:
-        from templates.java.java_code_generator import code_generator
+        from templates.cpp.cpp_code_generator import code_generator
         f.write(code_generator(result))
 
     # サンプルを格納
