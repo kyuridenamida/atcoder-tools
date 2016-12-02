@@ -50,8 +50,9 @@ $ python3 ./AtCoderClient.py [contestid]
 AtCoder username: username
 AtCoder password: ***
 $ cd ./workspace/[contestid]/[problem_id]/
-$ # create excetuable program
-$ python3 test.py
+$ {Compile something}
+$ ../../../tools/tester.py
+$ python tester.py
 ```
 
 If you feel annoyed at typing password many times, you can prepare the account information file.
