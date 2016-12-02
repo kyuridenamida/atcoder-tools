@@ -143,13 +143,24 @@ if __name__ == "__main__":
 
 def prepare_procedure(argv):
     atcoder,pid,url = argv
+    samples = []
+    # get data
     try:
         information, samples = atcoder.get_all(url)
-        result = FormatPredictor.format_predictor(information, samples)
-    except:
-        result = None
-        samples = []
+    except Exception:
+        #samples = []
         print("Problem %s: failed to get information." % pid)
+
+    if len(samples) == 0:
+        print("Problem %s: no samples" % pid)
+    # parse data
+    try:
+        result = FormatPredictor.format_predictor(information, samples)
+        if result is None:
+            raise Exception
+    except Exception:
+        result = None
+        print("Problem %s: failed to analyze input format." % pid)
 
     dirname = "workspace/%s/%s" % (contestid, pid)
     os.makedirs(dirname, exist_ok=True)
@@ -165,8 +176,6 @@ def prepare_procedure(argv):
                 break
             backup_id += 1
 
-    if result == None:
-        print("Problem %s: failed to analyze input format." % pid)
 
     with open(solution_name, "w") as f:
         f.write(code_generator(result))

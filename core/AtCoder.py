@@ -24,7 +24,6 @@ class AtCoder:
 
         self.opener = urllib.request.build_opener(
             urllib.request.HTTPCookieProcessor(self.cj))
-        self.opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
         postdata = {
             'name': username,
             'password': password

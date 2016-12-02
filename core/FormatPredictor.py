@@ -17,6 +17,7 @@ def format_predictor(format, samples):
     format = divide_consecutive_vars(format)
     format = normalize_index(format)
     format = format.replace("{", "").replace("}", "")
+    
     tokens = [x for x in format.split(
         " ") if x != "" and is_ascii(x) and not is_noise(x)]
     tokenize_result = FormatTokenizer.get_all_format_probabilities(tokens)

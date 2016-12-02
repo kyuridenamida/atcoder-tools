@@ -172,8 +172,13 @@ def format_analyse(parsed_tokens, to_1d_flag=False):
             root.pointers.append(FormatNode(varname))
             processed.add(varname)
         elif dim == 1:
-            # assume it's a arithmetic sequence
-            span = appearances[varname][1] - appearances[varname][0]
+            if len(appearances[varname]) >= 2:
+                # assume it's a arithmetic sequence
+                span = appearances[varname][1] - appearances[varname][0]
+            elif len(appearances[varname]) == 1:
+                # or mono
+                span = 1
+
             zipped_varnames = [token[0] for token in parsed_tokens[i:i + span]]
             for vname in zipped_varnames:
                 processed.add(vname)
