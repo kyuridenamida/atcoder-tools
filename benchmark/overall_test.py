@@ -7,7 +7,6 @@ from AtCoder import AtCoder
 import AccountInformation
 import FormatAnalyzer
 import FormatPredictor
-import CppCodeGenerator
 
 class NoPatternFoundError(Exception) : pass
 
