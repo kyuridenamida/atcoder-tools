@@ -170,7 +170,7 @@
 |[abc034(A)](http://abc034.contest.atcoder.jp/tasks/abc034_a)|○||
 |[abc034(B)](http://abc034.contest.atcoder.jp/tasks/abc034_b)|○||
 |[abc034(C)](http://abc034.contest.atcoder.jp/tasks/abc034_c)|○||
-|[abc034(D)](http://abc034.contest.atcoder.jp/tasks/abc034_d)|×|class '__main__.NoPatternFoundError'|
+|[abc034(D)](http://abc034.contest.atcoder.jp/tasks/abc034_d)|○||
 |[abc035(A)](http://abc035.contest.atcoder.jp/tasks/abc035_a)|○||
 |[abc035(B)](http://abc035.contest.atcoder.jp/tasks/abc035_b)|○||
 |[abc035(C)](http://abc035.contest.atcoder.jp/tasks/abc035_c)|○||
@@ -223,6 +223,102 @@
 |[abc047(B)](http://abc047.contest.atcoder.jp/tasks/abc047_b)|○||
 |[abc047(C)](http://abc047.contest.atcoder.jp/tasks/arc063_a)|○||
 |[abc047(D)](http://abc047.contest.atcoder.jp/tasks/arc063_b)|○||
+|[abc048(A)](http://abc048.contest.atcoder.jp/tasks/abc048_a)|○||
+|[abc048(B)](http://abc048.contest.atcoder.jp/tasks/abc048_b)|○||
+|[abc048(C)](http://abc048.contest.atcoder.jp/tasks/arc064_a)|○||
+|[abc048(D)](http://abc048.contest.atcoder.jp/tasks/arc064_b)|○||
+|[abc049(A)](http://abc049.contest.atcoder.jp/tasks/abc049_a)|○||
+|[abc049(B)](http://abc049.contest.atcoder.jp/tasks/abc049_b)|○||
+|[abc049(C)](http://abc049.contest.atcoder.jp/tasks/arc065_a)|○||
+|[abc049(D)](http://abc049.contest.atcoder.jp/tasks/arc065_b)|○||
+|[abc050(A)](http://abc050.contest.atcoder.jp/tasks/abc050_a)|○||
+|[abc050(B)](http://abc050.contest.atcoder.jp/tasks/abc050_b)|○||
+|[abc050(C)](http://abc050.contest.atcoder.jp/tasks/arc066_a)|○||
+|[abc050(D)](http://abc050.contest.atcoder.jp/tasks/arc066_b)|○||
+|[abc051(A)](http://abc051.contest.atcoder.jp/tasks/abc051_a)|○||
+|[abc051(B)](http://abc051.contest.atcoder.jp/tasks/abc051_b)|○||
+|[abc051(C)](http://abc051.contest.atcoder.jp/tasks/abc051_c)|○||
+|[abc051(D)](http://abc051.contest.atcoder.jp/tasks/abc051_d)|○||
+|[abc052(A)](http://abc052.contest.atcoder.jp/tasks/abc052_a)|○||
+|[abc052(B)](http://abc052.contest.atcoder.jp/tasks/abc052_b)|○||
+|[abc052(C)](http://abc052.contest.atcoder.jp/tasks/arc067_a)|○||
+|[abc052(D)](http://abc052.contest.atcoder.jp/tasks/arc067_b)|○||
+|[abc053(A)](http://abc053.contest.atcoder.jp/tasks/abc053_a)|○||
+|[abc053(B)](http://abc053.contest.atcoder.jp/tasks/abc053_b)|○||
+|[abc053(C)](http://abc053.contest.atcoder.jp/tasks/arc068_a)|○||
+|[abc053(D)](http://abc053.contest.atcoder.jp/tasks/arc068_b)|○||
+|[abc054(A)](http://abc054.contest.atcoder.jp/tasks/abc054_a)|○||
+|[abc054(B)](http://abc054.contest.atcoder.jp/tasks/abc054_b)|○||
+|[abc054(C)](http://abc054.contest.atcoder.jp/tasks/abc054_c)|○||
+|[abc054(D)](http://abc054.contest.atcoder.jp/tasks/abc054_d)|○||
+|[abc055(A)](http://abc055.contest.atcoder.jp/tasks/abc055_a)|○||
+|[abc055(B)](http://abc055.contest.atcoder.jp/tasks/abc055_b)|○||
+|[abc055(C)](http://abc055.contest.atcoder.jp/tasks/arc069_a)|○||
+|[abc055(D)](http://abc055.contest.atcoder.jp/tasks/arc069_b)|○||
+|[abc056(A)](http://abc056.contest.atcoder.jp/tasks/abc056_a)|○||
+|[abc056(B)](http://abc056.contest.atcoder.jp/tasks/abc056_b)|○||
+|[abc056(C)](http://abc056.contest.atcoder.jp/tasks/arc070_a)|○||
+|[abc056(D)](http://abc056.contest.atcoder.jp/tasks/arc070_b)|○||
+|[abc057(A)](http://abc057.contest.atcoder.jp/tasks/abc057_a)|○||
+|[abc057(B)](http://abc057.contest.atcoder.jp/tasks/abc057_b)|○||
+|[abc057(C)](http://abc057.contest.atcoder.jp/tasks/abc057_c)|○||
+|[abc057(D)](http://abc057.contest.atcoder.jp/tasks/abc057_d)|○||
+|[abc058(A)](http://abc058.contest.atcoder.jp/tasks/abc058_a)|○||
+|[abc058(B)](http://abc058.contest.atcoder.jp/tasks/abc058_b)|○||
+|[abc058(C)](http://abc058.contest.atcoder.jp/tasks/arc071_a)|○||
+|[abc058(D)](http://abc058.contest.atcoder.jp/tasks/arc071_b)|○||
+|[abc059(A)](http://abc059.contest.atcoder.jp/tasks/abc059_a)|○||
+|[abc059(B)](http://abc059.contest.atcoder.jp/tasks/abc059_b)|○||
+|[abc059(C)](http://abc059.contest.atcoder.jp/tasks/arc072_a)|○||
+|[abc059(D)](http://abc059.contest.atcoder.jp/tasks/arc072_b)|○||
+|[abc060(A)](http://abc060.contest.atcoder.jp/tasks/abc060_a)|○||
+|[abc060(B)](http://abc060.contest.atcoder.jp/tasks/abc060_b)|○||
+|[abc060(C)](http://abc060.contest.atcoder.jp/tasks/arc073_a)|○||
+|[abc060(D)](http://abc060.contest.atcoder.jp/tasks/arc073_b)|○||
+|[abc061(A)](http://abc061.contest.atcoder.jp/tasks/abc061_a)|○||
+|[abc061(B)](http://abc061.contest.atcoder.jp/tasks/abc061_b)|○||
+|[abc061(C)](http://abc061.contest.atcoder.jp/tasks/abc061_c)|○||
+|[abc061(D)](http://abc061.contest.atcoder.jp/tasks/abc061_d)|○||
+|[abc062(A)](http://abc062.contest.atcoder.jp/tasks/abc062_a)|○||
+|[abc062(B)](http://abc062.contest.atcoder.jp/tasks/abc062_b)|○||
+|[abc062(C)](http://abc062.contest.atcoder.jp/tasks/arc074_a)|○||
+|[abc062(D)](http://abc062.contest.atcoder.jp/tasks/arc074_b)|○||
+|[abc063(A)](http://abc063.contest.atcoder.jp/tasks/abc063_a)|○||
+|[abc063(B)](http://abc063.contest.atcoder.jp/tasks/abc063_b)|○||
+|[abc063(C)](http://abc063.contest.atcoder.jp/tasks/arc075_a)|○||
+|[abc063(D)](http://abc063.contest.atcoder.jp/tasks/arc075_b)|○||
+|[abc064(A)](http://abc064.contest.atcoder.jp/tasks/abc064_a)|○||
+|[abc064(B)](http://abc064.contest.atcoder.jp/tasks/abc064_b)|○||
+|[abc064(C)](http://abc064.contest.atcoder.jp/tasks/abc064_c)|○||
+|[abc064(D)](http://abc064.contest.atcoder.jp/tasks/abc064_d)|○||
+|[abc065(A)](http://abc065.contest.atcoder.jp/tasks/abc065_a)|○||
+|[abc065(B)](http://abc065.contest.atcoder.jp/tasks/abc065_b)|○||
+|[abc065(C)](http://abc065.contest.atcoder.jp/tasks/arc076_a)|○||
+|[abc065(D)](http://abc065.contest.atcoder.jp/tasks/arc076_b)|○||
+|[abc066(A)](http://abc066.contest.atcoder.jp/tasks/abc066_a)|○||
+|[abc066(B)](http://abc066.contest.atcoder.jp/tasks/abc066_b)|○||
+|[abc066(C)](http://abc066.contest.atcoder.jp/tasks/arc077_a)|○||
+|[abc066(D)](http://abc066.contest.atcoder.jp/tasks/arc077_b)|○||
+|[abc067(A)](http://abc067.contest.atcoder.jp/tasks/abc067_a)|○||
+|[abc067(B)](http://abc067.contest.atcoder.jp/tasks/abc067_b)|○||
+|[abc067(C)](http://abc067.contest.atcoder.jp/tasks/arc078_a)|○||
+|[abc067(D)](http://abc067.contest.atcoder.jp/tasks/arc078_b)|○||
+|[abc068(A)](http://abc068.contest.atcoder.jp/tasks/abc068_a)|○||
+|[abc068(B)](http://abc068.contest.atcoder.jp/tasks/abc068_b)|○||
+|[abc068(C)](http://abc068.contest.atcoder.jp/tasks/arc079_a)|○||
+|[abc068(D)](http://abc068.contest.atcoder.jp/tasks/arc079_b)|○||
+|[abc069(A)](http://abc069.contest.atcoder.jp/tasks/abc069_a)|○||
+|[abc069(B)](http://abc069.contest.atcoder.jp/tasks/abc069_b)|○||
+|[abc069(C)](http://abc069.contest.atcoder.jp/tasks/arc080_a)|○||
+|[abc069(D)](http://abc069.contest.atcoder.jp/tasks/arc080_b)|○||
+|[abc070(A)](http://abc070.contest.atcoder.jp/tasks/abc070_a)|○||
+|[abc070(B)](http://abc070.contest.atcoder.jp/tasks/abc070_b)|○||
+|[abc070(C)](http://abc070.contest.atcoder.jp/tasks/abc070_c)|○||
+|[abc070(D)](http://abc070.contest.atcoder.jp/tasks/abc070_d)|○||
+|[abc071(A)](http://abc071.contest.atcoder.jp/tasks/abc071_a)|○||
+|[abc071(B)](http://abc071.contest.atcoder.jp/tasks/abc071_b)|○||
+|[abc071(C)](http://abc071.contest.atcoder.jp/tasks/arc081_a)|○||
+|[abc071(D)](http://abc071.contest.atcoder.jp/tasks/arc081_b)|○||
 |[agc001(A)](http://agc001.contest.atcoder.jp/tasks/agc001_a)|○||
 |[agc001(B)](http://agc001.contest.atcoder.jp/tasks/agc001_b)|○||
 |[agc001(C)](http://agc001.contest.atcoder.jp/tasks/agc001_c)|○||
@@ -261,10 +357,81 @@
 |[agc006(F)](http://agc006.contest.atcoder.jp/tasks/agc006_f)|○||
 |[agc007(A)](http://agc007.contest.atcoder.jp/tasks/agc007_a)|○||
 |[agc007(B)](http://agc007.contest.atcoder.jp/tasks/agc007_b)|○||
-|[agc007(C)](http://agc007.contest.atcoder.jp/tasks/agc007_c)|×|class 'IndexError'|
+|[agc007(C)](http://agc007.contest.atcoder.jp/tasks/agc007_c)|○||
 |[agc007(D)](http://agc007.contest.atcoder.jp/tasks/agc007_d)|○||
 |[agc007(E)](http://agc007.contest.atcoder.jp/tasks/agc007_e)|○||
-|[agc007(F)](http://agc007.contest.atcoder.jp/tasks/agc007_f)|×|class 'IndexError'|
+|[agc007(F)](http://agc007.contest.atcoder.jp/tasks/agc007_f)|○||
+|[agc008(A)](http://agc008.contest.atcoder.jp/tasks/agc008_a)|○||
+|[agc008(B)](http://agc008.contest.atcoder.jp/tasks/agc008_b)|○||
+|[agc008(C)](http://agc008.contest.atcoder.jp/tasks/agc008_c)|○||
+|[agc008(D)](http://agc008.contest.atcoder.jp/tasks/agc008_d)|○||
+|[agc008(E)](http://agc008.contest.atcoder.jp/tasks/agc008_e)|○||
+|[agc008(F)](http://agc008.contest.atcoder.jp/tasks/agc008_f)|×|class '__main__.NoPatternFoundError'|
+|[agc009(A)](http://agc009.contest.atcoder.jp/tasks/agc009_a)|○||
+|[agc009(B)](http://agc009.contest.atcoder.jp/tasks/agc009_b)|○||
+|[agc009(C)](http://agc009.contest.atcoder.jp/tasks/agc009_c)|○||
+|[agc009(D)](http://agc009.contest.atcoder.jp/tasks/agc009_d)|○||
+|[agc009(E)](http://agc009.contest.atcoder.jp/tasks/agc009_e)|○||
+|[agc010(A)](http://agc010.contest.atcoder.jp/tasks/agc010_a)|○||
+|[agc010(B)](http://agc010.contest.atcoder.jp/tasks/agc010_b)|○||
+|[agc010(C)](http://agc010.contest.atcoder.jp/tasks/agc010_c)|○||
+|[agc010(D)](http://agc010.contest.atcoder.jp/tasks/agc010_d)|○||
+|[agc010(E)](http://agc010.contest.atcoder.jp/tasks/agc010_e)|○||
+|[agc010(F)](http://agc010.contest.atcoder.jp/tasks/agc010_f)|○||
+|[agc011(A)](http://agc011.contest.atcoder.jp/tasks/agc011_a)|○||
+|[agc011(B)](http://agc011.contest.atcoder.jp/tasks/agc011_b)|○||
+|[agc011(C)](http://agc011.contest.atcoder.jp/tasks/agc011_c)|○||
+|[agc011(D)](http://agc011.contest.atcoder.jp/tasks/agc011_d)|○||
+|[agc011(E)](http://agc011.contest.atcoder.jp/tasks/agc011_e)|○||
+|[agc011(F)](http://agc011.contest.atcoder.jp/tasks/agc011_f)|○||
+|[agc012(A)](http://agc012.contest.atcoder.jp/tasks/agc012_a)|○||
+|[agc012(B)](http://agc012.contest.atcoder.jp/tasks/agc012_b)|○||
+|[agc012(C)](http://agc012.contest.atcoder.jp/tasks/agc012_c)|○||
+|[agc012(D)](http://agc012.contest.atcoder.jp/tasks/agc012_d)|○||
+|[agc012(E)](http://agc012.contest.atcoder.jp/tasks/agc012_e)|○||
+|[agc012(F)](http://agc012.contest.atcoder.jp/tasks/agc012_f)|○||
+|[agc013(A)](http://agc013.contest.atcoder.jp/tasks/agc013_a)|○||
+|[agc013(B)](http://agc013.contest.atcoder.jp/tasks/agc013_b)|○||
+|[agc013(C)](http://agc013.contest.atcoder.jp/tasks/agc013_c)|○||
+|[agc013(D)](http://agc013.contest.atcoder.jp/tasks/agc013_d)|○||
+|[agc013(E)](http://agc013.contest.atcoder.jp/tasks/agc013_e)|○||
+|[agc013(F)](http://agc013.contest.atcoder.jp/tasks/agc013_f)|○||
+|[agc014(A)](http://agc014.contest.atcoder.jp/tasks/agc014_a)|○||
+|[agc014(B)](http://agc014.contest.atcoder.jp/tasks/agc014_b)|○||
+|[agc014(C)](http://agc014.contest.atcoder.jp/tasks/agc014_c)|○||
+|[agc014(D)](http://agc014.contest.atcoder.jp/tasks/agc014_d)|○||
+|[agc014(E)](http://agc014.contest.atcoder.jp/tasks/agc014_e)|○||
+|[agc014(F)](http://agc014.contest.atcoder.jp/tasks/agc014_f)|○||
+|[agc015(A)](http://agc015.contest.atcoder.jp/tasks/agc015_a)|○||
+|[agc015(B)](http://agc015.contest.atcoder.jp/tasks/agc015_b)|×|class '__main__.NoPatternFoundError'|
+|[agc015(C)](http://agc015.contest.atcoder.jp/tasks/agc015_c)|×|class '__main__.NoPatternFoundError'|
+|[agc015(D)](http://agc015.contest.atcoder.jp/tasks/agc015_d)|○||
+|[agc015(E)](http://agc015.contest.atcoder.jp/tasks/agc015_e)|○||
+|[agc015(F)](http://agc015.contest.atcoder.jp/tasks/agc015_f)|○||
+|[agc016(A)](http://agc016.contest.atcoder.jp/tasks/agc016_a)|○||
+|[agc016(B)](http://agc016.contest.atcoder.jp/tasks/agc016_b)|○||
+|[agc016(C)](http://agc016.contest.atcoder.jp/tasks/agc016_c)|○||
+|[agc016(D)](http://agc016.contest.atcoder.jp/tasks/agc016_d)|○||
+|[agc016(E)](http://agc016.contest.atcoder.jp/tasks/agc016_e)|○||
+|[agc016(F)](http://agc016.contest.atcoder.jp/tasks/agc016_f)|○||
+|[agc017(A)](http://agc017.contest.atcoder.jp/tasks/agc017_a)|○||
+|[agc017(B)](http://agc017.contest.atcoder.jp/tasks/agc017_b)|○||
+|[agc017(C)](http://agc017.contest.atcoder.jp/tasks/agc017_c)|○||
+|[agc017(D)](http://agc017.contest.atcoder.jp/tasks/agc017_d)|○||
+|[agc017(E)](http://agc017.contest.atcoder.jp/tasks/agc017_e)|○||
+|[agc017(F)](http://agc017.contest.atcoder.jp/tasks/agc017_f)|○||
+|[agc018(A)](http://agc018.contest.atcoder.jp/tasks/agc018_a)|○||
+|[agc018(B)](http://agc018.contest.atcoder.jp/tasks/agc018_b)|○||
+|[agc018(C)](http://agc018.contest.atcoder.jp/tasks/agc018_c)|○||
+|[agc018(D)](http://agc018.contest.atcoder.jp/tasks/agc018_d)|○||
+|[agc018(E)](http://agc018.contest.atcoder.jp/tasks/agc018_e)|○||
+|[agc018(F)](http://agc018.contest.atcoder.jp/tasks/agc018_f)|○||
+|[agc019(A)](http://agc019.contest.atcoder.jp/tasks/agc019_a)|○||
+|[agc019(B)](http://agc019.contest.atcoder.jp/tasks/agc019_b)|○||
+|[agc019(C)](http://agc019.contest.atcoder.jp/tasks/agc019_c)|○||
+|[agc019(D)](http://agc019.contest.atcoder.jp/tasks/agc019_d)|○||
+|[agc019(E)](http://agc019.contest.atcoder.jp/tasks/agc019_e)|○||
+|[agc019(F)](http://agc019.contest.atcoder.jp/tasks/agc019_f)|○||
 |[arc001(A)](http://arc001.contest.atcoder.jp/tasks/arc001_1)|×|class '__main__.NoPatternFoundError'|
 |[arc001(B)](http://arc001.contest.atcoder.jp/tasks/arc001_2)|○||
 |[arc001(C)](http://arc001.contest.atcoder.jp/tasks/arc001_3)|○||
@@ -291,7 +458,7 @@
 |[arc006(D)](http://arc006.contest.atcoder.jp/tasks/arc006_4)|○||
 |[arc007(A)](http://arc007.contest.atcoder.jp/tasks/arc007_1)|○||
 |[arc007(B)](http://arc007.contest.atcoder.jp/tasks/arc007_2)|○||
-|[arc007(C)](http://arc007.contest.atcoder.jp/tasks/arc007_3)|×|class 'IndexError'|
+|[arc007(C)](http://arc007.contest.atcoder.jp/tasks/arc007_3)|○||
 |[arc007(D)](http://arc007.contest.atcoder.jp/tasks/arc007_4)|×|class '__main__.NoPatternFoundError'|
 |[arc008(A)](http://arc008.contest.atcoder.jp/tasks/arc008_1)|○||
 |[arc008(B)](http://arc008.contest.atcoder.jp/tasks/arc008_2)|○||
@@ -335,7 +502,7 @@
 |[arc017(D)](http://arc017.contest.atcoder.jp/tasks/arc017_4)|○||
 |[arc018(A)](http://arc018.contest.atcoder.jp/tasks/arc018_1)|○||
 |[arc018(B)](http://arc018.contest.atcoder.jp/tasks/arc018_2)|○||
-|[arc018(C)](http://arc018.contest.atcoder.jp/tasks/arc018_3)|×|class 'IndexError'|
+|[arc018(C)](http://arc018.contest.atcoder.jp/tasks/arc018_3)|×|class '__main__.NoPatternFoundError'|
 |[arc018(D)](http://arc018.contest.atcoder.jp/tasks/arc018_4)|○||
 |[arc019(A)](http://arc019.contest.atcoder.jp/tasks/arc019_1)|○||
 |[arc019(B)](http://arc019.contest.atcoder.jp/tasks/arc019_2)|○||
@@ -517,6 +684,78 @@
 |[arc063(D)](http://arc063.contest.atcoder.jp/tasks/arc063_b)|○||
 |[arc063(E)](http://arc063.contest.atcoder.jp/tasks/arc063_c)|○||
 |[arc063(F)](http://arc063.contest.atcoder.jp/tasks/arc063_d)|○||
+|[arc064(C)](http://arc064.contest.atcoder.jp/tasks/arc064_a)|○||
+|[arc064(D)](http://arc064.contest.atcoder.jp/tasks/arc064_b)|○||
+|[arc064(E)](http://arc064.contest.atcoder.jp/tasks/arc064_c)|○||
+|[arc064(F)](http://arc064.contest.atcoder.jp/tasks/arc064_d)|○||
+|[arc065(C)](http://arc065.contest.atcoder.jp/tasks/arc065_a)|○||
+|[arc065(D)](http://arc065.contest.atcoder.jp/tasks/arc065_b)|○||
+|[arc065(E)](http://arc065.contest.atcoder.jp/tasks/arc065_c)|○||
+|[arc065(F)](http://arc065.contest.atcoder.jp/tasks/arc065_d)|○||
+|[arc066(C)](http://arc066.contest.atcoder.jp/tasks/arc066_a)|○||
+|[arc066(D)](http://arc066.contest.atcoder.jp/tasks/arc066_b)|○||
+|[arc066(E)](http://arc066.contest.atcoder.jp/tasks/arc066_c)|×|class '__main__.NoPatternFoundError'|
+|[arc066(F)](http://arc066.contest.atcoder.jp/tasks/arc066_d)|○||
+|[arc067(C)](http://arc067.contest.atcoder.jp/tasks/arc067_a)|○||
+|[arc067(D)](http://arc067.contest.atcoder.jp/tasks/arc067_b)|○||
+|[arc067(E)](http://arc067.contest.atcoder.jp/tasks/arc067_c)|○||
+|[arc067(F)](http://arc067.contest.atcoder.jp/tasks/arc067_d)|○||
+|[arc068(C)](http://arc068.contest.atcoder.jp/tasks/arc068_a)|○||
+|[arc068(D)](http://arc068.contest.atcoder.jp/tasks/arc068_b)|○||
+|[arc068(E)](http://arc068.contest.atcoder.jp/tasks/arc068_c)|○||
+|[arc068(F)](http://arc068.contest.atcoder.jp/tasks/arc068_d)|○||
+|[arc069(C)](http://arc069.contest.atcoder.jp/tasks/arc069_a)|○||
+|[arc069(D)](http://arc069.contest.atcoder.jp/tasks/arc069_b)|○||
+|[arc069(E)](http://arc069.contest.atcoder.jp/tasks/arc069_c)|○||
+|[arc069(F)](http://arc069.contest.atcoder.jp/tasks/arc069_d)|○||
+|[arc070(C)](http://arc070.contest.atcoder.jp/tasks/arc070_a)|○||
+|[arc070(D)](http://arc070.contest.atcoder.jp/tasks/arc070_b)|○||
+|[arc070(E)](http://arc070.contest.atcoder.jp/tasks/arc070_c)|○||
+|[arc070(F)](http://arc070.contest.atcoder.jp/tasks/arc070_d)|×|class '__main__.NoPatternFoundError'|
+|[arc071(C)](http://arc071.contest.atcoder.jp/tasks/arc071_a)|○||
+|[arc071(D)](http://arc071.contest.atcoder.jp/tasks/arc071_b)|○||
+|[arc071(E)](http://arc071.contest.atcoder.jp/tasks/arc071_c)|○||
+|[arc071(F)](http://arc071.contest.atcoder.jp/tasks/arc071_d)|○||
+|[arc072(C)](http://arc072.contest.atcoder.jp/tasks/arc072_a)|○||
+|[arc072(D)](http://arc072.contest.atcoder.jp/tasks/arc072_b)|○||
+|[arc072(E)](http://arc072.contest.atcoder.jp/tasks/arc072_c)|○||
+|[arc072(F)](http://arc072.contest.atcoder.jp/tasks/arc072_d)|○||
+|[arc073(C)](http://arc073.contest.atcoder.jp/tasks/arc073_a)|○||
+|[arc073(D)](http://arc073.contest.atcoder.jp/tasks/arc073_b)|○||
+|[arc073(E)](http://arc073.contest.atcoder.jp/tasks/arc073_c)|○||
+|[arc073(F)](http://arc073.contest.atcoder.jp/tasks/arc073_d)|○||
+|[arc074(C)](http://arc074.contest.atcoder.jp/tasks/arc074_a)|○||
+|[arc074(D)](http://arc074.contest.atcoder.jp/tasks/arc074_b)|○||
+|[arc074(E)](http://arc074.contest.atcoder.jp/tasks/arc074_c)|○||
+|[arc074(F)](http://arc074.contest.atcoder.jp/tasks/arc074_d)|○||
+|[arc075(C)](http://arc075.contest.atcoder.jp/tasks/arc075_a)|○||
+|[arc075(D)](http://arc075.contest.atcoder.jp/tasks/arc075_b)|○||
+|[arc075(E)](http://arc075.contest.atcoder.jp/tasks/arc075_c)|○||
+|[arc075(F)](http://arc075.contest.atcoder.jp/tasks/arc075_d)|○||
+|[arc076(C)](http://arc076.contest.atcoder.jp/tasks/arc076_a)|○||
+|[arc076(D)](http://arc076.contest.atcoder.jp/tasks/arc076_b)|○||
+|[arc076(E)](http://arc076.contest.atcoder.jp/tasks/arc076_c)|○||
+|[arc076(F)](http://arc076.contest.atcoder.jp/tasks/arc076_d)|○||
+|[arc077(C)](http://arc077.contest.atcoder.jp/tasks/arc077_a)|○||
+|[arc077(D)](http://arc077.contest.atcoder.jp/tasks/arc077_b)|○||
+|[arc077(E)](http://arc077.contest.atcoder.jp/tasks/arc077_c)|○||
+|[arc077(F)](http://arc077.contest.atcoder.jp/tasks/arc077_d)|○||
+|[arc078(C)](http://arc078.contest.atcoder.jp/tasks/arc078_a)|○||
+|[arc078(D)](http://arc078.contest.atcoder.jp/tasks/arc078_b)|○||
+|[arc078(E)](http://arc078.contest.atcoder.jp/tasks/arc078_c)|×|class '__main__.NoPatternFoundError'|
+|[arc078(F)](http://arc078.contest.atcoder.jp/tasks/arc078_d)|○||
+|[arc079(C)](http://arc079.contest.atcoder.jp/tasks/arc079_a)|○||
+|[arc079(D)](http://arc079.contest.atcoder.jp/tasks/arc079_b)|○||
+|[arc079(E)](http://arc079.contest.atcoder.jp/tasks/arc079_c)|○||
+|[arc079(F)](http://arc079.contest.atcoder.jp/tasks/arc079_d)|○||
+|[arc080(C)](http://arc080.contest.atcoder.jp/tasks/arc080_a)|○||
+|[arc080(D)](http://arc080.contest.atcoder.jp/tasks/arc080_b)|○||
+|[arc080(E)](http://arc080.contest.atcoder.jp/tasks/arc080_c)|○||
+|[arc080(F)](http://arc080.contest.atcoder.jp/tasks/arc080_d)|○||
+|[arc081(C)](http://arc081.contest.atcoder.jp/tasks/arc081_a)|○||
+|[arc081(D)](http://arc081.contest.atcoder.jp/tasks/arc081_b)|○||
+|[arc081(E)](http://arc081.contest.atcoder.jp/tasks/arc081_c)|○||
+|[arc081(F)](http://arc081.contest.atcoder.jp/tasks/arc081_d)|○||
 |[atc001(A)](http://atc001.contest.atcoder.jp/tasks/dfs_a)|○||
 |[atc001(B)](http://atc001.contest.atcoder.jp/tasks/unionfind_a)|○||
 |[atc001(C)](http://atc001.contest.atcoder.jp/tasks/fft_c)|○||
@@ -534,6 +773,12 @@
 |[autumn_fest(I)](http://autumn_fest.contest.atcoder.jp/tasks/autumn_fest_09)|×|class 'AtCoder.SampleParseError'|
 |[autumn_fest(J)](http://autumn_fest.contest.atcoder.jp/tasks/autumn_fest_10)|○||
 |[autumn_fest(K)](http://autumn_fest.contest.atcoder.jp/tasks/autumn_fest_11)|×|class '__main__.NoPatternFoundError'|
+|[bcu30(A)](http://bcu30.contest.atcoder.jp/tasks/bcu30_a)|○||
+|[bcu30(B)](http://bcu30.contest.atcoder.jp/tasks/bcu30_b)|○||
+|[bcu30(C)](http://bcu30.contest.atcoder.jp/tasks/bcu30_c)|○||
+|[bcu30(D)](http://bcu30.contest.atcoder.jp/tasks/bcu30_d)|○||
+|[bcu30(E)](http://bcu30.contest.atcoder.jp/tasks/bcu30_e)|×|class '__main__.NoPatternFoundError'|
+|[bcu30(F)](http://bcu30.contest.atcoder.jp/tasks/bcu30_f)|○||
 |[birthday0410(A)](http://birthday0410.contest.atcoder.jp/tasks/birthday0410_a)|×|class 'AtCoder.SampleParseError'|
 |[birthday0410(B)](http://birthday0410.contest.atcoder.jp/tasks/birthday0410_b)|×|class 'AtCoder.SampleParseError'|
 |[birthday0410(C)](http://birthday0410.contest.atcoder.jp/tasks/birthday0410_c)|×|class 'AtCoder.SampleParseError'|
@@ -604,6 +849,19 @@
 |[cf16-tournament-round3-open(B)](http://cf16-tournament-round3-open.contest.atcoder.jp/tasks/asaporo_b)|○||
 |[chokudai001(A)](http://chokudai001.contest.atcoder.jp/tasks/chokudai_001_a)|×|class 'AtCoder.SampleParseError'|
 |[chokudai002(A)](http://chokudai002.contest.atcoder.jp/tasks/chokudai002_a)|×|class 'IndexError'|
+|[chokudai003(A)](http://chokudai003.contest.atcoder.jp/tasks/chokudai003_a)|×|class '__main__.NoPatternFoundError'|
+|[chokudai_S001(A)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_a)|×|class 'IndexError'|
+|[chokudai_S001(B)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_b)|×|class 'IndexError'|
+|[chokudai_S001(C)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_c)|×|class 'IndexError'|
+|[chokudai_S001(D)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_d)|×|class 'AtCoder.SampleParseError'|
+|[chokudai_S001(E)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_e)|×|class 'AtCoder.SampleParseError'|
+|[chokudai_S001(F)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_f)|×|class 'AtCoder.SampleParseError'|
+|[chokudai_S001(G)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_g)|×|class 'IndexError'|
+|[chokudai_S001(H)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_h)|×|class 'AtCoder.SampleParseError'|
+|[chokudai_S001(I)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_i)|×|class 'AtCoder.SampleParseError'|
+|[chokudai_S001(J)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_j)|×|class 'AtCoder.SampleParseError'|
+|[chokudai_S001(K)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_k)|×|class 'AtCoder.SampleParseError'|
+|[chokudai_S001(L)](http://chokudai_S001.contest.atcoder.jp/tasks/chokudai_S001_l)|×|class 'AtCoder.SampleParseError'|
 |[code-festival-2014-china-open(A)](http://code-festival-2014-china-open.contest.atcoder.jp/tasks/code_festival_china_a)|○||
 |[code-festival-2014-china-open(B)](http://code-festival-2014-china-open.contest.atcoder.jp/tasks/code_festival_china_b)|○||
 |[code-festival-2014-china-open(C)](http://code-festival-2014-china-open.contest.atcoder.jp/tasks/code_festival_china_c)|○||
@@ -777,12 +1035,17 @@
 |[code-thanks-festival-2015-open(F)](http://code-thanks-festival-2015-open.contest.atcoder.jp/tasks/code_thanks_festival_2015_f)|○||
 |[code-thanks-festival-2015-open(G)](http://code-thanks-festival-2015-open.contest.atcoder.jp/tasks/code_thanks_festival_2015_g)|○||
 |[code-thanks-festival-2015-open(H)](http://code-thanks-festival-2015-open.contest.atcoder.jp/tasks/code_thanks_festival_2015_h)|○||
+|[ddcc2016-final(A)](http://ddcc2016-final.contest.atcoder.jp/tasks/ddcc_2016_final_a)|○||
+|[ddcc2016-final(B)](http://ddcc2016-final.contest.atcoder.jp/tasks/ddcc_2016_final_b)|○||
+|[ddcc2016-final(C)](http://ddcc2016-final.contest.atcoder.jp/tasks/ddcc_2016_final_c)|○||
+|[ddcc2016-final(D)](http://ddcc2016-final.contest.atcoder.jp/tasks/ddcc_2016_final_d)|○||
+|[ddcc2016-final(E)](http://ddcc2016-final.contest.atcoder.jp/tasks/ddcc_2016_final_e)|×|class '__main__.NoPatternFoundError'|
 |[ddcc2016-qual(A)](http://ddcc2016-qual.contest.atcoder.jp/tasks/ddcc_2016_qual_a)|○||
 |[ddcc2016-qual(B)](http://ddcc2016-qual.contest.atcoder.jp/tasks/ddcc_2016_qual_b)|○||
 |[ddcc2016-qual(C)](http://ddcc2016-qual.contest.atcoder.jp/tasks/ddcc_2016_qual_c)|○||
 |[ddcc2016-qual(D)](http://ddcc2016-qual.contest.atcoder.jp/tasks/ddcc_2016_qual_d)|○||
 |[digitalarts2012(A)](http://digitalarts2012.contest.atcoder.jp/tasks/digitalarts_1)|×|class '__main__.NoPatternFoundError'|
-|[digitalarts2012(B)](http://digitalarts2012.contest.atcoder.jp/tasks/digitalarts_2)|×|class 'IndexError'|
+|[digitalarts2012(B)](http://digitalarts2012.contest.atcoder.jp/tasks/digitalarts_2)|○||
 |[digitalarts2012(C)](http://digitalarts2012.contest.atcoder.jp/tasks/digitalarts_3)|×|class 'AtCoder.SampleParseError'|
 |[discovery2016-final(A)](http://discovery2016-final.contest.atcoder.jp/tasks/discovery_2016_final_a)|○||
 |[discovery2016-final(B)](http://discovery2016-final.contest.atcoder.jp/tasks/discovery_2016_final_b)|○||
@@ -797,6 +1060,15 @@
 |[donuts-2015(B)](http://donuts-2015.contest.atcoder.jp/tasks/donuts_2015_2)|×|class '__main__.NoPatternFoundError'|
 |[donuts-2015(C)](http://donuts-2015.contest.atcoder.jp/tasks/donuts_2015_3)|○||
 |[donuts-2015(D)](http://donuts-2015.contest.atcoder.jp/tasks/donuts_2015_4)|○||
+|[dwacon2017-honsen(A)](http://dwacon2017-honsen.contest.atcoder.jp/tasks/dwango2017final_a)|○||
+|[dwacon2017-honsen(B)](http://dwacon2017-honsen.contest.atcoder.jp/tasks/dwango2017final_b)|○||
+|[dwacon2017-honsen(C)](http://dwacon2017-honsen.contest.atcoder.jp/tasks/dwango2017final_c)|×|class 'AtCoder.SampleParseError'|
+|[dwacon2017-honsen(D)](http://dwacon2017-honsen.contest.atcoder.jp/tasks/dwango2017final_d)|×|class '__main__.NoPatternFoundError'|
+|[dwacon2017-prelims(A)](http://dwacon2017-prelims.contest.atcoder.jp/tasks/dwango2017qual_a)|○||
+|[dwacon2017-prelims(B)](http://dwacon2017-prelims.contest.atcoder.jp/tasks/dwango2017qual_b)|○||
+|[dwacon2017-prelims(C)](http://dwacon2017-prelims.contest.atcoder.jp/tasks/dwango2017qual_c)|○||
+|[dwacon2017-prelims(D)](http://dwacon2017-prelims.contest.atcoder.jp/tasks/dwango2017qual_d)|○||
+|[dwacon2017-prelims(E)](http://dwacon2017-prelims.contest.atcoder.jp/tasks/dwango2017qual_e)|○||
 |[dwango2015-finals(A)](http://dwango2015-finals.contest.atcoder.jp/tasks/dwango2015_finals_1)|○||
 |[dwango2015-finals(B)](http://dwango2015-finals.contest.atcoder.jp/tasks/dwango2015_finals_2)|○||
 |[dwango2015-finals(C)](http://dwango2015-finals.contest.atcoder.jp/tasks/dwango2015_finals_3)|○||
@@ -810,6 +1082,10 @@
 |[dwango2015-prelims(C)](http://dwango2015-prelims.contest.atcoder.jp/tasks/dwango2015_prelims_3)|○||
 |[dwango2015-prelims(D)](http://dwango2015-prelims.contest.atcoder.jp/tasks/dwango2015_prelims_4)|○||
 |[dwango2015-prelims(E)](http://dwango2015-prelims.contest.atcoder.jp/tasks/dwango2015_prelims_5)|○||
+|[dwango2016-finals(A)](http://dwango2016-finals.contest.atcoder.jp/tasks/dwango2016final_a)|○||
+|[dwango2016-finals(B)](http://dwango2016-finals.contest.atcoder.jp/tasks/dwango2016final_b)|○||
+|[dwango2016-finals(C)](http://dwango2016-finals.contest.atcoder.jp/tasks/dwango2016final_c)|○||
+|[dwango2016-finals(D)](http://dwango2016-finals.contest.atcoder.jp/tasks/dwango2016final_d)|○||
 |[dwango2016-honsen(A)](http://dwango2016-honsen.contest.atcoder.jp/tasks/dwango2016final_a)|○||
 |[dwango2016-honsen(B)](http://dwango2016-honsen.contest.atcoder.jp/tasks/dwango2016final_b)|○||
 |[dwango2016-honsen(C)](http://dwango2016-honsen.contest.atcoder.jp/tasks/dwango2016final_c)|○||
@@ -853,6 +1129,10 @@
 |[ijpc2012-3(A)](http://ijpc2012-3.contest.atcoder.jp/tasks/ijpc_animals2)|×|class 'IndexError'|
 |[ijpc2012-3(B)](http://ijpc2012-3.contest.atcoder.jp/tasks/ijpc_ghost)|×|class 'IndexError'|
 |[ijpc2012-3(C)](http://ijpc2012-3.contest.atcoder.jp/tasks/ijpc_honest)|×|class 'IndexError'|
+|[ijpc2012pr(A)](http://ijpc2012pr.contest.atcoder.jp/tasks/ijpc_ijpc)|×|class 'IndexError'|
+|[ijpc2012pr(B)](http://ijpc2012pr.contest.atcoder.jp/tasks/ijpc_primehazard)|×|class 'IndexError'|
+|[ijpc2012pr(C)](http://ijpc2012pr.contest.atcoder.jp/tasks/ijpc_submission)|×|class 'IndexError'|
+|[ijpc2012pr(D)](http://ijpc2012pr.contest.atcoder.jp/tasks/ijpc_variance)|×|class 'IndexError'|
 |[ijpc2015(A)](http://ijpc2015.contest.atcoder.jp/tasks/ijpc2015_a)|○||
 |[ijpc2015(B)](http://ijpc2015.contest.atcoder.jp/tasks/ijpc2015_c)|○||
 |[ijpc2015(C)](http://ijpc2015.contest.atcoder.jp/tasks/ijpc2015_d)|○||
@@ -1044,11 +1324,137 @@
 |[jag2016autumn(I)](http://jag2016autumn.contest.atcoder.jp/tasks/icpc2016autumn_i)|×|class 'AtCoder.SampleParseError'|
 |[jag2016autumn(J)](http://jag2016autumn.contest.atcoder.jp/tasks/icpc2016autumn_j)|×|class 'AtCoder.SampleParseError'|
 |[jag2016autumn(K)](http://jag2016autumn.contest.atcoder.jp/tasks/icpc2016autumn_k)|×|class 'AtCoder.SampleParseError'|
+|[joi2006ho(A)](http://joi2006ho.contest.atcoder.jp/tasks/joi2006ho_a)|×|class 'IndexError'|
+|[joi2006ho(B)](http://joi2006ho.contest.atcoder.jp/tasks/joi2006ho_b)|×|class 'IndexError'|
+|[joi2006ho(C)](http://joi2006ho.contest.atcoder.jp/tasks/joi2006ho_c)|×|class 'IndexError'|
+|[joi2006ho(D)](http://joi2006ho.contest.atcoder.jp/tasks/joi2006ho_d)|×|class 'IndexError'|
+|[joi2006ho(E)](http://joi2006ho.contest.atcoder.jp/tasks/joi2006ho_e)|×|class 'IndexError'|
+|[joi2006yo(A)](http://joi2006yo.contest.atcoder.jp/tasks/joi2006yo_a)|×|class 'IndexError'|
+|[joi2006yo(B)](http://joi2006yo.contest.atcoder.jp/tasks/joi2006yo_b)|×|class 'IndexError'|
+|[joi2006yo(C)](http://joi2006yo.contest.atcoder.jp/tasks/joi2006yo_c)|×|class 'IndexError'|
+|[joi2006yo(D)](http://joi2006yo.contest.atcoder.jp/tasks/joi2006yo_d)|×|class 'IndexError'|
+|[joi2006yo(E)](http://joi2006yo.contest.atcoder.jp/tasks/joi2006yo_e)|×|class 'IndexError'|
+|[joi2007ho(A)](http://joi2007ho.contest.atcoder.jp/tasks/joi2007ho_a)|×|class 'IndexError'|
+|[joi2007ho(B)](http://joi2007ho.contest.atcoder.jp/tasks/joi2007ho_b)|×|class 'IndexError'|
+|[joi2007ho(C)](http://joi2007ho.contest.atcoder.jp/tasks/joi2007ho_c)|×|class 'IndexError'|
+|[joi2007ho(D)](http://joi2007ho.contest.atcoder.jp/tasks/joi2007ho_d)|×|class 'IndexError'|
+|[joi2007ho(E)](http://joi2007ho.contest.atcoder.jp/tasks/joi2007ho_e)|×|class 'IndexError'|
+|[joi2007yo(A)](http://joi2007yo.contest.atcoder.jp/tasks/joi2007yo_a)|×|class 'IndexError'|
+|[joi2007yo(B)](http://joi2007yo.contest.atcoder.jp/tasks/joi2007yo_b)|×|class 'IndexError'|
+|[joi2007yo(C)](http://joi2007yo.contest.atcoder.jp/tasks/joi2007yo_c)|×|class 'IndexError'|
+|[joi2007yo(D)](http://joi2007yo.contest.atcoder.jp/tasks/joi2007yo_d)|×|class 'IndexError'|
+|[joi2007yo(E)](http://joi2007yo.contest.atcoder.jp/tasks/joi2007yo_e)|×|class 'IndexError'|
+|[joi2007yo(F)](http://joi2007yo.contest.atcoder.jp/tasks/joi2007yo_f)|×|class 'IndexError'|
+|[joi2008ho(A)](http://joi2008ho.contest.atcoder.jp/tasks/joi2008ho_a)|×|class 'IndexError'|
+|[joi2008ho(B)](http://joi2008ho.contest.atcoder.jp/tasks/joi2008ho_b)|×|class 'IndexError'|
+|[joi2008ho(C)](http://joi2008ho.contest.atcoder.jp/tasks/joi2008ho_c)|×|class 'IndexError'|
+|[joi2008ho(D)](http://joi2008ho.contest.atcoder.jp/tasks/joi2008ho_d)|×|class 'IndexError'|
+|[joi2008ho(E)](http://joi2008ho.contest.atcoder.jp/tasks/joi2008ho_e)|×|class 'IndexError'|
+|[joi2008yo(A)](http://joi2008yo.contest.atcoder.jp/tasks/joi2008yo_a)|×|class 'IndexError'|
+|[joi2008yo(B)](http://joi2008yo.contest.atcoder.jp/tasks/joi2008yo_b)|×|class 'IndexError'|
+|[joi2008yo(C)](http://joi2008yo.contest.atcoder.jp/tasks/joi2008yo_c)|×|class 'IndexError'|
+|[joi2008yo(D)](http://joi2008yo.contest.atcoder.jp/tasks/joi2008yo_d)|×|class 'IndexError'|
+|[joi2008yo(E)](http://joi2008yo.contest.atcoder.jp/tasks/joi2008yo_e)|×|class 'IndexError'|
+|[joi2008yo(F)](http://joi2008yo.contest.atcoder.jp/tasks/joi2008yo_f)|×|class 'IndexError'|
+|[joi2009ho(A)](http://joi2009ho.contest.atcoder.jp/tasks/joi2009ho_a)|×|class 'IndexError'|
+|[joi2009ho(B)](http://joi2009ho.contest.atcoder.jp/tasks/joi2009ho_b)|×|class 'IndexError'|
+|[joi2009ho(C)](http://joi2009ho.contest.atcoder.jp/tasks/joi2009ho_c)|×|class 'IndexError'|
+|[joi2009ho(D)](http://joi2009ho.contest.atcoder.jp/tasks/joi2009ho_d)|×|class 'IndexError'|
+|[joi2009ho(E)](http://joi2009ho.contest.atcoder.jp/tasks/joi2009ho_e)|×|class 'IndexError'|
+|[joi2009yo(A)](http://joi2009yo.contest.atcoder.jp/tasks/joi2009yo_a)|×|class 'IndexError'|
+|[joi2009yo(B)](http://joi2009yo.contest.atcoder.jp/tasks/joi2009yo_b)|×|class 'IndexError'|
+|[joi2009yo(C)](http://joi2009yo.contest.atcoder.jp/tasks/joi2009yo_c)|×|class 'IndexError'|
+|[joi2009yo(D)](http://joi2009yo.contest.atcoder.jp/tasks/joi2009yo_d)|×|class 'IndexError'|
+|[joi2009yo(E)](http://joi2009yo.contest.atcoder.jp/tasks/joi2009yo_e)|×|class 'IndexError'|
+|[joi2009yo(F)](http://joi2009yo.contest.atcoder.jp/tasks/joi2009yo_f)|×|class 'IndexError'|
+|[joi2010ho(A)](http://joi2010ho.contest.atcoder.jp/tasks/joi2010ho_a)|×|class 'IndexError'|
+|[joi2010ho(B)](http://joi2010ho.contest.atcoder.jp/tasks/joi2010ho_b)|×|class 'IndexError'|
+|[joi2010ho(C)](http://joi2010ho.contest.atcoder.jp/tasks/joi2010ho_c)|×|class 'IndexError'|
+|[joi2010ho(D)](http://joi2010ho.contest.atcoder.jp/tasks/joi2010ho_d)|×|class 'IndexError'|
+|[joi2010ho(E)](http://joi2010ho.contest.atcoder.jp/tasks/joi2010ho_e)|×|class 'IndexError'|
+|[joi2010yo(A)](http://joi2010yo.contest.atcoder.jp/tasks/joi2010yo_a)|×|class 'IndexError'|
+|[joi2010yo(B)](http://joi2010yo.contest.atcoder.jp/tasks/joi2010yo_b)|×|class 'IndexError'|
+|[joi2010yo(C)](http://joi2010yo.contest.atcoder.jp/tasks/joi2010yo_c)|×|class 'IndexError'|
+|[joi2010yo(D)](http://joi2010yo.contest.atcoder.jp/tasks/joi2010yo_d)|×|class 'IndexError'|
+|[joi2010yo(E)](http://joi2010yo.contest.atcoder.jp/tasks/joi2010yo_e)|×|class 'IndexError'|
+|[joi2010yo(F)](http://joi2010yo.contest.atcoder.jp/tasks/joi2010yo_f)|×|class 'IndexError'|
+|[joi2011ho(A)](http://joi2011ho.contest.atcoder.jp/tasks/joi2011ho1)|×|class 'IndexError'|
+|[joi2011ho(B)](http://joi2011ho.contest.atcoder.jp/tasks/joi2011ho2)|×|class 'IndexError'|
+|[joi2011ho(C)](http://joi2011ho.contest.atcoder.jp/tasks/joi2011ho3)|×|class 'IndexError'|
+|[joi2011ho(D)](http://joi2011ho.contest.atcoder.jp/tasks/joi2011ho4)|×|class 'IndexError'|
+|[joi2011ho(E)](http://joi2011ho.contest.atcoder.jp/tasks/joi2011ho5)|×|class 'IndexError'|
+|[joi2011yo(A)](http://joi2011yo.contest.atcoder.jp/tasks/joi2011yo_a)|×|class 'IndexError'|
+|[joi2011yo(B)](http://joi2011yo.contest.atcoder.jp/tasks/joi2011yo_b)|×|class 'IndexError'|
+|[joi2011yo(C)](http://joi2011yo.contest.atcoder.jp/tasks/joi2011yo_c)|×|class 'IndexError'|
+|[joi2011yo(D)](http://joi2011yo.contest.atcoder.jp/tasks/joi2011yo_d)|×|class 'IndexError'|
+|[joi2011yo(E)](http://joi2011yo.contest.atcoder.jp/tasks/joi2011yo_e)|×|class 'IndexError'|
+|[joi2011yo(F)](http://joi2011yo.contest.atcoder.jp/tasks/joi2011yo_f)|×|class 'IndexError'|
+|[joi2012ho(A)](http://joi2012ho.contest.atcoder.jp/tasks/joi2012ho1)|×|class 'IndexError'|
+|[joi2012ho(B)](http://joi2012ho.contest.atcoder.jp/tasks/joi2012ho2)|×|class 'IndexError'|
+|[joi2012ho(C)](http://joi2012ho.contest.atcoder.jp/tasks/joi2012ho3)|×|class 'IndexError'|
+|[joi2012ho(D)](http://joi2012ho.contest.atcoder.jp/tasks/joi2012ho4)|×|class 'IndexError'|
+|[joi2012ho(E)](http://joi2012ho.contest.atcoder.jp/tasks/joi2012ho5)|×|class 'IndexError'|
+|[joi2012yo(A)](http://joi2012yo.contest.atcoder.jp/tasks/joi2012yo_a)|×|class 'IndexError'|
+|[joi2012yo(B)](http://joi2012yo.contest.atcoder.jp/tasks/joi2012yo_b)|×|class 'IndexError'|
+|[joi2012yo(C)](http://joi2012yo.contest.atcoder.jp/tasks/joi2012yo_c)|×|class 'IndexError'|
+|[joi2012yo(D)](http://joi2012yo.contest.atcoder.jp/tasks/joi2012yo_d)|×|class 'IndexError'|
+|[joi2012yo(E)](http://joi2012yo.contest.atcoder.jp/tasks/joi2012yo_e)|×|class 'IndexError'|
+|[joi2012yo(F)](http://joi2012yo.contest.atcoder.jp/tasks/joi2012yo_f)|×|class 'IndexError'|
 |[joi2013ho(1)](http://joi2013ho.contest.atcoder.jp/tasks/joi2013ho1)|×|class 'IndexError'|
 |[joi2013ho(2)](http://joi2013ho.contest.atcoder.jp/tasks/joi2013ho2)|×|class 'IndexError'|
 |[joi2013ho(3)](http://joi2013ho.contest.atcoder.jp/tasks/joi2013ho3)|×|class 'IndexError'|
 |[joi2013ho(4)](http://joi2013ho.contest.atcoder.jp/tasks/joi2013ho4)|×|class 'IndexError'|
 |[joi2013ho(5)](http://joi2013ho.contest.atcoder.jp/tasks/joi2013ho5)|×|class 'IndexError'|
+|[joi2013yo(A)](http://joi2013yo.contest.atcoder.jp/tasks/joi2013yo_a)|×|class 'IndexError'|
+|[joi2013yo(B)](http://joi2013yo.contest.atcoder.jp/tasks/joi2013yo_b)|×|class 'IndexError'|
+|[joi2013yo(C)](http://joi2013yo.contest.atcoder.jp/tasks/joi2013yo_c)|×|class 'IndexError'|
+|[joi2013yo(D)](http://joi2013yo.contest.atcoder.jp/tasks/joi2013yo_d)|×|class 'IndexError'|
+|[joi2013yo(E)](http://joi2013yo.contest.atcoder.jp/tasks/joi2013yo_e)|×|class 'IndexError'|
+|[joi2013yo(F)](http://joi2013yo.contest.atcoder.jp/tasks/joi2013yo_f)|×|class 'IndexError'|
+|[joi2014ho(A)](http://joi2014ho.contest.atcoder.jp/tasks/joi2014ho1)|×|class 'IndexError'|
+|[joi2014ho(B)](http://joi2014ho.contest.atcoder.jp/tasks/joi2014ho2)|×|class 'IndexError'|
+|[joi2014ho(C)](http://joi2014ho.contest.atcoder.jp/tasks/joi2014ho3)|×|class 'IndexError'|
+|[joi2014ho(D)](http://joi2014ho.contest.atcoder.jp/tasks/joi2014ho4)|×|class 'IndexError'|
+|[joi2014ho(E)](http://joi2014ho.contest.atcoder.jp/tasks/joi2014ho5)|×|class 'IndexError'|
+|[joi2014yo(A)](http://joi2014yo.contest.atcoder.jp/tasks/joi2014yo_a)|×|class 'IndexError'|
+|[joi2014yo(B)](http://joi2014yo.contest.atcoder.jp/tasks/joi2014yo_b)|×|class 'IndexError'|
+|[joi2014yo(C)](http://joi2014yo.contest.atcoder.jp/tasks/joi2014yo_c)|×|class 'IndexError'|
+|[joi2014yo(D)](http://joi2014yo.contest.atcoder.jp/tasks/joi2014yo_d)|×|class 'IndexError'|
+|[joi2014yo(E)](http://joi2014yo.contest.atcoder.jp/tasks/joi2014yo_e)|×|class 'IndexError'|
+|[joi2014yo(F)](http://joi2014yo.contest.atcoder.jp/tasks/joi2014yo_f)|×|class 'IndexError'|
+|[joi2015ho(A)](http://joi2015ho.contest.atcoder.jp/tasks/joi2015ho_a)|×|class 'IndexError'|
+|[joi2015ho(B)](http://joi2015ho.contest.atcoder.jp/tasks/joi2015ho_b)|×|class 'IndexError'|
+|[joi2015ho(C)](http://joi2015ho.contest.atcoder.jp/tasks/joi2015ho_c)|×|class 'IndexError'|
+|[joi2015ho(D)](http://joi2015ho.contest.atcoder.jp/tasks/joi2015ho_d)|×|class 'IndexError'|
+|[joi2015ho(E)](http://joi2015ho.contest.atcoder.jp/tasks/joi2015ho_e)|×|class 'IndexError'|
+|[joi2015yo(A)](http://joi2015yo.contest.atcoder.jp/tasks/joi2015yo_a)|×|class 'IndexError'|
+|[joi2015yo(B)](http://joi2015yo.contest.atcoder.jp/tasks/joi2015yo_b)|×|class 'IndexError'|
+|[joi2015yo(C)](http://joi2015yo.contest.atcoder.jp/tasks/joi2015yo_c)|×|class 'IndexError'|
+|[joi2015yo(D)](http://joi2015yo.contest.atcoder.jp/tasks/joi2015yo_d)|×|class 'IndexError'|
+|[joi2015yo(E)](http://joi2015yo.contest.atcoder.jp/tasks/joi2015yo_e)|×|class 'IndexError'|
+|[joi2015yo(F)](http://joi2015yo.contest.atcoder.jp/tasks/joi2015yo_f)|×|class 'IndexError'|
+|[joi2016ho(A)](http://joi2016ho.contest.atcoder.jp/tasks/joi2016ho_a)|×|class 'IndexError'|
+|[joi2016ho(B)](http://joi2016ho.contest.atcoder.jp/tasks/joi2016ho_b)|×|class 'IndexError'|
+|[joi2016ho(C)](http://joi2016ho.contest.atcoder.jp/tasks/joi2016ho_c)|×|class 'IndexError'|
+|[joi2016ho(D)](http://joi2016ho.contest.atcoder.jp/tasks/joi2016ho_d)|×|class 'IndexError'|
+|[joi2016ho(E)](http://joi2016ho.contest.atcoder.jp/tasks/joi2016ho_e)|×|class 'IndexError'|
+|[joi2016yo(A)](http://joi2016yo.contest.atcoder.jp/tasks/joi2016yo_a)|×|class 'IndexError'|
+|[joi2016yo(B)](http://joi2016yo.contest.atcoder.jp/tasks/joi2016yo_b)|×|class 'IndexError'|
+|[joi2016yo(C)](http://joi2016yo.contest.atcoder.jp/tasks/joi2016yo_c)|×|class 'IndexError'|
+|[joi2016yo(D)](http://joi2016yo.contest.atcoder.jp/tasks/joi2016yo_d)|×|class 'IndexError'|
+|[joi2016yo(E)](http://joi2016yo.contest.atcoder.jp/tasks/joi2016yo_e)|×|class 'IndexError'|
+|[joi2016yo(F)](http://joi2016yo.contest.atcoder.jp/tasks/joi2016yo_f)|×|class 'IndexError'|
+|[joi2017ho(A)](http://joi2017ho.contest.atcoder.jp/tasks/joi2017ho_a)|×|class 'AtCoder.SampleParseError'|
+|[joi2017ho(B)](http://joi2017ho.contest.atcoder.jp/tasks/joi2017ho_b)|×|class 'AtCoder.SampleParseError'|
+|[joi2017ho(C)](http://joi2017ho.contest.atcoder.jp/tasks/joi2017ho_c)|×|class 'AtCoder.SampleParseError'|
+|[joi2017ho(D)](http://joi2017ho.contest.atcoder.jp/tasks/joi2017ho_d)|×|class 'AtCoder.SampleParseError'|
+|[joi2017ho(E)](http://joi2017ho.contest.atcoder.jp/tasks/joi2017ho_e)|×|class 'AtCoder.SampleParseError'|
+|[joi2017yo(A)](http://joi2017yo.contest.atcoder.jp/tasks/joi2017yo_a)|×|class 'AtCoder.SampleParseError'|
+|[joi2017yo(B)](http://joi2017yo.contest.atcoder.jp/tasks/joi2017yo_b)|×|class 'AtCoder.SampleParseError'|
+|[joi2017yo(C)](http://joi2017yo.contest.atcoder.jp/tasks/joi2017yo_c)|×|class 'AtCoder.SampleParseError'|
+|[joi2017yo(D)](http://joi2017yo.contest.atcoder.jp/tasks/joi2017yo_d)|×|class 'AtCoder.SampleParseError'|
+|[joi2017yo(E)](http://joi2017yo.contest.atcoder.jp/tasks/joi2017yo_e)|×|class 'AtCoder.SampleParseError'|
+|[joi2017yo(F)](http://joi2017yo.contest.atcoder.jp/tasks/joi2017yo_f)|×|class 'AtCoder.SampleParseError'|
 |[joiopen2012(A)](http://joiopen2012.contest.atcoder.jp/tasks/apio_code)|×|class 'IndexError'|
 |[joiopen2012(B)](http://joiopen2012.contest.atcoder.jp/tasks/apio_jumps)|×|class 'IndexError'|
 |[joiopen2012(C)](http://joiopen2012.contest.atcoder.jp/tasks/apio_mansion)|×|class 'IndexError'|
@@ -1058,6 +1464,84 @@
 |[joiopen2012c(A)](http://joiopen2012c.contest.atcoder.jp/tasks/apio_code)|×|class 'IndexError'|
 |[joiopen2012c(B)](http://joiopen2012c.contest.atcoder.jp/tasks/apio_jumps)|×|class 'IndexError'|
 |[joiopen2012c(C)](http://joiopen2012c.contest.atcoder.jp/tasks/apio_mansion)|×|class 'IndexError'|
+|[joisc2007(score)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_score)|×|class 'IndexError'|
+|[joisc2007(factorial)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_factor)|×|class 'IndexError'|
+|[joisc2007(mall)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_mall)|×|class 'IndexError'|
+|[joisc2007(building)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_buildi)|×|class 'IndexError'|
+|[joisc2007(fermat)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_fermat)|×|class 'IndexError'|
+|[joisc2007(salt)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_salt)|×|class 'AtCoder.SampleParseError'|
+|[joisc2007(anagram)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_anagra)|×|class 'IndexError'|
+|[joisc2007(route)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_route)|×|class 'IndexError'|
+|[joisc2007(circuit)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_circui)|×|class 'IndexError'|
+|[joisc2007(fiber)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_fiber)|×|class 'IndexError'|
+|[joisc2007(lines)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_lines)|×|class 'IndexError'|
+|[joisc2007(packing1)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_packin)|×|class 'IndexError'|
+|[joisc2007(packing2)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_packing2)|×|class 'IndexError'|
+|[joisc2007(packing3)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_packing3)|×|class 'IndexError'|
+|[joisc2007(packing4)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_packing4)|×|class 'IndexError'|
+|[joisc2007(packing5)](http://joisc2007.contest.atcoder.jp/tasks/joisc2007_packing5)|×|class 'IndexError'|
+|[joisc2008(committee)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_committee)|×|class 'IndexError'|
+|[joisc2008(sheet)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_sheet)|×|class 'IndexError'|
+|[joisc2008(flu)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_flu)|×|class 'IndexError'|
+|[joisc2008(nile)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_nile)|×|class 'IndexError'|
+|[joisc2008(cheating)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_cheating)|×|class 'IndexError'|
+|[joisc2008(belt)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_belt)|×|class 'IndexError'|
+|[joisc2008(origami)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_origami)|×|class 'IndexError'|
+|[joisc2008(fraction)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_fraction)|×|class 'IndexError'|
+|[joisc2008(nightman)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_nightman)|×|class 'IndexError'|
+|[joisc2008(ruins)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_ruins)|×|class 'IndexError'|
+|[joisc2008(typhoon)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_typhoon)|×|class 'IndexError'|
+|[joisc2008(election1)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_election1)|×|class 'IndexError'|
+|[joisc2008(election2)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_election2)|×|class 'IndexError'|
+|[joisc2008(election3)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_election3)|×|class 'IndexError'|
+|[joisc2008(election4)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_election4)|×|class 'IndexError'|
+|[joisc2008(election5)](http://joisc2008.contest.atcoder.jp/tasks/joisc2008_election5)|×|class 'IndexError'|
+|[joisc2009(sequence)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_sequence)|×|class 'IndexError'|
+|[joisc2009(stamps)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_stamps)|×|class 'IndexError'|
+|[joisc2009(pyramid)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_pyramid)|×|class 'IndexError'|
+|[joisc2009(abduction)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_abduction)|×|class 'IndexError'|
+|[joisc2009(advertisement)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_advertisement)|×|class 'IndexError'|
+|[joisc2009(contest)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_contest)|×|class 'IndexError'|
+|[joisc2009(territory)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_territory)|×|class 'IndexError'|
+|[joisc2009(ski)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_ski)|×|class 'IndexError'|
+|[joisc2009(logo)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_logo)|×|class 'IndexError'|
+|[joisc2009(distribution)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_distribution)|×|class 'IndexError'|
+|[joisc2009(chopsticks)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_chopsticks)|×|class 'IndexError'|
+|[joisc2009(starry_sky)](http://joisc2009.contest.atcoder.jp/tasks/joisc2009_starry_sky)|×|class 'IndexError'|
+|[joisc2010(poster)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_poster)|×|class 'IndexError'|
+|[joisc2010(sengoku)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_sengoku)|×|class 'IndexError'|
+|[joisc2010(stairs)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_stairs)|×|class 'IndexError'|
+|[joisc2010(aplusb)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_aplusb)|×|class 'IndexError'|
+|[joisc2010(dna)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_dna)|×|class 'IndexError'|
+|[joisc2010(regions)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_regions)|×|class 'IndexError'|
+|[joisc2010(finals)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_finals)|×|class 'IndexError'|
+|[joisc2010(hideseek)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_hideseek)|×|class 'IndexError'|
+|[joisc2010(simroad1)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_simroad1)|×|class 'IndexError'|
+|[joisc2010(simroad2)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_simroad2)|×|class 'IndexError'|
+|[joisc2010(simroad3)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_simroad3)|×|class 'IndexError'|
+|[joisc2010(simroad4)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_simroad4)|×|class 'IndexError'|
+|[joisc2010(simroad5)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_simroad5)|×|class 'IndexError'|
+|[joisc2010(contest)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_contest)|×|class 'IndexError'|
+|[joisc2010(highway)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_highway)|×|class 'IndexError'|
+|[joisc2010(lake)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_lake)|×|class 'IndexError'|
+|[joisc2010(plugs)](http://joisc2010.contest.atcoder.jp/tasks/joisc2010_plugs)|×|class 'IndexError'|
+|[joisc2011(banner)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_banner)|×|class 'IndexError'|
+|[joisc2011(dragon)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_dragon)|×|class 'IndexError'|
+|[joisc2011(joitter)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_joitter)|×|class 'IndexError'|
+|[joisc2011(guess)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_guess)|×|class 'IndexError'|
+|[joisc2011(keycards)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_keycards)|×|class 'IndexError'|
+|[joisc2011(shiritori)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_shiritori)|×|class 'IndexError'|
+|[joisc2011(deciphering)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_deciphering)|×|class 'IndexError'|
+|[joisc2011(report)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_report)|×|class 'IndexError'|
+|[joisc2011(ufo1)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_ufo1)|×|class 'IndexError'|
+|[joisc2011(ufo2)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_ufo2)|×|class 'IndexError'|
+|[joisc2011(ufo3)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_ufo3)|×|class 'IndexError'|
+|[joisc2011(ufo4)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_ufo4)|×|class 'IndexError'|
+|[joisc2011(ufo5)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_ufo5)|×|class 'IndexError'|
+|[joisc2011(apples)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_apples)|×|class 'IndexError'|
+|[joisc2011(bookshelf)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_bookshelf)|×|class 'IndexError'|
+|[joisc2011(ioi)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_ioi)|×|class 'IndexError'|
+|[joisc2011(orienteering)](http://joisc2011.contest.atcoder.jp/tasks/joisc2011_orienteering)|×|class 'IndexError'|
 |[joisc2012(building2)](http://joisc2012.contest.atcoder.jp/tasks/joisc2012_building2)|×|class 'IndexError'|
 |[joisc2012(fish)](http://joisc2012.contest.atcoder.jp/tasks/joisc2012_fish)|×|class 'IndexError'|
 |[joisc2012(joi_flag)](http://joisc2012.contest.atcoder.jp/tasks/joisc2012_joi_flag)|×|class 'IndexError'|
@@ -1078,6 +1562,70 @@
 |[joisc2013-day1(2)](http://joisc2013-day1.contest.atcoder.jp/tasks/joisc2013_collecting)|×|class 'IndexError'|
 |[joisc2013-day1(3)](http://joisc2013-day1.contest.atcoder.jp/tasks/joisc2013_communication)|×|class 'IndexError'|
 |[joisc2013-day1(4)](http://joisc2013-day1.contest.atcoder.jp/tasks/joisc2013_joi_poster)|×|class 'IndexError'|
+|[joisc2013-day2(1)](http://joisc2013-day2.contest.atcoder.jp/tasks/joisc2013_construction)|×|class 'IndexError'|
+|[joisc2013-day2(2)](http://joisc2013-day2.contest.atcoder.jp/tasks/joisc2013_mascots)|×|class 'IndexError'|
+|[joisc2013-day2(3)](http://joisc2013-day2.contest.atcoder.jp/tasks/joisc2013_spy)|×|class 'IndexError'|
+|[joisc2013-day3(1)](http://joisc2013-day3.contest.atcoder.jp/tasks/joisc2013_cake)|×|class 'IndexError'|
+|[joisc2013-day3(2)](http://joisc2013-day3.contest.atcoder.jp/tasks/joisc2013_koala)|×|class 'IndexError'|
+|[joisc2013-day3(3)](http://joisc2013-day3.contest.atcoder.jp/tasks/joisc2013_mountain)|×|class 'IndexError'|
+|[joisc2013-day4(1)](http://joisc2013-day4.contest.atcoder.jp/tasks/joisc2013_messenger)|×|class 'IndexError'|
+|[joisc2013-day4(2)](http://joisc2013-day4.contest.atcoder.jp/tasks/joisc2013_presents)|×|class 'IndexError'|
+|[joisc2013-day4(3)](http://joisc2013-day4.contest.atcoder.jp/tasks/joisc2013_spaceships)|×|class 'IndexError'|
+|[joisc2014(A)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_a)|×|class 'IndexError'|
+|[joisc2014(B)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_b)|×|class 'IndexError'|
+|[joisc2014(C)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_c)|×|class 'IndexError'|
+|[joisc2014(D)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_d)|×|class 'IndexError'|
+|[joisc2014(E)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_e)|×|class 'IndexError'|
+|[joisc2014(F)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_f)|×|class 'IndexError'|
+|[joisc2014(G)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_g)|×|class 'IndexError'|
+|[joisc2014(H)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_h)|×|class 'IndexError'|
+|[joisc2014(I)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_i)|×|class 'IndexError'|
+|[joisc2014(J)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_j)|×|class 'IndexError'|
+|[joisc2014(K)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_k)|×|class 'IndexError'|
+|[joisc2014(L)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_l)|×|class 'IndexError'|
+|[joisc2014(M)](http://joisc2014.contest.atcoder.jp/tasks/joisc2014_m)|×|class 'IndexError'|
+|[joisc2015(A)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_a)|×|class 'IndexError'|
+|[joisc2015(B)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_b)|×|class 'IndexError'|
+|[joisc2015(C)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_c)|×|class 'IndexError'|
+|[joisc2015(D)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_d)|×|class 'IndexError'|
+|[joisc2015(E)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_e)|×|class 'IndexError'|
+|[joisc2015(F)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_f)|×|class 'IndexError'|
+|[joisc2015(G)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_g)|×|class 'IndexError'|
+|[joisc2015(H)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_h)|×|class 'IndexError'|
+|[joisc2015(I)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_i)|×|class 'IndexError'|
+|[joisc2015(J)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_j)|×|class 'IndexError'|
+|[joisc2015(K)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_k)|×|class 'IndexError'|
+|[joisc2015(L)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_l)|×|class 'IndexError'|
+|[joisc2015(M)](http://joisc2015.contest.atcoder.jp/tasks/joisc2015_m)|×|class 'IndexError'|
+|[joisc2016(A)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_a)|×|class 'IndexError'|
+|[joisc2016(B)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_b)|×|class 'IndexError'|
+|[joisc2016(C)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_c)|×|class 'IndexError'|
+|[joisc2016(D)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_d)|×|class 'IndexError'|
+|[joisc2016(E)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_e)|×|class 'IndexError'|
+|[joisc2016(F)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_f)|×|class 'IndexError'|
+|[joisc2016(G)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_g)|×|class 'IndexError'|
+|[joisc2016(H)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_h)|×|class 'IndexError'|
+|[joisc2016(I)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_i)|×|class 'IndexError'|
+|[joisc2016(J)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_j)|×|class 'IndexError'|
+|[joisc2016(K)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_k)|×|class 'IndexError'|
+|[joisc2016(L)](http://joisc2016.contest.atcoder.jp/tasks/joisc2016_l)|×|class 'IndexError'|
+|[joisc2017(A)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_a)|×|class 'IndexError'|
+|[joisc2017(B)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_b)|×|class 'IndexError'|
+|[joisc2017(C)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_c)|×|class 'IndexError'|
+|[joisc2017(D)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_d)|×|class 'IndexError'|
+|[joisc2017(E)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_e)|×|class 'IndexError'|
+|[joisc2017(F)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_f)|×|class 'IndexError'|
+|[joisc2017(G)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_g)|×|class 'IndexError'|
+|[joisc2017(H)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_h)|×|class 'IndexError'|
+|[joisc2017(I)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_i)|×|class 'IndexError'|
+|[joisc2017(J)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_j)|×|class 'IndexError'|
+|[joisc2017(K)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_k)|×|class 'IndexError'|
+|[joisc2017(L)](http://joisc2017.contest.atcoder.jp/tasks/joisc2017_l)|×|class 'IndexError'|
+|[jrex2017(A)](http://jrex2017.contest.atcoder.jp/tasks/agc009_a)|○||
+|[jrex2017(B)](http://jrex2017.contest.atcoder.jp/tasks/agc009_b)|○||
+|[jrex2017(C)](http://jrex2017.contest.atcoder.jp/tasks/agc009_c)|○||
+|[jrex2017(D)](http://jrex2017.contest.atcoder.jp/tasks/agc009_d)|○||
+|[jrex2017(E)](http://jrex2017.contest.atcoder.jp/tasks/agc009_e)|○||
 |[k2pc-easy(A)](http://k2pc-easy.contest.atcoder.jp/tasks/k2pc001_e1)|○||
 |[k2pc-easy(B)](http://k2pc-easy.contest.atcoder.jp/tasks/k2pc001_e2)|○||
 |[k2pc-easy(C)](http://k2pc-easy.contest.atcoder.jp/tasks/k2pc001_e3)|○||
@@ -1152,7 +1700,7 @@
 |[kupc2016(E)](http://kupc2016.contest.atcoder.jp/tasks/kupc2016_e)|○||
 |[kupc2016(F)](http://kupc2016.contest.atcoder.jp/tasks/kupc2016_f)|○||
 |[kupc2016(G)](http://kupc2016.contest.atcoder.jp/tasks/kupc2016_g)|○||
-|[kupc2016(H)](http://kupc2016.contest.atcoder.jp/tasks/kupc2016_h)|×|class 'AtCoder.SampleParseError'|
+|[kupc2016(H)](http://kupc2016.contest.atcoder.jp/tasks/kupc2016_h)|○||
 |[kupc2016(I)](http://kupc2016.contest.atcoder.jp/tasks/kupc2016_i)|○||
 |[kupc2016(J)](http://kupc2016.contest.atcoder.jp/tasks/kupc2016_j)|○||
 |[kupc2016(K)](http://kupc2016.contest.atcoder.jp/tasks/kupc2016_k)|×|class '__main__.NoPatternFoundError'|
@@ -1178,37 +1726,85 @@
 |[mujin-pc-2016(C)](http://mujin-pc-2016.contest.atcoder.jp/tasks/mujin_pc_2016_c)|○||
 |[mujin-pc-2016(D)](http://mujin-pc-2016.contest.atcoder.jp/tasks/mujin_pc_2016_d)|○||
 |[mujin-pc-2016(E)](http://mujin-pc-2016.contest.atcoder.jp/tasks/mujin_pc_2016_e)|○||
+|[mujin-pc-2017(A)](http://mujin-pc-2017.contest.atcoder.jp/tasks/mujin_pc_2017_a)|○||
+|[mujin-pc-2017(B)](http://mujin-pc-2017.contest.atcoder.jp/tasks/mujin_pc_2017_b)|○||
+|[mujin-pc-2017(C)](http://mujin-pc-2017.contest.atcoder.jp/tasks/mujin_pc_2017_c)|○||
+|[mujin-pc-2017(D)](http://mujin-pc-2017.contest.atcoder.jp/tasks/mujin_pc_2017_d)|×|class '__main__.NoPatternFoundError'|
+|[njpc2017(A)](http://njpc2017.contest.atcoder.jp/tasks/njpc2017_a)|○||
+|[njpc2017(B)](http://njpc2017.contest.atcoder.jp/tasks/njpc2017_b)|○||
+|[njpc2017(C)](http://njpc2017.contest.atcoder.jp/tasks/njpc2017_c)|○||
+|[njpc2017(D)](http://njpc2017.contest.atcoder.jp/tasks/njpc2017_d)|○||
+|[njpc2017(E)](http://njpc2017.contest.atcoder.jp/tasks/njpc2017_e)|○||
+|[njpc2017(F)](http://njpc2017.contest.atcoder.jp/tasks/njpc2017_f)|○||
+|[njpc2017(G)](http://njpc2017.contest.atcoder.jp/tasks/njpc2017_g)|○||
+|[njpc2017(H)](http://njpc2017.contest.atcoder.jp/tasks/njpc2017_h)|×|class '__main__.NoPatternFoundError'|
 |[oidashi(A)](http://oidashi.contest.atcoder.jp/tasks/oidashi_a)|○||
 |[oidashi(B)](http://oidashi.contest.atcoder.jp/tasks/oidashi_b)|×|class '__main__.NoPatternFoundError'|
 |[oidashi(C)](http://oidashi.contest.atcoder.jp/tasks/oidashi_c)|○||
 |[oidashi(D)](http://oidashi.contest.atcoder.jp/tasks/oidashi_d)|○||
 |[oidashi(E)](http://oidashi.contest.atcoder.jp/tasks/oidashi_e)|○||
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
+|[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
+|[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
+|[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
+|[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
+|[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
+|[practice(A)](http://practice.contest.atcoder.jp/tasks/practice_1)|×|class 'AtCoder.SampleParseError'|
+|[practice(B)](http://practice.contest.atcoder.jp/tasks/practice_2)|×|class '__main__.NoPatternFoundError'|
 |[qupc2014(A)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_a)|×|class '__main__.NoPatternFoundError'|
 |[qupc2014(B)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_b)|○||
 |[qupc2014(C)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_c)|○||
 |[qupc2014(D)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_d)|○||
-|[qupc2014(E)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_e)|×|class 'IndexError'|
+|[qupc2014(E)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_e)|×|class '__main__.NoPatternFoundError'|
 |[qupc2014(F)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_f)|○||
 |[qupc2014(G)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_g)|○||
 |[qupc2014(H)](http://qupc2014.contest.atcoder.jp/tasks/qupc2014_h)|○||
+|[rco-contest-2017-final(A)](http://rco-contest-2017-final.contest.atcoder.jp/tasks/rco_contest_2017_final_a)|○||
+|[rco-contest-2017-final(B)](http://rco-contest-2017-final.contest.atcoder.jp/tasks/rco_contest_2017_final_b)|○||
+|[rco-contest-2017-final-open(A)](http://rco-contest-2017-final-open.contest.atcoder.jp/tasks/rco_contest_2017_final_a)|○||
+|[rco-contest-2017-final-open(B)](http://rco-contest-2017-final-open.contest.atcoder.jp/tasks/rco_contest_2017_final_b)|○||
+|[rco-contest-2017-qual(A)](http://rco-contest-2017-qual.contest.atcoder.jp/tasks/rco_contest_2017_qual_a)|○||
+|[rco-contest-2017-qual(B)](http://rco-contest-2017-qual.contest.atcoder.jp/tasks/rco_contest_2017_qual_b)|○||
 |[s8pc-1(A)](http://s8pc-1.contest.atcoder.jp/tasks/s8pc_1_a)|○||
 |[s8pc-1(B)](http://s8pc-1.contest.atcoder.jp/tasks/s8pc_1_b)|○||
 |[s8pc-1(C)](http://s8pc-1.contest.atcoder.jp/tasks/s8pc_1_c)|○||
@@ -1233,6 +1829,14 @@
 |[s8pc-3(F)](http://s8pc-3.contest.atcoder.jp/tasks/s8pc_3_f)|×|class 'AtCoder.SampleParseError'|
 |[s8pc-3(G)](http://s8pc-3.contest.atcoder.jp/tasks/s8pc_3_g)|×|class 'AtCoder.SampleParseError'|
 |[s8pc-3(H)](http://s8pc-3.contest.atcoder.jp/tasks/s8pc_3_h)|×|class '__main__.NoPatternFoundError'|
+|[s8pc-4(A)](http://s8pc-4.contest.atcoder.jp/tasks/s8pc_4_a)|×|class 'AtCoder.SampleParseError'|
+|[s8pc-4(B)](http://s8pc-4.contest.atcoder.jp/tasks/s8pc_4_b)|×|class 'AtCoder.SampleParseError'|
+|[s8pc-4(C)](http://s8pc-4.contest.atcoder.jp/tasks/s8pc_4_c)|×|class 'AtCoder.SampleParseError'|
+|[s8pc-4(D)](http://s8pc-4.contest.atcoder.jp/tasks/s8pc_4_d)|×|class 'AtCoder.SampleParseError'|
+|[s8pc-4(E)](http://s8pc-4.contest.atcoder.jp/tasks/s8pc_4_e)|×|class 'AtCoder.SampleParseError'|
+|[s8pc-4(F)](http://s8pc-4.contest.atcoder.jp/tasks/s8pc_4_f)|×|class 'AtCoder.SampleParseError'|
+|[s8pc-4(G)](http://s8pc-4.contest.atcoder.jp/tasks/s8pc_4_g)|×|class 'AtCoder.SampleParseError'|
+|[s8pc-4(H)](http://s8pc-4.contest.atcoder.jp/tasks/s8pc_4_h)|×|class '__main__.NoPatternFoundError'|
 |[snuke21(A)](http://snuke21.contest.atcoder.jp/tasks/snuke21_a)|×|class 'IndexError'|
 |[snuke21(B)](http://snuke21.contest.atcoder.jp/tasks/snuke21_b)|×|class 'IndexError'|
 |[snuke21(C)](http://snuke21.contest.atcoder.jp/tasks/snuke21_c)|×|class 'IndexError'|
@@ -1295,6 +1899,11 @@
 |[tenka1-2013-qualb(C)](http://tenka1-2013-qualb.contest.atcoder.jp/tasks/tenka1_2013_qualB_c)|○||
 |[tenka1-2013-qualb(D)](http://tenka1-2013-qualb.contest.atcoder.jp/tasks/tenka1_2013_qualB_d)|×|class '__main__.NoPatternFoundError'|
 |[tenka1-2013-qualb(E)](http://tenka1-2013-qualb.contest.atcoder.jp/tasks/tenka1_2013_qualB_e)|○||
+|[tenka1-2014-final(A)](http://tenka1-2014-final.contest.atcoder.jp/tasks/tenka1_2014_final_a)|○||
+|[tenka1-2014-final(B)](http://tenka1-2014-final.contest.atcoder.jp/tasks/tenka1_2014_final_b)|×|class 'AtCoder.SampleParseError'|
+|[tenka1-2014-final(C)](http://tenka1-2014-final.contest.atcoder.jp/tasks/tenka1_2014_final_c)|○||
+|[tenka1-2014-final(D)](http://tenka1-2014-final.contest.atcoder.jp/tasks/tenka1_2014_final_d)|○||
+|[tenka1-2014-final(E)](http://tenka1-2014-final.contest.atcoder.jp/tasks/tenka1_2014_final_e)|○||
 |[tenka1-2014-final-open(A)](http://tenka1-2014-final-open.contest.atcoder.jp/tasks/tenka1_2014_final_a)|○||
 |[tenka1-2014-final-open(B)](http://tenka1-2014-final-open.contest.atcoder.jp/tasks/tenka1_2014_final_b)|×|class 'AtCoder.SampleParseError'|
 |[tenka1-2014-final-open(C)](http://tenka1-2014-final-open.contest.atcoder.jp/tasks/tenka1_2014_final_c)|○||
@@ -1310,6 +1919,13 @@
 |[tenka1-2014-qualb(C)](http://tenka1-2014-qualb.contest.atcoder.jp/tasks/tenka1_2014_qualB_c)|×|class '__main__.NoPatternFoundError'|
 |[tenka1-2014-qualb(D)](http://tenka1-2014-qualb.contest.atcoder.jp/tasks/tenka1_2014_qualB_d)|×|class 'AtCoder.SampleParseError'|
 |[tenka1-2014-qualb(E)](http://tenka1-2014-qualb.contest.atcoder.jp/tasks/tenka1_2014_qualB_e)|○||
+|[tenka1-2015-final(A)](http://tenka1-2015-final.contest.atcoder.jp/tasks/tenka1_2015_final_a)|○||
+|[tenka1-2015-final(B)](http://tenka1-2015-final.contest.atcoder.jp/tasks/tenka1_2015_final_b)|○||
+|[tenka1-2015-final(C)](http://tenka1-2015-final.contest.atcoder.jp/tasks/tenka1_2015_final_c)|×|class 'AtCoder.SampleParseError'|
+|[tenka1-2015-final(D)](http://tenka1-2015-final.contest.atcoder.jp/tasks/tenka1_2015_final_d)|○||
+|[tenka1-2015-final(E)](http://tenka1-2015-final.contest.atcoder.jp/tasks/tenka1_2015_final_e)|○||
+|[tenka1-2015-final(F)](http://tenka1-2015-final.contest.atcoder.jp/tasks/tenka1_2015_final_f)|×|class '__main__.NoPatternFoundError'|
+|[tenka1-2015-final(G)](http://tenka1-2015-final.contest.atcoder.jp/tasks/tenka1_2015_final_g)|○||
 |[tenka1-2015-final-open(A)](http://tenka1-2015-final-open.contest.atcoder.jp/tasks/tenka1_2015_final_a)|○||
 |[tenka1-2015-final-open(B)](http://tenka1-2015-final-open.contest.atcoder.jp/tasks/tenka1_2015_final_b)|○||
 |[tenka1-2015-final-open(C)](http://tenka1-2015-final-open.contest.atcoder.jp/tasks/tenka1_2015_final_c)|×|class 'AtCoder.SampleParseError'|
@@ -1331,7 +1947,7 @@
 |[tenka1-2016-final-open(B)](http://tenka1-2016-final-open.contest.atcoder.jp/tasks/tenka1_2016_final_b)|○||
 |[tenka1-2016-final-open(C)](http://tenka1-2016-final-open.contest.atcoder.jp/tasks/tenka1_2016_final_c)|○||
 |[tenka1-2016-final-open(D)](http://tenka1-2016-final-open.contest.atcoder.jp/tasks/tenka1_2016_final_d)|○||
-|[tenka1-2016-final-open(E)](http://tenka1-2016-final-open.contest.atcoder.jp/tasks/tenka1_2016_final_e)|×|class 'IndexError'|
+|[tenka1-2016-final-open(E)](http://tenka1-2016-final-open.contest.atcoder.jp/tasks/tenka1_2016_final_e)|×|class '__main__.NoPatternFoundError'|
 |[tenka1-2016-final-open(F)](http://tenka1-2016-final-open.contest.atcoder.jp/tasks/tenka1_2016_final_f)|○||
 |[tenka1-2016-quala(A)](http://tenka1-2016-quala.contest.atcoder.jp/tasks/tenka1_2016_qualA_a)|×|class 'IndexError'|
 |[tenka1-2016-quala(B)](http://tenka1-2016-quala.contest.atcoder.jp/tasks/tenka1_2016_qualA_b)|○||
@@ -1384,9 +2000,21 @@
 |[ttpc2015(N)](http://ttpc2015.contest.atcoder.jp/tasks/ttpc2015_n)|○||
 |[ttpc2015(O)](http://ttpc2015.contest.atcoder.jp/tasks/ttpc2015_o)|○||
 |[ttpc2015(P)](http://ttpc2015.contest.atcoder.jp/tasks/ttpc2015_p)|○||
+|[utpc2011(A)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_1)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(B)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_2)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(C)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_3)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(D)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_4)|×|class '__main__.NoPatternFoundError'|
+|[utpc2011(E)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_5)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(F)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_6)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(G)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_7)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(H)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_8)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(I)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_9)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(J)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_10)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(K)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_11)|×|class 'AtCoder.SampleParseError'|
+|[utpc2011(L)](http://utpc2011.contest.atcoder.jp/tasks/utpc2011_12)|×|class 'AtCoder.SampleParseError'|
 |[utpc2012(A)](http://utpc2012.contest.atcoder.jp/tasks/utpc2012_01)|×|class 'AtCoder.SampleParseError'|
 |[utpc2012(B)](http://utpc2012.contest.atcoder.jp/tasks/utpc2012_02)|×|class 'AtCoder.SampleParseError'|
-|[utpc2012(C)](http://utpc2012.contest.atcoder.jp/tasks/utpc2012_03)|×|class 'IndexError'|
+|[utpc2012(C)](http://utpc2012.contest.atcoder.jp/tasks/utpc2012_03)|×|class '__main__.NoPatternFoundError'|
 |[utpc2012(D)](http://utpc2012.contest.atcoder.jp/tasks/utpc2012_04)|○||
 |[utpc2012(E)](http://utpc2012.contest.atcoder.jp/tasks/utpc2012_05)|○||
 |[utpc2012(F)](http://utpc2012.contest.atcoder.jp/tasks/utpc2012_06)|×|class '__main__.NoPatternFoundError'|
@@ -1398,7 +2026,7 @@
 |[utpc2012(L)](http://utpc2012.contest.atcoder.jp/tasks/utpc2012_12)|×|class '__main__.NoPatternFoundError'|
 |[utpc2013(A)](http://utpc2013.contest.atcoder.jp/tasks/utpc2013_01)|×|class '__main__.NoPatternFoundError'|
 |[utpc2013(B)](http://utpc2013.contest.atcoder.jp/tasks/utpc2013_02)|○||
-|[utpc2013(C)](http://utpc2013.contest.atcoder.jp/tasks/utpc2013_03)|×|class 'IndexError'|
+|[utpc2013(C)](http://utpc2013.contest.atcoder.jp/tasks/utpc2013_03)|×|class '__main__.NoPatternFoundError'|
 |[utpc2013(D)](http://utpc2013.contest.atcoder.jp/tasks/utpc2013_04)|○||
 |[utpc2013(E)](http://utpc2013.contest.atcoder.jp/tasks/utpc2013_05)|×|class 'AtCoder.SampleParseError'|
 |[utpc2013(F)](http://utpc2013.contest.atcoder.jp/tasks/utpc2013_06)|○||
@@ -1424,13 +2052,13 @@
 |[wupc2012(B)](http://wupc2012.contest.atcoder.jp/tasks/wupc2012_2)|×|class '__main__.NoPatternFoundError'|
 |[wupc2012(C)](http://wupc2012.contest.atcoder.jp/tasks/wupc2012_3)|×|class '__main__.NoPatternFoundError'|
 |[wupc2012(D)](http://wupc2012.contest.atcoder.jp/tasks/wupc2012_4)|×|class '__main__.NoPatternFoundError'|
-|[wupc2012(E)](http://wupc2012.contest.atcoder.jp/tasks/wupc2012_5)|×|class 'IndexError'|
+|[wupc2012(E)](http://wupc2012.contest.atcoder.jp/tasks/wupc2012_5)|×|class '__main__.NoPatternFoundError'|
 |[wupc2012(F)](http://wupc2012.contest.atcoder.jp/tasks/wupc2012_6)|×|class '__main__.NoPatternFoundError'|
 |[wupc2012-closed(A)](http://wupc2012-closed.contest.atcoder.jp/tasks/wupc2012_1)|×|class 'AtCoder.SampleParseError'|
 |[wupc2012-closed(B)](http://wupc2012-closed.contest.atcoder.jp/tasks/wupc2012_2)|×|class '__main__.NoPatternFoundError'|
 |[wupc2012-closed(C)](http://wupc2012-closed.contest.atcoder.jp/tasks/wupc2012_3)|×|class '__main__.NoPatternFoundError'|
 |[wupc2012-closed(D)](http://wupc2012-closed.contest.atcoder.jp/tasks/wupc2012_4)|×|class '__main__.NoPatternFoundError'|
-|[wupc2012-closed(E)](http://wupc2012-closed.contest.atcoder.jp/tasks/wupc2012_5)|×|class 'IndexError'|
+|[wupc2012-closed(E)](http://wupc2012-closed.contest.atcoder.jp/tasks/wupc2012_5)|×|class '__main__.NoPatternFoundError'|
 |[wupc2012-closed(F)](http://wupc2012-closed.contest.atcoder.jp/tasks/wupc2012_6)|×|class '__main__.NoPatternFoundError'|
 |[wupc2nd(A)](http://wupc2nd.contest.atcoder.jp/tasks/wupc_01)|○||
 |[wupc2nd(B)](http://wupc2nd.contest.atcoder.jp/tasks/wupc_02)|×|class 'AtCoder.SampleParseError'|
@@ -1441,6 +2069,36 @@
 |[wupc2nd(G)](http://wupc2nd.contest.atcoder.jp/tasks/wupc_07)|○||
 |[wupc2nd(H)](http://wupc2nd.contest.atcoder.jp/tasks/wupc_08)|○||
 |[wupc2nd(I)](http://wupc2nd.contest.atcoder.jp/tasks/wupc_09)|○||
+|[xmascon16(A)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_a)|×|class 'IndexError'|
+|[xmascon16(B)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_b)|×|class '__main__.NoPatternFoundError'|
+|[xmascon16(C)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_c)|×|class 'IndexError'|
+|[xmascon16(D)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_d)|○||
+|[xmascon16(E)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_e)|×|class '__main__.NoPatternFoundError'|
+|[xmascon16(F)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_f)|○||
+|[xmascon16(G)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_g)|○||
+|[xmascon16(H)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_h)|○||
+|[xmascon16(I)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_i)|○||
+|[xmascon16(J)](http://xmascon16.contest.atcoder.jp/tasks/xmascon16_j)|○||
+|[xmascon16midnight(A)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_a)|×|class 'IndexError'|
+|[xmascon16midnight(B)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_b)|×|class '__main__.NoPatternFoundError'|
+|[xmascon16midnight(C)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_c)|×|class 'IndexError'|
+|[xmascon16midnight(D)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_d)|○||
+|[xmascon16midnight(E)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_e)|×|class '__main__.NoPatternFoundError'|
+|[xmascon16midnight(F)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_f)|○||
+|[xmascon16midnight(G)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_g)|○||
+|[xmascon16midnight(H)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_h)|○||
+|[xmascon16midnight(I)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_i)|○||
+|[xmascon16midnight(J)](http://xmascon16midnight.contest.atcoder.jp/tasks/xmascon16_j)|○||
+|[xmascon16noon(A)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_a)|×|class 'IndexError'|
+|[xmascon16noon(B)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_b)|×|class '__main__.NoPatternFoundError'|
+|[xmascon16noon(C)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_c)|×|class 'IndexError'|
+|[xmascon16noon(D)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_d)|○||
+|[xmascon16noon(E)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_e)|×|class '__main__.NoPatternFoundError'|
+|[xmascon16noon(F)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_f)|○||
+|[xmascon16noon(G)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_g)|○||
+|[xmascon16noon(H)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_h)|○||
+|[xmascon16noon(I)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_i)|○||
+|[xmascon16noon(J)](http://xmascon16noon.contest.atcoder.jp/tasks/xmascon16_j)|○||
 |[xmascontest2015(A)](http://xmascontest2015.contest.atcoder.jp/tasks/xmascontest2015_a)|○||
 |[xmascontest2015(B)](http://xmascontest2015.contest.atcoder.jp/tasks/xmascontest2015_b)|○||
 |[xmascontest2015(C)](http://xmascontest2015.contest.atcoder.jp/tasks/xmascontest2015_c)|×|class '__main__.NoPatternFoundError'|
@@ -1457,6 +2115,21 @@
 |[xmascontest2015noon(F)](http://xmascontest2015noon.contest.atcoder.jp/tasks/xmascontest2015_f)|○||
 |[xmascontest2015noon(G)](http://xmascontest2015noon.contest.atcoder.jp/tasks/xmascontest2015_g)|○||
 |[xmascontest2015noon(H)](http://xmascontest2015noon.contest.atcoder.jp/tasks/xmascontest2015_h)|○||
+|[yahoo-procon2017-final(A)](http://yahoo-procon2017-final.contest.atcoder.jp/tasks/yahoo_procon2017_final_a)|○||
+|[yahoo-procon2017-final(B)](http://yahoo-procon2017-final.contest.atcoder.jp/tasks/yahoo_procon2017_final_b)|○||
+|[yahoo-procon2017-final(C)](http://yahoo-procon2017-final.contest.atcoder.jp/tasks/yahoo_procon2017_final_c)|○||
+|[yahoo-procon2017-final(D)](http://yahoo-procon2017-final.contest.atcoder.jp/tasks/yahoo_procon2017_final_d)|○||
+|[yahoo-procon2017-final(E)](http://yahoo-procon2017-final.contest.atcoder.jp/tasks/yahoo_procon2017_final_e)|○||
+|[yahoo-procon2017-final-open(A)](http://yahoo-procon2017-final-open.contest.atcoder.jp/tasks/yahoo_procon2017_final_a)|○||
+|[yahoo-procon2017-final-open(B)](http://yahoo-procon2017-final-open.contest.atcoder.jp/tasks/yahoo_procon2017_final_b)|○||
+|[yahoo-procon2017-final-open(C)](http://yahoo-procon2017-final-open.contest.atcoder.jp/tasks/yahoo_procon2017_final_c)|○||
+|[yahoo-procon2017-final-open(D)](http://yahoo-procon2017-final-open.contest.atcoder.jp/tasks/yahoo_procon2017_final_d)|○||
+|[yahoo-procon2017-final-open(E)](http://yahoo-procon2017-final-open.contest.atcoder.jp/tasks/yahoo_procon2017_final_e)|○||
+|[yahoo-procon2017-qual(A)](http://yahoo-procon2017-qual.contest.atcoder.jp/tasks/yahoo_procon2017_qual_a)|○||
+|[yahoo-procon2017-qual(B)](http://yahoo-procon2017-qual.contest.atcoder.jp/tasks/yahoo_procon2017_qual_b)|○||
+|[yahoo-procon2017-qual(C)](http://yahoo-procon2017-qual.contest.atcoder.jp/tasks/yahoo_procon2017_qual_c)|○||
+|[yahoo-procon2017-qual(D)](http://yahoo-procon2017-qual.contest.atcoder.jp/tasks/yahoo_procon2017_qual_d)|×|class '__main__.NoPatternFoundError'|
+|[yahoo-procon2017-qual(E)](http://yahoo-procon2017-qual.contest.atcoder.jp/tasks/yahoo_procon2017_qual_e)|○||
 |[yuha-c83(A)](http://yuha-c83.contest.atcoder.jp/tasks/yuha_c83_01)|×|class 'AtCoder.SampleParseError'|
 |[yuha-c83(B)](http://yuha-c83.contest.atcoder.jp/tasks/yuha_c83_02)|○||
 |[yuha-c83(C)](http://yuha-c83.contest.atcoder.jp/tasks/yuha_c83_03)|×|class 'AtCoder.SampleParseError'|
