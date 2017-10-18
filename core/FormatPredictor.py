@@ -5,7 +5,6 @@ from utils import fixed_variable_name, divide_consecutive_vars, normalize_index
 
 
 class FormatPredictResult:
-
     def __init__(self, analyzed_root=None, var_information=None):
         self.analyzed_root = analyzed_root
         self.var_information = var_information
@@ -33,11 +32,12 @@ def format_predictor(format, samples):
                     sample = sample.replace("\n", "[NL] ")
                     # print(samples)
                     # tokens = [(name,sep)]*
-                    tokens = [(x[:-4], '     ' if x[-4:] == '[SP]' else '\n' if x[-4:] == '[NL]' else 'ERR') for x in sample.split(" ") if x != ""] # "abc[SP]" -> "abc
+                    tokens = [(x[:-4], '     ' if x[-4:] == '[SP]' else '\n' if x[-4:] == '[NL]' else 'ERR') for x in
+                              sample.split(" ") if x != ""]  # "abc[SP]" -> "abc
                     # print(tokens)
-                    current_dic = rootnode.verifyAndGetTypes(
+                    current_dic = rootnode.verify_and_get_types(
                         tokens, current_dic)
-                    
+
                 for k, var in current_dic.items():
                     varinfo[k].type = var[1]
                 res = FormatPredictResult(rootnode, varinfo)

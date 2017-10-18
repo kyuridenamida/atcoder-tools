@@ -1,9 +1,11 @@
 import sys
 import os
+
 mydir = os.path.dirname(__file__)
 
 from functools import reduce
 from TemplateEngine import render
+
 
 def tab(n):
     if n <= 0:
@@ -13,15 +15,15 @@ def tab(n):
 
 
 def indent(lines):
-    return [tab(1)+line for line in lines]
+    return [tab(1) + line for line in lines]
 
 
 def convert_to_javatype_string(vtype):
     '''
-    :param v: 変数の型(Python Type)
+    :param vtype:
     :return: その型に対応するJavaにおける文字列表現
     '''
-    if(vtype == float):
+    if vtype == float:
         return "double"
     elif vtype == int:
         return "long"
@@ -31,7 +33,7 @@ def convert_to_javatype_string(vtype):
         raise NotImplementedError
 
 
-def input_code(vtype,vname_for_input):
+def input_code(vtype, vname_for_input):
     if vtype == float:
         return '{name} = sc.nextDouble()'.format(name=vname_for_input)
     elif vtype == int:
@@ -56,7 +58,8 @@ def generate_declaration(v):
         type_template_after = ""
     elif dim == 1:
         type_template_before = "{type}[]".format(type=typename)
-        type_template_after = " = new {type}[{size}+1]".format(type=typename, size=v.indexes[0].zero_indexed().max_index)
+        type_template_after = " = new {type}[{size}+1]".format(type=typename,
+                                                               size=v.indexes[0].zero_indexed().max_index)
     elif dim == 2:
         type_template_before = "{type}[][]".format(type=typename)
         type_template_after = " = new {type}[{row_size}+1][{col_size}+1)]".format(
@@ -115,6 +118,7 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
     :return: 入力コードの列
     '''
     lines = []
+
     def declare_if_ready():
         '''
             サブルーチンです。例えば
@@ -137,12 +141,11 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
             lines.append(generate_declaration(var_information[vname]))
             undeclared.remove(vname)
 
-
     if depth == 0:
         # 入力の開始時、何の制約もない変数をまず全部宣言する (depth=-1 <=> 入力の開始)
         declare_if_ready()
 
-    if node.pointers != None:
+    if node.pointers is not None:
         '''
             何かしらの塊を処理(インデックスを持っている場合はループ)
             [a,b,c] or [ai,bi,ci](min<=i<=max) みたいな感じ
@@ -151,7 +154,7 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
         if node.index is None:
             for child in node.pointers:
                 lines += generate_input_part(child, var_information,
-                                            inputted, undeclared, depth + 1, indexes)
+                                             inputted, undeclared, depth + 1, indexes)
         else:
             loopv = "i" if indexes == [] else "j"
 
@@ -164,9 +167,9 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
             # ループの内側
             for child in node.pointers:
                 lines += indent(generate_input_part(child, var_information,
-                                                   inputted, undeclared, depth + 1, indexes + [loopv]))
+                                                    inputted, undeclared, depth + 1, indexes + [loopv]))
             # ループの外
-            if node.index != None:
+            if node.index is not None:
                 lines.append("}")
     else:
         ''' 変数が最小単位まで分解されたときの入力処理 '''
@@ -183,7 +186,7 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
 
 
 def code_generator(predict_result=None):
-    with open("{dir}/template_success.java".format(dir=mydir),"r") as f:
+    with open("{dir}/template_success.java".format(dir=mydir), "r") as f:
         template_success = f.read()
     with open("{dir}/template_failure.java".format(dir=mydir), "r") as f:
         template_failure = f.read()
@@ -198,7 +201,6 @@ def code_generator(predict_result=None):
             depth=0,
             indexes=[]
         )
-
 
         code = render(template_success,
                       formal_arguments=formal_arguments,

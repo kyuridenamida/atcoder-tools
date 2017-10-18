@@ -1,19 +1,22 @@
 import re
 import unicodedata
 
+
 def is_japanese(ch):
     # Thank you!
     # http://minus9d.hatenablog.com/entry/2015/07/16/231608
     try:
-        name = unicodedata.name(ch) 
-        if"CJK UNIFIED" in name or "HIRAGANA" in name or "KATAKANA" in name:
+        name = unicodedata.name(ch)
+        if "CJK UNIFIED" in name or "HIRAGANA" in name or "KATAKANA" in name:
             return True
     except:
         pass
     return False
-    
+
+
 def pure_japanese_text(content):
     return "".join([x for x in content if is_japanese(x)])
+
 
 def normalized(content):
     return content.strip().replace('\r', '') + "\n"
@@ -26,11 +29,11 @@ def fixed_variable_name(name):
 
 
 def is_float(text):
-    return re.match("-?\d+\.\d+$", text) != None
+    return re.match("-?\d+\.\d+$", text) is not None
 
 
 def is_int(text):
-    return re.match("-?\d+$", text) != None
+    return re.match("-?\d+$", text) is not None
 
 
 def is_arithmetic_sequence(seq):
