@@ -55,8 +55,17 @@ $ ../../../tools/tester.py
 $ python tester.py
 ```
 
-If you feel annoyed at typing password many times, you can prepare the account information file.
+You can skip to input the username and password using the `--without-login` argument.
 
+`--without-login` 引数を指定するとログインなしでデータをダウンロードできます(一般公開されているコンテストのみ)。
+
+```
+$ python3 ./AtCoderClient.py [contestid] --without_login
+```
+
+If you feel annoyed at typing password many times, you can prepare an account information file.
+
+もしパスワードを毎回入力するのが面倒くさいならアカウント情報のファイルを作ってください。
 ```
 $ echo "password = 'AtCoder password'; username = 'AtCoder username'" > ./AccountInformation.py # Be careful with the password management!!!
 ```
