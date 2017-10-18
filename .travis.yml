@@ -8,6 +8,10 @@ python:
 
 install:
   - pip install bs4
+  - pip install flake8 autopep8
 
 script:
+  - flake8
+  - autopep8 -r . --diff | tee check_autopep8
+  - test ! -s check_autopep8
   - python AtCoderClient.py arc050 --without-login
