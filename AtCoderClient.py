@@ -75,8 +75,10 @@ def prepare_procedure(argv):
     print("prepared %s!" % pid)
 
 
-def prepare_workspace(contestid):
-    atcoder = AtCoder(AccountInformation.username, AccountInformation.password)
+def prepare_workspace(contestid, without_login):
+    atcoder = AtCoder()
+    if not without_login:
+        atcoder.login(AccountInformation.username, AccountInformation.password)
 
     while True:
         plist = atcoder.get_problem_list(contestid)
@@ -90,9 +92,14 @@ def prepare_workspace(contestid):
 
 
 if __name__ == "__main__":
-    import sys
-    if len(sys.argv) == 2:
-        contestid = sys.argv[1]
-        prepare_workspace(contestid)
-    else:
-        print("%s [contest_id]" % sys.argv[0])
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("contestid",
+                        help="contest ID")
+    parser.add_argument("--without-login",
+                        action="store_true",
+                        help="download testdata without login")
+    args = parser.parse_args()
+    contestid = args.contestid
+    without_login = args.without_login
+    prepare_workspace(args.contestid, without_login)
