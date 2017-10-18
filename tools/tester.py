@@ -9,6 +9,7 @@ import subprocess
 def print_e(*text, end='\n'):
     print(*text, end=end, file=sys.stderr)
 
+
 # このへんのコメントアウト弄るとカラフルじゃなくなったり，なったりします．
 FAIL = '\033[91m'
 OKGREEN = '\033[92m'
@@ -43,7 +44,7 @@ def do_test(exec_file=None):
         exec_file = exec_files[0]
         if len(exec_files) >= 2:
             print_e("WARNING: There're multiple executable files. This time, '%s' is selected." %
-                  exec_file, "candidates =", exec_files)
+                    exec_file, "candidates =", exec_files)
 
     infiles = sorted(glob.glob('./in_*.txt'))
     outfiles = sorted(glob.glob('./out_*.txt'))
@@ -70,11 +71,11 @@ def do_test(exec_file=None):
             if out_data == ans_data:
                 status = "PASSED"
                 print_e("# %s ... %s" % (os.path.basename(infile),
-                                   "%s%s%s" % (OKGREEN, status, ENDC)))
+                                         "%s%s%s" % (OKGREEN, status, ENDC)))
                 success += 1
             else:
                 print_e("# %s ... %s" % (os.path.basename(infile),
-                                   "%s%s%s" % (FAIL, status, ENDC)))
+                                         "%s%s%s" % (FAIL, status, ENDC)))
                 print_e("[Input]")
                 with open(infile, "r") as inf2:
                     print_e(inf2.read(), end='')

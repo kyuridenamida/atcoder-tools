@@ -24,20 +24,22 @@ def upcast(frm, to):
         return float
     raise UpCastingError
 
-class Index:
 
+class Index:
     def __init__(self):
         self.max_index = None
         self.min_index = None
 
     def reflesh_min(self, v):
         if v.isdigit():
-            if self.min_index == None or self.min_index.evaluate() > CalcNode(v).evaluate():
+            if self.min_index is None or self.min_index.evaluate() > CalcNode(v).evaluate():
                 self.min_index = CalcNode(v)
 
     def reflesh_max(self, v):
         if v.isdigit():
-            if self.max_index == None or (self.max_index.get_all_varnames() == [] and self.max_index.evaluate() < CalcNode(v).evaluate()):
+            if self.max_index is None or (
+                            self.max_index.get_all_varnames() == [] and self.max_index.evaluate() < CalcNode(
+                        v).evaluate()):
                 self.max_index = CalcNode(v)
         else:
             self.max_index = CalcNode(v)
@@ -51,7 +53,6 @@ class Index:
 
 
 class VariableInformation:
-
     def __init__(self, name, idxsize):
         self.name = name
         self.indexes = [Index() for _ in range(idxsize)]
@@ -59,7 +60,6 @@ class VariableInformation:
 
 
 class FormatNode:
-
     def __init__(self, varname=None, pointers=None, index=None):
         self.varname = varname
         self.pointers = pointers
@@ -67,14 +67,16 @@ class FormatNode:
         self.sep = None
         self.terminal_sep = None
 
-    def verifyAndGetTypes(self, tokens, init_dic={}):
+    def verify_and_get_types(self, tokens, init_dic=None):
+        if init_dic is None:
+            init_dic = {}
         value_dic = copy.deepcopy(init_dic)
         if self.simulate(tokens, value_dic) != len(tokens):
             raise ParseError
         return value_dic
 
     def simulate(self, tokens, value_dic, pos=0):
-        def checkAndReflesh(value_dic, varname, value):
+        def check_and_reflesh(value_dic, varname, value):
             if is_int(value):
                 value = int(value)
             elif is_float(value):
@@ -86,8 +88,8 @@ class FormatNode:
             else:
                 value_dic[varname] = (value, type(value))
 
-        if self.pointers != None:
-            if self.index == None:
+        if self.pointers is not None:
+            if self.index is None:
                 for child in self.pointers:
                     pos = child.simulate(tokens, value_dic, pos)
                 return pos
@@ -97,45 +99,47 @@ class FormatNode:
                     for k, v in value_dic.items():
                         dic[k] = v[0]
                     return dic
+
                 minv = self.index.min_index.evaluate(
                     converted_dictionary(value_dic))
                 maxv = self.index.max_index.evaluate(
                     converted_dictionary(value_dic))
-                
+
                 for _ in range(minv, maxv + 1):
                     for child in self.pointers:
                         pos = child.simulate(tokens, value_dic, pos)
-                        if maxv - minv != 1 and self.sep == None:
-                            self.sep = tokens[pos-1][1];
-                self.terminal_sep = tokens[pos-1][1]
+                        if maxv - minv != 1 and self.sep is None:
+                            self.sep = tokens[pos - 1][1]
+                self.terminal_sep = tokens[pos - 1][1]
                 return pos
         else:
-        
-            checkAndReflesh(value_dic, self.varname, tokens[pos][0])
+
+            check_and_reflesh(value_dic, self.varname, tokens[pos][0])
             self.terminal_sep = tokens[pos][1]
             pos += 1
             return pos
 
     def __str__(self):
         res = ""
-        if self.pointers != None:
-            if self.index != None:
+        if self.pointers is not None:
+            if self.index is not None:
                 res += "(%s<=i<=%s)*" % (str(self.index.min_index),
                                          str(self.index.max_index))
             res += "[" + " ".join([child.__str__()
                                    for child in self.pointers]) + "]"
         else:
             res = fixed_variable_name(self.varname)
-        return res + "(sep:[" +  str(ord(str(self.sep)[0])) + "] terminal_sep = [" +  str(ord(str(self.terminal_sep)[0])) + "]" + ")"
+        return res + "(sep:[" + str(ord(str(self.sep)[0])) + "] terminal_sep = [" + str(
+            ord(str(self.terminal_sep)[0])) + "]" + ")"
 
 
 def format_analyse(parsed_tokens, to_1d_flag=False):
-    '''
+    """
             入力
                     parsed_tokens # list(list(str)) : 変数毎の変数名/インデックスがtokenizedなトークンリスト
             出力
                     res,dic # FormatNode,OrderedDict<str:VariableInformation> : フォーマット情報のノードと変数の情報を保持した辞書を同時に返す
-    '''
+    """
 
     appearances = {}
     dic = OrderedDict()
@@ -183,15 +187,16 @@ def format_analyse(parsed_tokens, to_1d_flag=False):
             for vname in zipped_varnames:
                 processed.add(vname)
             root.pointers.append(
-                FormatNode(pointers=[FormatNode(varname=vname) for vname in zipped_varnames], index=dic[varname].indexes[0]
+                FormatNode(pointers=[FormatNode(varname=vname) for vname in zipped_varnames],
+                           index=dic[varname].indexes[0]
                            )
             )
         elif dim == 2:
             processed.add(varname)
-            innerNode = FormatNode(pointers=[FormatNode(
+            inner_node = FormatNode(pointers=[FormatNode(
                 varname=varname)], index=dic[varname].indexes[1])
             root.pointers.append(FormatNode(
-                pointers=[innerNode], index=dic[varname].indexes[0]))
+                pointers=[inner_node], index=dic[varname].indexes[0]))
         else:
             raise NotImplementedError
 

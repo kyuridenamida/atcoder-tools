@@ -44,7 +44,7 @@ class CalcNode:
 
     def __init__(self, formula=None):
         if formula:
-            root = parseToCalcNode(formula)
+            root = parse_to_calc_node(formula)
             self.content = root.content
             self.lch = root.lch
             self.rch = root.rch
@@ -56,10 +56,10 @@ class CalcNode:
             self.rch = None
 
     def __str__(self, depth=0):
-        if self.operator != None:
+        if self.operator is not None:
             lv = self.lch.__str__(depth=depth + 1)
             rv = self.rch.__str__(depth=depth + 1)
-            res = ("%s%s%s") % (lv, operator_to_string(self.operator), rv)
+            res = "%s%s%s" % (lv, operator_to_string(self.operator), rv)
             if depth > 0 and (self.operator == add or self.operator == sub):
                 res = "(%s)" % res
             return res
@@ -69,7 +69,7 @@ class CalcNode:
             return self.content
 
     def get_all_varnames(self):
-        if self.operator != None:
+        if self.operator is not None:
             lv = self.lch.get_all_varnames()
             rv = self.rch.get_all_varnames()
             return lv + rv
@@ -78,8 +78,10 @@ class CalcNode:
         else:
             return [self.content]
 
-    def evaluate(self, variables={}):
-        if self.operator != None:
+    def evaluate(self, variables=None):
+        if variables is None:
+            variables = {}
+        if self.operator is not None:
             lv = self.lch.evaluate(variables)
             rv = self.rch.evaluate(variables)
             return self.operator(lv, rv)
@@ -163,14 +165,14 @@ def factor(formula, pos):
         raise CalcParseError
 
 
-def parseToCalcNode(formula):
-    '''
+def parse_to_calc_node(formula):
+    """
             入力
                     formula # str : 式
             出力
                     #CalcNode : 構文木の根ノード
 
-    '''
+    """
     res, pos = expr(formula + "$", 0)  # $は使わないことにする
     if pos != len(formula):
         raise CalcParseError

@@ -2,8 +2,7 @@
 
 import sys
 import os
-import glob
-import subprocess
+
 sys.path.append(".")
 sys.path.append("core")
 from AtCoder import AtCoder
@@ -19,8 +18,11 @@ import FormatPredictor
 from multiprocessing import Pool, Process, cpu_count
 from time import sleep
 
+atcoder = None
+
+
 def prepare_procedure(argv):
-    atcoder, pid, url = argv
+    pid, url = argv
     samples = []
 
     # データ取得
@@ -41,7 +43,6 @@ def prepare_procedure(argv):
         result = None
         print("Problem %s: failed to analyze input format." % pid)
 
-
     dirname = "workspace/%s/%s" % (contestid, pid)
     os.makedirs(dirname, exist_ok=True)
     solution_name = "%s/%s.cpp" % (dirname, pid)
@@ -55,7 +56,6 @@ def prepare_procedure(argv):
                 os.system('cp "%s" "%s"' % (solution_name, backup_name))
                 break
             backup_id += 1
-
 
     # 自動生成済みコードを格納
     with open(solution_name, "w") as f:
@@ -76,6 +76,7 @@ def prepare_procedure(argv):
 
 
 def prepare_workspace(contestid, without_login):
+    global atcoder
     atcoder = AtCoder()
     if not without_login:
         atcoder.login(AccountInformation.username, AccountInformation.password)
@@ -88,11 +89,12 @@ def prepare_workspace(contestid, without_login):
         print("retrying to get task list.")
 
     p = Pool(processes=cpu_count())
-    p.map(prepare_procedure, [(atcoder, pid, url) for pid, url in plist.items()])
+    p.map(prepare_procedure, [(pid, url) for pid, url in plist.items()])
 
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument("contestid",
                         help="contest ID")
