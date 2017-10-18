@@ -4,7 +4,7 @@ import os
 mydir = os.path.dirname(__file__)
 
 from functools import reduce
-from TemplateEngine import render
+from core.TemplateEngine import render
 
 
 def tab(n):

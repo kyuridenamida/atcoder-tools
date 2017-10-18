@@ -1,7 +1,7 @@
 import copy
-from Calculator import CalcNode
+from core.Calculator import CalcNode
 from collections import OrderedDict
-from utils import is_int, is_float, fixed_variable_name
+from core.utils import is_int, is_float, fixed_variable_name
 import re
 
 

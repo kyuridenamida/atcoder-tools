@@ -1,4 +1,4 @@
-from utils import normalized, pure_japanese_text
+from core.utils import normalized, pure_japanese_text
 import getpass
 import re
 import urllib.request

@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 import sys
 
-sys.path.append("../core")
-sys.path.append("..")
-from AtCoder import AtCoder
+from core.AtCoder import AtCoder
 import AccountInformation
-import FormatAnalyzer
-import FormatPredictor
+import core.FormatAnalyzer
+import core.FormatPredictor
 
 
 class NoPatternFoundError(Exception):
