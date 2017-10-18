@@ -38,8 +38,8 @@ class Index:
     def reflesh_max(self, v):
         if v.isdigit():
             if self.max_index is None or (
-                            self.max_index.get_all_varnames() == [] and self.max_index.evaluate() < CalcNode(
-                        v).evaluate()):
+                self.max_index.get_all_varnames() == [] and self.max_index.evaluate() < CalcNode(
+                    v).evaluate()):
                 self.max_index = CalcNode(v)
         else:
             self.max_index = CalcNode(v)

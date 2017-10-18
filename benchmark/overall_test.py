@@ -10,7 +10,8 @@ import FormatAnalyzer
 import FormatPredictor
 
 
-class NoPatternFoundError(Exception): pass
+class NoPatternFoundError(Exception):
+    pass
 
 
 if __name__ == "__main__":
@@ -41,4 +42,5 @@ if __name__ == "__main__":
                 error = str(type(e))[1:-1]
 
             print("|[%s(%s)](%s)|%s|%s|" % (cid, k, v, result_md, error))
-            print("|[%s(%s)](%s)|%s|%s|" % (cid, k, v, result_md, error), file=sys.stderr)
+            print("|[%s(%s)](%s)|%s|%s|" %
+                  (cid, k, v, result_md, error), file=sys.stderr)
