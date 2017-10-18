@@ -21,16 +21,18 @@ class InputParseError(Exception):
 class AtCoder:
 
     def __init__(self, username=None, password=None):
+        self.cj = http.cookiejar.CookieJar()
+
+        self.opener = urllib.request.build_opener(
+            urllib.request.HTTPCookieProcessor(self.cj))
+
+    def login(self, username=None, password=None):
         if username is None:
             username = input('AtCoder username: ')
 
         if password is None:
             password = getpass.getpass('AtCoder password: ')
 
-        self.cj = http.cookiejar.CookieJar()
-
-        self.opener = urllib.request.build_opener(
-            urllib.request.HTTPCookieProcessor(self.cj))
         postdata = {
             'name': username,
             'password': password
