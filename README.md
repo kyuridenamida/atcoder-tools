@@ -60,7 +60,7 @@ You can skip to input the username and password using the `--without-login` argu
 `--without-login` 引数を指定するとログインなしでデータをダウンロードできます(一般公開されているコンテストのみ)。
 
 ```
-$ python3 ./AtCoderClient.py [contestid] --without_login
+$ python3 ./AtCoderClient.py [contestid] --without-login
 ```
 
 If you feel annoyed at typing password many times, you can prepare an account information file.
