@@ -2,7 +2,6 @@ import copy
 from core.Calculator import CalcNode
 from collections import OrderedDict
 from core.utils import is_int, is_float, fixed_variable_name
-import re
 
 
 class TypesUnmatchedError(Exception):

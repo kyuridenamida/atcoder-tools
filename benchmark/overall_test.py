@@ -3,9 +3,7 @@
 import sys
 
 from core.AtCoder import AtCoder
-import AccountInformation
-import core.FormatAnalyzer
-import core.FormatPredictor
+import core.FormatPredictor as FP
 
 
 class NoPatternFoundError(Exception):
@@ -25,7 +23,7 @@ if __name__ == "__main__":
         for k, v in plist.items():
             try:
                 informat, samples = atcoder.get_all(v)
-                result = FormatPredictor.format_predictor(informat, samples)
+                result = FP.format_predictor(informat, samples)
                 if result:
                     pass
                 else:

@@ -1,7 +1,7 @@
 from core.FormatAnalyzer import format_analyse
 from core.FormatTokenizer import get_all_format_probabilities
 from core.utils import is_ascii, is_noise
-from core.utils import fixed_variable_name, divide_consecutive_vars, normalize_index
+from core.utils import divide_consecutive_vars, normalize_index
 
 
 class FormatPredictResult:

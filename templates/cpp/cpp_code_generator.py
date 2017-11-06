@@ -1,4 +1,3 @@
-import sys
 import os
 
 mydir = os.path.dirname(__file__)
