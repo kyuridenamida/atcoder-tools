@@ -15,3 +15,6 @@ script:
   - autopep8 -r . --diff | tee check_autopep8
   - test ! -s check_autopep8
   - python AtCoderClient.py arc050 --without-login
+
+notifications:
+  email: false
