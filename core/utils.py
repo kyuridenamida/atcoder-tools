@@ -9,7 +9,7 @@ def is_japanese(ch):
         name = unicodedata.name(ch)
         if "CJK UNIFIED" in name or "HIRAGANA" in name or "KATAKANA" in name:
             return True
-    except:
+    except ValueError:
         pass
     return False
 

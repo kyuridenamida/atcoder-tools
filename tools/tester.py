@@ -65,7 +65,7 @@ def do_test(exec_file=None):
                     [exec_file, ""], stdin=inf, timeout=1)
             except subprocess.TimeoutExpired:
                 status = "TLE(1s)"
-            except:
+            except subprocess.CalledProcessError:
                 status = "RE"
 
             if out_data == ans_data:
