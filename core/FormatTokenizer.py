@@ -42,7 +42,7 @@ def deviding_pattern(text, variables):
                 flag = False
             try:
                 for subvar in CalcNode(index).get_all_varnames():
-                    if not subvar in variables:
+                    if subvar not in variables:
                         flag = False
             except CalcParseError:
                 flag = False
