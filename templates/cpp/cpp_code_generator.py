@@ -6,6 +6,7 @@ from core.TemplateEngine import render
 
 mydir = os.path.dirname(__file__)
 
+
 def tab(n):
     if n <= 0:
         return ""
