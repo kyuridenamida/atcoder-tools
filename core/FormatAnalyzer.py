@@ -1,8 +1,7 @@
 import copy
-from Calculator import CalcNode
+from core.Calculator import CalcNode
 from collections import OrderedDict
-from utils import is_int, is_float, fixed_variable_name
-import re
+from core.utils import is_int, is_float, fixed_variable_name
 
 
 class TypesUnmatchedError(Exception):
@@ -38,8 +37,8 @@ class Index:
     def reflesh_max(self, v):
         if v.isdigit():
             if self.max_index is None or (
-                            self.max_index.get_all_varnames() == [] and self.max_index.evaluate() < CalcNode(
-                        v).evaluate()):
+                self.max_index.get_all_varnames() == [] and self.max_index.evaluate() < CalcNode(
+                    v).evaluate()):
                 self.max_index = CalcNode(v)
         else:
             self.max_index = CalcNode(v)

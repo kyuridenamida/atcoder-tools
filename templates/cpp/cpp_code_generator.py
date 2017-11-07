@@ -1,10 +1,10 @@
-import sys
 import os
 
-mydir = os.path.dirname(__file__)
-
 from functools import reduce
-from TemplateEngine import render
+from core.TemplateEngine import render
+
+
+mydir = os.path.dirname(__file__)
 
 
 def tab(n):
@@ -58,7 +58,8 @@ def generate_declaration(v):
         type_template_after = ""
     elif dim == 1:
         type_template_before = "vector<{type}>".format(type=typename)
-        type_template_after = "({size}+1)".format(size=v.indexes[0].zero_indexed().max_index)
+        type_template_after = "({size}+1)".format(
+            size=v.indexes[0].zero_indexed().max_index)
     elif dim == 2:
         type_template_before = "vector<vector<{type}>>".format(type=typename)
         type_template_after = "({row_size}+1,vector<{type}>({col_size}+1))".format(
@@ -99,7 +100,8 @@ def generate_arguments(var_information):
         else:
             raise NotImplementedError
 
-        formal_lst.append("{type} {name}".format(type=type_template, name=name))
+        formal_lst.append("{type} {name}".format(
+            type=type_template, name=name))
         actual_lst.append(name)
     formal_params = ", ".join(formal_lst)
     actual_params = ", ".join(actual_lst)
@@ -172,10 +174,12 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
                 lines.append("}")
     else:
         ''' 変数が最小単位まで分解されたときの入力処理 '''
-        vname_for_input = node.varname + ("" if indexes == [] else "[" + "][".join(indexes) + "]")
+        vname_for_input = node.varname + \
+            ("" if indexes == [] else "[" + "][".join(indexes) + "]")
         vtype = var_information[node.varname].type
 
-        line = "{input_code};".format(input_code=input_code(vtype, vname_for_input))
+        line = "{input_code};".format(
+            input_code=input_code(vtype, vname_for_input))
         lines.append(line)
         inputted.add(node.varname)
 
@@ -191,7 +195,8 @@ def code_generator(predict_result=None):
         template_failure = f.read()
 
     if predict_result is not None:
-        formal_arguments, actual_arguments = generate_arguments(predict_result.var_information)
+        formal_arguments, actual_arguments = generate_arguments(
+            predict_result.var_information)
         input_part_lines = generate_input_part(
             node=predict_result.analyzed_root,
             var_information=predict_result.var_information,

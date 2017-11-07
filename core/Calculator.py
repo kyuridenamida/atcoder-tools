@@ -178,6 +178,7 @@ def parse_to_calc_node(formula):
         raise CalcParseError
     return res
 
+
 if __name__ == '__main__':
 
     print(CalcNode("N-1-1+1000*N*N").evaluate({"N": 10}))

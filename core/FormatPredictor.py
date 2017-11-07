@@ -1,7 +1,7 @@
-import FormatAnalyzer
-import FormatTokenizer
-from utils import is_ascii, is_noise
-from utils import fixed_variable_name, divide_consecutive_vars, normalize_index
+from core.FormatAnalyzer import format_analyse
+from core.FormatTokenizer import get_all_format_probabilities
+from core.utils import is_ascii, is_noise
+from core.utils import divide_consecutive_vars, normalize_index
 
 
 class FormatPredictResult:
@@ -19,11 +19,11 @@ def format_predictor(format, samples):
 
     tokens = [x for x in format.split(
         " ") if x != "" and is_ascii(x) and not is_noise(x)]
-    tokenize_result = FormatTokenizer.get_all_format_probabilities(tokens)
+    tokenize_result = get_all_format_probabilities(tokens)
 
     for to_1d_flag in [False, True]:
         for candidate_format in tokenize_result:
-            rootnode, varinfo = FormatAnalyzer.format_analyse(
+            rootnode, varinfo = format_analyse(
                 candidate_format, to_1d_flag)
             try:
                 current_dic = {}

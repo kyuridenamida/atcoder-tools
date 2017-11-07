@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-import sys
+from multiprocessing import Pool, cpu_count
 import os
+from time import sleep
 
-sys.path.append(".")
-sys.path.append("core")
-from AtCoder import AtCoder
+from core.AtCoder import AtCoder
+from core.FormatPredictor import format_predictor
 
 try:
     import AccountInformation
@@ -13,10 +13,6 @@ except ImportError:
     class AccountInformation:
         username = None
         password = None
-
-import FormatPredictor
-from multiprocessing import Pool, Process, cpu_count
-from time import sleep
 
 atcoder = None
 
@@ -36,7 +32,7 @@ def prepare_procedure(argv):
 
     # 入力形式を解析
     try:
-        result = FormatPredictor.format_predictor(information, samples)
+        result = format_predictor(information, samples)
         if result is None:
             raise Exception
     except Exception:

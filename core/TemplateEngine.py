@@ -1,4 +1,7 @@
-import string, re
+import string
+import re
+
+
 def substitute(s, reps):
     # http://stackoverflow.com/questions/36739667/python-templates-for-generating-python-code-with-proper-multiline-indentation
     t = string.Template(s)
@@ -6,9 +9,10 @@ def substitute(s, reps):
     cr = {}  # prepare to iterate through the pattern string
     while True:
         # search for next replaceable token and its prefix
-        m =re.search(r'^(.*?)\$\{(.*?)\}', s[i:], re.MULTILINE)
+        m = re.search(r'^(.*?)\$\{(.*?)\}', s[i:], re.MULTILINE)
 
-        if m is None: break  # no more : finished
+        if m is None:
+            break  # no more : finished
         # the list is joined using the prefix if it contains only blanks
         sep = ('\n' + m.group(1)) if m.group(1).strip() == '' else '\n'
 
@@ -20,7 +24,7 @@ def substitute(s, reps):
 def render(s, **args):
     new_args = {}
 
-    for k,v in args.items():
+    for k, v in args.items():
         new_args[k] = v if isinstance(v, list) else [v]
 
-    return substitute(s,new_args)
+    return substitute(s, new_args)

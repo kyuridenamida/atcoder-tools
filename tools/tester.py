@@ -65,7 +65,7 @@ def do_test(exec_file=None):
                     [exec_file, ""], stdin=inf, timeout=1)
             except subprocess.TimeoutExpired:
                 status = "TLE(1s)"
-            except:
+            except subprocess.CalledProcessError:
                 status = "RE"
 
             if out_data == ans_data:
@@ -80,9 +80,11 @@ def do_test(exec_file=None):
                 with open(infile, "r") as inf2:
                     print_e(inf2.read(), end='')
                 print_e("[Expected]")
-                print_e("%s%s%s" % (OKBLUE, ans_data.decode('utf-8'), ENDC), end='')
+                print_e("%s%s%s" %
+                        (OKBLUE, ans_data.decode('utf-8'), ENDC), end='')
                 print_e("[Received]")
-                print_e("%s%s%s" % (FAIL, out_data.decode('utf-8'), ENDC), end='')
+                print_e("%s%s%s" %
+                        (FAIL, out_data.decode('utf-8'), ENDC), end='')
                 print_e()
         total += 1
 

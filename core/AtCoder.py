@@ -1,4 +1,4 @@
-from utils import normalized, pure_japanese_text
+from core.utils import normalized, pure_japanese_text
 import getpass
 import re
 import urllib.request
@@ -89,7 +89,8 @@ class AtCoder:
                 h3tag = tag.find('h3')
                 if h3tag is None:
                     continue
-                section_title = pure_japanese_text(tag.find('h3').get_text())  # 何かいくつかの問題のh3タグ内に変な特殊文字が混じっていてやばい
+                # 何かいくつかの問題のh3タグ内に変な特殊文字が混じっていてやばい
+                section_title = pure_japanese_text(tag.find('h3').get_text())
 
                 if section_title.startswith("入力例"):
                     input_tags.append(tag.find('pre'))
@@ -144,7 +145,8 @@ class AtCoder:
         previous_list = []
         page_num = 1
         while True:
-            req = self.opener.open("https://atcoder.jp/contest/archive?p={}&lang=ja".format(page_num))
+            req = self.opener.open(
+                "https://atcoder.jp/contest/archive?p={}&lang=ja".format(page_num))
             soup = BeautifulSoup(req, "html.parser")
             text = str(soup)
             url_re = re.compile(

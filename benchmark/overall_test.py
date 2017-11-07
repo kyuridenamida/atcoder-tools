@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 import sys
 
-sys.path.append("../core")
-sys.path.append("..")
-from AtCoder import AtCoder
-import AccountInformation
-import FormatAnalyzer
-import FormatPredictor
+from core.AtCoder import AtCoder
+import core.FormatPredictor as FP
 
 
-class NoPatternFoundError(Exception): pass
+class NoPatternFoundError(Exception):
+    pass
 
 
 if __name__ == "__main__":
@@ -26,7 +23,7 @@ if __name__ == "__main__":
         for k, v in plist.items():
             try:
                 informat, samples = atcoder.get_all(v)
-                result = FormatPredictor.format_predictor(informat, samples)
+                result = FP.format_predictor(informat, samples)
                 if result:
                     pass
                 else:
@@ -41,4 +38,5 @@ if __name__ == "__main__":
                 error = str(type(e))[1:-1]
 
             print("|[%s(%s)](%s)|%s|%s|" % (cid, k, v, result_md, error))
-            print("|[%s(%s)](%s)|%s|%s|" % (cid, k, v, result_md, error), file=sys.stderr)
+            print("|[%s(%s)](%s)|%s|%s|" %
+                  (cid, k, v, result_md, error), file=sys.stderr)
