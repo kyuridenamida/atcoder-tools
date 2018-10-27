@@ -1,3 +1,4 @@
+from core.AtCoderClient import ProblemContent
 from core.FormatAnalyzer import format_analyse
 from core.FormatTokenizer import get_all_format_probabilities
 from core.utils import is_ascii, is_noise
@@ -10,7 +11,10 @@ class FormatPredictResult:
         self.var_information = var_information
 
 
-def format_predictor(format, samples):
+def format_predictor(content: ProblemContent):
+    format = content.get_input_format()
+    samples = content.get_samples()
+
     format = format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
         "..", " ").replace("\ ", " ").replace("}", "} ").replace("　", " ")
     format = divide_consecutive_vars(format)
@@ -28,7 +32,7 @@ def format_predictor(format, samples):
             try:
                 current_dic = {}
                 for sample in samples:
-                    sample = sample[0].replace(" ", "[SP] ")
+                    sample = sample.get_input().replace(" ", "[SP] ")
                     sample = sample.replace("\n", "[NL] ")
                     # print(samples)
                     # tokens = [(name,sep)]*
