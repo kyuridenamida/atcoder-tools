@@ -14,7 +14,7 @@ def is_japanese(ch):
     return False
 
 
-def remove_non_jp_characters(content):
+def pure_japanese_text(content):
     return "".join([x for x in content if is_japanese(x)])
 
 
