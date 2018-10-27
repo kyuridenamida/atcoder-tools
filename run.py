@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 
-from multiprocessing import Pool, cpu_count
 import os
+from multiprocessing import Pool, cpu_count
 from time import sleep
+from typing import Tuple
 
-from core.AtCoderClient import AtCoderClient, Contest, Problem
+from core.AtCoderClient import AtCoderClient, Contest
 from core.FormatPredictor import format_predictor
+from core.models.Problem import Problem
 
 
-def prepare_procedure(argv):
+def prepare_procedure(argv: Tuple[AtCoderClient, Problem]):
     client, problem = argv
 
     pid, url = problem.get_alphabet(), problem.get_url()
