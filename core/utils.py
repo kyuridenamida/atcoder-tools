@@ -18,7 +18,7 @@ def pure_japanese_text(content):
     return "".join([x for x in content if is_japanese(x)])
 
 
-def normalized(content: str) -> str:
+def normalized(content):
     return content.strip().replace('\r', '') + "\n"
 
 

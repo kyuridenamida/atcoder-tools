@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from core.AtCoderClient import AtCoderClient
+from core.AtCoder import AtCoder
 import core.FormatPredictor as FP
 
 
@@ -11,18 +11,18 @@ class NoPatternFoundError(Exception):
 
 
 if __name__ == "__main__":
-    atcoder = AtCoderClient()
+    atcoder = AtCoder()
     succ = fail = 0
 
     print("|問題名|結果|エラーの型|")
     print("|-:|:-:|:-|")
-    for cid in atcoder.download_all_contest_ids():
-        plist = atcoder.download_problem_list(cid)
+    for cid in atcoder.get_all_contestids():
+        plist = atcoder.get_problem_list(cid)
         result_md = ""
         error = ""
         for k, v in plist.items():
             try:
-                informat, samples = atcoder.download_problem_content(v)
+                informat, samples = atcoder.get_all(v)
                 result = FP.format_predictor(informat, samples)
                 if result:
                     pass

@@ -14,7 +14,7 @@ script:
   - flake8 --ignore=E501
   - autopep8 -r . --diff | tee check_autopep8
   - test ! -s check_autopep8
-  - python run.py arc050 --without-login
+  - python AtCoderClient.py arc050 --without-login
 
 notifications:
   email: false
