@@ -1,95 +1,179 @@
 import copy
+from typing import List, Dict, Optional
+
 from core.Calculator import CalcNode, CalcParseError
+from core.utils import divide_consecutive_vars, normalize_index, is_ascii, is_noise
 
-from core.utils import fixed_variable_name
+
+class PreTokenizer:
+    @staticmethod
+    def tokenize(input_format: str) -> List[str]:
+        input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
+            "..", " ").replace("\ ", " ").replace("}", "} ").replace("　", " ")
+        input_format = divide_consecutive_vars(input_format)
+        input_format = normalize_index(input_format)
+        input_format = input_format.replace("{", "").replace("}", "")
+        tokens = [x for x in input_format.split() if x != "" and is_ascii(x) and not is_noise(x)]
+        return tokens
 
 
-def deviding_pattern(text, variables):
-    """
-            O(|text|^3)
-            ある文字列を分割するパターンを考える．
-            その際variablesに過去の変数の情報などをもたせ，インデックスとして今までに出てきたことのない変数が現れたら候補から除外するなどしている
-            分割は3分割まで考える(2次元indexまで対応することを想定)
-    """
+class TokenManager:
+    tokens = []
+    pos = 0
 
-    def is_variable_name(name):
-        return all(c.isalpha() or c == '_' for c in name)
+    def __init__(self, tokens):
+        self.tokens = tokens
 
-    def is_description(index):
+    def peek(self):
+        return self.tokens[self.pos]
+
+    def is_terminal(self):
+        return self.pos == len(self.tokens)
+
+    def go_next(self):
+        self.pos += 1
+
+    def go_back(self):
+        self.pos -= 1
+
+
+class VariableToken:
+    var_name = None
+    first_index = None
+    second_index = None
+
+    def __init__(self, var_name: str, first_index: Optional[str], second_index: Optional[str]):
+        def normalize(x: str):
+            if x is None:
+                return None
+            return x.rstrip(",")
+
+        def fixed_var_name(x: str):
+            if x[-1] == "_":
+                return x[:-1]
+            return x
+
+        self.var_name = fixed_var_name(normalize(var_name))
+        self.first_index = normalize(first_index)
+        self.second_index = normalize(second_index)
+
+    def is_valid(self):
+        if not self.has_valid_var_name():
+            return False
+        if not self.is_valid_index(self.first_index):
+            return False
+        if not self.is_valid_index(self.second_index):
+            return False
+        return True
+
+    def has_valid_var_name(self):
+        return all(c.isalpha() or c == '_' for c in self.var_name)
+
+    @staticmethod
+    def is_valid_index(index):
+        if index is None:
+            return True
+
         if not index[-1].isalpha() and not index[-1].isdigit():
             return False
         if index.find(',') != -1:
             return False
         return True
 
-    candidate = [[text]]
-    candidate += [[text[:i], text[i:]] for i in range(1, len(text))]
-    for i in range(1, len(text)):
-        for j in range(i + 1, len(text)):
-            candidate += [[text[:i], text[i:j], text[j:]]]
+    def dim_num(self):
+        if self.second_index:
+            return 2
+        if self.first_index:
+            return 1
+        return 0
 
-    res = []
-    for c in candidate:
-        c = [x.rstrip(",") for x in c if x != ","]
 
-        c[0] = fixed_variable_name(c[0])
-        flag = True
-        if not is_variable_name(c[0]):
-            flag = False
+class FormatSearcher:
+    answers = None
+    token_manager = None
+    max_variables_count = None
 
-        for index in c[1:]:
-            if not is_description(index):
-                flag = False
+    def __init__(self, tokens):
+        self.token_manager = TokenManager(tokens)
+
+    def search(self, max_variables_count):
+        self.max_variables_count = max_variables_count
+        self.answers = []
+        self.inner_search([], {})
+        return self.answers
+
+    def inner_search(self, var_token_seq, var_to_dim_num: Dict[str, int]):
+        if len(var_to_dim_num) > self.max_variables_count:
+            return
+
+        if self.token_manager.is_terminal():
+            self.answers.append(copy.deepcopy(var_token_seq))
+            return
+
+        for var_token in self.possible_var_tokens(self.token_manager.peek(), var_to_dim_num):
+            next_var_to_dim_num = copy.deepcopy(var_to_dim_num)
+            next_var_to_dim_num[var_token.var_name] = var_token.dim_num()
             try:
-                for subvar in CalcNode(index).get_all_varnames():
-                    if subvar not in variables:
-                        flag = False
-            except CalcParseError:
-                flag = False
-                pass
+                var_token_seq.append(var_token)
+                self.token_manager.go_next()
+                self.inner_search(var_token_seq, next_var_to_dim_num)
+            finally:
+                self.token_manager.go_back()
+                var_token_seq.pop()
+        return
 
-        if c[0] in variables and variables[c[0]] != len(c):
-            flag = False
+    @staticmethod
+    def possible_var_tokens(token: str, current_var_to_dim_num: Dict[str, int]) -> List[VariableToken]:
+        """
+        Only considers to divide the given token into at most 3 pieces (that is, to assume at most 2 dimensional indexes).
+        :param token: e.g. "N", "abc_1_2" or "a_1 ... a_N"
+        :param current_var_to_dim_num: utilized to detect unknown variables (for pruning purpose)
+        """
+        var_token_candidates = [VariableToken(token, None, None)]
+        var_token_candidates += [VariableToken(token[:i], token[i:], None) for i in range(1, len(token))]
+        for i in range(1, len(token)):
+            for j in range(i + 1, len(token)):
+                var_token_candidates += [VariableToken(token[:i], token[i:j], token[j:])]
 
-        if flag:
-            res.append(c)
-    return res
+        def check_if_possible(var_token: VariableToken):
+            # check syntax error
+            if not var_token.is_valid():
+                return False
+
+            # check kind of synonym error using current_var_to_dim_num
+            for index in [var_token.first_index, var_token.second_index]:
+                if index is None:
+                    continue
+
+                try:
+                    for sub_var in CalcNode(index).get_all_varnames():
+                        if sub_var not in current_var_to_dim_num:
+                            return False
+                except CalcParseError:
+                    return False
+
+            if var_token.var_name in current_var_to_dim_num \
+                    and current_var_to_dim_num[var_token.var_name] != var_token.dim_num():
+                return False
+            return True
+
+        return [var_token for var_token in var_token_candidates if check_if_possible(var_token)]
 
 
-def dfs(final_answer, tokens, current_state, pos, variables, lim):
-    """
-            O(???) <-指数オーダー
-            limの枝刈りのみで終了した場合はTrueが返ってくる
-    """
-    if len(variables) > lim:
-        return True
-    if pos == len(tokens):
-        final_answer.append(copy.deepcopy(current_state))
-        return False
-    flag = False
-    for d in deviding_pattern(tokens[pos], variables):
-        next_vars = copy.deepcopy(variables)
-        next_vars[d[0]] = len(d)
-        current_state.append(d)
-        if dfs(final_answer, tokens, current_state, pos + 1, next_vars, lim):
-            flag = True
-        current_state.pop()
-    return flag
+class FormatTokenizer:
 
+    def __init__(self, input_format: str):
+        self.tokens = PreTokenizer().tokenize(input_format)
 
-def get_all_format_probabilities(tokens):
-    """
-            入力
-                    tokens#list(str) : 変数毎にパースされたトークン．これは不要な記号(…など)を含まない．　(例:["N","A_1","A_N"])
-            出力
-                    #list(list(list(str))) 出現する変数の数が最小となるような更なるtokenizeの組み合わせ全て．(例: [[["N"],["A_","1"],["A_","N"]]] )
-            コメント
-                    現実的なインスタンスは一瞬
-    """
-    final_answer = []
-    lim = 1
-    while len(final_answer) == 0:
-        if not dfs(final_answer, tokens, [], 0, {}, lim):
-            break
-        lim += 1
-    return final_answer
+    def compute_formats_with_minimal_vars(self) -> List[VariableToken]:
+        """
+        Quite fast for realistic instances.
+        This method stores possible formats with the smallest number of variables to self.possible_formats
+        """
+
+        searcher = FormatSearcher(self.tokens)
+        for max_variable_length in range(1, 20):
+            result = searcher.search(max_variable_length)
+            if result:
+                return result
+        return []

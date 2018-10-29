@@ -6,7 +6,7 @@ from time import sleep
 from typing import Tuple
 
 from core.AtCoderClient import AtCoderClient, Contest
-from core.FormatPredictor import format_predictor
+from core.FormatPredictor import FormatPredictor
 from core.models.Problem import Problem
 
 
@@ -27,12 +27,12 @@ def prepare_procedure(argv: Tuple[AtCoderClient, Problem]):
 
     # Analyze input format
     try:
-        result = format_predictor(content)
+        result = FormatPredictor().predict(content)
         if result is None:
             raise Exception
-    except Exception:
+    except Exception as e:
         result = None
-        print("Problem {}: failed to analyze input format.".format(pid))
+        print("Problem {}: failed to analyze input format. {}".format(pid, e))
 
     dirname = "workspace/{}/{}".format(problem.get_contest().get_id(), pid)
     os.makedirs(dirname, exist_ok=True)

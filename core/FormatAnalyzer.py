@@ -132,13 +132,24 @@ class FormatNode:
             ord(str(self.terminal_sep)[0])) + "]" + ")"
 
 
-def format_analyse(parsed_tokens, to_1d_flag=False):
+def format_analyse(parsed_tokens_, to_1d_flag=False):
     """
             入力
                     parsed_tokens # list(list(str)) : 変数毎の変数名/インデックスがtokenizedなトークンリスト
             出力
                     res,dic # FormatNode,OrderedDict<str:VariableInformation> : フォーマット情報のノードと変数の情報を保持した辞書を同時に返す
     """
+
+    parsed_tokens = []
+    for t in parsed_tokens_:
+        r = []
+        if t.var_name:
+            r.append(t.var_name)
+        if t.first_index:
+            r.append(t.first_index)
+        if t.second_index:
+            r.append(t.second_index)
+        parsed_tokens.append(r)
 
     appearances = {}
     dic = OrderedDict()
