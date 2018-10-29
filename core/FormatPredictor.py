@@ -25,27 +25,23 @@ class FormatPredictor:
 
         for to_1d_flag in [False, True]:
             for candidate_format in var_tokens:
-                root_node, var_info = format_analyse(candidate_format, to_1d_flag)
+                root_node, var_info = format_analyse(candidate_format.var_tokens, to_1d_flag)
                 try:
                     current_dic = {}
                     for sample in samples:
                         sample = sample.get_input().replace(" ", "[SP] ")
                         sample = sample.replace("\n", "[NL] ")
-                        # print(samples)
-                        # tokens = [(name,sep)]*
                         tokens = [(x[:-4], '     ' if x[-4:] == '[SP]' else '\n' if x[-4:] == '[NL]' else 'ERR') for x
                                   in
                                   sample.split(" ") if x != ""]  # "abc[SP]" -> "abc
-                        # print(tokens)
                         current_dic = root_node.verify_and_get_types(
                             tokens, current_dic)
 
                     for k, var in current_dic.items():
                         var_info[k].type = var[1]
                     res = FormatPredictResult(root_node, var_info)
-                    # print(str(rootnode))
                     return res
-                except Exception as e:
+                except Exception:
                     pass
 
         return None

@@ -2,6 +2,7 @@ import copy
 from typing import List, Dict, Optional
 
 from core.Calculator import CalcNode, CalcParseError
+from core.models.VariableToken import VariableToken, TokenizedFormat
 from core.utils import divide_consecutive_vars, normalize_index, is_ascii, is_noise
 
 
@@ -37,57 +38,6 @@ class TokenManager:
         self.pos -= 1
 
 
-class VariableToken:
-    var_name = None
-    first_index = None
-    second_index = None
-
-    def __init__(self, var_name: str, first_index: Optional[str], second_index: Optional[str]):
-        def normalize(x: str):
-            if x is None:
-                return None
-            return x.rstrip(",")
-
-        def fixed_var_name(x: str):
-            if x[-1] == "_":
-                return x[:-1]
-            return x
-
-        self.var_name = fixed_var_name(normalize(var_name))
-        self.first_index = normalize(first_index)
-        self.second_index = normalize(second_index)
-
-    def is_valid(self):
-        if not self.has_valid_var_name():
-            return False
-        if not self.is_valid_index(self.first_index):
-            return False
-        if not self.is_valid_index(self.second_index):
-            return False
-        return True
-
-    def has_valid_var_name(self):
-        return all(c.isalpha() or c == '_' for c in self.var_name)
-
-    @staticmethod
-    def is_valid_index(index):
-        if index is None:
-            return True
-
-        if not index[-1].isalpha() and not index[-1].isdigit():
-            return False
-        if index.find(',') != -1:
-            return False
-        return True
-
-    def dim_num(self):
-        if self.second_index:
-            return 2
-        if self.first_index:
-            return 1
-        return 0
-
-
 class FormatSearcher:
     answers = None
     token_manager = None
@@ -96,7 +46,7 @@ class FormatSearcher:
     def __init__(self, tokens):
         self.token_manager = TokenManager(tokens)
 
-    def search(self, max_variables_count):
+    def search(self, max_variables_count) -> List[TokenizedFormat]:
         self.max_variables_count = max_variables_count
         self.answers = []
         self.inner_search([], {})
@@ -107,7 +57,7 @@ class FormatSearcher:
             return
 
         if self.token_manager.is_terminal():
-            self.answers.append(copy.deepcopy(var_token_seq))
+            self.answers.append(TokenizedFormat(copy.deepcopy(var_token_seq)))
             return
 
         for var_token in self.possible_var_tokens(self.token_manager.peek(), var_to_dim_num):
@@ -120,7 +70,6 @@ class FormatSearcher:
             finally:
                 self.token_manager.go_back()
                 var_token_seq.pop()
-        return
 
     @staticmethod
     def possible_var_tokens(token: str, current_var_to_dim_num: Dict[str, int]) -> List[VariableToken]:
@@ -165,7 +114,7 @@ class FormatTokenizer:
     def __init__(self, input_format: str):
         self.tokens = PreTokenizer().tokenize(input_format)
 
-    def compute_formats_with_minimal_vars(self) -> List[VariableToken]:
+    def compute_formats_with_minimal_vars(self) -> List[TokenizedFormat]:
         """
         Quite fast for realistic instances.
         This method stores possible formats with the smallest number of variables to self.possible_formats
@@ -176,4 +125,8 @@ class FormatTokenizer:
             result = searcher.search(max_variable_length)
             if result:
                 return result
-        return []
+        raise NoFormatFoundError
+
+
+class NoFormatFoundError(Exception):
+    pass
