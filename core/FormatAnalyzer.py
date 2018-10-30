@@ -1,213 +1,75 @@
-import copy
-from core.Calculator import CalcNode
+from typing import List
+
 from collections import OrderedDict
-from core.utils import is_int, is_float, fixed_variable_name
 
+from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
+from core.models.tokenizer.VariableToken import VariableToken
+from core.models.analyzer.SimpleFormat import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern
 
-class TypesUnmatchedError(Exception):
+class UnknownPeriodError(Exception):
     pass
 
 
-class ParseError(Exception):
-    pass
+def predict_period(seq: List[int]):
+    if len(seq) >= 2:
+        span = seq[1] - seq[0]
+        for cur, succ in zip(seq, seq[1:]):
+            if succ - cur != span:
+                raise UnknownPeriodError
+        return span
+    else:
+        return 1
 
 
-class UpCastingError(Exception):
-    pass
+def format_analyse(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
+    var_to_positions = {}
+    var_to_analyzed_var = OrderedDict()
 
+    # Pre-computation of the min / max value of each of the first and second indices.
+    for pos, var_token in enumerate(var_tokens):
+        var_name = var_token.var_name
 
-def upcast(frm, to):
-    if frm == to:
-        return frm
-    if (frm == int and to == float) or (frm == float or to == int):
-        return float
-    raise UpCastingError
+        if var_name not in var_to_analyzed_var:
+            var_to_analyzed_var[var_name] = AnalyzedVariable(var_name, var_token.dim_num())
+            var_to_positions[var_name] = []
 
+        var_to_positions[var_name].append(pos)
 
-class Index:
-    def __init__(self):
-        self.max_index = None
-        self.min_index = None
+        if var_token.dim_num() >= 2:
+            var_to_analyzed_var[var_name].second_index.update(var_token.second_index)
+        if var_token.dim_num() >= 1:
+            var_to_analyzed_var[var_name].first_index.update(var_token.first_index)
 
-    def reflesh_min(self, v):
-        if v.isdigit():
-            if self.min_index is None or self.min_index.evaluate() > CalcNode(v).evaluate():
-                self.min_index = CalcNode(v)
+    # Building format nodes
+    already_processed_vars = set()
 
-    def reflesh_max(self, v):
-        if v.isdigit():
-            if self.max_index is None or (
-                self.max_index.get_all_varnames() == [] and self.max_index.evaluate() < CalcNode(
-                    v).evaluate()):
-                self.max_index = CalcNode(v)
-        else:
-            self.max_index = CalcNode(v)
+    root = SimpleFormat()
+    for pos, var_token in enumerate(var_tokens):
+        var_name = var_token.var_name
+        analyzed_var = var_to_analyzed_var[var_name]
 
-    def zero_indexed(self):
-        res = Index()
-        res.min_index = CalcNode("0")
-        res.max_index = CalcNode(
-            str(self.max_index) + "-(" + str(self.min_index) + ")")
-        return res
-
-
-class VariableInformation:
-    def __init__(self, name, idxsize):
-        self.name = name
-        self.indexes = [Index() for _ in range(idxsize)]
-        self.type = None
-
-
-class FormatNode:
-    def __init__(self, varname=None, pointers=None, index=None):
-        self.varname = varname
-        self.pointers = pointers
-        self.index = index
-        self.sep = None
-        self.terminal_sep = None
-
-    def verify_and_get_types(self, tokens, init_dic=None):
-        if init_dic is None:
-            init_dic = {}
-        value_dic = copy.deepcopy(init_dic)
-        if self.simulate(tokens, value_dic) != len(tokens):
-            raise ParseError
-        return value_dic
-
-    def simulate(self, tokens, value_dic, pos=0):
-        def check_and_reflesh(value_dic, varname, value):
-            if is_int(value):
-                value = int(value)
-            elif is_float(value):
-                value = float(value)
-
-            if varname in value_dic:
-                value_dic[varname] = (value, upcast(
-                    value_dic[varname][1], type(value)))
-            else:
-                value_dic[varname] = (value, type(value))
-
-        if self.pointers is not None:
-            if self.index is None:
-                for child in self.pointers:
-                    pos = child.simulate(tokens, value_dic, pos)
-                return pos
-            else:
-                def converted_dictionary(value_dic):
-                    dic = {}
-                    for k, v in value_dic.items():
-                        dic[k] = v[0]
-                    return dic
-
-                minv = self.index.min_index.evaluate(
-                    converted_dictionary(value_dic))
-                maxv = self.index.max_index.evaluate(
-                    converted_dictionary(value_dic))
-
-                for _ in range(minv, maxv + 1):
-                    for child in self.pointers:
-                        pos = child.simulate(tokens, value_dic, pos)
-                        if maxv - minv != 1 and self.sep is None:
-                            self.sep = tokens[pos - 1][1]
-                self.terminal_sep = tokens[pos - 1][1]
-                return pos
-        else:
-
-            check_and_reflesh(value_dic, self.varname, tokens[pos][0])
-            self.terminal_sep = tokens[pos][1]
-            pos += 1
-            return pos
-
-    def __str__(self):
-        res = ""
-        if self.pointers is not None:
-            if self.index is not None:
-                res += "(%s<=i<=%s)*" % (str(self.index.min_index),
-                                         str(self.index.max_index))
-            res += "[" + " ".join([child.__str__()
-                                   for child in self.pointers]) + "]"
-        else:
-            res = fixed_variable_name(self.varname)
-        return res + "(sep:[" + str(ord(str(self.sep)[0])) + "] terminal_sep = [" + str(
-            ord(str(self.terminal_sep)[0])) + "]" + ")"
-
-
-def format_analyse(parsed_tokens_, to_1d_flag=False):
-    """
-            入力
-                    parsed_tokens # list(list(str)) : 変数毎の変数名/インデックスがtokenizedなトークンリスト
-            出力
-                    res,dic # FormatNode,OrderedDict<str:VariableInformation> : フォーマット情報のノードと変数の情報を保持した辞書を同時に返す
-    """
-
-    parsed_tokens = []
-    for t in parsed_tokens_:
-        r = []
-        if t.var_name:
-            r.append(t.var_name)
-        if t.first_index:
-            r.append(t.first_index)
-        if t.second_index:
-            r.append(t.second_index)
-        parsed_tokens.append(r)
-
-    appearances = {}
-    dic = OrderedDict()
-    pos = 0
-
-    # 出現位置とかインデックスとしての最小値・最大値をメモ
-    for token in parsed_tokens:
-        idxs = token[1:]
-        varname = token[0]
-        if varname not in dic:
-            dic[varname] = VariableInformation(varname, len(idxs))
-            appearances[varname] = []
-        appearances[varname].append(pos)
-        # print(idxs)
-        for i, idx in enumerate(idxs):
-            dic[varname].indexes[i].reflesh_min(idx)
-            dic[varname].indexes[i].reflesh_max(idx)
-        pos += 1
-
-    # フォーマットノードの構築
-    processed = set()
-    root = FormatNode(pointers=[])
-    for i in range(len(parsed_tokens)):
-        varname = parsed_tokens[i][0]
-        if varname in processed:
+        if var_name in already_processed_vars:
             continue
 
-        dim = len(dic[varname].indexes)
+        dim = var_token.dim_num()
 
         if dim == 2 and to_1d_flag:
-            dic[varname].indexes = dic[varname].indexes[:-1]
+            analyzed_var.first_index = analyzed_var.second_index
+            analyzed_var.second_index = None
             dim = 1
-        if dim == 0:
-            root.pointers.append(FormatNode(varname))
-            processed.add(varname)
-        elif dim == 1:
-            if len(appearances[varname]) >= 2:
-                # assume it's a arithmetic sequence
-                span = appearances[varname][1] - appearances[varname][0]
-            elif len(appearances[varname]) == 1:
-                # or mono
-                span = 1
 
-            zipped_varnames = [token[0] for token in parsed_tokens[i:i + span]]
-            for vname in zipped_varnames:
-                processed.add(vname)
-            root.pointers.append(
-                FormatNode(pointers=[FormatNode(varname=vname) for vname in zipped_varnames],
-                           index=dic[varname].indexes[0]
-                           )
-            )
+        if dim == 0:
+            root.push_back(SingularPattern(analyzed_var))
+            already_processed_vars.add(var_name)
+        elif dim == 1:
+            period = predict_period(var_to_positions[var_name])
+            parallel_vars_group = [var_to_analyzed_var[token.var_name] for token in var_tokens[pos:pos + period]]
+            root.push_back(ParallelPattern(parallel_vars_group))
+            for var in parallel_vars_group:
+                already_processed_vars.add(var.var_name)
         elif dim == 2:
-            processed.add(varname)
-            inner_node = FormatNode(pointers=[FormatNode(
-                varname=varname)], index=dic[varname].indexes[1])
-            root.pointers.append(FormatNode(
-                pointers=[inner_node], index=dic[varname].indexes[0]))
+            root.push_back(TwoDimensionalPattern(analyzed_var))
         else:
             raise NotImplementedError
-
-    return root, dic
+        already_processed_vars.add(var_name)
+    return root

@@ -55,6 +55,13 @@ class CalcNode:
             self.lch = None
             self.rch = None
 
+    def __eq__(self, other):
+        return self.__str__() == str(other)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+
     def __str__(self, depth=0):
         if self.operator is not None:
             lv = self.lch.__str__(depth=depth + 1)
@@ -68,10 +75,10 @@ class CalcNode:
         else:
             return self.content
 
-    def get_all_varnames(self):
+    def get_all_variables(self):
         if self.operator is not None:
-            lv = self.lch.get_all_varnames()
-            rv = self.rch.get_all_varnames()
+            lv = self.lch.get_all_variables()
+            rv = self.rch.get_all_variables()
             return lv + rv
         elif isinstance(self.content, int):
             return []
@@ -180,5 +187,4 @@ def parse_to_calc_node(formula):
 
 
 if __name__ == '__main__':
-
     print(CalcNode("N-1-1+1000*N*N").evaluate({"N": 10}))

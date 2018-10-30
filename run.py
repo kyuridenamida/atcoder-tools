@@ -75,7 +75,7 @@ def prepare_workspace(atcoder_client: AtCoderClient, contest_id: str):
         print("retrying to get task list.")
 
     thread_pool = Pool(processes=cpu_count())
-
+    problem_list = problem_list[1:2]
     thread_pool.map(prepare_procedure, [(atcoder_client, problem) for problem in problem_list])
 
 

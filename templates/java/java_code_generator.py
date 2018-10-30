@@ -59,13 +59,13 @@ def generate_declaration(v):
     elif dim == 1:
         type_template_before = "{type}[]".format(type=typename)
         type_template_after = " = new {type}[{size}+1]".format(type=typename,
-                                                               size=v.indexes[0].zero_indexed().max_index)
+                                                               size=v.indexes[0].get_zero_based_index().max_index)
     elif dim == 2:
         type_template_before = "{type}[][]".format(type=typename)
         type_template_after = " = new {type}[{row_size}+1][{col_size}+1)]".format(
             type=typename,
-            row_size=v.indexes[0].zero_indexed().max_index,
-            col_size=v.indexes[1].zero_indexed().max_index
+            row_size=v.indexes[0].get_zero_based_index().max_index,
+            col_size=v.indexes[1].get_zero_based_index().max_index
         )
     else:
         raise NotImplementedError
@@ -132,7 +132,7 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
         will_declare = []
         for vname in undeclared:
             related_vars = reduce(lambda a, b: a + b,
-                                  [index.min_index.get_all_varnames() + index.max_index.get_all_varnames()
+                                  [index.min_index.get_all_variables() + index.max_index.get_all_variables()
                                    for index in var_information[vname].indexes], []
                                   )
             if all([(var in inputted) for var in related_vars]):
@@ -162,8 +162,8 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
             # ループの開始
             lines.append("for(int {x} = {start} ; {x} <= {end} ; {x}++){{".format(
                 x=loopv,
-                start=node.index.zero_indexed().min_index,
-                end=node.index.zero_indexed().max_index)
+                start=node.index.get_zero_based_index().min_index,
+                end=node.index.get_zero_based_index().max_index)
             )
             # ループの内側
             for child in node.pointers:

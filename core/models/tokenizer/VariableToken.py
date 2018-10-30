@@ -2,9 +2,6 @@ from typing import Optional, List
 
 
 class VariableToken:
-    var_name = None
-    first_index = None
-    second_index = None
 
     def __init__(self, var_name: str, first_index: Optional[str], second_index: Optional[str]):
         def normalize(x: str):
@@ -21,20 +18,27 @@ class VariableToken:
         self.first_index = normalize(first_index)
         self.second_index = normalize(second_index)
 
+    def dim_num(self):
+        if self.second_index:
+            return 2
+        if self.first_index:
+            return 1
+        return 0
+
     def is_valid(self):
-        if not self.has_valid_var_name():
+        if not self._has_valid_var_name():
             return False
-        if not self.is_valid_index(self.first_index):
+        if not self._is_valid_index(self.first_index):
             return False
-        if not self.is_valid_index(self.second_index):
+        if not self._is_valid_index(self.second_index):
             return False
         return True
 
-    def has_valid_var_name(self):
+    def _has_valid_var_name(self):
         return all(c.isalpha() or c == '_' for c in self.var_name)
 
     @staticmethod
-    def is_valid_index(index):
+    def _is_valid_index(index):
         if index is None:
             return True
 
@@ -44,17 +48,8 @@ class VariableToken:
             return False
         return True
 
-    def dim_num(self):
-        if self.second_index:
-            return 2
-        if self.first_index:
-            return 1
-        return 0
-
 
 class TokenizedFormat:
-    var_tokens = None
-
     def __init__(self, var_tokens: List[VariableToken]):
         self.var_tokens = var_tokens
 

@@ -1,78 +1,94 @@
 import copy
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 from core.Calculator import CalcNode, CalcParseError
-from core.models.VariableToken import VariableToken, TokenizedFormat
-from core.utils import divide_consecutive_vars, normalize_index, is_ascii, is_noise
+from core.models.tokenizer.VariableToken import VariableToken, TokenizedFormat
 
 
-class PreTokenizer:
-    @staticmethod
-    def tokenize(input_format: str) -> List[str]:
-        input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
-            "..", " ").replace("\ ", " ").replace("}", "} ").replace("　", " ")
-        input_format = divide_consecutive_vars(input_format)
-        input_format = normalize_index(input_format)
-        input_format = input_format.replace("{", "").replace("}", "")
-        tokens = [x for x in input_format.split() if x != "" and is_ascii(x) and not is_noise(x)]
-        return tokens
+# Utils
+from core.utils.TokenManager import TokenManager
 
 
-class TokenManager:
-    tokens = []
-    pos = 0
+def is_ascii(s):
+    return all(ord(c) < 128 for c in s)
 
-    def __init__(self, tokens):
-        self.tokens = tokens
 
-    def peek(self):
-        return self.tokens[self.pos]
+def is_noise(s):
+    return s == ":" or s == "...." or s == "..." or s == ".." or s == "."
 
-    def is_terminal(self):
-        return self.pos == len(self.tokens)
 
-    def go_next(self):
-        self.pos += 1
+def normalize_index(text):
+    return text.replace("{(", "").replace(")}", "")
 
-    def go_back(self):
-        self.pos -= 1
+
+def divide_consecutive_vars(text):
+    res_text = ""
+    i = 0
+    while i < len(text):
+        if text[i] == "_":
+            res_text += "_"
+            i += 1
+
+            if i < len(text) and text[i].isdigit():
+                while i < len(text) and text[i].isdigit():
+                    res_text += text[i]
+                    i += 1
+            elif i < len(text) and text[i].isalpha():
+                res_text += text[i]
+                i += 1
+            if i < len(text) and text[i].isalpha():
+                res_text += " "
+        else:
+            res_text += text[i]
+            i += 1
+    return res_text
+
+
+def sanitized_tokens(input_format: str) -> List[str]:
+    input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
+        "..", " ").replace("\ ", " ").replace("}", "} ").replace("　", " ")
+    input_format = divide_consecutive_vars(input_format)
+    input_format = normalize_index(input_format)
+    input_format = input_format.replace("{", "").replace("}", "")
+    tokens = [x for x in input_format.split() if x != "" and is_ascii(x) and not is_noise(x)]
+    return tokens
 
 
 class FormatSearcher:
-    answers = None
-    token_manager = None
-    max_variables_count = None
+    _answers = None
+    _token_manager = None
+    _max_variables_count = None
 
     def __init__(self, tokens):
-        self.token_manager = TokenManager(tokens)
+        self._token_manager = TokenManager(tokens)
 
     def search(self, max_variables_count) -> List[TokenizedFormat]:
-        self.max_variables_count = max_variables_count
-        self.answers = []
-        self.inner_search([], {})
-        return self.answers
+        self._max_variables_count = max_variables_count
+        self._answers = []
+        self._inner_search([], {})
+        return self._answers
 
-    def inner_search(self, var_token_seq, var_to_dim_num: Dict[str, int]):
-        if len(var_to_dim_num) > self.max_variables_count:
+    def _inner_search(self, var_token_seq, var_to_dim_num: Dict[str, int]):
+        if len(var_to_dim_num) > self._max_variables_count:
             return
 
-        if self.token_manager.is_terminal():
-            self.answers.append(TokenizedFormat(copy.deepcopy(var_token_seq)))
+        if self._token_manager.is_terminal():
+            self._answers.append(TokenizedFormat(copy.deepcopy(var_token_seq)))
             return
 
-        for var_token in self.possible_var_tokens(self.token_manager.peek(), var_to_dim_num):
+        for var_token in self._possible_var_tokens(self._token_manager.peek(), var_to_dim_num):
             next_var_to_dim_num = copy.deepcopy(var_to_dim_num)
             next_var_to_dim_num[var_token.var_name] = var_token.dim_num()
             try:
                 var_token_seq.append(var_token)
-                self.token_manager.go_next()
-                self.inner_search(var_token_seq, next_var_to_dim_num)
+                self._token_manager.go_next()
+                self._inner_search(var_token_seq, next_var_to_dim_num)
             finally:
-                self.token_manager.go_back()
+                self._token_manager.go_back()
                 var_token_seq.pop()
 
     @staticmethod
-    def possible_var_tokens(token: str, current_var_to_dim_num: Dict[str, int]) -> List[VariableToken]:
+    def _possible_var_tokens(token: str, current_var_to_dim_num: Dict[str, int]) -> List[VariableToken]:
         """
         Only considers to divide the given token into at most 3 pieces (that is, to assume at most 2 dimensional indexes).
         :param token: e.g. "N", "abc_1_2" or "a_1 ... a_N"
@@ -95,7 +111,7 @@ class FormatSearcher:
                     continue
 
                 try:
-                    for sub_var in CalcNode(index).get_all_varnames():
+                    for sub_var in CalcNode(index).get_all_variables():
                         if sub_var not in current_var_to_dim_num:
                             return False
                 except CalcParseError:
@@ -110,13 +126,12 @@ class FormatSearcher:
 
 
 class FormatTokenizer:
-
     def __init__(self, input_format: str):
-        self.tokens = PreTokenizer().tokenize(input_format)
+        self.tokens = sanitized_tokens(input_format)
 
     def compute_formats_with_minimal_vars(self) -> List[TokenizedFormat]:
         """
-        Quite fast for realistic instances.
+        Fast enough for realistic instances.
         This method stores possible formats with the smallest number of variables to self.possible_formats
         """
 
