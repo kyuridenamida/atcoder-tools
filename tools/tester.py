@@ -34,10 +34,13 @@ class MultipleCppFilesError(Exception):
     pass
 
 
+def is_executable_file(file_name):
+    return os.access(file_name, os.X_OK) and file_name.find("test.py") == -1 \
+           and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
+
+
 def do_test(exec_file=None):
-    exec_files = [fname for fname in glob.glob(
-        './*') if os.access(fname, os.X_OK) and fname.find("test.py") == -1 and fname.find(
-        ".cpp") == -1 and not fname.endswith(".txt")]  # cppやtxtを省くのは一応の Cygwin 対策
+    exec_files = [fname for fname in glob.glob('./*') if is_executable_file(fname)]
     if exec_file is None:
         if len(exec_files) == 0:
             raise NoExecutableFileError
