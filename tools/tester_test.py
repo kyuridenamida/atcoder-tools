@@ -13,17 +13,17 @@ class TestTester(unittest.TestCase):
 
     @patch('os.access', return_value=False)
     @patch('pathlib.Path.is_file', return_value=True)
-    def test_is_executable_file__file_is_not_executable(self, os_mock, is_file_mock):
+    def test_is_executable_file__not_executable(self, os_mock, is_file_mock):
         self.assertFalse(is_executable_file('a.out'))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
-    def test_is_executable_file__file_is_source_code(self, os_mock, is_file_mock):
+    def test_is_executable_file__source_code(self, os_mock, is_file_mock):
         self.assertFalse(is_executable_file('A.cpp'))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
-    def test_is_executable_file__file_is_text(self, os_mock, is_file_mock):
+    def test_is_executable_file__text(self, os_mock, is_file_mock):
         self.assertFalse(is_executable_file('in.txt'))
 
     @patch('os.access', return_value=True)
