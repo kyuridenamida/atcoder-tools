@@ -22,6 +22,10 @@ class TestTester(unittest.TestCase):
     def test_is_executable_file__file_is_text(self, os_mock):
         self.assertFalse(is_executable_file('in.txt'))
 
+    @patch('os.access', return_value=True)
+    def test_is_executable_file__tester_itself(self, os_mock):
+        self.assertFalse(is_executable_file('tester.py'))
+
 
 if __name__ == '__main__':
     unittest.main()

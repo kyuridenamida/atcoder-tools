@@ -35,7 +35,7 @@ class MultipleCppFilesError(Exception):
 
 
 def is_executable_file(file_name):
-    return os.access(file_name, os.X_OK) and file_name.find("test.py") == -1 \
+    return os.access(file_name, os.X_OK) and file_name.find("tester.py") == -1 \
            and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
