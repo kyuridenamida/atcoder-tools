@@ -60,13 +60,13 @@ def do_test(exec_file=None):
         if os.path.basename(infile)[2:] != os.path.basename(outfile)[3:]:
             print_e("The output for '%s' is not '%s'!!!" % (infile, outfile))
             raise IrregularInOutFileError
-        with open(infile, "r") as inf, open(outfile, "rb") as ouf:
+        with open(infile, "r") as inf, open(outfile, "r") as ouf:
             ans_data = ouf.read()
             out_data = ""
             status = "WA"
             try:
                 out_data = subprocess.check_output(
-                    [exec_file, ""], stdin=inf, timeout=1)
+                    [exec_file, ""], stdin=inf, universal_newlines=True, timeout=1)
             except subprocess.TimeoutExpired:
                 status = "TLE(1s)"
             except subprocess.CalledProcessError:
@@ -85,10 +85,10 @@ def do_test(exec_file=None):
                     print_e(inf2.read(), end='')
                 print_e("[Expected]")
                 print_e("%s%s%s" %
-                        (OKBLUE, ans_data.decode('utf-8'), ENDC), end='')
+                        (OKBLUE, ans_data, ENDC), end='')
                 print_e("[Received]")
                 print_e("%s%s%s" %
-                        (FAIL, out_data.decode('utf-8'), ENDC), end='')
+                        (FAIL, out_data, ENDC), end='')
                 print_e()
         total += 1
 
