@@ -43,7 +43,7 @@ def format_predictor(format, samples):
                 res = FormatPredictResult(rootnode, varinfo)
                 # print(str(rootnode))
                 return res
-            except Exception as e:
+            except Exception:
                 pass
 
     return None
