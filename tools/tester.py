@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+import re
 import sys
 import os
 import glob
@@ -40,6 +40,10 @@ def is_executable_file(file_name):
            and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
+def remove_last_newline(output):
+    return re.sub(r'\n$', '', output, 1)
+
+
 def do_test(exec_file=None):
     exec_files = [fname for fname in glob.glob('./*') if is_executable_file(fname)]
     if exec_file is None:
@@ -72,7 +76,7 @@ def do_test(exec_file=None):
             except subprocess.CalledProcessError:
                 status = "RE"
 
-            if out_data == ans_data:
+            if remove_last_newline(ans_data) == remove_last_newline(out_data):
                 status = "PASSED"
                 print_e("# %s ... %s" % (os.path.basename(infile),
                                          "%s%s%s" % (OKGREEN, status, ENDC)))
