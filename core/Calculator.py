@@ -1,3 +1,5 @@
+import copy
+
 
 class CalcParseError(Exception):
     pass
@@ -55,12 +57,20 @@ class CalcNode:
             self.lch = None
             self.rch = None
 
+    def is_operator_node(self):
+        return self.operator is not None
+
+    def is_constant_node(self):
+        return isinstance(self.content, int)
+
+    def is_variable_node(self):
+        return not self.is_operator_node() and not self.is_constant_node()
+
     def __eq__(self, other):
         return self.__str__() == str(other)
 
     def __ne__(self, other):
         return not self.__eq__(other)
-
 
     def __str__(self, depth=0):
         if self.operator is not None:
@@ -88,18 +98,17 @@ class CalcNode:
     def evaluate(self, variables=None):
         if variables is None:
             variables = {}
-        if self.operator is not None:
+        if self.is_operator_node():
             lv = self.lch.evaluate(variables)
             rv = self.rch.evaluate(variables)
             return self.operator(lv, rv)
-        elif isinstance(self.content, int):
+        elif self.is_constant_node():
             return int(self.content)
         else:
             if self.content not in variables:
                 raise EvaluteError
             else:
                 return variables[self.content]
-
 
 def expr(formula, pos):
     res, pos = term(formula, pos)

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, TypeVar
 
 from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
 from core.models.analyzer import Index
@@ -9,13 +9,15 @@ class WrongGroupingError(Exception):
 
 
 class Pattern:
-    pass
+    def all_vars(self) -> List[AnalyzedVariable]:
+        raise NotImplementedError
 
 
 class SimpleFormat:
     """
     Format without type information and separator information
     """
+
     def __init__(self):
         self.sequence = []
 
@@ -24,6 +26,12 @@ class SimpleFormat:
 
     def __str__(self):
         return "[{}]".format(",".join([str(c) for c in self.sequence]))
+
+    def all_vars(self):
+        res = []
+        for seq in self.sequence:
+            res += seq.all_vars()
+        return res
 
 
 class SingularPattern(Pattern):
@@ -34,9 +42,12 @@ class SingularPattern(Pattern):
     def __init__(self, var: AnalyzedVariable):
         self.var = var
 
-
     def __str__(self):
         return "[Singular: {}]".format(self.var.var_name)
+
+    def all_vars(self):
+        return [self.var]
+
 
 class TwoDimensionalPattern(Pattern):
     """
@@ -50,6 +61,9 @@ class TwoDimensionalPattern(Pattern):
 
     def __str__(self):
         return "[2D: {}] ".format(self.var.var_name)
+
+    def all_vars(self):
+        return [self.var]
 
 
 class ParallelPattern(Pattern):
@@ -85,3 +99,6 @@ class ParallelPattern(Pattern):
             min=str(self.loop_index.min_index),
             max=str(self.loop_index.max_index)
         )
+
+    def all_vars(self):
+        return self.vars

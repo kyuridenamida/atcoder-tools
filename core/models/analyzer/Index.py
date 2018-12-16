@@ -2,10 +2,16 @@ from core.Calculator import CalcNode
 
 
 class Index:
+    """
+        The model to store index information of a variable, which has a likely the minimal / maximal value and for each dimension.
+        Up to 2 indices are now supported.
+
+        In most cases, the minimal value is 1 and the maximal value is some variable like N.
+    """
+
     def __init__(self):
         self.min_index = None
         self.max_index = None
-
 
     def update(self, new_value: str):
         self._update_min(new_value)
@@ -29,6 +35,7 @@ class Index:
             self.max_index = CalcNode(new_value)
 
         if (self.max_index is None) or (
-                len(self.max_index.get_all_variables()) == 0 and self.max_index.evaluate() < CalcNode(new_value).evaluate()
+                len(self.max_index.get_all_variables()) == 0 and self.max_index.evaluate() < CalcNode(
+            new_value).evaluate()
         ):
             self.max_index = CalcNode(new_value)

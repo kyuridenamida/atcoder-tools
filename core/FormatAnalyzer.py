@@ -6,6 +6,7 @@ from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
 from core.models.tokenizer.VariableToken import VariableToken
 from core.models.analyzer.SimpleFormat import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern
 
+
 class UnknownPeriodError(Exception):
     pass
 
@@ -21,7 +22,13 @@ def predict_period(seq: List[int]):
         return 1
 
 
-def format_analyse(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
+def analyze_format(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
+    """
+    TODO: Explanation
+    :param var_tokens:
+    :param to_1d_flag:
+    :return:
+    """
     var_to_positions = {}
     var_to_analyzed_var = OrderedDict()
 

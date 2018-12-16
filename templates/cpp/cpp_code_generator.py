@@ -1,215 +1,156 @@
 import os
-
 from functools import reduce
-from core.TemplateEngine import render
 
+from core.TemplateEngine import render
+from core.models.analyzer import AnalyzedVariable
+from core.models.analyzer.SimpleFormat import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from core.models.predictor.FormatPredictionResult import FormatPredictionResult
+from core.models.predictor.Variable import Variable
 
 mydir = os.path.dirname(__file__)
 
-
-def tab(n):
-    if n <= 0:
-        return ""
-    else:
-        return "\t" * n
+TAB = "    "
 
 
-def indent(lines):
-    return [tab(1) + line for line in lines]
+class CodeGenerator:
+    def __init__(self, prediction_result: FormatPredictionResult):
+        self.prediction_result = prediction_result
 
+    def get_code(self):
+        if self.prediction_result is None:
+            return self._code_when_failed()
+        return self._code_when_succeeded()
 
-def convert_to_cpptype_string(vtype):
-    """
-    :param vtype:
-    :return: その型に対応するC++における文字列表現
-    """
-    if vtype == float:
-        return "long double"
-    elif vtype == int:
-        return "long long"
-    elif vtype == str:
-        return "string"
-    else:
-        raise NotImplementedError
+    def _code_when_succeeded(self):
+        with open("{dir}/template_success.cpp".format(dir=mydir), "r") as f:
+            template_success = f.read()
+            return render(template_success,
+                          formal_arguments=self._formal_arguments(),
+                          actual_arguments=self._actual_arguments(),
+                          input_part=self._input_part())
 
+    def _code_when_failed(self):
+        with open("{dir}/template_failure.cpp".format(dir=mydir), "r") as f:
+            return f.read()
 
-def input_code(vtype, vname_for_input):
-    if vtype == float:
-        return 'scanf("%Lf",&{name})'.format(name=vname_for_input)
-    elif vtype == int:
-        return 'scanf("%lld",&{name})'.format(name=vname_for_input)
-    elif vtype == str:
-        return 'cin >> {name}'.format(name=vname_for_input)
-    else:
-        raise NotImplementedError
+    def _input_part(self):
+        lines = []
+        for pattern in self.prediction_result.simple_format.sequence:
+            lines += self._render_pattern(pattern)
+        return "\n    ".join(lines)
 
-
-def generate_declaration(v):
-    """
-    :param v: 変数情報
-    :return: 変数vの宣言パートを作る ex) array[1..n] → vector<int> array = vector<int>(n-1+1);
-    """
-
-    dim = len(v.indexes)
-    typename = convert_to_cpptype_string(v.type)
-
-    if dim == 0:
-        type_template_before = "{type}".format(type=typename)
-        type_template_after = ""
-    elif dim == 1:
-        type_template_before = "vector<{type}>".format(type=typename)
-        type_template_after = "({size}+1)".format(
-            size=v.indexes[0].get_zero_based_index().max_index)
-    elif dim == 2:
-        type_template_before = "vector<vector<{type}>>".format(type=typename)
-        type_template_after = "({row_size}+1,vector<{type}>({col_size}+1))".format(
-            type=typename,
-            row_size=v.indexes[0].get_zero_based_index().max_index,
-            col_size=v.indexes[1].get_zero_based_index().max_index
-        )
-    else:
-        raise NotImplementedError
-
-    line = "{declaration} {name}{constructor};".format(
-        name=v.name,
-        declaration=type_template_before,
-        constructor=type_template_after
-    )
-    return line
-
-
-def generate_arguments(var_information):
-    """
-    :param var_information: 全変数の情報
-    :return: 仮引数、実引数の文字列表現(順序は両者同じ);
-        - formal_params: 仮引数 ex) int a, string b, vector<int> ccc
-        - actual_params : 実引数 ex) a, b, ccc
-    """
-    formal_lst = []
-    actual_lst = []
-    for name, v in var_information.items():
-        dim = len(v.indexes)
-        typename = convert_to_cpptype_string(v.type)
-
-        if dim == 0:
-            type_template = "{type}".format(type=typename)
-        elif dim == 1:
-            type_template = "vector<{type}>".format(type=typename)
-        elif dim == 2:
-            type_template = "vector<vector<{type}>>".format(type=typename)
+    def _convert_type(self, py_type: type) -> str:
+        if py_type == float:
+            return "long double"
+        elif py_type == int:
+            return "long long"
+        elif py_type == str:
+            return "string"
         else:
             raise NotImplementedError
 
-        formal_lst.append("{type} {name}".format(
-            type=type_template, name=name))
-        actual_lst.append(name)
-    formal_params = ", ".join(formal_lst)
-    actual_params = ", ".join(actual_lst)
-    return formal_params, actual_params
-
-
-def generate_input_part(node, var_information, inputted, undeclared, depth, indexes):
-    """
-    :param node: FormatPredictorで得られる解析結果の木(const)
-    :param var_information: 変数の情報(const)
-    :param inputted: 入力が完了した変数名集合 (呼ぶときはset())
-    :param undeclared: 入力が完了していない変数名集合 (呼ぶときはset(現れる変数全部))
-    :param depth: ネストの深さ (呼ぶときは0で呼ぶ)
-    :param indexes: 二重ループで再帰してるとき、indexes=["i","j"]みたいな感じになってる。 (呼ぶときは[])
-    :return: 入力コードの列
-    """
-    lines = []
-
-    def declare_if_ready():
-        """
-            サブルーチンです。例えば
-                K N a_1 ...a_N　
-            という入力に対して、Nを代入する前に
-                vector<int> a(N);
-            を宣言してしまうと悲しいので、既に必要な変数が全て入力されたものから宣言していく。
-        """
-        nonlocal lines, inputted, undeclared, var_information
-        will_declare = []
-        for vname in undeclared:
-            related_vars = reduce(lambda a, b: a + b,
-                                  [index.min_index.get_all_variables() + index.max_index.get_all_variables()
-                                   for index in var_information[vname].indexes], []
-                                  )
-            if all([(var in inputted) for var in related_vars]):
-                will_declare.append(vname)
-
-        for vname in will_declare:
-            lines.append(generate_declaration(var_information[vname]))
-            undeclared.remove(vname)
-
-    if depth == 0:
-        # 入力の開始時、何の制約もない変数をまず全部宣言する (depth=-1 <=> 入力の開始)
-        declare_if_ready()
-
-    if node.pointers is not None:
-        '''
-            何かしらの塊を処理(インデックスを持っている場合はループ)
-            [a,b,c] or [ai,bi,ci](min<=i<=max) みたいな感じ
-        '''
-
-        if node.index is None:
-            for child in node.pointers:
-                lines += generate_input_part(child, var_information,
-                                             inputted, undeclared, depth + 1, indexes)
+    def _get_declaration_type(self, var: Variable):
+        if var.dim_num() == 0:
+            template = "{type}"
+        elif var.dim_num() == 1:
+            template = "vector<{type}>"
+        elif var.dim_num() == 2:
+            template = "vector<vector<{type}>>"
         else:
-            loopv = "i" if indexes == [] else "j"
+            raise NotImplementedError
+        return template.format(type=self._convert_type(var.type))
 
-            # ループの開始
-            lines.append("for(int {x} = {start} ; {x} <= {end} ; {x}++){{".format(
-                x=loopv,
-                start=node.index.get_zero_based_index().min_index,
-                end=node.index.get_zero_based_index().max_index)
+    def _actual_arguments(self) -> str:
+        """
+            :return the string form of actual arguments e.g. "N, K, a"
+        """
+        return ", ".join(self.prediction_result.var_to_info.keys())
+
+    def _formal_arguments(self):
+        """
+            :return the string form of formal arguments e.g. "int N, int K, vector<int> a"
+        """
+        return ", ".join([
+            "{decl_type} {name}".format(decl_type=self._get_declaration_type(var), name=vname)
+            for vname, var in self.prediction_result.var_to_info.items()
+        ])
+
+    def _generate_declaration(self, var: Variable):
+        """
+        :return: Create declaration part E.g. array[1..n] → vector<int> array = vector<int>(n-1+1);
+        """
+        if var.dim_num() == 0:
+            constructor = ""
+        elif var.dim_num() == 1:
+            constructor = "({size}+1)".format(size=var.get_first_index().get_zero_based_index().max_index)
+        elif var.dim_num() == 2:
+            constructor = "({row_size}+1,vector<{type}>({col_size}+1))".format(
+                type=self._convert_type(var.type),
+                row_size=var.get_first_index().get_zero_based_index().max_index,
+                col_size=var.get_second_index().get_zero_based_index().max_index
             )
-            # ループの内側
-            for child in node.pointers:
-                lines += indent(generate_input_part(child, var_information,
-                                                    inputted, undeclared, depth + 1, indexes + [loopv]))
-            # ループの外
-            if node.index is not None:
-                lines.append("}")
-    else:
-        ''' 変数が最小単位まで分解されたときの入力処理 '''
-        vname_for_input = node.varname + \
-            ("" if indexes == [] else "[" + "][".join(indexes) + "]")
-        vtype = var_information[node.varname].type
+        else:
+            raise NotImplementedError
 
-        line = "{input_code};".format(
-            input_code=input_code(vtype, vname_for_input))
-        lines.append(line)
-        inputted.add(node.varname)
+        line = "{decl_type} {name}{constructor};".format(
+            name=var.get_name(),
+            decl_type=self._get_declaration_type(var),
+            constructor=constructor
+        )
+        return line
 
-        declare_if_ready()
+    def _input_code_for_var(self, var: Variable) -> str:
+        if var.type == float:
+            return 'scanf("%Lf",&{name});'.format(name=var.get_name())
+        elif var.type == int:
+            return 'scanf("%lld",&{name});'.format(name=var.get_name())
+        elif var.type == str:
+            return 'cin >> {name};'.format(name=var.get_name())
+        else:
+            raise NotImplementedError
 
-    return lines
+    def _analyzed_var_to_vinfo(self, var: AnalyzedVariable) -> Variable:
+        return self.prediction_result.var_to_info[var.var_name]
 
+    def _loop_header(self, var: Variable, for_second_index: bool):
+        if for_second_index:
+            index = var.get_second_index()
+            loop_var = "j"
+        else:
+            index = var.get_first_index()
+            loop_var = "i"
 
-def code_generator(predict_result=None):
-    with open("{dir}/template_success.cpp".format(dir=mydir), "r") as f:
-        template_success = f.read()
-    with open("{dir}/template_failure.cpp".format(dir=mydir), "r") as f:
-        template_failure = f.read()
-
-    if predict_result is not None:
-        formal_arguments, actual_arguments = generate_arguments(
-            predict_result.var_information)
-        input_part_lines = generate_input_part(
-            node=predict_result.analyzed_root,
-            var_information=predict_result.var_information,
-            inputted=set(),
-            undeclared=set(predict_result.var_information.keys()),
-            depth=0,
-            indexes=[]
+        return "for(int {loop_var} = {start} ; {loop_var} <= {end} ; {loop_var}++){{".format(
+            loop_var=loop_var,
+            start=index.get_zero_based_index().min_index,
+            end=index.get_zero_based_index().max_index
         )
 
-        code = render(template_success,
-                      formal_arguments=formal_arguments,
-                      actual_arguments=actual_arguments,
-                      input_part=input_part_lines)
-    else:
-        code = template_failure
-    return code
+    def _render_pattern(self, pattern: Pattern):
+        lines = []
+        for var in pattern.all_vars():
+            lines.append(self._generate_declaration(self._analyzed_var_to_vinfo(var)))
+
+        representative_var = self._analyzed_var_to_vinfo(pattern.all_vars()[0])
+        if type(pattern) == SingularPattern:
+            lines.append(self._input_code_for_var(representative_var))
+        elif type(pattern) == ParallelPattern:
+            lines.append(self._loop_header(representative_var, False))
+            for var in pattern.all_vars():
+                lines.append("    {line}".format(line=self._input_code_for_var(self._analyzed_var_to_vinfo(var))))
+            lines.append("}")
+        elif type(pattern) == TwoDimensionalPattern:
+            lines.append(self._loop_header(representative_var, False))
+            lines.append("    {line}".format(line=self._loop_header(representative_var, True)))
+            for var in pattern.all_vars():
+                lines.append("        {line}".format(line=self._input_code_for_var(self._analyzed_var_to_vinfo(var))))
+            lines.append("}")
+        else:
+            raise NotImplementedError
+
+        return lines
+
+
+def generate_code(prediction_result: FormatPredictionResult):
+    generator = CodeGenerator
+    return generator(prediction_result).get_code()

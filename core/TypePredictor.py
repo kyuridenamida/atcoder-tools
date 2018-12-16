@@ -1,6 +1,6 @@
 import copy
 import re
-from typing import List
+from typing import List, Dict, Union
 
 from core.models.Sample import Sample
 from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
@@ -94,7 +94,6 @@ class TypePredictor:
             raise TooManyFetchesError
         return res
 
-
     def _fetch_generator(self):
         for pattern in self._fmt.sequence:
             if type(pattern) == SingularPattern:
@@ -120,7 +119,7 @@ def merge_type_dicts(to_dict, src_dict):
     return to_dict
 
 
-def type_predictor(fmt: SimpleFormat, samples: List[Sample]):
+def type_predictor(fmt: SimpleFormat, samples: List[Sample]) -> Dict[str, type]:
     res_type_dict = {}
     for sample in samples:
         token_manager = TokenManager(sample.get_input().split())

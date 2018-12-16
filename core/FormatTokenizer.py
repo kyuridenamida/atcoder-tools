@@ -55,12 +55,10 @@ def sanitized_tokens(input_format: str) -> List[str]:
 
 
 class FormatSearcher:
-    _answers = None
-    _token_manager = None
-    _max_variables_count = None
-
     def __init__(self, tokens):
         self._token_manager = TokenManager(tokens)
+        self._answers = None
+        self._max_variables_count = None
 
     def search(self, max_variables_count) -> List[TokenizedFormat]:
         self._max_variables_count = max_variables_count
@@ -132,7 +130,7 @@ class FormatTokenizer:
     def compute_formats_with_minimal_vars(self) -> List[TokenizedFormat]:
         """
         Fast enough for realistic instances.
-        This method stores possible formats with the smallest number of variables to self.possible_formats
+        This method returns possible formats with the smallest number of variables.
         """
 
         searcher = FormatSearcher(self.tokens)

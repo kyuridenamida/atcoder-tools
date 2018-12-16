@@ -1,7 +1,10 @@
 from core.models.analyzer.Index import Index
 
-
 class AnalyzedVariable:
+    """
+        The model to have a variable's index information with up to 2 indices.
+    """
+
     var_name = None
     first_index = None
     second_index = None
