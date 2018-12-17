@@ -43,7 +43,7 @@ class SingularPattern(Pattern):
         self.var = var
 
     def __str__(self):
-        return "[Singular: {}]".format(self.var.var_name)
+        return "(Singular: {})".format(self.var.var_name)
 
     def all_vars(self):
         return [self.var]
@@ -60,7 +60,7 @@ class TwoDimensionalPattern(Pattern):
         self.var = var
 
     def __str__(self):
-        return "[2D: {}] ".format(self.var.var_name)
+        return "(TwoDimensional: {})".format(self.var.var_name)
 
     def all_vars(self):
         return [self.var]
@@ -94,7 +94,7 @@ class ParallelPattern(Pattern):
         return first_var.first_index
 
     def __str__(self):
-        return "[Parallel: {names} | {min} to {max}] ".format(
+        return "(Parallel: {names} | {min} to {max})".format(
             names=",".join([str(c.var_name) for c in self.vars]),
             min=str(self.loop_index.min_index),
             max=str(self.loop_index.max_index)

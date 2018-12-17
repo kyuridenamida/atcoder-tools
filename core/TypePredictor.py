@@ -77,9 +77,16 @@ class TypePredictor:
         self._refresh(var, convert_to_proper_type(sample_token))
 
     def _loop_size(self, loop_index: Index):
+        if loop_index.min_index is None or loop_index.max_index is None:
+            raise InvalidLoopIndexError
+
         min_value = loop_index.min_index.evaluate(self._var_to_actual_value)
         max_value = loop_index.max_index.evaluate(self._var_to_actual_value)
-        return max_value - min_value + 1
+
+        try:
+            return max_value - min_value + 1
+        except Exception:
+            raise InvalidLoopSizeError
 
     def _refresh(self, var: AnalyzedVariable, value: any):
         if var.var_name in self._var_to_type:
@@ -124,8 +131,22 @@ def type_predictor(fmt: SimpleFormat, samples: List[Sample]) -> Dict[str, type]:
     for sample in samples:
         token_manager = TokenManager(sample.get_input().split())
         predictor = TypePredictor(fmt)
-        while not token_manager.is_terminal():
-            predictor.feed(token_manager.next())
-        predictor.ensure_terminal()
-        res_type_dict = merge_type_dicts(res_type_dict, predictor.get_typing_result())
+        try:
+            while not token_manager.is_terminal():
+                predictor.feed(token_manager.next())
+            predictor.ensure_terminal()
+            res_type_dict = merge_type_dicts(res_type_dict, predictor.get_typing_result())
+        except (TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError, UpCastingError, InvalidLoopIndexError):
+            raise TypePredictionFailedError
+
     return res_type_dict
+
+class TypePredictionFailedError(Exception):
+    pass
+
+class InvalidLoopSizeError(Exception):
+    pass
+
+
+class InvalidLoopIndexError(Exception):
+    pass

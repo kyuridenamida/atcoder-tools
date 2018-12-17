@@ -45,7 +45,8 @@ class VariableToken:
     def _is_valid_index(index):
         if index is None:
             return True
-
+        if len(index) == 0:
+            return False
         if not index[-1].isalpha() and not index[-1].isdigit():
             return False
         if index.find(',') != -1:

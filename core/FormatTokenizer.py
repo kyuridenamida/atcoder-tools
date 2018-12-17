@@ -46,7 +46,7 @@ def divide_consecutive_vars(text):
 
 def sanitized_tokens(input_format: str) -> List[str]:
     input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
-        "..", " ").replace("\ ", " ").replace("}", "} ").replace("　", " ")
+        "..", " ").replace("\ ", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
     input_format = divide_consecutive_vars(input_format)
     input_format = normalize_index(input_format)
     input_format = input_format.replace("{", "").replace("}", "")
@@ -126,6 +126,7 @@ class FormatSearcher:
 class FormatTokenizer:
     def __init__(self, input_format: str):
         self.tokens = sanitized_tokens(input_format)
+        # print(input_format)
 
     def compute_formats_with_minimal_vars(self) -> List[TokenizedFormat]:
         """

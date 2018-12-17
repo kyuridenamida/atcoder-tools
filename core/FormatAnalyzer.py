@@ -4,7 +4,8 @@ from collections import OrderedDict
 
 from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
 from core.models.tokenizer.VariableToken import VariableToken
-from core.models.analyzer.SimpleFormat import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern
+from core.models.analyzer.SimpleFormat import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern, \
+    WrongGroupingError
 
 
 class UnknownPeriodError(Exception):
@@ -22,13 +23,8 @@ def predict_period(seq: List[int]):
         return 1
 
 
-def analyze_format(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
-    """
-    TODO: Explanation
-    :param var_tokens:
-    :param to_1d_flag:
-    :return:
-    """
+def analyze_format_inner(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
+
     var_to_positions = {}
     var_to_analyzed_var = OrderedDict()
 
@@ -71,7 +67,10 @@ def analyze_format(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleF
         elif dim == 1:
             period = predict_period(var_to_positions[var_name])
             parallel_vars_group = [var_to_analyzed_var[token.var_name] for token in var_tokens[pos:pos + period]]
-            root.push_back(ParallelPattern(parallel_vars_group))
+            try:
+                root.push_back(ParallelPattern(parallel_vars_group))
+            except WrongGroupingError:
+                raise
             for var in parallel_vars_group:
                 already_processed_vars.add(var.var_name)
         elif dim == 2:
@@ -80,3 +79,13 @@ def analyze_format(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleF
             raise NotImplementedError
         already_processed_vars.add(var_name)
     return root
+
+
+def analyze_format(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
+    try:
+        return analyze_format_inner(var_tokens, to_1d_flag)
+    except (WrongGroupingError, UnknownPeriodError):
+        raise FormatAnalysisFailedError
+
+class FormatAnalysisFailedError(Exception):
+    pass
