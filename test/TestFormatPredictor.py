@@ -1,9 +1,7 @@
-import shutil
 import tempfile
 import unittest
 import os
 
-from core.FormatPredictor import FormatPredictor
 from test.utils.TestDataUtil import TestDataUtil
 from test.utils.TestFormatPredictorRunner import TestFormatPredictorRunner
 
@@ -19,7 +17,7 @@ class TestFormatPredictor(unittest.TestCase):
     def tearDown(self):
         self.test_data_util.remove_dir()
 
-    def test_long(self):
+    def test_overall(self):
         runner = TestFormatPredictorRunner(self.test_dir)
         case_names = sorted([cand for cand in os.listdir(self.test_dir) if runner.is_valid_case(cand)])
         output_text = ""

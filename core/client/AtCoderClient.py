@@ -59,13 +59,15 @@ class AtCoderClient:
         page_num = 1
         while True:
             req = self.opener.open(
-                "https://atcoder.jp/contest/archive?p={}&lang=ja".format(page_num))
+                "https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
             soup = BeautifulSoup(req, "html.parser")
             text = str(soup)
             url_re = re.compile(
-                r'https://([A-Za-z0-9\'~+\-_]+).contest.atcoder.jp')
+                r'"/contests/([A-Za-z0-9\'~+\-_]+)"')
             contest_list = url_re.findall(text)
-            contest_list = sorted(contest_list)
+            contest_list = set(contest_list)
+            contest_list.remove("archive")
+            contest_list = sorted(list(contest_list))
 
             if previous_list == contest_list:
                 break

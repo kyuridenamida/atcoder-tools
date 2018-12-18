@@ -1,5 +1,4 @@
-import os
-from core.TemplateEngine import render
+from core.code_generation.TemplateEngine import render
 from core.code_generation.CodeGenerator import CodeGenerator
 from core.models.analyzer import AnalyzedVariable
 from core.models.analyzer.SimpleFormat import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern

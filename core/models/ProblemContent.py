@@ -3,7 +3,27 @@ from typing import List, Tuple
 from bs4 import BeautifulSoup
 
 from core.models.Sample import Sample
-from core.utils.common import normalized, remove_non_jp_characters
+import unicodedata
+
+
+def remove_non_jp_characters(content):
+    return "".join([x for x in content if is_japanese(x)])
+
+
+def normalize(content: str) -> str:
+    return content.strip().replace('\r', '') + "\n"
+
+
+def is_japanese(ch):
+    # Thank you!
+    # http://minus9d.hatenablog.com/entry/2015/07/16/231608
+    try:
+        name = unicodedata.name(ch)
+        if "CJK UNIFIED" in name or "HIRAGANA" in name or "KATAKANA" in name:
+            return True
+    except ValueError:
+        pass
+    return False
 
 
 class SampleParseError(Exception):
@@ -61,13 +81,13 @@ class ProblemContent:
         if len(input_tags) != len(output_tags):
             raise SampleParseError
 
-        res = [Sample(normalized(in_tag.text), normalized(out_tag.text))
+        res = [Sample(normalize(in_tag.text), normalize(out_tag.text))
                for in_tag, out_tag in zip(input_tags, output_tags)]
 
         if input_format_tag is None:
             raise InputParseError
 
-        input_format_text = normalized(input_format_tag.text)
+        input_format_text = normalize(input_format_tag.text)
 
         return input_format_text, res
 

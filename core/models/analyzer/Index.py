@@ -1,4 +1,4 @@
-from core.Calculator import CalcNode
+from core.format_prediction.Calculator import CalcNode
 
 
 class Index:

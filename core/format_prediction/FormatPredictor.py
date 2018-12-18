@@ -1,9 +1,7 @@
-from typing import List
-
-from core.AtCoderClient import ProblemContent
-from core.FormatAnalyzer import analyze_format, FormatAnalysisFailedError
-from core.FormatTokenizer import FormatTokenizer, NoFormatFoundError
-from core.TypePredictor import type_predictor, TypePredictionFailedError
+from core.client.AtCoderClient import ProblemContent
+from core.format_prediction.FormatAnalyzer import analyze_format, FormatAnalysisFailedError
+from core.format_prediction.FormatTokenizer import FormatTokenizer, NoFormatFoundError
+from core.format_prediction.TypePredictor import type_predictor, TypePredictionFailedError
 from core.models.predictor.FormatPredictionResult import FormatPredictionResult
 
 

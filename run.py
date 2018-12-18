@@ -5,8 +5,8 @@ from multiprocessing import Pool, cpu_count
 from time import sleep
 from typing import Tuple
 
-from core.AtCoderClient import AtCoderClient, Contest
-from core.FormatPredictor import FormatPredictor, NoPredictionResultError
+from core.client.AtCoderClient import AtCoderClient, Contest
+from core.format_prediction.FormatPredictor import FormatPredictor
 from core.models.Problem import Problem
 from templates.cpp.cpp_code_generator import CppCodeGenerator
 
@@ -54,7 +54,6 @@ def prepare_procedure(argv: Tuple[AtCoderClient, Problem]):
         template = f.read()
 
     with open(solution_name, "w") as f:
-        from templates.cpp.cpp_code_generator import generate_code
         f.write(CppCodeGenerator().generate_code(template, prediction_result))
 
     # Store samples

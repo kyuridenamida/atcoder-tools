@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 import errno
 import os
-import sys
 
-from core.AtCoderClient import AtCoderClient
+from core.client.AtCoderClient import AtCoderClient
 from core.models.ProblemContent import SampleParseError, InputParseError
 
 

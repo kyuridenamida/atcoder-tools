@@ -1,5 +1,5 @@
 import os
-from core.FormatPredictor import FormatPredictor, MultiplePredictionResultsError, NoPredictionResultError
+from core.format_prediction.FormatPredictor import FormatPredictor, MultiplePredictionResultsError, NoPredictionResultError
 from core.models.ProblemContent import ProblemContent
 from core.models.Sample import Sample
 from core.models.predictor.FormatPredictionResult import FormatPredictionResult

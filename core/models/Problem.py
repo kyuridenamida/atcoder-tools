@@ -2,7 +2,7 @@ from core.models import Contest
 
 
 class Problem:
-    def __init__(self, contest, alphabet, problem_id):
+    def __init__(self, contest: Contest, alphabet: str, problem_id: str):
         self.contest = contest
         self.alphabet = alphabet
         self.problem_id = problem_id

@@ -1,7 +1,7 @@
 import copy
 from typing import List, Dict
 
-from core.Calculator import CalcNode, CalcParseError
+from core.format_prediction.Calculator import CalcNode, CalcParseError
 from core.models.tokenizer.VariableToken import VariableToken, TokenizedFormat
 
 
