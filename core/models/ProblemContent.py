@@ -24,7 +24,6 @@ class ProblemContent:
         else:
             self.input_format_text, self.samples = None, None
 
-
     @staticmethod
     def of(input_format_text: str, samples: List[Sample]):
         res = ProblemContent()

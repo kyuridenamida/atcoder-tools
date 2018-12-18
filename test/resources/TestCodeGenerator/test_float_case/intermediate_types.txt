@@ -1,0 +1,1 @@
+[('L', <class 'int'>), ('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'float'>), ('A', <class 'int'>), ('S', <class 'float'>)]

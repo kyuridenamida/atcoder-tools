@@ -1,0 +1,33 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) throws Exception {
+        final Scanner sc = new Scanner(System.in);
+        long N;
+        N = sc.nextLong();
+        long[][] A = new long[int(N-1+1)][int(N-1+1)];
+        for(int i = 0 ; i <= N-1 ; i++){
+                for(int j = 0 ; j <= N-1 ; j++){
+                    A[i][j] = sc.nextLong();
+                }
+        }
+        long[][] B = new long[int(N-1+1)][int(N-1+1)];
+        for(int i = 0 ; i <= N-1 ; i++){
+                for(int j = 0 ; j <= N-1 ; j++){
+                    B[i][j] = sc.nextLong();
+                }
+        }
+        long[][] C = new long[int(N-1+1)][int(N-1+1)];
+        for(int i = 0 ; i <= N-1 ; i++){
+                for(int j = 0 ; j <= N-1 ; j++){
+                    C[i][j] = sc.nextLong();
+                }
+        }
+        solve(N, A, B, C);
+    }
+
+    static void solve(long N, long[][] A, long[][] B, long[][] C){
+
+    }
+}

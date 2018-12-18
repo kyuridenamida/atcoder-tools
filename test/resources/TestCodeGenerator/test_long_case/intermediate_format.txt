@@ -1,0 +1,1 @@
+[(Singular: H),(Singular: W),(Singular: K),(Singular: sr),(Singular: sc),(Parallel: s | 1 to H),(Singular: N),(Parallel: fr,fc,F,D | 1 to N)]

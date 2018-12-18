@@ -110,6 +110,7 @@ class CalcNode:
             else:
                 return variables[self.content]
 
+
 def expr(formula, pos):
     res, pos = term(formula, pos)
     while formula[pos] == '+' or formula[pos] == '-':

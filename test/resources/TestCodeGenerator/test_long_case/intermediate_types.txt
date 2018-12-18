@@ -1,0 +1,1 @@
+[('H', <class 'int'>), ('W', <class 'int'>), ('K', <class 'int'>), ('sr', <class 'int'>), ('sc', <class 'int'>), ('s', <class 'str'>), ('N', <class 'int'>), ('fr', <class 'int'>), ('fc', <class 'int'>), ('F', <class 'int'>), ('D', <class 'int'>)]

@@ -98,4 +98,4 @@ class AtCoderClient:
             "source_code": source
         }
         encoded_postdata = urllib.parse.urlencode(postdata).encode('utf-8')
-        self.opener.open(contest.get_url(), encoded_postdata) # Sending POST request
+        self.opener.open(contest.get_url(), encoded_postdata)  # Sending POST request

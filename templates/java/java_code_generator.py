@@ -19,10 +19,10 @@ def indent(lines):
 
 
 def convert_to_javatype_string(vtype):
-    '''
+    """
     :param vtype:
     :return: その型に対応するJavaにおける文字列表現
-    '''
+    """
     if vtype == float:
         return "double"
     elif vtype == int:
@@ -45,10 +45,10 @@ def input_code(vtype, vname_for_input):
 
 
 def generate_declaration(v):
-    '''
+    """
     :param v: 変数情報
     :return: 変数vの宣言パートを作る ex) array[1..n] → int[] array = new int[n]
-    '''
+    """
 
     dim = len(v.indexes)
     typename = convert_to_javatype_string(v.type)
@@ -79,12 +79,12 @@ def generate_declaration(v):
 
 
 def generate_arguments(var_information):
-    '''
+    """
     :param var_information: 全変数の情報
     :return: 仮引数、実引数の文字列表現(順序は両者同じ);
         - formal_params: 仮引数 ex) int a, string b, vector<int> ccc
         - actual_params : 実引数 ex) a, b, ccc
-    '''
+    """
     formal_lst = []
     actual_lst = []
     for name, v in var_information.items():
@@ -109,7 +109,7 @@ def generate_arguments(var_information):
 
 
 def generate_input_part(node, var_information, inputted, undeclared, depth, indexes):
-    '''
+    """
     :param node: FormatPredictorで得られる解析結果の木(const)
     :param var_information: 変数の情報(const)
     :param inputted: 入力が完了した変数名集合 (呼ぶときはset())
@@ -117,17 +117,17 @@ def generate_input_part(node, var_information, inputted, undeclared, depth, inde
     :param depth: ネストの深さ (呼ぶときは0で呼ぶ)
     :param indexes: 二重ループで再帰してるとき、indexes=["i","j"]みたいな感じになってる。 (呼ぶときは[])
     :return: 入力コードの列
-    '''
+    """
     lines = []
 
     def declare_if_ready():
-        '''
+        """
             サブルーチンです。例えば
                 K N a_1 ...a_N　
             という入力に対して、Nを代入する前に
                 vector<int> a(N);
             を宣言してしまうと悲しいので、既に必要な変数が全て入力されたものから宣言していく。
-        '''
+        """
         nonlocal lines, inputted, undeclared, var_information
         will_declare = []
         for vname in undeclared:

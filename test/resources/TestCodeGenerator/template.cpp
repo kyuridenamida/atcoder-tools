@@ -2,12 +2,11 @@
 using namespace std;
 
 void solve(${formal_arguments}){
-    
+
 }
 
-int main(){    
+int main(){
     ${input_part}
     solve(${actual_arguments});
     return 0;
 }
-
