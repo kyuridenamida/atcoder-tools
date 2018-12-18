@@ -4,6 +4,7 @@ import sys
 import os
 import glob
 import subprocess
+from pathlib import Path
 
 
 def print_e(*text, end='\n'):
@@ -34,10 +35,14 @@ class MultipleCppFilesError(Exception):
     pass
 
 
+def is_executable_file(file_name):
+    return os.access(file_name, os.X_OK) and Path(file_name).is_file() and file_name.find("tester.py") == -1 \
+        and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
+
+
 def do_test(exec_file=None):
     exec_files = [fname for fname in glob.glob(
-        './*') if os.access(fname, os.X_OK) and fname.find("test.py") == -1 and fname.find(
-        ".cpp") == -1 and not fname.endswith(".txt")]  # cppやtxtを省くのは一応の Cygwin 対策
+        './*') if is_executable_file(fname)]
     if exec_file is None:
         if len(exec_files) == 0:
             raise NoExecutableFileError
@@ -56,13 +61,13 @@ def do_test(exec_file=None):
         if os.path.basename(infile)[2:] != os.path.basename(outfile)[3:]:
             print_e("The output for '%s' is not '%s'!!!" % (infile, outfile))
             raise IrregularInOutFileError
-        with open(infile, "r") as inf, open(outfile, "rb") as ouf:
+        with open(infile, "r") as inf, open(outfile, "r") as ouf:
             ans_data = ouf.read()
             out_data = ""
             status = "WA"
             try:
                 out_data = subprocess.check_output(
-                    [exec_file, ""], stdin=inf, timeout=1)
+                    [exec_file, ""], stdin=inf, universal_newlines=True, timeout=1)
             except subprocess.TimeoutExpired:
                 status = "TLE(1s)"
             except subprocess.CalledProcessError:
@@ -81,10 +86,10 @@ def do_test(exec_file=None):
                     print_e(inf2.read(), end='')
                 print_e("[Expected]")
                 print_e("%s%s%s" %
-                        (OKBLUE, ans_data.decode('utf-8'), ENDC), end='')
+                        (OKBLUE, ans_data, ENDC), end='')
                 print_e("[Received]")
                 print_e("%s%s%s" %
-                        (FAIL, out_data.decode('utf-8'), ENDC), end='')
+                        (FAIL, out_data, ENDC), end='')
                 print_e()
         total += 1
 
