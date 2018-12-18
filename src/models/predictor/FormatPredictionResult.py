@@ -1,8 +1,8 @@
 from collections import OrderedDict
 from typing import Dict
 
-from core.models.analyzer.SimpleFormat import SimpleFormat
-from core.models.predictor.Variable import Variable
+from src.models.analyzer.SimpleFormat import SimpleFormat
+from src.models.predictor.Variable import Variable
 
 
 class FormatPredictionResult:

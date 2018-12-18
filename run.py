@@ -5,9 +5,9 @@ from multiprocessing import Pool, cpu_count
 from time import sleep
 from typing import Tuple
 
-from core.client.AtCoderClient import AtCoderClient, Contest
-from core.format_prediction.FormatPredictor import FormatPredictor
-from core.models.Problem import Problem
+from src.client.AtCoderClient import AtCoderClient, Contest
+from src.format_prediction.FormatPredictor import FormatPredictor
+from src.models.Problem import Problem
 from templates.cpp.cpp_code_generator import CppCodeGenerator
 
 

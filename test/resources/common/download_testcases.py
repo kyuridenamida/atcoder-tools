@@ -3,8 +3,8 @@
 import errno
 import os
 
-from core.client.AtCoderClient import AtCoderClient
-from core.models.ProblemContent import SampleParseError, InputParseError
+from src.client.AtCoderClient import AtCoderClient
+from src.models.ProblemContent import SampleParseError, InputParseError
 
 
 class NoPatternFoundError(Exception):

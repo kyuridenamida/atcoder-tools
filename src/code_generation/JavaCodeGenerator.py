@@ -1,5 +1,5 @@
-from core.code_generation.CppCodeGenerator import CppCodeGenerator
-from core.models.predictor.Variable import Variable
+from src.code_generation.CppCodeGenerator import CppCodeGenerator
+from src.models.predictor.Variable import Variable
 
 
 class JavaCodeGenerator(CppCodeGenerator):

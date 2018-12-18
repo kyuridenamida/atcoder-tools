@@ -4,9 +4,9 @@ import tempfile
 import unittest
 import os
 
-from core.code_generation.CodeGenerator import CodeGenerator
-from core.code_generation.JavaCodeGenerator import JavaCodeGenerator
-from core.code_generation.CppCodeGenerator import CppCodeGenerator
+from src.code_generation.CodeGenerator import CodeGenerator
+from src.code_generation.JavaCodeGenerator import JavaCodeGenerator
+from src.code_generation.CppCodeGenerator import CppCodeGenerator
 from test.utils.TestDataUtil import TestDataUtil
 from test.utils.TestFormatPredictorRunner import TestFormatPredictorRunner, Response
 

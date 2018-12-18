@@ -1,12 +1,12 @@
 import copy
 from typing import List, Dict
 
-from core.format_prediction.Calculator import CalcNode, CalcParseError
-from core.models.tokenizer.VariableToken import VariableToken, TokenizedFormat
+from src.format_prediction.Calculator import CalcNode, CalcParseError
+from src.models.tokenizer.VariableToken import VariableToken, TokenizedFormat
 
 
 # Utils
-from core.utils.TokenManager import TokenManager
+from src.utils.TokenManager import TokenManager
 
 
 def is_ascii(s):

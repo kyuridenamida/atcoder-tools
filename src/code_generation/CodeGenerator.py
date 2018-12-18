@@ -1,4 +1,4 @@
-from core.models.predictor.FormatPredictionResult import FormatPredictionResult
+from src.models.predictor.FormatPredictionResult import FormatPredictionResult
 
 from abc import ABC, abstractmethod
 

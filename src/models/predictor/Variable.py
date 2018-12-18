@@ -1,5 +1,5 @@
-from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
-from core.models.analyzer.Index import Index
+from src.models.analyzer.AnalyzedVariable import AnalyzedVariable
+from src.models.analyzer.Index import Index
 
 
 class Variable:

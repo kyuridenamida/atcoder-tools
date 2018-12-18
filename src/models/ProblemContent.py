@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 from bs4 import BeautifulSoup
 
-from core.models.Sample import Sample
+from src.models.Sample import Sample
 import unicodedata
 
 

@@ -1,8 +1,8 @@
-from core.client.AtCoderClient import ProblemContent
-from core.format_prediction.FormatAnalyzer import analyze_format, FormatAnalysisFailedError
-from core.format_prediction.FormatTokenizer import FormatTokenizer, NoFormatFoundError
-from core.format_prediction.TypePredictor import type_predictor, TypePredictionFailedError
-from core.models.predictor.FormatPredictionResult import FormatPredictionResult
+from src.client.AtCoderClient import ProblemContent
+from src.format_prediction.FormatAnalyzer import analyze_format, FormatAnalysisFailedError
+from src.format_prediction.FormatTokenizer import FormatTokenizer, NoFormatFoundError
+from src.format_prediction.TypePredictor import type_predictor, TypePredictionFailedError
+from src.models.predictor.FormatPredictionResult import FormatPredictionResult
 
 
 class FormatPredictor:

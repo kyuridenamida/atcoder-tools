@@ -1,7 +1,7 @@
 from typing import List, TypeVar
 
-from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
-from core.models.analyzer import Index
+from src.models.analyzer.AnalyzedVariable import AnalyzedVariable
+from src.models.analyzer import Index
 
 
 class WrongGroupingError(Exception):

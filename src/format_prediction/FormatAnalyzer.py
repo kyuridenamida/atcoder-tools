@@ -2,9 +2,9 @@ from typing import List
 
 from collections import OrderedDict
 
-from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
-from core.models.tokenizer.VariableToken import VariableToken
-from core.models.analyzer.SimpleFormat import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern, \
+from src.models.analyzer.AnalyzedVariable import AnalyzedVariable
+from src.models.tokenizer.VariableToken import VariableToken
+from src.models.analyzer.SimpleFormat import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern, \
     WrongGroupingError
 
 

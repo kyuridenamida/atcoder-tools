@@ -1,4 +1,4 @@
-from core.models import Contest
+from src.models import Contest
 
 
 class Problem:

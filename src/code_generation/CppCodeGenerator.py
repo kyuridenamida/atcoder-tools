@@ -1,9 +1,9 @@
-from core.code_generation.TemplateEngine import render
-from core.code_generation.CodeGenerator import CodeGenerator
-from core.models.analyzer import AnalyzedVariable
-from core.models.analyzer.SimpleFormat import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
-from core.models.predictor.FormatPredictionResult import FormatPredictionResult
-from core.models.predictor.Variable import Variable
+from src.code_generation.TemplateEngine import render
+from src.code_generation.CodeGenerator import CodeGenerator
+from src.models.analyzer import AnalyzedVariable
+from src.models.analyzer.SimpleFormat import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from src.models.predictor.FormatPredictionResult import FormatPredictionResult
+from src.models.predictor.Variable import Variable
 
 
 def _loop_header(var: Variable, for_second_index: bool):

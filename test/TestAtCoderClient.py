@@ -1,8 +1,8 @@
 import unittest
 
-from core.client.AtCoderClient import AtCoderClient, LoginError
-from core.models.Contest import Contest
-from core.models.Problem import Problem
+from src.client.AtCoderClient import AtCoderClient, LoginError
+from src.models.Contest import Contest
+from src.models.Problem import Problem
 
 ANSWER_FILE = "./resources/TestFormatPredictor/answer.txt"
 

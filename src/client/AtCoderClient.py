@@ -6,9 +6,9 @@ from typing import List
 
 from bs4 import BeautifulSoup
 
-from core.models.Contest import Contest
-from core.models.Problem import Problem
-from core.models.ProblemContent import ProblemContent
+from src.models.Contest import Contest
+from src.models.Problem import Problem
+from src.models.ProblemContent import ProblemContent
 
 
 class LoginError(Exception):

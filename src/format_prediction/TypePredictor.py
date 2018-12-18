@@ -2,11 +2,11 @@ import copy
 import re
 from typing import List, Dict, Union
 
-from core.models.Sample import Sample
-from core.models.analyzer.AnalyzedVariable import AnalyzedVariable
-from core.models.analyzer.Index import Index
-from core.models.analyzer.SimpleFormat import SimpleFormat, SingularPattern, TwoDimensionalPattern, ParallelPattern
-from core.utils.TokenManager import TokenManager
+from src.models.Sample import Sample
+from src.models.analyzer.AnalyzedVariable import AnalyzedVariable
+from src.models.analyzer.Index import Index
+from src.models.analyzer.SimpleFormat import SimpleFormat, SingularPattern, TwoDimensionalPattern, ParallelPattern
+from src.utils.TokenManager import TokenManager
 
 
 class TypesUnmatchedError(Exception):

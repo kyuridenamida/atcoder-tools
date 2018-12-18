@@ -1,4 +1,4 @@
-from core.models.analyzer.Index import Index
+from src.models.analyzer.Index import Index
 
 
 class AnalyzedVariable:

@@ -1,8 +1,8 @@
 import os
-from core.format_prediction.FormatPredictor import FormatPredictor, MultiplePredictionResultsError, NoPredictionResultError
-from core.models.ProblemContent import ProblemContent
-from core.models.Sample import Sample
-from core.models.predictor.FormatPredictionResult import FormatPredictionResult
+from src.format_prediction.FormatPredictor import FormatPredictor, MultiplePredictionResultsError, NoPredictionResultError
+from src.models.ProblemContent import ProblemContent
+from src.models.Sample import Sample
+from src.models.predictor.FormatPredictionResult import FormatPredictionResult
 
 
 class Response:
