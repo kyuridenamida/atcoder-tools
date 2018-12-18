@@ -11,4 +11,3 @@ class CodeGenerator(ABC):
 
 class NoPredictionResultGiven(Exception):
     pass
-git 
