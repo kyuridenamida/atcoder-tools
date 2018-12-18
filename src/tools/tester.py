@@ -11,13 +11,10 @@ def print_e(*text, end='\n'):
     print(*text, end=end, file=sys.stderr)
 
 
-# このへんのコメントアウト弄るとカラフルじゃなくなったり，なったりします．
-FAIL = '\033[91m'
-OKGREEN = '\033[92m'
-OKBLUE = '\033[94m'
-ENDC = '\033[0m'
-FAIL = OKGREEN = OKBLUE = ENDC = ''
-
+FAIL = ''
+OKGREEN = ''
+OKBLUE = ''
+ENDC = ''
 
 class NoExecutableFileError(Exception):
     pass
