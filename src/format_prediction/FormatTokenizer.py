@@ -6,7 +6,7 @@ from src.models.tokenizer.VariableToken import VariableToken, TokenizedFormat
 
 
 # Utils
-from src.utils.TokenManager import TokenManager
+from format_prediction.TokenManager import TokenManager
 
 
 def is_ascii(s):
