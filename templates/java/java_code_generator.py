@@ -1,7 +1,7 @@
 import os
 
 from functools import reduce
-from src.code_generation.TemplateEngine import render
+from atcodertools.codegen.TemplateEngine import render
 
 
 mydir = os.path.dirname(__file__)
