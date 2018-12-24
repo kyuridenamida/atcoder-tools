@@ -26,29 +26,24 @@ def is_japanese(ch):
     return False
 
 
-class SampleParseError(Exception):
+class SampleDetectionError(Exception):
     pass
 
 
-class InputParseError(Exception):
+class InputFormatDetectionError(Exception):
     pass
 
 
 class ProblemContent:
-    def __init__(self, req=None):
-        if req:
-            self._soup = BeautifulSoup(req, "html.parser")
-            self._remove_english_statements()
-            self._focus_on_atcoder_format()
-            self.input_format_text, self.samples = self._extract_input_format_and_samples()
-        else:
-            self.input_format_text, self.samples = None, None
+    def __init__(self, input_format_text: str = None, samples: List[Sample] = None):
+        self.samples = samples
+        self.input_format_text = input_format_text
 
-    @staticmethod
-    def of(input_format_text: str, samples: List[Sample]):
+    @classmethod
+    def from_response(cls, response=None):
         res = ProblemContent()
-        res.samples = samples
-        res.input_format_text = input_format_text
+        soup = BeautifulSoup(response, "html.parser")
+        res.input_format_text, res.samples = res._extract_input_format_and_samples(soup)
         return res
 
     def get_input_format(self) -> str:
@@ -57,49 +52,51 @@ class ProblemContent:
     def get_samples(self) -> List[Sample]:
         return self.samples
 
-    def _remove_english_statements(self):
-        for e in self._soup.findAll("span", {"class": "lang-en"}):
+    @staticmethod
+    def _extract_input_format_and_samples(soup) -> Tuple[str, List[Sample]]:
+
+        # Remove English statements
+        for e in soup.findAll("span", {"class": "lang-en"}):
             e.extract()
 
-    def _focus_on_atcoder_format(self):
-        # Preferably use atCoder format
-        tmp = self._soup.select('.part')
+        # Focus on AtCoder's usual contest's html structure
+        tmp = soup.select('.part')
         if tmp:
             tmp[0].extract()
 
-    def _extract_input_format_and_samples(self) -> Tuple[str, List[Sample]]:
         try:
             try:
-                input_format_tag, input_tags, output_tags = self._prior_strategy()
+                input_format_tag, input_tags, output_tags = ProblemContent._primary_strategy(soup)
                 if input_format_tag is None:
-                    input_format_tag, input_tags, output_tags = self._alternative_strategy()
-            except InputParseError:
-                input_format_tag, input_tags, output_tags = self._alternative_strategy()
+                    raise InputFormatDetectionError
+            except InputFormatDetectionError:
+                input_format_tag, input_tags, output_tags = ProblemContent._secondary_strategy(soup)
         except Exception as e:
-            raise InputParseError(e)
+            raise InputFormatDetectionError(e)
 
         if len(input_tags) != len(output_tags):
-            raise SampleParseError
+            raise SampleDetectionError
 
         res = [Sample(normalize(in_tag.text), normalize(out_tag.text))
                for in_tag, out_tag in zip(input_tags, output_tags)]
 
         if input_format_tag is None:
-            raise InputParseError
+            raise InputFormatDetectionError
 
         input_format_text = normalize(input_format_tag.text)
 
         return input_format_text, res
 
-    def _prior_strategy(self):  # TODO: more descriptive name
+    @staticmethod
+    def _primary_strategy(soup):  # TODO: more descriptive name
         input_tags = []
         output_tags = []
         input_format_tag = None
-        for tag in self._soup.select('section'):
+        for tag in soup.select('section'):
             h3tag = tag.find('h3')
             if h3tag is None:
                 continue
-            # Some problem has strange characters in h3 tags which should be removed
+            # Some problems have strange characters in h3 tags which should be removed
             section_title = remove_non_jp_characters(tag.find('h3').get_text())
 
             if section_title.startswith("入力例"):
@@ -111,8 +108,9 @@ class ProblemContent:
                 output_tags.append(tag.find('pre'))
         return input_format_tag, input_tags, output_tags
 
-    def _alternative_strategy(self):  # TODO: more descriptive name
-        pre_tags = self._soup.select('pre')
+    @staticmethod
+    def _secondary_strategy(soup):  # TODO: more descriptive name
+        pre_tags = soup.select('pre')
         sample_tags = pre_tags[1:]
         input_tags = sample_tags[0::2]
         output_tags = sample_tags[1::2]

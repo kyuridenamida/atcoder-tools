@@ -1,4 +1,6 @@
 import os
+from typing import Optional
+
 from src.format_prediction.FormatPredictor import FormatPredictor, MultiplePredictionResultsError, NoPredictionResultError
 from src.models.ProblemContent import ProblemContent
 from src.models.Sample import Sample
@@ -6,7 +8,7 @@ from src.models.predictor.FormatPredictionResult import FormatPredictionResult
 
 
 class Response:
-    def __init__(self, result: FormatPredictionResult, status):
+    def __init__(self, result: Optional[FormatPredictionResult], status):
         self.status = status
         if result:
             self.original_result = result
@@ -36,7 +38,7 @@ class TestFormatPredictorRunner:
         for ex_file in example_files:
             with open(ex_file, 'r') as f:
                 examples.append(Sample(f.read(), None))
-        problem_content = ProblemContent.of(input_format, examples)
+        problem_content = ProblemContent(input_format, examples)
 
         try:
             result = FormatPredictor.predict(problem_content)

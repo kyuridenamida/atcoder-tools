@@ -23,7 +23,7 @@ class TestAtCoderClient(unittest.TestCase):
 
     def test_login_failed(self):
         try:
-            self.client.login(username="@$@#@.@^@", password="@@@@@")
+            self.client.login(username="@@@ invalid user name @@@", password="@@@@@@@")
             self.fail("Unexpectedly, this test succeeded to login.")
         except LoginError:
             pass

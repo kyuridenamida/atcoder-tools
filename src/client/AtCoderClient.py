@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 from src.models.Contest import Contest
 from src.models.Problem import Problem
-from src.models.ProblemContent import ProblemContent
+from src.models.ProblemContent import ProblemContent, InputFormatDetectionError, SampleDetectionError
 
 
 class LoginError(Exception):
@@ -33,15 +33,15 @@ class AtCoderClient:
             'password': password
         }
         encoded_postdata = urllib.parse.urlencode(postdata).encode('utf-8')
-        req = self.opener.open(
+        resp = self.opener.open(
             "https://arc001.contest.atcoder.jp/login", encoded_postdata)
-        html = req.read().decode('utf-8')
+        html = resp.read().decode('utf-8')
         if html.find("パスワードを忘れた方はこちら") != -1:
             raise LoginError
 
     def download_problem_list(self, contest: Contest) -> List[Problem]:
-        req = self.opener.open(contest.get_problem_list_url())
-        soup = BeautifulSoup(req, "html.parser")
+        resp = self.opener.open(contest.get_problem_list_url())
+        soup = BeautifulSoup(resp, "html.parser")
         res = []
         for tag in soup.select('.linkwrapper')[0::2]:
             alphabet = tag.text
@@ -50,17 +50,21 @@ class AtCoderClient:
         return res
 
     def download_problem_content(self, problem: Problem) -> ProblemContent:
-        req = self.opener.open(problem.get_url())
-        return ProblemContent(req)
+        resp = self.opener.open(problem.get_url())
+        try:
+            return ProblemContent.from_response(resp)
+        except (InputFormatDetectionError, SampleDetectionError) as e:
+            raise e
+
 
     def download_all_contests(self) -> List[Contest]:
         contest_ids = []
         previous_list = []
         page_num = 1
         while True:
-            req = self.opener.open(
+            resp = self.opener.open(
                 "https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
-            soup = BeautifulSoup(req, "html.parser")
+            soup = BeautifulSoup(resp, "html.parser")
             text = str(soup)
             url_re = re.compile(
                 r'"/contests/([A-Za-z0-9\'~+\-_]+)"')
@@ -79,8 +83,8 @@ class AtCoderClient:
         return [Contest(contest_id) for contest_id in contest_ids]
 
     def submit_source_code(self, contest: Contest, problem: Problem, lang, source):
-        req = self.opener.open(contest.submission_url())
-        soup = BeautifulSoup(req, "html.parser")
+        resp = self.opener.open(contest.submission_url())
+        soup = BeautifulSoup(resp, "html.parser")
         session_id = soup.find("input", attrs={"type": "hidden"}).get("value")
         task_select_area = soup.find(
             'select', attrs={"id": "submit-task-selector"})

@@ -65,15 +65,12 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(load_intermediate_format(py_test_name), str(response.simple_format))
         self.assertEqual(load_intermediate_types(py_test_name), str(response.types))
         self.assertEqual(load_generated_code(py_test_name, lang),
-                         self.get_generator(lang).generate_code(self.get_template(lang), response.original_result))
-
-    def get_template(self, lang: str) -> str:
-        file = os.path.join(RESOURCE_DIR, self.lang_to_template_file[lang])
-        with open(file, 'r') as f:
-            return f.read()
+                         self.get_generator(lang).generate_code(response.original_result))
 
     def get_generator(self, lang: str) -> CodeGenerator:
-        return self.lang_to_code_generator[lang]()
+        template_file = os.path.join(RESOURCE_DIR, self.lang_to_template_file[lang])
+        with open(template_file, 'r') as f:
+            return self.lang_to_code_generator[lang](f.read())
 
 if __name__ == "__main__":
     unittest.main()

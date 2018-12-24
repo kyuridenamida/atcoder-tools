@@ -4,7 +4,7 @@ import errno
 import os
 
 from src.client.AtCoderClient import AtCoderClient
-from src.models.ProblemContent import SampleParseError, InputParseError
+from src.models.ProblemContent import SampleDetectionError, InputFormatDetectionError
 
 
 class NoPatternFoundError(Exception):
@@ -41,10 +41,10 @@ if __name__ == "__main__":
                 for idx, sample in enumerate(content.get_samples()):
                     with open("{}/ex_{}.txt".format(path, idx + 1), "w") as f:
                         f.write(sample.get_input())
-            except SampleParseError as e:
+            except SampleDetectionError as e:
                 print("failed to parse samples for {} {} -- skipping download".format(contest.get_id(),
                                                                                       problem.get_alphabet()))
-            except InputParseError as e:
+            except InputFormatDetectionError as e:
                 print("failed to parse input for {} {} -- skipping download".format(contest.get_id(),
                                                                                     problem.get_alphabet()))
             except Exception as e:

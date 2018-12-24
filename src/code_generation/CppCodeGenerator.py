@@ -1,4 +1,4 @@
-from src.code_generation.TemplateEngine import render
+from code_generation.TemplateEngine import render
 from src.code_generation.CodeGenerator import CodeGenerator
 from src.models.analyzer import AnalyzedVariable
 from src.models.analyzer.SimpleFormat import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
@@ -22,15 +22,15 @@ def _loop_header(var: Variable, for_second_index: bool):
 
 
 class CppCodeGenerator(CodeGenerator):
-    def __init__(self):
+    def __init__(self, template: str):
+        self._template = template
         self._prediction_result = None
-        pass
 
-    def generate_code(self, template: str, prediction_result: FormatPredictionResult):
+    def generate_code(self, prediction_result: FormatPredictionResult):
         if prediction_result is None:
             raise NoPredictionResultGiven
         self._prediction_result = prediction_result
-        return render(template,
+        return render(self._template,
                       formal_arguments=self._formal_arguments(),
                       actual_arguments=self._actual_arguments(),
                       input_part=self._input_part())
