@@ -12,7 +12,7 @@ from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Re
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-     "./resources/test_codegen/")
+    "./resources/test_codegen/")
 LANGS = ["cpp", "java"]
 
 
@@ -81,6 +81,7 @@ class TestCodeGenerator(unittest.TestCase):
             self.lang_to_template_file[lang])
         with open(template_file, 'r') as f:
             return self.lang_to_code_generator[lang](f.read())
+
 
 if __name__ == "__main__":
     unittest.main()

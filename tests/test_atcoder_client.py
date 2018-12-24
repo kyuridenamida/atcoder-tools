@@ -7,7 +7,7 @@ from atcodertools.models.problem import Problem
 
 ANSWER_FILE = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-     "./resources/test_fmtprediction/answer.txt")
+    "./resources/test_fmtprediction/answer.txt")
 
 
 class TestAtCoderClient(unittest.TestCase):

@@ -7,7 +7,7 @@ from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner
 
 ANSWER_FILE = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-     "./resources/test_fmtprediction/answer.txt")
+    './resources/test_fmtprediction/answer.txt')
 
 
 class TestFormatPrediction(unittest.TestCase):

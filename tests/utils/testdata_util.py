@@ -4,7 +4,7 @@ import tarfile
 
 TEST_DATA_GZIP_FILE = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-     '../resources/common/test_data.tar.gz')
+    '../resources/common/test_data.tar.gz')
 
 
 class TestDataUtil:
