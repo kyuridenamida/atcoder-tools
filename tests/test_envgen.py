@@ -5,7 +5,7 @@ import unittest
 from os.path import relpath
 
 from client.atcoder import AtCoderClient
-from tools.atc_env import prepare_workspace
+from tools.envgen import prepare_workspace
 
 RESOURCE_DIR = "./resources/test_atc_env/"
 TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template.cpp")
@@ -20,7 +20,7 @@ def get_all_rel_file_paths(dir_path: str):
     return res
 
 
-class TestAtCoderEnv(unittest.TestCase):
+class TestEnvGen(unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
