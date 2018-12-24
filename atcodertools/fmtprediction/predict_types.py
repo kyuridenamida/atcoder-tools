@@ -75,8 +75,8 @@ class TypePredictor:
         self._fmt = fmt
         self._fetch_generator_instance = self._fetch_generator()
         self._var_to_type = {}
+        # If there are multiple values, only the first value is recorded.
         self._var_to_actual_value = {}
-            # If there are multiple values, only the first value is recorded.
 
     def get_typing_result(self):
         return self._var_to_type

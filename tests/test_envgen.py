@@ -9,7 +9,7 @@ from atcodertools.tools.envgen import prepare_workspace
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-     "./resources/test_atc_env/")
+    "./resources/test_atc_env/")
 TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template.cpp")
 REPLACEMENT_PATH = os.path.join(RESOURCE_DIR, "replacement.cpp")
 

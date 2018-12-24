@@ -34,7 +34,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                       template_code_path: str,
                       replacement_code_path: str,
                       lang: str):
-    pid, url = problem.get_alphabet(), problem.get_url()
+    pid = problem.get_alphabet()
     workspace_dir_path = os.path.join(
         workspace_root_path,
         problem.get_contest().get_id(),
@@ -132,8 +132,7 @@ def prepare_workspace(atcoder_client: AtCoderClient,
                       template_code_path: str,
                       replacement_code_path: str,
                       lang: str,
-                      parallel: bool = True
-                      ):
+                      parallel: bool):
     retry_duration = 1.5
     while True:
         problem_list = atcoder_client.download_problem_list(
@@ -220,6 +219,11 @@ def main(prog, args):
                                  get_default_replacement_path('java'))
                         )
 
+    parser.add_argument("--no_parallel",
+                        action="store_true",
+                        help="Prepare problem directories one by one not using multi processors.",
+                        default=False)
+
     args = parser.parse_args(args)
 
     try:
@@ -247,10 +251,11 @@ def main(prog, args):
                       args.contest_id,
                       args.workspace,
                       args.template if args.template is not None else get_default_template_path(
-                      args.lang),
+                          args.lang),
                       args.replacement if args.replacement is not None else get_default_replacement_path(
-                      args.lang),
-                      args.lang)
+                          args.lang),
+                      args.lang,
+                      not args.no_parallel)
 
 
 if __name__ == "__main__":
