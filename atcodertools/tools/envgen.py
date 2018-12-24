@@ -195,18 +195,19 @@ def main(prog, args):
 
     parser.add_argument("--workspace",
                         help="path to workspace's root directory. This script will create files"
-                             " in {{WORKSPACE}}/(contest name like arc001)/(problem alphabet like A)/\n"
+                             " in {{WORKSPACE}}/{{contest_name}}/{{alphabet}}/ e.g. ./your-workspace/arc001/A/\n"
                              "[Default] {}".format(DEFAULT_WORKSPACE_DIR_PATH),
                         default=DEFAULT_WORKSPACE_DIR_PATH)
 
     parser.add_argument("--lang",
-                        help="programming language of your template, {}.\n".format(" or ".join(SUPPORTED_LANGUAGES)) +
+                        help="programming language of your template code, {}.\n"
+                        .format(" or ".join(SUPPORTED_LANGUAGES)) +
                              "[Default] {}".format(DEFAULT_LANG),
                         default=DEFAULT_LANG,
                         type=check_lang)
 
     parser.add_argument("--template",
-                        help="file path to your template\n"
+                        help="file path to your template code\n"
                              "[Default (C++)] {}\n".format(get_default_template_path('cpp')) +
                              "[Default (Java)] {}".format(
                                  get_default_template_path('java'))

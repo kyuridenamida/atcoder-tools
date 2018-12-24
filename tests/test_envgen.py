@@ -40,6 +40,7 @@ class TestEnvGen(unittest.TestCase):
             self.temp_dir,
             TEMPLATE_PATH,
             REPLACEMENT_PATH,
+            "cpp",
             False)
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
@@ -53,6 +54,7 @@ class TestEnvGen(unittest.TestCase):
                 self.temp_dir,
                 TEMPLATE_PATH,
                 REPLACEMENT_PATH,
+                "cpp",
                 False)
         print(self.temp_dir)
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
