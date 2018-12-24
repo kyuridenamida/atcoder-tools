@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from tools.tester import is_executable_file
+from atcodertools.tools.tester import is_executable_file
 
 
 class TestTester(unittest.TestCase):

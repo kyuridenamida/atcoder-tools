@@ -10,7 +10,9 @@ from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from tests.utils.testdata_util import TestDataUtil
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 
-RESOURCE_DIR = "./resources/test_codegen/"
+RESOURCE_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+     "./resources/test_codegen/")
 LANGS = ["cpp", "java"]
 
 

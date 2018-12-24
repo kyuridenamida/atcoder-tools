@@ -2,8 +2,8 @@ from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
 from atcodertools.models.analyzer.simple_format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
 from atcodertools.models.predictor.variable import Variable
-from codegen.code_generator import CodeGenerator
-from codegen.template_engine import render
+from atcodertools.codegen.code_generator import CodeGenerator
+from atcodertools.codegen.template_engine import render
 
 
 def _loop_header(var: Variable, for_second_index: bool):

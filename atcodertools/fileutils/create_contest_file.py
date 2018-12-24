@@ -1,9 +1,9 @@
 import os
 from typing import List
 
-from codegen.code_generator import CodeGenerator
-from models.sample import Sample
-from models.predictor.format_prediction_result import FormatPredictionResult
+from atcodertools.codegen.code_generator import CodeGenerator
+from atcodertools.models.sample import Sample
+from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
 
 
 def _make_text_file(file_path, text):

@@ -4,7 +4,7 @@ from typing import List, Dict
 from atcodertools.fmtprediction.calculator import CalcNode, CalcParseError
 from atcodertools.models.tokenizer.variable_token import VariableToken, TokenizedFormat
 
-from fmtprediction.token_manager import TokenManager
+from atcodertools.fmtprediction.token_manager import TokenManager
 
 
 def _is_ascii(s):

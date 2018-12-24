@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+import argparse
 import os
 import shutil
 import sys
@@ -8,29 +8,37 @@ from os.path import expanduser
 from time import sleep
 from typing import Tuple
 
-from codegen.cpp_code_generator import CppCodeGenerator
-from fileutils.create_contest_file import create_examples, create_code_from_prediction_result
-from models.problem_content import InputFormatDetectionError, SampleDetectionError
+from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
+from atcodertools.codegen.java_code_generator import JavaCodeGenerator
+from atcodertools.fileutils.create_contest_file import create_examples, create_code_from_prediction_result
+from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.fmtprediction.predict_format import FormatPredictor, NoPredictionResultError, \
     MultiplePredictionResultsError
 from atcodertools.models.problem import Problem
 import logging
 
-fmt = "%(asctime)s %(levelname)s :%(message)s"
+script_dir_path = os.path.dirname(os.path.abspath(__file__))
+
+fmt = "%(asctime)s %(levelname)s: %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=fmt)
+
+
+def extension(lang: str):
+    return lang
 
 
 def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       workspace_root_path: str,
-                      successful_template_code_path: str,
-                      replacement_code_path: str):
+                      template_code_path: str,
+                      replacement_code_path: str,
+                      lang: str):
     pid, url = problem.get_alphabet(), problem.get_url()
     workspace_dir_path = os.path.join(
         workspace_root_path,
         problem.get_contest().get_id(),
-     pid)
+        pid)
 
     def emit_error(text):
         logging.error("Problem {}: {}".format(pid, text))
@@ -59,7 +67,9 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         create_examples(content.get_samples(), workspace_dir_path)
         emit_info("Created examples.")
 
-    code_file_path = os.path.join(workspace_dir_path, "main.cpp")
+    code_file_path = os.path.join(
+        workspace_dir_path,
+        "main.{}".format(extension(lang)))
 
     # If there is an existing code, just create backup
     if os.path.exists(code_file_path):
@@ -79,11 +89,19 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     try:
         result = FormatPredictor().predict(content)
 
-        with open(successful_template_code_path, "r") as f:
-            template_success = f.read()
+        with open(template_code_path, "r") as f:
+            template = f.read()
+
+        if lang == "cpp":
+            gen_class = CppCodeGenerator
+        elif lang == "java":
+            gen_class = JavaCodeGenerator
+        else:
+            raise NotImplementedError("only supporting cpp and java")
+
         create_code_from_prediction_result(
             result,
-            CppCodeGenerator(template_success),
+            gen_class(template),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
@@ -93,19 +111,19 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         else:
             msg = "Too many prediction -- Failed to understand the input format"
 
+        shutil.copy(replacement_code_path, code_file_path)
         emit_warning(
             "{} -- Copied {} to {}".format(
                 msg,
                 replacement_code_path,
                 code_file_path))
-        shutil.copy(replacement_code_path, code_file_path)
 
 
-def func(argv: Tuple[AtCoderClient, Problem, str, str, str]):
-    atcoder_client, problem, workspace_root_path, successful_template_code_path, replacement_code_path = argv
+def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str]):
+    atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang = argv
     prepare_procedure(
-        atcoder_client, problem, workspace_root_path, successful_template_code_path,
-                      replacement_code_path)
+        atcoder_client, problem, workspace_root_path, template_code_path,
+        replacement_code_path, lang)
 
 
 def prepare_workspace(atcoder_client: AtCoderClient,
@@ -113,7 +131,8 @@ def prepare_workspace(atcoder_client: AtCoderClient,
                       workspace_root_path: str,
                       template_code_path: str,
                       replacement_code_path: str,
-                      parallel=True
+                      lang: str,
+                      parallel: bool = True
                       ):
     retry_duration = 1.5
     while True:
@@ -125,7 +144,7 @@ def prepare_workspace(atcoder_client: AtCoderClient,
         logging.warning(
             "Failed to fetch. Will retry in {} seconds".format(retry_duration))
 
-    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path) for
+    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang) for
              problem in problem_list]
     if parallel:
         thread_pool = Pool(processes=cpu_count())
@@ -137,18 +156,35 @@ def prepare_workspace(atcoder_client: AtCoderClient,
 
 DEFAULT_WORKSPACE_DIR_PATH = os.path.join(
     expanduser("~"), "atcoder-workspace")
-DEFAULT_TEMPLATE_DIR_PATH = "../../templates/cpp/"
-DEFAULT_TEMPLATE_PATH = os.path.join(
-    DEFAULT_TEMPLATE_DIR_PATH,
-     "template_success.cpp")
-DEFAULT_REPLACEMENT_PATH = os.path.join(
-    DEFAULT_TEMPLATE_DIR_PATH,
-     "template_failure.cpp")
 
-if __name__ == "__main__":
-    import argparse
+DEFAULT_TEMPLATE_DIR_PATH = os.path.abspath(
+    os.path.join(script_dir_path, "../../templates/"))
 
-    parser = argparse.ArgumentParser()
+
+def get_default_template_path(lang):
+    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_success.{lang}".format(lang=lang)))
+
+
+def get_default_replacement_path(lang):
+    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_failure.{lang}").format(lang=lang))
+
+
+DEFAULT_LANG = "cpp"
+SUPPORTED_LANGUAGES = ["cpp", "java"]
+
+
+def check_lang(lang: str):
+    lang = lang.lower()
+    if lang not in SUPPORTED_LANGUAGES:
+        raise argparse.ArgumentTypeError("{} is not supported. The available languages are {}"
+                                         .format(lang, SUPPORTED_LANGUAGES))
+    return lang
+
+
+def main(prog, args):
+    parser = argparse.ArgumentParser(
+        prog=prog,
+        formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("contest_id",
                         help="contest ID (e.g. arc001)")
@@ -158,19 +194,32 @@ if __name__ == "__main__":
                         help="download data without login")
 
     parser.add_argument("--workspace",
-                        help="path to workspace's root directory. atc_env will create files"
-                             " in {workspace}/(contest name like arc001)/(problem alphabet like A)/",
+                        help="path to workspace's root directory. This script will create files"
+                             " in {{WORKSPACE}}/(contest name like arc001)/(problem alphabet like A)/\n"
+                             "[Default] {}".format(DEFAULT_WORKSPACE_DIR_PATH),
                         default=DEFAULT_WORKSPACE_DIR_PATH)
 
+    parser.add_argument("--lang",
+                        help="programming language of your template, {}.\n".format(" or ".join(SUPPORTED_LANGUAGES)) +
+                             "[Default] {}".format(DEFAULT_LANG),
+                        default=DEFAULT_LANG,
+                        type=check_lang)
+
     parser.add_argument("--template",
-                        help="file path to your template",
-                        default=DEFAULT_TEMPLATE_PATH)
+                        help="file path to your template\n"
+                             "[Default (C++)] {}\n".format(get_default_template_path('cpp')) +
+                             "[Default (Java)] {}".format(
+                                 get_default_template_path('java'))
+                        )
 
     parser.add_argument("--replacement",
-                        help="file path to the replacement code created when template generation is failed.",
-                        default=DEFAULT_REPLACEMENT_PATH)
+                        help="file path to the replacement code created when template generation is failed.\n"
+                             "[Default (C++)] {}\n".format(get_default_replacement_path('cpp')) +
+                             "[Default (Java)] {}".format(
+                                 get_default_replacement_path('java'))
+                        )
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
     try:
         import AccountInformation
@@ -196,5 +245,12 @@ if __name__ == "__main__":
     prepare_workspace(client,
                       args.contest_id,
                       args.workspace,
-                      args.template,
-                      args.replacement)
+                      args.template if args.template is not None else get_default_template_path(
+                      args.lang),
+                      args.replacement if args.replacement is not None else get_default_replacement_path(
+                      args.lang),
+                      args.lang)
+
+
+if __name__ == "__main__":
+    main(sys.argv[0], sys.argv[1:])

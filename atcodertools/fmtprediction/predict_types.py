@@ -6,7 +6,7 @@ from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
 from atcodertools.models.analyzer.index import Index
 from atcodertools.models.analyzer.simple_format import SimpleFormat, SingularPattern, TwoDimensionalPattern, \
     ParallelPattern
-from fmtprediction.token_manager import TokenManager
+from atcodertools.fmtprediction.token_manager import TokenManager
 
 
 class TypesUnmatchedError(Exception):

@@ -4,10 +4,12 @@ import tempfile
 import unittest
 from os.path import relpath
 
-from client.atcoder import AtCoderClient
-from tools.envgen import prepare_workspace
+from atcodertools.client.atcoder import AtCoderClient
+from atcodertools.tools.envgen import prepare_workspace
 
-RESOURCE_DIR = "./resources/test_atc_env/"
+RESOURCE_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+     "./resources/test_atc_env/")
 TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template.cpp")
 REPLACEMENT_PATH = os.path.join(RESOURCE_DIR, "replacement.cpp")
 

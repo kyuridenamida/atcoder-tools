@@ -1,10 +1,13 @@
+import os
 import unittest
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.models.contest import Contest
 from atcodertools.models.problem import Problem
 
-ANSWER_FILE = "./resources/test_fmtprediction/answer.txt"
+ANSWER_FILE = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+     "./resources/test_fmtprediction/answer.txt")
 
 
 class TestAtCoderClient(unittest.TestCase):
