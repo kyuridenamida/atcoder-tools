@@ -12,7 +12,7 @@ script:
   - flake8 --ignore=E501, W605
   - autopep8 -r . --diff | tee check_autopep8
   - test ! -s check_autopep8
-  - python envgen.py arc050 --without-login
+  - atcoder-tool gen arc050 --without-login
 
 notifications:
   email: false
