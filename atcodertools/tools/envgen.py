@@ -247,9 +247,9 @@ def main(prog, args):
                       args.contest_id,
                       args.workspace,
                       args.template if args.template is not None else get_default_template_path(
-                      args.lang),
+                          args.lang),
                       args.replacement if args.replacement is not None else get_default_replacement_path(
-                      args.lang),
+                          args.lang),
                       args.lang)
 
 
