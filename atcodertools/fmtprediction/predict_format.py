@@ -10,11 +10,13 @@ class NoPredictionResultError(Exception):
 
 
 class MultiplePredictionResultsError(Exception):
+
     def __init__(self, cands):
         self.cands = cands
 
 
 class FormatPredictor:
+
     @staticmethod
     def predict(content: ProblemContent) -> FormatPredictionResult:
         input_format = content.get_input_format()
@@ -24,7 +26,8 @@ class FormatPredictor:
             raise NoPredictionResultError
 
         try:
-            format_cands = FormatTokenizer(input_format).compute_formats_with_minimal_vars()
+            format_cands = FormatTokenizer(
+                input_format).compute_formats_with_minimal_vars()
         except NoFormatFoundError:
             raise NoPredictionResultError
 
@@ -33,7 +36,8 @@ class FormatPredictor:
             for to_1d_flag in [False, True]:
                 try:
                     fmt = analyze_format(format.var_tokens, to_1d_flag)
-                    output_cands.append(FormatPredictionResult(fmt, type_predictor(fmt, samples)))
+                    output_cands.append(
+                        FormatPredictionResult(fmt, type_predictor(fmt, samples)))
                     break
                 except (TypePredictionFailedError, FormatAnalysisFailedError):
                     pass

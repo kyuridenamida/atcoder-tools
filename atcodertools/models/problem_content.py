@@ -35,6 +35,7 @@ class InputFormatDetectionError(Exception):
 
 
 class ProblemContent:
+
     def __init__(self, input_format_text: str = None, samples: List[Sample] = None):
         self.samples = samples
         self.input_format_text = input_format_text
@@ -43,7 +44,8 @@ class ProblemContent:
     def from_response(cls, response=None):
         res = ProblemContent()
         soup = BeautifulSoup(response, "html.parser")
-        res.input_format_text, res.samples = res._extract_input_format_and_samples(soup)
+        res.input_format_text, res.samples = res._extract_input_format_and_samples(
+            soup)
         return res
 
     def get_input_format(self) -> str:
@@ -66,11 +68,13 @@ class ProblemContent:
 
         try:
             try:
-                input_format_tag, input_tags, output_tags = ProblemContent._primary_strategy(soup)
+                input_format_tag, input_tags, output_tags = ProblemContent._primary_strategy(
+                    soup)
                 if input_format_tag is None:
                     raise InputFormatDetectionError
             except InputFormatDetectionError:
-                input_format_tag, input_tags, output_tags = ProblemContent._secondary_strategy(soup)
+                input_format_tag, input_tags, output_tags = ProblemContent._secondary_strategy(
+                    soup)
         except Exception as e:
             raise InputFormatDetectionError(e)
 
@@ -96,7 +100,8 @@ class ProblemContent:
             h3tag = tag.find('h3')
             if h3tag is None:
                 continue
-            # Some problems have strange characters in h3 tags which should be removed
+            # Some problems have strange characters in h3 tags which should be
+            # removed
             section_title = remove_non_jp_characters(tag.find('h3').get_text())
 
             if section_title.startswith("入力例"):

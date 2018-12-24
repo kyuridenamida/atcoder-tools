@@ -2,6 +2,7 @@ from atcodertools.fmtprediction.calculator import CalcNode
 
 
 class Index:
+
     """
         The model to store index information of a variable, which has a likely the minimal / maximal value and for each dimension.
         Up to 2 indices are now supported.
@@ -20,7 +21,10 @@ class Index:
     def get_zero_based_index(self):
         res = Index()
         res.min_index = CalcNode("0")
-        res.max_index = CalcNode("{max_index}-({min_index})".format(max_index=self.max_index, min_index=self.min_index))
+        res.max_index = CalcNode(
+            "{max_index}-({min_index})".format(
+                max_index=self.max_index,
+                min_index=self.min_index))
         return res
 
     def _update_min(self, new_value: str):
@@ -36,6 +40,6 @@ class Index:
 
         if (self.max_index is None) or (
                 len(self.max_index.get_all_variables()) == 0 and self.max_index.evaluate() < CalcNode(
-            new_value).evaluate()
+                    new_value).evaluate()
         ):
             self.max_index = CalcNode(new_value)

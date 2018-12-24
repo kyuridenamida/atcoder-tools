@@ -22,6 +22,7 @@ def _loop_header(var: Variable, for_second_index: bool):
 
 
 class CppCodeGenerator(CodeGenerator):
+
     def __init__(self, template: str):
         self._template = template
         self._prediction_result = None
@@ -73,7 +74,9 @@ class CppCodeGenerator(CodeGenerator):
             :return the string form of formal arguments e.g. "int N, int K, vector<int> a"
         """
         return ", ".join([
-            "{decl_type} {name}".format(decl_type=self._get_declaration_type(var), name=vname)
+            "{decl_type} {name}".format(
+                decl_type=self._get_declaration_type(var),
+                name=vname)
             for vname, var in self._prediction_result.var_to_info.items()
         ])
 
@@ -84,12 +87,15 @@ class CppCodeGenerator(CodeGenerator):
         if var.dim_num() == 0:
             constructor = ""
         elif var.dim_num() == 1:
-            constructor = "({size}+1)".format(size=var.get_first_index().get_zero_based_index().max_index)
+            constructor = "({size}+1)".format(
+                size=var.get_first_index().get_zero_based_index().max_index)
         elif var.dim_num() == 2:
             constructor = "({row_size}+1,vector<{type}>({col_size}+1))".format(
                 type=self._convert_type(var.type),
-                row_size=var.get_first_index().get_zero_based_index().max_index,
-                col_size=var.get_second_index().get_zero_based_index().max_index
+                row_size=var.get_first_index(
+                ).get_zero_based_index().max_index,
+                col_size=var.get_second_index(
+                ).get_zero_based_index().max_index
             )
         else:
             raise NotImplementedError
@@ -127,18 +133,19 @@ class CppCodeGenerator(CodeGenerator):
     def _render_pattern(self, pattern: Pattern):
         lines = []
         for var in pattern.all_vars():
-            lines.append(self._generate_declaration(self._analyzed_var_to_vinfo(var)))
+            lines.append(self._generate_declaration(
+                self._analyzed_var_to_vinfo(var)))
 
         representative_var = self._analyzed_var_to_vinfo(pattern.all_vars()[0])
-        if type(pattern) == SingularPattern:
+        if isinstance(pattern, SingularPattern):
             lines.append(self._input_code_for_var(representative_var))
-        elif type(pattern) == ParallelPattern:
+        elif isinstance(pattern, ParallelPattern):
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(1),
                                                      line=self._input_code_for_var(self._analyzed_var_to_vinfo(var))))
             lines.append("}")
-        elif type(pattern) == TwoDimensionalPattern:
+        elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
             lines.append(
                 "{indent}{line}".format(indent=self._indent(1), line=_loop_header(representative_var, True)))

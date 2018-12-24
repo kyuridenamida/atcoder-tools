@@ -70,11 +70,13 @@ def _convert_to_proper_type(value: str):
 
 
 class TypePredictor:
+
     def __init__(self, fmt: SimpleFormat):
         self._fmt = fmt
         self._fetch_generator_instance = self._fetch_generator()
         self._var_to_type = {}
-        self._var_to_actual_value = {}  # If there are multiple values, only the first value is recorded.
+        self._var_to_actual_value = {}
+            # If there are multiple values, only the first value is recorded.
 
     def get_typing_result(self):
         return self._var_to_type
@@ -102,7 +104,9 @@ class TypePredictor:
 
     def _refresh(self, var: AnalyzedVariable, value: any):
         if var.var_name in self._var_to_type:
-            self._var_to_type[var.var_name] = up_cast(self._var_to_type[var.var_name], type(value))
+            self._var_to_type[var.var_name] = up_cast(
+                self._var_to_type[var.var_name],
+                type(value))
         else:
             self._var_to_type[var.var_name] = type(value)
             self._var_to_actual_value[var.var_name] = value
@@ -115,13 +119,13 @@ class TypePredictor:
 
     def _fetch_generator(self):
         for pattern in self._fmt.sequence:
-            if type(pattern) == SingularPattern:
+            if isinstance(pattern, SingularPattern):
                 yield pattern.var
-            elif type(pattern) == TwoDimensionalPattern:
+            elif isinstance(pattern, TwoDimensionalPattern):
                 for _ in range(self._loop_size(pattern.var.first_index)):
                     for _ in range(self._loop_size(pattern.var.second_index)):
                         yield pattern.var
-            elif type(pattern) == ParallelPattern:
+            elif isinstance(pattern, ParallelPattern):
                 for _ in range(self._loop_size(pattern.loop_index)):
                     for v in pattern.vars:
                         yield v
@@ -147,8 +151,11 @@ def type_predictor(fmt: SimpleFormat, samples: List[Sample]) -> Dict[str, type]:
             while not token_manager.is_terminal():
                 predictor.feed(token_manager.next())
             predictor.ensure_terminal()
-            res_type_dict = merge_type_dicts(res_type_dict, predictor.get_typing_result())
-        except (TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError, UpCastingError,
+            res_type_dict = merge_type_dicts(
+                res_type_dict,
+                predictor.get_typing_result())
+        except (
+            TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError, UpCastingError,
                 InvalidLoopIndexError):
             raise TypePredictionFailedError
 

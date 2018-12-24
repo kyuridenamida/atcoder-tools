@@ -2,6 +2,7 @@ from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
 
 
 class Variable:
+
     """
         This model is basically AnalyzedVariable + type information
     """

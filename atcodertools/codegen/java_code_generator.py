@@ -3,6 +3,7 @@ from atcodertools.models.predictor.variable import Variable
 
 
 class JavaCodeGenerator(CppCodeGenerator):
+
     def _convert_type(self, py_type: type) -> str:
         if py_type == float:
             return "double"
@@ -35,8 +36,10 @@ class JavaCodeGenerator(CppCodeGenerator):
         elif var.dim_num() == 2:
             constructor = " = new {type}[int({row_size}+1)][int({col_size}+1)]".format(
                 type=self._convert_type(var.type),
-                row_size=var.get_first_index().get_zero_based_index().max_index,
-                col_size=var.get_second_index().get_zero_based_index().max_index
+                row_size=var.get_first_index(
+                ).get_zero_based_index().max_index,
+                col_size=var.get_second_index(
+                ).get_zero_based_index().max_index
             )
         else:
             raise NotImplementedError

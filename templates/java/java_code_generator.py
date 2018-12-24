@@ -108,7 +108,13 @@ def generate_arguments(var_information):
     return formal_params, actual_params
 
 
-def generate_input_part(node, var_information, inputted, undeclared, depth, indexes):
+def generate_input_part(
+    node,
+     var_information,
+     inputted,
+     undeclared,
+     depth,
+     indexes):
     """
     :param node: FormatPredictorで得られる解析結果の木(const)
     :param var_information: 変数の情報(const)

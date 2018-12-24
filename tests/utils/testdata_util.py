@@ -6,6 +6,7 @@ TEST_DATA_GZIP_FILE = './resources/common/test_data.tar.gz'
 
 
 class TestDataUtil:
+
     def __init__(self, target_dir):
         self.target_dir = target_dir
 

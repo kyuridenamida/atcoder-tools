@@ -9,11 +9,13 @@ class WrongGroupingError(Exception):
 
 
 class Pattern:
+
     def all_vars(self) -> List[AnalyzedVariable]:
         raise NotImplementedError
 
 
 class SimpleFormat:
+
     """
     Format without type information and separator information
     """
@@ -35,6 +37,7 @@ class SimpleFormat:
 
 
 class SingularPattern(Pattern):
+
     """
     N
     """
@@ -50,6 +53,7 @@ class SingularPattern(Pattern):
 
 
 class TwoDimensionalPattern(Pattern):
+
     """
     a_1,1 ... a_1,w
     :
@@ -67,6 +71,7 @@ class TwoDimensionalPattern(Pattern):
 
 
 class ParallelPattern(Pattern):
+
     """
     a1 a2 ... an
 
@@ -88,9 +93,11 @@ class ParallelPattern(Pattern):
             if var.dim_num() != 1:
                 raise WrongGroupingError("dim_num must be 1")
             if var.first_index.min_index != first_var.first_index.min_index:
-                raise WrongGroupingError("some pair of first indices has different min values")
+                raise WrongGroupingError(
+                    "some pair of first indices has different min values")
             if var.first_index.max_index != first_var.first_index.max_index:
-                raise WrongGroupingError("some pair of first indices has different max values")
+                raise WrongGroupingError(
+                    "some pair of first indices has different max values")
         return first_var.first_index
 
     def __str__(self):

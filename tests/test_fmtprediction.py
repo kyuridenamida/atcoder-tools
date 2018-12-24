@@ -9,6 +9,7 @@ ANSWER_FILE = "./resources/test_fmtprediction/answer.txt"
 
 
 class TestFormatPrediction(unittest.TestCase):
+
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.test_data_util = TestDataUtil(tempfile.mkdtemp())
@@ -19,7 +20,8 @@ class TestFormatPrediction(unittest.TestCase):
 
     def test_overall(self):
         runner = FormatPredictionTestRunner(self.test_dir)
-        case_names = sorted([cand for cand in os.listdir(self.test_dir) if runner.is_valid_case(cand)])
+        case_names = sorted(
+            [cand for cand in os.listdir(self.test_dir) if runner.is_valid_case(cand)])
         output_text = ""
         for case in case_names:
             response = runner.run(case)

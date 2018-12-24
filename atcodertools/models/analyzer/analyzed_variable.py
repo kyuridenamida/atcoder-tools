@@ -2,6 +2,7 @@ from atcodertools.models.analyzer.index import Index
 
 
 class AnalyzedVariable:
+
     """
         The model to have a variable's index information with up to 2 indices.
     """

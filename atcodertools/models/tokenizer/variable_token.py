@@ -2,11 +2,13 @@ from typing import Optional, List
 
 
 class VariableToken:
+
     """
     Unlikely AnalyzedVariable class, this model stores variable information with all string indices
     This class supports up to 2 dimensions.
 
     """
+
     def __init__(self, var_name: str, first_index: Optional[str], second_index: Optional[str]):
         def normalize(x: str):
             if x is None:
@@ -55,6 +57,6 @@ class VariableToken:
 
 
 class TokenizedFormat:
+
     def __init__(self, var_tokens: List[VariableToken]):
         self.var_tokens = var_tokens
-

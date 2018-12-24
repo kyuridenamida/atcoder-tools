@@ -2,6 +2,7 @@ from atcodertools.models.contest import Contest
 
 
 class Problem:
+
     def __init__(self, contest: Contest, alphabet: str, problem_id: str):
         self.contest = contest
         self.alphabet = alphabet

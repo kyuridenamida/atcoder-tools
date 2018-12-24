@@ -30,6 +30,7 @@ def load_intermediate_format(py_test_name):
 
 
 class TestCodeGenerator(unittest.TestCase):
+
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.test_data_util = TestDataUtil(tempfile.mkdtemp())
@@ -43,6 +44,7 @@ class TestCodeGenerator(unittest.TestCase):
             "cpp": CppCodeGenerator,
             "java": JavaCodeGenerator,
         }
+
     def tearDown(self):
         self.test_data_util.remove_dir()
 
@@ -62,13 +64,19 @@ class TestCodeGenerator(unittest.TestCase):
             self.verify(response, sys._getframe().f_code.co_name, l)
 
     def verify(self, response: Response, py_test_name: str, lang: str):
-        self.assertEqual(load_intermediate_format(py_test_name), str(response.simple_format))
-        self.assertEqual(load_intermediate_types(py_test_name), str(response.types))
+        self.assertEqual(
+            load_intermediate_format(py_test_name),
+            str(response.simple_format))
+        self.assertEqual(
+            load_intermediate_types(py_test_name),
+            str(response.types))
         self.assertEqual(load_generated_code(py_test_name, lang),
                          self.get_generator(lang).generate_code(response.original_result))
 
     def get_generator(self, lang: str) -> CodeGenerator:
-        template_file = os.path.join(RESOURCE_DIR, self.lang_to_template_file[lang])
+        template_file = os.path.join(
+            RESOURCE_DIR,
+            self.lang_to_template_file[lang])
         with open(template_file, 'r') as f:
             return self.lang_to_code_generator[lang](f.read())
 

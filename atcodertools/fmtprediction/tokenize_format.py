@@ -48,11 +48,16 @@ def _sanitized_tokens(input_format: str) -> List[str]:
     input_format = _divide_consecutive_vars(input_format)
     input_format = _normalize_index(input_format)
     input_format = input_format.replace("{", "").replace("}", "")
-    tokens = [x for x in input_format.split() if x != "" and _is_ascii(x) and not _is_noise(x)]
+    tokens = [
+        x for x in input_format.split(
+        ) if x != "" and _is_ascii(
+            x) and not _is_noise(
+                x)]
     return tokens
 
 
 class FormatSearcher:
+
     def __init__(self, tokens):
         self._token_manager = TokenManager(tokens)
         self._answers = None
@@ -91,10 +96,14 @@ class FormatSearcher:
         :param current_var_to_dim_num: utilized to detect unknown variables (for pruning purpose)
         """
         var_token_candidates = [VariableToken(token, None, None)]
-        var_token_candidates += [VariableToken(token[:i], token[i:], None) for i in range(1, len(token))]
+        var_token_candidates += [VariableToken(
+                                 token[:i],
+                                 token[i:],
+                                 None) for i in range(1, len(token))]
         for i in range(1, len(token)):
             for j in range(i + 1, len(token)):
-                var_token_candidates += [VariableToken(token[:i], token[i:j], token[j:])]
+                var_token_candidates += [
+                    VariableToken(token[:i], token[i:j], token[j:])]
 
         def check_if_possible(var_token: VariableToken):
             # check syntax error
@@ -122,6 +131,7 @@ class FormatSearcher:
 
 
 class FormatTokenizer:
+
     def __init__(self, input_format: str):
         self.tokens = _sanitized_tokens(input_format)
         # print(input_format)

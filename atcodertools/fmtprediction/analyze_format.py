@@ -30,20 +30,24 @@ def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> S
     var_to_positions = {}
     var_to_analyzed_var = OrderedDict()
 
-    # Pre-computation of the min / max value of each of the first and second indices.
+    # Pre-computation of the min / max value of each of the first and second
+    # indices.
     for pos, var_token in enumerate(var_tokens):
         var_name = var_token.var_name
 
         if var_name not in var_to_analyzed_var:
-            var_to_analyzed_var[var_name] = AnalyzedVariable(var_name, var_token.dim_num())
+            var_to_analyzed_var[var_name] = AnalyzedVariable(
+                var_name, var_token.dim_num())
             var_to_positions[var_name] = []
 
         var_to_positions[var_name].append(pos)
 
         if var_token.dim_num() >= 2:
-            var_to_analyzed_var[var_name].second_index.update(var_token.second_index)
+            var_to_analyzed_var[var_name].second_index.update(
+                var_token.second_index)
         if var_token.dim_num() >= 1:
-            var_to_analyzed_var[var_name].first_index.update(var_token.first_index)
+            var_to_analyzed_var[var_name].first_index.update(
+                var_token.first_index)
 
     # Building format nodes
     already_processed_vars = set()
@@ -68,7 +72,8 @@ def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> S
             already_processed_vars.add(var_name)
         elif dim == 1:
             period = _predict_period(var_to_positions[var_name])
-            parallel_vars_group = [var_to_analyzed_var[token.var_name] for token in var_tokens[pos:pos + period]]
+            parallel_vars_group = [var_to_analyzed_var[token.var_name]
+                                   for token in var_tokens[pos:pos + period]]
             try:
                 root.push_back(ParallelPattern(parallel_vars_group))
             except WrongGroupingError:

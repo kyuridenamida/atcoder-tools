@@ -3,8 +3,8 @@
 import errno
 import os
 
-from atcodertools.client.AtCoderClient import AtCoderClient
-from atcodertools.models.ProblemContent import SampleDetectionError, InputFormatDetectionError
+from atcodertools.client.atcoder import AtCoderClient
+from atcodertools.models.problem_content import SampleDetectionError, InputFormatDetectionError
 
 
 class NoPatternFoundError(Exception):
@@ -42,10 +42,13 @@ if __name__ == "__main__":
                     with open("{}/ex_{}.txt".format(path, idx + 1), "w") as f:
                         f.write(sample.get_input())
             except SampleDetectionError as e:
-                print("failed to parse samples for {} {} -- skipping download".format(contest.get_id(),
-                                                                                      problem.get_alphabet()))
-            except InputFormatDetectionError as e:
-                print("failed to parse input for {} {} -- skipping download".format(contest.get_id(),
+                print(
+                    "failed to parse samples for {} {} -- skipping download".format(contest.get_id(),
                                                                                     problem.get_alphabet()))
+            except InputFormatDetectionError as e:
+                print(
+                    "failed to parse input for {} {} -- skipping download".format(contest.get_id(),
+                                                                                  problem.get_alphabet()))
             except Exception as e:
-                print("unknown error for {} {} -- skipping download".format(contest.get_id(), problem.get_alphabet()))
+                print("unknown error for {} {} -- skipping download".format(
+                    contest.get_id(), problem.get_alphabet()))

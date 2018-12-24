@@ -27,7 +27,10 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                       successful_template_code_path: str,
                       replacement_code_path: str):
     pid, url = problem.get_alphabet(), problem.get_url()
-    workspace_dir_path = os.path.join(workspace_root_path, problem.get_contest().get_id(), pid)
+    workspace_dir_path = os.path.join(
+        workspace_root_path,
+        problem.get_contest().get_id(),
+     pid)
 
     def emit_error(text):
         logging.error("Problem {}: {}".format(pid, text))
@@ -68,28 +71,40 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 shutil.copy(code_file_path, backup_name)
                 break
             backup_id += 1
-        emit_info("Backup for existing code '{}' -> '{}'".format(code_file_path, new_path))
+        emit_info(
+            "Backup for existing code '{}' -> '{}'".format(
+                code_file_path,
+                new_path))
 
     try:
         result = FormatPredictor().predict(content)
 
         with open(successful_template_code_path, "r") as f:
             template_success = f.read()
-        create_code_from_prediction_result(result, CppCodeGenerator(template_success), code_file_path)
-        emit_info("Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
+        create_code_from_prediction_result(
+            result,
+            CppCodeGenerator(template_success),
+            code_file_path)
+        emit_info(
+            "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
         if isinstance(e, NoPredictionResultError):
             msg = "No prediction -- Failed to understand the input format"
         else:
             msg = "Too many prediction -- Failed to understand the input format"
 
-        emit_warning("{} -- Copied {} to {}".format(msg, replacement_code_path, code_file_path))
+        emit_warning(
+            "{} -- Copied {} to {}".format(
+                msg,
+                replacement_code_path,
+                code_file_path))
         shutil.copy(replacement_code_path, code_file_path)
 
 
 def func(argv: Tuple[AtCoderClient, Problem, str, str, str]):
     atcoder_client, problem, workspace_root_path, successful_template_code_path, replacement_code_path = argv
-    prepare_procedure(atcoder_client, problem, workspace_root_path, successful_template_code_path,
+    prepare_procedure(
+        atcoder_client, problem, workspace_root_path, successful_template_code_path,
                       replacement_code_path)
 
 
@@ -102,11 +117,13 @@ def prepare_workspace(atcoder_client: AtCoderClient,
                       ):
     retry_duration = 1.5
     while True:
-        problem_list = atcoder_client.download_problem_list(Contest(contest_id=contest_id))
+        problem_list = atcoder_client.download_problem_list(
+            Contest(contest_id=contest_id))
         if problem_list:
             break
         sleep(retry_duration)
-        logging.warning("Failed to fetch. Will retry in {} seconds".format(retry_duration))
+        logging.warning(
+            "Failed to fetch. Will retry in {} seconds".format(retry_duration))
 
     tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path) for
              problem in problem_list]
@@ -118,10 +135,15 @@ def prepare_workspace(atcoder_client: AtCoderClient,
             func(argv)
 
 
-DEFAULT_WORKSPACE_DIR_PATH =  os.path.join(expanduser("~"),"atcoder-workspace")
+DEFAULT_WORKSPACE_DIR_PATH = os.path.join(
+    expanduser("~"), "atcoder-workspace")
 DEFAULT_TEMPLATE_DIR_PATH = "../../templates/cpp/"
-DEFAULT_TEMPLATE_PATH = os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "template_success.cpp")
-DEFAULT_REPLACEMENT_PATH = os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "template_failure.cpp")
+DEFAULT_TEMPLATE_PATH = os.path.join(
+    DEFAULT_TEMPLATE_DIR_PATH,
+     "template_success.cpp")
+DEFAULT_REPLACEMENT_PATH = os.path.join(
+    DEFAULT_TEMPLATE_DIR_PATH,
+     "template_failure.cpp")
 
 if __name__ == "__main__":
     import argparse
@@ -160,10 +182,13 @@ if __name__ == "__main__":
     client = AtCoderClient()
     if not args.without_login:
         try:
-            client.login(AccountInformation.username, AccountInformation.password)
+            client.login(
+                AccountInformation.username,
+                AccountInformation.password)
             logging.info("Login successful.")
         except LoginError:
-            logging.error("Failed to login (maybe due to wrong username/password combination?)")
+            logging.error(
+                "Failed to login (maybe due to wrong username/password combination?)")
             sys.exit(-1)
     else:
         logging.info("Downloading data without login.")

@@ -21,6 +21,7 @@ def get_all_rel_file_paths(dir_path: str):
 
 
 class TestAtCoderEnv(unittest.TestCase):
+
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
 
@@ -28,15 +29,29 @@ class TestAtCoderEnv(unittest.TestCase):
         shutil.rmtree(self.temp_dir)
 
     def test_prepare_workspace(self):
-        answer_data_dir_path = os.path.join(RESOURCE_DIR, "test_prepare_workspace")
-        prepare_workspace(AtCoderClient(), "agc029", self.temp_dir, TEMPLATE_PATH, REPLACEMENT_PATH, False)
+        answer_data_dir_path = os.path.join(
+            RESOURCE_DIR,
+            "test_prepare_workspace")
+        prepare_workspace(
+            AtCoderClient(),
+            "agc029",
+            self.temp_dir,
+            TEMPLATE_PATH,
+            REPLACEMENT_PATH,
+            False)
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
     def test_backup(self):
         answer_data_dir_path = os.path.join(RESOURCE_DIR, "test_backup")
         # Prepare workspace twice
         for _ in range(2):
-            prepare_workspace(AtCoderClient(), "agc029", self.temp_dir, TEMPLATE_PATH, REPLACEMENT_PATH, False)
+            prepare_workspace(
+                AtCoderClient(),
+                "agc029",
+                self.temp_dir,
+                TEMPLATE_PATH,
+                REPLACEMENT_PATH,
+                False)
         print(self.temp_dir)
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 

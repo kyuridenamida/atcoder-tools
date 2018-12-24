@@ -8,6 +8,7 @@ from atcodertools.models.predictor.format_prediction_result import FormatPredict
 
 
 class Response:
+
     def __init__(self, result: Optional[FormatPredictionResult], status):
         self.status = status
         if result:
@@ -20,6 +21,7 @@ FORMAT_FILE_NAME = "format.txt"
 
 
 class FormatPredictionTestRunner:
+
     def __init__(self, test_dir):
         self.test_dir = test_dir
 
@@ -29,7 +31,8 @@ class FormatPredictionTestRunner:
     def run(self, case_name: str) -> Response:
         case_dir = self._get_test_case_dir(case_name)
         format_file = os.path.join(case_dir, FORMAT_FILE_NAME)
-        example_files = [os.path.join(case_dir, file) for file in os.listdir(case_dir) if file != FORMAT_FILE_NAME]
+        example_files = [os.path.join(case_dir, file)
+                         for file in os.listdir(case_dir) if file != FORMAT_FILE_NAME]
 
         with open(format_file, 'r') as f:
             input_format = f.read()
