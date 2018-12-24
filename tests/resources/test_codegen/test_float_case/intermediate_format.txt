@@ -1,0 +1,1 @@
+[(Singular: L),(Singular: N),(Singular: M),(Parallel: K | 1 to L),(Parallel: A,S | 1 to N)]

@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve(long long N, vector<vector<long long>> A, vector<vector<long long>> B, vector<vector<long long>> C){
+
+}
+
+int main(){
+    long long N;
+    scanf("%lld",&N);
+    vector<vector<long long>> A(N-1+1,vector<long long>(N-1+1));
+    for(int i = 0 ; i <= N-1 ; i++){
+        for(int j = 0 ; j <= N-1 ; j++){
+            scanf("%lld",&A[i][j]);
+        }
+    }
+    vector<vector<long long>> B(N-1+1,vector<long long>(N-1+1));
+    for(int i = 0 ; i <= N-1 ; i++){
+        for(int j = 0 ; j <= N-1 ; j++){
+            scanf("%lld",&B[i][j]);
+        }
+    }
+    vector<vector<long long>> C(N-1+1,vector<long long>(N-1+1));
+    for(int i = 0 ; i <= N-1 ; i++){
+        for(int j = 0 ; j <= N-1 ; j++){
+            scanf("%lld",&C[i][j]);
+        }
+    }
+    solve(N, A, B, C);
+    return 0;
+}
