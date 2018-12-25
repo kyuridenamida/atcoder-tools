@@ -6,3 +6,4 @@ do_format.py
 debug.py
 /backup
 .idea
+.coverage
