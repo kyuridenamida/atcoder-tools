@@ -35,15 +35,15 @@ Python 3.5 で動作する [AtCoder](http://atcoder.jp/) からサンプル入�
 過去のユーザーの方はそのファイルを削除することを推奨します。*
 
 
-- `atcoder-tool gen {contest_id}` コンテスト環境を用意するコマンド
-- `atcoder-tool test` カレント・ディレクトリ上に実行ファイルと入出力(in_\*.txt, out_\*.txt)がある状態で実行するとローカルテストを行う
+- `atcoder-tools gen {contest_id}` コンテスト環境を用意するコマンド
+- `atcoder-tools test` カレント・ディレクトリ上に実行ファイルと入出力(in_\*.txt, out_\*.txt)がある状態で実行するとローカルテストを行う
 
 例: 
 ```
-$ atcoder-tool gen agc001
+$ atcoder-tools gen agc001
 $ cd ~/atcoder-workspace/agc001/A
 $ g++ main.cpp
-$ atcoder-tool test
+$ atcoder-tools test
 ```
 
 `--without-login` 引数を指定するとログインなしでデータをダウンロードできます(一般公開されているコンテストのみ)。

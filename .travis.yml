@@ -13,7 +13,7 @@ script:
   - flake8 --ignore=E501, W605
   - autopep8 -r . --diff | tee check_autopep8
   - test ! -s check_autopep8
-  - ./atcoder-tool gen arc050 --without-login --no_parallel
+  - ./atcoder-tools gen arc050 --without-login --no_parallel
   - nosetests --with-coverage --cover-package=atcodertools
   - codecov
 notifications:
