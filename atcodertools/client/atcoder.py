@@ -7,7 +7,6 @@ from typing import List, Optional
 
 import requests
 from bs4 import BeautifulSoup
-from sympy.core.singleton import Singleton
 
 from atcodertools.models.contest import Contest
 from atcodertools.models.problem import Problem
@@ -36,6 +35,15 @@ def load_cookie_to(session: requests.Session, cookie_path: Optional[str] = None)
         session.cookies.load()
         return True
     return False
+
+
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
 
 class AtCoderClient(metaclass=Singleton):
