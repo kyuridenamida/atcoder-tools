@@ -45,7 +45,8 @@ class InvalidLoopIndexError(Exception):
     pass
 
 
-UP_CAST_TABLE = {int: {}, str: {}, float: {}}  # type: Dict[type, Dict[type, type]]
+UP_CAST_TABLE = {int: {}, str: {}, float: {}}
+    # type: Dict[type, Dict[type, type]]
 
 UP_CAST_TABLE[int][int] = int
 UP_CAST_TABLE[int][str] = str

@@ -43,12 +43,16 @@ class TestFormatPrediction(unittest.TestCase):
 
         for ans, out in zip(answer.split("\n"), output_text.split("\n")):
             if ans != out:
-                case_name = ans.split()[0]  # case name is expected to be stored to the first column in the file
+                # Case name is expected to be stored to the first column in the
+                # file.
+                case_name = ans.split()[0]
                 content = runner.load_problem_content(case_name)
                 logging.debug("=== {} ===".format(case_name))
-                logging.debug("Input Format:\n{}".format(content.input_format_text))
+                logging.debug(
+                    "Input Format:\n{}".format(content.input_format_text))
                 for idx, s in enumerate(content.samples):
-                    logging.debug("Sample Input {num}:\n{inp}".format(inp=s.get_input(), num=idx + 1))
+                    logging.debug(
+                        "Sample Input {num}:\n{inp}".format(inp=s.get_input(), num=idx + 1))
                 self.assertEqual(ans, out)
 
         self.assertEqual(len(answer), len(output_text))
