@@ -36,7 +36,7 @@ class TestFormatPrediction(unittest.TestCase):
         with open(ANSWER_FILE, 'r') as f:
             answer = f.read()
 
-        for ans, out in zip(answer.split(), output_text.split()):
+        for ans, out in zip(answer.split("\n"), output_text.split("\n")):
             self.assertEqual(ans, out)
 
         self.assertEqual(len(answer), len(output_text))
