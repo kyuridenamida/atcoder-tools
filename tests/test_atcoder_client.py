@@ -1,7 +1,10 @@
 import os
+import tempfile
 import unittest
 
-from atcodertools.client.atcoder import AtCoderClient, LoginError
+import requests
+
+from atcodertools.client.atcoder import AtCoderClient, LoginError, save_cookie, load_cookie_to
 from atcodertools.models.contest import Contest
 from atcodertools.models.problem import Problem
 
@@ -13,6 +16,7 @@ ANSWER_FILE = os.path.join(
 class TestAtCoderClient(unittest.TestCase):
 
     def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
         self.client = AtCoderClient()
 
     def test_download_problem_list(self):
@@ -53,6 +57,20 @@ class TestAtCoderClient(unittest.TestCase):
 
     def test_check_logging_in(self):
         self.assertFalse(self.client.check_logging_in())
+
+    def test_cookie_save_and_load(self):
+        cookie_path = os.path.join(self.temp_dir, "cookie.txt")
+
+        session = requests.Session()
+
+        loaded = load_cookie_to(session, cookie_path)
+        self.assertFalse(loaded)
+
+        save_cookie(session, cookie_path)
+
+        new_session = requests.Session()
+        loaded = load_cookie_to(new_session, cookie_path)
+        self.assertTrue(loaded)
 
 
 if __name__ == "__main__":

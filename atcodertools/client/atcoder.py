@@ -3,7 +3,7 @@ import logging
 import os
 import re
 from http.cookiejar import LWPCookieJar
-from typing import List
+from typing import List, Optional
 
 import requests
 from bs4 import BeautifulSoup
@@ -18,21 +18,24 @@ class LoginError(Exception):
     pass
 
 
-cookie_path = os.path.join(
+default_cookie_path = os.path.join(
     os.path.expanduser('~/.local/share'), 'atcoder-tools', 'cookie.txt')
 
 
-def save_cookie(session: requests.Session):
-    if os.path.dirname(cookie_path):
-        os.makedirs(os.path.dirname(cookie_path), exist_ok=True)
+def save_cookie(session: requests.Session, cookie_path: Optional[str]):
+    cookie_path = cookie_path or default_cookie_path
+    os.makedirs(os.path.dirname(cookie_path), exist_ok=True)
     session.cookies.save()
     os.chmod(cookie_path, 0o600)
 
 
-def load_cookie_to(session: requests.Session):
+def load_cookie_to(session: requests.Session, cookie_path: Optional[str]):
+    cookie_path = cookie_path or default_cookie_path
     session.cookies = LWPCookieJar(cookie_path)
     if os.path.exists(cookie_path):
         session.cookies.load()
+        return True
+    return False
 
 
 class AtCoderClient(metaclass=Singleton):
@@ -52,7 +55,7 @@ class AtCoderClient(metaclass=Singleton):
                 logging.info(
                     "Successfully Logged in using the previous session cache.")
                 logging.info(
-                    "If you'd like to invalidate the cache, delete {}.".format(cookie_path))
+                    "If you'd like to invalidate the cache, delete {}.".format(default_cookie_path))
 
                 return
 
