@@ -18,7 +18,7 @@ def _requires_from_file(filename):
 
 setup(
     name="atcoder-tools",
-    version="1.0.0",
+    version="1.0.2",
     description="Convenient modules & tools for AtCoder users, written in Python 3.5",
     url='https://github.com/kyuridenamida/atcoder-tools',
     author='kyuridenamida',
