@@ -18,7 +18,8 @@ class LoginError(Exception):
     pass
 
 
-cookie_path = os.path.join(os.path.expanduser('~/.local/share'), 'atcoder-tools', 'cookie.txt')
+cookie_path = os.path.join(
+    os.path.expanduser('~/.local/share'), 'atcoder-tools', 'cookie.txt')
 
 
 def save_cookie(session: requests.Session):
@@ -35,6 +36,7 @@ def load_cookie_to(session: requests.Session):
 
 
 class AtCoderClient(metaclass=Singleton):
+
     def __init__(self):
         self._session = requests.Session()
 
@@ -47,8 +49,10 @@ class AtCoderClient(metaclass=Singleton):
         if use_local_session_cache:
             load_cookie_to(self._session)
             if self.check_logging_in():
-                logging.info("Successfully Logged in using the previous session cache.")
-                logging.info("If you'd like to invalidate the cache, delete {}.".format(cookie_path))
+                logging.info(
+                    "Successfully Logged in using the previous session cache.")
+                logging.info(
+                    "If you'd like to invalidate the cache, delete {}.".format(cookie_path))
 
                 return
 
@@ -91,7 +95,8 @@ class AtCoderClient(metaclass=Singleton):
         previous_list = []
         page_num = 1
         while True:
-            resp = self._request("https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
+            resp = self._request(
+                "https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
             soup = BeautifulSoup(resp.text, "html.parser")
             text = str(soup)
             url_re = re.compile(

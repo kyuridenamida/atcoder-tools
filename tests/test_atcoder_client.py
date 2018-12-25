@@ -52,7 +52,6 @@ class TestAtCoderClient(unittest.TestCase):
             len(contests))
 
     def test_check_logging_in(self):
-        #self.client.login()
         self.assertFalse(self.client.check_logging_in())
 
 

@@ -231,8 +231,9 @@ def main(prog, args):
     args = parser.parse_args(args)
 
     try:
-        import AccountInformation
-        raise BannedFileDetectedError("We abolished the logic with AccountInformation.py. Please delete the file.")
+        import AccountInformation  # noqa
+        raise BannedFileDetectedError(
+            "We abolished the logic with AccountInformation.py. Please delete the file.")
     except ImportError:
         pass
 
