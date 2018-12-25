@@ -7,3 +7,7 @@ debug.py
 /backup
 .idea
 .coverage
+atcoder_tools.egg-info/
+build/
+dist/
+

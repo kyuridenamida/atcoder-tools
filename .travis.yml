@@ -5,16 +5,15 @@ python:
   - "3.6"
 
 install:
-  - pip install bs4
+  - pip install .
   - pip install flake8 autopep8
   - pip install codecov nose
-  - pip install sympy
 
 script:
   - flake8 --ignore=E501, W605
   - autopep8 -r . --diff | tee check_autopep8
   - test ! -s check_autopep8
-  - ./atcoder-tool gen arc050 --without-login --no_parallel
+  - atcoder-tools gen arc050 --without-login --no_parallel
   - nosetests --with-coverage --cover-package=atcodertools
   - codecov
 notifications:

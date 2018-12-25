@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/kyuridenamida/atcoder-tools.svg?branch=master)](https://travis-ci.org/kyuridenamida/atcoder-tools)
 [![codecov](https://codecov.io/gh/kyuridenamida/atcoder-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/kyuridenamida/atcoder-tools)
+[![PyPI](https://img.shields.io/pypi/v/atcoder-tools.svg)](https://pypi.python.org/pypi/atcoder-tools)
 
 atcoder-tools
 ====
-
 Python 3.5 で動作する [AtCoder](http://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
 
 このツールには次のような機能があります。
@@ -20,6 +20,8 @@ Python 3.5 で動作する [AtCoder](http://atcoder.jp/) からサンプル入�
 |  2018-12-03  | ToolsForAtCoder は atcoder-tools に名前を変更した。 |
 |  2016-04-01  | 最初のバージョンをリリースした。 |
 
+## How to install
+`pip3 install atcoder-tools`
 
 ## Demo
 ※最初期のデモなので今とインターフェイスが異なります
@@ -29,21 +31,26 @@ Python 3.5 で動作する [AtCoder](http://atcoder.jp/) からサンプル入�
 
 ## Usage
 
+
+*重要: かつてログイン情報を保持するために`AccountInformation.py`に書き込むことを要求していましたが、セキュリティリスクが高すぎるため、セッション情報のみを保持する方針に切り替えました。
+過去のユーザーの方はそのファイルを削除することを推奨します。*
+
+
 - `atcoder-tools gen {contest_id}` コンテスト環境を用意するコマンド
 - `atcoder-tools test` カレント・ディレクトリ上に実行ファイルと入出力(in_\*.txt, out_\*.txt)がある状態で実行するとローカルテストを行う
 
 例: 
 ```
-$ atcoder-tool gen agc001
+$ atcoder-tools gen agc001
 $ cd ~/atcoder-workspace/agc001/A
 $ g++ main.cpp
-$ atcoder-tool test
+$ atcoder-tools test
 ```
 
 `--without-login` 引数を指定するとログインなしでデータをダウンロードできます(一般公開されているコンテストのみ)。
 
 ```
-$ atcoder-tool gen  [contestid] --without-login
+$ atcoder-tool gen  [contest_id] --without-login
 ```
 
 
