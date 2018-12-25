@@ -162,7 +162,7 @@ DEFAULT_WORKSPACE_DIR_PATH = os.path.join(
     expanduser("~"), "atcoder-workspace")
 
 DEFAULT_TEMPLATE_DIR_PATH = os.path.abspath(
-    os.path.join(script_dir_path, "../../templates/"))
+    os.path.join(script_dir_path, "./templates/"))
 
 
 def get_default_template_path(lang):

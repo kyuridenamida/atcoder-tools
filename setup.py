@@ -24,10 +24,11 @@ setup(
     author='kyuridenamida',
     author_email='tyotyo3@gmail.com',
     long_description=readme,
-    packages=find_packages(),
+    packages=find_packages(exclude=('tests',)),
     install_requires=_requires_from_file('requirements.txt'),
     license="MIT",
     scripts=['atcoder-tools'],
+    include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
