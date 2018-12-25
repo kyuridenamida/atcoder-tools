@@ -224,9 +224,9 @@ def main(prog, args):
                                  get_default_replacement_path('java'))
                         )
 
-    parser.add_argument("--no_parallel",
+    parser.add_argument("--parallel",
                         action="store_true",
-                        help="Prepare problem directories one by one not using multi processors.",
+                        help="Prepare problem directories asynchronously using multi processors.",
                         default=False)
 
     parser.add_argument("--save-no-session-cache",
@@ -263,7 +263,7 @@ def main(prog, args):
                       args.replacement if args.replacement is not None else get_default_replacement_path(
                           args.lang),
                       args.lang,
-                      not args.no_parallel)
+                      args.parallel)
 
 
 if __name__ == "__main__":
