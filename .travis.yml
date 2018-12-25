@@ -7,7 +7,7 @@ python:
 install:
   - pip install bs4
   - pip install flake8 autopep8
-  - pip install codecov
+  - pip install codecov nose
 
 script:
   - flake8 --ignore=E501, W605
