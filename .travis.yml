@@ -7,12 +7,14 @@ python:
 install:
   - pip install bs4
   - pip install flake8 autopep8
+  - pip install codecov
 
 script:
   - flake8 --ignore=E501, W605
   - autopep8 -r . --diff | tee check_autopep8
   - test ! -s check_autopep8
   - ./atcoder-tool gen arc050 --without-login --no_parallel
-
+  - nosetests --with-coverage
+  - codecov
 notifications:
   email: false
