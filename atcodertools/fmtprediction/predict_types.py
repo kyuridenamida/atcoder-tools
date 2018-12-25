@@ -45,12 +45,28 @@ class InvalidLoopIndexError(Exception):
     pass
 
 
+UP_CAST_TABLE = {int: {}, str: {}, float: {}}
+
+UP_CAST_TABLE[int][int] = int
+UP_CAST_TABLE[int][str] = str
+UP_CAST_TABLE[int][float] = float
+
+UP_CAST_TABLE[str] = {}
+UP_CAST_TABLE[str][int] = str
+UP_CAST_TABLE[str][str] = str
+UP_CAST_TABLE[str][float] = str
+
+UP_CAST_TABLE[float] = {}
+UP_CAST_TABLE[float][int] = float
+UP_CAST_TABLE[float][str] = str
+UP_CAST_TABLE[float][float] = float
+
+
 def up_cast(old_type, new_type):
-    if old_type == new_type:
-        return old_type
-    if (old_type == int and new_type == float) or (old_type == float or new_type == int):
-        return float
-    raise UpCastingError
+    try:
+        return UP_CAST_TABLE[old_type][new_type]
+    except KeyError:
+        raise UpCastingError
 
 
 def is_float(text):
@@ -155,7 +171,7 @@ def type_predictor(fmt: SimpleFormat, samples: List[Sample]) -> Dict[str, type]:
                 res_type_dict,
                 predictor.get_typing_result())
         except (
-            TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError, UpCastingError,
+                TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError, UpCastingError,
                 InvalidLoopIndexError):
             raise TypePredictionFailedError
 
