@@ -33,9 +33,9 @@ class TestAtCoderClient(unittest.TestCase):
 
     def test_login_failed(self):
         try:
-            self.client.login(
-                username="@@@ invalid user name @@@",
-                password="@@@@@@@")
+            self.client.login(username="@@@ invalid user name @@@",
+                              password="@@@ password @@@",
+                              use_local_session_cache=False)
             self.fail("Unexpectedly, this test succeeded to login.")
         except LoginError:
             pass
@@ -50,6 +50,10 @@ class TestAtCoderClient(unittest.TestCase):
         self.assertEqual(
             len(set([c.get_id() for c in contests])),
             len(contests))
+
+    def test_check_logging_in(self):
+        #self.client.login()
+        self.assertFalse(self.client.check_logging_in())
 
 
 if __name__ == "__main__":

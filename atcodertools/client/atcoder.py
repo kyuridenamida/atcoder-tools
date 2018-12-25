@@ -1,10 +1,13 @@
 import getpass
-import http.cookiejar
+import logging
+import os
 import re
-import urllib.request
+from http.cookiejar import LWPCookieJar
 from typing import List
 
+import requests
 from bs4 import BeautifulSoup
+from sympy.core.singleton import Singleton
 
 from atcodertools.models.contest import Contest
 from atcodertools.models.problem import Problem
@@ -15,34 +18,59 @@ class LoginError(Exception):
     pass
 
 
-class AtCoderClient:
+cookie_path = os.path.join(os.path.expanduser('~/.local/share'), 'atcoder-tools', 'cookie.txt')
 
+
+def save_cookie(session: requests.Session):
+    if os.path.dirname(cookie_path):
+        os.makedirs(os.path.dirname(cookie_path), exist_ok=True)
+    session.cookies.save()
+    os.chmod(cookie_path, 0o600)
+
+
+def load_cookie_to(session: requests.Session):
+    session.cookies = LWPCookieJar(cookie_path)
+    if os.path.exists(cookie_path):
+        session.cookies.load()
+
+
+class AtCoderClient(metaclass=Singleton):
     def __init__(self):
-        self.cj = http.cookiejar.CookieJar()
-        self.opener = urllib.request.build_opener(
-            urllib.request.HTTPCookieProcessor(self.cj))
+        self._session = requests.Session()
 
-    def login(self, username=None, password=None):
+    def check_logging_in(self):
+        private_url = "https://arc001.contest.atcoder.jp/settings"
+        resp = self._request(private_url)
+        return resp.url == private_url
+
+    def login(self, username=None, password=None, use_local_session_cache=True):
+        if use_local_session_cache:
+            load_cookie_to(self._session)
+            if self.check_logging_in():
+                logging.info("Successfully Logged in using the previous session cache.")
+                logging.info("If you'd like to invalidate the cache, delete {}.".format(cookie_path))
+
+                return
+
         if username is None:
             username = input('AtCoder username: ')
 
         if password is None:
             password = getpass.getpass('AtCoder password: ')
 
-        postdata = {
+        resp = self._request("https://arc001.contest.atcoder.jp/login", data={
             'name': username,
-            'password': password
-        }
-        encoded_postdata = urllib.parse.urlencode(postdata).encode('utf-8')
-        resp = self.opener.open(
-            "https://arc001.contest.atcoder.jp/login", encoded_postdata)
-        html = resp.read().decode('utf-8')
-        if html.find("パスワードを忘れた方はこちら") != -1:
+            "password": password
+        }, method='POST')
+
+        if resp.text.find("パスワードを忘れた方はこちら") != -1:
             raise LoginError
 
+        save_cookie(self._session)
+
     def download_problem_list(self, contest: Contest) -> List[Problem]:
-        resp = self.opener.open(contest.get_problem_list_url())
-        soup = BeautifulSoup(resp, "html.parser")
+        resp = self._request(contest.get_problem_list_url())
+        soup = BeautifulSoup(resp.text, "html.parser")
         res = []
         for tag in soup.select('.linkwrapper')[0::2]:
             alphabet = tag.text
@@ -51,9 +79,10 @@ class AtCoderClient:
         return res
 
     def download_problem_content(self, problem: Problem) -> ProblemContent:
-        resp = self.opener.open(problem.get_url())
+        resp = self._request(problem.get_url())
+
         try:
-            return ProblemContent.from_response(resp)
+            return ProblemContent.from_html(resp.text)
         except (InputFormatDetectionError, SampleDetectionError) as e:
             raise e
 
@@ -62,9 +91,8 @@ class AtCoderClient:
         previous_list = []
         page_num = 1
         while True:
-            resp = self.opener.open(
-                "https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
-            soup = BeautifulSoup(resp, "html.parser")
+            resp = self._request("https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
+            soup = BeautifulSoup(resp.text, "html.parser")
             text = str(soup)
             url_re = re.compile(
                 r'"/contests/([A-Za-z0-9\'~+\-_]+)"')
@@ -83,8 +111,8 @@ class AtCoderClient:
         return [Contest(contest_id) for contest_id in contest_ids]
 
     def submit_source_code(self, contest: Contest, problem: Problem, lang, source):
-        resp = self.opener.open(contest.submission_url())
-        soup = BeautifulSoup(resp, "html.parser")
+        resp = self._request(contest.submission_url())
+        soup = BeautifulSoup(resp.text, "html.parser")
         session_id = soup.find("input", attrs={"type": "hidden"}).get("value")
         task_select_area = soup.find(
             'select', attrs={"id": "submit-task-selector"})
@@ -103,7 +131,17 @@ class AtCoderClient:
             language_field_name: language_number,
             "source_code": source
         }
-        encoded_postdata = urllib.parse.urlencode(postdata).encode('utf-8')
-        self.opener.open(
+        self._request(
             contest.get_url(),
-            encoded_postdata)  # Sending POST request
+            data=postdata,
+            method='POST')
+
+    def _request(self, url: str, method='GET', **kwargs):
+        if method == 'GET':
+            response = self._session.get(url, **kwargs)
+        elif method == 'POST':
+            response = self._session.post(url, **kwargs)
+        else:
+            raise NotImplementedError
+        response.encoding = response.apparent_encoding
+        return response

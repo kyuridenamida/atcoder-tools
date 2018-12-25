@@ -21,7 +21,11 @@ import logging
 script_dir_path = os.path.dirname(os.path.abspath(__file__))
 
 fmt = "%(asctime)s %(levelname)s: %(message)s"
-logging.basicConfig(level=logging.DEBUG, format=fmt)
+logging.basicConfig(level=logging.INFO, format=fmt)
+
+
+class BannedFileDetectedError(Exception):
+    pass
 
 
 def extension(lang: str):
@@ -228,17 +232,14 @@ def main(prog, args):
 
     try:
         import AccountInformation
+        raise BannedFileDetectedError("We abolished the logic with AccountInformation.py. Please delete the file.")
     except ImportError:
-        class AccountInformation:
-            username = None
-            password = None
+        pass
 
     client = AtCoderClient()
     if not args.without_login:
         try:
-            client.login(
-                AccountInformation.username,
-                AccountInformation.password)
+            client.login()
             logging.info("Login successful.")
         except LoginError:
             logging.error(
