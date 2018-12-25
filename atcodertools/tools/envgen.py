@@ -115,6 +115,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         else:
             msg = "Too many prediction -- Failed to understand the input format"
 
+        os.makedirs(os.path.dirname(code_file_path), exist_ok=True)
         shutil.copy(replacement_code_path, code_file_path)
         emit_warning(
             "{} -- Copied {} to {}".format(
