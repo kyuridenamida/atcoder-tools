@@ -229,6 +229,11 @@ def main(prog, args):
                         help="Prepare problem directories one by one not using multi processors.",
                         default=False)
 
+    parser.add_argument("--save-no-session-cache",
+                        action="store_true",
+                        help="Save no session cache to avoid security risk",
+                        default=False)
+
     args = parser.parse_args(args)
 
     try:
@@ -241,7 +246,7 @@ def main(prog, args):
     client = AtCoderClient()
     if not args.without_login:
         try:
-            client.login()
+            client.login(save_session_cache=not args.save_no_session_cache)
             logging.info("Login successful.")
         except LoginError:
             logging.error(

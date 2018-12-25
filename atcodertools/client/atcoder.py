@@ -25,6 +25,7 @@ def save_cookie(session: requests.Session, cookie_path: Optional[str] = None):
     cookie_path = cookie_path or default_cookie_path
     os.makedirs(os.path.dirname(cookie_path), exist_ok=True)
     session.cookies.save()
+    logging.info("Saved session into {}".format(os.path.abspath(cookie_path)))
     os.chmod(cookie_path, 0o600)
 
 
@@ -33,6 +34,7 @@ def load_cookie_to(session: requests.Session, cookie_path: Optional[str] = None)
     session.cookies = LWPCookieJar(cookie_path)
     if os.path.exists(cookie_path):
         session.cookies.load()
+        logging.info("Loaded session from {}".format(os.path.abspath(cookie_path)))
         return True
     return False
 
@@ -57,7 +59,7 @@ class AtCoderClient(metaclass=Singleton):
         resp = self._request(private_url)
         return resp.url == private_url
 
-    def login(self, username=None, password=None, use_local_session_cache=True):
+    def login(self, username=None, password=None, use_local_session_cache=True, save_session_cache=True):
         if use_local_session_cache:
             load_cookie_to(self._session)
             if self.check_logging_in():
@@ -82,7 +84,7 @@ class AtCoderClient(metaclass=Singleton):
         if resp.text.find("パスワードを忘れた方はこちら") != -1:
             raise LoginError
 
-        if use_local_session_cache:
+        if use_local_session_cache and save_session_cache:
             save_cookie(self._session)
 
     def download_problem_list(self, contest: Contest) -> List[Problem]:
