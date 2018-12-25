@@ -73,7 +73,8 @@ class AtCoderClient(metaclass=Singleton):
         if resp.text.find("パスワードを忘れた方はこちら") != -1:
             raise LoginError
 
-        save_cookie(self._session)
+        if use_local_session_cache:
+            save_cookie(self._session)
 
     def download_problem_list(self, contest: Contest) -> List[Problem]:
         resp = self._request(contest.get_problem_list_url())
