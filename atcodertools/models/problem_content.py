@@ -41,9 +41,9 @@ class ProblemContent:
         self.input_format_text = input_format_text
 
     @classmethod
-    def from_response(cls, response=None):
+    def from_html(cls, html: str = None):
         res = ProblemContent()
-        soup = BeautifulSoup(response, "html.parser")
+        soup = BeautifulSoup(html, "html.parser")
         res.input_format_text, res.samples = res._extract_input_format_and_samples(
             soup)
         return res
@@ -88,11 +88,10 @@ class ProblemContent:
             raise InputFormatDetectionError
 
         input_format_text = normalize(input_format_tag.text)
-
         return input_format_text, res
 
     @staticmethod
-    def _primary_strategy(soup):  # TODO: more descriptive name
+    def _primary_strategy(soup):
         input_tags = []
         output_tags = []
         input_format_tag = None
