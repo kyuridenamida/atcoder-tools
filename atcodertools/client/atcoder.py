@@ -34,7 +34,8 @@ def load_cookie_to(session: requests.Session, cookie_path: Optional[str] = None)
     session.cookies = LWPCookieJar(cookie_path)
     if os.path.exists(cookie_path):
         session.cookies.load()
-        logging.info("Loaded session from {}".format(os.path.abspath(cookie_path)))
+        logging.info(
+            "Loaded session from {}".format(os.path.abspath(cookie_path)))
         return True
     return False
 
