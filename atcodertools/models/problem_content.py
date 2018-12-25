@@ -41,7 +41,7 @@ class ProblemContent:
         self.input_format_text = input_format_text
 
     @classmethod
-    def from_html(cls, html: str=None):
+    def from_html(cls, html: str = None):
         res = ProblemContent()
         soup = BeautifulSoup(html, "html.parser")
         res.input_format_text, res.samples = res._extract_input_format_and_samples(
