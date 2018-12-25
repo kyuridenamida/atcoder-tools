@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict, Any
+from typing import List, Dict
 
 from atcodertools.models.sample import Sample
 from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
