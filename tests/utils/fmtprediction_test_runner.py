@@ -1,7 +1,8 @@
 import os
 from typing import Optional
 
-from atcodertools.fmtprediction.predict_format import FormatPredictor, MultiplePredictionResultsError, NoPredictionResultError
+from atcodertools.fmtprediction.predict_format import FormatPredictor, MultiplePredictionResultsError, \
+    NoPredictionResultError
 from atcodertools.models.problem_content import ProblemContent
 from atcodertools.models.sample import Sample
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
@@ -28,7 +29,7 @@ class FormatPredictionTestRunner:
     def is_valid_case(self, case_name):
         return os.path.isdir(self._get_test_case_dir(case_name))
 
-    def run(self, case_name: str) -> Response:
+    def load_problem_content(self, case_name: str) -> ProblemContent:
         case_dir = self._get_test_case_dir(case_name)
         format_file = os.path.join(case_dir, FORMAT_FILE_NAME)
         example_files = [os.path.join(case_dir, file)
@@ -41,10 +42,14 @@ class FormatPredictionTestRunner:
         for ex_file in example_files:
             with open(ex_file, 'r') as f:
                 examples.append(Sample(f.read(), None))
-        problem_content = ProblemContent(input_format, examples)
+
+        return ProblemContent(input_format, examples)
+
+    def run(self, case_name: str) -> Response:
+        content = self.load_problem_content(case_name)
 
         try:
-            result = FormatPredictor.predict(problem_content)
+            result = FormatPredictor.predict(content)
             return Response(result, "OK")
         except MultiplePredictionResultsError:
             return Response(None, "Multiple results")
