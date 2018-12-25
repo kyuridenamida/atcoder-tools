@@ -22,14 +22,14 @@ default_cookie_path = os.path.join(
     os.path.expanduser('~/.local/share'), 'atcoder-tools', 'cookie.txt')
 
 
-def save_cookie(session: requests.Session, cookie_path: Optional[str]):
+def save_cookie(session: requests.Session, cookie_path: Optional[str] = None):
     cookie_path = cookie_path or default_cookie_path
     os.makedirs(os.path.dirname(cookie_path), exist_ok=True)
     session.cookies.save()
     os.chmod(cookie_path, 0o600)
 
 
-def load_cookie_to(session: requests.Session, cookie_path: Optional[str]):
+def load_cookie_to(session: requests.Session, cookie_path: Optional[str] = None):
     cookie_path = cookie_path or default_cookie_path
     session.cookies = LWPCookieJar(cookie_path)
     if os.path.exists(cookie_path):
