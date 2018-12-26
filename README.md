@@ -12,23 +12,11 @@ Python 3.5 で動作する [AtCoder](http://atcoder.jp/) からサンプル入�
 - 解析結果を用いたテンプレートコードの自動生成(C++, Java)
     - 他言語対応のためのコントリビューション(≒中間形式からコードに変換する部分のPR)を募集中です!
 
-## History
-
-|  日付  |  ログ  |
-| ---- | ---- |
-|  2018-12-26  | pip でインストールできるようになった。|
-|  2018-12-25  | 長らく触っておらずメンテナンスが困難になってしまったので、下位互換性のない大規模コードベース変更を実施した。(すみません!) |
-|  2018-12-03  | ToolsForAtCoder は atcoder-tools に名前を変更した。 |
-|  2016-04-01  | 最初のバージョンをリリースした。 |
-
 ## How to install
 `pip3 install atcoder-tools`
 
 ## Demo
-※最初期のデモなので今とインターフェイスが異なります
-
-[Video demo for 'Tools For AtCoder'](https://youtu.be/Ee3EWs_xHG8)
-
+[![asciicast](https://asciinema.org/a/JG18AGOE2Vw7Tsa3QTM7Y2XX5.svg)](https://asciinema.org/a/JG18AGOE2Vw7Tsa3QTM7Y2XX5)
 
 ## Usage
 
