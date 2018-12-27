@@ -53,7 +53,8 @@ def infer_exec_file(filenames):
     exec_file = exec_files[0]
     if len(exec_files) >= 2:
         logging.warning("{0}  {1}".format(
-            "There're multiple executable files. '{exec_file}' is selected.".format(exec_file=exec_file),
+            "There're multiple executable files. '{exec_file}' is selected.".format(
+                exec_file=exec_file),
             "The candidates were {exec_files}.".format(exec_files=exec_files)))
     return exec_file
 
@@ -132,7 +133,8 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
         # Output details for incorrect results.
         if not is_correct:
-            print('{}\n'.format(build_details_str(exec_res, in_sample_file, out_sample_file)))
+            print('{}\n'.format(build_details_str(
+                exec_res, in_sample_file, out_sample_file)))
             if knock_out:
                 print('Stop testing ...')
                 break
