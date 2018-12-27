@@ -44,7 +44,7 @@ def _divide_consecutive_vars(text):
 
 def _sanitized_tokens(input_format: str) -> List[str]:
     input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
-        "..", " ").replace("\ ", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
+        "..", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
     input_format = _divide_consecutive_vars(input_format)
     input_format = _normalize_index(input_format)
     input_format = input_format.replace("{", "").replace("}", "")

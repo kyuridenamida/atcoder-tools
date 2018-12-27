@@ -1,21 +1,15 @@
-import os
-import tempfile
 import unittest
-
-import requests
-
-from atcodertools.client.atcoder import AtCoderClient, LoginError, save_cookie, load_cookie_to
 from atcodertools.fmtprediction.calculator import parse_to_calc_node, EvaluateError
-from atcodertools.models.contest import Contest
-from atcodertools.models.problem import Problem
 
 
 class TestCalculator(unittest.TestCase):
     def test_parse_to_calc_node(self):
-        self.assertEqual("N-(1-1)+1000*N*(N+1)", str(parse_to_calc_node("N-(1-1)+1000*N*(N+1)")))
+        self.assertEqual("N-(1-1)+1000*N*(N+1)",
+                         str(parse_to_calc_node("N-(1-1)+1000*N*(N+1)")))
 
     def test_evaluate(self):
-        self.assertEqual(1000, parse_to_calc_node("N*(1+99)*(N-(1/N))/N").evaluate({"N": 10}))
+        self.assertEqual(1000, parse_to_calc_node(
+            "N*(1+99)*(N-(1/N))/N").evaluate({"N": 10}))
 
         # Expect an error for the invalid input
         try:
@@ -26,7 +20,8 @@ class TestCalculator(unittest.TestCase):
 
     def test_simplify(self):
         self.assertEqual("2*N", str(parse_to_calc_node("2*N-1+1").simplify()))
-        self.assertEqual("2*N", str(parse_to_calc_node("2*N-1+1-1+1-0").simplify()))
+        self.assertEqual(
+            "2*N", str(parse_to_calc_node("2*N-1+1-1+1-0").simplify()))
 
 
 if __name__ == "__main__":

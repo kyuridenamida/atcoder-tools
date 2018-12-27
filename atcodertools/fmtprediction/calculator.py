@@ -131,7 +131,8 @@ class CalcNode:
             return int(self.content)
         else:
             if self.content not in variables:
-                raise EvaluateError("Found an unknown variable '{}'".format(self.content))
+                raise EvaluateError(
+                    "Found an unknown variable '{}'".format(self.content))
             else:
                 return variables[self.content]
 
@@ -151,14 +152,13 @@ class CalcNode:
 
     def to_string_strictly(self):
         if self.is_operator_node():
-            return "({l}{op}{r})".format(
-                l=self.lch.to_string_strictly(),
+            return "({lch}{op}{rch})".format(
+                lch=self.lch.to_string_strictly(),
                 op=_operator_to_string(self.operator),
-                r=self.rch.to_string_strictly()
+                rch=self.rch.to_string_strictly()
             )
         else:
             return str(self.content)
-
 
 
 def _parse(formula: str):
