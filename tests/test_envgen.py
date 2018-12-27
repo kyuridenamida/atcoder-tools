@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 import tempfile
@@ -5,7 +6,7 @@ import unittest
 from os.path import relpath
 
 from atcodertools.client.atcoder import AtCoderClient
-from atcodertools.tools.envgen import prepare_workspace
+from atcodertools.tools.envgen import prepare_workspace, main
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -29,20 +30,22 @@ class TestEnvGen(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
-        print(self.temp_dir)
+        logging.debug(self.temp_dir)
 
     def test_prepare_workspace(self):
         answer_data_dir_path = os.path.join(
             RESOURCE_DIR,
             "test_prepare_workspace")
-        prepare_workspace(
-            AtCoderClient(),
-            "agc029",
-            self.temp_dir,
-            TEMPLATE_PATH,
-            REPLACEMENT_PATH,
-            "cpp",
-            False)
+        main(
+            "",
+            ["agc029",
+             "--workspace", self.temp_dir,
+             "--template", TEMPLATE_PATH,
+             "--replacement", REPLACEMENT_PATH,
+             "--lang", "cpp",
+             "--without-login"
+             ]
+        )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
     def test_backup(self):

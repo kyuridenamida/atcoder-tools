@@ -1,36 +1,41 @@
 #!/usr/bin/python3
-
+import argparse
+import logging
 import sys
 import os
 import glob
 import subprocess
+import time
+from enum import Enum
 from pathlib import Path
-
-
-def print_e(*text, end='\n'):
-    print(*text, end=end, file=sys.stderr)
-
-
-FAIL = ''
-OKGREEN = ''
-OKBLUE = ''
-ENDC = ''
+from typing import List, Tuple
 
 
 class NoExecutableFileError(Exception):
     pass
 
 
-class IrregularInOutFileError(Exception):
+class IrregularSampleFileError(Exception):
     pass
 
 
-class NoCppFileError(Exception):
-    pass
+class ExecStatus(Enum):
+    NORMAL = "NORMAL"
+    TLE = "TLE"
+    RE = "RE"
 
 
-class MultipleCppFilesError(Exception):
-    pass
+class ExecResult:
+    def __init__(self, status: ExecStatus, output: str = None, elapsed_sec: float = None):
+        self.status = status
+        self.output = output
+        if elapsed_sec is not None:
+            self.elapsed_ms = int(elapsed_sec * 1000 + 0.5)
+        else:
+            self.elapsed_ms = None
+
+    def is_correct_output(self, answer_text):
+        return answer_text == self.output
 
 
 def is_executable_file(file_name):
@@ -38,74 +43,208 @@ def is_executable_file(file_name):
         and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
-def do_test(exec_file=None):
-    exec_files = [
-        fname for fname in glob.glob(
-            './*') if is_executable_file(
-            fname)]
-    if exec_file is None:
-        if len(exec_files) == 0:
-            raise NoExecutableFileError
-        exec_file = exec_files[0]
-        if len(exec_files) >= 2:
-            print_e("WARNING: There're multiple executable files. This time, '%s' is selected." %
-                    exec_file, "candidates =", exec_files)
+def infer_exec_file(filenames):
+    exec_files = [name for name in sorted(
+        filenames) if is_executable_file(name)]
 
-    infiles = sorted(glob.glob('./in_*.txt'))
-    outfiles = sorted(glob.glob('./out_*.txt'))
+    if len(exec_files) == 0:
+        raise NoExecutableFileError
 
-    success = 0
-    total = 0
+    exec_file = exec_files[0]
+    if len(exec_files) >= 2:
+        logging.warning("{0}  {1}".format(
+            "There're multiple executable files. '{exec_file}' is selected.".format(
+                exec_file=exec_file),
+            "The candidates were {exec_files}.".format(exec_files=exec_files)))
+    return exec_file
 
-    for infile, outfile in zip(infiles, outfiles):
-        if os.path.basename(infile)[2:] != os.path.basename(outfile)[3:]:
-            print_e("The output for '%s' is not '%s'!!!" % (infile, outfile))
-            raise IrregularInOutFileError
-        with open(infile, "r") as inf, open(outfile, "r") as ouf:
-            ans_data = ouf.read()
-            out_data = ""
-            status = "WA"
-            try:
-                out_data = subprocess.check_output(
-                    [exec_file, ""], stdin=inf, universal_newlines=True, timeout=1)
-            except subprocess.TimeoutExpired:
-                status = "TLE(1s)"
-            except subprocess.CalledProcessError:
-                status = "RE"
 
-            if out_data == ans_data:
-                status = "PASSED"
-                print_e("# %s ... %s" % (os.path.basename(infile),
-                                         "%s%s%s" % (OKGREEN, status, ENDC)))
-                success += 1
-            else:
-                print_e("# %s ... %s" % (os.path.basename(infile),
-                                         "%s%s%s" % (FAIL, status, ENDC)))
-                print_e("[Input]")
-                with open(infile, "r") as inf2:
-                    print_e(inf2.read(), end='')
-                print_e("[Expected]")
-                print_e("%s%s%s" %
-                        (OKBLUE, ans_data, ENDC), end='')
-                print_e("[Received]")
-                print_e("%s%s%s" %
-                        (FAIL, out_data, ENDC), end='')
-                print_e()
-        total += 1
+def infer_case_num(sample_filename: str):
+    result = ""
+    for c in sample_filename:
+        if c.isdigit():
+            result += c
+    return int(result)
 
-    success_flag = False
-    if total == 0:
-        print_e("No test cases")
-    elif success != total:
-        print_e("Some cases FAILED (passed %s of %s)" % (success, total))
+
+def run_program(exec_file: str, input_file: str, timeout_sec: int) -> ExecResult:
+    try:
+        elapsed_sec = -time.time()
+        out_data = subprocess.check_output(
+            [exec_file, ""], stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec)
+        elapsed_sec += time.time()
+        return ExecResult(ExecStatus.NORMAL, out_data, elapsed_sec)
+    except subprocess.TimeoutExpired:
+        return ExecResult(ExecStatus.TLE)
+    except subprocess.CalledProcessError:
+        return ExecResult(ExecStatus.RE)
+
+
+def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -> str:
+    res = ""
+
+    def append(text: str, end='\n'):
+        nonlocal res
+        res += text + end
+
+    append("[Input]")
+    with open(input_file, "r") as f:
+        append(f.read(), end='')
+
+    append("[Expected]")
+    with open(output_file, "r") as f:
+        append(f.read(), end='')
+
+    if exec_res.status == ExecStatus.NORMAL:
+        append("[Received]")
+        if exec_res.status == ExecStatus.NORMAL:
+            append(exec_res.output, end='')
     else:
-        print_e("Passed all testcases!!!")
-        success_flag = True
-    return success_flag
+        append("[Log]")
+        append(exec_res.status.name)
+    return res
+
+
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, knock_out: bool = False):
+    success_count = 0
+    for in_sample_file, out_sample_file in sample_pair_list:
+        # Run program
+        exec_res = run_program(exec_file, in_sample_file,
+                               timeout_sec=timeout_sec)
+
+        # Output header
+        with open(out_sample_file, 'r') as f:
+            answer_text = f.read()
+
+        is_correct = exec_res.is_correct_output(answer_text)
+        if is_correct:
+            message = "PASSED {elapsed} ms".format(elapsed=exec_res.elapsed_ms)
+            success_count += 1
+        else:
+            if exec_res.status == ExecStatus.NORMAL:
+                message = "WA"
+            else:
+                message = exec_res.status.name
+
+        print("# {case_name} ... {message}".format(
+            case_name=os.path.basename(in_sample_file),
+            message=message,
+        ))
+
+        # Output details for incorrect results.
+        if not is_correct:
+            print('{}\n'.format(build_details_str(
+                exec_res, in_sample_file, out_sample_file)))
+            if knock_out:
+                print('Stop testing ...')
+                break
+    return success_count
+
+
+def validate_sample_pair(in_sample_file, out_sample_file):
+    if os.path.basename(in_sample_file).split("_")[-1] != os.path.basename(out_sample_file).split("_")[-1]:
+        logging.error(
+            'The file combination of {} and {} is wrong.'.format(
+                in_sample_file,
+                out_sample_file
+            ))
+        raise IrregularSampleFileError
+
+
+def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int) -> bool:
+    def single_or_none(lst: List):
+        if len(lst) == 1:
+            return lst[0]
+        if len(lst) == 0:
+            return None
+        raise IrregularSampleFileError(
+            "Multiple samples are detected for given case num: {}".format(lst))
+
+    in_sample_file = single_or_none(
+        [name for name in in_sample_file_list if infer_case_num(name) == case_num])
+    out_sample_file = single_or_none(
+        [name for name in out_sample_file_list if infer_case_num(name) == case_num])
+
+    if in_sample_file is None or out_sample_file is None:
+        print("Invalid test case number: {}".format(case_num))
+        return False
+
+    validate_sample_pair(in_sample_file, out_sample_file)
+
+    success_count = run_for_samples(
+        exec_file, [(in_sample_file, out_sample_file)], timeout_sec)
+
+    return success_count == 1
+
+
+def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool) -> bool:
+    if len(in_sample_file_list) != len(out_sample_file_list):
+        logging.error("{0}{1}{2}".format(
+            "The number of the sample inputs and outputs are different.\n",
+            "# of sample inputs: {}\n".format(len(in_sample_file_list)),
+            "# of sample outputs: {}\n".format(len(out_sample_file_list))))
+        raise IrregularSampleFileError
+    samples = []
+    for in_sample_file, out_sample_file in zip(in_sample_file_list, out_sample_file_list):
+        validate_sample_pair(in_sample_file, out_sample_file)
+        samples.append((in_sample_file, out_sample_file))
+
+    success_count = run_for_samples(exec_file, samples, timeout_sec, knock_out)
+
+    if len(samples) == 0:
+        print("No test cases")
+        return False
+    elif success_count != len(samples):
+        print("Some cases FAILED (passed {success_count} of {total})".format(
+            success_count=success_count,
+            total=len(samples),
+        ))
+        return False
+    else:
+        print("Passed all test cases!!!")
+        return True
+
+
+def main(prog, args) -> bool:
+    parser = argparse.ArgumentParser(
+        prog=prog,
+        formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.add_argument("--exec", '-e',
+                        help="file path to the execution target. Automatically detects an exec file if not specified.",
+                        default=None)
+
+    parser.add_argument("--num", '-n',
+                        help="the case number to test (1-origin). All cases are tested if not specified.",
+                        type=int,
+                        default=None)
+
+    parser.add_argument("--dir", '-d',
+                        help="target directory to test. [Default] Current directory",
+                        default=".")
+
+    parser.add_argument("--timeout", '-t',
+                        help="Timeout for each test cases (sec) [Default] 1",
+                        type=int,
+                        default=1)
+
+    parser.add_argument("--knock-out", '-k',
+                        help="Stop execution immediately after any example's failure [Default] False",
+                        action="store_true",
+                        default=False)
+
+    args = parser.parse_args(args)
+    exec_file = args.exec or infer_exec_file(
+        glob.glob(os.path.join(args.dir, '*')))
+    in_sample_file_list = sorted(glob.glob(os.path.join(args.dir, 'in_*.txt')))
+    out_sample_file_list = sorted(
+        glob.glob(os.path.join(args.dir, 'out_*.txt')))
+
+    if args.num is None:
+        return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out)
+    else:
+        return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num)
 
 
 if __name__ == "__main__":
-    if do_test():
-        sys.exit(0)
-    else:
-        sys.exit(-1)
+    main(sys.argv[0], sys.argv[1:])

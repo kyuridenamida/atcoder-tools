@@ -2,7 +2,7 @@
 import sys
 
 from atcodertools.tools.envgen import main as envgen_main
-from atcodertools.tools.tester import do_test
+from atcodertools.tools.tester import main as tester_main
 
 if __name__ == '__main__':
     if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test"):
@@ -18,4 +18,4 @@ if __name__ == '__main__':
         envgen_main(prog, args)
 
     if sys.argv[1] == "test":
-        do_test()
+        sys.exit(tester_main(prog, args))
