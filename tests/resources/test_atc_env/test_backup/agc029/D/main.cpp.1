@@ -12,9 +12,9 @@ int main(){
     scanf("%lld",&W);
     long long N;
     scanf("%lld",&N);
-    vector<long long> X(N-1+1);
-    vector<long long> Y(N-1+1);
-    for(int i = 0 ; i <= N-1 ; i++){
+    vector<long long> X(N);
+    vector<long long> Y(N);
+    for(int i = 0 ; i < N ; i++){
         scanf("%lld",&X[i]);
         scanf("%lld",&Y[i]);
     }
