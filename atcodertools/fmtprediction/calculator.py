@@ -1,3 +1,8 @@
+import itertools
+import re
+from typing import Dict
+
+
 class CalcParseError(Exception):
     pass
 
@@ -43,7 +48,7 @@ class CalcNode:
 
     def __init__(self, formula=None):
         if formula:
-            root = parse_to_calc_node(formula)
+            root = _parse(formula)
             self.content = root.content
             self.lch = root.lch
             self.rch = root.rch
@@ -70,29 +75,52 @@ class CalcNode:
         return not self.__eq__(other)
 
     def __str__(self, depth=0):
-        if self.operator is not None:
-            lv = self.lch.__str__(depth=depth + 1)
-            rv = self.rch.__str__(depth=depth + 1)
-            res = "%s%s%s" % (lv, _operator_to_string(self.operator), rv)
-            if depth > 0 and (self.operator == add or self.operator == sub):
-                res = "(%s)" % res
-            return res
-        elif isinstance(self.content, int):
-            return str(self.content)
-        else:
-            return self.content
+        opens = []  # Position list of open brackets
+        cands = []
+        original_formula = self.to_string_strictly()
+        for i, c in enumerate(original_formula):
+            if c == '(':
+                opens.append(i)
+            elif c == ')':
+                assert len(opens) > 0
+                cands.append((opens[-1], i))
+                opens.pop()
+        pass
+
+        values_for_identity_check = [3, 14, 15, 92]
+
+        def likely_identical(formula: str):
+            node = CalcNode(formula)
+            vars = node.get_all_variables()
+            for combination in itertools.product(values_for_identity_check, repeat=len(vars)):
+                val_dict = dict(zip(vars, list(combination)))
+                if self.evaluate(val_dict) != node.evaluate(val_dict):
+                    return False
+            return True
+
+        # Remove parentheses greedy
+        res_formula = list(original_formula)
+        for op, cl in cands:
+            tmp = res_formula.copy()
+            tmp[op] = ''
+            tmp[cl] = ''
+            if likely_identical("".join(tmp)):
+                res_formula = tmp
+        simplified_form = "".join(res_formula)
+
+        return simplified_form
 
     def get_all_variables(self):
-        if self.operator is not None:
+        if self.is_operator_node():
             lv = self.lch.get_all_variables()
             rv = self.rch.get_all_variables()
             return lv + rv
-        elif isinstance(self.content, int):
+        elif self.is_constant_node():
             return []
         else:
             return [self.content]
 
-    def evaluate(self, variables=None):
+    def evaluate(self, variables: Dict[str, int] = None):
         if variables is None:
             variables = {}
         if self.is_operator_node():
@@ -103,9 +131,41 @@ class CalcNode:
             return int(self.content)
         else:
             if self.content not in variables:
-                raise EvaluateError
+                raise EvaluateError(
+                    "Found an unknown variable '{}'".format(self.content))
             else:
                 return variables[self.content]
+
+    def simplify(self):
+        current_formula = str(self)
+
+        # Really stupid heuristics but covers the major case.
+        while True:
+            next_formula = re.sub(r"-1\+1$", "", current_formula)
+            next_formula = re.sub(r"\+0$", "", next_formula)
+            next_formula = re.sub(r"-0$", "", next_formula)
+            if next_formula == current_formula:
+                break
+            current_formula = next_formula
+
+        return CalcNode(current_formula)
+
+    def to_string_strictly(self):
+        if self.is_operator_node():
+            return "({lch}{op}{rch})".format(
+                lch=self.lch.to_string_strictly(),
+                op=_operator_to_string(self.operator),
+                rch=self.rch.to_string_strictly()
+            )
+        else:
+            return str(self.content)
+
+
+def _parse(formula: str):
+    res, pos = _expr(formula + "$", 0)  # $ is put as a terminal character
+    if pos != len(formula):
+        raise CalcParseError
+    return res
 
 
 def _expr(formula, pos):
@@ -179,19 +239,5 @@ def _factor(formula, pos):
         raise CalcParseError
 
 
-def parse_to_calc_node(formula):
-    """
-            入力
-                    formula # str : 式
-            出力
-                    #CalcNode : 構文木の根ノード
-
-    """
-    res, pos = _expr(formula + "$", 0)  # $は使わないことにする
-    if pos != len(formula):
-        raise CalcParseError
-    return res
-
-
-if __name__ == '__main__':
-    print(CalcNode("N-1-1+1000*N*N").evaluate({"N": 10}))
+def parse_to_calc_node(formula: str) -> CalcNode:
+    return CalcNode(formula)

@@ -12,13 +12,13 @@ int main(){
     scanf("%lld",&N);
     long long M;
     scanf("%lld",&M);
-    vector<long double> K(L-1+1);
-    for(int i = 0 ; i <= L-1 ; i++){
+    vector<long double> K(L);
+    for(int i = 0 ; i < L ; i++){
         scanf("%Lf",&K[i]);
     }
-    vector<long long> A(N-1+1);
-    vector<long double> S(N-1+1);
-    for(int i = 0 ; i <= N-1 ; i++){
+    vector<long long> A(N);
+    vector<long double> S(N);
+    for(int i = 0 ; i < N ; i++){
         scanf("%lld",&A[i]);
         scanf("%Lf",&S[i]);
     }

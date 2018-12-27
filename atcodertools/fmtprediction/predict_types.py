@@ -70,11 +70,11 @@ def up_cast(old_type, new_type):
 
 
 def is_float(text):
-    return re.match("-?\d+\.\d+$", text) is not None
+    return re.match(r"-?\d+\.\d+$", text) is not None
 
 
 def is_int(text):
-    return re.match("-?\d+$", text) is not None
+    return re.match(r"-?\d+$", text) is not None
 
 
 def _convert_to_proper_type(value: str):

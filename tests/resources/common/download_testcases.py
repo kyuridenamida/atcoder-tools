@@ -41,14 +41,14 @@ if __name__ == "__main__":
                 for idx, sample in enumerate(content.get_samples()):
                     with open("{}/ex_{}.txt".format(path, idx + 1), "w") as f:
                         f.write(sample.get_input())
-            except SampleDetectionError as e:
+            except SampleDetectionError:
                 print(
                     "failed to parse samples for {} {} -- skipping download".format(contest.get_id(),
                                                                                     problem.get_alphabet()))
-            except InputFormatDetectionError as e:
+            except InputFormatDetectionError:
                 print(
                     "failed to parse input for {} {} -- skipping download".format(contest.get_id(),
                                                                                   problem.get_alphabet()))
-            except Exception as e:
+            except Exception:
                 print("unknown error for {} {} -- skipping download".format(
                     contest.get_id(), problem.get_alphabet()))

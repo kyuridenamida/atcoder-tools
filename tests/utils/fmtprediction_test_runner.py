@@ -35,12 +35,12 @@ class FormatPredictionTestRunner:
         example_files = [os.path.join(case_dir, file)
                          for file in os.listdir(case_dir) if file != FORMAT_FILE_NAME]
 
-        with open(format_file, 'r') as f:
+        with open(format_file, 'r', encoding="utf-8") as f:
             input_format = f.read()
 
         examples = []
         for ex_file in example_files:
-            with open(ex_file, 'r') as f:
+            with open(ex_file, 'r', encoding="utf-8") as f:
                 examples.append(Sample(f.read(), None))
 
         return ProblemContent(input_format, examples)

@@ -14,10 +14,9 @@ def _loop_header(var: Variable, for_second_index: bool):
         index = var.get_first_index()
         loop_var = "i"
 
-    return "for(int {loop_var} = {start} ; {loop_var} <= {end} ; {loop_var}++){{".format(
+    return "for(int {loop_var} = 0 ; {loop_var} < {length} ; {loop_var}++){{".format(
         loop_var=loop_var,
-        start=index.get_zero_based_index().min_index,
-        end=index.get_zero_based_index().max_index
+        length=index.get_length()
     )
 
 
@@ -87,15 +86,13 @@ class CppCodeGenerator(CodeGenerator):
         if var.dim_num() == 0:
             constructor = ""
         elif var.dim_num() == 1:
-            constructor = "({size}+1)".format(
-                size=var.get_first_index().get_zero_based_index().max_index)
+            constructor = "({size})".format(
+                size=var.get_first_index().get_length())
         elif var.dim_num() == 2:
-            constructor = "({row_size}+1,vector<{type}>({col_size}+1))".format(
+            constructor = "({row_size}, vector<{type}>({col_size}))".format(
                 type=self._convert_type(var.type),
-                row_size=var.get_first_index(
-                ).get_zero_based_index().max_index,
-                col_size=var.get_second_index(
-                ).get_zero_based_index().max_index
+                row_size=var.get_first_index().get_length(),
+                col_size=var.get_second_index().get_length()
             )
         else:
             raise NotImplementedError
