@@ -52,8 +52,9 @@ def infer_exec_file(filenames):
 
     exec_file = exec_files[0]
     if len(exec_files) >= 2:
-        logging.warning(f"There're multiple executable files. '{exec_file}' is selected."
-                        f"  The candidates were {exec_files}.")
+        logging.warning("{0}  {1}".format(
+            "There're multiple executable files. '{exec_file}' is selected.".format(exec_file=exec_file),
+            "The candidates were {exec_files}.".format(exec_files=exec_files)))
     return exec_file
 
 
@@ -99,7 +100,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
             append(exec_res.output, end='')
     else:
         append("[Log]")
-        append(f"{exec_res.status.name}")
+        append(exec_res.status.name)
     return res
 
 
@@ -116,7 +117,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
         is_correct = exec_res.is_correct_output(answer_text)
         if is_correct:
-            message = f"PASSED {exec_res.elapsed_ms} ms"
+            message = "PASSED {elapsed} ms".format(elapsed=exec_res.elapsed_ms)
             success_count += 1
         else:
             if exec_res.status == ExecStatus.NORMAL:
@@ -124,11 +125,14 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
             else:
                 message = exec_res.status.name
 
-        print(f"# {os.path.basename(in_sample_file)} ... {message}")
+        print("# {case_name} ... {message}".format(
+            case_name=os.path.basename(in_sample_file),
+            message=message,
+        ))
 
         # Output details for incorrect results.
         if not is_correct:
-            print(f'{build_details_str(exec_res, in_sample_file, out_sample_file)}\n')
+            print('{}\n'.format(build_details_str(exec_res, in_sample_file, out_sample_file)))
             if knock_out:
                 print('Stop testing ...')
                 break
@@ -138,7 +142,10 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 def validate_sample_pair(in_sample_file, out_sample_file):
     if os.path.basename(in_sample_file).split("_")[-1] != os.path.basename(out_sample_file).split("_")[-1]:
         logging.error(
-            f'The file combination of {in_sample_file} and {out_sample_file} is wrong.')
+            'The file combination of {} and {} is wrong.'.format(
+                in_sample_file,
+                out_sample_file
+            ))
         raise IrregularSampleFileError
 
 
@@ -149,7 +156,7 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
         if len(lst) == 0:
             return None
         raise IrregularSampleFileError(
-            f"Multiple samples are detected for given case num: {lst}")
+            "Multiple samples are detected for given case num: {}".format(lst))
 
     in_sample_file = single_or_none(
         [name for name in in_sample_file_list if infer_case_num(name) == case_num])
@@ -157,7 +164,7 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
         [name for name in out_sample_file_list if infer_case_num(name) == case_num])
 
     if in_sample_file is None or out_sample_file is None:
-        print(f"Invalid test case number: {case_num}")
+        print("Invalid test case number: {}".format(case_num))
         return False
 
     validate_sample_pair(in_sample_file, out_sample_file)
@@ -170,9 +177,10 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
 
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
-        logging.error("The number of the sample inputs and outputs are different.\n"
-                      f"# of sample inputs: {len(in_sample_file_list)}\n"
-                      f"# of sample outputs: {len(out_sample_file_list)}")
+        logging.error("{0}{1}{2}".format(
+            "The number of the sample inputs and outputs are different.\n",
+            "# of sample inputs: {}\n".format(len(in_sample_file_list)),
+            "# of sample outputs: {}\n".format(len(out_sample_file_list))))
         raise IrregularSampleFileError
     samples = []
     for in_sample_file, out_sample_file in zip(in_sample_file_list, out_sample_file_list):
@@ -185,7 +193,10 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         print("No test cases")
         return False
     elif success_count != len(samples):
-        print(f"Some cases FAILED (passed {success_count} of {len(samples)})")
+        print("Some cases FAILED (passed {success_count} of {total})".format(
+            success_count=success_count,
+            total=len(samples),
+        ))
         return False
     else:
         print("Passed all test cases!!!")
