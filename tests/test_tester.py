@@ -1,10 +1,25 @@
+import os
 import unittest
 from unittest.mock import patch
 
+from atcodertools.tools import tester
 from atcodertools.tools.tester import is_executable_file
+
+RESOURCE_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "./resources/test_tester/")
 
 
 class TestTester(unittest.TestCase):
+    def test_multiple_exec_files(self):
+        all_ok = tester.main(
+            '', ['-d', os.path.join(RESOURCE_DIR, "test_multiple_exec_files")])
+        self.assertTrue(all_ok)
+
+    def test_run_single_test(self):
+        test_dir = os.path.join(RESOURCE_DIR, "test_run_single_test")
+        self.assertTrue(tester.main('', ['-d', test_dir, "-n", "1"]))
+        self.assertFalse(tester.main('', ['-d', test_dir, "-n", "2"]))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)

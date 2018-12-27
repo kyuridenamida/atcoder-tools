@@ -29,7 +29,10 @@ class ExecResult:
     def __init__(self, status: ExecStatus, output: str = None, elapsed_sec: float = None):
         self.status = status
         self.output = output
-        self.elapsed_ms = int(elapsed_sec * 1000 + 0.5)
+        if elapsed_sec is not None:
+            self.elapsed_ms = int(elapsed_sec * 1000 + 0.5)
+        else:
+            self.elapsed_ms = None
 
     def is_correct_output(self, answer_text):
         return answer_text == self.output
@@ -41,15 +44,16 @@ def is_executable_file(file_name):
 
 
 def infer_exec_file(filenames):
-    exec_files = [name for name in filenames if is_executable_file(name)]
+    exec_files = [name for name in sorted(
+        filenames) if is_executable_file(name)]
 
     if len(exec_files) == 0:
         raise NoExecutableFileError
 
     exec_file = exec_files[0]
     if len(exec_files) >= 2:
-        logging.warning(f"There're multiple executable files. '{exec_file}' is selected.\n"
-                        f"The candidates were {exec_files}.")
+        logging.warning(f"There're multiple executable files. '{exec_file}' is selected."
+                        f"  The candidates were {exec_files}.")
     return exec_file
 
 
@@ -170,7 +174,6 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
                       f"# of sample inputs: {len(in_sample_file_list)}\n"
                       f"# of sample outputs: {len(out_sample_file_list)}")
         raise IrregularSampleFileError
-
     samples = []
     for in_sample_file, out_sample_file in zip(in_sample_file_list, out_sample_file_list):
         validate_sample_pair(in_sample_file, out_sample_file)
@@ -189,7 +192,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         return True
 
 
-def main(prog, args):
+def main(prog, args) -> bool:
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
@@ -210,7 +213,7 @@ def main(prog, args):
     parser.add_argument("--timeout", '-t',
                         help="Timeout for each test cases (sec) [Default] 1",
                         type=int,
-                        default=False)
+                        default=1)
 
     parser.add_argument("--knock-out", '-k',
                         help="Stop execution immediately after any example's failure [Default] False",
@@ -218,7 +221,6 @@ def main(prog, args):
                         default=False)
 
     args = parser.parse_args(args)
-
     exec_file = args.exec or infer_exec_file(
         glob.glob(os.path.join(args.dir, '*')))
     in_sample_file_list = sorted(glob.glob(os.path.join(args.dir, 'in_*.txt')))
