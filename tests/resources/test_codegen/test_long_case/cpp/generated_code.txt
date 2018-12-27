@@ -16,17 +16,17 @@ int main(){
     scanf("%lld",&sr);
     long long sc;
     scanf("%lld",&sc);
-    vector<string> s(H-1+1);
-    for(int i = 0 ; i <= H-1 ; i++){
+    vector<string> s(H);
+    for(int i = 0 ; i < H ; i++){
         cin >> s[i];
     }
     long long N;
     scanf("%lld",&N);
-    vector<long long> fr(N-1+1);
-    vector<long long> fc(N-1+1);
-    vector<long long> F(N-1+1);
-    vector<long long> D(N-1+1);
-    for(int i = 0 ; i <= N-1 ; i++){
+    vector<long long> fr(N);
+    vector<long long> fc(N);
+    vector<long long> F(N);
+    vector<long long> D(N);
+    for(int i = 0 ; i < N ; i++){
         scanf("%lld",&fr[i]);
         scanf("%lld",&fc[i]);
         scanf("%lld",&F[i]);

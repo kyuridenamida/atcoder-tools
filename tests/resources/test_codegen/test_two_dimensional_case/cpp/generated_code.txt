@@ -8,21 +8,21 @@ void solve(long long N, vector<vector<long long>> A, vector<vector<long long>> B
 int main(){
     long long N;
     scanf("%lld",&N);
-    vector<vector<long long>> A(N-1+1,vector<long long>(N-1+1));
-    for(int i = 0 ; i <= N-1 ; i++){
-        for(int j = 0 ; j <= N-1 ; j++){
+    vector<vector<long long>> A(N, vector<long long>(N));
+    for(int i = 0 ; i < N ; i++){
+        for(int j = 0 ; j < N ; j++){
             scanf("%lld",&A[i][j]);
         }
     }
-    vector<vector<long long>> B(N-1+1,vector<long long>(N-1+1));
-    for(int i = 0 ; i <= N-1 ; i++){
-        for(int j = 0 ; j <= N-1 ; j++){
+    vector<vector<long long>> B(N, vector<long long>(N));
+    for(int i = 0 ; i < N ; i++){
+        for(int j = 0 ; j < N ; j++){
             scanf("%lld",&B[i][j]);
         }
     }
-    vector<vector<long long>> C(N-1+1,vector<long long>(N-1+1));
-    for(int i = 0 ; i <= N-1 ; i++){
-        for(int j = 0 ; j <= N-1 ; j++){
+    vector<vector<long long>> C(N, vector<long long>(N));
+    for(int i = 0 ; i < N ; i++){
+        for(int j = 0 ; j < N ; j++){
             scanf("%lld",&C[i][j]);
         }
     }

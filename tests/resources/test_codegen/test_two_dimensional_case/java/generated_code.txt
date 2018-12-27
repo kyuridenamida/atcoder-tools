@@ -6,21 +6,21 @@ class Main {
         final Scanner sc = new Scanner(System.in);
         long N;
         N = sc.nextLong();
-        long[][] A = new long[int(N-1+1)][int(N-1+1)];
-        for(int i = 0 ; i <= N-1 ; i++){
-                for(int j = 0 ; j <= N-1 ; j++){
+        long[][] A = new long[int(N)][int(N)];
+        for(int i = 0 ; i < N ; i++){
+                for(int j = 0 ; j < N ; j++){
                     A[i][j] = sc.nextLong();
                 }
         }
-        long[][] B = new long[int(N-1+1)][int(N-1+1)];
-        for(int i = 0 ; i <= N-1 ; i++){
-                for(int j = 0 ; j <= N-1 ; j++){
+        long[][] B = new long[int(N)][int(N)];
+        for(int i = 0 ; i < N ; i++){
+                for(int j = 0 ; j < N ; j++){
                     B[i][j] = sc.nextLong();
                 }
         }
-        long[][] C = new long[int(N-1+1)][int(N-1+1)];
-        for(int i = 0 ; i <= N-1 ; i++){
-                for(int j = 0 ; j <= N-1 ; j++){
+        long[][] C = new long[int(N)][int(N)];
+        for(int i = 0 ; i < N ; i++){
+                for(int j = 0 ; j < N ; j++){
                     C[i][j] = sc.nextLong();
                 }
         }

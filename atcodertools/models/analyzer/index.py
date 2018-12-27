@@ -18,14 +18,25 @@ class Index:
         self._update_min(new_value)
         self._update_max(new_value)
 
+    @DeprecationWarning
     def get_zero_based_index(self):
+        """This method is deprecated. Use get_length() instead."""
         res = Index()
         res.min_index = CalcNode("0")
         res.max_index = CalcNode(
             "{max_index}-({min_index})".format(
                 max_index=self.max_index,
-                min_index=self.min_index))
+                min_index=self.min_index)).simplify()
         return res
+
+    def get_length(self):
+        assert self.max_index is not None
+        assert self.min_index is not None
+        return CalcNode(
+            "{max_index}-({min_index})+1".format(
+                max_index=self.max_index,
+                min_index=self.min_index)
+        ).simplify()
 
     def _update_min(self, new_value: str):
         if not new_value.isdecimal():

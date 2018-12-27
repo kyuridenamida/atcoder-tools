@@ -14,17 +14,17 @@ class Main {
         sr = sc.nextLong();
         long sc;
         sc = sc.nextLong();
-        String[] s = new String[(int)(H-1+1)];
-        for(int i = 0 ; i <= H-1 ; i++){
+        String[] s = new String[(int)(H)];
+        for(int i = 0 ; i < H ; i++){
                 s[i] = sc.next();
         }
         long N;
         N = sc.nextLong();
-        long[] fr = new long[(int)(N-1+1)];
-        long[] fc = new long[(int)(N-1+1)];
-        long[] F = new long[(int)(N-1+1)];
-        long[] D = new long[(int)(N-1+1)];
-        for(int i = 0 ; i <= N-1 ; i++){
+        long[] fr = new long[(int)(N)];
+        long[] fc = new long[(int)(N)];
+        long[] F = new long[(int)(N)];
+        long[] D = new long[(int)(N)];
+        for(int i = 0 ; i < N ; i++){
                 fr[i] = sc.nextLong();
                 fc[i] = sc.nextLong();
                 F[i] = sc.nextLong();

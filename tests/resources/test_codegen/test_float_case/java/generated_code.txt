@@ -10,13 +10,13 @@ class Main {
         N = sc.nextLong();
         long M;
         M = sc.nextLong();
-        double[] K = new double[(int)(L-1+1)];
-        for(int i = 0 ; i <= L-1 ; i++){
+        double[] K = new double[(int)(L)];
+        for(int i = 0 ; i < L ; i++){
                 K[i] = sc.nextDouble();
         }
-        long[] A = new long[(int)(N-1+1)];
-        double[] S = new double[(int)(N-1+1)];
-        for(int i = 0 ; i <= N-1 ; i++){
+        long[] A = new long[(int)(N)];
+        double[] S = new double[(int)(N)];
+        for(int i = 0 ; i < N ; i++){
                 A[i] = sc.nextLong();
                 S[i] = sc.nextDouble();
         }
