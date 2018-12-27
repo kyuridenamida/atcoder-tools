@@ -29,6 +29,7 @@ class TestEnvGen(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
+        print(self.temp_dir)
 
     def test_prepare_workspace(self):
         answer_data_dir_path = os.path.join(
@@ -56,7 +57,6 @@ class TestEnvGen(unittest.TestCase):
                 REPLACEMENT_PATH,
                 "cpp",
                 False)
-        print(self.temp_dir)
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
     def assertDirectoriesEqual(self, expected_dir_path, dir_path):
