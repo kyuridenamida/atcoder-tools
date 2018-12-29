@@ -1,10 +1,10 @@
+#!/usr/bin/env python3
 import sys
 
 from atcodertools.tools.envgen import main as envgen_main
 from atcodertools.tools.tester import main as tester_main
 
-
-def main():
+if __name__ == '__main__':
     if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test"):
         print("Usage:")
         print("{} gen -- to generate workspace".format(sys.argv[0]))
@@ -19,7 +19,3 @@ def main():
 
     if sys.argv[1] == "test":
         sys.exit(tester_main(prog, args))
-
-
-if __name__ == '__main__':
-    main()
