@@ -1,1 +1,2 @@
 recursive-include atcodertools/tools/templates/ *
+include requirements.txt
