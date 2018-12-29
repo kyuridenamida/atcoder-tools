@@ -27,11 +27,7 @@ setup(
     packages=find_packages(exclude=('tests',)),
     install_requires=_requires_from_file('requirements.txt'),
     license="MIT",
-    entry_points={
-        "console_scripts": [
-                "atcoder-tools=atcodertools.tools.run_script:main",
-        ],
-    },
+    scripts=['atcoder-tools'],
     include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
