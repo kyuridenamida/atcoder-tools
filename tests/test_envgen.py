@@ -29,7 +29,7 @@ class TestEnvGen(unittest.TestCase):
         self.temp_dir = tempfile.mkdtemp()
 
     def tearDown(self):
-        #shutil.rmtree(self.temp_dir)
+        shutil.rmtree(self.temp_dir)
         logging.info(self.temp_dir)
 
     def test_prepare_workspace(self):
