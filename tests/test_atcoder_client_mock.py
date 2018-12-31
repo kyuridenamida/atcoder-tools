@@ -39,13 +39,13 @@ def create_fake_request_func(get_url_to_resp: Dict[str, MockResponse] = None,
 
 
 def restore_client_after_run(func):
-    def _decorated_func(*args, **kwargs):
+    def test_decorated(*args, **kwargs):
         client = AtCoderClient()
         prev = client._request
         func(*args, **kwargs)
         client._request = prev
 
-    return _decorated_func
+    return test_decorated
 
 
 class TestAtCoderClientMock(unittest.TestCase):
