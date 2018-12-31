@@ -14,7 +14,7 @@ script:
   - autopep8 -r . --diff | tee check_autopep8
   - test ! -s check_autopep8
   - atcoder-tools gen arc050 --without-login
-  - nosetests --with-coverage --cover-package=atcodertools
+  - nosetests tests --exe -v --with-coverage --cover-package=atcodertools
   - codecov
 notifications:
   email: false

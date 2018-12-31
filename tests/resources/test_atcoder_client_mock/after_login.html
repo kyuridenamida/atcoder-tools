@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>AtCoder Regular Contest 001
+        - AtCoder Regular Contest 001 | AtCoder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="
+">
+    <meta name="keyword" content="AtCoder,アットコーダー,あっとこーだー,プログラミングコンテスト
+">
+    <meta name="author" content="Atcoder" />
+    <meta name="copyright" content="Copyright (C) 2012 Atcoder" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="stylesheet" type="text/css" href="/css/all.css?v=2">
+    <link rel="stylesheet" type="text/css" href="/css/print.css?v=1" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script src="/js/jquery.js"></script>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-30554866-3']);
+        _gaq.push(['_setDomainName', 'atcoder.jp']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+    <!--[if lt IE 9]><style>.navbar-fixed-top{ position: relative!important; }</style><![endif]-->
+
+</head>
+
+
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/"><span class="contest-name">AtCoder Regular Contest 001</span><span class="bland-small"><time>2012/04/14 12:00:00 +0000</time> ~ <time>2012/04/14 17:00:00 +0000</time></span></a>
+
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li class="divider-vertical"></li>
+                    <li><a href="http://atcoder.jp" target="_blank"><span class="lang"><span class="lang-en">back to atcoder.jp</span><span class="lang-ja">AtCoderへ戻る</span></span></a></li>
+                </ul>
+                <ul  id="nav-right-logined" class="nav pull-right" style="display:none;">
+                    <li class="dropdown">
+                        <a href="#" lang="ja" class="dropdown-toggle static-nav-language-selector-dropdown" data-toggle="dropdown" style="display:none;">
+                            <i class="flag-ja"></i> 日本語 <b class="caret"></b>
+                        </a>
+                        <a href="#" lang="en" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
+                            <i class="flag-en"></i> English <b class="caret"></b>
+                        </a>
+                        <a href="#" lang="ko" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
+                            <i class="flag-ko"></i> 한국어 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li> <a lang="ja" class="static-nav-language-selector" href="#"><i class="flag-ja"></i> 日本語</a></li>
+                            <li> <a lang="en" class="static-nav-language-selector" href="#"><i class="flag-en"></i> English</a></li>
+                            <li> <a lang="ko" class="static-nav-language-selector" href="#"><i class="flag-ko"></i> 한국어</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i> <span id="nav-right-username"></span><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/me"><span class="lang"><span class="lang-en">My Profile</span><span class="lang-ja">マイプロフィール</span></span></a></li>
+                            <li><a href="/settings"><span class="lang"><span class="lang-en">Settings</span><span class="lang-ja">設定</span></span></a></li>
+                            <li><a href="/settings/password"><span class="lang"><span class="lang-en">Change password</span><span class="lang-ja">パスワードの変更</span></span></a></li>
+                            <li class="divider"></li>
+                            <li><a href="/logout"><span class="lang"><span class="lang-en">Sign out</span><span class="lang-ja">ログアウト</span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul id="nav-right-not-login" class="nav pull-right" style="display:none;">
+                    <li class="dropdown">
+                        <a href="#" lang="ja" class="dropdown-toggle static-nav-language-selector-dropdown" data-toggle="dropdown" style="display:none;">
+                            <i class="flag-ja"></i> 日本語 <b class="caret"></b>
+                        </a>
+                        <a href="#" lang="en" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
+                            <i class="flag-en"></i> English <b class="caret"></b>
+                        </a>
+                        <a href="#" lang="ko" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
+                            <i class="flag-ko"></i> 한국어 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li> <a lang="ja" class="static-nav-language-selector" href="#"><i class="flag-ja"></i> 日本語</a></li>
+                            <li> <a lang="en" class="static-nav-language-selector" href="#"><i class="flag-en"></i> English</a></li>
+                            <li> <a lang="ko" class="static-nav-language-selector" href="#"><i class="flag-ko"></i> 한국어</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="/register"><span class="lang"><span class="lang-en">Sign up</span><span class="lang-ja">新規登録</span></span></a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="/login"><span class="lang"><span class="lang-en">Sign in</span><span class="lang-ja">ログイン</span></span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal hide fade" style="display:none;" id="modal-contest-end">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3><span class="lang"><span class="lang-en">AtCoder Regular Contest 001 has ended</span><span class="lang-ja">AtCoder Regular Contest 001が終了しました</span></span></h3>
+    </div>
+    <div class="modal-body">
+        <p><span class="lang"><span class="lang-en">Contest has ended</span><span class="lang-ja">コンテスト終了です</span></span></p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal"><span class="lang"><span class="lang-en">Close</span><span class="lang-ja">閉じる</span></span></a>
+    </div>
+</div>
+
+<div class="modal hide fade" style="display:none;" id="modal-contest-begin">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3><span class="lang"><span class="lang-en">AtCoder Regular Contest 001 is now opening</span><span class="lang-ja">AtCoder Regular Contest 001の開催時間になりました</span></span></h3>
+    </div>
+    <div class="modal-body">
+        <p><span class="lang"><span class="lang-en">Contest has started</span><span class="lang-ja">問題一覧のページへ移動してください</span></span></p>
+    </div>
+    <div class="modal-footer">
+        <a href="/assignments" class="btn btn-primary"><span class="lang"><span class="lang-en">Go to the task list page</span><span class="lang-ja">問題一覧のページへ移動</span></span></a>
+    </div>
+</div>
+
+<div id="outer-inner" class="container">
+    <h1 class="site-title">
+        AtCoder Regular Contest 001
+    </h1>
+    <time style="display:none" id="contest-start-time">2012/04/14 12:00:00 +0000</time>
+    <time style="display:none" id="contest-end-time">2012/04/14 17:00:00 +0000</time>
+    <time style="display:none" id="server-current-time">2018/12/31 09:17:13 +0000</time>
+
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="https://arc001.contest.atcoder.jp/"><i class="icon-home"></i> <span class="lang"><span class="lang-en">Home</span><span class="lang-ja">トップページ</span><span class="lang-ko">톱 페이지</span></span></a></li>
+        <li><a href="https://arc001.contest.atcoder.jp/assignments"><i class="icon-list-alt"></i> <span class="lang"><span class="lang-en">Tasks</span><span class="lang-ja">問題</span><span class="lang-ko">문제</span></span></a></li>
+        <li><a href="https://arc001.contest.atcoder.jp/submit"><i class="icon-upload"></i> <span class="lang"><span class="lang-en">Submit</span><span class="lang-ja">提出</span><span class="lang-ko">제출</span></span></a></li>
+        <li><a href="https://arc001.contest.atcoder.jp/clarifications"><i class="icon-question-sign"></i> <span class="lang"><span class="lang-en">Clarifications</span><span class="lang-ja">質問</span><span class="lang-ko">질문</span></span></a></li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <b class="caret"></b><i class="icon-download-alt"></i> <span class="lang"><span class="lang-en">Results</span><span class="lang-ja">結果</span><span class="lang-ko">채점 결과</span></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="https://arc001.contest.atcoder.jp/submissions/all"><span class="lang"><span class="lang-en">All submissions</span><span class="lang-ja">すべての結果</span><span class="lang-ko">모든 결과</span></span></a></li>
+                <li><a href="https://arc001.contest.atcoder.jp/submissions/me"><span class="lang"><span class="lang-en">My submissions</span><span class="lang-ja">自分の結果</span><span class="lang-ko">자신의 결과</span></span></a></li>
+            </ul>
+        </li>
+        <li><a href="/standings"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Standings</span><span class="lang-ja">順位表</span><span class="lang-ko">순위표</span></span></a></li>
+        <li><a href="/custom_test"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Custom Test</span><span class="lang-ja">コードテスト</span></span></a></li>
+        <li><a href="/editorial"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Editorial</span><span class="lang-ja">解説</span></span></a></li>
+    </ul>
+    <div id="alert_box" class="alert alert-block" style="display:none">
+        <a class="close" data-dismiss="alert">×</a>
+        <h4 id="alert_box_heading" class="alert-heading" style="display:none"></h4>
+        <p id="alert_box_content"></p>
+    </div>
+
+
+    <div class="insert-participant-box">
+        <h1>AtCoder Regular Contest 001</h1>
+    </div>
+
+
+
+    <div id="contest-statement"><h2>Welcome to AtCoder Regular Contest #001!</h2>
+
+        <section class="lang">
+            <div class="lang-ja">
+                <h3>AtCoder Regular Contest #001の中止のお知らせ</h3>
+                今回のコンテストにつきまして、サーバーに接続できない問題があり、中止させて頂きます。<br/>
+                参加者の皆様にはご迷惑をおかけし、誠に申し訳ありませんでした。<br/>
+                コンテストの問題につきましては、過去問として挑戦可能とさせて頂きます。<br/>
+                次回のコンテストでは、皆様に楽しんで参加できるように、誠心誠意取り組んでまいりますので、<br/>
+                よろしくお願いいたします。<br/>
+            </div>
+            <div class="lang-en">
+                <h3>News: AtCoder Regular Contest #001 was canceled.</h3>
+                We are sorry, but we cannot hold the contest because of server troubles.
+                The tasks of the contest were served as tasks for practice.
+                We are looking forward to seeing you in the next competition of AtCoder.
+                Thank you.
+            </div>
+        </section>
+
+        <h3>コンテストについて</h3>
+
+        <section>
+            このコンテストの開催時間は、2012/04/14 21:00 ～ 2012/04/14 22:30となります。<br/>
+            コンテストに参加するには、コンテスト開始の10分後までに、<a href="/register">ユーザ登録ページ</a>よりユーザ登録を行ってください。<br/>
+            ログイン後に<a href="/">トップページ</a>に下部に表示される参加ボタンを押すことで参加できます。<br />
+            コンテストの開催時間になると、<a href="/assignments">問題一覧ページ</a>より問題を確認し、解答することができます<br/>
+
+            <h3>コンテストの流れ</h3>
+
+            <section>
+                コンテストの流れは、以下のようになります。<br/>
+                <ol>
+                    <li>問題ボタンから好きな問題を１問開き、解き方を考えます。</li>
+                    <li>解き方が思いついたら、ソースコードを書きます。思いつかない場合は、他の問題を見ても問題ありません。</li>
+                    <li>正しいソースコードが書けたと思ったら、解答ボタンを選択し、問題及び言語を選択し、ソースコードを貼り付け、提出します。</li>
+                    <li>解答ボタンより、自分の解答を確認すると、ソースコードに対するジャッジ結果が表示されます。ACと表示されれば正解、それ以外は不正解となります。なお、WJと表示されている場合は、ジャッジ待ちの状態ですので、定期的に更新ボタンを押しながら、暫くお待ちください。</li>
+                    <li>正解だった場合は、次の問題へ挑戦しましょう。不正解だった場合は、また同じ問題に挑戦しても、別の問題を解いてみても構いません。</li>
+                    <li>コンテストが終了すると、結果に応じて、順位表にて自分の順位が確認閲覧出来ます。なお、コンテスト中でも、途中経過を確認することは可能です。</li>
+            </section>
+
+            <h3>メニューについて</h3>
+
+            なお、上メニューバーの各ボタンの機能は、以下の通りです。<br/>
+            <ul>
+                <li>トップ: 現在閲覧中のページです。</li>
+                <li>問題: コンテストの問題の閲覧ができます。</li>
+                <li>提出: コンテストの問題に対する、解答ソースコードを提出することが出来ます。</li>
+                <li>質問: コンテスト全体、および各問題に対して、コンテスト中に質問し、その回答を閲覧することが出来ます。</li>
+                <li>解答: 今までに自分が提出した解答を閲覧することができます。また、コンテスト終了後には他の参加者の解答状況を閲覧することが出来ます。</li>
+                <li>順位表: 現在のコンテストの順位表が閲覧できます。</li>
+            </ul>
+
+            <h3>使用可能な言語</h3>
+            コンテストで使用可能な言語は、以下の通りです。<br/>
+
+            <ul>
+                <li>C++ (GCC4.4.6)</li>
+                <li>C (GCC4.4.6)</li>
+                <li>D (DMD 2.058)</li>
+                <li>Java (OpenJDK 1.6.0)</li>
+                <li>C# (Mono 2.10.5)</li>
+                <li>PHP (PHP 5.3.6)</li>
+                <li>Python (2.7.2)</li>
+                <li>Perl (5.12.4)</li>
+                <li>Ruby (1.9.2)</li>
+                <li>C++11 (GCC 4.6.1)</li>
+                <li>Haskell (GHC 7.0.3)</li>
+            </ul>
+
+        </section></div>
+
+
+
+
+
+</div>
+
+<footer>
+    <ul>
+        <li><a href="/tos"><span class="lang"><span class="lang-en">Terms of service</span><span class="lang-ja">利用規約</span></span></a></li>
+        <li><a href="/privacy"><span class="lang"><span class="lang-en">Privacy</span><span class="lang-ja">プライバシーポリシー</span></span></a></li>
+        <li><a href="/personal"><span class="lang"><span class="lang-en">Personal Information</span><span class="lang-ja">個人情報保護方針</span></span></a></li>
+        <li><a href="/tutorial"><span class="lang"><span class="lang-en">Tutorial</span><span class="lang-ja">チュートリアル</span></span></a></li>
+        <li><a href="/rules"><span class="lang"><span class="lang-en">Rules</span><span class="lang-ja">ルール</span></span></a></li>
+        <li><a href="/glossary"><span class="lang"><span class="lang-en">Glossary</span><span class="lang-ja">用語集</span></span></a></li>
+        <li><a href="/faq"><span class="lang"><span class="lang-en">FAQ</span><span class="lang-ja">よくある質問</span></span></a></li>
+    </ul>
+    <p id="copyright">&copy; 2017 AtCoder Inc. All rights reserved.</p>
+</footer>
+
+<p id="fixed-server-timer" style="display: none;"></p>
+
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/prettify.js"></script>
+<script src="/js/lang-vb.js"></script>
+<script src="/js/lang-hs.js"></script>
+<script src="/js/varmath.js"></script>
+<script src="/js/script.js?v=2"></script>
+</body>
+</html>

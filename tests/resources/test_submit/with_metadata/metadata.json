@@ -1,0 +1,13 @@
+{
+ "problem": {
+  "contest": {
+   "contest_id": "arc001"
+  },
+  "problem_id": "arc001_1",
+  "alphabet": "A"
+ },
+ "code_filename": "A_good.py",
+ "sample_in_pattern": "*.in",
+ "sample_out_pattern": "*.out",
+ "lang": "cpp"
+}

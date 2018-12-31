@@ -10,6 +10,8 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Tuple
 
+from atcodertools.models.tools.metadata import Metadata
+
 
 class NoExecutableFileError(Exception):
     pass
@@ -142,7 +144,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
 
 def validate_sample_pair(in_sample_file, out_sample_file):
-    if os.path.basename(in_sample_file).split("_")[-1] != os.path.basename(out_sample_file).split("_")[-1]:
+    if infer_case_num(in_sample_file) != infer_case_num(out_sample_file):
         logging.error(
             'The file combination of {} and {} is wrong.'.format(
                 in_sample_file,
@@ -205,13 +207,30 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         return True
 
 
+DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
+DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
+
+
+def get_sample_patterns(metadata_file: str) -> Tuple[str, str]:
+    try:
+        metadata = Metadata.load_from(metadata_file)
+        return metadata.sample_in_pattern, metadata.sample_out_pattern
+    except IOError:
+        logging.warning("{} is not found. Assume the example file name patterns are {} and {}".format(
+            metadata_file,
+            DEFAULT_IN_EXAMPLE_PATTERN,
+            DEFAULT_OUT_EXAMPLE_PATTERN)
+        )
+        return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN
+
+
 def main(prog, args) -> bool:
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("--exec", '-e',
-                        help="file path to the execution target. Automatically detects an exec file if not specified.",
+                        help="file path to the execution target. [Default] Automatically detected exec file",
                         default=None)
 
     parser.add_argument("--num", '-n',
@@ -236,9 +255,14 @@ def main(prog, args) -> bool:
     args = parser.parse_args(args)
     exec_file = args.exec or infer_exec_file(
         glob.glob(os.path.join(args.dir, '*')))
-    in_sample_file_list = sorted(glob.glob(os.path.join(args.dir, 'in_*.txt')))
+
+    metadata_file = os.path.join(args.dir, "metadata.json")
+    in_ex_pattern, out_ex_pattern = get_sample_patterns(metadata_file)
+
+    in_sample_file_list = sorted(
+        glob.glob(os.path.join(args.dir, in_ex_pattern)))
     out_sample_file_list = sorted(
-        glob.glob(os.path.join(args.dir, 'out_*.txt')))
+        glob.glob(os.path.join(args.dir, out_ex_pattern)))
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out)

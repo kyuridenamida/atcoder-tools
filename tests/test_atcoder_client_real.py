@@ -8,18 +8,14 @@ from atcodertools.client.atcoder import AtCoderClient, LoginError, save_cookie, 
 from atcodertools.models.contest import Contest
 from atcodertools.models.problem import Problem
 
-ANSWER_FILE = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    "./resources/test_fmtprediction/answer.txt")
 
-
-class TestAtCoderClient(unittest.TestCase):
+class TestAtCoderClientReal(unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.client = AtCoderClient()
 
-    def test_download_problem_list(self):
+    def test_submit_source_code(self):
         problem_list = self.client.download_problem_list(Contest("arc002"))
         self.assertEqual(
             ['arc002_1',
@@ -33,12 +29,13 @@ class TestAtCoderClient(unittest.TestCase):
             Problem(Contest("arc002"), "C", "arc002_3"))
         self.assertEqual("N\nc_{1}c_{2}...c_{N}\n", content.input_format_text)
         self.assertEqual(3, len(content.samples))
-        # return ProblemContent(req)
 
     def test_login_failed(self):
+        def fake_supplier():
+            return "@@@ invalid user name @@@", "@@@ password @@@"
+
         try:
-            self.client.login(username="@@@ invalid user name @@@",
-                              password="@@@ password @@@",
+            self.client.login(credential_supplier=fake_supplier,
                               use_local_session_cache=False)
             self.fail("Unexpectedly, this test succeeded to login.")
         except LoginError:
@@ -55,7 +52,7 @@ class TestAtCoderClient(unittest.TestCase):
             len(set([c.get_id() for c in contests])),
             len(contests))
 
-    def test_check_logging_in(self):
+    def test_check_logging_in_is_false(self):
         self.assertFalse(self.client.check_logging_in())
 
     def test_cookie_save_and_load(self):
