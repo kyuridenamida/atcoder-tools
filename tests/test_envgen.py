@@ -30,7 +30,7 @@ class TestEnvGen(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
-        logging.debug(self.temp_dir)
+        logging.info(self.temp_dir)
 
     def test_prepare_workspace(self):
         answer_data_dir_path = os.path.join(

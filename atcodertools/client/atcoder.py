@@ -3,7 +3,7 @@ import logging
 import os
 import re
 from http.cookiejar import LWPCookieJar
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 from atcodertools.models.contest import Contest
 from atcodertools.models.problem import Problem
 from atcodertools.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
+from atcodertools.models.submission import Submission
 
 
 class LoginError(Exception):
@@ -50,6 +51,12 @@ class Singleton(type):
         return cls._instances[cls]
 
 
+def default_credential_supplier() -> Tuple[str, str]:
+    username = input('AtCoder username: ')
+    password = getpass.getpass('AtCoder password: ')
+    return username, password
+
+
 class AtCoderClient(metaclass=Singleton):
 
     def __init__(self):
@@ -60,7 +67,14 @@ class AtCoderClient(metaclass=Singleton):
         resp = self._request(private_url)
         return resp.url == private_url
 
-    def login(self, username=None, password=None, use_local_session_cache=True, save_session_cache=True):
+    def login(self,
+              credential_supplier=None,
+              use_local_session_cache=True,
+              save_session_cache=True):
+
+        if credential_supplier is None:
+            credential_supplier = default_credential_supplier
+
         if use_local_session_cache:
             load_cookie_to(self._session)
             if self.check_logging_in():
@@ -71,11 +85,7 @@ class AtCoderClient(metaclass=Singleton):
 
                 return
 
-        if username is None:
-            username = input('AtCoder username: ')
-
-        if password is None:
-            password = getpass.getpass('AtCoder password: ')
+        username, password = credential_supplier()
 
         resp = self._request("https://arc001.contest.atcoder.jp/login", data={
             'name': username,
@@ -131,8 +141,9 @@ class AtCoderClient(metaclass=Singleton):
         contest_ids = sorted(contest_ids)
         return [Contest(contest_id) for contest_id in contest_ids]
 
-    def submit_source_code(self, contest: Contest, problem: Problem, lang, source):
-        resp = self._request(contest.submission_url())
+    def submit_source_code(self, contest: Contest, problem: Problem, lang: str, source: str) -> Submission:
+        resp = self._request(contest.get_submit_url())
+
         soup = BeautifulSoup(resp.text, "html.parser")
         session_id = soup.find("input", attrs={"type": "hidden"}).get("value")
         task_select_area = soup.find(
@@ -140,22 +151,34 @@ class AtCoderClient(metaclass=Singleton):
         task_field_name = task_select_area.get("name")
         task_number = task_select_area.find(
             "option", text=re.compile('{} -'.format(problem.get_alphabet()))).get("value")
-
         language_select_area = soup.find(
             'select', attrs={"id": "submit-language-selector-{}".format(task_number)})
         language_field_name = language_select_area.get("name")
         language_number = language_select_area.find(
-            "option", text=re.compile(lang)).get("value")
+            "option", text=lang).get("value")
         postdata = {
             "__session": session_id,
             task_field_name: task_number,
             language_field_name: language_number,
             "source_code": source
         }
-        self._request(
-            contest.get_url(),
+        resp = self._request(
+            contest.get_submit_url(),
             data=postdata,
             method='POST')
+        return Submission.make_submissions_from(resp.text)[0]
+
+    def download_submission_list(self, contest: Contest) -> List[Submission]:
+        submissions = []
+        page_num = 1
+        while True:
+            resp = self._request(contest.get_my_submissions_url(page_num))
+            new_submissions = Submission.make_submissions_from(resp.text)
+            if len(new_submissions) == 0:
+                break
+            submissions += new_submissions
+            page_num += 1
+        return submissions
 
     def _request(self, url: str, method='GET', **kwargs):
         if method == 'GET':

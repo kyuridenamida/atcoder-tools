@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My submissions - AtCoder Regular Contest 001 | AtCoder</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="
+">
+    <meta name="keyword" content="AtCoder,アットコーダー,あっとこーだー,プログラミングコンテスト
+">
+    <meta name="author" content="Atcoder" />
+    <meta name="copyright" content="Copyright (C) 2012 Atcoder" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="stylesheet" type="text/css" href="/css/all.css?v=2">
+    <link rel="stylesheet" type="text/css" href="/css/print.css?v=1" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script src="/js/jquery.js"></script>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-30554866-3']);
+        _gaq.push(['_setDomainName', 'atcoder.jp']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+    <!--[if lt IE 9]><style>.navbar-fixed-top{ position: relative!important; }</style><![endif]-->
+
+</head>
+
+
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/"><span class="contest-name">AtCoder Regular Contest 001</span><span class="bland-small"><time>2012/04/14 12:00:00 +0000</time> ~ <time>2012/04/14 17:00:00 +0000</time></span></a>
+
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li class="divider-vertical"></li>
+                    <li><a href="http://atcoder.jp" target="_blank"><span class="lang"><span class="lang-en">back to atcoder.jp</span><span class="lang-ja">AtCoderへ戻る</span></span></a></li>
+                </ul>
+                <ul  id="nav-right-logined" class="nav pull-right" style="display:none;">
+                    <li class="dropdown">
+                        <a href="#" lang="ja" class="dropdown-toggle static-nav-language-selector-dropdown" data-toggle="dropdown" style="display:none;">
+                            <i class="flag-ja"></i> 日本語 <b class="caret"></b>
+                        </a>
+                        <a href="#" lang="en" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
+                            <i class="flag-en"></i> English <b class="caret"></b>
+                        </a>
+                        <a href="#" lang="ko" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
+                            <i class="flag-ko"></i> 한국어 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li> <a lang="ja" class="static-nav-language-selector" href="#"><i class="flag-ja"></i> 日本語</a></li>
+                            <li> <a lang="en" class="static-nav-language-selector" href="#"><i class="flag-en"></i> English</a></li>
+                            <li> <a lang="ko" class="static-nav-language-selector" href="#"><i class="flag-ko"></i> 한국어</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i> <span id="nav-right-username"></span><b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/me"><span class="lang"><span class="lang-en">My Profile</span><span class="lang-ja">マイプロフィール</span></span></a></li>
+                            <li><a href="/settings"><span class="lang"><span class="lang-en">Settings</span><span class="lang-ja">設定</span></span></a></li>
+                            <li><a href="/settings/password"><span class="lang"><span class="lang-en">Change password</span><span class="lang-ja">パスワードの変更</span></span></a></li>
+                            <li class="divider"></li>
+                            <li><a href="/logout"><span class="lang"><span class="lang-en">Sign out</span><span class="lang-ja">ログアウト</span></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul id="nav-right-not-login" class="nav pull-right" style="display:none;">
+                    <li class="dropdown">
+                        <a href="#" lang="ja" class="dropdown-toggle static-nav-language-selector-dropdown" data-toggle="dropdown" style="display:none;">
+                            <i class="flag-ja"></i> 日本語 <b class="caret"></b>
+                        </a>
+                        <a href="#" lang="en" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
+                            <i class="flag-en"></i> English <b class="caret"></b>
+                        </a>
+                        <a href="#" lang="ko" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
+                            <i class="flag-ko"></i> 한국어 <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li> <a lang="ja" class="static-nav-language-selector" href="#"><i class="flag-ja"></i> 日本語</a></li>
+                            <li> <a lang="en" class="static-nav-language-selector" href="#"><i class="flag-en"></i> English</a></li>
+                            <li> <a lang="ko" class="static-nav-language-selector" href="#"><i class="flag-ko"></i> 한국어</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="/register"><span class="lang"><span class="lang-en">Sign up</span><span class="lang-ja">新規登録</span></span></a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="/login"><span class="lang"><span class="lang-en">Sign in</span><span class="lang-ja">ログイン</span></span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal hide fade" style="display:none;" id="modal-contest-end">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3><span class="lang"><span class="lang-en">AtCoder Regular Contest 001 has ended</span><span class="lang-ja">AtCoder Regular Contest 001が終了しました</span></span></h3>
+    </div>
+    <div class="modal-body">
+        <p><span class="lang"><span class="lang-en">Contest has ended</span><span class="lang-ja">コンテスト終了です</span></span></p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal"><span class="lang"><span class="lang-en">Close</span><span class="lang-ja">閉じる</span></span></a>
+    </div>
+</div>
+
+<div class="modal hide fade" style="display:none;" id="modal-contest-begin">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3><span class="lang"><span class="lang-en">AtCoder Regular Contest 001 is now opening</span><span class="lang-ja">AtCoder Regular Contest 001の開催時間になりました</span></span></h3>
+    </div>
+    <div class="modal-body">
+        <p><span class="lang"><span class="lang-en">Contest has started</span><span class="lang-ja">問題一覧のページへ移動してください</span></span></p>
+    </div>
+    <div class="modal-footer">
+        <a href="/assignments" class="btn btn-primary"><span class="lang"><span class="lang-en">Go to the task list page</span><span class="lang-ja">問題一覧のページへ移動</span></span></a>
+    </div>
+</div>
+
+<div id="outer-inner" class="container">
+    <h1 class="site-title">
+        AtCoder Regular Contest 001
+    </h1>
+    <time style="display:none" id="contest-start-time">2012/04/14 12:00:00 +0000</time>
+    <time style="display:none" id="contest-end-time">2012/04/14 17:00:00 +0000</time>
+    <time style="display:none" id="server-current-time">2018/12/31 09:27:58 +0000</time>
+
+
+    <ul class="nav nav-tabs">
+        <li><a href="https://arc001.contest.atcoder.jp/"><i class="icon-home"></i> <span class="lang"><span class="lang-en">Home</span><span class="lang-ja">トップページ</span><span class="lang-ko">톱 페이지</span></span></a></li>
+        <li><a href="https://arc001.contest.atcoder.jp/assignments"><i class="icon-list-alt"></i> <span class="lang"><span class="lang-en">Tasks</span><span class="lang-ja">問題</span><span class="lang-ko">문제</span></span></a></li>
+        <li><a href="https://arc001.contest.atcoder.jp/submit"><i class="icon-upload"></i> <span class="lang"><span class="lang-en">Submit</span><span class="lang-ja">提出</span><span class="lang-ko">제출</span></span></a></li>
+        <li><a href="https://arc001.contest.atcoder.jp/clarifications"><i class="icon-question-sign"></i> <span class="lang"><span class="lang-en">Clarifications</span><span class="lang-ja">質問</span><span class="lang-ko">질문</span></span></a></li>
+        <li class="dropdown active">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <b class="caret"></b><i class="icon-download-alt"></i> <span class="lang"><span class="lang-en">Results</span><span class="lang-ja">結果</span><span class="lang-ko">채점 결과</span></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="https://arc001.contest.atcoder.jp/submissions/all"><span class="lang"><span class="lang-en">All submissions</span><span class="lang-ja">すべての結果</span><span class="lang-ko">모든 결과</span></span></a></li>
+                <li><a href="https://arc001.contest.atcoder.jp/submissions/me"><span class="lang"><span class="lang-en">My submissions</span><span class="lang-ja">自分の結果</span><span class="lang-ko">자신의 결과</span></span></a></li>
+            </ul>
+        </li>
+        <li><a href="/standings"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Standings</span><span class="lang-ja">順位表</span><span class="lang-ko">순위표</span></span></a></li>
+        <li><a href="/custom_test"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Custom Test</span><span class="lang-ja">コードテスト</span></span></a></li>
+        <li><a href="/editorial"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Editorial</span><span class="lang-ja">解説</span></span></a></li>
+    </ul>
+    <div id="alert_box" class="alert alert-block" style="display:none">
+        <a class="close" data-dismiss="alert">×</a>
+        <h4 id="alert_box_heading" class="alert-heading" style="display:none"></h4>
+        <p id="alert_box_content"></p>
+    </div>
+
+
+    <ul class="nav nav-pills">
+        <li class="dropdown"><a href="/submissions/all"><span class="lang"><span class="lang-en">All submissions</span><span class="lang-ja">すべての結果</span><span class="lang-ko">모든 결과</span></span></a></li>  <li class="dropdown active"><a href="/submissions/me"><span class="lang"><span class="lang-en">My submissions</span><span class="lang-ja">自分の結果</span><span class="lang-ko">자신의 결과</span></span></a></li></ul>
+
+    <h2><span class="lang"><span class="lang-en">My submissions</span><span class="lang-ja">自分の結果</span><span class="lang-ko">자신의 결과</span></span></h2>
+
+    <div class="submissions-selector">
+        <form class="well form-inline" method="get" action="/submissions/me">
+            <legend class="legend-small"><span class="lang"><span class="lang-en">Search</span><span class="lang-ja">検索</span></span></legend>
+            <span class="selector-inline-label-left"><span class="lang"><span class="lang-en">Title</span><span class="lang-ja">問題名</span></span>:</span>
+            <select name="task_screen_name" class="input-small span2">
+                <option value="" selected> - </option>
+                <option value="arc001_1">A - センター採点</option>
+                <option value="arc001_2">B - リモコン</option>
+                <option value="arc001_3">C - パズルのお手伝い</option>
+                <option value="arc001_4">D - レースゲーム</option>
+            </select>
+
+            <span class="selector-inline-label"> <span class="lang"><span class="lang-en">Language</span><span class="lang-ja">言語</span></span>:</span>
+            <select name="language_screen_name" class="input-small span2">
+                <option value="" selected> - </option>
+                <option value="bash_4.3.11">Bash (GNU bash v4.3.11)</option>
+                <option value="gcc_5.3.0">C (GCC 5.4.1)</option>
+                <option value="gpp_5.3.0">C++14 (GCC 5.4.1)</option>
+                <option value="clang_3.8.0">C (Clang 3.8.0)</option>
+                <option value="clangpp_3.8.0">C++14 (Clang 3.8.0)</option>
+                <option value="csharp_4.2.2.30">C# (Mono 4.6.2.0)</option>
+                <option value="clojure_1.8.0">Clojure (1.8.0)</option>
+                <option value="sbcl_1.1.14">Common Lisp (SBCL 1.1.14)</option>
+                <option value="dmd_2.070.1">D (DMD64 v2.070.1)</option>
+                <option value="ldc_0.17.0">D (LDC 0.17.0)</option>
+                <option value="gdc_4.9.3">D (GDC 4.9.4)</option>
+                <option value="gfortran_4.8.4">Fortran (gfortran v4.8.4)</option>
+                <option value="go_1.6">Go (1.6)</option>
+                <option value="ghc_7.10">Haskell (GHC 7.10.3)</option>
+                <option value="java_1.7.0">Java7 (OpenJDK 1.7.0)</option>
+                <option value="java_1.8.0">Java8 (OpenJDK 1.8.0)</option>
+                <option value="nodejs_5.7">JavaScript (node.js v5.12)</option>
+                <option value="ocaml_4.02.3">OCaml (4.02.3)</option>
+                <option value="fpc_2.6.2">Pascal (FPC 2.6.2)</option>
+                <option value="perl_5.18.2">Perl (v5.18.2)</option>
+                <option value="php_5.6.18">PHP (5.6.30)</option>
+                <option value="python2_2.7.6">Python2 (2.7.6)</option>
+                <option value="python3_3.4.3">Python3 (3.4.3)</option>
+                <option value="ruby_2.3.0">Ruby (2.3.3)</option>
+                <option value="scala_2.11.7">Scala (2.11.7)</option>
+                <option value="gosh_0.9.3.3">Scheme (Gauche 0.9.3.3)</option>
+                <option value="cat">Text (cat)</option>
+                <option value="vbnc_4.2.2.30">Visual Basic (Mono 4.0.1)</option>
+                <option value="gpp_03_5.3.0">C++ (GCC 5.4.1)</option>
+                <option value="clangpp_03_3.8.0">C++ (Clang 3.8.0)</option>
+                <option value="gobjc_5.3.0">Objective-C (GCC 5.3.0)</option>
+                <option value="cobjc_3.7.1">Objective-C (Clang3.8.0)</option>
+                <option value="swift_2.2">Swift (swift-2.2-RELEASE)</option>
+                <option value="rust_1.7.0">Rust (1.15.1)</option>
+                <option value="sed_4.2.2">Sed (GNU sed 4.2.2)</option>
+                <option value="awk_1.3.3">Awk (mawk 1.3.3)</option>
+                <option value="bf_20041219">Brainfuck (bf 20041219)</option>
+                <option value="sml_20100608">Standard ML (MLton 20100608)</option>
+                <option value="pypy2_4.0.1">PyPy2 (5.6.0)</option>
+                <option value="pypy3_2.4.0">PyPy3 (2.4.0)</option>
+                <option value="crystal_0.12.0">Crystal (0.20.5)</option>
+                <option value="fsharp_4.2.2.30">F# (Mono 4.0)</option>
+                <option value="unlambda_0.1.3">Unlambda (0.1.3)</option>
+                <option value="lua_5.3.2">Lua (5.3.2)</option>
+                <option value="luajit_2.0.2">LuaJIT (2.0.4)</option>
+                <option value="moonscript_0.4.0">MoonScript (0.5.0)</option>
+                <option value="ceylon_1.2.1">Ceylon (1.2.1)</option>
+                <option value="julia_0.4.2">Julia (0.5.0)</option>
+                <option value="octave_4.0.0">Octave (4.0.2)</option>
+                <option value="nim_0.13.0">Nim (0.13.0)</option>
+                <option value="typescript_1.8.2">TypeScript (2.1.6)</option>
+                <option value="perl6_2016.01">Perl6 (rakudo-star 2016.01)</option>
+                <option value="kotlin_1.0.0">Kotlin (1.0.0)</option>
+                <option value="php7_7.0.4">PHP7 (7.0.15)</option>
+            </select>
+
+            <span class="selector-inline-label"> <span class="lang"><span class="lang-en">Status</span><span class="lang-ja">状態</span></span>:</span>
+            <select name="status" class="input-small span1">
+                <option value="" selected>-</option>
+                <option value="AC">AC</option>
+                <option value="WA">WA</option>
+                <option value="MLE">MLE</option>
+                <option value="TLE">TLE</option>
+                <option value="RE">RE</option>
+                <option value="OLE">OLE</option>
+                <option value="QLE">QLE</option>
+                <option value="CE">CE</option>
+                <option value="IE">IE</option>
+            </select>
+            <button type="submit" class="btn btn-primary selector-inline-label"><span class="lang"><span class="lang-en">Search</span><span class="lang-ja">検索する</span></span></button>
+            <a class="btn selector-inline-label" href="/submissions/me"><span class="lang"><span class="lang-en">Cancel</span><span class="lang-ja">キャンセル</span></span></a>
+        </form>
+    </div>
+
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-wb">
+            <thead>
+            <tr>
+                <th width="12%"><span class="lang"><span class="lang-en">Created time</span><span class="lang-ja">投稿日時</span></span></th>
+                <th width="23%"><span class="lang"><span class="lang-en">Title</span><span class="lang-ja">問題名</span></span></th>
+                <th width="16%"><span class="lang"><span class="lang-en">Language</span><span class="lang-ja">言語</span></span></th>
+                <th width="8%"><span class="lang"><span class="lang-en">Score</span><span class="lang-ja">得点</span></span></th>
+                <th width="8%"><span class="lang"><span class="lang-en">Status</span><span class="lang-ja">状態</span></span></th>
+                <th width="10%"><span class="lang"><span class="lang-en">Exec time</span><span class="lang-ja">実行時間</span></span></span></th>
+                <th width="10%"><span class="lang"><span class="lang-en">Memory usage</span><span class="lang-ja">メモリ使用量</span></span></span></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="table-nwb"><time>2017/11/04 11:57:56 +0000</time></td>
+                <td><a href="/tasks/arc001_1">A - センター採点</a></td>
+                <td class="table-nwb">C++14 (GCC 5.4.1)</td>
+                <td class="table-nwb">0</td>
+                <td colspan="3" class="table-nwb center"><span class="label tooltip-label label-warning" rel="tooltip" data-title="Wrong Answer">WA</span></td>
+                <td><a href="/submissions/1736948"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2016/03/27 09:58:56 +0000</time></td>
+                <td><a href="/tasks/arc001_1">A - センター採点</a></td>
+                <td class="table-nwb">C++11 (GCC 4.8.1)</td>
+                <td class="table-nwb">0</td>
+                <td colspan="3" class="table-nwb center"><span class="label tooltip-label label-warning" rel="tooltip" data-title="Wrong Answer">WA</span></td>
+                <td><a href="/submissions/678072"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2016/03/27 09:57:16 +0000</time></td>
+                <td><a href="/tasks/arc001_1">A - センター採点</a></td>
+                <td class="table-nwb">C++11 (GCC 4.8.1)</td>
+                <td class="table-nwb">0</td>
+                <td colspan="3" class="table-nwb center"><span class="label tooltip-label label-warning" rel="tooltip" data-title="Wrong Answer">WA</span></td>
+                <td><a href="/submissions/678071"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/10/19 07:53:20 +0000</time></td>
+                <td><a href="/tasks/arc001_2">B - リモコン</a></td>
+                <td class="table-nwb">C++ (G++ 4.6.4)</td>
+                <td class="table-nwb">100</td>
+                <td class="table-nwb center"><span class="label label-success tooltip-label" rel="tooltip" data-title="Accepted">AC</span></td>
+                <td class="right">29 ms</td>
+                <td class="right">816 KB</td>
+                <td><a href="/submissions/48220"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 19:51:34 +0000</time></td>
+                <td><a href="/tasks/arc001_4">D - レースゲーム</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">0</td>
+                <td colspan="3" class="table-nwb center"><span class="label tooltip-label label-warning" rel="tooltip" data-title="Wrong Answer">WA</span></td>
+                <td><a href="/submissions/4953"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 19:51:10 +0000</time></td>
+                <td><a href="/tasks/arc001_4">D - レースゲーム</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">0</td>
+                <td colspan="3" class="table-nwb center"><span class="label tooltip-label label-warning" rel="tooltip" data-title="Wrong Answer">WA</span></td>
+                <td><a href="/submissions/4952"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 19:50:19 +0000</time></td>
+                <td><a href="/tasks/arc001_4">D - レースゲーム</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">0</td>
+                <td colspan="3" class="table-nwb center"><span class="label tooltip-label label-warning" rel="tooltip" data-title="Wrong Answer">WA</span></td>
+                <td><a href="/submissions/4951"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 19:42:25 +0000</time></td>
+                <td><a href="/tasks/arc001_4">D - レースゲーム</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">0</td>
+                <td colspan="3" class="table-nwb center"><span class="label tooltip-label label-warning" rel="tooltip" data-title="Wrong Answer">WA</span></td>
+                <td><a href="/submissions/4948"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 13:45:33 +0000</time></td>
+                <td><a href="/tasks/arc001_2">B - リモコン</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">100</td>
+                <td class="table-nwb center"><span class="label label-success tooltip-label" rel="tooltip" data-title="Accepted">AC</span></td>
+                <td class="right">20 ms</td>
+                <td class="right">692 KB</td>
+                <td><a href="/submissions/4292"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 13:43:28 +0000</time></td>
+                <td><a href="/tasks/arc001_3">C - パズルのお手伝い</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">100</td>
+                <td class="table-nwb center"><span class="label label-success tooltip-label" rel="tooltip" data-title="Accepted">AC</span></td>
+                <td class="right">20 ms</td>
+                <td class="right">692 KB</td>
+                <td><a href="/submissions/4280"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 13:30:09 +0000</time></td>
+                <td><a href="/tasks/arc001_2">B - リモコン</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">0</td>
+                <td colspan="3" class="table-nwb center"><span class="label label-warning tooltip-label" rel="tooltip" data-title="Time Limit Exceeded">TLE</span></td>
+                <td><a href="/submissions/4199"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 13:24:32 +0000</time></td>
+                <td><a href="/tasks/arc001_1">A - センター採点</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">100</td>
+                <td class="table-nwb center"><span class="label label-success tooltip-label" rel="tooltip" data-title="Accepted">AC</span></td>
+                <td class="right">22 ms</td>
+                <td class="right">808 KB</td>
+                <td><a href="/submissions/4164"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            <tr>
+                <td class="table-nwb"><time>2012/04/14 12:23:20 +0000</time></td>
+                <td><a href="/tasks/arc001_1">A - センター採点</a></td>
+                <td class="table-nwb">C++ (GCC 4.4.7)</td>
+                <td class="table-nwb">100</td>
+                <td class="table-nwb center"><span class="label label-success tooltip-label" rel="tooltip" data-title="Accepted">AC</span></td>
+                <td class="right">22 ms</td>
+                <td class="right">820 KB</td>
+                <td><a href="/submissions/4133"><span class="lang"><span class="lang-en">Details</span><span class="lang-ja">詳細を確認</span></span></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="pagination pagination-centered">
+        <ul>
+            <li><a href="/submissions/me/1">&larr;</a></li>                  <li><a href="/submissions/me/1">1</a></li>
+            <li class="active"><a href="/submissions/me/2">2</a></li>
+        </ul>
+    </div>
+
+</div>
+
+<footer>
+    <ul>
+        <li><a href="/tos"><span class="lang"><span class="lang-en">Terms of service</span><span class="lang-ja">利用規約</span></span></a></li>
+        <li><a href="/privacy"><span class="lang"><span class="lang-en">Privacy</span><span class="lang-ja">プライバシーポリシー</span></span></a></li>
+        <li><a href="/personal"><span class="lang"><span class="lang-en">Personal Information</span><span class="lang-ja">個人情報保護方針</span></span></a></li>
+        <li><a href="/tutorial"><span class="lang"><span class="lang-en">Tutorial</span><span class="lang-ja">チュートリアル</span></span></a></li>
+        <li><a href="/rules"><span class="lang"><span class="lang-en">Rules</span><span class="lang-ja">ルール</span></span></a></li>
+        <li><a href="/glossary"><span class="lang"><span class="lang-en">Glossary</span><span class="lang-ja">用語集</span></span></a></li>
+        <li><a href="/faq"><span class="lang"><span class="lang-en">FAQ</span><span class="lang-ja">よくある質問</span></span></a></li>
+    </ul>
+    <p id="copyright">&copy; 2017 AtCoder Inc. All rights reserved.</p>
+</footer>
+
+<p id="fixed-server-timer" style="display: none;"></p>
+
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/prettify.js"></script>
+<script src="/js/lang-vb.js"></script>
+<script src="/js/lang-hs.js"></script>
+<script src="/js/varmath.js"></script>
+<script src="/js/script.js?v=2"></script>
+</body>
+</html>

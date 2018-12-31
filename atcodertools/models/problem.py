@@ -1,3 +1,5 @@
+import json
+
 from atcodertools.models.contest import Contest
 
 
@@ -16,3 +18,18 @@ class Problem:
 
     def get_alphabet(self):
         return self.alphabet
+
+    def to_dict(self):
+        return {
+            "contest": self.contest.to_dict(),
+            "problem_id": self.problem_id,
+            "alphabet": self.alphabet
+        }
+
+    @classmethod
+    def from_dict(cls, dic):
+        return Problem(
+            contest=Contest.from_dict(dic["contest"]),
+            problem_id=dic["problem_id"],
+            alphabet=dic["alphabet"],
+        )

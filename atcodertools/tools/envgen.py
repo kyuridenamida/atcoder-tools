@@ -18,6 +18,8 @@ from atcodertools.fmtprediction.predict_format import FormatPredictor, NoPredict
 from atcodertools.models.problem import Problem
 import logging
 
+from atcodertools.models.tools.metadata import Metadata
+
 script_dir_path = os.path.dirname(os.path.abspath(__file__))
 
 fmt = "%(asctime)s %(levelname)s: %(message)s"
@@ -30,6 +32,10 @@ class BannedFileDetectedError(Exception):
 
 def extension(lang: str):
     return lang
+
+
+IN_EXAMPLE_FORMAT = "in_{}.txt"
+OUT_EXAMPLE_FORMAT = "out_{}.txt"
 
 
 def prepare_procedure(atcoder_client: AtCoderClient,
@@ -68,7 +74,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         emit_info("No samples.")
     else:
         os.makedirs(workspace_dir_path, exist_ok=True)
-        create_examples(content.get_samples(), workspace_dir_path)
+        create_examples(content.get_samples(), workspace_dir_path, IN_EXAMPLE_FORMAT, OUT_EXAMPLE_FORMAT)
         emit_info("Created examples.")
 
     code_file_path = os.path.join(
@@ -122,6 +128,16 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 msg,
                 replacement_code_path,
                 code_file_path))
+
+    # Save metadata
+    metadata_path = os.path.join(workspace_dir_path, "metadata.json")
+    Metadata(problem,
+             os.path.basename(code_file_path),
+             IN_EXAMPLE_FORMAT.replace("{}", "*"),
+             OUT_EXAMPLE_FORMAT.replace("{}", "*"),
+             lang,
+             ).save_to(metadata_path)
+    emit_info("Saved metadata to {}".format(metadata_path))
 
 
 def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str]):
@@ -212,9 +228,9 @@ def main(prog, args):
     parser.add_argument("--template",
                         help="{0}{1}".format("file path to your template code\n"
                                              "[Default (C++)] {}\n".format(
-                                                 get_default_template_path('cpp')),
-                                             "[Default (Java)] {}".format(
-                                                 get_default_template_path('java')))
+                            get_default_template_path('cpp')),
+                            "[Default (Java)] {}".format(
+                                get_default_template_path('java')))
                         )
 
     parser.add_argument("--replacement",
