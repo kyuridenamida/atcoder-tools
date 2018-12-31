@@ -1,13 +1,13 @@
 {
+ "code_filename": "main.cpp",
+ "lang": "cpp",
  "problem": {
+  "alphabet": "F",
   "contest": {
    "contest_id": "agc029"
   },
-  "problem_id": "agc029_f",
-  "alphabet": "F"
+  "problem_id": "agc029_f"
  },
- "code_filename": "main.cpp",
  "sample_in_pattern": "in_*.txt",
- "sample_out_pattern": "out_*.txt",
- "lang": "cpp"
+ "sample_out_pattern": "out_*.txt"
 }

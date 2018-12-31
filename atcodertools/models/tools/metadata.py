@@ -37,4 +37,4 @@ class Metadata:
 
     def save_to(self, filename):
         with open(filename, 'w') as f:
-            json.dump(self.to_dict(), f, indent=1)
+            json.dump(self.to_dict(), f, indent=1, sort_keys=True)
