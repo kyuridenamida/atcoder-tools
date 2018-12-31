@@ -78,7 +78,8 @@ class TestAtCoderClientMock(unittest.TestCase):
             {contest.get_submit_url(): fake_resp("submit/after_post.html")}
         )
 
-        submission = self.client.submit_source_code(contest, problem, "C++14 (GCC 5.4.1)", "x")
+        submission = self.client.submit_source_code(
+            contest, problem, "C++14 (GCC 5.4.1)", "x")
         self.assertEqual(3905485, submission.submission_id)
         self.assertEqual("arc001_1", submission.problem_id)
 

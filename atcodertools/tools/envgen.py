@@ -74,7 +74,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         emit_info("No samples.")
     else:
         os.makedirs(workspace_dir_path, exist_ok=True)
-        create_examples(content.get_samples(), workspace_dir_path, IN_EXAMPLE_FORMAT, OUT_EXAMPLE_FORMAT)
+        create_examples(content.get_samples(), workspace_dir_path,
+                        IN_EXAMPLE_FORMAT, OUT_EXAMPLE_FORMAT)
         emit_info("Created examples.")
 
     code_file_path = os.path.join(
@@ -228,9 +229,9 @@ def main(prog, args):
     parser.add_argument("--template",
                         help="{0}{1}".format("file path to your template code\n"
                                              "[Default (C++)] {}\n".format(
-                            get_default_template_path('cpp')),
-                            "[Default (Java)] {}".format(
-                                get_default_template_path('java')))
+                                                 get_default_template_path('cpp')),
+                                             "[Default (Java)] {}".format(
+                                                 get_default_template_path('java')))
                         )
 
     parser.add_argument("--replacement",

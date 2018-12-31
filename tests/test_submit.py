@@ -13,6 +13,7 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 def fake_credential_suplier():
     return "@@fakeuser@@", "fakepass"
 
+
 class TestTester(unittest.TestCase):
     def test_submit_fail_when_metadata_not_found(self):
         ok = submit.main(

@@ -42,7 +42,7 @@ class ExecResult:
 
 def is_executable_file(file_name):
     return os.access(file_name, os.X_OK) and Path(file_name).is_file() \
-           and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
+        and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
 def infer_exec_file(filenames):
@@ -259,7 +259,8 @@ def main(prog, args) -> bool:
     metadata_file = os.path.join(args.dir, "metadata.json")
     in_ex_pattern, out_ex_pattern = get_sample_patterns(metadata_file)
 
-    in_sample_file_list = sorted(glob.glob(os.path.join(args.dir, in_ex_pattern)))
+    in_sample_file_list = sorted(
+        glob.glob(os.path.join(args.dir, in_ex_pattern)))
     out_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, out_ex_pattern)))
 

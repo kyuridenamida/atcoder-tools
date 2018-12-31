@@ -69,7 +69,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
     try:
         metadata = Metadata.load_from(metadata_file)
     except IOError:
-        logging.error("{0} is not found! You need {0} to use this submission functionality.".format(metadata_file))
+        logging.error(
+            "{0} is not found! You need {0} to use this submission functionality.".format(metadata_file))
         return False
 
     try:
@@ -97,7 +98,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                 if submission.problem_id == metadata.problem.problem_id:
                     logging.error("Cancel submitting because you already sent some code to the problem. Please "
                                   "specify -u to send the code. {}".format(
-                        metadata.problem.contest.get_submissions_url(submission)))
+                                      metadata.problem.contest.get_submissions_url(submission)))
                     return False
 
         code_path = os.path.join(args.dir, metadata.code_filename)
@@ -105,8 +106,10 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
             source = f.read()
         detailed_lang = infer_detailed_lang(metadata.lang)
         logging.info("Submitting {} as {}".format(code_path, detailed_lang))
-        submission = client.submit_source_code(metadata.problem.contest, metadata.problem, detailed_lang, source)
-        logging.info("Done! {}".format(metadata.problem.contest.get_submissions_url(submission)))
+        submission = client.submit_source_code(
+            metadata.problem.contest, metadata.problem, detailed_lang, source)
+        logging.info("Done! {}".format(
+            metadata.problem.contest.get_submissions_url(submission)))
 
 
 if __name__ == "__main__":

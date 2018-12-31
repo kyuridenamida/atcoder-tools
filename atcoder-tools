@@ -15,7 +15,8 @@ if __name__ == '__main__':
         print("Usage:")
         print("{} gen -- to generate workspace".format(sys.argv[0]))
         print("{} test -- to test codes in your workspace".format(sys.argv[0]))
-        print("{} submit -- to submit a code to the contest system".format(sys.argv[0]))
+        print(
+            "{} submit -- to submit a code to the contest system".format(sys.argv[0]))
         sys.exit(-1)
 
     prog = " ".join(sys.argv[:2])
