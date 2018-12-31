@@ -1,9 +1,6 @@
 import os
 import unittest
-from unittest.mock import patch
-
-from atcodertools.tools import tester, submit
-from atcodertools.tools.tester import is_executable_file
+from atcodertools.tools import submit
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),

@@ -3,12 +3,6 @@ import argparse
 import logging
 import sys
 import os
-import glob
-import subprocess
-import time
-from enum import Enum
-from pathlib import Path
-from typing import List, Tuple
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.tools import tester

@@ -1,5 +1,3 @@
-import json
-
 from atcodertools.models.contest import Contest
 
 
