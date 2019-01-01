@@ -6,7 +6,7 @@ import sys
 from multiprocessing import Pool, cpu_count
 from os.path import expanduser
 from time import sleep
-from typing import Tuple
+from typing import Tuple, Optional
 
 from atcodertools.codegen.code_gen_config import CodeGenConfig
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
@@ -213,17 +213,18 @@ SECONDARY_DEFAULT_CONFIG_PATH = os.path.abspath(
     os.path.join(script_dir_path, "./atcodertools-default.toml"))
 
 
-def get_code_gen_config(config_path: str = None):
+def get_code_gen_config(config_path: Optional[str] = None):
+    def _load(path: str):
+        logging.info("Going to load {} as config".format(path))
+        return CodeGenConfig.load(path)
+
     if config_path:
-        logging.info("Going to load {} as config".format(config_path))
-        return CodeGenConfig.load(config_path)
+        return _load(config_path)
+
     if os.path.exists(PRIMARY_DEFAULT_CONFIG_PATH):
-        logging.info("Going to load {} as config".format(
-            PRIMARY_DEFAULT_CONFIG_PATH))
-        return CodeGenConfig.load(PRIMARY_DEFAULT_CONFIG_PATH)
-    logging.info("Going to load {} as config".format(
-        SECONDARY_DEFAULT_CONFIG_PATH))
-    return CodeGenConfig.load(SECONDARY_DEFAULT_CONFIG_PATH)
+        return _load(PRIMARY_DEFAULT_CONFIG_PATH)
+
+    return _load(SECONDARY_DEFAULT_CONFIG_PATH)
 
 
 def main(prog, args):
@@ -280,7 +281,9 @@ def main(prog, args):
                         help="{0}{1}{2}".format("file path to your config file\n",
                                                 "[Default (Primary)] {}\n".format(
                                                     PRIMARY_DEFAULT_CONFIG_PATH),
-                                                "[Default (Secondary)] {}\n".format(SECONDARY_DEFAULT_CONFIG_PATH)))
+                                                "[Default (Secondary)] {}\n".format(
+                                                    SECONDARY_DEFAULT_CONFIG_PATH))
+                        )
 
     args = parser.parse_args(args)
 
