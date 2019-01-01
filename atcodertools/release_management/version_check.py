@@ -26,8 +26,8 @@ def _get_latest_version_cache():
     if not os.path.exists(cache_file_path):
         return None
     with open(cache_file_path, 'r') as f:
-        version, timestamp_ms = f.read().split()
-        timestamp_sec = float(timestamp_ms)
+        version, timestamp_sec = f.read().split()
+        timestamp_sec = float(timestamp_sec)
 
         if time.time() - timestamp_sec > HOUR_IN_SEC:
             return None
