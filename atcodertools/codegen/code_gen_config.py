@@ -4,10 +4,8 @@ INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
 
 
-def _verify_indent_type(indent_type: str):
-    # indent_type must be 'space' or 'tab'
-    assert indent_type in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]
-    return indent_type
+class ConfigInitError(Exception):
+    pass
 
 
 class CodeGenConfig:
@@ -15,7 +13,14 @@ class CodeGenConfig:
                  indent_type: str = INDENT_TYPE_SPACE,
                  indent_width: int = 4,
                  ):
-        self.indent_type = _verify_indent_type(indent_type)
+
+        if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
+            raise ConfigInitError("indent_type must be 'space' or 'tab'")
+
+        if indent_width < 0:
+            raise ConfigInitError("indent_width must be a positive integer")
+
+        self.indent_type = indent_type
         self.indent_width = indent_width
 
     def indent(self, depth):
