@@ -216,7 +216,8 @@ SECONDARY_DEFAULT_CONFIG_PATH = os.path.abspath(
 def get_code_gen_config(config_path: Optional[str] = None):
     def _load(path: str):
         logging.info("Going to load {} as config".format(path))
-        return CodeGenConfig.load(path)
+        with open(path, 'r') as f:
+            return CodeGenConfig.load(f)
 
     if config_path:
         return _load(config_path)

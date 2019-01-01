@@ -83,14 +83,17 @@ class TestCodeGenerator(unittest.TestCase):
             return self.lang_to_code_generator[lang](f.read())
 
     def test_load_code_gen_config(self):
-        toml_path = os.path.join(RESOURCE_DIR, "atcodertools-test.toml")
-        config = CodeGenConfig.load(toml_path)
+        with open(os.path.join(RESOURCE_DIR, "atcodertools-test.toml"), 'r') as f:
+            config = CodeGenConfig.load(f)
+
         self.assertEqual(8, config.indent_width)
         self.assertEqual(INDENT_TYPE_SPACE, config.indent_type)
 
     def test_init_code_gen_config_with_invalid_parameters(self):
-        self._expect_error_when_init_config(indent_type='SPACE', indent_width=4)
-        self._expect_error_when_init_config(indent_type='space', indent_width=-1)
+        self._expect_error_when_init_config(
+            indent_type='SPACE', indent_width=4)
+        self._expect_error_when_init_config(
+            indent_type='space', indent_width=-1)
 
     def _expect_error_when_init_config(self, **kwargs):
         try:

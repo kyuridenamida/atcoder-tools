@@ -1,3 +1,5 @@
+from typing import TextIO
+
 import toml
 
 INDENT_TYPE_SPACE = 'space'
@@ -29,7 +31,6 @@ class CodeGenConfig:
         return "\t" * self.indent_width * depth
 
     @classmethod
-    def load(cls, config_file_path):
-        with open(config_file_path) as f:
-            kwargs = toml.load(f).get("codegen")
-            return CodeGenConfig(**kwargs)
+    def load(cls, fp: TextIO):
+        kwargs = toml.load(fp).get("codegen")
+        return CodeGenConfig(**kwargs)
