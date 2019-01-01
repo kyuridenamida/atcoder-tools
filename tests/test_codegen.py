@@ -89,10 +89,10 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(INDENT_TYPE_SPACE, config.indent_type)
 
     def test_init_code_gen_config_with_invalid_parameters(self):
-        self._expect_error_when_init(indent_type='SPACE', indent_width=4)
-        self._expect_error_when_init(indent_type='space', indent_width=-1)
+        self._expect_error_when_init_config(indent_type='SPACE', indent_width=4)
+        self._expect_error_when_init_config(indent_type='space', indent_width=-1)
 
-    def _expect_error_when_init(self, **kwargs):
+    def _expect_error_when_init_config(self, **kwargs):
         try:
             CodeGenConfig(**kwargs)
             self.fail("Must not reach here")
