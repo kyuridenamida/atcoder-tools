@@ -1,10 +1,7 @@
 import os
 import unittest
-from unittest.mock import patch
 
-from atcodertools.release_management.version_check import get_latest_version, _fetch_latest_version
-from atcodertools.tools import tester
-from atcodertools.tools.tester import is_executable_file
+from atcodertools.release_management.version_check import get_latest_version
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
