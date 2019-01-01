@@ -8,6 +8,7 @@ from typing import List, Optional, Tuple
 import requests
 from bs4 import BeautifulSoup
 
+from atcodertools.fileutils.artifacts_cache import get_cache_file_path
 from atcodertools.models.contest import Contest
 from atcodertools.models.problem import Problem
 from atcodertools.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
@@ -18,8 +19,7 @@ class LoginError(Exception):
     pass
 
 
-default_cookie_path = os.path.join(
-    os.path.expanduser('~/.local/share'), 'atcoder-tools', 'cookie.txt')
+default_cookie_path = get_cache_file_path('cookie.txt')
 
 
 def save_cookie(session: requests.Session, cookie_path: Optional[str] = None):

@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 from setuptools import setup, find_packages
+from atcodertools.release_management.version import __version__
 
 try:
     with open('README.md') as f:
@@ -18,7 +19,7 @@ def _requires_from_file(filename):
 
 setup(
     name="atcoder-tools",
-    version="1.0.4",
+    version=__version__,
     description="Convenient modules & tools for AtCoder users, written in Python 3.5",
     url='https://github.com/kyuridenamida/atcoder-tools',
     author='kyuridenamida',
