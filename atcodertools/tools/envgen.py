@@ -8,6 +8,7 @@ from os.path import expanduser
 from time import sleep
 from typing import Tuple
 
+from atcodertools.codegen.code_gen_config import CodeGenConfig
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
 from atcodertools.fileutils.create_contest_file import create_examples, create_code_from_prediction_result
@@ -43,7 +44,9 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                       workspace_root_path: str,
                       template_code_path: str,
                       replacement_code_path: str,
-                      lang: str):
+                      lang: str,
+                      config: CodeGenConfig,
+                      ):
     pid = problem.get_alphabet()
     workspace_dir_path = os.path.join(
         workspace_root_path,
@@ -112,7 +115,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
         create_code_from_prediction_result(
             result,
-            gen_class(template),
+            gen_class(template, config),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
@@ -141,11 +144,11 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     emit_info("Saved metadata to {}".format(metadata_path))
 
 
-def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str]):
-    atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang = argv
+def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str, CodeGenConfig]):
+    atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config = argv
     prepare_procedure(
         atcoder_client, problem, workspace_root_path, template_code_path,
-        replacement_code_path, lang)
+        replacement_code_path, lang, config)
 
 
 def prepare_workspace(atcoder_client: AtCoderClient,
@@ -154,7 +157,9 @@ def prepare_workspace(atcoder_client: AtCoderClient,
                       template_code_path: str,
                       replacement_code_path: str,
                       lang: str,
-                      parallel: bool):
+                      parallel: bool,
+                      config: CodeGenConfig,
+                      ):
     retry_duration = 1.5
     while True:
         problem_list = atcoder_client.download_problem_list(
@@ -165,7 +170,7 @@ def prepare_workspace(atcoder_client: AtCoderClient,
         logging.warning(
             "Failed to fetch. Will retry in {} seconds".format(retry_duration))
 
-    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang) for
+    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config) for
              problem in problem_list]
     if parallel:
         thread_pool = Pool(processes=cpu_count())
@@ -200,6 +205,25 @@ def check_lang(lang: str):
         raise argparse.ArgumentTypeError("{} is not supported. The available languages are {}"
                                          .format(lang, SUPPORTED_LANGUAGES))
     return lang
+
+
+PRIMARY_DEFAULT_CONFIG_PATH = os.path.join(
+    expanduser("~"), ".atcodertools.toml")
+SECONDARY_DEFAULT_CONFIG_PATH = os.path.abspath(
+    os.path.join(script_dir_path, "./atcodertools-default.toml"))
+
+
+def get_code_gen_config(config_path: str = None):
+    if config_path:
+        logging.info("Going to load {} as config".format(config_path))
+        return CodeGenConfig.load(config_path)
+    if os.path.exists(PRIMARY_DEFAULT_CONFIG_PATH):
+        logging.info("Going to load {} as config".format(
+            PRIMARY_DEFAULT_CONFIG_PATH))
+        return CodeGenConfig.load(PRIMARY_DEFAULT_CONFIG_PATH)
+    logging.info("Going to load {} as config".format(
+        SECONDARY_DEFAULT_CONFIG_PATH))
+    return CodeGenConfig.load(SECONDARY_DEFAULT_CONFIG_PATH)
 
 
 def main(prog, args):
@@ -252,6 +276,12 @@ def main(prog, args):
                         help="Save no session cache to avoid security risk",
                         default=False)
 
+    parser.add_argument("--config",
+                        help="{0}{1}{2}".format("file path to your config file\n",
+                                                "[Default (Primary)] {}\n".format(
+                                                    PRIMARY_DEFAULT_CONFIG_PATH),
+                                                "[Default (Secondary)] {}\n".format(SECONDARY_DEFAULT_CONFIG_PATH)))
+
     args = parser.parse_args(args)
 
     try:
@@ -281,7 +311,9 @@ def main(prog, args):
                       args.replacement if args.replacement is not None else get_default_replacement_path(
                           args.lang),
                       args.lang,
-                      args.parallel)
+                      args.parallel,
+                      get_code_gen_config(args.config)
+                      )
 
 
 if __name__ == "__main__":

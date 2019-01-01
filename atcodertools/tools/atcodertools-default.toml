@@ -1,0 +1,3 @@
+[codegen]
+indent_type = 'space' # 'tab' or 'space'
+indent_width = 4
