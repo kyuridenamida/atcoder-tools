@@ -36,7 +36,7 @@ class InputFormatDetectionError(Exception):
 
 class ProblemContent:
 
-    def __init__(self, input_format_text: str = None,
+    def __init__(self, input_format_text: Optional[str] = None,
                  samples: Optional[List[Sample]] = None,
                  original_html: Optional[str] = None,
                  ):
