@@ -6,6 +6,7 @@ import unittest
 from os.path import relpath
 
 from atcodertools.client.atcoder import AtCoderClient
+from atcodertools.codegen.code_gen_config import CodeGenConfig
 from atcodertools.tools.envgen import prepare_workspace, main
 
 RESOURCE_DIR = os.path.join(
@@ -59,7 +60,9 @@ class TestEnvGen(unittest.TestCase):
                 TEMPLATE_PATH,
                 REPLACEMENT_PATH,
                 "cpp",
-                False)
+                False,
+                CodeGenConfig(),
+            )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
     def assertDirectoriesEqual(self, expected_dir_path, dir_path):

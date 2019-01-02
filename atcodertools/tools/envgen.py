@@ -6,8 +6,9 @@ import sys
 from multiprocessing import Pool, cpu_count
 from os.path import expanduser
 from time import sleep
-from typing import Tuple
+from typing import Tuple, Optional
 
+from atcodertools.codegen.code_gen_config import CodeGenConfig
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
 from atcodertools.constprediction.constants_prediction import predict_constants
@@ -45,7 +46,9 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                       workspace_root_path: str,
                       template_code_path: str,
                       replacement_code_path: str,
-                      lang: str):
+                      lang: str,
+                      config: CodeGenConfig,
+                      ):
     pid = problem.get_alphabet()
     workspace_dir_path = os.path.join(
         workspace_root_path,
@@ -116,7 +119,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         create_code_from(
             result,
             constants,
-            gen_class(template),
+            gen_class(template, config),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
@@ -145,11 +148,11 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     emit_info("Saved metadata to {}".format(metadata_path))
 
 
-def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str]):
-    atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang = argv
+def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str, CodeGenConfig]):
+    atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config = argv
     prepare_procedure(
         atcoder_client, problem, workspace_root_path, template_code_path,
-        replacement_code_path, lang)
+        replacement_code_path, lang, config)
 
 
 def prepare_workspace(atcoder_client: AtCoderClient,
@@ -158,7 +161,9 @@ def prepare_workspace(atcoder_client: AtCoderClient,
                       template_code_path: str,
                       replacement_code_path: str,
                       lang: str,
-                      parallel: bool):
+                      parallel: bool,
+                      config: CodeGenConfig,
+                      ):
     retry_duration = 1.5
     while True:
         problem_list = atcoder_client.download_problem_list(
@@ -169,7 +174,7 @@ def prepare_workspace(atcoder_client: AtCoderClient,
         logging.warning(
             "Failed to fetch. Will retry in {} seconds".format(retry_duration))
 
-    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang) for
+    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config) for
              problem in problem_list]
     if parallel:
         thread_pool = Pool(processes=cpu_count())
@@ -206,41 +211,61 @@ def check_lang(lang: str):
     return lang
 
 
+USER_CONFIG_PATH = os.path.join(
+    expanduser("~"), ".atcodertools.toml")
+DEFAULT_CONFIG_PATH = os.path.abspath(
+    os.path.join(script_dir_path, "./atcodertools-default.toml"))
+
+
+def get_code_gen_config(config_path: Optional[str] = None):
+    def _load(path: str):
+        logging.info("Going to load {} as config".format(path))
+        with open(path, 'r') as f:
+            return CodeGenConfig.load(f)
+
+    if config_path:
+        return _load(config_path)
+
+    if os.path.exists(USER_CONFIG_PATH):
+        return _load(USER_CONFIG_PATH)
+
+    return _load(DEFAULT_CONFIG_PATH)
+
+
 def main(prog, args):
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("contest_id",
-                        help="contest ID (e.g. arc001)")
+                        help="Contest ID (e.g. arc001)")
 
     parser.add_argument("--without-login",
                         action="store_true",
-                        help="download data without login")
+                        help="Download data without login")
 
     parser.add_argument("--workspace",
-                        help="path to workspace's root directory. This script will create files"
+                        help="Path to workspace's root directory. This script will create files"
                              " in {{WORKSPACE}}/{{contest_name}}/{{alphabet}}/ e.g. ./your-workspace/arc001/A/\n"
                              "[Default] {}".format(DEFAULT_WORKSPACE_DIR_PATH),
                         default=DEFAULT_WORKSPACE_DIR_PATH)
 
     parser.add_argument("--lang",
-                        help="programming language of your template code, {}.\n"
+                        help="Programming language of your template code, {}.\n"
                         .format(" or ".join(SUPPORTED_LANGUAGES)) + "[Default] {}".format(DEFAULT_LANG),
                         default=DEFAULT_LANG,
                         type=check_lang)
 
     parser.add_argument("--template",
-                        help="{0}{1}".format("file path to your template code\n"
-                                             "[Default (C++)] {}\n".format(
-                                                 get_default_template_path('cpp')),
-                                             "[Default (Java)] {}".format(
-                                                 get_default_template_path('java')))
+                        help="File path to your template code\n{0}{1}".format(
+                            "[Default (C++)] {}\n".format(
+                                get_default_template_path('cpp')),
+                            "[Default (Java)] {}".format(
+                                get_default_template_path('java')))
                         )
 
     parser.add_argument("--replacement",
-                        help="{0}{1}".format(
-                            "file path to the replacement code created when template generation is failed.\n"
+                        help="File path to your config file\n{0}{1}".format(
                             "[Default (C++)] {}\n".format(get_default_replacement_path('cpp')),
                             "[Default (Java)] {}".format(
                                 get_default_replacement_path('java')))
@@ -255,6 +280,13 @@ def main(prog, args):
                         action="store_true",
                         help="Save no session cache to avoid security risk",
                         default=False)
+
+    parser.add_argument("--config",
+                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
+                            USER_CONFIG_PATH),
+                            "[Default (Secondary)] {}\n".format(
+                            DEFAULT_CONFIG_PATH))
+                        )
 
     args = parser.parse_args(args)
 
@@ -285,7 +317,9 @@ def main(prog, args):
                       args.replacement if args.replacement is not None else get_default_replacement_path(
                           args.lang),
                       args.lang,
-                      args.parallel)
+                      args.parallel,
+                      get_code_gen_config(args.config)
+                      )
 
 
 if __name__ == "__main__":
