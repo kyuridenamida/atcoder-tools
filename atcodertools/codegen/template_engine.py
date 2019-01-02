@@ -2,7 +2,7 @@ import string
 import re
 import warnings
 
-from jinja2 import Template
+import jinja2
 
 
 def _substitute(s, reps):
@@ -47,5 +47,5 @@ def old_render(template, **kwargs):
 
 
 def render_by_jinja(template, **kwargs):
-    template = Template(template)
+    template = jinja2.Template(template)
     return template.render(**kwargs) + "\n"

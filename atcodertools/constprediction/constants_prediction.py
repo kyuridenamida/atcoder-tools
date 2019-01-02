@@ -6,20 +6,19 @@ from bs4 import BeautifulSoup
 
 from atcodertools.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 
+MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
 
-def split_into_sentences(text: str):
-    return text.split("\n")
+MOD_STRATEGY_RE_LIST = [
+    re.compile("([0-9]+).?.?.?で割った"),
+    re.compile("modu?l?o?[^0-9]?[^0-9]?[^0-9]?([0-9]+)")
+]
 
 
-def is_interesting_sentence(sentence, keywords):
-    for kw in keywords:
+def is_mod_context(sentence):
+    for kw in MOD_ANCHORS:
         if kw in sentence:
             return True
     return False
-
-
-PRIMARY_STRATEGY_RE = re.compile("([0-9]+).?.?.?で割った")
-SECONDARY_STRATEGY_RE = re.compile("modu?l?o?[^0-9]?[^0-9]?[^0-9]?([0-9]+)")
 
 
 def predict_modulo(html: str):
@@ -27,17 +26,14 @@ def predict_modulo(html: str):
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
             "10^9+7", "1000000007").lower().strip()
 
-    mod_anchors = ["余り", "あまり", "mod", "割っ", "modulo"]
-
     soup = BeautifulSoup(html, "html.parser")
-    sentences = split_into_sentences(soup.get_text())
-    sentences = [
-        normalize(s) for s in sentences if is_interesting_sentence(s, mod_anchors)]
+    sentences = soup.get_text().split("\n")
+    sentences = [normalize(s) for s in sentences if is_mod_context(s)]
 
     res = None
 
     for s in sentences:
-        for regexp in [PRIMARY_STRATEGY_RE, SECONDARY_STRATEGY_RE]:
+        for regexp in MOD_STRATEGY_RE_LIST:
             m = regexp.search(s)
             if m is not None:
                 extracted_val = int(m.group(1))
@@ -46,15 +42,14 @@ def predict_modulo(html: str):
     return res
 
 
-# yes_str, no_str
-def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
+def predict_yes_no(html: str) -> Optional[Tuple[str, str]]:
     try:
         outputs = set()
         for sample in ProblemContent.from_html(html).get_samples():
             for x in sample.get_output().split():
                 outputs.add(x)
     except (InputFormatDetectionError, SampleDetectionError):
-        return None, None
+        return None
 
     yes_kws = ["yes", "possible"]
     no_kws = ["no", "impossible"]
@@ -71,6 +66,11 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
 
 
 def predict_constants(html: str) -> ProblemConstantSet:
-    yes_str, no_str = predict_yes_no(html)
+    yes_no_result = predict_yes_no(html)
+    if yes_no_result is None:
+        yes_str = no_str = None
+    else:
+        yes_str, no_str = yes_no_result
+
     mod = predict_modulo(html)
     return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str)
