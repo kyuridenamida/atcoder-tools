@@ -37,6 +37,9 @@ class TestEnvGen(unittest.TestCase):
         answer_data_dir_path = os.path.join(
             RESOURCE_DIR,
             "test_prepare_workspace")
+
+        config_path = os.path.join(RESOURCE_DIR, "test_prepare_workspace.toml")
+
         main(
             "",
             ["agc029",
@@ -44,7 +47,8 @@ class TestEnvGen(unittest.TestCase):
              "--template", TEMPLATE_PATH,
              "--replacement", REPLACEMENT_PATH,
              "--lang", "cpp",
-             "--without-login"
+             "--without-login",
+             '--config', config_path
              ]
         )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
