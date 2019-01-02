@@ -1,12 +1,8 @@
-from typing import TextIO
-
-import toml
-
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
 
 
-class ConfigInitError(Exception):
+class CodeGenConfigInitError(Exception):
     pass
 
 
@@ -17,10 +13,12 @@ class CodeGenConfig:
                  ):
 
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
-            raise ConfigInitError("indent_type must be 'space' or 'tab'")
+            raise CodeGenConfigInitError(
+                "indent_type must be 'space' or 'tab'")
 
         if indent_width < 0:
-            raise ConfigInitError("indent_width must be a positive integer")
+            raise CodeGenConfigInitError(
+                "indent_width must be a positive integer")
 
         self.indent_type = indent_type
         self.indent_width = indent_width
@@ -29,8 +27,3 @@ class CodeGenConfig:
         if self.indent_type == INDENT_TYPE_SPACE:
             return " " * self.indent_width * depth
         return "\t" * self.indent_width * depth
-
-    @classmethod
-    def load(cls, fp: TextIO):
-        kwargs = toml.load(fp).get("codegen")
-        return CodeGenConfig(**kwargs)

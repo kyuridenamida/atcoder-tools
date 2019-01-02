@@ -1,4 +1,4 @@
-from atcodertools.codegen.code_gen_config import CodeGenConfig
+from atcodertools.codegen.codegen_config import CodeGenConfig
 from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
 from atcodertools.models.analyzer.simple_format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult

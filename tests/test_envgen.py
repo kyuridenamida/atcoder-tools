@@ -6,8 +6,8 @@ import unittest
 from os.path import relpath
 
 from atcodertools.client.atcoder import AtCoderClient
-from atcodertools.codegen.code_gen_config import CodeGenConfig
-from atcodertools.tools.envgen import prepare_workspace, main
+from atcodertools.config.config import Config
+from atcodertools.tools.envgen import prepare_contest, main
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -53,7 +53,7 @@ class TestEnvGen(unittest.TestCase):
         answer_data_dir_path = os.path.join(RESOURCE_DIR, "test_backup")
         # Prepare workspace twice
         for _ in range(2):
-            prepare_workspace(
+            prepare_contest(
                 AtCoderClient(),
                 "agc029",
                 self.temp_dir,
@@ -61,7 +61,7 @@ class TestEnvGen(unittest.TestCase):
                 REPLACEMENT_PATH,
                 "cpp",
                 False,
-                CodeGenConfig(),
+                Config(),
             )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 

@@ -8,9 +8,9 @@ from os.path import expanduser
 from time import sleep
 from typing import Tuple, Optional
 
-from atcodertools.codegen.code_gen_config import CodeGenConfig
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
+from atcodertools.config.config import Config
 from atcodertools.fileutils.create_contest_file import create_examples, create_code_from_prediction_result
 from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
@@ -39,16 +39,25 @@ IN_EXAMPLE_FORMAT = "in_{}.txt"
 OUT_EXAMPLE_FORMAT = "out_{}.txt"
 
 
+def output_splitter():
+    # for readability
+    print("=================================================", file=sys.stderr)
+
+
+def _message_on_execution(cwd: str, cmd: str):
+    return "Executing the following command in `{}`: {}".format(cwd, cmd)
+
+
 def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       workspace_root_path: str,
                       template_code_path: str,
                       replacement_code_path: str,
                       lang: str,
-                      config: CodeGenConfig,
+                      config: Config,
                       ):
     pid = problem.get_alphabet()
-    workspace_dir_path = os.path.join(
+    problem_dir_path = os.path.join(
         workspace_root_path,
         problem.get_contest().get_id(),
         pid)
@@ -76,13 +85,13 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     if len(content.get_samples()) == 0:
         emit_info("No samples.")
     else:
-        os.makedirs(workspace_dir_path, exist_ok=True)
-        create_examples(content.get_samples(), workspace_dir_path,
+        os.makedirs(problem_dir_path, exist_ok=True)
+        create_examples(content.get_samples(), problem_dir_path,
                         IN_EXAMPLE_FORMAT, OUT_EXAMPLE_FORMAT)
         emit_info("Created examples.")
 
     code_file_path = os.path.join(
-        workspace_dir_path,
+        problem_dir_path,
         "main.{}".format(extension(lang)))
 
     # If there is an existing code, just create backup
@@ -115,7 +124,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
         create_code_from_prediction_result(
             result,
-            gen_class(template, config),
+            gen_class(template, config.code_gen_config),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
@@ -134,7 +143,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 code_file_path))
 
     # Save metadata
-    metadata_path = os.path.join(workspace_dir_path, "metadata.json")
+    metadata_path = os.path.join(problem_dir_path, "metadata.json")
     Metadata(problem,
              os.path.basename(code_file_path),
              IN_EXAMPLE_FORMAT.replace("{}", "*"),
@@ -143,23 +152,30 @@ def prepare_procedure(atcoder_client: AtCoderClient,
              ).save_to(metadata_path)
     emit_info("Saved metadata to {}".format(metadata_path))
 
+    if config.env_gen_config.exec_after_problem_created is not None:
+        emit_info(_message_on_execution(problem_dir_path,
+                                        config.env_gen_config.exec_after_problem_created))
+        config.env_gen_config.run_exec_after_problem_created(problem_dir_path)
 
-def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str, CodeGenConfig]):
+    output_splitter()
+
+
+def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str, Config]):
     atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config = argv
     prepare_procedure(
         atcoder_client, problem, workspace_root_path, template_code_path,
         replacement_code_path, lang, config)
 
 
-def prepare_workspace(atcoder_client: AtCoderClient,
-                      contest_id: str,
-                      workspace_root_path: str,
-                      template_code_path: str,
-                      replacement_code_path: str,
-                      lang: str,
-                      parallel: bool,
-                      config: CodeGenConfig,
-                      ):
+def prepare_contest(atcoder_client: AtCoderClient,
+                    contest_id: str,
+                    workspace_root_path: str,
+                    template_code_path: str,
+                    replacement_code_path: str,
+                    lang: str,
+                    parallel: bool,
+                    config: Config,
+                    ):
     retry_duration = 1.5
     while True:
         problem_list = atcoder_client.download_problem_list(
@@ -172,12 +188,21 @@ def prepare_workspace(atcoder_client: AtCoderClient,
 
     tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config) for
              problem in problem_list]
+
+    output_splitter()
+
     if parallel:
         thread_pool = Pool(processes=cpu_count())
         thread_pool.map(func, tasks)
     else:
         for argv in tasks:
             func(argv)
+
+    if config.env_gen_config.exec_after_problem_created is not None:
+        contest_dir_path = os.path.join(workspace_root_path, contest_id)
+        logging.info(_message_on_execution(contest_dir_path,
+                                           config.env_gen_config.exec_after_contest_created))
+        config.env_gen_config.run_exec_after_contest_created(contest_dir_path)
 
 
 DEFAULT_WORKSPACE_DIR_PATH = os.path.join(
@@ -213,11 +238,11 @@ DEFAULT_CONFIG_PATH = os.path.abspath(
     os.path.join(script_dir_path, "./atcodertools-default.toml"))
 
 
-def get_code_gen_config(config_path: Optional[str] = None):
-    def _load(path: str):
+def get_config(config_path: Optional[str] = None) -> Config:
+    def _load(path: str) -> Config:
         logging.info("Going to load {} as config".format(path))
         with open(path, 'r') as f:
-            return CodeGenConfig.load(f)
+            return Config.load(f)
 
     if config_path:
         return _load(config_path)
@@ -281,7 +306,7 @@ def main(prog, args):
                         help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
                             USER_CONFIG_PATH),
                             "[Default (Secondary)] {}\n".format(
-                            DEFAULT_CONFIG_PATH))
+                                DEFAULT_CONFIG_PATH))
                         )
 
     args = parser.parse_args(args)
@@ -305,17 +330,17 @@ def main(prog, args):
     else:
         logging.info("Downloading data without login.")
 
-    prepare_workspace(client,
-                      args.contest_id,
-                      args.workspace,
-                      args.template if args.template is not None else get_default_template_path(
-                          args.lang),
-                      args.replacement if args.replacement is not None else get_default_replacement_path(
-                          args.lang),
-                      args.lang,
-                      args.parallel,
-                      get_code_gen_config(args.config)
-                      )
+    prepare_contest(client,
+                    args.contest_id,
+                    args.workspace,
+                    args.template if args.template is not None else get_default_template_path(
+                        args.lang),
+                    args.replacement if args.replacement is not None else get_default_replacement_path(
+                        args.lang),
+                    args.lang,
+                    args.parallel,
+                    get_config(args.config)
+                    )
 
 
 if __name__ == "__main__":

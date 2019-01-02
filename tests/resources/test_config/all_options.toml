@@ -1,0 +1,7 @@
+[codegen]
+indent_type = 'tab' # 'tab' or 'space'
+indent_width = 8
+
+[envgen]
+exec_after_problem_created='echo problem && ls'
+exec_after_contest_created='echo contest && ls'

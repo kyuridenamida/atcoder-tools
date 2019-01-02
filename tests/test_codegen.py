@@ -3,7 +3,6 @@ import tempfile
 import unittest
 import os
 
-from atcodertools.codegen.code_gen_config import CodeGenConfig, INDENT_TYPE_SPACE, ConfigInitError
 from atcodertools.codegen.code_generator import CodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
@@ -81,26 +80,6 @@ class TestCodeGenerator(unittest.TestCase):
             self.lang_to_template_file[lang])
         with open(template_file, 'r') as f:
             return self.lang_to_code_generator[lang](f.read())
-
-    def test_load_code_gen_config(self):
-        with open(os.path.join(RESOURCE_DIR, "atcodertools-test.toml"), 'r') as f:
-            config = CodeGenConfig.load(f)
-
-        self.assertEqual(8, config.indent_width)
-        self.assertEqual(INDENT_TYPE_SPACE, config.indent_type)
-
-    def test_init_code_gen_config_with_invalid_parameters(self):
-        self._expect_error_when_init_config(
-            indent_type='SPACE', indent_width=4)
-        self._expect_error_when_init_config(
-            indent_type='space', indent_width=-1)
-
-    def _expect_error_when_init_config(self, **kwargs):
-        try:
-            CodeGenConfig(**kwargs)
-            self.fail("Must not reach here")
-        except ConfigInitError:
-            pass
 
 
 if __name__ == "__main__":
