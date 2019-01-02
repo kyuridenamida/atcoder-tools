@@ -3,7 +3,7 @@ import os
 import tempfile
 import unittest
 
-from atcodertools.constprediction.constants_prediction import predict_constants
+from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo
 from tests.utils.gzip_controller import make_html_data_controller
 
 ANSWER_FILE = os.path.join(
@@ -47,6 +47,10 @@ class TestConstantsPrediction(unittest.TestCase):
                                                                              constants.yes_str),
                                                                          _to_str(constants.no_str))
             self.assertEqual(answer_line.rstrip(), output_line.rstrip())
+
+    def test_modulo_prediction_fail(self):
+        modulo = predict_modulo(self._load("abc103-C.html"))
+        self.assertIsNone(modulo)
 
     def _load(self, html_path):
         with open(os.path.join(self.test_dir, html_path), 'r') as f:

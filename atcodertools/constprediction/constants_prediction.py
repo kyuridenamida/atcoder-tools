@@ -1,3 +1,4 @@
+import logging
 import re
 from typing import Tuple, Optional
 
@@ -30,16 +31,24 @@ def predict_modulo(html: str):
     sentences = soup.get_text().split("\n")
     sentences = [normalize(s) for s in sentences if is_mod_context(s)]
 
-    res = None
+    mod_cands = set()
 
     for s in sentences:
         for regexp in MOD_STRATEGY_RE_LIST:
             m = regexp.search(s)
             if m is not None:
                 extracted_val = int(m.group(1))
-                if res is None or res < extracted_val:
-                    res = extracted_val
-    return res
+                mod_cands.add(extracted_val)
+
+    if len(mod_cands) == 0:
+        return None
+
+    if len(mod_cands) == 1:
+        return list(mod_cands)[0]
+
+    logging.warning("Modulo prediction failed -- "
+                    "two or more candidates {} are detected as modulo values".format(mod_cands))
+    return None
 
 
 def predict_yes_no(html: str) -> Optional[Tuple[str, str]]:
