@@ -36,13 +36,17 @@ class InputFormatDetectionError(Exception):
 
 class ProblemContent:
 
-    def __init__(self, input_format_text: str = None, samples: List[Sample] = None):
+    def __init__(self, input_format_text: str = None,
+                 samples: List[Sample] = None,
+                 original_html: str = None,
+                 ):
         self.samples = samples
         self.input_format_text = input_format_text
+        self.original_html = original_html
 
     @classmethod
-    def from_html(cls, html: str = None):
-        res = ProblemContent()
+    def from_html(cls, html: str):
+        res = ProblemContent(original_html=html)
         soup = BeautifulSoup(html, "html.parser")
         res.input_format_text, res.samples = res._extract_input_format_and_samples(
             soup)
@@ -81,13 +85,17 @@ class ProblemContent:
         if len(input_tags) != len(output_tags):
             raise SampleDetectionError
 
-        res = [Sample(normalize(in_tag.text), normalize(out_tag.text))
-               for in_tag, out_tag in zip(input_tags, output_tags)]
+        try:
+            res = [Sample(normalize(in_tag.text), normalize(out_tag.text))
+                   for in_tag, out_tag in zip(input_tags, output_tags)]
 
-        if input_format_tag is None:
+            if input_format_tag is None:
+                raise InputFormatDetectionError
+
+            input_format_text = normalize(input_format_tag.text)
+        except AttributeError:
             raise InputFormatDetectionError
 
-        input_format_text = normalize(input_format_tag.text)
         return input_format_text, res
 
     @staticmethod

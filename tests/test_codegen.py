@@ -6,7 +6,8 @@ import os
 from atcodertools.codegen.code_generator import CodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from tests.utils.testdata_util import TestDataUtil
+from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
+from tests.utils.gzip_controller import make_test_data_controller
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 
 RESOURCE_DIR = os.path.join(
@@ -34,8 +35,9 @@ class TestCodeGenerator(unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
-        self.test_data_util = TestDataUtil(tempfile.mkdtemp())
-        self.test_dir = self.test_data_util.create_dir()
+        self.test_data_controller = make_test_data_controller(
+            tempfile.mkdtemp())
+        self.test_dir = self.test_data_controller.create_dir()
         self.runner = FormatPredictionTestRunner(self.test_dir)
         self.lang_to_template_file = {
             "cpp": "template.cpp",
@@ -47,7 +49,7 @@ class TestCodeGenerator(unittest.TestCase):
         }
 
     def tearDown(self):
-        self.test_data_util.remove_dir()
+        self.test_data_controller.remove_dir()
 
     def test_long_case(self):
         response = self.runner.run('rco-contest-2017-qual-B')
