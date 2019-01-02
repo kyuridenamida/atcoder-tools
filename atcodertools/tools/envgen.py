@@ -10,7 +10,9 @@ from typing import Tuple
 
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
-from atcodertools.fileutils.create_contest_file import create_examples, create_code_from_prediction_result
+from atcodertools.constprediction.constants_prediction import predict_constants
+from atcodertools.fileutils.create_contest_file import create_examples, \
+    create_code_from
 from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.fmtprediction.predict_format import FormatPredictor, NoPredictionResultError, \
@@ -98,11 +100,6 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 new_path))
 
     try:
-        result = FormatPredictor().predict(content)
-
-        with open(template_code_path, "r") as f:
-            template = f.read()
-
         if lang == "cpp":
             gen_class = CppCodeGenerator
         elif lang == "java":
@@ -110,8 +107,15 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         else:
             raise NotImplementedError("only supporting cpp and java")
 
-        create_code_from_prediction_result(
+        with open(template_code_path, "r") as f:
+            template = f.read()
+
+        result = FormatPredictor().predict(content)
+        constants = predict_constants(content.original_html)
+
+        create_code_from(
             result,
+            constants,
             gen_class(template),
             code_file_path)
         emit_info(

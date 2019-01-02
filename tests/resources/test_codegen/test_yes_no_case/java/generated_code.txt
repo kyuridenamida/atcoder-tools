@@ -1,0 +1,25 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+
+    static final String YES = "YES";
+    static final String NO = "NO";
+
+    public static void main(String[] args) throws Exception {
+        final Scanner sc = new Scanner(System.in);
+        long N;
+        N = sc.nextLong();
+        long M;
+        M = sc.nextLong();
+        long A;
+        A = sc.nextLong();
+        long B;
+        B = sc.nextLong();
+        solve(N, M, A, B);
+    }
+
+    static void solve(long N, long M, long A, long B){
+
+    }
+}

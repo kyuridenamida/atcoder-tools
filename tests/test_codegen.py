@@ -40,8 +40,14 @@ class TestCodeGenerator(unittest.TestCase):
         self.test_dir = self.test_data_controller.create_dir()
         self.runner = FormatPredictionTestRunner(self.test_dir)
         self.lang_to_template_file = {
-            "cpp": "template.cpp",
-            "java": "template.java"
+            "cpp": {
+                "old": "template.cpp",
+                "jinja": "template_jinja.cpp",
+            },
+            "java": {
+                "old": "template.java",
+                "jinja": "template_jinja.java",
+            }
         }
         self.lang_to_code_generator = {
             "cpp": CppCodeGenerator,
@@ -66,7 +72,20 @@ class TestCodeGenerator(unittest.TestCase):
         for l in LANGS:
             self.verify(response, sys._getframe().f_code.co_name, l)
 
-    def verify(self, response: Response, py_test_name: str, lang: str):
+    def test_mod_case(self):
+        response = self.runner.run('agc019-E')
+        for l in LANGS:
+            self.verify(response, sys._getframe().f_code.co_name,
+                        l, "jinja", ProblemConstantSet(mod=998244353))
+
+    def test_yes_no_case(self):
+        response = self.runner.run('agc021-C')
+        for l in LANGS:
+            self.verify(response, sys._getframe().f_code.co_name, l, "jinja",
+                        ProblemConstantSet(yes_str="YES", no_str="NO"))
+
+    def verify(self, response: Response, py_test_name: str, lang: str, template_type: str = "old",
+               constants: ProblemConstantSet = ProblemConstantSet()):
         self.assertEqual(
             load_intermediate_format(py_test_name),
             str(response.simple_format))
@@ -74,12 +93,12 @@ class TestCodeGenerator(unittest.TestCase):
             load_intermediate_types(py_test_name),
             str(response.types))
         self.assertEqual(load_generated_code(py_test_name, lang),
-                         self.get_generator(lang).generate_code(response.original_result))
+                         self.get_generator(lang, template_type).generate_code(response.original_result, constants))
 
-    def get_generator(self, lang: str) -> CodeGenerator:
+    def get_generator(self, lang: str, template_type: str) -> CodeGenerator:
         template_file = os.path.join(
             RESOURCE_DIR,
-            self.lang_to_template_file[lang])
+            self.lang_to_template_file[lang][template_type])
         with open(template_file, 'r') as f:
             return self.lang_to_code_generator[lang](f.read())
 

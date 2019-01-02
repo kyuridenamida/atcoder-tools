@@ -1,0 +1,21 @@
+import java.io.*;
+import java.util.*;
+
+class Main {
+    static final int mod = 998244353;
+
+
+
+    public static void main(String[] args) throws Exception {
+        final Scanner sc = new Scanner(System.in);
+        long A;
+        A = sc.nextLong();
+        long B;
+        B = sc.nextLong();
+        solve(A, B);
+    }
+
+    static void solve(long A, long B){
+
+    }
+}
