@@ -230,16 +230,16 @@ def main(prog, args) -> bool:
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("--exec", '-e',
-                        help="file path to the execution target. [Default] Automatically detected exec file",
+                        help="File path to the execution target. [Default] Automatically detected exec file",
                         default=None)
 
     parser.add_argument("--num", '-n',
-                        help="the case number to test (1-origin). All cases are tested if not specified.",
+                        help="The case number to test (1-origin). All cases are tested if not specified.",
                         type=int,
                         default=None)
 
     parser.add_argument("--dir", '-d',
-                        help="target directory to test. [Default] Current directory",
+                        help="Target directory to test. [Default] Current directory",
                         default=".")
 
     parser.add_argument("--timeout", '-t',

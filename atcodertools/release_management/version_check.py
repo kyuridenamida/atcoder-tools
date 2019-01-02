@@ -41,16 +41,16 @@ def store_version_cache(version):
         f.write("{} {}".format(version, time.time()))
 
 
-def get_latest_version(user_cache=True):
+def get_latest_version(use_cache=True):
     try:
-        if user_cache:
+        if use_cache:
             cached_version = _get_latest_version_cache()
             if cached_version:
                 return cached_version
 
         version = _fetch_latest_version()
 
-        if user_cache:
+        if use_cache:
             store_version_cache(version)
 
         return version
