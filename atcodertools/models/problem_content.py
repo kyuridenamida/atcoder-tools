@@ -38,7 +38,7 @@ class ProblemContent:
 
     def __init__(self, input_format_text: str = None,
                  samples: List[Sample] = None,
-                 original_html: str = None,
+                 original_html: Optional[str] = None,
                  ):
         self.samples = samples
         self.input_format_text = input_format_text
