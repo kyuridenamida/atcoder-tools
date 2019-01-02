@@ -207,9 +207,9 @@ def check_lang(lang: str):
     return lang
 
 
-PRIMARY_DEFAULT_CONFIG_PATH = os.path.join(
+USER_CONFIG_PATH = os.path.join(
     expanduser("~"), ".atcodertools.toml")
-SECONDARY_DEFAULT_CONFIG_PATH = os.path.abspath(
+DEFAULT_CONFIG_PATH = os.path.abspath(
     os.path.join(script_dir_path, "./atcodertools-default.toml"))
 
 
@@ -222,10 +222,10 @@ def get_code_gen_config(config_path: Optional[str] = None):
     if config_path:
         return _load(config_path)
 
-    if os.path.exists(PRIMARY_DEFAULT_CONFIG_PATH):
-        return _load(PRIMARY_DEFAULT_CONFIG_PATH)
+    if os.path.exists(USER_CONFIG_PATH):
+        return _load(USER_CONFIG_PATH)
 
-    return _load(SECONDARY_DEFAULT_CONFIG_PATH)
+    return _load(DEFAULT_CONFIG_PATH)
 
 
 def main(prog, args):
@@ -234,35 +234,34 @@ def main(prog, args):
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("contest_id",
-                        help="contest ID (e.g. arc001)")
+                        help="Contest ID (e.g. arc001)")
 
     parser.add_argument("--without-login",
                         action="store_true",
-                        help="download data without login")
+                        help="Download data without login")
 
     parser.add_argument("--workspace",
-                        help="path to workspace's root directory. This script will create files"
+                        help="Path to workspace's root directory. This script will create files"
                              " in {{WORKSPACE}}/{{contest_name}}/{{alphabet}}/ e.g. ./your-workspace/arc001/A/\n"
                              "[Default] {}".format(DEFAULT_WORKSPACE_DIR_PATH),
                         default=DEFAULT_WORKSPACE_DIR_PATH)
 
     parser.add_argument("--lang",
-                        help="programming language of your template code, {}.\n"
+                        help="Programming language of your template code, {}.\n"
                         .format(" or ".join(SUPPORTED_LANGUAGES)) + "[Default] {}".format(DEFAULT_LANG),
                         default=DEFAULT_LANG,
                         type=check_lang)
 
     parser.add_argument("--template",
-                        help="{0}{1}".format("file path to your template code\n"
-                                             "[Default (C++)] {}\n".format(
-                                                 get_default_template_path('cpp')),
-                                             "[Default (Java)] {}".format(
-                                                 get_default_template_path('java')))
+                        help="File path to your template code\n{0}{1}".format(
+                            "[Default (C++)] {}\n".format(
+                                get_default_template_path('cpp')),
+                            "[Default (Java)] {}".format(
+                                get_default_template_path('java')))
                         )
 
     parser.add_argument("--replacement",
-                        help="{0}{1}".format(
-                            "file path to the replacement code created when template generation is failed.\n"
+                        help="File path to your config file\n{0}{1}".format(
                             "[Default (C++)] {}\n".format(get_default_replacement_path('cpp')),
                             "[Default (Java)] {}".format(
                                 get_default_replacement_path('java')))
@@ -279,11 +278,10 @@ def main(prog, args):
                         default=False)
 
     parser.add_argument("--config",
-                        help="{0}{1}{2}".format("file path to your config file\n",
-                                                "[Default (Primary)] {}\n".format(
-                                                    PRIMARY_DEFAULT_CONFIG_PATH),
-                                                "[Default (Secondary)] {}\n".format(
-                                                    SECONDARY_DEFAULT_CONFIG_PATH))
+                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
+                            USER_CONFIG_PATH),
+                            "[Default (Secondary)] {}\n".format(
+                            DEFAULT_CONFIG_PATH))
                         )
 
     args = parser.parse_args(args)

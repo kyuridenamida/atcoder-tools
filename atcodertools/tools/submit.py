@@ -24,11 +24,11 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("--exec", '-e',
-                        help="file path to the execution target. [Default] Automatically detected exec file",
+                        help="File path to the execution target. [Default] Automatically detected exec file",
                         default=None)
 
     parser.add_argument("--dir", '-d',
-                        help="target directory to test. [Default] Current directory",
+                        help="Target directory to test. [Default] Current directory",
                         default=".")
 
     parser.add_argument("--timeout", '-t',
@@ -37,7 +37,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                         default=1)
 
     parser.add_argument("--code", '-c',
-                        help="path to the source code to submit [Default] Code path written in metadata.json",
+                        help="Path to the source code to submit [Default] Code path written in metadata.json",
                         type=str,
                         default=None)
 
