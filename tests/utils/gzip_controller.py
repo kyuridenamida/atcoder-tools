@@ -27,7 +27,7 @@ def _make_data_full_path(filename: str):
         filename)
 
 
-def make_test_data_controller(target_dir: str):
+def make_tst_data_controller(target_dir: str):
     return GZipController(target_dir,
                           _make_data_full_path(
                               '../resources/common/test_data.tar.gz'),

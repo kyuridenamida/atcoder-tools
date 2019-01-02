@@ -3,7 +3,7 @@ import tempfile
 import unittest
 import os
 
-from tests.utils.gzip_controller import make_test_data_controller
+from tests.utils.gzip_controller import make_tst_data_controller
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner
 
 ANSWER_FILE = os.path.join(
@@ -18,7 +18,7 @@ class TestFormatPrediction(unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
-        self.test_data_controller = make_test_data_controller(
+        self.test_data_controller = make_tst_data_controller(
             tempfile.mkdtemp())
         self.test_dir = self.test_data_controller.create_dir()
 
