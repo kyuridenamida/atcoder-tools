@@ -2,8 +2,10 @@
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "rules": {
     "jsx-boolean-value": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "member-access": false
   },
+  "defaultSeverity": "warn",
   "linterOptions": {
     "exclude": [
       "config/**/*.js",

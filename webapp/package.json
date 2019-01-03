@@ -5,19 +5,21 @@
   "dependencies": {
     "@types/reactstrap": "^6.4.3",
     "bootstrap": "^4.2.1",
+    "marked": "^0.6.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts-ts": "^4.0.8",
     "reactstrap": "^7.0.2"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
+    "start": "./generate.sh && react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
     "@types/jest": "^23.3.11",
+    "@types/marked": "^0.6.0",
     "@types/node": "^10.12.18",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
