@@ -64,6 +64,11 @@ class TestConstantsPrediction(unittest.TestCase):
         except MultipleModCandidatesError:
             pass
 
+    def test_case_only_with_no_str(self):
+        yes_str, no_str = predict_yes_no(self._load("agc001-D.html"))
+        self.assertEqual(None, yes_str)
+        self.assertEqual("Impossible", no_str)
+
     @unittest.expectedFailure
     def test_tricky_case_that_can_raise_multi_mod_cands_error(self):
         # This test exists in order to demonstrate the current wrong behavior that throws MultipleModCandidatesError.
