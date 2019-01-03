@@ -58,7 +58,8 @@ class TestConstantsPrediction(unittest.TestCase):
 
     def test_modulo_prediction_fails_with_multi_mod_cands(self):
         try:
-            predict_modulo("<p>101で割った余りを出力してください。もしくは n modulo 103を出力してください。</p>")
+            predict_modulo(
+                "<p>101で割った余りを出力してください。もしくは n modulo 103を出力してください。</p>")
             self.fail("Must not reach here")
         except MultipleModCandidatesError:
             pass
