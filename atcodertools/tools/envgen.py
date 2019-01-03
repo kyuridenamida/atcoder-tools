@@ -124,7 +124,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
         create_code_from_prediction_result(
             result,
-            gen_class(template, config.code_gen_config),
+            gen_class(template, config.code_style_config),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
@@ -152,10 +152,11 @@ def prepare_procedure(atcoder_client: AtCoderClient,
              ).save_to(metadata_path)
     emit_info("Saved metadata to {}".format(metadata_path))
 
-    if config.env_gen_config.exec_after_problem_created is not None:
+    if config.postprocess_config.exec_after_problem_created is not None:
         emit_info(_message_on_execution(problem_dir_path,
-                                        config.env_gen_config.exec_after_problem_created))
-        config.env_gen_config.run_exec_after_problem_created(problem_dir_path)
+                                        config.postprocess_config.exec_after_problem_created))
+        config.postprocess_config.run_exec_after_problem_created(
+            problem_dir_path)
 
     output_splitter()
 
@@ -198,11 +199,12 @@ def prepare_contest(atcoder_client: AtCoderClient,
         for argv in tasks:
             func(argv)
 
-    if config.env_gen_config.exec_after_problem_created is not None:
+    if config.postprocess_config.exec_after_problem_created is not None:
         contest_dir_path = os.path.join(workspace_root_path, contest_id)
         logging.info(_message_on_execution(contest_dir_path,
-                                           config.env_gen_config.exec_after_contest_created))
-        config.env_gen_config.run_exec_after_contest_created(contest_dir_path)
+                                           config.postprocess_config.exec_after_contest_created))
+        config.postprocess_config.run_exec_after_contest_created(
+            contest_dir_path)
 
 
 DEFAULT_WORKSPACE_DIR_PATH = os.path.join(

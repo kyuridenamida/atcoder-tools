@@ -10,7 +10,7 @@ def _run_command(exec_cmd: str, current_working_dir: str) -> str:
     return proc.stdout.decode("utf8")
 
 
-class EnvGenConfig:
+class PostprocessConfig:
     def __init__(self,
                  exec_after_problem_created: str = None,
                  exec_after_contest_created: str = None,

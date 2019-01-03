@@ -1,4 +1,4 @@
-from atcodertools.codegen.codegen_config import CodeGenConfig
+from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
 from atcodertools.models.analyzer.simple_format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
@@ -23,7 +23,7 @@ def _loop_header(var: Variable, for_second_index: bool):
 
 class CppCodeGenerator(CodeGenerator):
 
-    def __init__(self, template: str, config: CodeGenConfig = CodeGenConfig()):
+    def __init__(self, template: str, config: CodeStyleConfig = CodeStyleConfig()):
         self._template = template
         self._prediction_result = None
         self._config = config
