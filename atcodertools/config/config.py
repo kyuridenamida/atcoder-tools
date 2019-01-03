@@ -21,8 +21,8 @@ class Config:
     @classmethod
     def load(cls, fp: TextIO):
         config_dic = toml.load(fp)
-        code_gen_config_dic = config_dic.get('codegen', {})
-        env_gen_config_dic = config_dic.get('envgen', {})
+        code_gen_config_dic = config_dic.get('codestyle', {})
+        env_gen_config_dic = config_dic.get('postprocess', {})
         return Config(
             code_gen_config=CodeGenConfig(**code_gen_config_dic),
             env_gen_config=EnvGenConfig(**env_gen_config_dic)

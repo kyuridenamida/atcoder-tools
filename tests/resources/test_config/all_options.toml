@@ -1,7 +1,7 @@
-[codegen]
+[codestyle]
 indent_type = 'tab' # 'tab' or 'space'
 indent_width = 8
 
-[envgen]
+[postprocess]
 exec_after_problem_created='echo problem && ls'
 exec_after_contest_created='echo contest && ls'

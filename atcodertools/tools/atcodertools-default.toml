@@ -1,7 +1,7 @@
-[codegen]
+[codestyle]
 indent_type = 'space' # 'tab' or 'space'
 indent_width = 4
 
-[envgen]
+[postprocess]
 #exec_after_problem_created='clang-format -i ./*.cpp'
 #exec_after_contest_created=
