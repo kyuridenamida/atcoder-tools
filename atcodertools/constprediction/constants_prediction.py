@@ -64,8 +64,8 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     try:
         outputs = set()
         for sample in ProblemContent.from_html(html).get_samples():
-            for x in sample.get_output().split():
-                outputs.add(x)
+            for x in sample.get_output().split("\n"):
+                outputs.add(x.strip())
     except (InputFormatDetectionError, SampleDetectionError) as e:
         raise YesNoPredictionFailedError(e)
 
