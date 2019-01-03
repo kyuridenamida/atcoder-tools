@@ -22,3 +22,5 @@ yarn-error.log*
 
 # auto-genenated file
 /src/auto_generated/
+/scripts/auto_generated/
+/scripts/.cache/

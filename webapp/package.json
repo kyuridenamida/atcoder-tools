@@ -12,7 +12,7 @@
     "reactstrap": "^7.0.2"
   },
   "scripts": {
-    "start": "./generate.sh && react-scripts-ts start",
+    "start": "./scripts/generate.sh && react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
