@@ -6,10 +6,6 @@ from atcodertools.codegen.codegen_config import CodeGenConfig
 from atcodertools.tools.envgen_config import EnvGenConfig
 
 
-class ConfigInitError(Exception):
-    pass
-
-
 class Config:
     def __init__(self,
                  code_gen_config: CodeGenConfig = CodeGenConfig(),

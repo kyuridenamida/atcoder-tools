@@ -1,10 +1,6 @@
 import subprocess
 
 
-class EnvGenConfigInitError(Exception):
-    pass
-
-
 def _run_command(exec_cmd: str, current_working_dir: str) -> str:
     proc = subprocess.run(exec_cmd,
                           shell=True,
