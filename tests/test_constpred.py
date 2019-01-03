@@ -3,7 +3,8 @@ import os
 import tempfile
 import unittest
 
-from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo
+from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, \
+    MultipleModCandidatesError, predict_yes_no, YesNoPredictionFailedError
 from tests.utils.gzip_controller import make_html_data_controller
 
 ANSWER_FILE = os.path.join(
@@ -48,7 +49,26 @@ class TestConstantsPrediction(unittest.TestCase):
                                                                          _to_str(constants.no_str))
             self.assertEqual(answer_line.rstrip(), output_line.rstrip())
 
-    def test_modulo_prediction_fail(self):
+    def test_yes_no_prediction_fails_when_failing_to_parse_html(self):
+        try:
+            predict_yes_no("broken html")
+            self.fail("Must not reach here")
+        except YesNoPredictionFailedError:
+            pass
+
+    def test_modulo_prediction_fails_with_multi_mod_cands(self):
+        try:
+            predict_modulo("<p>101で割った余りを出力してください。もしくは n modulo 103を出力してください。</p>")
+            self.fail("Must not reach here")
+        except MultipleModCandidatesError:
+            pass
+
+    @unittest.expectedFailure
+    def test_tricky_case_that_can_raise_multi_mod_cands_error(self):
+        # This test exists in order to demonstrate the current wrong behavior that throws MultipleModCandidatesError.
+        # None is the true answer for ABC103-C. This test shouldn't fail with a better prediction method.
+        # Please remove @unittest.expectedFailure when predict_modulo() behaves correctly.
+
         modulo = predict_modulo(self._load("abc103-C.html"))
         self.assertIsNone(modulo)
 

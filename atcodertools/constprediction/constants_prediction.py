@@ -7,6 +7,17 @@ from bs4 import BeautifulSoup
 
 from atcodertools.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 
+
+class YesNoPredictionFailedError(Exception):
+    pass
+
+
+class MultipleModCandidatesError(Exception):
+
+    def __init__(self, cands):
+        self.cands = cands
+
+
 MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
 
 MOD_STRATEGY_RE_LIST = [
@@ -22,7 +33,7 @@ def is_mod_context(sentence):
     return False
 
 
-def predict_modulo(html: str):
+def predict_modulo(html: str) -> Optional[int]:
     def normalize(sentence):
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
             "10^9+7", "1000000007").lower().strip()
@@ -46,19 +57,17 @@ def predict_modulo(html: str):
     if len(mod_cands) == 1:
         return list(mod_cands)[0]
 
-    logging.warning("Modulo prediction failed -- "
-                    "two or more candidates {} are detected as modulo values".format(mod_cands))
-    return None
+    raise MultipleModCandidatesError(mod_cands)
 
 
-def predict_yes_no(html: str) -> Optional[Tuple[str, str]]:
+def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     try:
         outputs = set()
         for sample in ProblemContent.from_html(html).get_samples():
             for x in sample.get_output().split():
                 outputs.add(x)
-    except (InputFormatDetectionError, SampleDetectionError):
-        return None
+    except (InputFormatDetectionError, SampleDetectionError) as e:
+        raise YesNoPredictionFailedError(e)
 
     yes_kws = ["yes", "possible"]
     no_kws = ["no", "impossible"]
@@ -75,11 +84,16 @@ def predict_yes_no(html: str) -> Optional[Tuple[str, str]]:
 
 
 def predict_constants(html: str) -> ProblemConstantSet:
-    yes_no_result = predict_yes_no(html)
-    if yes_no_result is None:
+    try:
+        yes_str, no_str = predict_yes_no(html)
+    except YesNoPredictionFailedError:
         yes_str = no_str = None
-    else:
-        yes_str, no_str = yes_no_result
 
-    mod = predict_modulo(html)
+    try:
+        mod = predict_modulo(html)
+    except MultipleModCandidatesError as e:
+        logging.warning("Modulo prediction failed -- "
+                        "two or more candidates {} are detected as modulo values".format(e.cands))
+        mod = None
+
     return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str)
