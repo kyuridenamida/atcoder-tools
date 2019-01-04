@@ -23,7 +23,6 @@ class HomePage extends React.Component<{}, {readme_html: any}> {
                     readme_html: marked(text)
                 });
             });
-
     }
 
     render() {

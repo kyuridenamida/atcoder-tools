@@ -5,24 +5,30 @@
   "dependencies": {
     "@types/reactstrap": "^6.4.3",
     "bootstrap": "^4.2.1",
+    "classnames": "^2.2.6",
     "marked": "^0.6.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-router-dom": "^4.3.1",
     "react-scripts-ts": "^4.0.8",
+    "react-table": "^6.8.6",
     "reactstrap": "^7.0.2"
   },
   "scripts": {
-    "start": "./scripts/generate.sh && react-scripts-ts start",
+    "start": "./generate.sh && react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.6",
     "@types/jest": "^23.3.11",
     "@types/marked": "^0.6.0",
     "@types/node": "^10.12.18",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
+    "@types/react-router-dom": "^4.3.1",
+    "@types/react-table": "^6.7.21",
     "typescript": "^3.2.2"
   },
   "browserslist": [
