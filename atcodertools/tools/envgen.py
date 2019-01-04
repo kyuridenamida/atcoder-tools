@@ -157,10 +157,10 @@ def prepare_procedure(atcoder_client: AtCoderClient,
              ).save_to(metadata_path)
     emit_info("Saved metadata to {}".format(metadata_path))
 
-    if config.postprocess_config.exec_after_problem_created is not None:
+    if config.postprocess_config.exec_cmd_for_problem is not None:
         emit_info(_message_on_execution(problem_dir_path,
-                                        config.postprocess_config.exec_after_problem_created))
-        config.postprocess_config.run_exec_after_problem_created(
+                                        config.postprocess_config.exec_cmd_for_problem))
+        config.postprocess_config.execute_for_problem(
             problem_dir_path)
 
     output_splitter()
@@ -204,11 +204,11 @@ def prepare_contest(atcoder_client: AtCoderClient,
         for argv in tasks:
             func(argv)
 
-    if config.postprocess_config.exec_after_problem_created is not None:
+    if config.postprocess_config.exec_cmd_for_contest is not None:
         contest_dir_path = os.path.join(workspace_root_path, contest_id)
         logging.info(_message_on_execution(contest_dir_path,
-                                           config.postprocess_config.exec_after_contest_created))
-        config.postprocess_config.run_exec_after_contest_created(
+                                           config.postprocess_config.exec_cmd_for_contest))
+        config.postprocess_config.execute_for_contest(
             contest_dir_path)
 
 

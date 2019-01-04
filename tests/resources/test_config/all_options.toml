@@ -3,5 +3,5 @@ indent_type = 'tab' # 'tab' or 'space'
 indent_width = 8
 
 [postprocess]
-exec_after_problem_created='echo problem && ls'
-exec_after_contest_created='echo contest && ls'
+exec_foreach_problem='echo problem && ls'
+exec_for_contest='echo contest && ls'

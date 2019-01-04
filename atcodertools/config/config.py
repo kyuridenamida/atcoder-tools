@@ -21,5 +21,9 @@ class Config:
         postprocess_config_dic = config_dic.get('postprocess', {})
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
-            postprocess_config=PostprocessConfig(**postprocess_config_dic)
-        )
+            postprocess_config=PostprocessConfig(
+                exec_cmd_for_problem=postprocess_config_dic.get(
+                    "exec_foreach_problem", None),
+                exec_cmd_for_contest=postprocess_config_dic.get(
+                    "exec_for_contest", None),
+            ))

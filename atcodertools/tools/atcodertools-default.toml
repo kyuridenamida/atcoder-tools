@@ -3,5 +3,10 @@ indent_type = 'space' # 'tab' or 'space'
 indent_width = 4
 
 [postprocess]
-#exec_after_problem_created='clang-format -i ./*.cpp'
-#exec_after_contest_created=
+## exec_foreach_problem is executed after every problem directory's creation
+## with its problem directory as cwd like arc001/A
+#exec_foreach_problem='clang-format -i ./*.cpp'
+
+## exec_for_contest is executed once after `atcoder-tools gen`
+## with the contest directory as cwd like arc001/
+#exec_for_contest=
