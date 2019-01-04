@@ -1,5 +1,8 @@
 import string
 import re
+import warnings
+
+import jinja2
 
 
 def _substitute(s, reps):
@@ -17,14 +20,32 @@ def _substitute(s, reps):
         sep = ('\n' + m.group(1)) if m.group(1).strip() == '' else '\n'
 
         cr[m.group(2)] = sep.join(reps[m.group(2)])
-        i += m.end()   # continue past last processed replaceable token
+        i += m.end()  # continue past last processed replaceable token
     return t.substitute(cr)  # we can now substitute
 
 
-def render(s, **args):
+def render(template, **kwargs):
+    if "${" in template:
+        # If the template is old, render with the old engine.
+        # This logic is for backward compatibility
+        warnings.warn(
+            "The old template engine with ${} is deprecated. Please use the new Jinja2 template engine.", UserWarning)
+
+        return old_render(template, **kwargs)
+    else:
+        return render_by_jinja(template, **kwargs)
+
+
+def old_render(template, **kwargs):
+    # This render function used to be used before version 1.0.3
     new_args = {}
 
-    for k, v in args.items():
+    for k, v in kwargs.items():
         new_args[k] = v if isinstance(v, list) else [v]
 
-    return _substitute(s, new_args)
+    return _substitute(template, new_args)
+
+
+def render_by_jinja(template, **kwargs):
+    template = jinja2.Template(template)
+    return template.render(**kwargs) + "\n"
