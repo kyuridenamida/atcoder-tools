@@ -1,10 +1,13 @@
+import asyncio
 import io
 
 import json
 import os
 import pickle
 import subprocess
+import sys
 import tempfile
+import threading
 
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, predict_yes_no
@@ -12,11 +15,12 @@ from atcodertools.constprediction.constants_prediction import predict_constants,
 from atcodertools.client.atcoder import AtCoderClient
 from atcodertools.fmtprediction.predict_format import FormatPredictor
 from atcodertools.models.problem import Problem
+from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError, ProblemContent
 
 atcoder = AtCoderClient()
 CACHE_DIR = "./.cache/"
 
-with open('./auto_generated/cpp/template_success.cpp') as f:
+with open('./auto_generated/templates/cpp/template_success.cpp') as f:
     TEMPLATE_CODE = f.read()
 
 
@@ -38,6 +42,7 @@ def get_contests():
 
 def get_problem_list(contest):
     def func():
+        print("downloading problem list ...", file=sys.stderr)
         return atcoder.download_problem_list(contest)
 
     return get_and_set_cache("contest/{}".format(contest.contest_id), func)
@@ -45,9 +50,11 @@ def get_problem_list(contest):
 
 def get_problem_content(problem: Problem):
     def func():
-        return atcoder.download_problem_content(problem)
+        print("downloading html ...", file=sys.stderr)
+        raw_response = atcoder._request(problem.get_url())
+        return raw_response.text
 
-    return get_and_set_cache("problem/{}".format(problem.problem_id), func)
+    return ProblemContent.from_html(get_and_set_cache("problem/{}".format(problem.problem_id), func))
 
 
 def norm_error(err):
@@ -95,14 +102,14 @@ class QualityResult:
             "value": self.no_str
         }
 
-        d["codes"] = self.codes
+        # d["codes"] = self.codes
         return d
 
 
 def load_problem_content(result: QualityResult):
     try:
         result.problem_content = get_problem_content(result.problem)
-    except Exception as e:
+    except (SampleDetectionError, InputFormatDetectionError) as e:
         result.statement_parse_error = e
 
 
@@ -143,21 +150,71 @@ def do_predict_constants(result: QualityResult):
     result.yes_str, result.no_str = predict_yes_no(result.problem_content.original_html)
 
 
-def main():
-    print("[")
-    for contest in get_contests():
+_counter = 0
+_lock = threading.Lock()
+
+
+def increment_counter():
+    global _counter
+    with _lock:
+        _counter += 1
+
+
+def get_counter():
+    global _counter
+    with _lock:
+        return _counter
+
+
+async def process_problem(problem, contest, total) -> QualityResult:
+    try:
+        result = QualityResult()
+        result.contest = contest
+        result.problem = problem
+        load_problem_content(result)
+        predict_format(result)
+        do_predict_constants(result)
+        increment_counter()
+        print("Processed {} ... {}/{}".format(problem.problem_id, get_counter(), total), file=sys.stderr)
+        return result
+    except Exception as e:
+        print(e, file=sys.stderr)
+        for task in asyncio.Task.all_tasks():
+            task.cancel()
+
+
+def main(output_path: str):
+    loop = asyncio.get_event_loop()
+    contests = get_contests()
+
+    args_list = []
+    for idx, contest in enumerate(contests):
         problem_list = get_problem_list(contest)
-        for problem in problem_list:
-            result = QualityResult()
-            result.contest = contest
-            result.problem = problem
-            load_problem_content(result)
-            predict_format(result)
-            do_predict_constants(result)
-            print(json.dumps(result.build_dict(), indent=1), end="")
-            print(", ")
-    print("]")
+        print("Add {} ... ({}/{})".format(
+            contest.contest_id,
+            idx,
+            len(contests)
+        ), file=sys.stderr)
+
+        args_list += [dict(
+            problem=problem,
+            contest=contest
+        ) for problem in problem_list]
+
+    tasks = asyncio.wait([process_problem(**args, total=len(args_list)) for idx, args in enumerate(args_list)])
+    done, pending = loop.run_until_complete(tasks)
+    done = [x.result() for x in done]
+    res = []
+
+    for result in done:
+        res.append(result.build_dict())
+    loop.close()
+
+    json_str = json.dumps(res)
+
+    with open(output_path, "w") as fp:
+        fp.write("export default {};".format(json_str))
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1])
