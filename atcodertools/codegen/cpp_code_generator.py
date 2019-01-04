@@ -1,6 +1,7 @@
 from atcodertools.codegen.code_gen_config import CodeGenConfig
 from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
 from atcodertools.models.analyzer.simple_format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
 from atcodertools.models.predictor.variable import Variable
 from atcodertools.codegen.code_generator import CodeGenerator
@@ -28,14 +29,20 @@ class CppCodeGenerator(CodeGenerator):
         self._prediction_result = None
         self._config = config
 
-    def generate_code(self, prediction_result: FormatPredictionResult):
+    def generate_code(self, prediction_result: FormatPredictionResult,
+                      constants: ProblemConstantSet = ProblemConstantSet()):
         if prediction_result is None:
             raise NoPredictionResultGiven
         self._prediction_result = prediction_result
+
         return render(self._template,
                       formal_arguments=self._formal_arguments(),
                       actual_arguments=self._actual_arguments(),
-                      input_part=self._input_part())
+                      input_part=self._input_part(),
+                      mod=constants.mod,
+                      yes_str=constants.yes_str,
+                      no_str=constants.no_str,
+                      )
 
     def _input_part(self):
         lines = []

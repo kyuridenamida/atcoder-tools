@@ -1,6 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+
+
+
+
 void solve(long long N, vector<long long> a, vector<long long> b){
 
 }
