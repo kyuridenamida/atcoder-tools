@@ -32,6 +32,13 @@ class TestConfig(unittest.TestCase):
         self.assertEqual("contest\nmock_file.txt\n",
                          config.postprocess_config.execute_on_contest_dir(problem_dir))
 
+    def test_load_config_fails_due_to_typo(self):
+        try:
+            with open(os.path.join(RESOURCE_DIR, "typo_in_postprocess.toml"), 'r') as f:
+                Config.load(f)
+        except TypeError:
+            pass
+
     def test_init_code_style_config_with_invalid_parameters(self):
         self._expect_error_when_init_config(
             indent_type='SPACE', indent_width=4)

@@ -21,9 +21,5 @@ class Config:
         postprocess_config_dic = config_dic.get('postprocess', {})
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
-            postprocess_config=PostprocessConfig(
-                exec_cmd_on_problem_dir=postprocess_config_dic.get(
-                    "exec_on_each_problem_dir", None),
-                exec_cmd_on_contest_dir=postprocess_config_dic.get(
-                    "exec_on_contest_dir", None),
-            ))
+            postprocess_config=PostprocessConfig(**postprocess_config_dic),
+        )
