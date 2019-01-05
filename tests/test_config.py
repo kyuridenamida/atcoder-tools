@@ -28,9 +28,9 @@ class TestConfig(unittest.TestCase):
         contest_dir = os.path.join(RESOURCE_DIR, "mock_contest")
         problem_dir = os.path.join(contest_dir, "mock_problem")
         self.assertEqual("problem\nmock_problem\n",
-                         config.postprocess_config.execute_for_problem(contest_dir))
+                         config.postprocess_config.execute_on_problem_dir(contest_dir))
         self.assertEqual("contest\nmock_file.txt\n",
-                         config.postprocess_config.execute_for_contest(problem_dir))
+                         config.postprocess_config.execute_on_contest_dir(problem_dir))
 
     def test_init_code_style_config_with_invalid_parameters(self):
         self._expect_error_when_init_config(

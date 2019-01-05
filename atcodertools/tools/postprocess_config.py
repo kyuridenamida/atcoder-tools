@@ -12,16 +12,16 @@ def _run_command(exec_cmd: str, current_working_dir: str) -> str:
 
 class PostprocessConfig:
     def __init__(self,
-                 exec_cmd_for_problem: str = None,
-                 exec_cmd_for_contest: str = None,
+                 exec_cmd_on_problem_dir: str = None,
+                 exec_cmd_on_contest_dir: str = None,
                  ):
-        self.exec_cmd_for_problem = exec_cmd_for_problem
-        self.exec_cmd_for_contest = exec_cmd_for_contest
+        self.exec_cmd_on_problem_dir = exec_cmd_on_problem_dir
+        self.exec_cmd_on_contest_dir = exec_cmd_on_contest_dir
 
-    def execute_for_problem(self, problem_dir: str) -> str:
-        assert self.exec_cmd_for_problem is not None
-        return _run_command(self.exec_cmd_for_problem, problem_dir)
+    def execute_on_problem_dir(self, problem_dir: str) -> str:
+        assert self.exec_cmd_on_problem_dir is not None
+        return _run_command(self.exec_cmd_on_problem_dir, problem_dir)
 
-    def execute_for_contest(self, workspace_dir: str) -> str:
-        assert self.exec_cmd_for_contest is not None
-        return _run_command(self.exec_cmd_for_contest, workspace_dir)
+    def execute_on_contest_dir(self, contest_dir: str) -> str:
+        assert self.exec_cmd_on_contest_dir is not None
+        return _run_command(self.exec_cmd_on_contest_dir, contest_dir)
