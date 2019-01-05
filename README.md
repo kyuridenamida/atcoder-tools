@@ -48,9 +48,7 @@ $ atcoder-tools test
 $ atcoder-tool gen  [contest_id] --without-login
 ```
 
-コマンドの詳細:
-
-### gen
+### gen の詳細
 ```$xslt
 usage: atcoder-tools gen [-h] [--without-login]
                                                         [--workspace WORKSPACE]
@@ -89,7 +87,7 @@ optional arguments:
 
 ```
 
-### test
+### test の詳細
 
 ```$xslt
 usage: atcoder-tools test [-h] [--exec EXEC]
@@ -110,7 +108,7 @@ optional arguments:
 ```
 
 
-### submit
+### submit の詳細
 
 ```
 usage: atcoder-tools submit [-h] [--exec EXEC]
@@ -134,6 +132,25 @@ optional arguments:
   --unlock-safety, -u   By default, this script only submits the first code per problem. However, you can remove the safety by this option in order to submit codes twice or more.
 
 ```
+
+
+## 設定ファイルの例
+`~/.atcodertools.toml`に以下の設定を保存すると、コードスタイルや、コード生成後に実行するコマンドを指定できます。
+
+以下は、コードスタイルの設定が幅4のスペースインデントで、
+問題用ディレクトリ内で毎回`clang-format`を実行して、最後に`CMakeLists.txt`(空)をコンテスト用ディレクトリに生成する場合の`~/.atcodertools.toml`の例です。
+
+```$xslt
+[codestyle]
+indent_type = 'space' # 'tab' or 'space'
+indent_width = 4
+
+[postprocess]
+exec_on_each_problem_dir='clang-format -i ./*.cpp'
+exec_on_contest_dir='touch CMakeLists.txt'
+```
+
+
 
 
 ## Contribution
