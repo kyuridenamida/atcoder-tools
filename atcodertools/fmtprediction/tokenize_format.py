@@ -11,7 +11,13 @@ def _is_ascii(s):
     return all(ord(c) < 128 for c in s)
 
 
+DOTS_PATTERNS = ["ldots", "cdots", "vdots", "ddots"]
+
+
 def _is_noise(s):
+    if any(pattern in s for pattern in DOTS_PATTERNS):
+        return True
+
     return s == ":" or s == "...." or s == "..." or s == ".." or s == "."
 
 
