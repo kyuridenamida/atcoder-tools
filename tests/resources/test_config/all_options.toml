@@ -1,0 +1,7 @@
+[codestyle]
+indent_type = 'tab' # 'tab' or 'space'
+indent_width = 8
+
+[postprocess]
+exec_on_each_problem_dir='echo problem && ls'
+exec_on_contest_dir='echo contest && ls'
