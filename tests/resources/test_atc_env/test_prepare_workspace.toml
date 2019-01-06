@@ -1,0 +1,3 @@
+[postprocess]
+exec_on_each_problem_dir='touch exec_on_each_problem_dir_ok'
+exec_on_contest_dir="touch exec_on_contest_dir_ok"

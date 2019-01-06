@@ -1,0 +1,2 @@
+[postprocess]
+typo='echo problem && ls'
