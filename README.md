@@ -150,7 +150,35 @@ exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
 ```
 
+## テンプレートの例
+`atcoder-tools gen`コマンドに対し`--template`, `--replacement` でそれぞれ入力形式の推論に成功したときのテンプレート、生成に失敗したときに代わりに生成するソースコードを指定できます。テンプレートエンジンの仕様については[jinja2](http://jinja.pocoo.org/docs/2.10/) の公式ドキュメントを参照してください。テンプレートに渡される変数は以下の通りです。
 
+- **input_part** input用のコード
+- **formal_arguments** 型つき引数列
+- **actual_arguments** 型なし引数列
+
+- **mod** 問題文中に存在するmodの値
+- **yes_str** 問題文中に存在する yes や possible などの真を表しそうな値
+- **no_str** 問題文中に存在する no や impossible などの偽を表しそうな値
+
+```
+#include <bits/stdc++.h>
+using namespace std;
+
+{% if mod is not none %}const int mod = {{ mod }};{% endif %}
+{% if yes_str is not none %}const string YES = "{{ yes_str }}";{% endif %}
+{% if no_str is not none %}const string NO = "{{ no_str }}";{% endif %}
+
+void solve({{formal_arguments}}){
+
+}
+
+int main(){
+    {{input_part}}
+    solve({{actual_arguments}});
+    return 0;
+}
+```
 
 
 ## Contribution
