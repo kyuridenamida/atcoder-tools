@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.0.5 / 2018-01-05
+## 1.0.5 / 2018-01-06
 - [#59](https://github.com/kyuridenamida/atcoder-tools/pull/59) Support user-defined postprocessor commands after code generation.
 - [#54](https://github.com/kyuridenamida/atcoder-tools/pull/54) Support constants (MOD/YES/NO) prediction so you can use them in your template.
 - [#52](https://github.com/kyuridenamida/atcoder-tools/pull/52) Support codestyle configuration.
