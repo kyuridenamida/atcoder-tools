@@ -1,15 +1,16 @@
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
+from atcodertools.models.analyzer.type import Type
 from atcodertools.models.predictor.variable import Variable
 
 
 class JavaCodeGenerator(CppCodeGenerator):
 
-    def _convert_type(self, py_type: type) -> str:
-        if py_type == float:
+    def _convert_type(self, type_: Type) -> str:
+        if type_ == Type.float:
             return "double"
-        elif py_type == int:
+        elif type_ == Type.int:
             return "long"
-        elif py_type == str:
+        elif type_ == Type.str:
             return "String"
         else:
             raise NotImplementedError
@@ -51,11 +52,11 @@ class JavaCodeGenerator(CppCodeGenerator):
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
-        if var.type == float:
+        if var.type == Type.float:
             return '{name} = sc.nextDouble();'.format(name=name)
-        elif var.type == int:
+        elif var.type == Type.int:
             return '{name} = sc.nextLong();'.format(name=name)
-        elif var.type == str:
+        elif var.type == Type.str:
             return '{name} = sc.next();'.format(name=name)
         else:
             raise NotImplementedError

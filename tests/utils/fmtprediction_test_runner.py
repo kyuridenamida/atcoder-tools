@@ -3,9 +3,19 @@ from typing import Optional
 
 from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, \
     NoPredictionResultError, predict_format
+from atcodertools.models.analyzer.type import Type
 from atcodertools.models.problem_content import ProblemContent
 from atcodertools.models.sample import Sample
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
+
+
+def py_type(type_: Type):
+    if type_ == Type.int:
+        return int
+    if type_ == Type.str:
+        return str
+    if type_ == Type.float:
+        return float
 
 
 class Response:
@@ -15,7 +25,7 @@ class Response:
         if result:
             self.original_result = result
             self.simple_format = result.simple_format
-            self.types = [(k, v.type) for k, v in result.var_to_info.items()]
+            self.types = [(k, py_type(v.type)) for k, v in result.var_to_info.items()]
 
 
 FORMAT_FILE_NAME = "format.txt"

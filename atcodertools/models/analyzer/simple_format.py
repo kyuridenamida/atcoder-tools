@@ -29,7 +29,7 @@ class SimpleFormat:
     def __str__(self):
         return "[{}]".format(",".join([str(c) for c in self.sequence]))
 
-    def all_vars(self):
+    def all_vars(self) -> List[AnalyzedVariable]:
         res = []
         for seq in self.sequence:
             res += seq.all_vars()

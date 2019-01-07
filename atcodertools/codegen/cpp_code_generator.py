@@ -1,6 +1,7 @@
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
 from atcodertools.models.analyzer.simple_format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from atcodertools.models.analyzer.type import Type
 from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
 from atcodertools.models.predictor.variable import Variable
@@ -50,12 +51,12 @@ class CppCodeGenerator(CodeGenerator):
             lines += self._render_pattern(pattern)
         return "\n{indent}".format(indent=self._indent(1)).join(lines)
 
-    def _convert_type(self, py_type: type) -> str:
-        if py_type == float:
+    def _convert_type(self, type_: Type) -> str:
+        if type_ == Type.float:
             return "long double"
-        elif py_type == int:
+        elif type_ == Type.int:
             return "long long"
-        elif py_type == str:
+        elif type_ == Type.str:
             return "string"
         else:
             raise NotImplementedError
@@ -115,11 +116,11 @@ class CppCodeGenerator(CodeGenerator):
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
-        if var.type == float:
+        if var.type == Type.float:
             return 'scanf("%Lf",&{name});'.format(name=name)
-        elif var.type == int:
+        elif var.type == Type.int:
             return 'scanf("%lld",&{name});'.format(name=name)
-        elif var.type == str:
+        elif var.type == Type.str:
             return 'cin >> {name};'.format(name=name)
         else:
             raise NotImplementedError
