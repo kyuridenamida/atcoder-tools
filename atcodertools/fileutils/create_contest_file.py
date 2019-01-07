@@ -2,8 +2,6 @@ import os
 from typing import List
 
 from atcodertools.client.models.sample import Sample
-from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
-from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 
 
 def _make_text_file(file_path, text):

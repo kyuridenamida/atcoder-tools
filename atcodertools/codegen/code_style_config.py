@@ -1,4 +1,5 @@
 import importlib.machinery as imm
+import os
 
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
@@ -24,13 +25,22 @@ class CodeStyleConfig:
             raise CodeStyleConfigInitError(
                 "indent_width must be a positive integer")
 
+        if code_gen_module_file is not None and not os.path.exists(code_gen_module_file):
+            raise CodeStyleConfigInitError(
+                "Module file {} is not found".format(code_gen_module_file))
+
         self.indent_type = indent_type
         self.indent_width = indent_width
         self.code_gen_module = None
-        if code_gen_module_file:
-            module = imm.SourceFileLoader(
-                'udf', code_gen_module_file).load_module()
-            self.code_gen_module = getattr(module, 'main')
+
+        if code_gen_module_file is not None:
+            try:
+                module = imm.SourceFileLoader(
+                    'code_gen_module', code_gen_module_file).load_module()
+                self.code_gen_module = getattr(module, 'main')
+            except AttributeError as e:
+                raise CodeStyleConfigInitError(e, "Error while loading {}".format(
+                    code_gen_module_file))
 
     def indent(self, depth):
         if self.indent_type == INDENT_TYPE_SPACE:
