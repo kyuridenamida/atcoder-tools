@@ -53,11 +53,10 @@ def _message_on_execution(cwd: str, cmd: str):
 def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       workspace_root_path: str,
-                      template_code_path: str,
+                      default_template_code_path: str,
                       replacement_code_path: str,
                       lang: str,
-                      config: Config,
-                      ):
+                      config: Config):
     pid = problem.get_alphabet()
     problem_dir_path = os.path.join(
         workspace_root_path,
@@ -72,6 +71,12 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
     def emit_info(text):
         logging.info("Problem {}: {}".format(pid, text))
+
+    if config.code_style_config.template_file is not None:
+        template_code_path = config.code_style_config.template_file
+    else:
+        template_code_path = default_template_code_path
+    emit_info('{} is used for template'.format(template_code_path))
 
     # Fetch problem data from the statement
     try:
@@ -129,7 +134,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
             result,
             constants,
             gen_class(template, config.code_style_config),
-            code_file_path)
+            code_file_path
+        )
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
