@@ -2,9 +2,9 @@ from typing import List
 
 from collections import OrderedDict
 
-from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
+from atcodertools.models.predictor.analyzed_variable import AnalyzedVariable
 from atcodertools.models.tokenizer.variable_token import VariableToken
-from atcodertools.models.analyzer.simple_format import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern, WrongGroupingError
+from atcodertools.models.predictor.simple_format import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern, WrongGroupingError
 
 
 class UnknownPeriodError(Exception):

@@ -1,7 +1,7 @@
 from typing import List
 
-from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
-from atcodertools.models.analyzer.index import Index
+from atcodertools.models.predictor.analyzed_variable import AnalyzedVariable
+from atcodertools.models.predictor.index import Index
 
 
 class WrongGroupingError(Exception):

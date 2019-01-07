@@ -3,7 +3,6 @@ from typing import Optional
 
 from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, \
     NoPredictionResultError, predict_format
-from atcodertools.models.analyzer.type import Type
 from atcodertools.models.problem_content import ProblemContent
 from atcodertools.models.sample import Sample
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult

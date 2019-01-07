@@ -1,4 +1,4 @@
-from atcodertools.models.analyzer.index import Index
+from atcodertools.models.predictor.index import Index
 
 
 class AnalyzedVariable:

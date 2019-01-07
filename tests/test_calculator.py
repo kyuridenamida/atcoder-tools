@@ -1,5 +1,5 @@
 import unittest
-from atcodertools.models.analyzer.calculator import CalcNode, EvaluateError
+from atcodertools.models.predictor.calculator import CalcNode, EvaluateError
 
 
 class TestCalculator(unittest.TestCase):

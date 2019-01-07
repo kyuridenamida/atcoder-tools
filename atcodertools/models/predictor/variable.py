@@ -1,6 +1,5 @@
-from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
-from atcodertools.models.analyzer.index import Index
-from atcodertools.models.analyzer.type import Type
+from atcodertools.models.predictor.index import Index
+from atcodertools.models.predictor.type import Type
 
 
 class Variable:

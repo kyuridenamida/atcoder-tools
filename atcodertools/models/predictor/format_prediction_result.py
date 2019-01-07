@@ -1,8 +1,8 @@
 from collections import OrderedDict
 from typing import Dict
 
-from atcodertools.models.analyzer.simple_format import SimpleFormat
-from atcodertools.models.analyzer.type import Type
+from atcodertools.models.predictor.simple_format import SimpleFormat
+from atcodertools.models.predictor.type import Type
 from atcodertools.models.predictor.variable import Variable
 
 

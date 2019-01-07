@@ -1,5 +1,5 @@
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from atcodertools.models.analyzer.type import Type
+from atcodertools.models.predictor.type import Type
 from atcodertools.models.predictor.variable import Variable
 
 
