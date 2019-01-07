@@ -1,4 +1,4 @@
-from atcodertools.fmtprediction.calculator import CalcNode
+from atcodertools.models.analyzer.calculator import CalcNode
 
 
 class Index:

@@ -1,7 +1,7 @@
 import copy
 from typing import List, Dict
 
-from atcodertools.fmtprediction.calculator import CalcNode, CalcParseError
+from atcodertools.models.analyzer.calculator import CalcNode, CalcParseError
 from atcodertools.models.tokenizer.variable_token import VariableToken, TokenizedFormat
 
 from atcodertools.fmtprediction.token_manager import TokenManager
