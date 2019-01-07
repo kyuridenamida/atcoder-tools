@@ -28,8 +28,8 @@ def fake_resp(filename: str):
     return MockResponse.response_from(os.path.join(RESOURCE_DIR, filename))
 
 
-def create_fake_request_func(get_url_to_resp: Dict[str, MockResponse]=None,
-                             post_url_to_resp: Dict[str, MockResponse]=None,
+def create_fake_request_func(get_url_to_resp: Dict[str, MockResponse] = None,
+                             post_url_to_resp: Dict[str, MockResponse] = None,
                              ):
     def func(url, method="GET", **kwargs):
         if method == "GET":
