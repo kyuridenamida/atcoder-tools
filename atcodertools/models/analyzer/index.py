@@ -21,7 +21,7 @@ class Index:
     def get_length(self):
         assert self.max_index is not None
         assert self.min_index is not None
-        return CalcNode(
+        return CalcNode.parse(
             "{max_index}-({min_index})+1".format(
                 max_index=self.max_index,
                 min_index=self.min_index)
@@ -31,15 +31,15 @@ class Index:
         if not new_value.isdecimal():
             # consider variable is not always could not be minimal.
             return
-        if (self.min_index is None) or (self.min_index.evaluate() > CalcNode(new_value).evaluate()):
-            self.min_index = CalcNode(new_value)
+        if (self.min_index is None) or (self.min_index.evaluate() > CalcNode.parse(new_value).evaluate()):
+            self.min_index = CalcNode.parse(new_value)
 
     def _update_max(self, new_value: str):
         if not new_value.isdecimal():
-            self.max_index = CalcNode(new_value)
+            self.max_index = CalcNode.parse(new_value)
 
         if (self.max_index is None) or (
-                len(self.max_index.get_all_variables()) == 0 and self.max_index.evaluate() < CalcNode(
+                len(self.max_index.get_all_variables()) == 0 and self.max_index.evaluate() < CalcNode.parse(
                     new_value).evaluate()
         ):
-            self.max_index = CalcNode(new_value)
+            self.max_index = CalcNode.parse(new_value)

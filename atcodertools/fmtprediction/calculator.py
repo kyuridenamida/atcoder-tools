@@ -46,18 +46,11 @@ def _operator_to_string(operator):
 
 class CalcNode:
 
-    def __init__(self, formula=None):
-        if formula:
-            root = _parse(formula)
-            self.content = root.content
-            self.lch = root.lch
-            self.rch = root.rch
-            self.operator = root.operator
-        else:
-            self.content = None
-            self.operator = None
-            self.lch = None
-            self.rch = None
+    def __init__(self, content=None, operator=None, lch=None, rch=None):
+        self.content = content
+        self.lch = lch
+        self.rch = rch
+        self.operator = operator
 
     def is_operator_node(self):
         return self.operator is not None
@@ -90,7 +83,7 @@ class CalcNode:
         values_for_identity_check = [3, 14, 15, 92]
 
         def likely_identical(formula: str):
-            node = CalcNode(formula)
+            node = CalcNode.parse(formula)
             vars = node.get_all_variables()
             for combination in itertools.product(values_for_identity_check, repeat=len(vars)):
                 val_dict = dict(zip(vars, list(combination)))
@@ -148,7 +141,7 @@ class CalcNode:
                 break
             current_formula = next_formula
 
-        return CalcNode(current_formula)
+        return CalcNode.parse(current_formula)
 
     def to_string_strictly(self):
         if self.is_operator_node():
@@ -160,12 +153,12 @@ class CalcNode:
         else:
             return str(self.content)
 
-
-def _parse(formula: str):
-    res, pos = _expr(formula + "$", 0)  # $ is put as a terminal character
-    if pos != len(formula):
-        raise CalcParseError
-    return res
+    @classmethod
+    def parse(cls, formula: str):
+        res, pos = _expr(formula + "$", 0)  # $ is put as a terminal character
+        if pos != len(formula):
+            raise CalcParseError
+        return res
 
 
 def _expr(formula, pos):
@@ -237,7 +230,3 @@ def _factor(formula, pos):
             return res, pos
     else:
         raise CalcParseError
-
-
-def parse_to_calc_node(formula: str) -> CalcNode:
-    return CalcNode(formula)

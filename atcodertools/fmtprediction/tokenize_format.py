@@ -116,7 +116,7 @@ class FormatSearcher:
                     continue
 
                 try:
-                    for sub_var in CalcNode(index).get_all_variables():
+                    for sub_var in CalcNode.parse(index).get_all_variables():
                         if sub_var not in current_var_to_dim_num:
                             return False
                 except CalcParseError:
