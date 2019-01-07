@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 from typing import Optional
 
 from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, \
@@ -15,8 +16,9 @@ class Response:
         self.status = status
         if result:
             self.original_result = result
-            self.simple_format = result.simple_format
-            self.types = [(k, v.type.to_py_type()) for k, v in result.var_to_info.items()]
+            self.simple_format = result.format
+            var_info = [(var.name, var.type) for var in result.format.all_vars()]
+            self.types = [(name, type.to_py_type()) for name, type in var_info]
 
 
 FORMAT_FILE_NAME = "format.txt"

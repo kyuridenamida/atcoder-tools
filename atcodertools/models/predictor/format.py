@@ -1,5 +1,6 @@
-from typing import List, TypeVar, Generic
+from typing import List, TypeVar, Generic, Dict
 from atcodertools.models.predictor.index import Index
+from atcodertools.models.predictor.variable import Variable
 
 
 class WrongGroupingError(Exception):
@@ -11,6 +12,9 @@ T = TypeVar('T')  # T must be Variable or SimpleVariable
 
 class Pattern(Generic[T]):
     def all_vars(self) -> List[T]:
+        raise NotImplementedError
+
+    def with_replaced_vars(self, name_to_var: Dict[str, Variable]):
         raise NotImplementedError
 
 
@@ -49,6 +53,9 @@ class SingularPattern(Pattern):
     def all_vars(self):
         return [self.var]
 
+    def with_replaced_vars(self, name_to_var: Dict[str, Variable]):
+        return SingularPattern(name_to_var[self.var.name])
+
 
 class TwoDimensionalPattern(Pattern):
     """
@@ -65,6 +72,9 @@ class TwoDimensionalPattern(Pattern):
 
     def all_vars(self):
         return [self.var]
+
+    def with_replaced_vars(self, name_to_var: Dict[str, Variable]):
+        return TwoDimensionalPattern(name_to_var[self.var.name])
 
 
 class ParallelPattern(Pattern):
@@ -105,3 +115,6 @@ class ParallelPattern(Pattern):
 
     def all_vars(self):
         return self.vars
+
+    def with_replaced_vars(self, name_to_var: Dict[str, Variable]):
+        return ParallelPattern([name_to_var[var.name] for var in self.vars])

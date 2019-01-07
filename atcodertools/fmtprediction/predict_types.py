@@ -131,7 +131,7 @@ def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
     return to_dict
 
 
-def type_predictor(fmt: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
+def predict_type(fmt: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
     res_type_dict = {}
     for sample in samples:
         token_manager = TokenManager(sample.get_input().split())

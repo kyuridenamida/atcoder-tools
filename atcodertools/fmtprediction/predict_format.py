@@ -1,7 +1,7 @@
 from atcodertools.client.atcoder import ProblemContent
 from atcodertools.fmtprediction.analyze_format import analyze_format, FormatAnalysisFailedError
 from atcodertools.fmtprediction.tokenize_format import FormatTokenizer, NoFormatFoundError
-from atcodertools.fmtprediction.predict_types import type_predictor, TypePredictionFailedError
+from atcodertools.fmtprediction.predict_types import predict_type, TypePredictionFailedError
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
 
 
@@ -34,7 +34,7 @@ def predict_format(content: ProblemContent) -> FormatPredictionResult:
             try:
                 fmt = analyze_format(format.var_tokens, to_1d_flag)
                 output_cands.append(
-                    FormatPredictionResult(fmt, type_predictor(fmt, samples)))
+                    FormatPredictionResult.create_typed_format(fmt, predict_type(fmt, samples)))
                 break
             except (TypePredictionFailedError, FormatAnalysisFailedError):
                 pass

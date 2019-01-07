@@ -26,7 +26,7 @@ class CppCodeGenerator(CodeGenerator):
 
     def __init__(self, template: str, config: CodeStyleConfig = CodeStyleConfig()):
         self._template = template
-        self._prediction_result = None
+        self._prediction_result = None  # type: FormatPredictionResult
         self._config = config
 
     def generate_code(self, prediction_result: FormatPredictionResult,
@@ -46,7 +46,7 @@ class CppCodeGenerator(CodeGenerator):
 
     def _input_part(self):
         lines = []
-        for pattern in self._prediction_result.simple_format.sequence:
+        for pattern in self._prediction_result.format.sequence:
             lines += self._render_pattern(pattern)
         return "\n{indent}".format(indent=self._indent(1)).join(lines)
 
@@ -75,7 +75,7 @@ class CppCodeGenerator(CodeGenerator):
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
-        return ", ".join(self._prediction_result.var_to_info.keys())
+        return ", ".join([v.name for v in self._prediction_result.format.all_vars()])
 
     def _formal_arguments(self):
         """
@@ -83,9 +83,9 @@ class CppCodeGenerator(CodeGenerator):
         """
         return ", ".join([
             "{decl_type} {name}".format(
-                decl_type=self._get_declaration_type(var),
-                name=vname)
-            for vname, var in self._prediction_result.var_to_info.items()
+                decl_type=self._get_declaration_type(v),
+                name=v.name)
+            for v in self._prediction_result.format.all_vars()
         ])
 
     def _generate_declaration(self, var: Variable):
@@ -133,23 +133,19 @@ class CppCodeGenerator(CodeGenerator):
             name += "[j]"
         return name
 
-    def _simple_var_to_vinfo(self, var: SimpleVariable) -> Variable:
-        return self._prediction_result.var_to_info[var.name]
-
     def _render_pattern(self, pattern: Pattern):
         lines = []
         for var in pattern.all_vars():
-            lines.append(self._generate_declaration(
-                self._simple_var_to_vinfo(var)))
+            lines.append(self._generate_declaration(var))
 
-        representative_var = self._simple_var_to_vinfo(pattern.all_vars()[0])
+        representative_var = pattern.all_vars()[0]
         if isinstance(pattern, SingularPattern):
             lines.append(self._input_code_for_var(representative_var))
         elif isinstance(pattern, ParallelPattern):
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(1),
-                                                     line=self._input_code_for_var(self._simple_var_to_vinfo(var))))
+                                                     line=self._input_code_for_var(var)))
             lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
@@ -157,7 +153,7 @@ class CppCodeGenerator(CodeGenerator):
                 "{indent}{line}".format(indent=self._indent(1), line=_loop_header(representative_var, True)))
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(2),
-                                                     line=self._input_code_for_var(self._simple_var_to_vinfo(var))))
+                                                     line=self._input_code_for_var(var)))
             lines.append("{indent}}}".format(indent=self._indent(1)))
             lines.append("}")
         else:
