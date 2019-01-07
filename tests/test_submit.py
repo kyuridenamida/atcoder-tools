@@ -12,6 +12,7 @@ def fake_credential_suplier():
 
 
 class TestTester(unittest.TestCase):
+
     def test_submit_fail_when_metadata_not_found(self):
         ok = submit.main(
             '', ['-d', os.path.join(RESOURCE_DIR, "without_metadata")], fake_credential_suplier, False)

@@ -3,6 +3,7 @@ from atcodertools.fmtprediction.models.calculator import CalcNode, EvaluateError
 
 
 class TestCalculator(unittest.TestCase):
+
     def test_parse_to_calc_node(self):
         self.assertEqual("N-(1-1)+1000*N*(N+1)",
                          str(CalcNode.parse("N-(1-1)+1000*N*(N+1)")))

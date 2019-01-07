@@ -95,7 +95,8 @@ class TypePredictor:
         type_ = Type.from_py_type(type(value))
 
         if var.name in self._var_to_type:
-            self._var_to_type[var.name] = self._var_to_type[var.name].intersect(type_)
+            self._var_to_type[var.name] = self._var_to_type[
+                var.name].intersect(type_)
         else:
             self._var_to_type[var.name] = type_
             self._var_to_actual_value[var.name] = value

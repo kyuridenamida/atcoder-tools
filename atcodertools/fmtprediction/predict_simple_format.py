@@ -36,7 +36,8 @@ def _predict_simple_format_main(var_tokens: List[VariableToken], to_1d_flag=Fals
         var_name = var_token.var_name
 
         if var_name not in var_to_simple_var:
-            var_to_simple_var[var_name] = SimpleVariable.create(var_name, var_token.dim_num())
+            var_to_simple_var[var_name] = SimpleVariable.create(
+                var_name, var_token.dim_num())
             var_to_positions[var_name] = []
 
         var_to_positions[var_name].append(pos)

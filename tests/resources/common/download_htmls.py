@@ -30,7 +30,8 @@ if __name__ == "__main__":
                 contest=contest.get_id(), problem_id=problem.get_alphabet()))
 
             if os.path.exists(html_path):
-                print("{} already exists -- skipping download".format(html_path))
+                print(
+                    "{} already exists -- skipping download".format(html_path))
                 continue
 
             print("Downloading {}".format(html_path))

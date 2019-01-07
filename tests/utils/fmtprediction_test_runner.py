@@ -8,7 +8,6 @@ from atcodertools.client.models.sample import Sample
 from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 
 
-
 class Response:
 
     def __init__(self, result: Optional[FormatPredictionResult], status):
@@ -16,7 +15,8 @@ class Response:
         if result:
             self.original_result = result
             self.simple_format = result.format
-            var_info = [(var.name, var.type) for var in result.format.all_vars()]
+            var_info = [(var.name, var.type)
+                        for var in result.format.all_vars()]
             self.types = [(name, type.to_py_type()) for name, type in var_info]
 
 

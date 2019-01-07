@@ -113,7 +113,7 @@ class CalcNode:
         else:
             return [self.content]
 
-    def evaluate(self, variables: Dict[str, int] = None):
+    def evaluate(self, variables: Dict[str, int]=None):
         if variables is None:
             variables = {}
         if self.is_operator_node():

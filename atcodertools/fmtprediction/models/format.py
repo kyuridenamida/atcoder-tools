@@ -11,6 +11,7 @@ T = TypeVar('T')  # T must be Variable or SimpleVariable
 
 
 class Pattern(Generic[T]):
+
     def all_vars(self) -> List[T]:
         raise NotImplementedError
 
@@ -19,6 +20,7 @@ class Pattern(Generic[T]):
 
 
 class Format(Generic[T]):
+
     """
     Format without type information and separator information
     """
@@ -40,6 +42,7 @@ class Format(Generic[T]):
 
 
 class SingularPattern(Pattern):
+
     """
     N
     """
@@ -58,6 +61,7 @@ class SingularPattern(Pattern):
 
 
 class TwoDimensionalPattern(Pattern):
+
     """
     a_1,1 ... a_1,w
     :
@@ -78,6 +82,7 @@ class TwoDimensionalPattern(Pattern):
 
 
 class ParallelPattern(Pattern):
+
     """
     a1 a2 ... an
 

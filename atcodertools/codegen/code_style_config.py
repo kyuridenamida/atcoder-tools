@@ -7,6 +7,7 @@ class CodeStyleConfigInitError(Exception):
 
 
 class CodeStyleConfig:
+
     def __init__(self,
                  indent_type: str = INDENT_TYPE_SPACE,
                  indent_width: int = 4,

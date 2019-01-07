@@ -98,7 +98,8 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(_load_text_file("answer_x_none_y_2.txt"),
                          _trim(render(template, x=None, y=2)))
 
-    def verify(self, response: Response, py_test_name: str, lang: str, template_type: str = "old",
+    def verify(
+        self, response: Response, py_test_name: str, lang: str, template_type: str = "old",
                constants: ProblemConstantSet = ProblemConstantSet()):
         self.assertEqual(
             load_intermediate_format(py_test_name),

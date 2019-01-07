@@ -9,6 +9,7 @@ SUBMISSION_URL_RE = re.compile(
 
 
 class Submission:
+
     def __init__(self, problem_id: str, submission_id: int):
         self.problem_id = problem_id
         self.submission_id = submission_id

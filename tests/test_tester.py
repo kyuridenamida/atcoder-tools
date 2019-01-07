@@ -11,6 +11,7 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 
 
 class TestTester(unittest.TestCase):
+
     def test_multiple_exec_files(self):
         all_ok = tester.main(
             '', ['-d', os.path.join(RESOURCE_DIR, "test_multiple_exec_files")])

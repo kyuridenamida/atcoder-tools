@@ -28,6 +28,7 @@ class ExecStatus(Enum):
 
 
 class ExecResult:
+
     def __init__(self, status: ExecStatus, output: str = None, elapsed_sec: float = None):
         self.status = status
         self.output = output

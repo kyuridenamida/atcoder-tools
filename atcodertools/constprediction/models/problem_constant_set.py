@@ -1,6 +1,7 @@
 
 
 class ProblemConstantSet:
+
     def __init__(self,
                  mod: int = None,
                  yes_str: str = None,

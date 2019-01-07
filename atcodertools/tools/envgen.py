@@ -293,7 +293,8 @@ def main(prog, args):
 
     parser.add_argument("--replacement",
                         help="File path to your config file\n{0}{1}".format(
-                            "[Default (C++)] {}\n".format(get_default_replacement_path('cpp')),
+                            "[Default (C++)] {}\n".format(
+                                get_default_replacement_path('cpp')),
                             "[Default (Java)] {}".format(
                                 get_default_replacement_path('java')))
                         )

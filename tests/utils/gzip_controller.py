@@ -4,6 +4,7 @@ import tarfile
 
 
 class GZipController:
+
     def __init__(self, target_dir, gzip_file_path, main_dirname):
         self.target_dir = target_dir
         self.gzip_file_path = gzip_file_path
