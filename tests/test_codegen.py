@@ -5,7 +5,7 @@ import os
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.codegen_args import CodeGenArgs
-from atcodertools.codegen.langs import cpp, java
+from atcodertools.codegen.codegen_modules import cpp, java
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from tests.utils.gzip_controller import make_tst_data_controller

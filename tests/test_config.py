@@ -54,8 +54,8 @@ class TestConfig(unittest.TestCase):
             pass
 
     def test_import_udf(self):
-        code_gen_module_file = os.path.join(RESOURCE_DIR, "user_defined_code_gen_module.py")
-        CodeStyleConfig(code_gen_module_file=code_gen_module_file)
+        codegen_module_file = os.path.join(RESOURCE_DIR, "custom_codegen_module.py")
+        CodeStyleConfig(codegen_module_file=codegen_module_file)
 
 
 if __name__ == "__main__":

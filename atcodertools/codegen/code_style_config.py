@@ -13,7 +13,7 @@ class CodeStyleConfig:
     def __init__(self,
                  indent_type: str = INDENT_TYPE_SPACE,
                  indent_width: int = 4,
-                 code_gen_module_file: str = None,
+                 codegen_module_file: str = None,
                  ):
 
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
@@ -27,8 +27,8 @@ class CodeStyleConfig:
         self.indent_type = indent_type
         self.indent_width = indent_width
         self.udf = None
-        if code_gen_module_file:
-            module = imm.SourceFileLoader('udf', code_gen_module_file).load_module()
+        if codegen_module_file:
+            module = imm.SourceFileLoader('udf', codegen_module_file).load_module()
             self.udf = getattr(module, 'main')
 
     def indent(self, depth):

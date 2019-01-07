@@ -9,7 +9,7 @@ from time import sleep
 from typing import Tuple, Optional
 
 from atcodertools.codegen.models.codegen_args import CodeGenArgs
-from atcodertools.codegen.langs import cpp, java
+from atcodertools.codegen.codegen_modules import cpp, java
 from atcodertools.codegen.template_engine import render
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
