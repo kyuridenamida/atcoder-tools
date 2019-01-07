@@ -1,4 +1,8 @@
+import re
 from typing import Optional, List
+
+
+VALID_VAR_NAME_REG_EXP = re.compile("[a-zA-Z_]+")
 
 
 class VariableToken:
@@ -40,7 +44,7 @@ class VariableToken:
         return True
 
     def _has_valid_var_name(self):
-        return all(c.isalpha() or c == '_' for c in self.var_name)
+        return VALID_VAR_NAME_REG_EXP.fullmatch(self.var_name) is not None
 
     @staticmethod
     def _is_valid_index(index):
