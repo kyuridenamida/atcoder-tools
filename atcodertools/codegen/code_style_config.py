@@ -1,3 +1,5 @@
+import importlib.machinery as imm
+
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
 
@@ -11,6 +13,7 @@ class CodeStyleConfig:
     def __init__(self,
                  indent_type: str = INDENT_TYPE_SPACE,
                  indent_width: int = 4,
+                 udf_path: str = None,
                  ):
 
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
@@ -23,6 +26,10 @@ class CodeStyleConfig:
 
         self.indent_type = indent_type
         self.indent_width = indent_width
+        self.udf = None
+        if udf_path:
+            module = imm.SourceFileLoader('udf', udf_path).load_module()
+            self.udf = getattr(module, 'generate_template_parameters')
 
     def indent(self, depth):
         if self.indent_type == INDENT_TYPE_SPACE:

@@ -53,6 +53,10 @@ class TestConfig(unittest.TestCase):
         except CodeStyleConfigInitError:
             pass
 
+    def test_import_udf(self):
+        udf_path = os.path.join(RESOURCE_DIR, "udf.py")
+        CodeStyleConfig(udf_path=udf_path)
+
 
 if __name__ == "__main__":
     unittest.main()
