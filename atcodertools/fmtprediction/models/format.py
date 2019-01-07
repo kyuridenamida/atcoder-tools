@@ -1,20 +1,25 @@
-from typing import List
-
-from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
-from atcodertools.models.analyzer.index import Index
+from typing import List, TypeVar, Generic, Dict
+from atcodertools.fmtprediction.models.index import Index
+from atcodertools.fmtprediction.models.variable import Variable
 
 
 class WrongGroupingError(Exception):
     pass
 
 
-class Pattern:
+T = TypeVar('T')  # T must be Variable or SimpleVariable
 
-    def all_vars(self) -> List[AnalyzedVariable]:
+
+class Pattern(Generic[T]):
+
+    def all_vars(self) -> List[T]:
+        raise NotImplementedError
+
+    def with_replaced_vars(self, name_to_var: Dict[str, Variable]):
         raise NotImplementedError
 
 
-class SimpleFormat:
+class Format(Generic[T]):
 
     """
     Format without type information and separator information
@@ -23,13 +28,13 @@ class SimpleFormat:
     def __init__(self):
         self.sequence = []
 
-    def push_back(self, pattern: Pattern):
+    def push_back(self, pattern: Pattern[T]):
         self.sequence.append(pattern)
 
     def __str__(self):
         return "[{}]".format(",".join([str(c) for c in self.sequence]))
 
-    def all_vars(self):
+    def all_vars(self) -> List[T]:
         res = []
         for seq in self.sequence:
             res += seq.all_vars()
@@ -42,14 +47,17 @@ class SingularPattern(Pattern):
     N
     """
 
-    def __init__(self, var: AnalyzedVariable):
+    def __init__(self, var: T):
         self.var = var
 
     def __str__(self):
-        return "(Singular: {})".format(self.var.var_name)
+        return "(Singular: {})".format(self.var.name)
 
     def all_vars(self):
         return [self.var]
+
+    def with_replaced_vars(self, name_to_var: Dict[str, Variable]):
+        return SingularPattern(name_to_var[self.var.name])
 
 
 class TwoDimensionalPattern(Pattern):
@@ -60,14 +68,17 @@ class TwoDimensionalPattern(Pattern):
     a_h,1 ... a_h,w
     """
 
-    def __init__(self, var: AnalyzedVariable):
+    def __init__(self, var: T):
         self.var = var
 
     def __str__(self):
-        return "(TwoDimensional: {})".format(self.var.var_name)
+        return "(TwoDimensional: {})".format(self.var.name)
 
     def all_vars(self):
         return [self.var]
+
+    def with_replaced_vars(self, name_to_var: Dict[str, Variable]):
+        return TwoDimensionalPattern(name_to_var[self.var.name])
 
 
 class ParallelPattern(Pattern):
@@ -82,12 +93,12 @@ class ParallelPattern(Pattern):
     an bn ... cn
     """
 
-    def __init__(self, vars: List[AnalyzedVariable]):
-        self.vars = vars
-        self.loop_index = self._decide_loop_index(vars)
+    def __init__(self, vars_: List[T]):
+        self.vars = vars_
+        self.loop_index = self._decide_loop_index(vars_)
 
     @staticmethod
-    def _decide_loop_index(parallel_vars: List[AnalyzedVariable]) -> Index:
+    def _decide_loop_index(parallel_vars: List[T]) -> Index:
         first_var = parallel_vars[0]
         for var in parallel_vars:
             if var.dim_num() != 1:
@@ -102,10 +113,13 @@ class ParallelPattern(Pattern):
 
     def __str__(self):
         return "(Parallel: {names} | {min} to {max})".format(
-            names=",".join([str(c.var_name) for c in self.vars]),
+            names=",".join([str(c.name) for c in self.vars]),
             min=str(self.loop_index.min_index),
             max=str(self.loop_index.max_index)
         )
 
     def all_vars(self):
         return self.vars
+
+    def with_replaced_vars(self, name_to_var: Dict[str, Variable]):
+        return ParallelPattern([name_to_var[var.name] for var in self.vars])

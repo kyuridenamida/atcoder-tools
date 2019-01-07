@@ -11,6 +11,7 @@ RESOURCE_DIR = os.path.join(
 
 
 class TestConfig(unittest.TestCase):
+
     def test_load_code_style_config(self):
         with open(os.path.join(RESOURCE_DIR, "with_indent_width.toml"), 'r') as f:
             config = Config.load(f).code_style_config

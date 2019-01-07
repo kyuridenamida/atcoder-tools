@@ -1,5 +1,5 @@
-from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
-from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
+from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 
 from abc import ABC, abstractmethod
 

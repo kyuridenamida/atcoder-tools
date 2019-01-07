@@ -5,8 +5,8 @@ import unittest
 import requests
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError, save_cookie, load_cookie_to
-from atcodertools.models.contest import Contest
-from atcodertools.models.problem import Problem
+from atcodertools.client.models.contest import Contest
+from atcodertools.client.models.problem import Problem
 
 
 class TestAtCoderClientReal(unittest.TestCase):

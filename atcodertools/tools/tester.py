@@ -10,7 +10,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Tuple
 
-from atcodertools.models.tools.metadata import Metadata
+from atcodertools.tools.models.metadata import Metadata
 
 
 class NoExecutableFileError(Exception):
@@ -28,6 +28,7 @@ class ExecStatus(Enum):
 
 
 class ExecResult:
+
     def __init__(self, status: ExecStatus, output: str = None, elapsed_sec: float = None):
         self.status = status
         self.output = output

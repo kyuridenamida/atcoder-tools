@@ -1,10 +1,11 @@
 import re
-from typing import List, Dict
+from typing import List, Dict, Any
 
-from atcodertools.models.sample import Sample
-from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
-from atcodertools.models.analyzer.index import Index
-from atcodertools.models.analyzer.simple_format import SimpleFormat, SingularPattern, TwoDimensionalPattern, \
+from atcodertools.fmtprediction.models.type import Type
+from atcodertools.client.models.sample import Sample
+from atcodertools.fmtprediction.models.variable import SimpleVariable
+from atcodertools.fmtprediction.models.index import Index
+from atcodertools.fmtprediction.models.format import Format, SingularPattern, TwoDimensionalPattern, \
     ParallelPattern
 from atcodertools.fmtprediction.token_manager import TokenManager
 
@@ -14,10 +15,6 @@ class TypesUnmatchedError(Exception):
 
 
 class ParseError(Exception):
-    pass
-
-
-class UpCastingError(Exception):
     pass
 
 
@@ -45,30 +42,6 @@ class InvalidLoopIndexError(Exception):
     pass
 
 
-UP_CAST_TABLE = {int: {}, str: {}, float: {}}
-
-UP_CAST_TABLE[int][int] = int
-UP_CAST_TABLE[int][str] = str
-UP_CAST_TABLE[int][float] = float
-
-UP_CAST_TABLE[str] = {}
-UP_CAST_TABLE[str][int] = str
-UP_CAST_TABLE[str][str] = str
-UP_CAST_TABLE[str][float] = str
-
-UP_CAST_TABLE[float] = {}
-UP_CAST_TABLE[float][int] = float
-UP_CAST_TABLE[float][str] = str
-UP_CAST_TABLE[float][float] = float
-
-
-def up_cast(old_type, new_type):
-    try:
-        return UP_CAST_TABLE[old_type][new_type]
-    except KeyError:
-        raise UpCastingError
-
-
 def is_float(text):
     return re.match(r"-?\d+\.\d+$", text) is not None
 
@@ -77,7 +50,7 @@ def is_int(text):
     return re.match(r"-?\d+$", text) is not None
 
 
-def _convert_to_proper_type(value: str):
+def _convert_to_proper_type(value: str) -> Any:
     if is_int(value):
         return int(value)
     elif is_float(value):
@@ -87,10 +60,10 @@ def _convert_to_proper_type(value: str):
 
 class TypePredictor:
 
-    def __init__(self, fmt: SimpleFormat):
+    def __init__(self, fmt: Format[SimpleVariable]):
         self._fmt = fmt
         self._fetch_generator_instance = self._fetch_generator()
-        self._var_to_type = {}
+        self._var_to_type = {}  # type: Dict[str, Type]
         # If there are multiple values, only the first value is recorded.
         self._var_to_actual_value = {}
 
@@ -118,16 +91,17 @@ class TypePredictor:
         except Exception:
             raise InvalidLoopSizeError
 
-    def _refresh(self, var: AnalyzedVariable, value: any):
-        if var.var_name in self._var_to_type:
-            self._var_to_type[var.var_name] = up_cast(
-                self._var_to_type[var.var_name],
-                type(value))
-        else:
-            self._var_to_type[var.var_name] = type(value)
-            self._var_to_actual_value[var.var_name] = value
+    def _refresh(self, var: SimpleVariable, value: Any):
+        type_ = Type.from_py_type(type(value))
 
-    def _fetch(self) -> AnalyzedVariable:
+        if var.name in self._var_to_type:
+            self._var_to_type[var.name] = self._var_to_type[
+                var.name].intersect(type_)
+        else:
+            self._var_to_type[var.name] = type_
+            self._var_to_actual_value[var.name] = value
+
+    def _fetch(self) -> SimpleVariable:
         res = next(self._fetch_generator_instance)
         if res is None:
             raise TooManyFetchesError
@@ -149,20 +123,20 @@ class TypePredictor:
         raise TooManyFetchesError()
 
 
-def merge_type_dicts(to_dict, src_dict):
+def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
     for k, v in src_dict.items():
         if k in to_dict:
-            to_dict[k] = up_cast(to_dict[k], v)
+            to_dict[k] = to_dict[k].intersect(v)
         else:
             to_dict[k] = v
     return to_dict
 
 
-def type_predictor(fmt: SimpleFormat, samples: List[Sample]) -> Dict[str, type]:
+def predict_types(simple_format: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
     res_type_dict = {}
     for sample in samples:
         token_manager = TokenManager(sample.get_input().split())
-        predictor = TypePredictor(fmt)
+        predictor = TypePredictor(simple_format)
         try:
             while not token_manager.is_terminal():
                 predictor.feed(token_manager.next())
@@ -171,7 +145,7 @@ def type_predictor(fmt: SimpleFormat, samples: List[Sample]) -> Dict[str, type]:
                 res_type_dict,
                 predictor.get_typing_result())
         except (
-                TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError, UpCastingError,
+                TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
                 InvalidLoopIndexError):
             raise TypePredictionFailedError
 

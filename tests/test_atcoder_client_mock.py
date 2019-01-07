@@ -4,8 +4,8 @@ import unittest
 from typing import Dict
 
 from atcodertools.client.atcoder import AtCoderClient
-from atcodertools.models.contest import Contest
-from atcodertools.models.problem import Problem
+from atcodertools.client.models.contest import Contest
+from atcodertools.client.models.problem import Problem
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -13,6 +13,7 @@ RESOURCE_DIR = os.path.join(
 
 
 class MockResponse:
+
     def __init__(self, text=None, url=None):
         self.text = text
         self.url = url
@@ -49,6 +50,7 @@ def restore_client_after_run(func):
 
 
 class TestAtCoderClientMock(unittest.TestCase):
+
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.client = AtCoderClient()

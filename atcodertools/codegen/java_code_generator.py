@@ -1,15 +1,16 @@
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from atcodertools.models.predictor.variable import Variable
+from atcodertools.fmtprediction.models.type import Type
+from atcodertools.fmtprediction.models.variable import Variable
 
 
 class JavaCodeGenerator(CppCodeGenerator):
 
-    def _convert_type(self, py_type: type) -> str:
-        if py_type == float:
+    def _convert_type(self, type_: Type) -> str:
+        if type_ == Type.float:
             return "double"
-        elif py_type == int:
+        elif type_ == Type.int:
             return "long"
-        elif py_type == str:
+        elif type_ == Type.str:
             return "String"
         else:
             raise NotImplementedError
@@ -31,19 +32,19 @@ class JavaCodeGenerator(CppCodeGenerator):
         elif var.dim_num() == 1:
             constructor = " = new {type}[(int)({size})]".format(
                 type=self._convert_type(var.type),
-                size=var.get_first_index().get_length()
+                size=var.first_index.get_length()
             )
         elif var.dim_num() == 2:
             constructor = " = new {type}[int({row_size})][int({col_size})]".format(
                 type=self._convert_type(var.type),
-                row_size=var.get_first_index().get_length(),
-                col_size=var.get_second_index().get_length()
+                row_size=var.first_index.get_length(),
+                col_size=var.second_index.get_length()
             )
         else:
             raise NotImplementedError
 
         line = "{decl_type} {name}{constructor};".format(
-            name=var.get_name(),
+            name=var.name,
             decl_type=self._get_declaration_type(var),
             constructor=constructor
         )
@@ -51,11 +52,11 @@ class JavaCodeGenerator(CppCodeGenerator):
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
-        if var.type == float:
+        if var.type == Type.float:
             return '{name} = sc.nextDouble();'.format(name=name)
-        elif var.type == int:
+        elif var.type == Type.int:
             return '{name} = sc.nextLong();'.format(name=name)
-        elif var.type == str:
+        elif var.type == Type.str:
             return '{name} = sc.next();'.format(name=name)
         else:
             raise NotImplementedError

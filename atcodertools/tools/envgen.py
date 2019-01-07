@@ -11,18 +11,17 @@ from typing import Tuple, Optional
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
 from atcodertools.config.config import Config
-from atcodertools.fileutils.create_contest_file import create_examples, create_code_from
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
     create_code_from
-from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError
+from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
-from atcodertools.fmtprediction.predict_format import FormatPredictor, NoPredictionResultError, \
-    MultiplePredictionResultsError
-from atcodertools.models.problem import Problem
+from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
+    MultiplePredictionResultsError, predict_format
+from atcodertools.client.models.problem import Problem
 import logging
 
-from atcodertools.models.tools.metadata import Metadata
+from atcodertools.tools.models.metadata import Metadata
 
 script_dir_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -123,7 +122,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         with open(template_code_path, "r") as f:
             template = f.read()
 
-        result = FormatPredictor().predict(content)
+        result = predict_format(content)
         constants = predict_constants(content.original_html)
 
         create_code_from(
@@ -294,7 +293,8 @@ def main(prog, args):
 
     parser.add_argument("--replacement",
                         help="File path to your config file\n{0}{1}".format(
-                            "[Default (C++)] {}\n".format(get_default_replacement_path('cpp')),
+                            "[Default (C++)] {}\n".format(
+                                get_default_replacement_path('cpp')),
                             "[Default (Java)] {}".format(
                                 get_default_replacement_path('java')))
                         )

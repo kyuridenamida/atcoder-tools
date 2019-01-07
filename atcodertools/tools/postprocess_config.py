@@ -11,6 +11,7 @@ def _run_command(exec_cmd: str, current_working_dir: str) -> str:
 
 
 class PostprocessConfig:
+
     def __init__(self,
                  exec_on_each_problem_dir: str = None,
                  exec_on_contest_dir: str = None,

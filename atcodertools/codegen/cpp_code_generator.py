@@ -1,19 +1,19 @@
 from atcodertools.codegen.code_style_config import CodeStyleConfig
-from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
-from atcodertools.models.analyzer.simple_format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
-from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
-from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
-from atcodertools.models.predictor.variable import Variable
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
+from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from atcodertools.fmtprediction.models.type import Type
+from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
+from atcodertools.fmtprediction.models.variable import Variable
 from atcodertools.codegen.code_generator import CodeGenerator
 from atcodertools.codegen.template_engine import render
 
 
 def _loop_header(var: Variable, for_second_index: bool):
     if for_second_index:
-        index = var.get_second_index()
+        index = var.second_index
         loop_var = "j"
     else:
-        index = var.get_first_index()
+        index = var.first_index
         loop_var = "i"
 
     return "for(int {loop_var} = 0 ; {loop_var} < {length} ; {loop_var}++){{".format(
@@ -26,7 +26,7 @@ class CppCodeGenerator(CodeGenerator):
 
     def __init__(self, template: str, config: CodeStyleConfig = CodeStyleConfig()):
         self._template = template
-        self._prediction_result = None
+        self._prediction_result = None  # type: FormatPredictionResult
         self._config = config
 
     def generate_code(self, prediction_result: FormatPredictionResult,
@@ -46,16 +46,16 @@ class CppCodeGenerator(CodeGenerator):
 
     def _input_part(self):
         lines = []
-        for pattern in self._prediction_result.simple_format.sequence:
+        for pattern in self._prediction_result.format.sequence:
             lines += self._render_pattern(pattern)
         return "\n{indent}".format(indent=self._indent(1)).join(lines)
 
-    def _convert_type(self, py_type: type) -> str:
-        if py_type == float:
+    def _convert_type(self, type_: Type) -> str:
+        if type_ == Type.float:
             return "long double"
-        elif py_type == int:
+        elif type_ == Type.int:
             return "long long"
-        elif py_type == str:
+        elif type_ == Type.str:
             return "string"
         else:
             raise NotImplementedError
@@ -75,7 +75,7 @@ class CppCodeGenerator(CodeGenerator):
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
-        return ", ".join(self._prediction_result.var_to_info.keys())
+        return ", ".join([v.name for v in self._prediction_result.format.all_vars()])
 
     def _formal_arguments(self):
         """
@@ -83,9 +83,9 @@ class CppCodeGenerator(CodeGenerator):
         """
         return ", ".join([
             "{decl_type} {name}".format(
-                decl_type=self._get_declaration_type(var),
-                name=vname)
-            for vname, var in self._prediction_result.var_to_info.items()
+                decl_type=self._get_declaration_type(v),
+                name=v.name)
+            for v in self._prediction_result.format.all_vars()
         ])
 
     def _generate_declaration(self, var: Variable):
@@ -96,18 +96,18 @@ class CppCodeGenerator(CodeGenerator):
             constructor = ""
         elif var.dim_num() == 1:
             constructor = "({size})".format(
-                size=var.get_first_index().get_length())
+                size=var.first_index.get_length())
         elif var.dim_num() == 2:
             constructor = "({row_size}, vector<{type}>({col_size}))".format(
                 type=self._convert_type(var.type),
-                row_size=var.get_first_index().get_length(),
-                col_size=var.get_second_index().get_length()
+                row_size=var.first_index.get_length(),
+                col_size=var.second_index.get_length()
             )
         else:
             raise NotImplementedError
 
         line = "{decl_type} {name}{constructor};".format(
-            name=var.get_name(),
+            name=var.name,
             decl_type=self._get_declaration_type(var),
             constructor=constructor
         )
@@ -115,41 +115,37 @@ class CppCodeGenerator(CodeGenerator):
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
-        if var.type == float:
+        if var.type == Type.float:
             return 'scanf("%Lf",&{name});'.format(name=name)
-        elif var.type == int:
+        elif var.type == Type.int:
             return 'scanf("%lld",&{name});'.format(name=name)
-        elif var.type == str:
+        elif var.type == Type.str:
             return 'cin >> {name};'.format(name=name)
         else:
             raise NotImplementedError
 
     @staticmethod
     def _get_var_name(var: Variable):
-        name = var.get_name()
+        name = var.name
         if var.dim_num() >= 1:
             name += "[i]"
         if var.dim_num() >= 2:
             name += "[j]"
         return name
 
-    def _analyzed_var_to_vinfo(self, var: AnalyzedVariable) -> Variable:
-        return self._prediction_result.var_to_info[var.var_name]
-
     def _render_pattern(self, pattern: Pattern):
         lines = []
         for var in pattern.all_vars():
-            lines.append(self._generate_declaration(
-                self._analyzed_var_to_vinfo(var)))
+            lines.append(self._generate_declaration(var))
 
-        representative_var = self._analyzed_var_to_vinfo(pattern.all_vars()[0])
+        representative_var = pattern.all_vars()[0]
         if isinstance(pattern, SingularPattern):
             lines.append(self._input_code_for_var(representative_var))
         elif isinstance(pattern, ParallelPattern):
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(1),
-                                                     line=self._input_code_for_var(self._analyzed_var_to_vinfo(var))))
+                                                     line=self._input_code_for_var(var)))
             lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
@@ -157,7 +153,7 @@ class CppCodeGenerator(CodeGenerator):
                 "{indent}{line}".format(indent=self._indent(1), line=_loop_header(representative_var, True)))
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(2),
-                                                     line=self._input_code_for_var(self._analyzed_var_to_vinfo(var))))
+                                                     line=self._input_code_for_var(var)))
             lines.append("{indent}}}".format(indent=self._indent(1)))
             lines.append("}")
         else:

@@ -9,6 +9,7 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 
 
 class TestVersionCheck(unittest.TestCase):
+
     def test_get_latest_version_with_no_error(self):
         get_latest_version(use_cache=False)
 

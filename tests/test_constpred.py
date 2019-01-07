@@ -73,7 +73,8 @@ class TestConstantsPrediction(unittest.TestCase):
     def test_tricky_mod_case_that_can_raise_multi_cands_error(self):
         # This test exists in order to demonstrate the current wrong behavior that throws MultipleModCandidatesError.
         # None is the true answer for ABC103-C. This test shouldn't fail with a better prediction method.
-        # Please remove @unittest.expectedFailure when predict_modulo() behaves correctly.
+        # Please remove @unittest.expectedFailure when predict_modulo() behaves
+        # correctly.
 
         modulo = predict_modulo(self._load("abc103-C.html"))
         self.assertIsNone(modulo)
@@ -81,7 +82,8 @@ class TestConstantsPrediction(unittest.TestCase):
     @unittest.expectedFailure
     def test_tricky_yes_no_case_difficult_to_recognize(self):
         # This test exists in order to demonstrate the current wrong behavior that doesn't detect some yes/no strings.
-        # Please remove @unittest.expectedFailure when predict_yes_no() behaves correctly.
+        # Please remove @unittest.expectedFailure when predict_yes_no() behaves
+        # correctly.
 
         yes_str, no_str = predict_yes_no(self._load("abc110-B.html"))
         self.assertEqual("War", yes_str)

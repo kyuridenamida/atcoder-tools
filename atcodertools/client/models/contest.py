@@ -1,4 +1,4 @@
-from atcodertools.models.submission import Submission
+from atcodertools.client.models.submission import Submission
 
 
 class Contest:

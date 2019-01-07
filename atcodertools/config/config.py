@@ -7,6 +7,7 @@ from atcodertools.tools.postprocess_config import PostprocessConfig
 
 
 class Config:
+
     def __init__(self,
                  code_style_config: CodeStyleConfig = CodeStyleConfig(),
                  postprocess_config: PostprocessConfig = PostprocessConfig(),

@@ -1,9 +1,10 @@
 import json
 
-from atcodertools.models.problem import Problem
+from atcodertools.client.models.problem import Problem
 
 
 class Metadata:
+
     def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str, lang: str):
         self.problem = problem
         self.code_filename = code_filename

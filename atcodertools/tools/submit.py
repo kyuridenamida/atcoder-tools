@@ -7,7 +7,7 @@ import os
 from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.tools import tester
 
-from atcodertools.models.tools.metadata import Metadata
+from atcodertools.tools.models.metadata import Metadata
 
 
 def infer_detailed_lang(lang: str):
