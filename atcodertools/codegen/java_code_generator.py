@@ -32,19 +32,19 @@ class JavaCodeGenerator(CppCodeGenerator):
         elif var.dim_num() == 1:
             constructor = " = new {type}[(int)({size})]".format(
                 type=self._convert_type(var.type),
-                size=var.get_first_index().get_length()
+                size=var.first_index.get_length()
             )
         elif var.dim_num() == 2:
             constructor = " = new {type}[int({row_size})][int({col_size})]".format(
                 type=self._convert_type(var.type),
-                row_size=var.get_first_index().get_length(),
-                col_size=var.get_second_index().get_length()
+                row_size=var.first_index.get_length(),
+                col_size=var.second_index.get_length()
             )
         else:
             raise NotImplementedError
 
         line = "{decl_type} {name}{constructor};".format(
-            name=var.get_name(),
+            name=var.name,
             decl_type=self._get_declaration_type(var),
             constructor=constructor
         )

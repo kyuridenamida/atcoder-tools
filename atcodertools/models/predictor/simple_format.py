@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Union
 
-from atcodertools.models.predictor.analyzed_variable import AnalyzedVariable
+from atcodertools.models.predictor.variable import SimpleVariable, Variable
 from atcodertools.models.predictor.index import Index
 
 
@@ -9,13 +9,11 @@ class WrongGroupingError(Exception):
 
 
 class Pattern:
-
-    def all_vars(self) -> List[AnalyzedVariable]:
+    def all_vars(self) -> List[SimpleVariable]:
         raise NotImplementedError
 
 
 class SimpleFormat:
-
     """
     Format without type information and separator information
     """
@@ -29,7 +27,7 @@ class SimpleFormat:
     def __str__(self):
         return "[{}]".format(",".join([str(c) for c in self.sequence]))
 
-    def all_vars(self) -> List[AnalyzedVariable]:
+    def all_vars(self) -> List[SimpleVariable]:
         res = []
         for seq in self.sequence:
             res += seq.all_vars()
@@ -37,41 +35,38 @@ class SimpleFormat:
 
 
 class SingularPattern(Pattern):
-
     """
     N
     """
 
-    def __init__(self, var: AnalyzedVariable):
+    def __init__(self, var: SimpleVariable):
         self.var = var
 
     def __str__(self):
-        return "(Singular: {})".format(self.var.var_name)
+        return "(Singular: {})".format(self.var.name)
 
     def all_vars(self):
         return [self.var]
 
 
 class TwoDimensionalPattern(Pattern):
-
     """
     a_1,1 ... a_1,w
     :
     a_h,1 ... a_h,w
     """
 
-    def __init__(self, var: AnalyzedVariable):
+    def __init__(self, var: SimpleVariable):
         self.var = var
 
     def __str__(self):
-        return "(TwoDimensional: {})".format(self.var.var_name)
+        return "(TwoDimensional: {})".format(self.var.name)
 
     def all_vars(self):
         return [self.var]
 
 
 class ParallelPattern(Pattern):
-
     """
     a1 a2 ... an
 
@@ -82,12 +77,12 @@ class ParallelPattern(Pattern):
     an bn ... cn
     """
 
-    def __init__(self, vars: List[AnalyzedVariable]):
+    def __init__(self, vars: List[SimpleVariable]):
         self.vars = vars
         self.loop_index = self._decide_loop_index(vars)
 
     @staticmethod
-    def _decide_loop_index(parallel_vars: List[AnalyzedVariable]) -> Index:
+    def _decide_loop_index(parallel_vars: List[SimpleVariable]) -> Index:
         first_var = parallel_vars[0]
         for var in parallel_vars:
             if var.dim_num() != 1:
@@ -102,7 +97,7 @@ class ParallelPattern(Pattern):
 
     def __str__(self):
         return "(Parallel: {names} | {min} to {max})".format(
-            names=",".join([str(c.var_name) for c in self.vars]),
+            names=",".join([str(c.name) for c in self.vars]),
             min=str(self.loop_index.min_index),
             max=str(self.loop_index.max_index)
         )

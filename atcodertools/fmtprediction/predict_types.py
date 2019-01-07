@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 
 from atcodertools.models.predictor.type import Type
 from atcodertools.models.sample import Sample
-from atcodertools.models.predictor.analyzed_variable import AnalyzedVariable
+from atcodertools.models.predictor.variable import SimpleVariable
 from atcodertools.models.predictor.index import Index
 from atcodertools.models.predictor.simple_format import SimpleFormat, SingularPattern, TwoDimensionalPattern, \
     ParallelPattern
@@ -91,16 +91,16 @@ class TypePredictor:
         except Exception:
             raise InvalidLoopSizeError
 
-    def _refresh(self, var: AnalyzedVariable, value: Any):
+    def _refresh(self, var: SimpleVariable, value: Any):
         type_ = Type.from_py_type(type(value))
 
-        if var.var_name in self._var_to_type:
-            self._var_to_type[var.var_name] = self._var_to_type[var.var_name].intersect(type_)
+        if var.name in self._var_to_type:
+            self._var_to_type[var.name] = self._var_to_type[var.name].intersect(type_)
         else:
-            self._var_to_type[var.var_name] = type_
-            self._var_to_actual_value[var.var_name] = value
+            self._var_to_type[var.name] = type_
+            self._var_to_actual_value[var.name] = value
 
-    def _fetch(self) -> AnalyzedVariable:
+    def _fetch(self) -> SimpleVariable:
         res = next(self._fetch_generator_instance)
         if res is None:
             raise TooManyFetchesError

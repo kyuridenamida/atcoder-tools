@@ -1,22 +1,17 @@
+from typing import Optional
+
 from atcodertools.models.predictor.index import Index
 from atcodertools.models.predictor.type import Type
 
 
-class Variable:
-
-    """
-        This model is basically AnalyzedVariable + type information
-    """
-
+class SimpleVariable:
     def __init__(self,
-                 var_name: str,
-                 first_index: Index,
-                 second_index: Index,
-                 type_: Type):
-        self.var_name = var_name
+                 name: str,
+                 first_index: Optional[Index],
+                 second_index: Optional[Index]):
+        self.name = name
         self.first_index = first_index
         self.second_index = second_index
-        self.type = type_
 
     def dim_num(self):
         if self.second_index:
@@ -25,12 +20,30 @@ class Variable:
             return 1
         return 0
 
-    def get_first_index(self):
-        return self.first_index
+    @classmethod
+    def create(cls, name: str, dim_num: int):
+        assert dim_num <= 2
 
-    def get_second_index(self):
-        return self.second_index
+        first_index = None
+        second_index = None
 
-    def get_name(self):
-        return self.var_name
+        if dim_num >= 2:
+            second_index = Index()
+        if dim_num >= 1:
+            first_index = Index()
+
+        return SimpleVariable(name, first_index, second_index)
+
+
+class Variable(SimpleVariable):
+    """
+        SimpleVariable + type information
+    """
+    def __init__(self,
+                 name: str,
+                 first_index: Optional[Index],
+                 second_index: Optional[Index],
+                 type_: Type):
+        super().__init__(name, first_index, second_index)
+        self.type = type_
 

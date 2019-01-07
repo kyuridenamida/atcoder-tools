@@ -12,10 +12,10 @@ class FormatPredictionResult:
         self.simple_format = simple_format
         self.var_to_info = OrderedDict()
         for var in simple_format.all_vars():
-            assert var.var_name not in self.var_to_info
-            self.var_to_info[var.var_name] = Variable(
-                var.var_name,
+            assert var.name not in self.var_to_info
+            self.var_to_info[var.name] = Variable(
+                var.name,
                 var.first_index,
                 var.second_index,
-                var_to_type[var.var_name]
+                var_to_type[var.name]
             )

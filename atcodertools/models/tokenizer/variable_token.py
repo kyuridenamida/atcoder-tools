@@ -4,7 +4,7 @@ from typing import Optional, List
 class VariableToken:
 
     """
-    Unlikely AnalyzedVariable class, this model stores variable information with all string indices
+    This model stores variable information with all string indices
     This class supports up to 2 dimensions.
 
     """

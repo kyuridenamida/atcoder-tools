@@ -2,7 +2,7 @@ from typing import List
 
 from collections import OrderedDict
 
-from atcodertools.models.predictor.analyzed_variable import AnalyzedVariable
+from atcodertools.models.predictor.variable import SimpleVariable
 from atcodertools.models.tokenizer.variable_token import VariableToken
 from atcodertools.models.predictor.simple_format import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern, WrongGroupingError
 
@@ -28,25 +28,24 @@ def _predict_period(seq: List[int]):
 
 def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
     var_to_positions = {}
-    var_to_analyzed_var = OrderedDict()
+    var_to_simple_var = OrderedDict()
 
     # Pre-computation of the min / max value of each of the first and second
     # indices.
     for pos, var_token in enumerate(var_tokens):
         var_name = var_token.var_name
 
-        if var_name not in var_to_analyzed_var:
-            var_to_analyzed_var[var_name] = AnalyzedVariable(
-                var_name, var_token.dim_num())
+        if var_name not in var_to_simple_var:
+            var_to_simple_var[var_name] = SimpleVariable.create(var_name, var_token.dim_num())
             var_to_positions[var_name] = []
 
         var_to_positions[var_name].append(pos)
 
         if var_token.dim_num() >= 2:
-            var_to_analyzed_var[var_name].second_index.update(
+            var_to_simple_var[var_name].second_index.update(
                 var_token.second_index)
         if var_token.dim_num() >= 1:
-            var_to_analyzed_var[var_name].first_index.update(
+            var_to_simple_var[var_name].first_index.update(
                 var_token.first_index)
 
     # Building format nodes
@@ -55,7 +54,7 @@ def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> S
     root = SimpleFormat()
     for pos, var_token in enumerate(var_tokens):
         var_name = var_token.var_name
-        analyzed_var = var_to_analyzed_var[var_name]
+        simple_var = var_to_simple_var[var_name]
 
         if var_name in already_processed_vars:
             continue
@@ -63,25 +62,25 @@ def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> S
         dim = var_token.dim_num()
 
         if dim == 2 and to_1d_flag:
-            analyzed_var.first_index = analyzed_var.second_index
-            analyzed_var.second_index = None
+            simple_var.first_index = simple_var.second_index
+            simple_var.second_index = None
             dim = 1
 
         if dim == 0:
-            root.push_back(SingularPattern(analyzed_var))
+            root.push_back(SingularPattern(simple_var))
             already_processed_vars.add(var_name)
         elif dim == 1:
             period = _predict_period(var_to_positions[var_name])
-            parallel_vars_group = [var_to_analyzed_var[token.var_name]
+            parallel_vars_group = [var_to_simple_var[token.var_name]
                                    for token in var_tokens[pos:pos + period]]
             try:
                 root.push_back(ParallelPattern(parallel_vars_group))
             except WrongGroupingError:
                 raise
             for var in parallel_vars_group:
-                already_processed_vars.add(var.var_name)
+                already_processed_vars.add(var.name)
         elif dim == 2:
-            root.push_back(TwoDimensionalPattern(analyzed_var))
+            root.push_back(TwoDimensionalPattern(simple_var))
         else:
             raise NotImplementedError
         already_processed_vars.add(var_name)

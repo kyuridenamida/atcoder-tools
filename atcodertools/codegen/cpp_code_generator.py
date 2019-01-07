@@ -1,20 +1,19 @@
 from atcodertools.codegen.code_style_config import CodeStyleConfig
-from atcodertools.models.predictor.analyzed_variable import AnalyzedVariable
 from atcodertools.models.predictor.simple_format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
 from atcodertools.models.predictor.type import Type
 from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
-from atcodertools.models.predictor.variable import Variable
+from atcodertools.models.predictor.variable import Variable, SimpleVariable
 from atcodertools.codegen.code_generator import CodeGenerator
 from atcodertools.codegen.template_engine import render
 
 
 def _loop_header(var: Variable, for_second_index: bool):
     if for_second_index:
-        index = var.get_second_index()
+        index = var.second_index
         loop_var = "j"
     else:
-        index = var.get_first_index()
+        index = var.first_index
         loop_var = "i"
 
     return "for(int {loop_var} = 0 ; {loop_var} < {length} ; {loop_var}++){{".format(
@@ -97,18 +96,18 @@ class CppCodeGenerator(CodeGenerator):
             constructor = ""
         elif var.dim_num() == 1:
             constructor = "({size})".format(
-                size=var.get_first_index().get_length())
+                size=var.first_index.get_length())
         elif var.dim_num() == 2:
             constructor = "({row_size}, vector<{type}>({col_size}))".format(
                 type=self._convert_type(var.type),
-                row_size=var.get_first_index().get_length(),
-                col_size=var.get_second_index().get_length()
+                row_size=var.first_index.get_length(),
+                col_size=var.second_index.get_length()
             )
         else:
             raise NotImplementedError
 
         line = "{decl_type} {name}{constructor};".format(
-            name=var.get_name(),
+            name=var.name,
             decl_type=self._get_declaration_type(var),
             constructor=constructor
         )
@@ -127,30 +126,30 @@ class CppCodeGenerator(CodeGenerator):
 
     @staticmethod
     def _get_var_name(var: Variable):
-        name = var.get_name()
+        name = var.name
         if var.dim_num() >= 1:
             name += "[i]"
         if var.dim_num() >= 2:
             name += "[j]"
         return name
 
-    def _analyzed_var_to_vinfo(self, var: AnalyzedVariable) -> Variable:
-        return self._prediction_result.var_to_info[var.var_name]
+    def _simple_var_to_vinfo(self, var: SimpleVariable) -> Variable:
+        return self._prediction_result.var_to_info[var.name]
 
     def _render_pattern(self, pattern: Pattern):
         lines = []
         for var in pattern.all_vars():
             lines.append(self._generate_declaration(
-                self._analyzed_var_to_vinfo(var)))
+                self._simple_var_to_vinfo(var)))
 
-        representative_var = self._analyzed_var_to_vinfo(pattern.all_vars()[0])
+        representative_var = self._simple_var_to_vinfo(pattern.all_vars()[0])
         if isinstance(pattern, SingularPattern):
             lines.append(self._input_code_for_var(representative_var))
         elif isinstance(pattern, ParallelPattern):
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(1),
-                                                     line=self._input_code_for_var(self._analyzed_var_to_vinfo(var))))
+                                                     line=self._input_code_for_var(self._simple_var_to_vinfo(var))))
             lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
@@ -158,7 +157,7 @@ class CppCodeGenerator(CodeGenerator):
                 "{indent}{line}".format(indent=self._indent(1), line=_loop_header(representative_var, True)))
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(2),
-                                                     line=self._input_code_for_var(self._analyzed_var_to_vinfo(var))))
+                                                     line=self._input_code_for_var(self._simple_var_to_vinfo(var))))
             lines.append("{indent}}}".format(indent=self._indent(1)))
             lines.append("}")
         else:
