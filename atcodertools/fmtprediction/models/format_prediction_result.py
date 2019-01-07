@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from typing import Dict
 
 from atcodertools.fmtprediction.models.format import Format
