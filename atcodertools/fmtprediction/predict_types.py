@@ -1,11 +1,11 @@
 import re
 from typing import List, Dict, Any
 
-from atcodertools.models.predictor.type import Type
-from atcodertools.models.sample import Sample
-from atcodertools.models.predictor.variable import SimpleVariable
-from atcodertools.models.predictor.index import Index
-from atcodertools.models.predictor.format import Format, SingularPattern, TwoDimensionalPattern, \
+from atcodertools.fmtprediction.models.type import Type
+from atcodertools.client.models.sample import Sample
+from atcodertools.fmtprediction.models.variable import SimpleVariable
+from atcodertools.fmtprediction.models.index import Index
+from atcodertools.fmtprediction.models.format import Format, SingularPattern, TwoDimensionalPattern, \
     ParallelPattern
 from atcodertools.fmtprediction.token_manager import TokenManager
 

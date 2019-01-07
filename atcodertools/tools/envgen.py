@@ -11,18 +11,17 @@ from typing import Tuple, Optional
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
 from atcodertools.config.config import Config
-from atcodertools.fileutils.create_contest_file import create_examples, create_code_from
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
     create_code_from
-from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError
+from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
     MultiplePredictionResultsError, predict_format
-from atcodertools.models.problem import Problem
+from atcodertools.client.models.problem import Problem
 import logging
 
-from atcodertools.models.tools.metadata import Metadata
+from atcodertools.tools.models.metadata import Metadata
 
 script_dir_path = os.path.dirname(os.path.abspath(__file__))
 

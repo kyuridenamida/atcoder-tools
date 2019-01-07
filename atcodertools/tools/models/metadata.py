@@ -1,6 +1,6 @@
 import json
 
-from atcodertools.models.problem import Problem
+from atcodertools.client.models.problem import Problem
 
 
 class Metadata:

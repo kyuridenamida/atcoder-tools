@@ -2,7 +2,7 @@ from atcodertools.client.atcoder import ProblemContent
 from atcodertools.fmtprediction.analyze_format import analyze_format, FormatAnalysisFailedError
 from atcodertools.fmtprediction.tokenize_format import FormatTokenizer, NoFormatFoundError
 from atcodertools.fmtprediction.predict_types import predict_type, TypePredictionFailedError
-from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
+from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 
 
 class NoPredictionResultError(Exception):

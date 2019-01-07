@@ -1,5 +1,5 @@
 import unittest
-from atcodertools.models.predictor.calculator import CalcNode, EvaluateError
+from atcodertools.fmtprediction.models.calculator import CalcNode, EvaluateError
 
 
 class TestCalculator(unittest.TestCase):

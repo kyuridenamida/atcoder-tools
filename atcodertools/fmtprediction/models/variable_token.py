@@ -4,9 +4,8 @@ from typing import Optional, List
 class VariableToken:
 
     """
-    This model stores variable information with all string indices
+    This model is used on the tokenization stage to store variable information with all string indices
     This class supports up to 2 dimensions.
-
     """
 
     def __init__(self, var_name: str, first_index: Optional[str], second_index: Optional[str]):

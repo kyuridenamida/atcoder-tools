@@ -1,12 +1,11 @@
 import os
-from collections import OrderedDict
 from typing import Optional
 
 from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, \
     NoPredictionResultError, predict_format
-from atcodertools.models.problem_content import ProblemContent
-from atcodertools.models.sample import Sample
-from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
+from atcodertools.client.models.problem_content import ProblemContent
+from atcodertools.client.models.sample import Sample
+from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 
 
 

@@ -1,9 +1,9 @@
 from collections import OrderedDict
 from typing import Dict
 
-from atcodertools.models.predictor.format import Format
-from atcodertools.models.predictor.type import Type
-from atcodertools.models.predictor.variable import Variable, SimpleVariable
+from atcodertools.fmtprediction.models.format import Format
+from atcodertools.fmtprediction.models.type import Type
+from atcodertools.fmtprediction.models.variable import Variable, SimpleVariable
 
 
 class FormatPredictionResult:

@@ -2,10 +2,10 @@ import logging
 import re
 from typing import Tuple, Optional
 
-from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
 from bs4 import BeautifulSoup
 
-from atcodertools.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
+from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 
 
 class YesNoPredictionFailedError(Exception):

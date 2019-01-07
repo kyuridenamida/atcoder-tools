@@ -1,10 +1,10 @@
-from typing import List, Any
+from typing import List
 
 from collections import OrderedDict
 
-from atcodertools.models.predictor.variable import SimpleVariable
-from atcodertools.models.tokenizer.variable_token import VariableToken
-from atcodertools.models.predictor.format import SingularPattern, Format, ParallelPattern, TwoDimensionalPattern, WrongGroupingError
+from atcodertools.fmtprediction.models.variable import SimpleVariable
+from atcodertools.fmtprediction.models.variable_token import VariableToken
+from atcodertools.fmtprediction.models.format import SingularPattern, Format, ParallelPattern, TwoDimensionalPattern, WrongGroupingError
 
 
 class UnknownPeriodError(Exception):

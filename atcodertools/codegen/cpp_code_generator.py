@@ -1,9 +1,9 @@
 from atcodertools.codegen.code_style_config import CodeStyleConfig
-from atcodertools.models.predictor.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
-from atcodertools.models.predictor.type import Type
-from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
-from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
-from atcodertools.models.predictor.variable import Variable, SimpleVariable
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
+from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from atcodertools.fmtprediction.models.type import Type
+from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
+from atcodertools.fmtprediction.models.variable import Variable
 from atcodertools.codegen.code_generator import CodeGenerator
 from atcodertools.codegen.template_engine import render
 

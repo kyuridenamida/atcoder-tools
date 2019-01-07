@@ -2,7 +2,7 @@ from typing import List, Tuple, Optional
 
 from bs4 import BeautifulSoup
 
-from atcodertools.models.sample import Sample
+from atcodertools.client.models.sample import Sample
 import unicodedata
 
 

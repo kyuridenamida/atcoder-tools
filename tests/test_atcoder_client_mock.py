@@ -4,8 +4,8 @@ import unittest
 from typing import Dict
 
 from atcodertools.client.atcoder import AtCoderClient
-from atcodertools.models.contest import Contest
-from atcodertools.models.problem import Problem
+from atcodertools.client.models.contest import Contest
+from atcodertools.client.models.problem import Problem
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),

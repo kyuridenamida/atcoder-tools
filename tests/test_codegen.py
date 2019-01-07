@@ -7,7 +7,7 @@ from atcodertools.codegen.code_generator import CodeGenerator
 from atcodertools.codegen.java_code_generator import JavaCodeGenerator
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
 from atcodertools.codegen.template_engine import render
-from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from tests.utils.gzip_controller import make_tst_data_controller
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 

@@ -10,7 +10,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Tuple
 
-from atcodertools.models.tools.metadata import Metadata
+from atcodertools.tools.models.metadata import Metadata
 
 
 class NoExecutableFileError(Exception):

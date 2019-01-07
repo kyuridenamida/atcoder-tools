@@ -1,4 +1,4 @@
-from atcodertools.models.contest import Contest
+from atcodertools.client.models.contest import Contest
 
 
 class Problem:

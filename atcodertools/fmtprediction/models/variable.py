@@ -1,7 +1,7 @@
 from typing import Optional
 
-from atcodertools.models.predictor.index import Index
-from atcodertools.models.predictor.type import Type
+from atcodertools.fmtprediction.models.index import Index
+from atcodertools.fmtprediction.models.type import Type
 
 
 class SimpleVariable:

@@ -1,6 +1,6 @@
 from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from atcodertools.models.predictor.type import Type
-from atcodertools.models.predictor.variable import Variable
+from atcodertools.fmtprediction.models.type import Type
+from atcodertools.fmtprediction.models.variable import Variable
 
 
 class JavaCodeGenerator(CppCodeGenerator):

@@ -1,6 +1,6 @@
 from typing import List, TypeVar, Generic, Dict
-from atcodertools.models.predictor.index import Index
-from atcodertools.models.predictor.variable import Variable
+from atcodertools.fmtprediction.models.index import Index
+from atcodertools.fmtprediction.models.variable import Variable
 
 
 class WrongGroupingError(Exception):
