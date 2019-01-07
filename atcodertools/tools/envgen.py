@@ -53,7 +53,7 @@ def _message_on_execution(cwd: str, cmd: str):
 def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       workspace_root_path: str,
-                      template_code_path: str,
+                      default_template_code_path: str,
                       replacement_code_path: str,
                       lang: str,
                       config: Config):
@@ -72,6 +72,10 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     def emit_info(text):
         logging.info("Problem {}: {}".format(pid, text))
 
+    if config.code_style_config.template_file is not None:
+        template_code_path = config.code_style_config.template_file
+    else:
+        template_code_path = default_template_code_path
     emit_info('{} is used for template'.format(template_code_path))
 
     # Fetch problem data from the statement
@@ -228,14 +232,6 @@ def get_default_replacement_path(lang):
     return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_failure.{lang}").format(lang=lang))
 
 
-def decide_template_path(lang: str, config: Config, cmd_template_path: str):
-    if cmd_template_path is not None:
-        return cmd_template_path
-    if config.code_style_config.template_file is not None:
-        return config.code_style_config.template_file
-    return get_default_template_path(lang)
-
-
 DEFAULT_LANG = "cpp"
 SUPPORTED_LANGUAGES = ["cpp", "java"]
 
@@ -347,16 +343,16 @@ def main(prog, args):
     else:
         logging.info("Downloading data without login.")
 
-    config = get_config(args.config)
     prepare_contest(client,
                     args.contest_id,
                     args.workspace,
-                    decide_template_path(args.lang, config, args.template),
+                    args.template if args.template is not None else get_default_template_path(
+                        args.lang),
                     args.replacement if args.replacement is not None else get_default_replacement_path(
                         args.lang),
                     args.lang,
                     args.parallel,
-                    config
+                    get_config(args.config)
                     )
 
 
