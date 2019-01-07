@@ -8,6 +8,7 @@ from os.path import expanduser
 from time import sleep
 from typing import Tuple, Optional
 
+from atcodertools.codegen.models.codegen_args import CodeGenArgs
 from atcodertools.codegen.langs import cpp, java
 from atcodertools.codegen.template_engine import render
 from atcodertools.config.config import Config
@@ -112,12 +113,17 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 new_path))
 
     try:
+        default_param_generator_func = None
+
         if lang == "cpp":
-            param_generator_func = cpp.generate_template_parameters
+            default_param_generator_func = cpp.main
         elif lang == "java":
-            param_generator_func = java.generate_template_parameters
-        else:
-            raise NotImplementedError("only supporting cpp and java")
+            default_param_generator_func = java.main
+
+        params_generator_func = config.code_style_config.udf or default_param_generator_func
+
+        if params_generator_func is None:
+            raise NotImplementedError("only supporting cpp and java by default. Please define UDF for another language.")
 
         with open(template_code_path, "r") as f:
             template = f.read()
@@ -126,7 +132,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         constants = predict_constants(content.original_html)
 
         create_code(
-            render(template, **param_generator_func(result, constants, config.code_style_config)),
+            render(template, **params_generator_func(CodeGenArgs(result.format, constants, config.code_style_config))),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))

@@ -1,9 +1,7 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
-from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.models.codegen_args import CodeGenArgs
 from atcodertools.codegen.langs.cpp import CppCodeGenerator
-from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
-from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
@@ -69,13 +67,11 @@ class JavaCodeGenerator(CppCodeGenerator):
         return "    " * (depth + 1)
 
 
-def generate_template_parameters(prediction_result: Optional[FormatPredictionResult],
-                                 constants: ProblemConstantSet = ProblemConstantSet(),
-                                 config: CodeStyleConfig = CodeStyleConfig()) -> Dict[str, Any]:
-    code_parameters = JavaCodeGenerator(prediction_result, config).generate_parameters()
+def main(args: CodeGenArgs) -> Dict[str, Any]:
+    code_parameters = JavaCodeGenerator(args.format, args.config).generate_parameters()
     return {
         **code_parameters,
-        "mod": constants.mod,
-        "yes_str": constants.yes_str,
-        "no_str": constants.no_str,
+        "mod": args.constants.mod,
+        "yes_str": args.constants.yes_str,
+        "no_str": args.constants.no_str,
     }

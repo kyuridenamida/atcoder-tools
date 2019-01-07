@@ -2,6 +2,10 @@
 indent_type = 'space' # 'tab' or 'space'
 indent_width = 4
 
+## code_gen_module_file is a path to python file to use user-defined template parameters generator function.
+## Please read manual for details.
+#code_gen_module_file=
+
 [postprocess]
 ## exec_on_each_problem_dir is executed after every problem directory's creation
 ## with its problem directory as cwd like arc001/A

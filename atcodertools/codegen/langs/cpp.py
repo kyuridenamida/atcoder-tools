@@ -1,10 +1,10 @@
 from typing import Dict, Any
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
-from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
-from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from atcodertools.codegen.models.codegen_args import CodeGenArgs
+from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern, \
+    Format
 from atcodertools.fmtprediction.models.type import Type
-from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 from atcodertools.fmtprediction.models.variable import Variable
 
 
@@ -24,9 +24,10 @@ def _loop_header(var: Variable, for_second_index: bool):
 
 class CppCodeGenerator:
 
-    def __init__(self, prediction_result: FormatPredictionResult,
+    def __init__(self,
+                 format_: Format[Variable],
                  config: CodeStyleConfig):
-        self._prediction_result = prediction_result
+        self._format = format_
         self._config = config
 
     def generate_parameters(self) -> Dict[str, Any]:
@@ -36,7 +37,7 @@ class CppCodeGenerator:
 
     def _input_part(self):
         lines = []
-        for pattern in self._prediction_result.format.sequence:
+        for pattern in self._format.sequence:
             lines += self._render_pattern(pattern)
         return "\n{indent}".format(indent=self._indent(1)).join(lines)
 
@@ -65,7 +66,7 @@ class CppCodeGenerator:
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
-        return ", ".join([v.name for v in self._prediction_result.format.all_vars()])
+        return ", ".join([v.name for v in self._format.all_vars()])
 
     def _formal_arguments(self):
         """
@@ -75,7 +76,7 @@ class CppCodeGenerator:
             "{decl_type} {name}".format(
                 decl_type=self._get_declaration_type(v),
                 name=v.name)
-            for v in self._prediction_result.format.all_vars()
+            for v in self._format.all_vars()
         ])
 
     def _generate_declaration(self, var: Variable):
@@ -159,14 +160,11 @@ class NoPredictionResultGiven(Exception):
     pass
 
 
-def generate_template_parameters(prediction_result: FormatPredictionResult,
-                                 constants: ProblemConstantSet,
-                                 config: CodeStyleConfig) -> Dict[str, Any]:
-    code_parameters = CppCodeGenerator(prediction_result, config).generate_parameters()
-
+def main(args: CodeGenArgs) -> Dict[str, Any]:
+    code_parameters = CppCodeGenerator(args.format, args.config).generate_parameters()
     return {
         **code_parameters,
-        "mod": constants.mod,
-        "yes_str": constants.yes_str,
-        "no_str": constants.no_str,
+        "mod": args.constants.mod,
+        "yes_str": args.constants.yes_str,
+        "no_str": args.constants.no_str,
     }

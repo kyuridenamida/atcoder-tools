@@ -4,6 +4,7 @@ import unittest
 import os
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.models.codegen_args import CodeGenArgs
 from atcodertools.codegen.langs import cpp, java
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
@@ -50,8 +51,8 @@ class TestCodeGenerator(unittest.TestCase):
             }
         }
         self.lang_to_code_generator_func = {
-            "cpp": cpp.generate_template_parameters,
-            "java": java.generate_template_parameters,
+            "cpp": cpp.main,
+            "java": java.main,
         }
 
     def tearDown(self):
@@ -114,9 +115,12 @@ class TestCodeGenerator(unittest.TestCase):
                          render(
                              self.get_template(lang, template_type),
                              **self.lang_to_code_generator_func[lang](
-                                 response.original_result,
-                                 constants,
-                                 CodeStyleConfig()
+                                 CodeGenArgs(
+                                     response.original_result.format,
+                                     constants,
+                                     CodeStyleConfig()
+                                 )
+
                              )
                          ))
 
