@@ -135,7 +135,9 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
         code_gen_module = _decide_code_gen_module(config, lang)
         create_code(
-            render(template, **code_gen_module(CodeGenArgs(result.format, constants, config.code_style_config))),
+            render(template, **code_gen_module(
+                CodeGenArgs(
+                    result.format, constants, config.code_style_config))),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))

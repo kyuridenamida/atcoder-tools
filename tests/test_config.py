@@ -54,7 +54,8 @@ class TestConfig(unittest.TestCase):
             pass
 
     def test_import_custom_code_gen_module(self):
-        code_gen_module_file = os.path.join(RESOURCE_DIR, "custom_code_gen_module.py")
+        code_gen_module_file = os.path.join(
+            RESOURCE_DIR, "custom_code_gen_module.py")
         CodeStyleConfig(code_gen_module_file=code_gen_module_file)
 
 

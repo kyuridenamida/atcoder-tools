@@ -28,7 +28,8 @@ class CodeStyleConfig:
         self.indent_width = indent_width
         self.code_gen_module = None
         if code_gen_module_file:
-            module = imm.SourceFileLoader('udf', code_gen_module_file).load_module()
+            module = imm.SourceFileLoader(
+                'udf', code_gen_module_file).load_module()
             self.code_gen_module = getattr(module, 'main')
 
     def indent(self, depth):

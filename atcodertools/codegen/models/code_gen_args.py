@@ -5,6 +5,7 @@ from atcodertools.fmtprediction.models.variable import Variable
 
 
 class CodeGenArgs:
+
     def __init__(self,
                  format_: Format[Variable],
                  constants: ProblemConstantSet,

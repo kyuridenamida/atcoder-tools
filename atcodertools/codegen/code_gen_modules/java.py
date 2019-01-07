@@ -7,6 +7,7 @@ from atcodertools.fmtprediction.models.variable import Variable
 
 
 class JavaCodeGenerator(CppCodeGenerator):
+
     def _convert_type(self, type_: Type) -> str:
         if type_ == Type.float:
             return "double"
@@ -71,7 +72,8 @@ def main(args: CodeGenArgs) -> Dict[str, Any]:
     """
     :return: A dictionary of the parameters passed to template.
     """
-    code_parameters = JavaCodeGenerator(args.format, args.config).generate_parameters()
+    code_parameters = JavaCodeGenerator(
+        args.format, args.config).generate_parameters()
     return {
         **code_parameters,
         "mod": args.constants.mod,

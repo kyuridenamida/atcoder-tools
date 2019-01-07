@@ -164,7 +164,8 @@ def main(args: CodeGenArgs) -> Dict[str, Any]:
     """
     :return: A dictionary of the parameters passed to template.
     """
-    code_parameters = CppCodeGenerator(args.format, args.config).generate_parameters()
+    code_parameters = CppCodeGenerator(
+        args.format, args.config).generate_parameters()
     return {
         **code_parameters,
         "mod": args.constants.mod,

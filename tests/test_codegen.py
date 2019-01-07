@@ -122,7 +122,7 @@ class TestCodeGenerator(unittest.TestCase):
                                  )
 
                              )
-                         ))
+        ))
 
     def get_template(self, lang: str, template_type: str) -> str:
         template_file = os.path.join(
