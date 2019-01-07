@@ -1,10 +1,6 @@
 from enum import Enum
 
 
-class TypeIntersectionError(Exception):
-    pass
-
-
 class Type(Enum):
     int = 'int'
     float = 'float'
@@ -14,16 +10,25 @@ class Type(Enum):
         try:
             return TYPE_INTERSECTION_TABLE[self][target_type]
         except KeyError:
-            return TypeIntersectionError
+            raise NotImplementedError
 
     @classmethod
     def from_py_type(cls, py_type: type):
         if py_type == int:
             return Type.int
-        if py_type == float:
+        elif py_type == float:
             return Type.float
-        if py_type == str:
+        elif py_type == str:
             return Type.str
+        raise NotImplementedError
+
+    def to_py_type(self):
+        if self == Type.int:
+            return int
+        elif self == Type.str:
+            return str
+        elif self == Type.float:
+            return float
         raise NotImplementedError
 
 

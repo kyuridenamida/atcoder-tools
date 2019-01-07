@@ -9,14 +9,6 @@ from atcodertools.models.sample import Sample
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
 
 
-def py_type(type_: Type):
-    if type_ == Type.int:
-        return int
-    if type_ == Type.str:
-        return str
-    if type_ == Type.float:
-        return float
-
 
 class Response:
 
@@ -25,7 +17,7 @@ class Response:
         if result:
             self.original_result = result
             self.simple_format = result.simple_format
-            self.types = [(k, py_type(v.type)) for k, v in result.var_to_info.items()]
+            self.types = [(k, v.type.to_py_type()) for k, v in result.var_to_info.items()]
 
 
 FORMAT_FILE_NAME = "format.txt"

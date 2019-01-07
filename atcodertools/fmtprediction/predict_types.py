@@ -1,7 +1,7 @@
 import re
 from typing import List, Dict, Any
 
-from atcodertools.models.analyzer.type import Type, TypeIntersectionError
+from atcodertools.models.analyzer.type import Type
 from atcodertools.models.sample import Sample
 from atcodertools.models.analyzer.analyzed_variable import AnalyzedVariable
 from atcodertools.models.analyzer.index import Index
@@ -144,7 +144,7 @@ def type_predictor(fmt: SimpleFormat, samples: List[Sample]) -> Dict[str, Type]:
                 res_type_dict,
                 predictor.get_typing_result())
         except (
-                TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError, TypeIntersectionError,
+                TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
                 InvalidLoopIndexError):
             raise TypePredictionFailedError
 
