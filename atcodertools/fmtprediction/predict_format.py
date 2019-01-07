@@ -15,35 +15,32 @@ class MultiplePredictionResultsError(Exception):
         self.cands = cands
 
 
-class FormatPredictor:
+def predict_format(content: ProblemContent) -> FormatPredictionResult:
+    input_format = content.get_input_format()
+    samples = content.get_samples()
 
-    @staticmethod
-    def predict(content: ProblemContent) -> FormatPredictionResult:
-        input_format = content.get_input_format()
-        samples = content.get_samples()
+    if len(samples) == 0:
+        raise NoPredictionResultError
 
-        if len(samples) == 0:
-            raise NoPredictionResultError
+    try:
+        format_cands = FormatTokenizer(
+            input_format).compute_formats_with_minimal_vars()
+    except NoFormatFoundError:
+        raise NoPredictionResultError
 
-        try:
-            format_cands = FormatTokenizer(
-                input_format).compute_formats_with_minimal_vars()
-        except NoFormatFoundError:
-            raise NoPredictionResultError
+    output_cands = []
+    for format in format_cands:
+        for to_1d_flag in [False, True]:
+            try:
+                fmt = analyze_format(format.var_tokens, to_1d_flag)
+                output_cands.append(
+                    FormatPredictionResult(fmt, type_predictor(fmt, samples)))
+                break
+            except (TypePredictionFailedError, FormatAnalysisFailedError):
+                pass
 
-        output_cands = []
-        for format in format_cands:
-            for to_1d_flag in [False, True]:
-                try:
-                    fmt = analyze_format(format.var_tokens, to_1d_flag)
-                    output_cands.append(
-                        FormatPredictionResult(fmt, type_predictor(fmt, samples)))
-                    break
-                except (TypePredictionFailedError, FormatAnalysisFailedError):
-                    pass
-
-        if len(output_cands) > 1:
-            raise MultiplePredictionResultsError(output_cands)
-        if len(output_cands) == 0:
-            raise NoPredictionResultError
-        return output_cands[0]
+    if len(output_cands) > 1:
+        raise MultiplePredictionResultsError(output_cands)
+    if len(output_cands) == 0:
+        raise NoPredictionResultError
+    return output_cands[0]

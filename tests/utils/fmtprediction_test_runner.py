@@ -1,8 +1,8 @@
 import os
 from typing import Optional
 
-from atcodertools.fmtprediction.predict_format import FormatPredictor, MultiplePredictionResultsError, \
-    NoPredictionResultError
+from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, \
+    NoPredictionResultError, predict_format
 from atcodertools.models.problem_content import ProblemContent
 from atcodertools.models.sample import Sample
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
@@ -49,7 +49,7 @@ class FormatPredictionTestRunner:
         content = self.load_problem_content(case_name)
 
         try:
-            result = FormatPredictor.predict(content)
+            result = predict_format(content)
             return Response(result, "OK")
         except MultiplePredictionResultsError:
             return Response(None, "Multiple results")

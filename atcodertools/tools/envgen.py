@@ -17,8 +17,8 @@ from atcodertools.fileutils.create_contest_file import create_examples, \
     create_code_from
 from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
-from atcodertools.fmtprediction.predict_format import FormatPredictor, NoPredictionResultError, \
-    MultiplePredictionResultsError
+from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
+    MultiplePredictionResultsError, predict_format
 from atcodertools.models.problem import Problem
 import logging
 
@@ -123,7 +123,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         with open(template_code_path, "r") as f:
             template = f.read()
 
-        result = FormatPredictor().predict(content)
+        result = predict_format(content)
         constants = predict_constants(content.original_html)
 
         create_code_from(
