@@ -52,7 +52,8 @@ class TestConfig(unittest.TestCase):
 
         code_gen_module_file = os.path.join(
             RESOURCE_DIR, "broken_custom_code_gen_module.py")
-        self._expect_error_when_init_config(code_gen_module_file=code_gen_module_file)
+        self._expect_error_when_init_config(
+            code_gen_module_file=code_gen_module_file)
 
     def _expect_error_when_init_config(self, **kwargs):
         try:
