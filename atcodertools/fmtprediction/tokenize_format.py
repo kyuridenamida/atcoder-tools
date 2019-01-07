@@ -48,12 +48,31 @@ def _divide_consecutive_vars(text):
     return res_text
 
 
+def _remove_spaces_in_curly_brackets(input_format):
+    res = []
+    nest = 0
+    for c in input_format:
+        if c == '{':
+            nest += 1
+        elif c == '}':
+            nest -= 1
+
+        if c == ' ' and nest > 0:
+            continue
+
+        res.append(c)
+
+    return "".join(res)
+
+
 def _sanitized_tokens(input_format: str) -> List[str]:
     input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
         "..", " ").replace("\\ ", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
+    input_format = _remove_spaces_in_curly_brackets(input_format)
     input_format = _divide_consecutive_vars(input_format)
     input_format = _normalize_index(input_format)
     input_format = input_format.replace("{", "").replace("}", "")
+
     tokens = [
         x for x in input_format.split(
         ) if x != "" and _is_ascii(
