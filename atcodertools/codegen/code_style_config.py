@@ -26,10 +26,10 @@ class CodeStyleConfig:
 
         self.indent_type = indent_type
         self.indent_width = indent_width
-        self.udf = None
+        self.codegen_module = None
         if codegen_module_file:
             module = imm.SourceFileLoader('udf', codegen_module_file).load_module()
-            self.udf = getattr(module, 'main')
+            self.codegen_module = getattr(module, 'main')
 
     def indent(self, depth):
         if self.indent_type == INDENT_TYPE_SPACE:

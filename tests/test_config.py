@@ -53,7 +53,7 @@ class TestConfig(unittest.TestCase):
         except CodeStyleConfigInitError:
             pass
 
-    def test_import_udf(self):
+    def test_import_custom_codegen_module(self):
         codegen_module_file = os.path.join(RESOURCE_DIR, "custom_codegen_module.py")
         CodeStyleConfig(codegen_module_file=codegen_module_file)
 
