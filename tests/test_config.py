@@ -53,9 +53,9 @@ class TestConfig(unittest.TestCase):
         except CodeStyleConfigInitError:
             pass
 
-    def test_import_custom_codegen_module(self):
-        codegen_module_file = os.path.join(RESOURCE_DIR, "custom_codegen_module.py")
-        CodeStyleConfig(codegen_module_file=codegen_module_file)
+    def test_import_custom_code_gen_module(self):
+        code_gen_module_file = os.path.join(RESOURCE_DIR, "custom_code_gen_module.py")
+        CodeStyleConfig(code_gen_module_file=code_gen_module_file)
 
 
 if __name__ == "__main__":

@@ -8,8 +8,8 @@ from os.path import expanduser
 from time import sleep
 from typing import Tuple, Optional
 
-from atcodertools.codegen.models.codegen_args import CodeGenArgs
-from atcodertools.codegen.codegen_modules import cpp, java
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from atcodertools.codegen.code_gen_modules import cpp, java
 from atcodertools.codegen.template_engine import render
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
@@ -51,9 +51,9 @@ def _message_on_execution(cwd: str, cmd: str):
     return "Executing the following command in `{}`: {}".format(cwd, cmd)
 
 
-def _decide_codegen_module(config: Config, lang: str):
-    if config.code_style_config.codegen_module:
-        return config.code_style_config.codegen_module
+def _decide_code_gen_module(config: Config, lang: str):
+    if config.code_style_config.code_gen_module:
+        return config.code_style_config.code_gen_module
 
     if lang == "cpp":
         return cpp.main
@@ -133,9 +133,9 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         result = predict_format(content)
         constants = predict_constants(content.original_html)
 
-        codegen_module = _decide_codegen_module(config, lang)
+        code_gen_module = _decide_code_gen_module(config, lang)
         create_code(
-            render(template, **codegen_module(CodeGenArgs(result.format, constants, config.code_style_config))),
+            render(template, **code_gen_module(CodeGenArgs(result.format, constants, config.code_style_config))),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))

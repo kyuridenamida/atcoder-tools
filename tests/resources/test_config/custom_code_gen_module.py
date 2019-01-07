@@ -1,6 +1,6 @@
 from typing import Dict, Any
 
-from atcodertools.codegen.models.codegen_args import CodeGenArgs
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 
 
 def main(args: CodeGenArgs) -> Dict[str, Any]:

@@ -2,9 +2,9 @@
 indent_type = 'space' # 'tab' or 'space'
 indent_width = 4
 
-## codegen_module_file is a path to .py file defining custom template parameters generator function.
+## code_gen_module_file is a path to .py file defining custom template parameters generator function.
 ## Please check README.md for details.
-#codegen_module_file=
+#code_gen_module_file=
 
 [postprocess]
 ## exec_on_each_problem_dir is executed after every problem directory's creation

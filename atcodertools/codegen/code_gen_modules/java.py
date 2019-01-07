@@ -1,7 +1,7 @@
 from typing import Dict, Any
 
-from atcodertools.codegen.models.codegen_args import CodeGenArgs
-from atcodertools.codegen.codegen_modules.cpp import CppCodeGenerator
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from atcodertools.codegen.code_gen_modules.cpp import CppCodeGenerator
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
