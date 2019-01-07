@@ -52,7 +52,7 @@ def _sanitized_tokens(input_format: str) -> List[str]:
         x for x in input_format.split(
         ) if x != "" and _is_ascii(
             x) and not _is_noise(
-                x)]
+            x)]
     return tokens
 
 
@@ -97,9 +97,9 @@ class FormatSearcher:
         """
         var_token_candidates = [VariableToken(token, None, None)]
         var_token_candidates += [VariableToken(
-                                 token[:i],
-                                 token[i:],
-                                 None) for i in range(1, len(token))]
+            token[:i],
+            token[i:],
+            None) for i in range(1, len(token))]
         for i in range(1, len(token)):
             for j in range(i + 1, len(token)):
                 var_token_candidates += [
@@ -130,24 +130,18 @@ class FormatSearcher:
         return [var_token for var_token in var_token_candidates if check_if_possible(var_token)]
 
 
-class FormatTokenizer:
-
-    def __init__(self, input_format: str):
-        self.tokens = _sanitized_tokens(input_format)
-        # print(input_format)
-
-    def compute_formats_with_minimal_vars(self) -> List[TokenizedFormat]:
-        """
-        Fast enough for realistic instances.
-        This method returns possible formats with the smallest number of variables.
-        """
-
-        searcher = FormatSearcher(self.tokens)
-        for max_variable_length in range(1, 20):
-            result = searcher.search(max_variable_length)
-            if result:
-                return result
-        raise NoFormatFoundError
+def search_formats_with_minimum_vars(input_format: str) -> List[TokenizedFormat]:
+    """
+    Fast enough for realistic instances.
+    This method returns possible formats with the smallest number of variables.
+    """
+    tokens = _sanitized_tokens(input_format)
+    searcher = FormatSearcher(tokens)
+    for max_variable_length in range(1, 20):
+        result = searcher.search(max_variable_length)
+        if result:
+            return result
+    raise NoFormatFoundError
 
 
 class NoFormatFoundError(Exception):

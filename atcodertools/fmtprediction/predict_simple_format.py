@@ -11,7 +11,7 @@ class UnknownPeriodError(Exception):
     pass
 
 
-class FormatAnalysisFailedError(Exception):
+class SimpleFormatPredictionFailedError(Exception):
     pass
 
 
@@ -26,7 +26,7 @@ def _predict_period(seq: List[int]):
         return 1
 
 
-def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> Format[SimpleVariable]:
+def _predict_simple_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> Format[SimpleVariable]:
     var_to_positions = {}
     var_to_simple_var = OrderedDict()
 
@@ -87,8 +87,8 @@ def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> F
     return root
 
 
-def analyze_format(var_tokens: List[VariableToken], to_1d_flag=False) -> Format[SimpleVariable]:
+def predict_simple_format(var_tokens: List[VariableToken], to_1d_flag=False) -> Format[SimpleVariable]:
     try:
-        return _analyze_format_main(var_tokens, to_1d_flag)
+        return _predict_simple_format_main(var_tokens, to_1d_flag)
     except (WrongGroupingError, UnknownPeriodError):
-        raise FormatAnalysisFailedError
+        raise SimpleFormatPredictionFailedError

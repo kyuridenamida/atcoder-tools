@@ -131,11 +131,11 @@ def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
     return to_dict
 
 
-def predict_type(fmt: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
+def predict_types(simple_format: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
     res_type_dict = {}
     for sample in samples:
         token_manager = TokenManager(sample.get_input().split())
-        predictor = TypePredictor(fmt)
+        predictor = TypePredictor(simple_format)
         try:
             while not token_manager.is_terminal():
                 predictor.feed(token_manager.next())
