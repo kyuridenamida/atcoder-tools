@@ -1,7 +1,6 @@
 import os
 from typing import List
 
-from atcodertools.codegen.code_generator import CodeGenerator
 from atcodertools.client.models.sample import Sample
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
@@ -12,11 +11,9 @@ def _make_text_file(file_path, text):
         f.write(text)
 
 
-def create_code_from(result: FormatPredictionResult,
-                     constants: ProblemConstantSet,
-                     code_generator: CodeGenerator,
-                     file_path: str):
-    _make_text_file(file_path, code_generator.generate_code(result, constants))
+def create_code(source_code: str,
+                file_path: str):
+    _make_text_file(file_path, source_code)
 
 
 def create_example(example: Sample, in_example_name: str, out_example_name: str):

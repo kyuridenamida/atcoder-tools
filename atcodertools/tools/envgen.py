@@ -8,12 +8,12 @@ from os.path import expanduser
 from time import sleep
 from typing import Tuple, Optional
 
-from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from atcodertools.codegen.java_code_generator import JavaCodeGenerator
+from atcodertools.codegen.langs import cpp, java
+from atcodertools.codegen.template_engine import render
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
-    create_code_from
+    create_code
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
@@ -113,9 +113,9 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
     try:
         if lang == "cpp":
-            gen_class = CppCodeGenerator
+            param_generator_func = cpp.generate_template_parameters
         elif lang == "java":
-            gen_class = JavaCodeGenerator
+            param_generator_func = java.generate_template_parameters
         else:
             raise NotImplementedError("only supporting cpp and java")
 
@@ -125,10 +125,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         result = predict_format(content)
         constants = predict_constants(content.original_html)
 
-        create_code_from(
-            result,
-            constants,
-            gen_class(template, config.code_style_config),
+        create_code(
+            render(template, **param_generator_func(result, constants, config.code_style_config)),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
