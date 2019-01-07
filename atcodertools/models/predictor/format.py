@@ -1,6 +1,4 @@
-from typing import List, Union
-
-from atcodertools.models.predictor.variable import SimpleVariable, Variable
+from typing import List, TypeVar, Generic
 from atcodertools.models.predictor.index import Index
 
 
@@ -8,12 +6,15 @@ class WrongGroupingError(Exception):
     pass
 
 
-class Pattern:
-    def all_vars(self) -> List[SimpleVariable]:
+T = TypeVar('T')  # T must be Variable or SimpleVariable
+
+
+class Pattern(Generic[T]):
+    def all_vars(self) -> List[T]:
         raise NotImplementedError
 
 
-class SimpleFormat:
+class Format(Generic[T]):
     """
     Format without type information and separator information
     """
@@ -21,13 +22,13 @@ class SimpleFormat:
     def __init__(self):
         self.sequence = []
 
-    def push_back(self, pattern: Pattern):
+    def push_back(self, pattern: Pattern[T]):
         self.sequence.append(pattern)
 
     def __str__(self):
         return "[{}]".format(",".join([str(c) for c in self.sequence]))
 
-    def all_vars(self) -> List[SimpleVariable]:
+    def all_vars(self) -> List[T]:
         res = []
         for seq in self.sequence:
             res += seq.all_vars()
@@ -39,7 +40,7 @@ class SingularPattern(Pattern):
     N
     """
 
-    def __init__(self, var: SimpleVariable):
+    def __init__(self, var: T):
         self.var = var
 
     def __str__(self):
@@ -56,7 +57,7 @@ class TwoDimensionalPattern(Pattern):
     a_h,1 ... a_h,w
     """
 
-    def __init__(self, var: SimpleVariable):
+    def __init__(self, var: T):
         self.var = var
 
     def __str__(self):
@@ -77,12 +78,12 @@ class ParallelPattern(Pattern):
     an bn ... cn
     """
 
-    def __init__(self, vars: List[SimpleVariable]):
-        self.vars = vars
-        self.loop_index = self._decide_loop_index(vars)
+    def __init__(self, vars_: List[T]):
+        self.vars = vars_
+        self.loop_index = self._decide_loop_index(vars_)
 
     @staticmethod
-    def _decide_loop_index(parallel_vars: List[SimpleVariable]) -> Index:
+    def _decide_loop_index(parallel_vars: List[T]) -> Index:
         first_var = parallel_vars[0]
         for var in parallel_vars:
             if var.dim_num() != 1:

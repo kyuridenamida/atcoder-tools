@@ -1,10 +1,10 @@
-from typing import List
+from typing import List, Any
 
 from collections import OrderedDict
 
 from atcodertools.models.predictor.variable import SimpleVariable
 from atcodertools.models.tokenizer.variable_token import VariableToken
-from atcodertools.models.predictor.simple_format import SingularPattern, SimpleFormat, ParallelPattern, TwoDimensionalPattern, WrongGroupingError
+from atcodertools.models.predictor.format import SingularPattern, Format, ParallelPattern, TwoDimensionalPattern, WrongGroupingError
 
 
 class UnknownPeriodError(Exception):
@@ -26,7 +26,7 @@ def _predict_period(seq: List[int]):
         return 1
 
 
-def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
+def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> Format[SimpleVariable]:
     var_to_positions = {}
     var_to_simple_var = OrderedDict()
 
@@ -51,7 +51,7 @@ def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> S
     # Building format nodes
     already_processed_vars = set()
 
-    root = SimpleFormat()
+    root = Format()  # type: Format[SimpleVariable]
     for pos, var_token in enumerate(var_tokens):
         var_name = var_token.var_name
         simple_var = var_to_simple_var[var_name]
@@ -87,7 +87,7 @@ def _analyze_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> S
     return root
 
 
-def analyze_format(var_tokens: List[VariableToken], to_1d_flag=False) -> SimpleFormat:
+def analyze_format(var_tokens: List[VariableToken], to_1d_flag=False) -> Format[SimpleVariable]:
     try:
         return _analyze_format_main(var_tokens, to_1d_flag)
     except (WrongGroupingError, UnknownPeriodError):

@@ -1,5 +1,5 @@
 from atcodertools.codegen.code_style_config import CodeStyleConfig
-from atcodertools.models.predictor.simple_format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from atcodertools.models.predictor.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
 from atcodertools.models.predictor.type import Type
 from atcodertools.models.constpred.problem_constant_set import ProblemConstantSet
 from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult

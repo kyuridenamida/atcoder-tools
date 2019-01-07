@@ -5,7 +5,7 @@ from atcodertools.models.predictor.type import Type
 from atcodertools.models.sample import Sample
 from atcodertools.models.predictor.variable import SimpleVariable
 from atcodertools.models.predictor.index import Index
-from atcodertools.models.predictor.simple_format import SimpleFormat, SingularPattern, TwoDimensionalPattern, \
+from atcodertools.models.predictor.format import Format, SingularPattern, TwoDimensionalPattern, \
     ParallelPattern
 from atcodertools.fmtprediction.token_manager import TokenManager
 
@@ -60,7 +60,7 @@ def _convert_to_proper_type(value: str) -> Any:
 
 class TypePredictor:
 
-    def __init__(self, fmt: SimpleFormat):
+    def __init__(self, fmt: Format[SimpleVariable]):
         self._fmt = fmt
         self._fetch_generator_instance = self._fetch_generator()
         self._var_to_type = {}  # type: Dict[str, Type]
@@ -131,7 +131,7 @@ def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
     return to_dict
 
 
-def type_predictor(fmt: SimpleFormat, samples: List[Sample]) -> Dict[str, Type]:
+def type_predictor(fmt: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
     res_type_dict = {}
     for sample in samples:
         token_manager = TokenManager(sample.get_input().split())
