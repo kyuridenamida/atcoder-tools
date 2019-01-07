@@ -50,17 +50,16 @@ class TestConfig(unittest.TestCase):
         self._expect_error_when_init_config(
             code_gen_module_file='not existing module')
 
+        code_gen_module_file = os.path.join(
+            RESOURCE_DIR, "broken_custom_code_gen_module.py")
+        self._expect_error_when_init_config(code_gen_module_file=code_gen_module_file)
+
     def _expect_error_when_init_config(self, **kwargs):
         try:
             CodeStyleConfig(**kwargs)
             self.fail("Must not reach here")
         except CodeStyleConfigInitError:
             pass
-
-    def test_import_broken_custom_code_gen_module(self):
-        code_gen_module_file = os.path.join(
-            RESOURCE_DIR, "broken_custom_code_gen_module.py")
-        CodeStyleConfig(code_gen_module_file=code_gen_module_file)
 
 
 if __name__ == "__main__":
