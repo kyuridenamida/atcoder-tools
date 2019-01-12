@@ -23,6 +23,7 @@ def notify_if_latest_version_found():
             print("To upgrade, run the following command:")
             print("")
             print("pip3 install atcoder-tools --upgrade")
+            print(Style.RESET_ALL)
     except VersionCheckError:
         print(Fore.RED, end='')
         print("Failed to fetch the latest version information "
