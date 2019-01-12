@@ -34,6 +34,8 @@ class TestConfig(unittest.TestCase):
                          config.postprocess_config.execute_on_problem_dir(contest_dir))
         self.assertEqual("contest\nmock_file.txt\n",
                          config.postprocess_config.execute_on_contest_dir(problem_dir))
+        with open(config.code_style_config.template_file, 'r') as f:
+            self.assertEqual("this is custom_template.cpp", f.read())
 
     def test_load_config_fails_due_to_typo(self):
         try:
@@ -54,6 +56,9 @@ class TestConfig(unittest.TestCase):
             RESOURCE_DIR, "broken_custom_code_generator.py")
         self._expect_error_when_init_config(
             code_generator_file=code_generator_file)
+        self._expect_error_when_init_config(
+            template_file='not existing path'
+        )
 
     def _expect_error_when_init_config(self, **kwargs):
         try:

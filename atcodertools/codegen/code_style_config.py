@@ -17,8 +17,10 @@ class CodeStyleConfig:
                  indent_type: str = INDENT_TYPE_SPACE,
                  indent_width: int = 4,
                  code_generator_file: str = None,
+                 template_file: str = None,
                  ):
         code_generator_file = normalize_path(code_generator_file)
+        template_file = normalize_path(template_file)
 
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
             raise CodeStyleConfigInitError(
@@ -32,6 +34,12 @@ class CodeStyleConfig:
             raise CodeStyleConfigInitError(
                 "Module file {} is not found".format(code_generator_file))
 
+        if template_file is not None and not os.path.exists(template_file):
+            raise CodeStyleConfigInitError(
+                "The specified template file '{}' is not found".format(
+                    template_file)
+            )
+
         self.indent_type = indent_type
         self.indent_width = indent_width
         self.code_generator = None
@@ -44,6 +52,7 @@ class CodeStyleConfig:
             except AttributeError as e:
                 raise CodeStyleConfigInitError(e, "Error while loading {}".format(
                     code_generator_file))
+        self.template_file = template_file
 
     def indent(self, depth):
         if self.indent_type == INDENT_TYPE_SPACE:

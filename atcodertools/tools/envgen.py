@@ -68,8 +68,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                       template_code_path: str,
                       replacement_code_path: str,
                       lang: str,
-                      config: Config,
-                      ):
+                      config: Config):
     pid = problem.get_alphabet()
     problem_dir_path = os.path.join(
         workspace_root_path,
@@ -84,6 +83,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
     def emit_info(text):
         logging.info("Problem {}: {}".format(pid, text))
+
+    emit_info('{} is used for template'.format(template_code_path))
 
     # Fetch problem data from the statement
     try:
@@ -139,7 +140,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 constants,
                 config.code_style_config
             )),
-            code_file_path)
+            code_file_path
+        )
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
@@ -234,6 +236,14 @@ def get_default_template_path(lang):
 
 def get_default_replacement_path(lang):
     return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_failure.{lang}").format(lang=lang))
+
+
+def decide_template_path(lang: str, config: Config, cmd_template_path: str):
+    if cmd_template_path is not None:
+        return cmd_template_path
+    if config.code_style_config.template_file is not None:
+        return config.code_style_config.template_file
+    return get_default_template_path(lang)
 
 
 DEFAULT_LANG = "cpp"
@@ -347,16 +357,16 @@ def main(prog, args):
     else:
         logging.info("Downloading data without login.")
 
+    config = get_config(args.config)
     prepare_contest(client,
                     args.contest_id,
                     args.workspace,
-                    args.template if args.template is not None else get_default_template_path(
-                        args.lang),
+                    decide_template_path(args.lang, config, args.template),
                     args.replacement if args.replacement is not None else get_default_replacement_path(
                         args.lang),
                     args.lang,
                     args.parallel,
-                    get_config(args.config)
+                    config
                     )
 
 
