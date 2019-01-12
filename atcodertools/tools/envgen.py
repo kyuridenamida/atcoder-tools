@@ -23,6 +23,7 @@ from atcodertools.fileutils.create_contest_file import create_examples, \
 from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
     MultiplePredictionResultsError, predict_format
 from atcodertools.tools.models.metadata import Metadata
+from atcodertools.tools.utils import with_color
 
 script_dir_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -62,10 +63,6 @@ def _decide_code_generator(config: Config, lang: str):
 
     raise NotImplementedError(
         "only supporting cpp and java by default. Please define UDF for another language.")
-
-
-def with_color(msg, color):
-    return "{}{}{}".format(color, msg, Fore.RESET)
 
 
 def prepare_procedure(atcoder_client: AtCoderClient,
