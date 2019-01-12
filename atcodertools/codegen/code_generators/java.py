@@ -1,5 +1,5 @@
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.codegen.code_gen_modules.cpp import CppCodeGenerator
+from atcodertools.codegen.code_generators.cpp import CppCodeGenerator
 from atcodertools.codegen.template_engine import render
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable

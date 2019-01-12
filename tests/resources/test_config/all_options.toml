@@ -1,7 +1,7 @@
 [codestyle]
 indent_type = 'tab' # 'tab' or 'space'
 indent_width = 8
-code_gen_module_file='./custom_code_gen_module.py'
+code_generator_file='./custom_code_generator.py'
 
 [postprocess]
 exec_on_each_problem_dir='echo problem && ls'

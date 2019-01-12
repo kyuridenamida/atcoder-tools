@@ -12,7 +12,7 @@ from typing import Tuple, Optional
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
-from atcodertools.codegen.code_gen_modules import cpp, java
+from atcodertools.codegen.code_generators import cpp, java
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
@@ -49,9 +49,9 @@ def _message_on_execution(cwd: str, cmd: str):
     return "Executing the following command in `{}`: {}".format(cwd, cmd)
 
 
-def _decide_code_gen_module(config: Config, lang: str):
-    if config.code_style_config.code_gen_module:
-        return config.code_style_config.code_gen_module
+def _decide_code_generator(config: Config, lang: str):
+    if config.code_style_config.code_generator:
+        return config.code_style_config.code_generator
 
     if lang == "cpp":
         return cpp.main
@@ -131,8 +131,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         result = predict_format(content)
         constants = predict_constants(content.original_html)
 
-        code_gen_module = _decide_code_gen_module(config, lang)
-        create_code(code_gen_module(
+        code_generator = _decide_code_generator(config, lang)
+        create_code(code_generator(
             CodeGenArgs(
                 template,
                 result.format,

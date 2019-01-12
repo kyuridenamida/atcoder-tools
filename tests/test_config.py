@@ -48,12 +48,12 @@ class TestConfig(unittest.TestCase):
         self._expect_error_when_init_config(
             indent_type='space', indent_width=-1)
         self._expect_error_when_init_config(
-            code_gen_module_file='not existing module')
+            code_generator_file='not existing module')
 
-        code_gen_module_file = os.path.join(
-            RESOURCE_DIR, "broken_custom_code_gen_module.py")
+        code_generator_file = os.path.join(
+            RESOURCE_DIR, "broken_custom_code_generator.py")
         self._expect_error_when_init_config(
-            code_gen_module_file=code_gen_module_file)
+            code_generator_file=code_generator_file)
 
     def _expect_error_when_init_config(self, **kwargs):
         try:
