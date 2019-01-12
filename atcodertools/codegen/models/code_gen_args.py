@@ -7,9 +7,11 @@ from atcodertools.fmtprediction.models.variable import Variable
 class CodeGenArgs:
 
     def __init__(self,
+                 template: str,
                  format_: Format[Variable],
                  constants: ProblemConstantSet,
                  config: CodeStyleConfig):
+        self.template = template
         self.format = format_
         self.constants = constants
         self.config = config

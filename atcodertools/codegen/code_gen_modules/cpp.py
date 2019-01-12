@@ -2,6 +2,7 @@ from typing import Dict, Any
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from atcodertools.codegen.template_engine import render
 from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern, \
     Format
 from atcodertools.fmtprediction.models.type import Type
@@ -160,15 +161,13 @@ class NoPredictionResultGiven(Exception):
     pass
 
 
-def main(args: CodeGenArgs) -> Dict[str, Any]:
-    """
-    :return: A dictionary of the parameters passed to template.
-    """
+def main(args: CodeGenArgs) -> str:
     code_parameters = CppCodeGenerator(
         args.format, args.config).generate_parameters()
-    return {
-        **code_parameters,
-        "mod": args.constants.mod,
-        "yes_str": args.constants.yes_str,
-        "no_str": args.constants.no_str,
-    }
+    return render(
+        args.template,
+        mod=args.constants.mod,
+        yes_str=args.constants.yes_str,
+        no_str=args.constants.no_str,
+        **code_parameters
+    )

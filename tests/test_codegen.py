@@ -1,15 +1,15 @@
+import os
 import sys
 import tempfile
 import unittest
-import os
 
+from atcodertools.codegen.code_gen_modules import cpp, java
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.codegen.code_gen_modules import cpp, java
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
-from tests.utils.gzip_controller import make_tst_data_controller
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
+from tests.utils.gzip_controller import make_tst_data_controller
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -111,18 +111,15 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(
             load_intermediate_types(py_test_name),
             str(response.types))
-        self.assertEqual(load_generated_code(py_test_name, lang),
-                         render(
-                             self.get_template(lang, template_type),
-                             **self.lang_to_code_generator_func[lang](
-                                 CodeGenArgs(
-                                     response.original_result.format,
-                                     constants,
-                                     CodeStyleConfig()
-                                 )
-
-                             )
-        ))
+        self.assertEqual(
+            load_generated_code(py_test_name, lang),
+            self.lang_to_code_generator_func[lang](
+                CodeGenArgs(
+                    self.get_template(lang, template_type),
+                    response.original_result.format,
+                    constants,
+                    CodeStyleConfig())
+            ))
 
     def get_template(self, lang: str, template_type: str) -> str:
         template_file = os.path.join(

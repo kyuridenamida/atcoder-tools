@@ -1,10 +1,11 @@
-from typing import Dict, Any
-
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.code_gen_modules.cpp import CppCodeGenerator
+from atcodertools.codegen.template_engine import render
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
+
+# JavaCodeGenerator uses part of CppCodeGenerator just for less code clone.
 
 class JavaCodeGenerator(CppCodeGenerator):
 
@@ -68,15 +69,13 @@ class JavaCodeGenerator(CppCodeGenerator):
         return "    " * (depth + 1)
 
 
-def main(args: CodeGenArgs) -> Dict[str, Any]:
-    """
-    :return: A dictionary of the parameters passed to template.
-    """
+def main(args: CodeGenArgs) -> str:
     code_parameters = JavaCodeGenerator(
         args.format, args.config).generate_parameters()
-    return {
-        **code_parameters,
-        "mod": args.constants.mod,
-        "yes_str": args.constants.yes_str,
-        "no_str": args.constants.no_str,
-    }
+    return render(
+        args.template,
+        mod=args.constants.mod,
+        yes_str=args.constants.yes_str,
+        no_str=args.constants.no_str,
+        **code_parameters
+    )
