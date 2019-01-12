@@ -1,6 +1,8 @@
 import importlib.machinery as imm
 import os
 
+from atcodertools.fileutils.normalize import normalize_path
+
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
 
@@ -16,6 +18,7 @@ class CodeStyleConfig:
                  indent_width: int = 4,
                  code_generator_file: str = None,
                  ):
+        code_generator_file = normalize_path(code_generator_file)
 
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
             raise CodeStyleConfigInitError(
