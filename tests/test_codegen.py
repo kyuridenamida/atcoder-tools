@@ -1,15 +1,15 @@
+import os
 import sys
 import tempfile
 import unittest
-import os
 
-from atcodertools.codegen.code_generator import CodeGenerator
-from atcodertools.codegen.java_code_generator import JavaCodeGenerator
-from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
+from atcodertools.codegen.code_generators import cpp, java
+from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
-from tests.utils.gzip_controller import make_tst_data_controller
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
+from tests.utils.gzip_controller import make_tst_data_controller
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -50,9 +50,9 @@ class TestCodeGenerator(unittest.TestCase):
                 "jinja": "template_jinja.java",
             }
         }
-        self.lang_to_code_generator = {
-            "cpp": CppCodeGenerator,
-            "java": JavaCodeGenerator,
+        self.lang_to_code_generator_func = {
+            "cpp": cpp.main,
+            "java": java.main,
         }
 
     def tearDown(self):
@@ -111,15 +111,22 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(
             load_intermediate_types(py_test_name),
             str(response.types))
-        self.assertEqual(load_generated_code(py_test_name, lang),
-                         self.get_generator(lang, template_type).generate_code(response.original_result, constants))
+        self.assertEqual(
+            load_generated_code(py_test_name, lang),
+            self.lang_to_code_generator_func[lang](
+                CodeGenArgs(
+                    self.get_template(lang, template_type),
+                    response.original_result.format,
+                    constants,
+                    CodeStyleConfig())
+            ))
 
-    def get_generator(self, lang: str, template_type: str) -> CodeGenerator:
+    def get_template(self, lang: str, template_type: str) -> str:
         template_file = os.path.join(
             RESOURCE_DIR,
             self.lang_to_template_file[lang][template_type])
         with open(template_file, 'r') as f:
-            return self.lang_to_code_generator[lang](f.read())
+            return f.read()
 
 
 if __name__ == "__main__":
