@@ -9,6 +9,8 @@ from os.path import expanduser
 from time import sleep
 from typing import Tuple, Optional
 
+from colorama import Fore
+
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
@@ -62,6 +64,10 @@ def _decide_code_generator(config: Config, lang: str):
         "only supporting cpp and java by default. Please define UDF for another language.")
 
 
+def with_color(msg, color):
+    return "{}{}{}".format(color, msg, Fore.RESET)
+
+
 def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       workspace_root_path: str,
@@ -76,7 +82,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         pid)
 
     def emit_error(text):
-        logging.error("Problem {}: {}".format(pid, text))
+        logging.error(with_color("Problem {}: {}".format(pid, text), Fore.RED))
 
     def emit_warning(text):
         logging.warning("Problem {}: {}".format(pid, text))
@@ -143,7 +149,9 @@ def prepare_procedure(atcoder_client: AtCoderClient,
             code_file_path
         )
         emit_info(
-            "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
+            "{} -- Saved auto-generated code to '{}'".format(
+                with_color("Prediction succeeded", Fore.LIGHTGREEN_EX),
+                code_file_path))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
         if isinstance(e, NoPredictionResultError):
             msg = "No prediction -- Failed to understand the input format"
@@ -154,7 +162,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         shutil.copy(replacement_code_path, code_file_path)
         emit_warning(
             "{} -- Copied {} to {}".format(
-                msg,
+                with_color(msg, Fore.LIGHTRED_EX),
                 replacement_code_path,
                 code_file_path))
 
