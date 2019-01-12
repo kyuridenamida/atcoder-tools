@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.0.6 / 2018-01-13
+- [#68](https://github.com/kyuridenamida/atcoder-tools/pull/68) Support custom code generator specification.
+- [#69](https://github.com/kyuridenamida/atcoder-tools/pull/69) Support template file specification in toml.
+- [#65](https://github.com/kyuridenamida/atcoder-tools/pull/65) Ignore exception while checking version.
+- [#64](https://github.com/kyuridenamida/atcoder-tools/pull/64) Increase recall of input format prediction, supporting tex formula.
+- [#71](https://github.com/kyuridenamida/atcoder-tools/pull/71) Minor speeding up of prediction.
+- [#73](https://github.com/kyuridenamida/atcoder-tools/pull/73) Colorful messages in gen / tester / submit.
+- Fix a bug that the color never goes back when you get a message saying "the latest version is available".
+
+
 ## 1.0.5 / 2018-01-06
 - [#59](https://github.com/kyuridenamida/atcoder-tools/pull/59) Support user-defined postprocessor commands after code generation.
 - [#54](https://github.com/kyuridenamida/atcoder-tools/pull/54) Support constants (MOD/YES/NO) prediction so you can use them in your template.
