@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import argparse
+import logging
 import os
 import shutil
 import sys
@@ -8,19 +9,17 @@ from os.path import expanduser
 from time import sleep
 from typing import Tuple, Optional
 
-from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from atcodertools.codegen.java_code_generator import JavaCodeGenerator
+from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
+from atcodertools.client.models.problem import Problem
+from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
+from atcodertools.codegen.code_generators import cpp, java
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
-    create_code_from
-from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
-from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
+    create_code
 from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
     MultiplePredictionResultsError, predict_format
-from atcodertools.client.models.problem import Problem
-import logging
-
 from atcodertools.tools.models.metadata import Metadata
 
 script_dir_path = os.path.dirname(os.path.abspath(__file__))
@@ -48,6 +47,19 @@ def output_splitter():
 
 def _message_on_execution(cwd: str, cmd: str):
     return "Executing the following command in `{}`: {}".format(cwd, cmd)
+
+
+def _decide_code_generator(config: Config, lang: str):
+    if config.code_style_config.code_generator:
+        return config.code_style_config.code_generator
+
+    if lang == "cpp":
+        return cpp.main
+    elif lang == "java":
+        return java.main
+
+    raise NotImplementedError(
+        "only supporting cpp and java by default. Please define UDF for another language.")
 
 
 def prepare_procedure(atcoder_client: AtCoderClient,
@@ -112,12 +124,6 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 new_path))
 
     try:
-        if lang == "cpp":
-            gen_class = CppCodeGenerator
-        elif lang == "java":
-            gen_class = JavaCodeGenerator
-        else:
-            raise NotImplementedError("only supporting cpp and java")
 
         with open(template_code_path, "r") as f:
             template = f.read()
@@ -125,10 +131,14 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         result = predict_format(content)
         constants = predict_constants(content.original_html)
 
-        create_code_from(
-            result,
-            constants,
-            gen_class(template, config.code_style_config),
+        code_generator = _decide_code_generator(config, lang)
+        create_code(code_generator(
+            CodeGenArgs(
+                template,
+                result.format,
+                constants,
+                config.code_style_config
+            )),
             code_file_path)
         emit_info(
             "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))

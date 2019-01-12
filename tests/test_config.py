@@ -20,6 +20,8 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(INDENT_TYPE_SPACE, config.indent_type)
 
     def test_load_config(self):
+        os.chdir(RESOURCE_DIR)
+
         with open(os.path.join(RESOURCE_DIR, "all_options.toml"), 'r') as f:
             config = Config.load(f)
 
@@ -45,6 +47,13 @@ class TestConfig(unittest.TestCase):
             indent_type='SPACE', indent_width=4)
         self._expect_error_when_init_config(
             indent_type='space', indent_width=-1)
+        self._expect_error_when_init_config(
+            code_generator_file='not existing module')
+
+        code_generator_file = os.path.join(
+            RESOURCE_DIR, "broken_custom_code_generator.py")
+        self._expect_error_when_init_config(
+            code_generator_file=code_generator_file)
 
     def _expect_error_when_init_config(self, **kwargs):
         try:
