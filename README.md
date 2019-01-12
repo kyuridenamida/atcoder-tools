@@ -137,19 +137,28 @@ optional arguments:
 ## 設定ファイルの例
 `~/.atcodertools.toml`に以下の設定を保存すると、コードスタイルや、コード生成後に実行するコマンドを指定できます。
 
-以下は、コードスタイルの設定が幅4のスペースインデントで、
-問題用ディレクトリ内で毎回`clang-format`を実行して、最後に`CMakeLists.txt`(空)をコンテスト用ディレクトリに生成する場合の`~/.atcodertools.toml`の例です。
+以下は、次の挙動を期待する場合の`~/.atcodertools.toml`の例です。
+
+- コードスタイルの設定が幅4のスペースインデントである
+- コード生成テンプレートとして`~/my_template.cpp`を使う
+- 問題用ディレクトリ内で毎回`clang-format`を実行して、最後に`CMakeLists.txt`(空)をコンテスト用ディレクトリに生成する
+- カスタムコードジェネレーター `custom_code_generator.py`を指定す
 
 ```$xslt
 [codestyle]
 indent_type = 'space' # 'tab' or 'space'
 indent_width = 4
-
+template_file='~/my_template.cpp'
 [postprocess]
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
+code_generator_file="~/custom_code_generator.py"
 ```
 
+### カスタムコードジェネレーター
+[標準のC++コードジェネレーター](https://github.com/kyuridenamida/atcoder-tools/blob/master/atcodertools/codegen/code_generators/cpp.py)に倣って、
+`(CogeGenArgs) -> str(ソースコード)`が型であるような`main`関数を定義した.pyファイルを`code_generator_file`で指定すると、コード生成時にカスタムコードジェネレーターを利用できます。
+ 
 ## テンプレートの例
 `atcoder-tools gen`コマンドに対し`--template`, `--replacement` でそれぞれ入力形式の推論に成功したときのテンプレート、生成に失敗したときに代わりに生成するソースコードを指定できます。テンプレートエンジンの仕様については[jinja2](http://jinja.pocoo.org/docs/2.10/) の公式ドキュメントを参照してください。テンプレートに渡される変数は以下の通りです。
 
