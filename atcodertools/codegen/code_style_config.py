@@ -20,6 +20,7 @@ class CodeStyleConfig:
                  template_file: str = None,
                  ):
         code_generator_file = normalize_path(code_generator_file)
+        template_file = normalize_path(template_file)
 
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
             raise CodeStyleConfigInitError(
