@@ -213,11 +213,7 @@ def prepare_contest(atcoder_client: AtCoderClient,
         thread_pool.map(func, tasks)
     else:
         for argv in tasks:
-            try:
-                func(argv)
-            except Exception:
-                # Prevent the script from stopping
-                pass
+            func(argv)
 
     if config.postprocess_config.exec_cmd_on_contest_dir is not None:
         contest_dir_path = os.path.join(workspace_root_path, contest_id)
