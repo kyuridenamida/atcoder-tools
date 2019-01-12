@@ -4,6 +4,7 @@ import logging
 import os
 import shutil
 import sys
+import traceback
 from multiprocessing import Pool, cpu_count
 from os.path import expanduser
 from time import sleep
@@ -218,7 +219,12 @@ def prepare_contest(atcoder_client: AtCoderClient,
         thread_pool.map(func, tasks)
     else:
         for argv in tasks:
-            func(argv)
+            try:
+                func(argv)
+            except Exception:
+                # Prevent the script from stopping
+                print(traceback.format_exc(), file=sys.stderr)
+                pass
 
     if config.postprocess_config.exec_cmd_on_contest_dir is not None:
         contest_dir_path = os.path.join(workspace_root_path, contest_id)
