@@ -24,6 +24,10 @@ with open('./auto_generated/templates/cpp/template_success.cpp') as f:
     TEMPLATE_CODE = f.read()
 
 
+class Skipped(Exception):
+    pass
+
+
 def get_and_set_cache(key, func):
     filepath = os.path.join(CACHE_DIR, key)
     if os.path.exists(os.path.join(CACHE_DIR, key)):
@@ -73,6 +77,8 @@ class QualityResult:
         self.modulo_error = None
         self.yes_str = None
         self.no_str = None
+        self.yes_str_error = None
+        self.no_str_error = None
         self.codes = {}
 
     def build_dict(self):
@@ -94,11 +100,11 @@ class QualityResult:
             "error": norm_error(self.modulo_error)
         }
         d["yes_str"] = {
-            "error": None,
+            "error": norm_error(self.yes_str_error),
             "value": self.yes_str
         }
         d["no_str"] = {
-            "error": None,
+            "error": norm_error(self.no_str_error),
             "value": self.no_str
         }
 
@@ -126,7 +132,8 @@ def apply_clang(cpp: str):
 
 def predict_format(result: QualityResult):
     if result.problem_content is None:
-        return None
+        result.format_prediction_error = Skipped()
+        return
 
     try:
         pred = FormatPredictor.predict(result.problem_content)
@@ -140,7 +147,11 @@ def predict_format(result: QualityResult):
 
 
 def do_predict_constants(result: QualityResult):
+
     if result.problem_content is None:
+        result.modulo_error = Skipped()
+        result.yes_str_error = Skipped()
+        result.no_str_error = Skipped()
         return
     try:
         result.modulo = predict_modulo(result.problem_content.original_html)
@@ -200,7 +211,7 @@ def main(output_path: str):
             problem=problem,
             contest=contest
         ) for problem in problem_list]
-
+    # args_list = args_list[:100]
     tasks = asyncio.wait([process_problem(**args, total=len(args_list)) for idx, args in enumerate(args_list)])
     done, pending = loop.run_until_complete(tasks)
     done = [x.result() for x in done]

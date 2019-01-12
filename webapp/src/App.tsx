@@ -12,9 +12,10 @@ class App extends React.Component {
             <Router>
                 <div className="App">
                     <NavigationBar/>
-                    <Route path="/" exact component={HomePage}/>
-                    <Route path="/quality/" exact component={QualityPage}/>
-
+                    <div className="text-left page-wrapper">
+                        <Route path="/" exact component={HomePage}/>
+                        <Route path="/quality/" exact component={QualityPage}/>
+                    </div>
                 </div>
             </Router>
         );
