@@ -95,8 +95,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
             for submission in submissions:
                 if submission.problem_id == metadata.problem.problem_id:
                     logging.error(with_color("Cancel submitting because you already sent some code to the problem. Please "
-                                  "specify -u to send the code. {}".format(
-                                      metadata.problem.contest.get_submissions_url(submission)), Fore.LIGHTRED_EX))
+                                             "specify -u to send the code. {}".format(
+                                                 metadata.problem.contest.get_submissions_url(submission)), Fore.LIGHTRED_EX))
                     return False
 
         code_path = os.path.join(args.dir, metadata.code_filename)
