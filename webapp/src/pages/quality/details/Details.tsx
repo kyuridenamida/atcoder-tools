@@ -7,6 +7,7 @@ import qualityResultList from "../../../auto_generated/qualityResultList.js"
 import listStyles from "./listStyles";
 import styled from '@emotion/styled';
 import Code from "../Code";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 const buildData = () => {
@@ -26,26 +27,34 @@ const buildData = () => {
     Object.keys(res).sort().forEach(contest => {
         const resultList = res[contest];
         const subtree: any[] = [];
+        let is_prefect_contest = true;
         resultList.forEach((r: QualityResult) => {
+            const children: any[] = [];
+            if( r.codes.cpp ) {
+                children.push({
+                    name: "main.cpp",
+                    code: r.codes.cpp,
+                });
+            }
+            const successful = !!r.codes.cpp;
+
             subtree.push({
                 name: r.problem.problem_id,
                 toggled: true,
-                children: [
-                    {
-                        name: "main.cpp",
-                        code: r.codes.cpp,
-                    }
-                ]
+                children: children.length > 0 ? children : undefined,
+                successful: successful,
             });
+
+            is_prefect_contest = is_prefect_contest && successful;
         });
         tree.push({
             name: contest,
             children: subtree,
+            successful: is_prefect_contest,
         });
     });
-    console.log("Done!");
     return {
-        name: "root",
+        name: "Contests",
         toggled: true,
         children: tree
     };
@@ -58,15 +67,22 @@ const Div = styled('Div', {
 })(({style}) => style);
 
 decorators.Header = ({style, node}) => {
-    const iconType = node.children ? 'folder' : 'file-text';
-    const iconClass = `fa fa-${iconType}`;
-    const iconStyle = {marginRight: '5px'};
+    let icon: any = null;
+
+    if (node.hasOwnProperty("successful")) {
+        if (node.successful) {
+            icon = <FontAwesomeIcon icon="check" color="green"/>;
+        } else {
+            icon = <FontAwesomeIcon icon="times" color="red"/>;
+        }
+    }
+
 
     return (
         <Div style={style.base}>
             <Div style={style.title}>
-                <i className={iconClass} style={iconStyle}/>
-
+                {icon}
+                {' '}
                 {node.name}
             </Div>
         </Div>

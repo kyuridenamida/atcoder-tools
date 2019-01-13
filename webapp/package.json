@@ -19,7 +19,7 @@
     "react-scripts-ts": "^4.0.8",
     "react-syntax-highlighter": "^10.1.2",
     "react-table": "^6.8.6",
-    "react-treebeard": "^3.1.0",
+    "react-treebeard": "github:bitjourney/react-treebeard#bitjourney",
     "reactstrap": "^7.0.2"
   },
   "scripts": {
