@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {Route, BrowserRouter as Router} from "react-router-dom";
+import {BrowserRouter as Router, Route} from "react-router-dom";
 import Summary from "./summary/Summary";
 import {NavLink} from "reactstrap";
 import Details from "./details/Details";
@@ -13,8 +13,10 @@ class QualityPage extends React.Component{
                 <NavLink href="/quality/details">Details</NavLink>
 
                 <Router>
-                    <Route path="/quality/details" exact component={Details}/>
-                    <Route path="/quality/summary" exact component={Summary}/>
+                    <div>
+                        <Route path="/quality/details" exact component={Details}/>
+                        <Route path="/quality/summary" exact component={Summary}/>
+                    </div>
                 </Router>
             </div>
         );
