@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.0.6.1 / 2018-01-13
+- [#76](https://github.com/kyuridenamida/atcoder-tools/pull/76) Fix a bug the default templates are wrong. 
+
 ## 1.0.6 / 2018-01-13
 - [#68](https://github.com/kyuridenamida/atcoder-tools/pull/68) Support custom code generator specification.
 - [#69](https://github.com/kyuridenamida/atcoder-tools/pull/69) Support template file specification in toml.
