@@ -174,9 +174,9 @@ code_generator_file="~/custom_code_generator.py"
 #include <bits/stdc++.h>
 using namespace std;
 
-{% if mod is not none %}const int mod = {{ mod }};{% endif %}
-{% if yes_str is not none %}const string YES = "{{ yes_str }}";{% endif %}
-{% if no_str is not none %}const string NO = "{{ no_str }}";{% endif %}
+{% if mod %}const int mod = {{ mod }};{% endif %}
+{% if yes_str %}const string YES = "{{ yes_str }}";{% endif %}
+{% if no_str %}const string NO = "{{ no_str }}";{% endif %}
 
 void solve({{formal_arguments}}){
 
