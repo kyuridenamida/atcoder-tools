@@ -1,9 +1,7 @@
 import os
 from typing import List
 
-from atcodertools.codegen.code_generator import CodeGenerator
-from atcodertools.models.sample import Sample
-from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
+from atcodertools.client.models.sample import Sample
 
 
 def _make_text_file(file_path, text):
@@ -11,8 +9,9 @@ def _make_text_file(file_path, text):
         f.write(text)
 
 
-def create_code_from_prediction_result(result: FormatPredictionResult, code_generator: CodeGenerator, file_path: str):
-    _make_text_file(file_path, code_generator.generate_code(result))
+def create_code(source_code: str,
+                file_path: str):
+    _make_text_file(file_path, source_code)
 
 
 def create_example(example: Sample, in_example_name: str, out_example_name: str):

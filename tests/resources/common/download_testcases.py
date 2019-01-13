@@ -4,7 +4,7 @@ import errno
 import os
 
 from atcodertools.client.atcoder import AtCoderClient
-from atcodertools.models.problem_content import SampleDetectionError, InputFormatDetectionError
+from atcodertools.client.models.problem_content import SampleDetectionError, InputFormatDetectionError
 
 
 class NoPatternFoundError(Exception):

@@ -1,25 +1,30 @@
 #!/usr/bin/python3
 import argparse
+import logging
 import os
 import shutil
 import sys
+import traceback
 from multiprocessing import Pool, cpu_count
 from os.path import expanduser
 from time import sleep
 from typing import Tuple, Optional
 
-from atcodertools.codegen.code_gen_config import CodeGenConfig
-from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from atcodertools.codegen.java_code_generator import JavaCodeGenerator
-from atcodertools.fileutils.create_contest_file import create_examples, create_code_from_prediction_result
-from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError
-from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
-from atcodertools.fmtprediction.predict_format import FormatPredictor, NoPredictionResultError, \
-    MultiplePredictionResultsError
-from atcodertools.models.problem import Problem
-import logging
+from colorama import Fore
 
-from atcodertools.models.tools.metadata import Metadata
+from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
+from atcodertools.client.models.problem import Problem
+from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
+from atcodertools.codegen.code_generators import cpp, java
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from atcodertools.config.config import Config
+from atcodertools.constprediction.constants_prediction import predict_constants
+from atcodertools.fileutils.create_contest_file import create_examples, \
+    create_code
+from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
+    MultiplePredictionResultsError, predict_format
+from atcodertools.tools.models.metadata import Metadata
+from atcodertools.tools.utils import with_color
 
 script_dir_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -39,28 +44,51 @@ IN_EXAMPLE_FORMAT = "in_{}.txt"
 OUT_EXAMPLE_FORMAT = "out_{}.txt"
 
 
+def output_splitter():
+    # for readability
+    print("=================================================", file=sys.stderr)
+
+
+def _message_on_execution(cwd: str, cmd: str):
+    return "Executing the following command in `{}`: {}".format(cwd, cmd)
+
+
+def _decide_code_generator(config: Config, lang: str):
+    if config.code_style_config.code_generator:
+        return config.code_style_config.code_generator
+
+    if lang == "cpp":
+        return cpp.main
+    elif lang == "java":
+        return java.main
+
+    raise NotImplementedError(
+        "only supporting cpp and java by default. Please define UDF for another language.")
+
+
 def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       workspace_root_path: str,
                       template_code_path: str,
                       replacement_code_path: str,
                       lang: str,
-                      config: CodeGenConfig,
-                      ):
+                      config: Config):
     pid = problem.get_alphabet()
-    workspace_dir_path = os.path.join(
+    problem_dir_path = os.path.join(
         workspace_root_path,
         problem.get_contest().get_id(),
         pid)
 
     def emit_error(text):
-        logging.error("Problem {}: {}".format(pid, text))
+        logging.error(with_color("Problem {}: {}".format(pid, text), Fore.RED))
 
     def emit_warning(text):
         logging.warning("Problem {}: {}".format(pid, text))
 
     def emit_info(text):
         logging.info("Problem {}: {}".format(pid, text))
+
+    emit_info('{} is used for template'.format(template_code_path))
 
     # Fetch problem data from the statement
     try:
@@ -76,13 +104,13 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     if len(content.get_samples()) == 0:
         emit_info("No samples.")
     else:
-        os.makedirs(workspace_dir_path, exist_ok=True)
-        create_examples(content.get_samples(), workspace_dir_path,
+        os.makedirs(problem_dir_path, exist_ok=True)
+        create_examples(content.get_samples(), problem_dir_path,
                         IN_EXAMPLE_FORMAT, OUT_EXAMPLE_FORMAT)
         emit_info("Created examples.")
 
     code_file_path = os.path.join(
-        workspace_dir_path,
+        problem_dir_path,
         "main.{}".format(extension(lang)))
 
     # If there is an existing code, just create backup
@@ -101,24 +129,27 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 new_path))
 
     try:
-        result = FormatPredictor().predict(content)
 
         with open(template_code_path, "r") as f:
             template = f.read()
 
-        if lang == "cpp":
-            gen_class = CppCodeGenerator
-        elif lang == "java":
-            gen_class = JavaCodeGenerator
-        else:
-            raise NotImplementedError("only supporting cpp and java")
+        result = predict_format(content)
+        constants = predict_constants(content.original_html)
 
-        create_code_from_prediction_result(
-            result,
-            gen_class(template, config),
-            code_file_path)
+        code_generator = _decide_code_generator(config, lang)
+        create_code(code_generator(
+            CodeGenArgs(
+                template,
+                result.format,
+                constants,
+                config.code_style_config
+            )),
+            code_file_path
+        )
         emit_info(
-            "Prediction succeeded -- Saved auto-generated code to '{}'".format(code_file_path))
+            "{} -- Saved auto-generated code to '{}'".format(
+                with_color("Prediction succeeded", Fore.LIGHTGREEN_EX),
+                code_file_path))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
         if isinstance(e, NoPredictionResultError):
             msg = "No prediction -- Failed to understand the input format"
@@ -129,12 +160,12 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         shutil.copy(replacement_code_path, code_file_path)
         emit_warning(
             "{} -- Copied {} to {}".format(
-                msg,
+                with_color(msg, Fore.LIGHTRED_EX),
                 replacement_code_path,
                 code_file_path))
 
     # Save metadata
-    metadata_path = os.path.join(workspace_dir_path, "metadata.json")
+    metadata_path = os.path.join(problem_dir_path, "metadata.json")
     Metadata(problem,
              os.path.basename(code_file_path),
              IN_EXAMPLE_FORMAT.replace("{}", "*"),
@@ -143,23 +174,31 @@ def prepare_procedure(atcoder_client: AtCoderClient,
              ).save_to(metadata_path)
     emit_info("Saved metadata to {}".format(metadata_path))
 
+    if config.postprocess_config.exec_cmd_on_problem_dir is not None:
+        emit_info(_message_on_execution(problem_dir_path,
+                                        config.postprocess_config.exec_cmd_on_problem_dir))
+        config.postprocess_config.execute_on_problem_dir(
+            problem_dir_path)
 
-def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str, CodeGenConfig]):
+    output_splitter()
+
+
+def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str, Config]):
     atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config = argv
     prepare_procedure(
         atcoder_client, problem, workspace_root_path, template_code_path,
         replacement_code_path, lang, config)
 
 
-def prepare_workspace(atcoder_client: AtCoderClient,
-                      contest_id: str,
-                      workspace_root_path: str,
-                      template_code_path: str,
-                      replacement_code_path: str,
-                      lang: str,
-                      parallel: bool,
-                      config: CodeGenConfig,
-                      ):
+def prepare_contest(atcoder_client: AtCoderClient,
+                    contest_id: str,
+                    workspace_root_path: str,
+                    template_code_path: str,
+                    replacement_code_path: str,
+                    lang: str,
+                    parallel: bool,
+                    config: Config,
+                    ):
     retry_duration = 1.5
     while True:
         problem_list = atcoder_client.download_problem_list(
@@ -172,12 +211,27 @@ def prepare_workspace(atcoder_client: AtCoderClient,
 
     tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config) for
              problem in problem_list]
+
+    output_splitter()
+
     if parallel:
         thread_pool = Pool(processes=cpu_count())
         thread_pool.map(func, tasks)
     else:
         for argv in tasks:
-            func(argv)
+            try:
+                func(argv)
+            except Exception:
+                # Prevent the script from stopping
+                print(traceback.format_exc(), file=sys.stderr)
+                pass
+
+    if config.postprocess_config.exec_cmd_on_contest_dir is not None:
+        contest_dir_path = os.path.join(workspace_root_path, contest_id)
+        logging.info(_message_on_execution(contest_dir_path,
+                                           config.postprocess_config.exec_cmd_on_contest_dir))
+        config.postprocess_config.execute_on_contest_dir(
+            contest_dir_path)
 
 
 DEFAULT_WORKSPACE_DIR_PATH = os.path.join(
@@ -193,6 +247,14 @@ def get_default_template_path(lang):
 
 def get_default_replacement_path(lang):
     return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_failure.{lang}").format(lang=lang))
+
+
+def decide_template_path(lang: str, config: Config, cmd_template_path: str):
+    if cmd_template_path is not None:
+        return cmd_template_path
+    if config.code_style_config.template_file is not None:
+        return config.code_style_config.template_file
+    return get_default_template_path(lang)
 
 
 DEFAULT_LANG = "cpp"
@@ -213,11 +275,11 @@ DEFAULT_CONFIG_PATH = os.path.abspath(
     os.path.join(script_dir_path, "./atcodertools-default.toml"))
 
 
-def get_code_gen_config(config_path: Optional[str] = None):
-    def _load(path: str):
+def get_config(config_path: Optional[str] = None) -> Config:
+    def _load(path: str) -> Config:
         logging.info("Going to load {} as config".format(path))
         with open(path, 'r') as f:
-            return CodeGenConfig.load(f)
+            return Config.load(f)
 
     if config_path:
         return _load(config_path)
@@ -262,7 +324,8 @@ def main(prog, args):
 
     parser.add_argument("--replacement",
                         help="File path to your config file\n{0}{1}".format(
-                            "[Default (C++)] {}\n".format(get_default_replacement_path('cpp')),
+                            "[Default (C++)] {}\n".format(
+                                get_default_replacement_path('cpp')),
                             "[Default (Java)] {}".format(
                                 get_default_replacement_path('java')))
                         )
@@ -281,7 +344,7 @@ def main(prog, args):
                         help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
                             USER_CONFIG_PATH),
                             "[Default (Secondary)] {}\n".format(
-                            DEFAULT_CONFIG_PATH))
+                                DEFAULT_CONFIG_PATH))
                         )
 
     args = parser.parse_args(args)
@@ -305,17 +368,17 @@ def main(prog, args):
     else:
         logging.info("Downloading data without login.")
 
-    prepare_workspace(client,
-                      args.contest_id,
-                      args.workspace,
-                      args.template if args.template is not None else get_default_template_path(
-                          args.lang),
-                      args.replacement if args.replacement is not None else get_default_replacement_path(
-                          args.lang),
-                      args.lang,
-                      args.parallel,
-                      get_code_gen_config(args.config)
-                      )
+    config = get_config(args.config)
+    prepare_contest(client,
+                    args.contest_id,
+                    args.workspace,
+                    decide_template_path(args.lang, config, args.template),
+                    args.replacement if args.replacement is not None else get_default_replacement_path(
+                        args.lang),
+                    args.lang,
+                    args.parallel,
+                    config
+                    )
 
 
 if __name__ == "__main__":

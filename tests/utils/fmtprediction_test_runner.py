@@ -1,11 +1,11 @@
 import os
 from typing import Optional
 
-from atcodertools.fmtprediction.predict_format import FormatPredictor, MultiplePredictionResultsError, \
-    NoPredictionResultError
-from atcodertools.models.problem_content import ProblemContent
-from atcodertools.models.sample import Sample
-from atcodertools.models.predictor.format_prediction_result import FormatPredictionResult
+from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, \
+    NoPredictionResultError, predict_format
+from atcodertools.client.models.problem_content import ProblemContent
+from atcodertools.client.models.sample import Sample
+from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 
 
 class Response:
@@ -14,8 +14,10 @@ class Response:
         self.status = status
         if result:
             self.original_result = result
-            self.simple_format = result.simple_format
-            self.types = [(k, v.type) for k, v in result.var_to_info.items()]
+            self.simple_format = result.format
+            var_info = [(var.name, var.type)
+                        for var in result.format.all_vars()]
+            self.types = [(name, type.to_py_type()) for name, type in var_info]
 
 
 FORMAT_FILE_NAME = "format.txt"
@@ -49,7 +51,7 @@ class FormatPredictionTestRunner:
         content = self.load_problem_content(case_name)
 
         try:
-            result = FormatPredictor.predict(content)
+            result = predict_format(content)
             return Response(result, "OK")
         except MultiplePredictionResultsError:
             return Response(None, "Multiple results")

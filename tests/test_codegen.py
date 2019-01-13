@@ -1,14 +1,15 @@
+import os
 import sys
 import tempfile
 import unittest
-import os
 
-from atcodertools.codegen.code_gen_config import CodeGenConfig, INDENT_TYPE_SPACE, ConfigInitError
-from atcodertools.codegen.code_generator import CodeGenerator
-from atcodertools.codegen.java_code_generator import JavaCodeGenerator
-from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from tests.utils.testdata_util import TestDataUtil
+from atcodertools.codegen.code_generators import cpp, java
+from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from atcodertools.codegen.template_engine import render
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
+from tests.utils.gzip_controller import make_tst_data_controller
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -35,20 +36,27 @@ class TestCodeGenerator(unittest.TestCase):
 
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
-        self.test_data_util = TestDataUtil(tempfile.mkdtemp())
-        self.test_dir = self.test_data_util.create_dir()
+        self.test_data_controller = make_tst_data_controller(
+            tempfile.mkdtemp())
+        self.test_dir = self.test_data_controller.create_dir()
         self.runner = FormatPredictionTestRunner(self.test_dir)
         self.lang_to_template_file = {
-            "cpp": "template.cpp",
-            "java": "template.java"
+            "cpp": {
+                "old": "template.cpp",
+                "jinja": "template_jinja.cpp",
+            },
+            "java": {
+                "old": "template.java",
+                "jinja": "template_jinja.java",
+            }
         }
-        self.lang_to_code_generator = {
-            "cpp": CppCodeGenerator,
-            "java": JavaCodeGenerator,
+        self.lang_to_code_generator_func = {
+            "cpp": cpp.main,
+            "java": java.main,
         }
 
     def tearDown(self):
-        self.test_data_util.remove_dir()
+        self.test_data_controller.remove_dir()
 
     def test_long_case(self):
         response = self.runner.run('rco-contest-2017-qual-B')
@@ -65,42 +73,60 @@ class TestCodeGenerator(unittest.TestCase):
         for l in LANGS:
             self.verify(response, sys._getframe().f_code.co_name, l)
 
-    def verify(self, response: Response, py_test_name: str, lang: str):
+    def test_mod_case(self):
+        response = self.runner.run('agc019-E')
+        for l in LANGS:
+            self.verify(response, sys._getframe().f_code.co_name,
+                        l, "jinja", ProblemConstantSet(mod=998244353))
+
+    def test_yes_no_case(self):
+        response = self.runner.run('agc021-C')
+        for l in LANGS:
+            self.verify(response, sys._getframe().f_code.co_name, l, "jinja",
+                        ProblemConstantSet(yes_str="YES", no_str="NO"))
+
+    def test_nested_embeddings_on_template(self):
+        def _load_text_file(filename):
+            with open(os.path.join(RESOURCE_DIR, "test_nested_embeddings_on_template", filename), 'r') as f:
+                return f.read()
+
+        def _trim(text):
+            return "\n".join([l.rstrip() for l in text.split("\n")])
+
+        template = _load_text_file("template.txt")
+        self.assertEqual(_load_text_file("answer_x_0_y_2.txt"),
+                         _trim(render(template, x=0, y=2)))
+        self.assertEqual(_load_text_file("answer_x_none_y_2.txt"),
+                         _trim(render(template, x=None, y=2)))
+
+    def verify(self,
+               response: Response,
+               py_test_name: str,
+               lang: str,
+               template_type: str = "old",
+               constants: ProblemConstantSet = ProblemConstantSet()):
         self.assertEqual(
             load_intermediate_format(py_test_name),
             str(response.simple_format))
         self.assertEqual(
             load_intermediate_types(py_test_name),
             str(response.types))
-        self.assertEqual(load_generated_code(py_test_name, lang),
-                         self.get_generator(lang).generate_code(response.original_result))
+        self.assertEqual(
+            load_generated_code(py_test_name, lang),
+            self.lang_to_code_generator_func[lang](
+                CodeGenArgs(
+                    self.get_template(lang, template_type),
+                    response.original_result.format,
+                    constants,
+                    CodeStyleConfig())
+            ))
 
-    def get_generator(self, lang: str) -> CodeGenerator:
+    def get_template(self, lang: str, template_type: str) -> str:
         template_file = os.path.join(
             RESOURCE_DIR,
-            self.lang_to_template_file[lang])
+            self.lang_to_template_file[lang][template_type])
         with open(template_file, 'r') as f:
-            return self.lang_to_code_generator[lang](f.read())
-
-    def test_load_code_gen_config(self):
-        with open(os.path.join(RESOURCE_DIR, "atcodertools-test.toml"), 'r') as f:
-            config = CodeGenConfig.load(f)
-
-        self.assertEqual(8, config.indent_width)
-        self.assertEqual(INDENT_TYPE_SPACE, config.indent_type)
-
-    def test_init_code_gen_config_with_invalid_parameters(self):
-        self._expect_error_when_init_config(
-            indent_type='SPACE', indent_width=4)
-        self._expect_error_when_init_config(
-            indent_type='space', indent_width=-1)
-
-    def _expect_error_when_init_config(self, **kwargs):
-        try:
-            CodeGenConfig(**kwargs)
-            self.fail("Must not reach here")
-        except ConfigInitError:
-            pass
+            return f.read()
 
 
 if __name__ == "__main__":

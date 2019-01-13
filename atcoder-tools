@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 
-from atcodertools.release_management.version_check import get_latest_version
+from atcodertools.release_management.version_check import get_latest_version, VersionCheckError
 from atcodertools.tools.envgen import main as envgen_main
 from atcodertools.tools.tester import main as tester_main
 from atcodertools.tools.submit import main as submit_main
@@ -14,14 +14,20 @@ def exit_program(success: bool):
 
 
 def notify_if_latest_version_found():
-    latest = get_latest_version()
-    if latest != __version__:
-        print(Fore.YELLOW, end='')
-        print("The latest version {0} is available! (The current version: {1})".format(
-            latest, __version__))
-        print("To upgrade, run the following command:")
-        print("")
-        print("pip3 install atcoder-tools --upgrade")
+    try:
+        latest = get_latest_version()
+        if latest != __version__:
+            print(Fore.YELLOW, end='')
+            print("The latest version {0} is available! (The current version: {1})".format(
+                latest, __version__))
+            print("To upgrade, run the following command:")
+            print("")
+            print("pip3 install atcoder-tools --upgrade")
+            print(Style.RESET_ALL)
+    except VersionCheckError:
+        print(Fore.RED, end='')
+        print("Failed to fetch the latest version information "
+              "for some reason (maybe due to no internet connection?)")
         print(Style.RESET_ALL)
 
 

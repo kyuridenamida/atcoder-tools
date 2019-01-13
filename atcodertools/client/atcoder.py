@@ -8,11 +8,11 @@ from typing import List, Optional, Tuple
 import requests
 from bs4 import BeautifulSoup
 
+from atcodertools.client.models.submission import Submission
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
-from atcodertools.models.contest import Contest
-from atcodertools.models.problem import Problem
-from atcodertools.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
-from atcodertools.models.submission import Submission
+from atcodertools.client.models.contest import Contest
+from atcodertools.client.models.problem import Problem
+from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 
 
 class LoginError(Exception):

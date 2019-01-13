@@ -10,7 +10,10 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Tuple
 
-from atcodertools.models.tools.metadata import Metadata
+from colorama import Fore
+
+from atcodertools.tools.models.metadata import Metadata
+from atcodertools.tools.utils import with_color
 
 
 class NoExecutableFileError(Exception):
@@ -28,6 +31,7 @@ class ExecStatus(Enum):
 
 
 class ExecResult:
+
     def __init__(self, status: ExecStatus, output: str = None, elapsed_sec: float = None):
         self.status = status
         self.output = output
@@ -120,13 +124,15 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
         is_correct = exec_res.is_correct_output(answer_text)
         if is_correct:
-            message = "PASSED {elapsed} ms".format(elapsed=exec_res.elapsed_ms)
+            message = "{} {elapsed} ms".format(
+                with_color("PASSED", Fore.LIGHTGREEN_EX),
+                elapsed=exec_res.elapsed_ms)
             success_count += 1
         else:
             if exec_res.status == ExecStatus.NORMAL:
-                message = "WA"
+                message = with_color("WA", Fore.LIGHTRED_EX)
             else:
-                message = exec_res.status.name
+                message = with_color(exec_res.status.name, Fore.LIGHTYELLOW_EX)
 
         print("# {case_name} ... {message}".format(
             case_name=os.path.basename(in_sample_file),
@@ -197,13 +203,14 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         print("No test cases")
         return False
     elif success_count != len(samples):
-        print("Some cases FAILED (passed {success_count} of {total})".format(
+        print("{msg} (passed {success_count} of {total})".format(
+            msg=with_color("Some cases FAILED", Fore.LIGHTRED_EX),
             success_count=success_count,
             total=len(samples),
         ))
         return False
     else:
-        print("Passed all test cases!!!")
+        print(with_color("Passed all test cases!!!", Fore.LIGHTGREEN_EX))
         return True
 
 
