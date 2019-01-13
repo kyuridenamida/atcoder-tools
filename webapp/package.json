@@ -15,7 +15,9 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-router-dom": "^4.3.1",
+    "react-router-tabs": "^1.2.0",
     "react-scripts-ts": "^4.0.8",
+    "react-syntax-highlighter": "^10.1.2",
     "react-table": "^6.8.6",
     "reactstrap": "^7.0.2"
   },
@@ -34,6 +36,7 @@
     "@types/react-dom": "^16.0.11",
     "@types/react-router-dom": "^4.3.1",
     "@types/react-table": "^6.7.21",
+    "node-sass": "^4.11.0",
     "typescript": "^3.2.2"
   },
   "browserslist": [

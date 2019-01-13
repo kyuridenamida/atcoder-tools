@@ -14,7 +14,7 @@ class App extends React.Component {
                     <NavigationBar/>
                     <div className="text-left page-wrapper">
                         <Route path="/" exact component={HomePage}/>
-                        <Route path="/quality/" exact component={QualityPage}/>
+                        <Route path="/quality/" component={QualityPage}/>
                     </div>
                 </div>
             </Router>

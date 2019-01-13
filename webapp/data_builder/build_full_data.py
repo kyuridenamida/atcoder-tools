@@ -9,13 +9,17 @@ import sys
 import tempfile
 import threading
 
-from atcodertools.codegen.cpp_code_generator import CppCodeGenerator
-from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, predict_yes_no
+from atcodertools.codegen.code_generators import cpp
+from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
+from atcodertools.fmtprediction.predict_format import predict_format as predict
+
+from atcodertools.client.models.problem import Problem
+from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError, ProblemContent
+from atcodertools.constprediction.constants_prediction import predict_modulo, predict_yes_no
 
 from atcodertools.client.atcoder import AtCoderClient
-from atcodertools.fmtprediction.predict_format import FormatPredictor
-from atcodertools.models.problem import Problem
-from atcodertools.models.problem_content import InputFormatDetectionError, SampleDetectionError, ProblemContent
 
 atcoder = AtCoderClient()
 CACHE_DIR = "./.cache/"
@@ -80,6 +84,7 @@ class QualityResult:
         self.yes_str_error = None
         self.no_str_error = None
         self.codes = {}
+        self.constant_set = None
 
     def build_dict(self):
         d = {}
@@ -108,7 +113,7 @@ class QualityResult:
             "value": self.no_str
         }
 
-        # d["codes"] = self.codes
+        d["codes"] = self.codes
         return d
 
 
@@ -136,18 +141,13 @@ def predict_format(result: QualityResult):
         return
 
     try:
-        pred = FormatPredictor.predict(result.problem_content)
+        pred = predict(result.problem_content)
         result.prediction_result = pred
     except Exception as e:
-        pred = None
         result.format_prediction_error = e
-
-    if pred is not None:
-        result.codes["cpp"] = apply_clang(CppCodeGenerator(TEMPLATE_CODE).generate_code(pred))
 
 
 def do_predict_constants(result: QualityResult):
-
     if result.problem_content is None:
         result.modulo_error = Skipped()
         result.yes_str_error = Skipped()
@@ -159,6 +159,22 @@ def do_predict_constants(result: QualityResult):
         result.modulo_error = e
 
     result.yes_str, result.no_str = predict_yes_no(result.problem_content.original_html)
+
+    result.constant_set = ProblemConstantSet(
+        mod=result.modulo,
+        yes_str=result.yes_str,
+        no_str=result.no_str
+    )
+
+
+def generate_code(result: QualityResult):
+    if result.prediction_result is not None:
+        result.codes["cpp"] = apply_clang(cpp.main(CodeGenArgs(
+            TEMPLATE_CODE,
+            result.prediction_result.format,
+            result.constant_set,
+            CodeStyleConfig()
+        )))
 
 
 _counter = 0
@@ -185,6 +201,7 @@ async def process_problem(problem, contest, total) -> QualityResult:
         load_problem_content(result)
         predict_format(result)
         do_predict_constants(result)
+        generate_code(result)
         increment_counter()
         print("Processed {} ... {}/{}".format(problem.problem_id, get_counter(), total), file=sys.stderr)
         return result
