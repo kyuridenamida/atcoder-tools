@@ -2,9 +2,6 @@
 using namespace std;
 
 
-
-
-
 void solve(long long N, std::vector<long long> A){
 
 }

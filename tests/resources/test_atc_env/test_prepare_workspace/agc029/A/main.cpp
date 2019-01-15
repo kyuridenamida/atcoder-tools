@@ -2,9 +2,6 @@
 using namespace std;
 
 
-
-
-
 void solve(std::string S){
 
 }

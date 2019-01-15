@@ -1,10 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
 const string YES = "YES";
 const string NO = "NO";
-
 void solve(long long N, long long M, long long A, long long B){
 
 }

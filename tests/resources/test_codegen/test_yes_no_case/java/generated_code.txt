@@ -2,10 +2,8 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-
     static final String YES = "YES";
     static final String NO = "NO";
-
     public static void main(String[] args) throws Exception {
         final Scanner sc = new Scanner(System.in);
         long N;
