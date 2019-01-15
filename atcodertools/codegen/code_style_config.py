@@ -1,5 +1,6 @@
 import importlib.machinery as imm
 import os
+from typing import Optional
 
 from atcodertools.fileutils.normalize import normalize_path
 
@@ -16,8 +17,8 @@ class CodeStyleConfig:
     def __init__(self,
                  indent_type: str = INDENT_TYPE_SPACE,
                  indent_width: int = 4,
-                 code_generator_file: str = None,
-                 template_file: str = None,
+                 code_generator_file: Optional[str] = None,
+                 template_file: Optional[str] = None,
                  ):
         code_generator_file = normalize_path(code_generator_file)
         template_file = normalize_path(template_file)

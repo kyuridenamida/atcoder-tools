@@ -21,6 +21,7 @@ from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
     create_code
+from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
     MultiplePredictionResultsError, predict_format
 from atcodertools.tools.models.metadata import Metadata
@@ -128,32 +129,30 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 new_path))
 
     try:
-
-        with open(template_code_path, "r") as f:
-            template = f.read()
-
-        result = predict_format(content)
-        constants = predict_constants(content.original_html)
-
-        code_generator = _decide_code_generator(config, lang)
-        create_code(code_generator(
-            CodeGenArgs(
-                template,
-                result.format,
-                constants,
-                config.code_style_config
-            )),
-            code_file_path
-        )
-        emit_info(
-            "{} -- Saved auto-generated code to '{}'".format(
-                with_color("Prediction succeeded", Fore.LIGHTGREEN_EX),
-                code_file_path))
+        prediction_result = predict_format(content)
+        emit_info(with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
+        prediction_result = FormatPredictionResult.empty_result()
         if isinstance(e, NoPredictionResultError):
             msg = "No prediction -- Failed to understand the input format"
         else:
             msg = "Too many prediction -- Failed to understand the input format"
+        emit_warning(with_color(msg, Fore.LIGHTRED_EX))
+
+    constants = predict_constants(content.original_html)
+    code_generator = _decide_code_generator(config, lang)
+    with open(template_code_path, "r") as f:
+        template = f.read()
+
+    create_code(code_generator(
+        CodeGenArgs(
+            template,
+            prediction_result.format,
+            constants,
+            config.code_style_config
+        )),
+        code_file_path)
+    emit_info("Saved code to {}".format(code_file_path))
 
     # Save metadata
     metadata_path = os.path.join(problem_dir_path, "metadata.json")
@@ -233,6 +232,7 @@ DEFAULT_TEMPLATE_DIR_PATH = os.path.abspath(
 
 def get_default_template_path(lang):
     return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_success.{lang}".format(lang=lang)))
+
 
 def decide_template_path(lang: str, config: Config, cmd_template_path: str):
     if cmd_template_path is not None:

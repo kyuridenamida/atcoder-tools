@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from atcodertools.fmtprediction.models.format import Format
 from atcodertools.fmtprediction.models.type import Type
@@ -7,7 +7,7 @@ from atcodertools.fmtprediction.models.variable import Variable, SimpleVariable
 
 class FormatPredictionResult:
 
-    def __init__(self, format_: Format[Variable]):
+    def __init__(self, format_: Optional[Format[Variable]] = None):
         self.format = format_
 
     @classmethod
@@ -28,3 +28,7 @@ class FormatPredictionResult:
             fmt.push_back(pattern.with_replaced_vars(var_to_info))
 
         return FormatPredictionResult(fmt)
+
+    @classmethod
+    def empty_result(cls):
+        return FormatPredictionResult()

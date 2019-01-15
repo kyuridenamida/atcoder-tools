@@ -1,8 +1,8 @@
-import string
 import re
+import string
 import warnings
 
-import jinja2
+from jinja2 import Environment
 
 
 def _substitute(s, reps):
