@@ -25,4 +25,3 @@ int main(){
     solve(H, W, std::move(c), std::move(A));
     return 0;
 }
-gi
