@@ -64,7 +64,7 @@ class TestCodeGenerator(unittest.TestCase):
             self.verify(response, sys._getframe().f_code.co_name, l)
 
     def test_two_dimensional_case(self):
-        response = self.runner.run('kupc2012pr-D')
+        response = self.runner.run('abc079-D')
         for l in LANGS:
             self.verify(response, sys._getframe().f_code.co_name, l)
 

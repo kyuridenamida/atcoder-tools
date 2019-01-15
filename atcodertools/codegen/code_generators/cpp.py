@@ -48,30 +48,27 @@ class CppCodeGenerator:
         elif type_ == Type.int:
             return "long long"
         elif type_ == Type.str:
-            return "string"
+            return "std::string"
         else:
             raise NotImplementedError
 
     def _get_declaration_type(self, var: Variable):
-        if var.dim_num() == 0:
-            template = "{type}"
-        elif var.dim_num() == 1:
-            template = "vector<{type}>"
-        elif var.dim_num() == 2:
-            template = "vector<vector<{type}>>"
-        else:
-            raise NotImplementedError
-        return template.format(type=self._convert_type(var.type))
+        ctype = self._convert_type(var.type)
+        for _ in range(var.dim_num()):
+            ctype = 'std::vector<{}>'.format(ctype)
+        return ctype
 
     def _actual_arguments(self) -> str:
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
-        return ", ".join([v.name for v in self._format.all_vars()])
+        return ", ".join([
+            v.name if v.dim_num() == 0 else 'std::move({})'.format(v.name)
+            for v in self._format.all_vars()])
 
     def _formal_arguments(self):
         """
-            :return the string form of formal arguments e.g. "int N, int K, vector<int> a"
+            :return the string form of formal arguments e.g. "int N, int K, std::vector<int> a"
         """
         return ", ".join([
             "{decl_type} {name}".format(
@@ -82,26 +79,33 @@ class CppCodeGenerator:
 
     def _generate_declaration(self, var: Variable):
         """
-        :return: Create declaration part E.g. array[1..n] → vector<int> array = vector<int>(n-1+1);
+        :return: Create declaration part E.g. array[1..n] -> std::vector<int> array = std::vector<int>(n-1+1);
         """
         if var.dim_num() == 0:
-            constructor = ""
+            dims = []
         elif var.dim_num() == 1:
-            constructor = "({size})".format(
-                size=var.first_index.get_length())
+            dims = [var.first_index.get_length()]
         elif var.dim_num() == 2:
-            constructor = "({row_size}, vector<{type}>({col_size}))".format(
-                type=self._convert_type(var.type),
-                row_size=var.first_index.get_length(),
-                col_size=var.second_index.get_length()
-            )
+            dims = [var.first_index.get_length(),
+                    var.second_index.get_length()]
         else:
             raise NotImplementedError
+
+        if len(dims) == 0:
+            ctor = ''
+        elif len(dims) == 1:
+            ctor = '({})'.format(dims[0])
+        else:
+            ctor = '({})'.format(dims[-1])
+            ctype = self._convert_type(var.type)
+            for dim in dims[-2::-1]:
+                ctype = 'std::vector<{}>'.format(ctype)
+                ctor = '({}, {}{})'.format(dim, ctype, ctor)
 
         line = "{decl_type} {name}{constructor};".format(
             name=var.name,
             decl_type=self._get_declaration_type(var),
-            constructor=constructor
+            constructor=ctor
         )
         return line
 
@@ -112,7 +116,7 @@ class CppCodeGenerator:
         elif var.type == Type.int:
             return 'scanf("%lld",&{name});'.format(name=name)
         elif var.type == Type.str:
-            return 'cin >> {name};'.format(name=name)
+            return 'std::cin >> {name};'.format(name=name)
         else:
             raise NotImplementedError
 

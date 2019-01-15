@@ -4,30 +4,26 @@ import java.util.*;
 class Main {
     public static void main(String[] args) throws Exception {
         final Scanner sc = new Scanner(System.in);
-        long N;
-        N = sc.nextLong();
-        long[][] A = new long[int(N)][int(N)];
-        for(int i = 0 ; i < N ; i++){
-                for(int j = 0 ; j < N ; j++){
+        long H;
+        H = sc.nextLong();
+        long W;
+        W = sc.nextLong();
+        long[][] c = new long[int(9-0+1)][int(9-0+1)];
+        for(int i = 0 ; i < 9-0+1 ; i++){
+                for(int j = 0 ; j < 9-0+1 ; j++){
+                    c[i][j] = sc.nextLong();
+                }
+        }
+        long[][] A = new long[int(H)][int(W)];
+        for(int i = 0 ; i < H ; i++){
+                for(int j = 0 ; j < W ; j++){
                     A[i][j] = sc.nextLong();
                 }
         }
-        long[][] B = new long[int(N)][int(N)];
-        for(int i = 0 ; i < N ; i++){
-                for(int j = 0 ; j < N ; j++){
-                    B[i][j] = sc.nextLong();
-                }
-        }
-        long[][] C = new long[int(N)][int(N)];
-        for(int i = 0 ; i < N ; i++){
-                for(int j = 0 ; j < N ; j++){
-                    C[i][j] = sc.nextLong();
-                }
-        }
-        solve(N, A, B, C);
+        solve(H, W, c, A);
     }
 
-    static void solve(long N, long[][] A, long[][] B, long[][] C){
+    static void solve(long H, long W, long[][] c, long[][] A){
 
     }
 }
