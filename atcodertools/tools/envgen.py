@@ -311,7 +311,8 @@ def main(prog, args):
                                 get_default_template_path('java')))
                         )
 
-    parser.add_argument('--replacement', help=argparse.SUPPRESS)  # Deleted functionality
+    # Deleted functionality
+    parser.add_argument('--replacement', help=argparse.SUPPRESS)
 
     parser.add_argument("--parallel",
                         action="store_true",
