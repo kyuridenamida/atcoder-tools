@@ -2,11 +2,8 @@ import * as React from 'react';
 import ReactTable from 'react-table'
 import qualityResultList from "../../../auto_generated/qualityResultList.js"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Code from "../Code";
 import QualityResult from "../../../models/QualityResult";
 import "./Summary.scss";
-import {PopoverBody, PopoverHeader} from "reactstrap";
-import Popover from "reactstrap/lib/Popover";
 
 export default class Summary extends React.Component<{}, {
     activeProblemId: string | null,
@@ -81,20 +78,7 @@ export default class Summary extends React.Component<{}, {
             , {
                 Header: 'Format Pred.',
                 accessor: 'format_prediction',
-                Cell: (props) => {
-                    const original = props.original as QualityResult;
-                    return <div id={original.problem.problem_id}>
-                        <Popover placement="right"
-                                 isOpen={this.state.showingCode && this.isActive(original.problem.problem_id)}
-                                 target={original.problem.problem_id}>
-                            <PopoverHeader>Generated Code</PopoverHeader>
-                            <PopoverBody>
-                                <Code code={original.codes.cpp || ""} />
-                            </PopoverBody>
-                        </Popover>
-                        {renderValueOrError(props)}
-                    </div>;
-                },
+                Cell: renderValueOrError,
                 sortMethod: this.sortForErrorAndValue,
             }, {
                 Header: 'Constants Prediction',
@@ -140,7 +124,11 @@ export default class Summary extends React.Component<{}, {
                     height: "100%"
                 }}
                 getTrProps={(state, rowInfo) => {
-                    const original = rowInfo.original as QualityResult;
+                    if( !rowInfo || !rowInfo.hasOwnProperty("original") ) {
+                        return {};
+                    }
+
+                    const original : QualityResult = rowInfo.original;
                     console.log(this.state.activeProblemId, original.problem.problem_id);
                     return {
                         onClick: () => this.updateActiveProblem(original.problem.problem_id),
