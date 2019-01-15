@@ -47,5 +47,5 @@ def old_render(template, **kwargs):
 
 
 def render_by_jinja(template, **kwargs):
-    template = jinja2.Template(template)
-    return template.render(**kwargs) + "\n"
+    return Environment(trim_blocks=True,
+                       lstrip_blocks=True).from_string(template).render(**kwargs) + "\n"
