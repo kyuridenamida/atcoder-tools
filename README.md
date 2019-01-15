@@ -151,31 +151,48 @@ code_generator_file="~/custom_code_generator.py"
 `(CogeGenArgs) -> str(ソースコード)`が型であるような`main`関数を定義した.pyファイルを`code_generator_file`で指定すると、コード生成時にカスタムコードジェネレーターを利用できます。
  
 ## テンプレートの例
-`atcoder-tools gen`コマンドに対し`--template`, `--replacement` でそれぞれ入力形式の推論に成功したときのテンプレート、生成に失敗したときに代わりに生成するソースコードを指定できます。テンプレートエンジンの仕様については[jinja2](http://jinja.pocoo.org/docs/2.10/) の公式ドキュメントを参照してください。テンプレートに渡される変数は以下の通りです。
+`atcoder-tools gen`コマンドに対し`--template`でテンプレートソースコードを指定できます。
+テンプレートエンジンの仕様については[jinja2](http://jinja.pocoo.org/docs/2.10/) の公式ドキュメントを参照してください。
 
-- **input_part** input用のコード
-- **formal_arguments** 型つき引数列
-- **actual_arguments** 型なし引数列
+テンプレートに渡される変数は以下の通りです。
 
-- **mod** 問題文中に存在するmodの値
-- **yes_str** 問題文中に存在する yes や possible などの真を表しそうな値
-- **no_str** 問題文中に存在する no や impossible などの偽を表しそうな値
+
+- **prediction_success** 入力形式の推論に成功したとき `True`、 失敗したとき `False`が格納されている。この値が`True`のとき次の3種類の変数も存在することが保証される。
+    - **input_part** input用のコード
+    - **formal_arguments** 型つき引数列
+    - **actual_arguments** 型なし引数列
+
+- **mod** 問題文中に存在するmodの整数値
+- **yes_str** 問題文中に存在する yes や possible などの真を表しそうな文字列値
+- **no_str** 問題文中に存在する no や impossible などの偽を表しそうな文字列値
 
 ```
 #include <bits/stdc++.h>
 using namespace std;
 
-{% if mod %}const int mod = {{ mod }};{% endif %}
-{% if yes_str %}const string YES = "{{ yes_str }}";{% endif %}
-{% if no_str %}const string NO = "{{ no_str }}";{% endif %}
+{% if mod %}
+const long long MOD = {{ mod }};
+{% endif %}
+{% if yes_str %}
+const string YES = "{{ yes_str }}";
+{% endif %}
+{% if no_str %}
+const string NO = "{{ no_str }}";
+{% endif %}
 
-void solve({{formal_arguments}}){
+{% if prediction_success %}
+void solve({{ formal_arguments }}){
 
 }
+{% endif %}
 
 int main(){
+    {% if prediction_success %}
     {{input_part}}
-    solve({{actual_arguments}});
+    solve({{ actual_arguments }});
+    {% else %}
+    // Failed to predict input format
+    {% endif %}
     return 0;
 }
 ```
