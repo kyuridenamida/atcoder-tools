@@ -50,15 +50,11 @@ $ atcoder-tool gen  [contest_id] --without-login
 
 ### gen の詳細
 ```$xslt
-usage: atcoder-tools gen [-h] [--without-login]
-                                                        [--workspace WORKSPACE]
-                                                        [--lang LANG]
-                                                        [--template TEMPLATE]
-                                                        [--replacement REPLACEMENT]
-                                                        [--parallel]
-                                                        [--save-no-session-cache]
-                                                        [--config CONFIG]
-                                                        contest_id
+usage: atcoder-tools gen
+       [-h] [--without-login] [--workspace WORKSPACE] [--lang LANG]
+       [--template TEMPLATE] [--parallel] [--save-no-session-cache]
+       [--config CONFIG]
+       contest_id
 
 positional arguments:
   contest_id            Contest ID (e.g. arc001)
@@ -68,23 +64,18 @@ optional arguments:
   --without-login       Download data without login
   --workspace WORKSPACE
                         Path to workspace's root directory. This script will create files in {WORKSPACE}/{contest_name}/{alphabet}/ e.g. ./your-workspace/arc001/A/
-                        [Default] ${HOME}/atcoder-workspace
+                        [Default] /home/kyuridenamida/atcoder-workspace
   --lang LANG           Programming language of your template code, cpp or java.
                         [Default] cpp
   --template TEMPLATE   File path to your template code
-                        [Default (C++)] /atcodertools/tools/templates/cpp/template_success.cpp
-                        [Default (Java)] /atcodertools/tools/templates/java/template_success.java
-  --replacement REPLACEMENT
-                        File path to your config file
-                        [Default (C++)] /atcodertools/tools/templates/cpp/template_failure.cpp
-                        [Default (Java)] /atcodertools/tools/templates/java/template_failure.java
+                        [Default (C++)] /atcoder-tools/atcodertools/tools/templates/cpp/default_template.cpp
+                        [Default (Java)] /atcoder-tools/atcodertools/tools/templates/java/default_template.java
   --parallel            Prepare problem directories asynchronously using multi processors.
   --save-no-session-cache
                         Save no session cache to avoid security risk
   --config CONFIG       File path to your config file
-                        [Default (Primary)] ${HOME}/.atcodertools.toml
-                        [Default (Secondary)] /atcodertools/tools/atcodertools-default.toml
-
+                        [Default (Primary)] /home/kyuridenamida/.atcodertools.toml
+                        [Default (Secondary)] /atcoder-tools/atcodertools/tools/atcodertools-default.toml
 ```
 
 ### test の詳細

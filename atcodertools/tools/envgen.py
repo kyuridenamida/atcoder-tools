@@ -231,7 +231,7 @@ DEFAULT_TEMPLATE_DIR_PATH = os.path.abspath(
 
 
 def get_default_template_path(lang):
-    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_success.{lang}".format(lang=lang)))
+    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/default_template.{lang}".format(lang=lang)))
 
 
 def decide_template_path(lang: str, config: Config, cmd_template_path: str):
