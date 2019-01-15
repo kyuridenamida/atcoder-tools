@@ -5,7 +5,7 @@ using namespace std;
 
 
 
-void solve(long long H, long long W, long long N, vector<long long> X, vector<long long> Y){
+void solve(long long H, long long W, long long N, std::vector<long long> X, std::vector<long long> Y){
 
 }
 
@@ -16,12 +16,12 @@ int main(){
     scanf("%lld",&W);
     long long N;
     scanf("%lld",&N);
-    vector<long long> X(N);
-    vector<long long> Y(N);
+    std::vector<long long> X(N);
+    std::vector<long long> Y(N);
     for(int i = 0 ; i < N ; i++){
         scanf("%lld",&X[i]);
         scanf("%lld",&Y[i]);
     }
-    solve(H, W, N, X, Y);
+    solve(H, W, N, std::move(X), std::move(Y));
     return 0;
 }

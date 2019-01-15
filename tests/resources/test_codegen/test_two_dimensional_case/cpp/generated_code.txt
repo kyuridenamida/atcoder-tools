@@ -1,31 +1,31 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void solve(long long N, vector<vector<long long>> A, vector<vector<long long>> B, vector<vector<long long>> C){
+void solve(long long N, std::vector<std::vector<long long>> A, std::vector<std::vector<long long>> B, std::vector<std::vector<long long>> C){
 
 }
 
 int main(){
     long long N;
     scanf("%lld",&N);
-    vector<vector<long long>> A(N, vector<long long>(N));
+    std::vector<std::vector<long long>> A(N, std::vector<long long>(N));
     for(int i = 0 ; i < N ; i++){
         for(int j = 0 ; j < N ; j++){
             scanf("%lld",&A[i][j]);
         }
     }
-    vector<vector<long long>> B(N, vector<long long>(N));
+    std::vector<std::vector<long long>> B(N, std::vector<long long>(N));
     for(int i = 0 ; i < N ; i++){
         for(int j = 0 ; j < N ; j++){
             scanf("%lld",&B[i][j]);
         }
     }
-    vector<vector<long long>> C(N, vector<long long>(N));
+    std::vector<std::vector<long long>> C(N, std::vector<long long>(N));
     for(int i = 0 ; i < N ; i++){
         for(int j = 0 ; j < N ; j++){
             scanf("%lld",&C[i][j]);
         }
     }
-    solve(N, A, B, C);
+    solve(N, std::move(A), std::move(B), std::move(C));
     return 0;
 }

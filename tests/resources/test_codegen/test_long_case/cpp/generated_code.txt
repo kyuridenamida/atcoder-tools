@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void solve(long long H, long long W, long long K, long long sr, long long sc, vector<string> s, long long N, vector<long long> fr, vector<long long> fc, vector<long long> F, vector<long long> D){
+void solve(long long H, long long W, long long K, long long sr, long long sc, std::vector<std::string> s, long long N, std::vector<long long> fr, std::vector<long long> fc, std::vector<long long> F, std::vector<long long> D){
 
 }
 
@@ -16,22 +16,22 @@ int main(){
     scanf("%lld",&sr);
     long long sc;
     scanf("%lld",&sc);
-    vector<string> s(H);
+    std::vector<std::string> s(H);
     for(int i = 0 ; i < H ; i++){
-        cin >> s[i];
+        std::cin >> s[i];
     }
     long long N;
     scanf("%lld",&N);
-    vector<long long> fr(N);
-    vector<long long> fc(N);
-    vector<long long> F(N);
-    vector<long long> D(N);
+    std::vector<long long> fr(N);
+    std::vector<long long> fc(N);
+    std::vector<long long> F(N);
+    std::vector<long long> D(N);
     for(int i = 0 ; i < N ; i++){
         scanf("%lld",&fr[i]);
         scanf("%lld",&fc[i]);
         scanf("%lld",&F[i]);
         scanf("%lld",&D[i]);
     }
-    solve(H, W, K, sr, sc, s, N, fr, fc, F, D);
+    solve(H, W, K, sr, sc, std::move(s), N, std::move(fr), std::move(fc), std::move(F), std::move(D));
     return 0;
 }
