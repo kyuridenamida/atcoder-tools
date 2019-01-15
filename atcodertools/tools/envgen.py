@@ -70,7 +70,6 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       workspace_root_path: str,
                       template_code_path: str,
-                      replacement_code_path: str,
                       lang: str,
                       config: Config):
     pid = problem.get_alphabet()
@@ -156,14 +155,6 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         else:
             msg = "Too many prediction -- Failed to understand the input format"
 
-        os.makedirs(os.path.dirname(code_file_path), exist_ok=True)
-        shutil.copy(replacement_code_path, code_file_path)
-        emit_warning(
-            "{} -- Copied {} to {}".format(
-                with_color(msg, Fore.LIGHTRED_EX),
-                replacement_code_path,
-                code_file_path))
-
     # Save metadata
     metadata_path = os.path.join(problem_dir_path, "metadata.json")
     Metadata(problem,
@@ -183,18 +174,17 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     output_splitter()
 
 
-def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str, Config]):
-    atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config = argv
+def func(argv: Tuple[AtCoderClient, Problem, str, str, str, Config]):
+    atcoder_client, problem, workspace_root_path, template_code_path, lang, config = argv
     prepare_procedure(
         atcoder_client, problem, workspace_root_path, template_code_path,
-        replacement_code_path, lang, config)
+        lang, config)
 
 
 def prepare_contest(atcoder_client: AtCoderClient,
                     contest_id: str,
                     workspace_root_path: str,
                     template_code_path: str,
-                    replacement_code_path: str,
                     lang: str,
                     parallel: bool,
                     config: Config,
@@ -209,7 +199,7 @@ def prepare_contest(atcoder_client: AtCoderClient,
         logging.warning(
             "Failed to fetch. Will retry in {} seconds".format(retry_duration))
 
-    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config) for
+    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, lang, config) for
              problem in problem_list]
 
     output_splitter()
@@ -243,11 +233,6 @@ DEFAULT_TEMPLATE_DIR_PATH = os.path.abspath(
 
 def get_default_template_path(lang):
     return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_success.{lang}".format(lang=lang)))
-
-
-def get_default_replacement_path(lang):
-    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_failure.{lang}").format(lang=lang))
-
 
 def decide_template_path(lang: str, config: Config, cmd_template_path: str):
     if cmd_template_path is not None:
@@ -290,6 +275,10 @@ def get_config(config_path: Optional[str] = None) -> Config:
     return _load(DEFAULT_CONFIG_PATH)
 
 
+class DeletedFunctionalityError(Exception):
+    pass
+
+
 def main(prog, args):
     parser = argparse.ArgumentParser(
         prog=prog,
@@ -322,13 +311,7 @@ def main(prog, args):
                                 get_default_template_path('java')))
                         )
 
-    parser.add_argument("--replacement",
-                        help="File path to your config file\n{0}{1}".format(
-                            "[Default (C++)] {}\n".format(
-                                get_default_replacement_path('cpp')),
-                            "[Default (Java)] {}".format(
-                                get_default_replacement_path('java')))
-                        )
+    parser.add_argument('--replacement', help=argparse.SUPPRESS)  # Deleted functionality
 
     parser.add_argument("--parallel",
                         action="store_true",
@@ -348,6 +331,12 @@ def main(prog, args):
                         )
 
     args = parser.parse_args(args)
+
+    if args.replacement is not None:
+        logging.error(with_color("Sorry! --replacement argument no longer exists"
+                                 " and you can only use --template."
+                                 " See the official document for details.", Fore.LIGHTRED_EX))
+        raise DeletedFunctionalityError
 
     try:
         import AccountInformation  # noqa
@@ -373,8 +362,6 @@ def main(prog, args):
                     args.contest_id,
                     args.workspace,
                     decide_template_path(args.lang, config, args.template),
-                    args.replacement if args.replacement is not None else get_default_replacement_path(
-                        args.lang),
                     args.lang,
                     args.parallel,
                     config
