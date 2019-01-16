@@ -56,7 +56,6 @@ class CodeStyleConfig:
 
         self.indent_type = indent_type
         self.indent_width = indent_width
-        self.code_generator = None
 
         if code_generator_file is not None:
             try:
@@ -71,7 +70,7 @@ class CodeStyleConfig:
             if lang == "cpp":
                 from atcodertools.codegen.code_generators import cpp
                 self.code_generator = cpp.main
-            elif lang == "java":
+            else:
                 from atcodertools.codegen.code_generators import java
                 self.code_generator = java.main
 

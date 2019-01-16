@@ -15,7 +15,6 @@ from colorama import Fore
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
-from atcodertools.codegen.code_generators import cpp, java
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.config.code_style_config import DEFAULT_WORKSPACE_DIR_PATH, SUPPORTED_LANGUAGES
 from atcodertools.config.config import Config
@@ -55,19 +54,6 @@ def output_splitter():
 
 def _message_on_execution(cwd: str, cmd: str):
     return "Executing the following command in `{}`: {}".format(cwd, cmd)
-
-
-def _decide_code_generator(config: Config, lang: str):
-    if config.code_style_config.code_generator:
-        return config.code_style_config.code_generator
-
-    if lang == "cpp":
-        return cpp.main
-    elif lang == "java":
-        return java.main
-
-    raise NotImplementedError(
-        "only supporting cpp and java by default. Please define UDF for another language.")
 
 
 def prepare_procedure(atcoder_client: AtCoderClient,
@@ -144,7 +130,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         emit_warning(with_color(msg, Fore.LIGHTRED_EX))
 
     constants = predict_constants(content.original_html)
-    code_generator = _decide_code_generator(config, lang)
+    code_generator = config.code_style_config.code_generator
     with open(template_code_path, "r") as f:
         template = f.read()
 
