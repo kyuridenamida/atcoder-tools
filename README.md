@@ -132,18 +132,31 @@ optional arguments:
 
 - コードスタイルの設定が幅4のスペースインデントである
 - コード生成テンプレートとして`~/my_template.cpp`を使う
+- ワークスペースのルートは `~/atcoder-workspace/`
+- 言語設定は `cpp` (提出時もしくはデフォルトのコードジェネレーター生成時に使われます)
 - 問題用ディレクトリ内で毎回`clang-format`を実行して、最後に`CMakeLists.txt`(空)をコンテスト用ディレクトリに生成する
-- カスタムコードジェネレーター `custom_code_generator.py`を指定す
+- カスタムコードジェネレーター `custom_code_generator.py`を指定する
+- AtCoderにログインせずにダウンロードを行う機能を使わない (公開コンテストに対してのみ可能)
+- データの並列ダウンロードを無効にする
+- ログイン情報のクッキーを保存する
 
 ```$xslt
 [codestyle]
 indent_type = 'space' # 'tab' or 'space'
 indent_width = 4
 template_file='~/my_template.cpp'
+workspace_dir = '~/atcoder-workspace/'
+lang = 'cpp' # 'cpp' or 'java' (Currently)
 [postprocess]
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
 code_generator_file="~/custom_code_generator.py"
+
+[etc]
+download_without_login=false
+parallel_download=false
+save_no_session_cache=false
+
 ```
 
 ### カスタムコードジェネレーター
