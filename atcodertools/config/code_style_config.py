@@ -51,7 +51,8 @@ class CodeStyleConfig:
             )
 
         if lang and lang not in SUPPORTED_LANGUAGES:
-            raise CodeStyleConfigInitError("language must be one of {}".format(SUPPORTED_LANGUAGES))
+            raise CodeStyleConfigInitError(
+                "language must be one of {}".format(SUPPORTED_LANGUAGES))
 
         self.indent_type = indent_type
         self.indent_width = indent_width
@@ -74,8 +75,10 @@ class CodeStyleConfig:
                 from atcodertools.codegen.code_generators import java
                 self.code_generator = java.main
 
-        self.template_file = normalize_path(template_file or get_default_template_path(lang))
-        self.workspace_dir = normalize_path(workspace_dir or DEFAULT_WORKSPACE_DIR_PATH)
+        self.template_file = normalize_path(
+            template_file or get_default_template_path(lang))
+        self.workspace_dir = normalize_path(
+            workspace_dir or DEFAULT_WORKSPACE_DIR_PATH)
         self.lang = lang
 
     def indent(self, depth):

@@ -215,7 +215,8 @@ def prepare_contest(atcoder_client: AtCoderClient,
                 pass
 
     if config.postprocess_config.exec_cmd_on_contest_dir is not None:
-        contest_dir_path = os.path.join(config.code_style_config.workspace_dir, contest_id)
+        contest_dir_path = os.path.join(
+            config.code_style_config.workspace_dir, contest_id)
         logging.info(_message_on_execution(contest_dir_path,
                                            config.postprocess_config.exec_cmd_on_contest_dir))
         config.postprocess_config.execute_on_contest_dir(
@@ -316,7 +317,8 @@ def main(prog, args):
     client = AtCoderClient()
     if not config.etc_config.download_without_login:
         try:
-            client.login(save_session_cache=not config.etc_config.save_no_session_cache)
+            client.login(
+                save_session_cache=not config.etc_config.save_no_session_cache)
             logging.info("Login successful.")
         except LoginError:
             logging.error(

@@ -47,7 +47,7 @@ class TestConfig(unittest.TestCase):
 
     def test_load_default_config(self):
         with open(get_default_config_path(), 'r') as f:
-            config = Config.load(f)
+            Config.load(f)
 
     def test_init_code_style_config_with_invalid_parameters(self):
         self._expect_error_when_init_config(

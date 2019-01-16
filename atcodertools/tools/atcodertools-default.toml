@@ -12,6 +12,7 @@ lang = 'cpp' # 'cpp' or 'java' (Currently)
 ## Please check README.md for details.
 #code_generator_file=
 
+
 [postprocess]
 ## exec_on_each_problem_dir is executed after every problem directory's creation
 ## with its problem directory as cwd like arc001/A
