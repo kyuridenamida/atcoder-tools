@@ -269,12 +269,12 @@ def main(prog, args):
     parser.add_argument("--parallel",
                         action="store_true",
                         help="Prepare problem directories asynchronously using multi processors.",
-                        default=False)
+                        default=None)
 
     parser.add_argument("--save-no-session-cache",
                         action="store_true",
                         help="Save no session cache to avoid security risk",
-                        default=False)
+                        default=None)
 
     parser.add_argument("--config",
                         help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
