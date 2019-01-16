@@ -3,9 +3,6 @@ import java.util.*;
 
 class Main {
     static final int mod = 998244353;
-
-
-
     public static void main(String[] args) throws Exception {
         final Scanner sc = new Scanner(System.in);
         long A;

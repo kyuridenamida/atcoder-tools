@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
@@ -26,15 +26,19 @@ def _loop_header(var: Variable, for_second_index: bool):
 class CppCodeGenerator:
 
     def __init__(self,
-                 format_: Format[Variable],
+                 format_: Optional[Format[Variable]],
                  config: CodeStyleConfig):
         self._format = format_
         self._config = config
 
     def generate_parameters(self) -> Dict[str, Any]:
+        if self._format is None:
+            return dict(prediction_success=False)
+
         return dict(formal_arguments=self._formal_arguments(),
                     actual_arguments=self._actual_arguments(),
-                    input_part=self._input_part())
+                    input_part=self._input_part(),
+                    prediction_success=True)
 
     def _input_part(self):
         lines = []

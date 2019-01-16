@@ -45,7 +45,6 @@ class TestEnvGen(unittest.TestCase):
             ["agc029",
              "--workspace", self.temp_dir,
              "--template", TEMPLATE_PATH,
-             "--replacement", REPLACEMENT_PATH,
              "--lang", "cpp",
              "--without-login",
              '--config', config_path
@@ -62,7 +61,6 @@ class TestEnvGen(unittest.TestCase):
                 "agc029",
                 self.temp_dir,
                 TEMPLATE_PATH,
-                REPLACEMENT_PATH,
                 "cpp",
                 False,
                 Config(),

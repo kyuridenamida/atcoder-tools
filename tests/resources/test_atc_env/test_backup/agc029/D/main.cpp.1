@@ -2,9 +2,6 @@
 using namespace std;
 
 
-
-
-
 void solve(long long H, long long W, long long N, std::vector<long long> X, std::vector<long long> Y){
 
 }

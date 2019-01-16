@@ -21,6 +21,7 @@ from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
     create_code
+from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
     MultiplePredictionResultsError, predict_format
 from atcodertools.tools.models.metadata import Metadata
@@ -70,7 +71,6 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       workspace_root_path: str,
                       template_code_path: str,
-                      replacement_code_path: str,
                       lang: str,
                       config: Config):
     pid = problem.get_alphabet()
@@ -129,40 +129,30 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 new_path))
 
     try:
-
-        with open(template_code_path, "r") as f:
-            template = f.read()
-
-        result = predict_format(content)
-        constants = predict_constants(content.original_html)
-
-        code_generator = _decide_code_generator(config, lang)
-        create_code(code_generator(
-            CodeGenArgs(
-                template,
-                result.format,
-                constants,
-                config.code_style_config
-            )),
-            code_file_path
-        )
-        emit_info(
-            "{} -- Saved auto-generated code to '{}'".format(
-                with_color("Prediction succeeded", Fore.LIGHTGREEN_EX),
-                code_file_path))
+        prediction_result = predict_format(content)
+        emit_info(with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
+        prediction_result = FormatPredictionResult.empty_result()
         if isinstance(e, NoPredictionResultError):
             msg = "No prediction -- Failed to understand the input format"
         else:
             msg = "Too many prediction -- Failed to understand the input format"
+        emit_warning(with_color(msg, Fore.LIGHTRED_EX))
 
-        os.makedirs(os.path.dirname(code_file_path), exist_ok=True)
-        shutil.copy(replacement_code_path, code_file_path)
-        emit_warning(
-            "{} -- Copied {} to {}".format(
-                with_color(msg, Fore.LIGHTRED_EX),
-                replacement_code_path,
-                code_file_path))
+    constants = predict_constants(content.original_html)
+    code_generator = _decide_code_generator(config, lang)
+    with open(template_code_path, "r") as f:
+        template = f.read()
+
+    create_code(code_generator(
+        CodeGenArgs(
+            template,
+            prediction_result.format,
+            constants,
+            config.code_style_config
+        )),
+        code_file_path)
+    emit_info("Saved code to {}".format(code_file_path))
 
     # Save metadata
     metadata_path = os.path.join(problem_dir_path, "metadata.json")
@@ -183,18 +173,17 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     output_splitter()
 
 
-def func(argv: Tuple[AtCoderClient, Problem, str, str, str, str, Config]):
-    atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config = argv
+def func(argv: Tuple[AtCoderClient, Problem, str, str, str, Config]):
+    atcoder_client, problem, workspace_root_path, template_code_path, lang, config = argv
     prepare_procedure(
         atcoder_client, problem, workspace_root_path, template_code_path,
-        replacement_code_path, lang, config)
+        lang, config)
 
 
 def prepare_contest(atcoder_client: AtCoderClient,
                     contest_id: str,
                     workspace_root_path: str,
                     template_code_path: str,
-                    replacement_code_path: str,
                     lang: str,
                     parallel: bool,
                     config: Config,
@@ -209,7 +198,7 @@ def prepare_contest(atcoder_client: AtCoderClient,
         logging.warning(
             "Failed to fetch. Will retry in {} seconds".format(retry_duration))
 
-    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, replacement_code_path, lang, config) for
+    tasks = [(atcoder_client, problem, workspace_root_path, template_code_path, lang, config) for
              problem in problem_list]
 
     output_splitter()
@@ -242,11 +231,7 @@ DEFAULT_TEMPLATE_DIR_PATH = os.path.abspath(
 
 
 def get_default_template_path(lang):
-    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_success.{lang}".format(lang=lang)))
-
-
-def get_default_replacement_path(lang):
-    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/template_failure.{lang}").format(lang=lang))
+    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "{lang}/default_template.{lang}".format(lang=lang)))
 
 
 def decide_template_path(lang: str, config: Config, cmd_template_path: str):
@@ -290,6 +275,10 @@ def get_config(config_path: Optional[str] = None) -> Config:
     return _load(DEFAULT_CONFIG_PATH)
 
 
+class DeletedFunctionalityError(Exception):
+    pass
+
+
 def main(prog, args):
     parser = argparse.ArgumentParser(
         prog=prog,
@@ -322,13 +311,8 @@ def main(prog, args):
                                 get_default_template_path('java')))
                         )
 
-    parser.add_argument("--replacement",
-                        help="File path to your config file\n{0}{1}".format(
-                            "[Default (C++)] {}\n".format(
-                                get_default_replacement_path('cpp')),
-                            "[Default (Java)] {}".format(
-                                get_default_replacement_path('java')))
-                        )
+    # Deleted functionality
+    parser.add_argument('--replacement', help=argparse.SUPPRESS)
 
     parser.add_argument("--parallel",
                         action="store_true",
@@ -348,6 +332,12 @@ def main(prog, args):
                         )
 
     args = parser.parse_args(args)
+
+    if args.replacement is not None:
+        logging.error(with_color("Sorry! --replacement argument no longer exists"
+                                 " and you can only use --template."
+                                 " See the official document for details.", Fore.LIGHTRED_EX))
+        raise DeletedFunctionalityError
 
     try:
         import AccountInformation  # noqa
@@ -373,8 +363,6 @@ def main(prog, args):
                     args.contest_id,
                     args.workspace,
                     decide_template_path(args.lang, config, args.template),
-                    args.replacement if args.replacement is not None else get_default_replacement_path(
-                        args.lang),
                     args.lang,
                     args.parallel,
                     config
