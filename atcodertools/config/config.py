@@ -2,8 +2,8 @@ from typing import TextIO
 
 import toml
 
-from atcodertools.codegen.code_style_config import CodeStyleConfig
-from atcodertools.tools.postprocess_config import PostprocessConfig
+from atcodertools.config.code_style_config import CodeStyleConfig
+from atcodertools.config.postprocess_config import PostprocessConfig
 
 
 class Config:

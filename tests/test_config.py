@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, CodeStyleConfigInitError, \
+from atcodertools.config.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, CodeStyleConfigInitError, \
     INDENT_TYPE_TAB
 from atcodertools.config.config import Config
 

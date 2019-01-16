@@ -1,6 +1,6 @@
 from typing import Dict, Any, Optional
 
-from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.config.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern, \

@@ -4,7 +4,7 @@ import tempfile
 import unittest
 
 from atcodertools.codegen.code_generators import cpp, java
-from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.config.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
