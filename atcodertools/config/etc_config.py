@@ -1,10 +1,10 @@
 class EtcConfig:
 
     def __init__(self,
-                 without_login: str = False,
-                 parallel: bool = False,
+                 download_without_login: str = False,
+                 parallel_download: bool = False,
                  save_no_session_cache: bool = False,
                  ):
-        self.without_login = without_login
-        self.parallel = parallel
+        self.download_without_login = download_without_login
+        self.parallel_download = parallel_download
         self.save_no_session_cache = save_no_session_cache

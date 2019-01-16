@@ -25,6 +25,7 @@ from atcodertools.fileutils.create_contest_file import create_examples, \
 from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
     MultiplePredictionResultsError, predict_format
+from atcodertools.tools import get_default_config_path
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.templates import get_default_template_path
 from atcodertools.tools.utils import with_color
@@ -201,7 +202,7 @@ def prepare_contest(atcoder_client: AtCoderClient,
 
     output_splitter()
 
-    if config.etc_config.parallel:
+    if config.etc_config.parallel_download:
         thread_pool = Pool(processes=cpu_count())
         thread_pool.map(func, tasks)
     else:
@@ -226,9 +227,6 @@ DEFAULT_LANG = "cpp"
 USER_CONFIG_PATH = os.path.join(
     expanduser("~"), ".atcodertools.toml")
 
-DEFAULT_CONFIG_PATH = os.path.abspath(
-    os.path.join(script_dir_path, "./atcodertools-default.toml"))
-
 
 def get_config(args: argparse.Namespace) -> Config:
     def _load(path: str) -> Config:
@@ -242,7 +240,7 @@ def get_config(args: argparse.Namespace) -> Config:
     if os.path.exists(USER_CONFIG_PATH):
         return _load(USER_CONFIG_PATH)
 
-    return _load(DEFAULT_CONFIG_PATH)
+    return _load(get_default_config_path())
 
 
 class DeletedFunctionalityError(Exception):
@@ -295,7 +293,7 @@ def main(prog, args):
                         help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
                             USER_CONFIG_PATH),
                             "[Default (Secondary)] {}\n".format(
-                                DEFAULT_CONFIG_PATH))
+                                get_default_config_path()))
                         )
 
     args = parser.parse_args(args)
@@ -316,7 +314,7 @@ def main(prog, args):
         pass
 
     client = AtCoderClient()
-    if not config.etc_config.without_login:
+    if not config.etc_config.download_without_login:
         try:
             client.login(save_session_cache=not config.etc_config.save_no_session_cache)
             logging.info("Login successful.")

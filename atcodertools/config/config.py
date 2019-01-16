@@ -41,16 +41,14 @@ class Config:
         etc_config_dic = config_dic.get('etc', {})
 
         if args:
-            code_style_config_dic = merge_dict(code_style_config_dic, {
-                "template_file": args.template,
-                "workspace_dir": args.workspace,
-                "lang": args.lang,
-            })
-            etc_config_dic = merge_dict(etc_config_dic, {
-                "without_login": args.without_login,
-                "parallel": args.parallel,
-                "save_no_session_cache": args.save_no_session_cache,
-            })
+            code_style_config_dic = merge_dict(code_style_config_dic,
+                                               dict(template_file=args.template,
+                                                    workspace_dir=args.workspace,
+                                                    lang=args.lang))
+            etc_config_dic = merge_dict(etc_config_dic,
+                                        dict(download_without_login=args.without_login,
+                                             parallel_download=args.parallel,
+                                             save_no_session_cache=args.save_no_session_cache))
 
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
