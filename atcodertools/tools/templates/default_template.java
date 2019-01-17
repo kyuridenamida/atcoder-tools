@@ -1,3 +1,5 @@
+package atcodertools.tools.templates;
+
 import java.io.*;
 import java.util.*;
 

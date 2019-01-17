@@ -1,8 +1,9 @@
 import importlib.machinery as imm
 import os
+from os.path import expanduser
 from typing import Optional
-
 from atcodertools.fileutils.normalize import normalize_path
+from atcodertools.tools.templates import get_default_template_path
 
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
@@ -12,6 +13,10 @@ class CodeStyleConfigInitError(Exception):
     pass
 
 
+DEFAULT_WORKSPACE_DIR_PATH = os.path.join(expanduser("~"), "atcoder-workspace")
+SUPPORTED_LANGUAGES = ["cpp", "java"]
+
+
 class CodeStyleConfig:
 
     def __init__(self,
@@ -19,6 +24,8 @@ class CodeStyleConfig:
                  indent_width: int = 4,
                  code_generator_file: Optional[str] = None,
                  template_file: Optional[str] = None,
+                 workspace_dir: Optional[str] = None,
+                 lang: str = "cpp",
                  ):
         code_generator_file = normalize_path(code_generator_file)
         template_file = normalize_path(template_file)
@@ -41,9 +48,12 @@ class CodeStyleConfig:
                     template_file)
             )
 
+        if lang and lang not in SUPPORTED_LANGUAGES:
+            raise CodeStyleConfigInitError(
+                "language must be one of {}".format(SUPPORTED_LANGUAGES))
+
         self.indent_type = indent_type
         self.indent_width = indent_width
-        self.code_generator = None
 
         if code_generator_file is not None:
             try:
@@ -53,7 +63,20 @@ class CodeStyleConfig:
             except AttributeError as e:
                 raise CodeStyleConfigInitError(e, "Error while loading {}".format(
                     code_generator_file))
-        self.template_file = template_file
+        else:
+            assert lang is not None
+            if lang == "cpp":
+                from atcodertools.codegen.code_generators import cpp
+                self.code_generator = cpp.main
+            else:
+                from atcodertools.codegen.code_generators import java
+                self.code_generator = java.main
+
+        self.template_file = normalize_path(
+            template_file or get_default_template_path(lang))
+        self.workspace_dir = normalize_path(
+            workspace_dir or DEFAULT_WORKSPACE_DIR_PATH)
+        self.lang = lang
 
     def indent(self, depth):
         if self.indent_type == INDENT_TYPE_SPACE:
