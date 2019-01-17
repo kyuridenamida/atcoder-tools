@@ -1,5 +1,5 @@
-import os
+import pathlib
 
 
 def get_default_config_path():
-    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "atcodertools-default.toml")
+    return pathlib.Path(pathlib.Path(__file__).parent, "atcodertools-default.toml").resolve()
