@@ -1,7 +1,7 @@
-import pathlib
+import os
 
-DEFAULT_TEMPLATE_DIR_PATH = pathlib.Path(__file__).parent
+DEFAULT_TEMPLATE_DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
-def get_default_template_path(lang: str) -> str:
-    return str(DEFAULT_TEMPLATE_DIR_PATH / "./default_template.{}".format(lang))
+def get_default_template_path(lang: str):
+    return os.path.abspath(os.path.join(DEFAULT_TEMPLATE_DIR_PATH, "default_template.{}".format(lang)))
