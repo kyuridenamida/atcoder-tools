@@ -1,6 +1,7 @@
 # Change Log
 
-## 1.1.0 / 2018-01-18
+## 1.1.0 / 2018-01-18 
+This version includes a breaking change. Deleting --replacement parameter requires some changes in your template. See [#79](https://github.com/kyuridenamida/atcoder-tools/pull/79).
 - [#80](https://github.com/kyuridenamida/atcoder-tools/pull/80) Anything configurable from command line is configurable from toml
 - [#79](https://github.com/kyuridenamida/atcoder-tools/pull/79) Delete --replacement and use template for both failure and success instead 
 - [#78](https://github.com/kyuridenamida/atcoder-tools/pull/78) Better default C++ template with move semantics
