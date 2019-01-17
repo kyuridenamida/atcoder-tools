@@ -8,12 +8,11 @@ from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
 
 
-def merge_dict(org_dic: Dict[str, Any], dic: Dict[str, Any]):
-    for k, v in dic.items():
-        if v is not None:
-            org_dic[k] = v
-
-    return org_dic
+def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
+    return {
+        **target_dic,
+        **dict((k, v) for k, v in update_dic.items() if v is not None)
+    }
 
 
 class Config:
@@ -41,11 +40,11 @@ class Config:
         etc_config_dic = config_dic.get('etc', {})
 
         if args:
-            code_style_config_dic = merge_dict(code_style_config_dic,
+            code_style_config_dic = _update_config_dict(code_style_config_dic,
                                                dict(template_file=args.template,
                                                     workspace_dir=args.workspace,
                                                     lang=args.lang))
-            etc_config_dic = merge_dict(etc_config_dic,
+            etc_config_dic = _update_config_dict(etc_config_dic,
                                         dict(download_without_login=args.without_login,
                                              parallel_download=args.parallel,
                                              save_no_session_cache=args.save_no_session_cache))
