@@ -8,9 +8,12 @@ Python 3.5 で動作する [AtCoder](http://atcoder.jp/) からサンプル入�
 
 このツールには次のような機能があります。
 - AtCoderへのログイン，入出力例データなどの抽出
-- 枝刈り探索による高精度・高速な入力解析 (ARC、ABC、AGCについては約9割ほど)
-- 解析結果を用いたテンプレートコードの自動生成(C++, Java)
+- 枝刈り探索による高精度・高速な入力フォーマット解析 (ARC、ABC、AGCについては約9割ほど)
+- 問題文中に含まれるMOD値やYES/NO文字列等の定数値抽出
+- 入力フォーマット解析結果や抽出した定数値を用いたテンプレートコードの自動生成(C++, Java)
+    - カスタムテンプレートに対応
     - 他言語対応のためのコントリビューション(≒中間形式からコードに変換する部分のPR)を募集中です!
+- コード提出機能
 
 ## How to install
 `pip3 install atcoder-tools`
@@ -142,11 +145,11 @@ optional arguments:
 
 ```$xslt
 [codestyle]
-indent_type = 'space' # 'tab' or 'space'
-indent_width = 4
+indent_type='space' # 'tab' or 'space'
+indent_width=4
 template_file='~/my_template.cpp'
-workspace_dir = '~/atcoder-workspace/'
-lang = 'cpp' # 'cpp' or 'java' (Currently)
+workspace_dir='~/atcoder-workspace/'
+lang='cpp' # 'cpp' or 'java' (Currently)
 [postprocess]
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
