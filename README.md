@@ -147,10 +147,11 @@ indent_width = 4
 template_file='~/my_template.cpp'
 workspace_dir = '~/atcoder-workspace/'
 lang = 'cpp' # 'cpp' or 'java' (Currently)
+code_generator_file="~/custom_code_generator.py"
+
 [postprocess]
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
-code_generator_file="~/custom_code_generator.py"
 
 [etc]
 download_without_login=false
