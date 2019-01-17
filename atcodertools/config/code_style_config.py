@@ -8,6 +8,8 @@ from atcodertools.tools.templates import get_default_template_path
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
 
+script_dir_path = os.path.dirname(os.path.abspath(__file__))
+
 
 class CodeStyleConfigInitError(Exception):
     pass
