@@ -1,6 +1,6 @@
 from typing import Optional
 
-from atcodertools.config.code_style_config import CodeStyleConfig
+from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.fmtprediction.models.format import Format
 from atcodertools.fmtprediction.models.variable import Variable

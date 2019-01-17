@@ -3,7 +3,7 @@ from typing import TextIO, Dict, Any, Optional
 
 import toml
 
-from atcodertools.config.code_style_config import CodeStyleConfig
+from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
 

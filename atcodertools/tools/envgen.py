@@ -16,7 +16,7 @@ from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.config.code_style_config import DEFAULT_WORKSPACE_DIR_PATH, SUPPORTED_LANGUAGES
+from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH, SUPPORTED_LANGUAGES
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \

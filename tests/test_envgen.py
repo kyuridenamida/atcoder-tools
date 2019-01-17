@@ -6,7 +6,7 @@ import unittest
 from os.path import relpath
 
 from atcodertools.client.atcoder import AtCoderClient
-from atcodertools.config.code_style_config import CodeStyleConfig
+from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.config import Config
 from atcodertools.tools.envgen import prepare_contest, main
 
