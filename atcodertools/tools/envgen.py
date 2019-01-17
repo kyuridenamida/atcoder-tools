@@ -29,7 +29,6 @@ from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.templates import get_default_template_path
 from atcodertools.tools.utils import with_color
 
-script_dir_path = os.path.dirname(os.path.abspath(__file__))
 
 fmt = "%(asctime)s %(levelname)s: %(message)s"
 logging.basicConfig(level=logging.INFO, format=fmt)
