@@ -80,10 +80,10 @@ def run_program(exec_file: str, input_file: str, timeout_sec: int) -> ExecResult
             [exec_file, ""], stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec)
         elapsed_sec += time.time()
         return ExecResult(ExecStatus.NORMAL, out_data, elapsed_sec)
-    except subprocess.TimeoutExpired:
-        return ExecResult(ExecStatus.TLE)
-    except subprocess.CalledProcessError:
-        return ExecResult(ExecStatus.RE)
+    except subprocess.TimeoutExpired as e:
+        return ExecResult(ExecStatus.TLE, e.stdout)
+    except subprocess.CalledProcessError as e:
+        return ExecResult(ExecStatus.RE, e.stdout)
 
 
 def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -> str:
@@ -101,13 +101,11 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     with open(output_file, "r") as f:
         append(f.read(), end='')
 
-    if exec_res.status == ExecStatus.NORMAL:
-        append("[Received]")
-        if exec_res.status == ExecStatus.NORMAL:
-            append(exec_res.output, end='')
-    else:
-        append("[Log]")
-        append(exec_res.status.name)
+    append("[Received]")
+    append(exec_res.output, end='')
+    if exec_res.status != ExecStatus.NORMAL:
+        append(with_color("Aborted ({})".format(
+            exec_res.status.name), Fore.LIGHTYELLOW_EX))
     return res
 
 
