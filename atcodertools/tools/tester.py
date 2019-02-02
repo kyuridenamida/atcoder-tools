@@ -104,18 +104,18 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
         nonlocal res
         res += text + end
 
-    append("[Input]")
+    append(with_color("[Input]", Fore.LIGHTMAGENTA_EX))
     with open(input_file, "r") as f:
         append(f.read(), end='')
 
-    append("[Expected]")
+    append(with_color("[Expected]", Fore.LIGHTMAGENTA_EX))
     with open(output_file, "r") as f:
         append(f.read(), end='')
 
-    append("[Received]")
+    append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
     append(exec_res.output, end='')
     if exec_res.status != ExecStatus.NORMAL:
-        append(with_color("Aborted ({})".format(
+        append(with_color("Aborted ({})\n".format(
             exec_res.status.name), Fore.LIGHTYELLOW_EX))
 
     if len(exec_res.stderr) > 0:
