@@ -1,28 +1,12 @@
-use io::*;
 use std::*;
 
-{% if mod %}
-const MOD: i64 = {{ mod }};
-{% endif %}
-{% if yes_str %}
-const YES: String = "{{ yes_str }}";
-{% endif %}
-{% if no_str %}
-const NO: String = "{{ no_str }}";
-{% endif %}
-{% if prediction_success %}
-fn solve({{ formal_arguments }}) {
+fn solve(${formal_arguments}) {
 
 }
-{% endif %}
 
 fn main() {
-    {% if prediction_success %}
-    {{input_part}}
-    solve({{ actual_arguments }});
-    {% else %}
-    // Failed to predict input format
-    {% endif %}
+    ${input_part}
+    solve(${actual_arguments});
 }
 
 pub mod io {

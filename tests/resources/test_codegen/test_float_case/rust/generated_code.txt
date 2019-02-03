@@ -1,28 +1,29 @@
-use io::*;
 use std::*;
 
-{% if mod %}
-const MOD: i64 = {{ mod }};
-{% endif %}
-{% if yes_str %}
-const YES: String = "{{ yes_str }}";
-{% endif %}
-{% if no_str %}
-const NO: String = "{{ no_str }}";
-{% endif %}
-{% if prediction_success %}
-fn solve({{ formal_arguments }}) {
+fn solve(L: i64, N: i64, M: i64, K: Vec<f64>, A: Vec<i64>, S: Vec<f64>) {
 
 }
-{% endif %}
 
 fn main() {
-    {% if prediction_success %}
-    {{input_part}}
-    solve({{ actual_arguments }});
-    {% else %}
-    // Failed to predict input format
-    {% endif %}
+    let con = read_string();
+    let mut scanner = Scanner::new(&con);
+    let mut L: i64;
+    L = scanner.next();
+    let mut N: i64;
+    N = scanner.next();
+    let mut M: i64;
+    M = scanner.next();
+    let mut K: Vec<f64> = vec![0f64; (L) as usize];
+    for i in 0..(L) as usize {
+        K[i] = scanner.next();
+    }
+    let mut A: Vec<i64> = vec![0i64; (N) as usize];
+    let mut S: Vec<f64> = vec![0f64; (N) as usize];
+    for i in 0..(N) as usize {
+        A[i] = scanner.next();
+        S[i] = scanner.next();
+    }
+    solve(L, N, M, K, A, S);
 }
 
 pub mod io {
