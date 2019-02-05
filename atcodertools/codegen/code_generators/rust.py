@@ -26,7 +26,8 @@ def _loop_header(var: Variable, for_second_index: bool):
 class RustCodeGenerator(CppCodeGenerator):
 
     def _input_part(self):
-        lines = ["let con = read_string();", "let mut scanner = Scanner::new(&con);"]
+        lines = ["let con = read_string();",
+                 "let mut scanner = Scanner::new(&con);"]
         for pattern in self._format.sequence:
             lines += self._render_pattern(pattern)
         return "\n{indent}".format(indent=self._indent(0)).join(lines)
