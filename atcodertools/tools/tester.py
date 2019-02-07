@@ -45,6 +45,8 @@ class ExecResult:
     def is_correct_output(self, answer_text):
         return self.status == ExecStatus.NORMAL and answer_text == self.output
 
+    def has_stderr(self):
+        return len(self.stderr) > 0
 
 def is_executable_file(file_name):
     return os.access(file_name, os.X_OK) and Path(file_name).is_file() \
@@ -118,7 +120,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
         append(with_color("Aborted ({})\n".format(
             exec_res.status.name), Fore.LIGHTYELLOW_EX))
 
-    if len(exec_res.stderr) > 0:
+    if exec_res.has_stderr():
         append(with_color("[Error]", Fore.LIGHTYELLOW_EX))
         append(exec_res.stderr, end='')
     return res
@@ -136,16 +138,21 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
             answer_text = f.read()
 
         is_correct = exec_res.is_correct_output(answer_text)
-        if is_correct:
+        passed = is_correct and not exec_res.has_stderr()
+
+        if passed:
             message = "{} {elapsed} ms".format(
                 with_color("PASSED", Fore.LIGHTGREEN_EX),
                 elapsed=exec_res.elapsed_ms)
             success_count += 1
         else:
-            if exec_res.status == ExecStatus.NORMAL:
-                message = with_color("WA", Fore.LIGHTRED_EX)
+            if is_correct:
+                message = with_color("CORRECT but with stderr (Please remove stderr!)", Fore.LIGHTYELLOW_EX)
             else:
-                message = with_color(exec_res.status.name, Fore.LIGHTYELLOW_EX)
+                if exec_res.status == ExecStatus.NORMAL:
+                    message = with_color("WA", Fore.LIGHTRED_EX)
+                else:
+                    message = with_color(exec_res.status.name, Fore.LIGHTYELLOW_EX)
 
         print("# {case_name} ... {message}".format(
             case_name=os.path.basename(in_sample_file),
@@ -153,7 +160,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
         ))
 
         # Output details for incorrect results.
-        if not is_correct:
+        if not passed:
             print('{}\n'.format(build_details_str(
                 exec_res, in_sample_file, out_sample_file)))
             if knock_out:
