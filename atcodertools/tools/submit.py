@@ -99,7 +99,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                                                  metadata.problem.contest.get_submissions_url(submission)), Fore.LIGHTRED_EX))
                     return False
 
-        code_path = os.path.join(args.dir, metadata.code_filename)
+        code_path = args.code or os.path.join(args.dir, metadata.code_filename)
         with open(code_path, 'r') as f:
             source = f.read()
         detailed_lang = infer_detailed_lang(metadata.lang)
