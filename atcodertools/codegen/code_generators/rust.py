@@ -58,7 +58,7 @@ class RustCodeGenerator(CppCodeGenerator):
 
     def _formal_arguments(self):
         """
-            :return the string form of formal arguments e.g. "int N, int K, std::vector<int> a"
+            :return the string form of formal arguments e.g. "N: i64, K: i64, a: Vec<i64>"
         """
         return ", ".join([
             "{name}: {decl_type}".format(
