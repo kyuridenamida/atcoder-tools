@@ -48,6 +48,7 @@ class ExecResult:
     def has_stderr(self):
         return len(self.stderr) > 0
 
+
 def is_executable_file(file_name):
     return os.access(file_name, os.X_OK) and Path(file_name).is_file() \
         and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
