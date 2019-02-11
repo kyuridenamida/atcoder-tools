@@ -48,7 +48,7 @@ $ atcoder-tools test
 `--without-login` 引数を指定するとログインなしでデータをダウンロードできます(一般公開されているコンテストのみ)。
 
 ```
-$ atcoder-tool gen  [contest_id] --without-login
+$ atcoder-tools gen  [contest_id] --without-login
 ```
 
 ### gen の詳細
