@@ -9,7 +9,7 @@ install:
   - pip install .
   - pip install flake8 autopep8
   - pip install codecov nose
-  - sudo apt-get update && sudo apt-get install rustc gcc python2.7 python3.4
+  - sudo apt-get update && sudo apt-get install rustc gcc openjdk-8-jdk
 
 script:
   - flake8 --ignore=E501, W605

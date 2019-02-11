@@ -3,11 +3,19 @@ import sys
 import tempfile
 import unittest
 
+from atcodertools.client.models.problem_content import ProblemContent
+from atcodertools.client.models.sample import Sample
+from atcodertools.config.postprocess_config import _run_command
+from atcodertools.fileutils.create_contest_file import create_code
+from atcodertools.fmtprediction.predict_format import predict_format
+
 from atcodertools.codegen.code_generators import cpp, java
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
+from atcodertools.tools.templates import get_default_template_path
+from atcodertools.tools.tester import run_program
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 from tests.utils.gzip_controller import make_tst_data_controller
 
@@ -18,7 +26,7 @@ LANGS = ["cpp", "java"]
 
 
 def load_generated_code(py_test_name, lang):
-    with open(os.path.join(RESOURCE_DIR, py_test_name, lang, "generated_code.txt"), 'r') as f:
+    with open(os.path.join(RESOURCE_DIR, py_test_name, lang, "generated_code.cpp"), 'r') as f:
         return f.read()
 
 
@@ -98,6 +106,66 @@ class TestCodeGenerator(unittest.TestCase):
                          _trim(render(template, x=0, y=2)))
         self.assertEqual(_load_text_file("answer_x_none_y_2.txt"),
                          _trim(render(template, x=None, y=2)))
+
+    def test_default_code_generators_and_templates(self):
+        UNIT_TEST_RESOURCE_DIR = os.path.join(
+            RESOURCE_DIR, "test_default_code_generators_and_templates")
+
+        def _load_text_file(filename):
+            with open(os.path.join(UNIT_TEST_RESOURCE_DIR, filename), 'r') as f:
+                return f.read()
+
+        input_file_path = os.path.join(UNIT_TEST_RESOURCE_DIR, "input.txt")
+        expected_output = _load_text_file("output.txt")
+        pred_result = predict_format(
+            ProblemContent(_load_text_file("format.txt"), [Sample(_load_text_file("input.txt"), None)]))
+        code_file = os.path.join(self.temp_dir, "code.cpp")
+        exec_file = os.path.join(self.temp_dir, "a.out")
+        compile_cmd = "g++ {} -o {} -std=c++14".format(code_file, exec_file)
+
+        # Test compile with default templates
+
+        with open(get_default_template_path("cpp")) as f:
+            default_template = f.read()
+
+        self._test(
+            pred_result.format,
+            default_template,
+            _load_text_file("cpp/default_generated_code.cpp"),
+            input_file_path,
+            compile_cmd,
+            code_file,
+            exec_file,
+        )
+
+        # Test compile with custom templates having echo output of input
+
+        exec_result = self._test(
+            pred_result.format,
+            _load_text_file("cpp/template.cpp"),
+            _load_text_file("cpp/generated_code.cpp"),
+            input_file_path,
+            compile_cmd,
+            code_file,
+            exec_file,
+        )
+        self.assertEqual(expected_output, exec_result.output)
+
+    def _test(self, format, template, expected_generated_code, input_file, compile_cmd, code_file, exec_file):
+        args = CodeGenArgs(
+            template=template,
+            format_=format,
+            constants=ProblemConstantSet(123, "yes", "NO"),
+            config=CodeStyleConfig()
+        )
+
+        code = cpp.main(args)
+        self.assertEqual(expected_generated_code, code)
+        create_code(code, code_file)
+        print(_run_command(compile_cmd, self.temp_dir))
+        exec_result = run_program(exec_file, input_file, 2)
+        self.assertEqual(exec_result.status.NORMAL, exec_result.status)
+        return exec_result
 
     def verify(self,
                response: Response,
