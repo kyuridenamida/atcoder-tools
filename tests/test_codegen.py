@@ -128,7 +128,7 @@ class TestCodeGenerator(unittest.TestCase):
         with open(get_default_template_path("cpp")) as f:
             default_template = f.read()
 
-        self._test(
+        self._compile_and_run(
             pred_result.format,
             default_template,
             _load_text_file("cpp/default_generated_code.cpp"),
@@ -140,7 +140,7 @@ class TestCodeGenerator(unittest.TestCase):
 
         # Test compile with custom templates having echo output of input
 
-        exec_result = self._test(
+        exec_result = self._compile_and_run(
             pred_result.format,
             _load_text_file("cpp/template.cpp"),
             _load_text_file("cpp/generated_code.cpp"),
@@ -151,7 +151,7 @@ class TestCodeGenerator(unittest.TestCase):
         )
         self.assertEqual(expected_output, exec_result.output)
 
-    def _test(self, format, template, expected_generated_code, input_file, compile_cmd, code_file, exec_file):
+    def _compile_and_run(self, format, template, expected_generated_code, input_file, compile_cmd, code_file, exec_file):
         args = CodeGenArgs(
             template=template,
             format_=format,
@@ -162,7 +162,7 @@ class TestCodeGenerator(unittest.TestCase):
         code = cpp.main(args)
         self.assertEqual(expected_generated_code, code)
         create_code(code, code_file)
-        print(_run_command(compile_cmd, self.temp_dir))
+        print(_run_command(compile_cmd, self.temp_dir))  # TODO: stop calling private function
         exec_result = run_program(exec_file, input_file, 2)
         self.assertEqual(exec_result.status.NORMAL, exec_result.status)
         return exec_result
