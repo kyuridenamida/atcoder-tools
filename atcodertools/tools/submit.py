@@ -5,8 +5,6 @@ import sys
 import os
 
 from colorama import Fore
-
-from atcodertools.common.language import Language
 from atcodertools.tools.utils import with_color
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
@@ -95,7 +93,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
         code_path = args.code or os.path.join(args.dir, metadata.code_filename)
         with open(code_path, 'r') as f:
             source = f.read()
-        logging.info("Submitting {} as {}".format(code_path, metadata.lang.name))
+        logging.info(
+            "Submitting {} as {}".format(code_path, metadata.lang.name))
         submission = client.submit_source_code(
             metadata.problem.contest, metadata.problem, metadata.lang, source)
         logging.info("{} {}".format(

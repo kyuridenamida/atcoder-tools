@@ -31,14 +31,15 @@ class Language:
         for l in ALL_LANGUAGES:
             if l.name == name:
                 return l
-        raise LanguageNotFoundError("No language support for '{}'".format(ALL_LANGUAGE_NAMES))
+        raise LanguageNotFoundError(
+            "No language support for '{}'".format(ALL_LANGUAGE_NAMES))
 
 
 CPP = Language(
     name="cpp",
     display_name="C++",
     extension="cpp",
-    submission_lang_pattern=re.compile(".*C\+\+14 \(GCC.*"),
+    submission_lang_pattern=re.compile(".*C\\+\\+14 \\(GCC.*"),
     default_code_generator=cpp.main,
     default_template_path=get_default_template_path('cpp'),
 )

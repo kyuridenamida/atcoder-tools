@@ -114,7 +114,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
     try:
         prediction_result = predict_format(content)
-        emit_info(with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
+        emit_info(
+            with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
         prediction_result = FormatPredictionResult.empty_result()
         if isinstance(e, NoPredictionResultError):
