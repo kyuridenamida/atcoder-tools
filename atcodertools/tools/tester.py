@@ -148,12 +148,14 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
             success_count += 1
         else:
             if is_correct:
-                message = with_color("CORRECT but with stderr (Please remove stderr!)", Fore.LIGHTYELLOW_EX)
+                message = with_color(
+                    "CORRECT but with stderr (Please remove stderr!)", Fore.LIGHTYELLOW_EX)
             else:
                 if exec_res.status == ExecStatus.NORMAL:
                     message = with_color("WA", Fore.LIGHTRED_EX)
                 else:
-                    message = with_color(exec_res.status.name, Fore.LIGHTYELLOW_EX)
+                    message = with_color(
+                        exec_res.status.name, Fore.LIGHTYELLOW_EX)
 
         print("# {case_name} ... {message}".format(
             case_name=os.path.basename(in_sample_file),
