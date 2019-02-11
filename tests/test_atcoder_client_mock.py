@@ -6,6 +6,7 @@ from typing import Dict
 from atcodertools.client.atcoder import AtCoderClient
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
+from atcodertools.common.language import CPP
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -80,10 +81,12 @@ class TestAtCoderClientMock(unittest.TestCase):
             {contest.get_submit_url(): fake_resp("submit/after_post.html")}
         )
 
-        submission = self.client.submit_source_code(
-            contest, problem, "C++14 (GCC 5.4.1)", "x")
-        self.assertEqual(3905485, submission.submission_id)
-        self.assertEqual("arc001_1", submission.problem_id)
+        # test two patterns (str, Language object) for parameter lang
+        for lang in [CPP, "C++14 (GCC 5.4.1)"]:
+            submission = self.client.submit_source_code(
+                contest, problem, lang, "x")
+            self.assertEqual(3905485, submission.submission_id)
+            self.assertEqual("arc001_1", submission.problem_id)
 
     @restore_client_after_run
     def test_login_success(self):
