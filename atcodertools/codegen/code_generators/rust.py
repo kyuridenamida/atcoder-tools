@@ -136,9 +136,6 @@ class RustCodeGenerator(CppCodeGenerator):
 
         return lines
 
-    def _indent(self, depth):
-        return "    " * (depth + 1)
-
 
 def main(args: CodeGenArgs) -> str:
     code_parameters = RustCodeGenerator(
