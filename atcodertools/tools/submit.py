@@ -19,6 +19,8 @@ def infer_detailed_lang(lang: str):
         return "Java8 (OpenJDK 1.8.0)"
     if lang == "cpp":
         return "C++14 (GCC 5.4.1)"
+    if lang == "rust":
+        return "Rust (1.15.1)"
     raise NotImplementedError
 
 
