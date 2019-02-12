@@ -9,7 +9,10 @@ install:
   - pip install .
   - pip install flake8 autopep8
   - pip install codecov nose
-  - sudo apt-get update && sudo apt-get install rustc g++-4.9 openjdk-8-jdk
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update
+  - sudo apt-get install rustc g++-4.9 openjdk-8-jdk
+  - sudo ln -f -s /usr/bin/g++-4.9 /usr/bin/g++
 
 script:
   - flake8 --ignore=E501, W605
