@@ -26,7 +26,7 @@ LANGS = ["cpp", "java"]
 
 
 def load_generated_code(py_test_name, lang):
-    with open(os.path.join(RESOURCE_DIR, py_test_name, lang, "generated_code.cpp"), 'r') as f:
+    with open(os.path.join(RESOURCE_DIR, py_test_name, lang, "generated_code.txt"), 'r') as f:
         return f.read()
 
 
