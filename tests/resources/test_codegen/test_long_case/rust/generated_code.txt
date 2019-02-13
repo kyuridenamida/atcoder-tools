@@ -1,0 +1,86 @@
+use std::*;
+
+fn solve(H: i64, W: i64, K: i64, sr: i64, sc: i64, s: Vec<String>, N: i64, fr: Vec<i64>, fc: Vec<i64>, F: Vec<i64>, D: Vec<i64>) {
+
+}
+
+fn main() {
+    let con = read_string();
+    let mut scanner = Scanner::new(&con);
+    let mut H: i64;
+    H = scanner.next();
+    let mut W: i64;
+    W = scanner.next();
+    let mut K: i64;
+    K = scanner.next();
+    let mut sr: i64;
+    sr = scanner.next();
+    let mut sc: i64;
+    sc = scanner.next();
+    let mut s: Vec<String> = vec![String::new(); (H) as usize];
+    for i in 0..(H) as usize {
+        s[i] = scanner.next();
+    }
+    let mut N: i64;
+    N = scanner.next();
+    let mut fr: Vec<i64> = vec![0i64; (N) as usize];
+    let mut fc: Vec<i64> = vec![0i64; (N) as usize];
+    let mut F: Vec<i64> = vec![0i64; (N) as usize];
+    let mut D: Vec<i64> = vec![0i64; (N) as usize];
+    for i in 0..(N) as usize {
+        fr[i] = scanner.next();
+        fc[i] = scanner.next();
+        F[i] = scanner.next();
+        D[i] = scanner.next();
+    }
+    solve(H, W, K, sr, sc, s, N, fr, fc, F, D);
+}
+
+pub mod io {
+    use std;
+    use std::str::FromStr;
+
+    pub struct Scanner<'a> {
+        iter: std::str::SplitWhitespace<'a>,
+    }
+
+    impl<'a> Scanner<'a> {
+        pub fn new(s: &'a str) -> Scanner<'a> {
+            Scanner {
+                iter: s.split_whitespace(),
+            }
+        }
+
+        pub fn next<T: FromStr>(&mut self) -> T {
+            let s = self.iter.next().unwrap();
+            if let Ok(v) = s.parse::<T>() {
+                v
+            } else {
+                panic!("Parse error")
+            }
+        }
+
+        pub fn next_vec_len<T: FromStr>(&mut self) -> Vec<T> {
+            let n: usize = self.next();
+            self.next_vec(n)
+        }
+
+        pub fn next_vec<T: FromStr>(&mut self, n: usize) -> Vec<T> {
+            (0..n).map(|_| self.next()).collect()
+        }
+    }
+
+    pub fn read_string() -> String {
+        use std::io::Read;
+
+        let mut s = String::new();
+        std::io::stdin().read_to_string(&mut s).unwrap();
+        s
+    }
+
+    pub fn read_line() -> String {
+        let mut s = String::new();
+        std::io::stdin().read_line(&mut s).unwrap();
+        s.trim_right().to_owned()
+    }
+}

@@ -53,5 +53,14 @@ JAVA = Language(
     default_template_path=get_default_template_path('java'),
 )
 
-ALL_LANGUAGES = [CPP, JAVA]
+RUST = Language(
+    name="rust",
+    display_name="Rust",
+    extension="rs",
+    submission_lang_pattern=re.compile(".*Rust \\(1.*"),
+    default_code_generator=java.main,
+    default_template_path=get_default_template_path('rust'),
+)
+
+ALL_LANGUAGES = [CPP, JAVA, RUST]
 ALL_LANGUAGE_NAMES = [lang.display_name for lang in ALL_LANGUAGES]
