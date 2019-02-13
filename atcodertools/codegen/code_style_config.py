@@ -71,7 +71,7 @@ class CodeStyleConfig:
             self.code_generator = lang.default_code_generator
 
         self.template_file = normalize_path(
-            template_file or get_default_template_path(lang))
+            template_file or lang.default_template_path)
         self.workspace_dir = normalize_path(
             workspace_dir or DEFAULT_WORKSPACE_DIR_PATH)
         self.lang = lang
