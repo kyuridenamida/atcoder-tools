@@ -23,6 +23,7 @@ void solve({{ formal_arguments }}){
         cout << endl;
     }
     assert(A.size() == N - 1);
+    assert(B.size() == N - 1);
     for(int i = 0 ; i < N - 1 ; i++){
         cout << A[i] << " " << B[i] << endl;
     }

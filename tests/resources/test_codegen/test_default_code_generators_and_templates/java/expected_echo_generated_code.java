@@ -45,6 +45,7 @@ class Main {
             System.out.println();
         }
         assert A.length == N - 1;
+        assert B.length == N - 1;
         for(int i = 0 ; i < N - 1 ; i++){
             System.out.println("" + A[i] + " " + B[i]);
         }

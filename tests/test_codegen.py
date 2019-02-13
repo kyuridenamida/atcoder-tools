@@ -119,18 +119,18 @@ class TestCodeGenerator(unittest.TestCase):
         def _full_path(filename):
             return os.path.join(RESOURCE_DIR, "test_default_code_generators_and_templates", filename)
 
-        input_file = _full_path("input.txt")
-        expected_output_file = _full_path("output.txt")
+        input_file = _full_path("echo_test_input.txt")
+        expected_output_file = _full_path("echo_test_output.txt")
         pred_result = predict_format(
             ProblemContent(
-                load_text_file(_full_path("format.txt")),
-                [Sample(load_text_file(_full_path("input.txt")), None)]))
+                load_text_file(_full_path("echo_test_format.txt")),
+                [Sample(load_text_file(_full_path("echo_test_input.txt")), None)]))
 
         for lang in ALL_LANGUAGES:
             expected_default_generated_code_file = _full_path(
-                os.path.join(lang.name, lang.source_code_name("default_generated_code")))
+                os.path.join(lang.name, lang.source_code_name("expected_default_generated_code")))
 
-            # Test compile with default templates
+            # 1. Compile test with default templates
 
             self._compile_and_run(
                 lang,
@@ -140,13 +140,13 @@ class TestCodeGenerator(unittest.TestCase):
                 input_file
             )
 
-            # Test compile with custom templates having echo output of input
+            # 2. Echo test, which tests custom templates having echo output of input
 
             exec_result = self._compile_and_run(
                 lang,
                 pred_result.format,
-                _full_path(os.path.join(lang.name, lang.source_code_name("template"))),
-                _full_path(os.path.join(lang.name, lang.source_code_name("generated_code"))),
+                _full_path(os.path.join(lang.name, lang.source_code_name("echo_template"))),
+                _full_path(os.path.join(lang.name, lang.source_code_name("expected_echo_generated_code"))),
                 input_file
             )
             self.assertEqual(load_text_file(expected_output_file), exec_result.output)
