@@ -15,8 +15,9 @@ from colorama import Fore
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
+from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH, SUPPORTED_LANGUAGES
+from atcodertools.common.language import ALL_LANGUAGES, CPP
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
@@ -26,9 +27,7 @@ from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
     MultiplePredictionResultsError, predict_format
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.models.metadata import Metadata
-from atcodertools.tools.templates import get_default_template_path
 from atcodertools.tools.utils import with_color
-
 
 fmt = "%(asctime)s %(levelname)s: %(message)s"
 logging.basicConfig(level=logging.INFO, format=fmt)
@@ -36,12 +35,6 @@ logging.basicConfig(level=logging.INFO, format=fmt)
 
 class BannedFileDetectedError(Exception):
     pass
-
-
-def extension(lang: str):
-    if lang == 'rust':
-        return 'rs'
-    return lang
 
 
 IN_EXAMPLE_FORMAT = "in_{}.txt"
@@ -102,7 +95,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
     code_file_path = os.path.join(
         problem_dir_path,
-        "main.{}".format(extension(lang)))
+        "main.{}".format(lang.extension))
 
     # If there is an existing code, just create backup
     if os.path.exists(code_file_path):
@@ -121,7 +114,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
     try:
         prediction_result = predict_format(content)
-        emit_info(with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
+        emit_info(
+            with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
         prediction_result = FormatPredictionResult.empty_result()
         if isinstance(e, NoPredictionResultError):
@@ -210,8 +204,6 @@ def prepare_contest(atcoder_client: AtCoderClient,
             contest_dir_path)
 
 
-DEFAULT_LANG = "cpp"
-
 USER_CONFIG_PATH = os.path.join(
     expanduser("~"), ".atcodertools.toml")
 
@@ -254,16 +246,16 @@ def main(prog, args):
 
     parser.add_argument("--lang",
                         help="Programming language of your template code, {}.\n"
-                        .format(" or ".join(SUPPORTED_LANGUAGES)) + "[Default] {}".format(DEFAULT_LANG))
+                        .format(" or ".join([lang.name for lang in ALL_LANGUAGES])) + "[Default] {}".format(CPP.name))
 
     parser.add_argument("--template",
-                        help="File path to your template code\n{0}{1}".format(
-                            "[Default (C++)] {}\n".format(
-                                get_default_template_path('cpp')),
-                            "[Default (Java)] {}".format(
-                                get_default_template_path('java')),
-                            "[Default (Rust)] {}".format(
-                                get_default_template_path('rust'))),
+                        help="File path to your template code\n{}".format(
+                            "\n".join(
+                                ["[Default ({dname})] {path}".format(
+                                    dname=lang.display_name,
+                                    path=lang.default_template_path
+                                ) for lang in ALL_LANGUAGES]
+                            ))
                         )
 
     # Deleted functionality

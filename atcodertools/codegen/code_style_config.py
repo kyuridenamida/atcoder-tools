@@ -2,8 +2,8 @@ import importlib.machinery as imm
 import os
 from os.path import expanduser
 from typing import Optional
+
 from atcodertools.fileutils.normalize import normalize_path
-from atcodertools.tools.templates import get_default_template_path
 
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
@@ -14,7 +14,6 @@ class CodeStyleConfigInitError(Exception):
 
 
 DEFAULT_WORKSPACE_DIR_PATH = os.path.join(expanduser("~"), "atcoder-workspace")
-SUPPORTED_LANGUAGES = ["cpp", "java", "rust"]
 
 
 class CodeStyleConfig:
@@ -27,8 +26,16 @@ class CodeStyleConfig:
                  workspace_dir: Optional[str] = None,
                  lang: str = "cpp",
                  ):
+        from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
+
         code_generator_file = normalize_path(code_generator_file)
         template_file = normalize_path(template_file)
+
+        try:
+            lang = Language.from_name(lang)
+        except LanguageNotFoundError:
+            raise CodeStyleConfigInitError(
+                "language must be one of {}".format(ALL_LANGUAGE_NAMES))
 
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
             raise CodeStyleConfigInitError(
@@ -48,10 +55,6 @@ class CodeStyleConfig:
                     template_file)
             )
 
-        if lang and lang not in SUPPORTED_LANGUAGES:
-            raise CodeStyleConfigInitError(
-                "language must be one of {}".format(SUPPORTED_LANGUAGES))
-
         self.indent_type = indent_type
         self.indent_width = indent_width
 
@@ -64,19 +67,10 @@ class CodeStyleConfig:
                 raise CodeStyleConfigInitError(e, "Error while loading {}".format(
                     code_generator_file))
         else:
-            assert lang is not None
-            if lang == "cpp":
-                from atcodertools.codegen.code_generators import cpp
-                self.code_generator = cpp.main
-            elif lang == "java":
-                from atcodertools.codegen.code_generators import java
-                self.code_generator = java.main
-            else:
-                from atcodertools.codegen.code_generators import rust
-                self.code_generator = rust.main
+            self.code_generator = lang.default_code_generator
 
         self.template_file = normalize_path(
-            template_file or get_default_template_path(lang))
+            template_file or lang.default_template_path)
         self.workspace_dir = normalize_path(
             workspace_dir or DEFAULT_WORKSPACE_DIR_PATH)
         self.lang = lang

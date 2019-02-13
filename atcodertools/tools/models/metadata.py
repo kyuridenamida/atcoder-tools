@@ -1,11 +1,12 @@
 import json
 
 from atcodertools.client.models.problem import Problem
+from atcodertools.common.language import Language
 
 
 class Metadata:
 
-    def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str, lang: str):
+    def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str, lang: Language):
         self.problem = problem
         self.code_filename = code_filename
         self.sample_in_pattern = sample_in_pattern
@@ -18,7 +19,7 @@ class Metadata:
             "code_filename": self.code_filename,
             "sample_in_pattern": self.sample_in_pattern,
             "sample_out_pattern": self.sample_out_pattern,
-            "lang": self.lang,
+            "lang": self.lang.name,
         }
 
     @classmethod
@@ -28,7 +29,7 @@ class Metadata:
             code_filename=dic["code_filename"],
             sample_in_pattern=dic["sample_in_pattern"],
             sample_out_pattern=dic["sample_out_pattern"],
-            lang=dic["lang"],
+            lang=Language.from_name(dic["lang"]),
         )
 
     @classmethod
