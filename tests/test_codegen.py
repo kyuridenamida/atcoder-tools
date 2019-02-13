@@ -5,7 +5,8 @@ import unittest
 
 from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.client.models.sample import Sample
-from atcodertools.config.postprocess_config import _run_command
+from atcodertools.executils.run_command import run_command
+from atcodertools.executils.run_program import run_program
 from atcodertools.fileutils.create_contest_file import create_code
 from atcodertools.fmtprediction.predict_format import predict_format
 
@@ -15,7 +16,6 @@ from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.tools.templates import get_default_template_path
-from atcodertools.tools.tester import run_program
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 from tests.utils.gzip_controller import make_tst_data_controller
 
@@ -168,7 +168,7 @@ class TestCodeGenerator(unittest.TestCase):
         code = cpp.main(args)
         self.assertEqual(expected_generated_code, code)
         create_code(code, code_file)
-        print(_run_command(compile_cmd, self.temp_dir))
+        print(run_command(compile_cmd, self.temp_dir))
         # TODO: stop calling private function
         exec_result = run_program(exec_file, input_file, 2)
         self.assertEqual(exec_result.status.NORMAL, exec_result.status)
