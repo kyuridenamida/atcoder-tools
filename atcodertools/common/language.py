@@ -27,6 +27,10 @@ class Language:
         self.default_code_generator = default_code_generator
         self.default_template_path = default_template_path
 
+    def source_code_name(self, name_without_extension: str) -> str:
+        # put extension to the name
+        return "{}.{}".format(name_without_extension, self.extension)
+
     @classmethod
     def from_name(cls, name: str):
         for l in ALL_LANGUAGES:

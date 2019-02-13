@@ -2,6 +2,7 @@ import os
 import sys
 import tempfile
 import unittest
+from typing import Tuple, List
 
 from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.client.models.sample import Sample
@@ -9,6 +10,7 @@ from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUS
 from atcodertools.executils.run_command import run_command
 from atcodertools.executils.run_program import run_program
 from atcodertools.fileutils.create_contest_file import create_code
+from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format
 
 from atcodertools.codegen.code_generators import cpp, java, rust
@@ -114,64 +116,87 @@ class TestCodeGenerator(unittest.TestCase):
                          _trim(render(template, x=None, y=2)))
 
     def test_default_code_generators_and_templates(self):
-        UNIT_TEST_RESOURCE_DIR = os.path.join(
-            RESOURCE_DIR, "test_default_code_generators_and_templates")
+        def _full_path(filename):
+            return os.path.join(RESOURCE_DIR, "test_default_code_generators_and_templates", filename)
 
-        def _load_text_file(filename):
-            with open(os.path.join(UNIT_TEST_RESOURCE_DIR, filename), 'r') as f:
-                return f.read()
-
-        input_file_path = os.path.join(UNIT_TEST_RESOURCE_DIR, "input.txt")
-        expected_output = _load_text_file("output.txt")
+        input_file = _full_path("input.txt")
+        expected_output_file = _full_path("output.txt")
         pred_result = predict_format(
-            ProblemContent(_load_text_file("format.txt"), [Sample(_load_text_file("input.txt"), None)]))
-        code_file = os.path.join(self.temp_dir, "code.cpp")
-        exec_file = os.path.join(self.temp_dir, "a.out")
-        compile_cmd = "g++ {} -o {} -std=c++14".format(code_file, exec_file)
+            ProblemContent(
+                load_text_file(_full_path("format.txt")),
+                [Sample(load_text_file(_full_path("input.txt")), None)]))
 
-        # Test compile with default templates
+        for lang in ALL_LANGUAGES:
+            expected_default_generated_code_file = _full_path(
+                os.path.join(lang.name, lang.source_code_name("default_generated_code")))
 
-        with open(get_default_template_path("cpp")) as f:
-            default_template = f.read()
+            # Test compile with default templates
 
-        self._compile_and_run(
-            pred_result.format,
-            default_template,
-            _load_text_file("cpp/default_generated_code.cpp"),
-            input_file_path,
-            compile_cmd,
-            code_file,
-            exec_file,
-        )
+            self._compile_and_run(
+                lang,
+                pred_result.format,
+                lang.default_template_path,
+                expected_default_generated_code_file,
+                input_file
+            )
 
-        # Test compile with custom templates having echo output of input
+            # Test compile with custom templates having echo output of input
 
-        exec_result = self._compile_and_run(
-            pred_result.format,
-            _load_text_file("cpp/template.cpp"),
-            _load_text_file("cpp/generated_code.cpp"),
-            input_file_path,
-            compile_cmd,
-            code_file,
-            exec_file,
-        )
-        self.assertEqual(expected_output, exec_result.output)
+            exec_result = self._compile_and_run(
+                lang,
+                pred_result.format,
+                _full_path(os.path.join(lang.name, lang.source_code_name("template"))),
+                _full_path(os.path.join(lang.name, lang.source_code_name("generated_code"))),
+                input_file
+            )
+            self.assertEqual(load_text_file(expected_output_file), exec_result.output)
 
-    def _compile_and_run(self, format, template, expected_generated_code, input_file, compile_cmd, code_file, exec_file):
+    def _compile_command(self, lang: Language, code_file: str):
+        if lang == CPP:
+            return "g++ {} -o a.out -std=c++14".format(code_file)
+        elif lang == JAVA:
+            return "javac {}".format(code_file)
+        elif lang == RUST:
+            return "rustc {}".format(code_file)
+        else:
+            raise NotImplementedError()
+
+    def _exec_file_and_args(self, lang: Language) -> Tuple[str, List[str]]:
+        if lang == CPP:
+            return "./a.out", []
+        elif lang == JAVA:
+            return "java", ["Main"]
+        elif lang == RUST:
+            return "./main", []
+        else:
+            raise NotImplementedError()
+
+    def _compile_and_run(self, lang, format, template_file, expected_generated_code_file, input_file):
+        code_file = os.path.join(self.temp_dir, lang.source_code_name("main"))
+        exec_file, exec_args = self._exec_file_and_args(lang)
+        compile_cmd = self._compile_command(lang, code_file)
+
         args = CodeGenArgs(
-            template=template,
+            template=load_text_file(template_file),
             format_=format,
             constants=ProblemConstantSet(123, "yes", "NO"),
             config=CodeStyleConfig()
         )
 
-        code = cpp.main(args)
-        self.assertEqual(expected_generated_code, code)
+        code = lang.default_code_generator(args)
+        self.compare_two_source_codes(load_text_file(expected_generated_code_file), code)
         create_code(code, code_file)
         print(run_command(compile_cmd, self.temp_dir))
-        exec_result = run_program(exec_file, input_file, 2)
+        exec_result = run_program(exec_file, input_file, 2, exec_args, self.temp_dir)
         self.assertEqual(exec_result.status.NORMAL, exec_result.status)
         return exec_result
+
+    def compare_two_source_codes(self, a: str, b: str):
+        a_list = a.split()
+        b_list = b.split()
+        for x, y in zip(a_list, b_list):
+            self.assertEqual(x.rstrip(), y.rstrip())
+        self.assertEqual(len(a_list), len(b_list))
 
     def verify(self,
                response: Response,
