@@ -1,7 +1,7 @@
 import re
 from typing import Pattern, Callable
 
-from atcodertools.codegen.code_generators import cpp, java
+from atcodertools.codegen.code_generators import cpp, java, rust
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 
@@ -59,7 +59,7 @@ RUST = Language(
     display_name="Rust",
     extension="rs",
     submission_lang_pattern=re.compile(".*Rust \\(1.*"),
-    default_code_generator=java.main,
+    default_code_generator=rust.main,
     default_template_path=get_default_template_path('rs'),
 )
 
