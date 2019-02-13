@@ -70,37 +70,40 @@ export default class Summary extends React.Component<{}, {
                 }
             ]
         }, {
-            Header: 'Sample Parsing',
-            accessor: 'statement_parse',
-            Cell: renderValueOrError,
-            sortMethod: this.sortForErrorAndValue,
-        }
-            , {
-                Header: 'Format Pred.',
-                accessor: 'format_prediction',
-                Cell: renderValueOrError,
-                sortMethod: this.sortForErrorAndValue,
-            }, {
-                Header: 'Constants Prediction',
-                columns: [
-                    {
-                        Header: 'MOD',
-                        accessor: 'modulo',
-                        Cell: renderValueOrErrorWithoutOkMark,
-                        sortMethod: this.sortForErrorAndValue,
-                    }, {
-                        Header: 'YES',
-                        accessor: 'yes_str',
-                        Cell: renderValueOrErrorWithoutOkMark,
-                        sortMethod: this.sortForErrorAndValue,
-                    }, {
-                        Header: 'NO',
-                        accessor: 'no_str',
-                        Cell: renderValueOrErrorWithoutOkMark,
-                        sortMethod: this.sortForErrorAndValue,
-                    },
-                ]
-            }];
+            Header: 'Input Analysis',
+            columns:
+                [{
+                    Header: 'Statement Parsing',
+                    accessor: 'statement_parse',
+                    Cell: renderValueOrError,
+                    sortMethod: this.sortForErrorAndValue,
+                }, {
+                    Header: 'Format Pred.',
+                    accessor: 'format_prediction',
+                    Cell: renderValueOrError,
+                    sortMethod: this.sortForErrorAndValue,
+                }]
+        }, {
+            Header: 'Constants Prediction',
+            columns: [
+                {
+                    Header: 'MOD',
+                    accessor: 'modulo',
+                    Cell: renderValueOrErrorWithoutOkMark,
+                    sortMethod: this.sortForErrorAndValue,
+                }, {
+                    Header: 'YES',
+                    accessor: 'yes_str',
+                    Cell: renderValueOrErrorWithoutOkMark,
+                    sortMethod: this.sortForErrorAndValue,
+                }, {
+                    Header: 'NO',
+                    accessor: 'no_str',
+                    Cell: renderValueOrErrorWithoutOkMark,
+                    sortMethod: this.sortForErrorAndValue,
+                },
+            ]
+        }];
 
         const defaultFilterMethod = (filter, row, column) => {
             const id = filter.pivotId || filter.id;
