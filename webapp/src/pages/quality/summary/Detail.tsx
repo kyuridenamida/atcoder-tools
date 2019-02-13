@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Col, Nav, NavItem, NavLink, Row, TabContent, Table, TabPane} from "reactstrap";
+import {Col, Nav, Button, NavItem, NavLink, Row, TabContent, Table, TabPane} from "reactstrap";
 import classNames from 'classnames';
 import Code from "./Code";
 import QualityResult from "../../../models/QualityResult";
@@ -35,6 +35,12 @@ export default class Detail extends React.Component<ComponentProps, { activeTab:
         }
     };
 
+    createReportUrl = () => {
+        const problemId = this.props.qualityResult.problem.problem_id;
+        const body = `問題 ${problemId} におけるコード生成結果が正しくないようです。 (↓以下に詳細を書く)`;
+        return `https://github.com/kyuridenamida/atcoder-tools/issues/new?title=Wrong code generation on ${problemId}&body=${body}&assignee=kyuridenamida&labels=generator%20bug`;
+    };
+
     render() {
         const {qualityResult} = this.props;
 
@@ -56,7 +62,8 @@ export default class Detail extends React.Component<ComponentProps, { activeTab:
             <h3 style={{display: 'inline-block'}}>{qualityResult.problem.problem_id}</h3>
             {' '}
             <ProblemLink contest_id={qualityResult.problem.contest.contest_id}
-                         problem_id={qualityResult.problem.problem_id}>[問題文]</ProblemLink>
+                         problem_id={qualityResult.problem.problem_id}>[問題文]
+            </ProblemLink>
             <hr/>
             <h3>自動生成コード</h3>
             <div>
@@ -137,6 +144,10 @@ export default class Detail extends React.Component<ComponentProps, { activeTab:
                     </Table>
                 </div>
             }
+
+            <hr/>
+            <Button color="danger" target="_blank" size="sm" href={this.createReportUrl()}>不具合を報告する</Button>
+
         </div>
     }
 };

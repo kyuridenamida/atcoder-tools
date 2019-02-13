@@ -27,10 +27,7 @@ class NavigationBar extends React.Component<{},{isOpen: boolean}> {
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <NavLink href="/quality/details">Gallery</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="/quality/summary">Quality Summary</NavLink>
+                                <NavLink href="/quality/summary">各問題毎の解析結果</NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink href="https://github.com/kyuridenamida/atcoder-tools">GitHub</NavLink>

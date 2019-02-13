@@ -131,7 +131,7 @@ export default class Summary extends React.Component<{}, {
 
         return <div>
             <Row>
-                <h3>Summary</h3>
+                <h3>各問題毎の解析結果</h3>
                 <Col sm={12}>
                     <Label>
                         <Input type="checkbox" checked={this.state.detailedSearchMode}
