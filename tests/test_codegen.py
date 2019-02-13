@@ -5,6 +5,7 @@ import unittest
 
 from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.client.models.sample import Sample
+from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST
 from atcodertools.executils.run_command import run_command
 from atcodertools.executils.run_program import run_program
 from atcodertools.fileutils.create_contest_file import create_code
@@ -22,11 +23,10 @@ from tests.utils.gzip_controller import make_tst_data_controller
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "./resources/test_codegen/")
-LANGS = ["cpp", "java", "rust"]
 
 
 def load_generated_code(py_test_name, lang):
-    with open(os.path.join(RESOURCE_DIR, py_test_name, lang, "generated_code.txt"), 'r') as f:
+    with open(os.path.join(RESOURCE_DIR, py_test_name, lang.name, "generated_code.txt"), 'r') as f:
         return f.read()
 
 
@@ -49,23 +49,23 @@ class TestCodeGenerator(unittest.TestCase):
         self.test_dir = self.test_data_controller.create_dir()
         self.runner = FormatPredictionTestRunner(self.test_dir)
         self.lang_to_template_file = {
-            "cpp": {
+            CPP: {
                 "old": "template.cpp",
                 "jinja": "template_jinja.cpp",
             },
-            "java": {
+            JAVA: {
                 "old": "template.java",
                 "jinja": "template_jinja.java",
             },
-            "rust": {
+            RUST: {
                 "old": "template.rust",
                 "jinja": "template_jinja.rust",
             }
         }
         self.lang_to_code_generator_func = {
-            "cpp": cpp.main,
-            "java": java.main,
-            "rust": rust.main,
+            CPP: cpp.main,
+            JAVA: java.main,
+            RUST: rust.main,
         }
         self.maxDiff = None
 
@@ -74,28 +74,28 @@ class TestCodeGenerator(unittest.TestCase):
 
     def test_long_case(self):
         response = self.runner.run('rco-contest-2017-qual-B')
-        for l in LANGS:
+        for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name, l)
 
     def test_two_dimensional_case(self):
         response = self.runner.run('abc079-D')
-        for l in LANGS:
+        for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name, l)
 
     def test_float_case(self):
         response = self.runner.run('tenka1-2014-qualb-E')
-        for l in LANGS:
+        for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name, l)
 
     def test_mod_case(self):
         response = self.runner.run('agc019-E')
-        for l in LANGS:
+        for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name,
                         l, "jinja", ProblemConstantSet(mod=998244353))
 
     def test_yes_no_case(self):
         response = self.runner.run('agc021-C')
-        for l in LANGS:
+        for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name, l, "jinja",
                         ProblemConstantSet(yes_str="YES", no_str="NO"))
 
@@ -176,7 +176,7 @@ class TestCodeGenerator(unittest.TestCase):
     def verify(self,
                response: Response,
                py_test_name: str,
-               lang: str,
+               lang: Language,
                template_type: str = "old",
                constants: ProblemConstantSet = ProblemConstantSet()):
         self.assertEqual(
@@ -195,7 +195,7 @@ class TestCodeGenerator(unittest.TestCase):
                     CodeStyleConfig())
             ))
 
-    def get_template(self, lang: str, template_type: str) -> str:
+    def get_template(self, lang: Language, template_type: str) -> str:
         template_file = os.path.join(
             RESOURCE_DIR,
             self.lang_to_template_file[lang][template_type])
