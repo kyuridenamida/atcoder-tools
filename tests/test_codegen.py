@@ -188,18 +188,23 @@ class TestCodeGenerator(unittest.TestCase):
         create_code(code, code_file)
         print(run_command(compile_cmd, self.temp_dir))
         exec_result = run_program(exec_file, input_file, 2, exec_args, self.temp_dir)
+        print("== stdout ==")
+        print(exec_result.output)
+        print("== stderr ==")
+        print(exec_result.stderr)
+
         self.assertEqual(exec_result.status.NORMAL, exec_result.status)
         return exec_result
 
-    def compare_two_texts_ignoring_trailing_spaces(self, a: str, b: str):
-        a_list = a.split()
-        b_list = b.split()
+    def compare_two_texts_ignoring_trailing_spaces(self, expected: str, output: str):
+        a_list = expected.split()
+        b_list = output.split()
         has_diff = False
         for x, y in zip(a_list, b_list):
             has_diff = has_diff or x.rstrip() != y.rstrip()
         has_diff = has_diff or len(a_list) != len(b_list)
         if has_diff:
-            self.assertEqual(a, b)
+            self.assertEqual(expected, output)
 
     def verify(self,
                response: Response,
