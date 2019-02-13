@@ -14,7 +14,7 @@ class CodeStyleConfigInitError(Exception):
 
 
 DEFAULT_WORKSPACE_DIR_PATH = os.path.join(expanduser("~"), "atcoder-workspace")
-SUPPORTED_LANGUAGES = ["cpp", "java"]
+SUPPORTED_LANGUAGES = ["cpp", "java", "rust"]
 
 
 class CodeStyleConfig:
@@ -68,9 +68,12 @@ class CodeStyleConfig:
             if lang == "cpp":
                 from atcodertools.codegen.code_generators import cpp
                 self.code_generator = cpp.main
-            else:
+            elif lang == "java":
                 from atcodertools.codegen.code_generators import java
                 self.code_generator = java.main
+            else:
+                from atcodertools.codegen.code_generators import rust
+                self.code_generator = rust.main
 
         self.template_file = normalize_path(
             template_file or get_default_template_path(lang))

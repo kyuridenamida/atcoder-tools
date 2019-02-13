@@ -39,6 +39,8 @@ class BannedFileDetectedError(Exception):
 
 
 def extension(lang: str):
+    if lang == 'rust':
+        return 'rs'
     return lang
 
 
@@ -259,7 +261,9 @@ def main(prog, args):
                             "[Default (C++)] {}\n".format(
                                 get_default_template_path('cpp')),
                             "[Default (Java)] {}".format(
-                                get_default_template_path('java')))
+                                get_default_template_path('java')),
+                            "[Default (Rust)] {}".format(
+                                get_default_template_path('rust'))),
                         )
 
     # Deleted functionality
