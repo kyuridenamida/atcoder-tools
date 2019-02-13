@@ -2,6 +2,7 @@ import re
 from typing import Pattern, Callable
 
 from atcodertools.codegen.code_generators import cpp, java
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 
 
@@ -16,7 +17,7 @@ class Language:
                  display_name: str,
                  extension: str,
                  submission_lang_pattern: Pattern[str],
-                 default_code_generator: Callable[['CodeGenArgs'], str],
+                 default_code_generator: Callable[[CodeGenArgs], str],
                  default_template_path: str,
                  ):
         self.name = name
