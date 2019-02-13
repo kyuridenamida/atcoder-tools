@@ -169,7 +169,6 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(expected_generated_code, code)
         create_code(code, code_file)
         print(run_command(compile_cmd, self.temp_dir))
-        # TODO: stop calling private function
         exec_result = run_program(exec_file, input_file, 2)
         self.assertEqual(exec_result.status.NORMAL, exec_result.status)
         return exec_result
