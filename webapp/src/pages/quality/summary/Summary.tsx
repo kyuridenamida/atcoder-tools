@@ -1,35 +1,42 @@
 import * as React from 'react';
+import {Col, Input, Label, Row} from 'reactstrap';
 import ReactTable from 'react-table'
 import qualityResultList from "../../../auto_generated/qualityResultList.js"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import QualityResult from "../../../models/QualityResult";
 import "./Summary.scss";
+import Detail from "./Detail";
+import ProblemLink from "./ProblemLink";
 
 export default class Summary extends React.Component<{}, {
-    activeProblemId: string | null,
     showingCode: boolean,
+    detailedSearchMode: boolean,
+    activeQualityResult: QualityResult | null,
 }> {
     constructor(props: any) {
         super(props);
         this.state = {
-            activeProblemId: null,
-            showingCode: false
+            activeQualityResult: null,
+            showingCode: false,
+            detailedSearchMode: false,
         }
     }
 
-    updateActiveProblem = (problemId: string) => {
+    updateActiveProblem = (qualityResult: QualityResult) => {
         this.setState({
-            activeProblemId: problemId,
+            activeQualityResult: qualityResult,
             showingCode: true,
         });
     };
 
     isActive = (problemId: string) => {
-        return problemId == this.state.activeProblemId
+        return this.state.activeQualityResult && problemId == this.state.activeQualityResult.problem.problem_id
     };
 
 
     render() {
+        const {detailedSearchMode} = this.state;
+
         const renderValueOrError = ({value}, withOkMark = true) => {
             if (value.error) {
                 if( value.error == "Skipped"){
@@ -54,56 +61,62 @@ export default class Summary extends React.Component<{}, {
         };
         const renderValueOrErrorWithoutOkMark = (props) => renderValueOrError(props, false);
 
-        const columns = [{
-            Header: 'Problem Data',
-            columns: [
-                {
-                    Header: 'Contest',
-                    accessor: 'contest.contest_id',
-                    Cell: ({value}) => <a target="_blank" href={`https://atcoder.jp/contests/${value}`}>{value}</a>
-                }, {
-                    Header: 'Problem',
-                    accessor: 'problem.problem_id',
-                    Cell: ({original, value}) =>
-                        <a target="_blank"
-                           href={`https://atcoder.jp/contests/${original.contest.contest_id}/tasks/${value}`}>{value}</a>
-                }
-            ]
-        }, {
-            Header: 'Input Analysis',
-            columns:
-                [{
-                    Header: 'Statement Parsing',
-                    accessor: 'statement_parse',
-                    Cell: renderValueOrError,
-                    sortMethod: this.sortForErrorAndValue,
-                }, {
-                    Header: 'Format Pred.',
-                    accessor: 'format_prediction',
-                    Cell: renderValueOrError,
-                    sortMethod: this.sortForErrorAndValue,
-                }]
-        }, {
-            Header: 'Constants Prediction',
-            columns: [
-                {
-                    Header: 'MOD',
-                    accessor: 'modulo',
-                    Cell: renderValueOrErrorWithoutOkMark,
-                    sortMethod: this.sortForErrorAndValue,
-                }, {
-                    Header: 'YES',
-                    accessor: 'yes_str',
-                    Cell: renderValueOrErrorWithoutOkMark,
-                    sortMethod: this.sortForErrorAndValue,
-                }, {
-                    Header: 'NO',
-                    accessor: 'no_str',
-                    Cell: renderValueOrErrorWithoutOkMark,
-                    sortMethod: this.sortForErrorAndValue,
-                },
-            ]
-        }];
+        const columns = [
+            {
+                Header: 'Problem Data',
+                columns: [
+                    {
+                        Header: 'Contest',
+                        accessor: 'contest.contest_id',
+                        Cell: ({value}) => <a target="_blank" href={`https://atcoder.jp/contests/${value}`}>{value}</a>
+                    }, {
+                        Header: 'Problem',
+                        accessor: 'problem.problem_id',
+                        Cell: ({original, value}) =>
+                            <ProblemLink contest_id={original.contest.contest_id} problem_id={value}>{value}</ProblemLink>
+                    }
+                ]
+            },
+            {
+                Header: 'Input Analysis',
+                columns:
+                    [{
+                        show: detailedSearchMode,
+                        Header: 'Statement Parsing',
+                        accessor: 'statement_parse',
+                        Cell: renderValueOrError,
+                        sortMethod: this.sortForErrorAndValue,
+                    }, {
+                        show: detailedSearchMode,
+                        Header: 'Format Pred.',
+                        accessor: 'format_prediction',
+                        Cell: renderValueOrError,
+                        sortMethod: this.sortForErrorAndValue,
+                    }]
+            }, {
+                Header: 'Constants Prediction',
+                columns: [
+                    {
+                        show: detailedSearchMode,
+                        Header: 'MOD',
+                        accessor: 'modulo',
+                        Cell: renderValueOrErrorWithoutOkMark,
+                        sortMethod: this.sortForErrorAndValue,
+                    }, {
+                        show: detailedSearchMode,
+                        Header: 'YES',
+                        accessor: 'yes_str',
+                        Cell: renderValueOrErrorWithoutOkMark,
+                        sortMethod: this.sortForErrorAndValue,
+                    }, {
+                        show: detailedSearchMode,
+                        Header: 'NO',
+                        accessor: 'no_str',
+                        Cell: renderValueOrErrorWithoutOkMark,
+                        sortMethod: this.sortForErrorAndValue,
+                    },
+                ]
+            }];
 
         const defaultFilterMethod = (filter, row, column) => {
             const id = filter.pivotId || filter.id;
@@ -117,28 +130,45 @@ export default class Summary extends React.Component<{}, {
 
 
         return <div>
-            <h3>Summary</h3>
-            <ReactTable
-                filterable
-                data={qualityResultList}
-                columns={columns}
-                defaultFilterMethod={defaultFilterMethod}
-                style={{
-                    height: "100%"
-                }}
-                getTrProps={(state, rowInfo) => {
-                    if( !rowInfo || !rowInfo.hasOwnProperty("original") ) {
-                        return {};
-                    }
+            <Row>
+                <h3>Summary</h3>
+                <Col sm={12}>
+                    <Label>
+                        <Input type="checkbox" checked={this.state.detailedSearchMode}
+                               onChange={() => this.setState({detailedSearchMode: !this.state.detailedSearchMode})}/>
+                        詳細検索モード
+                    </Label>
+                </Col>
+            </Row>
+            <Row>
+                <Col sm={this.state.detailedSearchMode ? 12 : 6}>
+                    <ReactTable
+                        filterable
+                        data={qualityResultList}
+                        columns={columns}
+                        defaultFilterMethod={defaultFilterMethod}
+                        style={{
+                            height: "100%"
+                        }}
+                        getTrProps={(state, rowInfo) => {
+                            if (!rowInfo || !rowInfo.hasOwnProperty("original")) {
+                                return {};
+                            }
 
-                    const original : QualityResult = rowInfo.original;
-                    console.log(this.state.activeProblemId, original.problem.problem_id);
-                    return {
-                        onClick: () => this.updateActiveProblem(original.problem.problem_id),
-                        className: this.isActive(original.problem.problem_id) ? "selected" : ""
-                    }
-                }}
-            />
+                            const original: QualityResult = rowInfo.original;
+                            return {
+                                onClick: () => this.updateActiveProblem(original),
+                                className: this.isActive(original.problem.problem_id) ? "selected" : ""
+                            }
+                        }}
+                    />
+                </Col>
+                {!this.state.detailedSearchMode && this.state.activeQualityResult &&
+                <Col sm={6}>
+                    <Detail qualityResult={this.state.activeQualityResult}/>
+                </Col>
+                }
+            </Row>
         </div>
     }
 

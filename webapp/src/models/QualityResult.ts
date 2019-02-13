@@ -1,11 +1,7 @@
+import Problem from './Problem'
+
 export default interface QualityResult {
-    problem: {
-        contest: {
-            contest_id: string,
-        },
-        problem_id: string,
-        alphabet: string
-    },
+    problem: Problem,
     contest: {
         contest_id: string,
     },
