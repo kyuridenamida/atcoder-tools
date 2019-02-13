@@ -2,13 +2,15 @@ import getpass
 import logging
 import os
 import re
+import warnings
 from http.cookiejar import LWPCookieJar
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 import requests
 from bs4 import BeautifulSoup
 
 from atcodertools.client.models.submission import Submission
+from atcodertools.common.language import Language
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
@@ -141,7 +143,16 @@ class AtCoderClient(metaclass=Singleton):
         contest_ids = sorted(contest_ids)
         return [Contest(contest_id) for contest_id in contest_ids]
 
-    def submit_source_code(self, contest: Contest, problem: Problem, lang: str, source: str) -> Submission:
+    def submit_source_code(self, contest: Contest, problem: Problem, lang: Union[str, Language], source: str) -> Submission:
+        if isinstance(lang, str):
+            warnings.warn(
+                "Parameter lang as a str object is deprecated. "
+                "Please use 'atcodertools.common.language.Language' object instead",
+                UserWarning)
+            lang_option_pattern = lang
+        else:
+            lang_option_pattern = lang.submission_lang_pattern
+
         resp = self._request(contest.get_submit_url())
 
         soup = BeautifulSoup(resp.text, "html.parser")
@@ -155,7 +166,7 @@ class AtCoderClient(metaclass=Singleton):
             'select', attrs={"id": "submit-language-selector-{}".format(task_number)})
         language_field_name = language_select_area.get("name")
         language_number = language_select_area.find(
-            "option", text=lang).get("value")
+            "option", text=lang_option_pattern).get("value")
         postdata = {
             "__session": session_id,
             task_field_name: task_number,

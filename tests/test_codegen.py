@@ -9,7 +9,7 @@ from atcodertools.config.postprocess_config import _run_command
 from atcodertools.fileutils.create_contest_file import create_code
 from atcodertools.fmtprediction.predict_format import predict_format
 
-from atcodertools.codegen.code_generators import cpp, java
+from atcodertools.codegen.code_generators import cpp, java, rust
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
@@ -22,7 +22,7 @@ from tests.utils.gzip_controller import make_tst_data_controller
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "./resources/test_codegen/")
-LANGS = ["cpp", "java"]
+LANGS = ["cpp", "java", "rust"]
 
 
 def load_generated_code(py_test_name, lang):
@@ -56,12 +56,18 @@ class TestCodeGenerator(unittest.TestCase):
             "java": {
                 "old": "template.java",
                 "jinja": "template_jinja.java",
+            },
+            "rust": {
+                "old": "template.rust",
+                "jinja": "template_jinja.rust",
             }
         }
         self.lang_to_code_generator_func = {
             "cpp": cpp.main,
             "java": java.main,
+            "rust": rust.main,
         }
+        self.maxDiff = None
 
     def tearDown(self):
         self.test_data_controller.remove_dir()
