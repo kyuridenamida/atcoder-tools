@@ -4,7 +4,6 @@ from os.path import expanduser
 from typing import Optional
 
 from atcodertools.fileutils.normalize import normalize_path
-from atcodertools.tools.templates import get_default_template_path
 
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'

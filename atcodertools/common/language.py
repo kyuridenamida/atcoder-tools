@@ -59,7 +59,7 @@ RUST = Language(
     extension="rs",
     submission_lang_pattern=re.compile(".*Rust \\(1.*"),
     default_code_generator=java.main,
-    default_template_path=get_default_template_path('rust'),
+    default_template_path=get_default_template_path('rs'),
 )
 
 ALL_LANGUAGES = [CPP, JAVA, RUST]
