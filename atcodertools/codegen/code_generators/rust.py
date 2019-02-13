@@ -30,7 +30,7 @@ class RustCodeGenerator(CppCodeGenerator):
                  "let mut scanner = Scanner::new(&con);"]
         for pattern in self._format.sequence:
             lines += self._render_pattern(pattern)
-        return "\n{indent}".format(indent=self._indent(0)).join(lines)
+        return "\n{indent}".format(indent=self._indent(1)).join(lines)
 
     def _convert_type(self, type_: Type) -> str:
         if type_ == Type.float:
@@ -119,17 +119,17 @@ class RustCodeGenerator(CppCodeGenerator):
         elif isinstance(pattern, ParallelPattern):
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
-                lines.append("{indent}{line}".format(indent=self._indent(0),
+                lines.append("{indent}{line}".format(indent=self._indent(1),
                                                      line=self._input_code_for_var(var)))
             lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
             lines.append(
-                "{indent}{line}".format(indent=self._indent(0), line=_loop_header(representative_var, True)))
+                "{indent}{line}".format(indent=self._indent(1), line=_loop_header(representative_var, True)))
             for var in pattern.all_vars():
-                lines.append("{indent}{line}".format(indent=self._indent(1),
+                lines.append("{indent}{line}".format(indent=self._indent(2),
                                                      line=self._input_code_for_var(var)))
-            lines.append("{indent}}}".format(indent=self._indent(0)))
+            lines.append("{indent}}}".format(indent=self._indent(1)))
             lines.append("}")
         else:
             raise NotImplementedError
