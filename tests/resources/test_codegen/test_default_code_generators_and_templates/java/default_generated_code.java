@@ -12,7 +12,7 @@ class Main {
         N = sc.nextLong();
         long M;
         M = sc.nextLong();
-        String[][] H = new String[int(N-2+1)][int(M-1-2+1)];
+        String[][] H = new String[(int)(N-2+1)][(int)(M-1-2+1)];
         for(int i = 0 ; i < N-2+1 ; i++){
             for(int j = 0 ; j < M-1-2+1 ; j++){
                 H[i][j] = sc.next();
