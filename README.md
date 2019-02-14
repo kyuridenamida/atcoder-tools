@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/kyuridenamida/atcoder-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/kyuridenamida/atcoder-tools)
 [![PyPI](https://img.shields.io/pypi/v/atcoder-tools.svg)](https://pypi.python.org/pypi/atcoder-tools)
 
-atcoder-tools
+AtCoder Tools
 ====
 Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
 
@@ -25,9 +25,11 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 `pip3 install atcoder-tools`
 
 ## Demo
-<a href="https://asciinema.org/a/JG18AGOE2Vw7Tsa3QTM7Y2XX5">
-    <img src="https://asciinema.org/a/JG18AGOE2Vw7Tsa3QTM7Y2XX5.svg" width=70%>
-</a>
+<img src="https://user-images.githubusercontent.com/233559/52807100-f6e2d300-30cd-11e9-8906-82b9f9b2dff7.gif" width=70%>
+
+## Analysis
+各問題ごとの解析結果などが載っています。
+https://kyuridenamida.github.io/atcoder-tools/
 
 ## Usage
 
