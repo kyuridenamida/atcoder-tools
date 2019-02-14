@@ -1,0 +1,54 @@
+{
+  "name": "atcoder-tools-doc",
+  "homepage": "https://kyuridenamida.github.io/atcoder-tools",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.12",
+    "@fortawesome/free-solid-svg-icons": "^5.6.3",
+    "@fortawesome/react-fontawesome": "^0.1.3",
+    "@types/reactstrap": "^6.4.3",
+    "bootstrap": "^4.2.1",
+    "classnames": "^2.2.6",
+    "i": "^0.3.6",
+    "marked": "^0.6.0",
+    "npm": "^6.5.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-router-dom": "^4.3.1",
+    "react-router-tabs": "^1.2.0",
+    "react-scripts-ts": "^4.0.8",
+    "react-syntax-highlighter": "^10.1.2",
+    "react-table": "^6.8.6",
+    "react-treebeard": "github:bitjourney/react-treebeard#bitjourney",
+    "reactstrap": "^7.0.2"
+  },
+  "scripts": {
+    "start": "./generate.sh && react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject",
+    "partial-deploy": "npm run build && gh-pages -d build",
+    "deploy": "./generate.sh && build_data.sh && npm run build && gh-pages -d build"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.6",
+    "@types/jest": "^23.3.11",
+    "@types/marked": "^0.6.0",
+    "@types/node": "^10.12.18",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11",
+    "@types/react-router-dom": "^4.3.1",
+    "@types/react-syntax-highlighter": "^10.1.0",
+    "@types/react-table": "^6.7.21",
+    "gh-pages": "^2.0.1",
+    "node-sass": "^4.11.0",
+    "typescript": "^3.2.2"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
