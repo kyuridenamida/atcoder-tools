@@ -1,6 +1,7 @@
 # Change Log
 
 ## 1.1.1 / 2019-02-14 
+- Add an explicit disclaimer on README.md
 - [#84](https://github.com/kyuridenamida/atcoder-tools/pull/84) Output stdout even when getting RE or TLE.
 - [#86](https://github.com/kyuridenamida/atcoder-tools/pull/86) Support Rust
     - Thanks for [@fukatani](https://github.com/fukatani/)'s contribution and [@koba-e964](https://github.com/koba-e964/)'s code review!
