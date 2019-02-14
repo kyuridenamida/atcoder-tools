@@ -52,8 +52,10 @@ export default class Detail extends React.Component<ComponentProps, { activeLang
             ["NO", qualityResult.no_str.error],
             ["YES", qualityResult.yes_str.error],
         ].map(([text, error]: [string, string | null]) => {
-            if (error === null) return null;
-            return <tr>
+            if (error === null) {
+                return null;
+            }
+            return <tr key={text}>
                 <th scope="row">{this.renderLabel(text, error !== null)}</th>
                 <td>{error || ""}</td>
             </tr>
@@ -123,7 +125,7 @@ export default class Detail extends React.Component<ComponentProps, { activeLang
                         ["NO", qualityResult.no_str.value],
                         ["YES", qualityResult.yes_str.value],
                     ].map(([text, value]: [string, string | null]) => {
-                        return <tr>
+                        return <tr key={text}>
                             <th scope="row">{this.renderLabel(text, value !== null)}</th>
                             <td>{value || ""}</td>
                         </tr>

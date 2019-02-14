@@ -18,8 +18,8 @@ export default class Summary extends React.Component<{}, {
         super(props);
         this.state = {
             activeQualityResult: null,
-            showingCode: false,
             detailedSearchMode: false,
+            showingCode: false,
         }
     }
 
@@ -31,7 +31,7 @@ export default class Summary extends React.Component<{}, {
     };
 
     isActive = (problemId: string) => {
-        return this.state.activeQualityResult && problemId == this.state.activeQualityResult.problem.problem_id
+        return this.state.activeQualityResult && problemId === this.state.activeQualityResult.problem.problem_id
     };
 
 
@@ -40,7 +40,7 @@ export default class Summary extends React.Component<{}, {
 
         const renderValueOrError = ({value}, withOkMark = true) => {
             if (value.error) {
-                if( value.error == "Skipped"){
+                if( value.error === "Skipped"){
                     return <span>
                         <FontAwesomeIcon icon="minus" color="lightgray"/>
                         {' '}
@@ -49,7 +49,7 @@ export default class Summary extends React.Component<{}, {
                 }
                 return <span>
 
-                    {value.error != "Skipped" && <FontAwesomeIcon icon="times" color="red"/>}
+                    {value.error !== "Skipped" && <FontAwesomeIcon icon="times" color="red"/>}
                     {' '}
                     {value.error}
                     </span>
@@ -122,7 +122,7 @@ export default class Summary extends React.Component<{}, {
         const defaultFilterMethod = (filter, row, column) => {
             const id = filter.pivotId || filter.id;
             try {
-                return row[id] !== undefined ? this.getCellText(column, row[id]).match(filter.value) != null : true;
+                return row[id] !== undefined ? this.getCellText(column, row[id]).match(filter.value) !== null : true;
 
             } catch (e) {
                 return false;
@@ -178,11 +178,11 @@ export default class Summary extends React.Component<{}, {
     }
 
     private getCellText(column, value) {
-        if (column.id == "modulo" ||
-            column.id == "yes_str" ||
-            column.id == "no_str" ||
-            column.id == "statement_parse" ||
-            column.id == "format_prediction"
+        if (column.id === "modulo" ||
+            column.id === "yes_str" ||
+            column.id === "no_str" ||
+            column.id === "statement_parse" ||
+            column.id === "format_prediction"
         ) {
             return this.getCellTextWithErrorAndValue(value);
         }

@@ -3,7 +3,10 @@
   "rules": {
     "jsx-boolean-value": false,
     "ordered-imports": false,
-    "member-access": false
+    "member-access": false,
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "jsx-no-lambda": false
   },
   "defaultSeverity": "warn",
   "linterOptions": {
