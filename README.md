@@ -10,10 +10,16 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 - AtCoderへのログイン，入出力例データなどの抽出
 - 枝刈り探索による高精度・高速な入力フォーマット解析 (ARC、ABC、AGCについては約9割ほど)
 - 問題文中に含まれるMOD値やYES/NO文字列等の定数値抽出
-- 入力フォーマット解析結果や抽出した定数値を用いたテンプレートコードの自動生成(C++, Java, Rust)
+- コード提出機能
+- 入力フォーマット解析結果や抽出した定数値を用いたテンプレートからのコード自動生成(以下の表に記載されている言語をサポートしています)
     - カスタムテンプレートに対応
     - 他言語対応のためのコントリビューション(≒中間形式からコードに変換する部分のPR)を募集中です!
-- コード提出機能
+
+|対応言語  |Contributor 1|Contributor 2|
+|:---:|:---:|:---:|
+|C++|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)|[@asi1024](https://github.com/asi1024/) (template)|
+|Java|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)||
+|Rust|[@fukatani](https://github.com/fukatani/) (generator, template)|[@koba-e964](https://github.com/koba-e964/) (template, CR)|
 
 ## How to install
 `pip3 install atcoder-tools`
@@ -71,8 +77,10 @@ optional arguments:
   --lang LANG           Programming language of your template code, cpp or java.
                         [Default] cpp
   --template TEMPLATE   File path to your template code
-                        [Default (C++)] /atcoder-tools/atcodertools/tools/templates/cpp/default_template.cpp
-                        [Default (Java)] /atcoder-tools/atcodertools/tools/templates/java/default_template.java
+                        [Default (C++)] /atcodertools/tools/templates/default_template.cpp
+                        [Default (Java)] /atcodertools/tools/templates/default_template.java
+                        [Default (Rust)] /atcodertools/tools/templates/default_template.rs
+
   --parallel            Prepare problem directories asynchronously using multi processors.
   --save-no-session-cache
                         Save no session cache to avoid security risk
@@ -224,3 +232,6 @@ int main(){
 ## Author
 
 [kyuridenamida](https://github.com/kyuridenamida) ([@kyuridenamida](https://twitter.com/kyuridenamida))
+
+## 免責
+このソフトウェア等に起因するいかなる損害に対しても、[@kyuridenamida](https://github.com/kyuridenamida)並びにこのソフトウェアの開発者達は何ら責任を負いません。

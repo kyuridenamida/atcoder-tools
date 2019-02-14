@@ -3,7 +3,7 @@ import os
 import time
 
 import requests
-
+from atcodertools.release_management.version import __version__
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
 
 
@@ -26,10 +26,17 @@ def _get_latest_version_cache():
     if not os.path.exists(cache_file_path):
         return None
     with open(cache_file_path, 'r') as f:
-        version, timestamp_sec = f.read().split()
+        info = f.read().split()
+        version, timestamp_sec = info[:2]
+
+        if len(info) >= 3:
+            captured_version = info[2]
+        else:
+            captured_version = None
+
         timestamp_sec = float(timestamp_sec)
 
-        if time.time() - timestamp_sec > HOUR_IN_SEC:
+        if time.time() - timestamp_sec > HOUR_IN_SEC or __version__ != captured_version:
             return None
 
         return version
@@ -38,7 +45,7 @@ def _get_latest_version_cache():
 def store_version_cache(version):
     os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
     with open(cache_file_path, 'w') as f:
-        f.write("{} {}".format(version, time.time()))
+        f.write("{} {} {}".format(version, time.time(), __version__))
 
 
 def get_latest_version(use_cache=True):
