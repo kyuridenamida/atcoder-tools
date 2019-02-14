@@ -1,28 +1,29 @@
 import * as React from "react";
-import {Col, Nav, Button, NavItem, NavLink, Row, TabContent, Table, TabPane} from "reactstrap";
+import {Col, Nav, Button, NavItem, NavLink, Row, TabContent, Table} from "reactstrap";
 import classNames from 'classnames';
 import Code from "./Code";
 import QualityResult from "../../../models/QualityResult";
 import ProblemLink from "./ProblemLink";
+import Scrollable from "../../../common/Scrollable";
 
 interface ComponentProps {
     qualityResult: QualityResult
 }
 
-export default class Detail extends React.Component<ComponentProps, { activeTab: string }> {
+export default class Detail extends React.Component<ComponentProps, { activeLanguage: string }> {
     constructor(props) {
         super(props);
 
         this.toggle = this.toggle.bind(this);
         this.state = {
-            activeTab: '1'
+            activeLanguage: 'cpp'
         };
     }
 
-    toggle(tab) {
-        if (this.state.activeTab !== tab) {
+    toggle(language) {
+        if (this.state.activeLanguage !== language) {
             this.setState({
-                activeTab: tab
+                activeLanguage: language
             });
         }
     }
@@ -58,6 +59,7 @@ export default class Detail extends React.Component<ComponentProps, { activeTab:
             </tr>
         }).filter(tag => tag !== null);
 
+
         return <div>
             <h3 style={{display: 'inline-block'}}>{qualityResult.problem.problem_id}</h3>
             {' '}
@@ -70,7 +72,7 @@ export default class Detail extends React.Component<ComponentProps, { activeTab:
                 <Nav tabs>
                     <NavItem>
                         <NavLink
-                            className={classNames({active: this.state.activeTab === 'cpp'})}
+                            className={classNames({active: this.state.activeLanguage === 'cpp'})}
                             onClick={() => {
                                 this.toggle('cpp');
                             }}
@@ -80,7 +82,7 @@ export default class Detail extends React.Component<ComponentProps, { activeTab:
                     </NavItem>
                     <NavItem>
                         <NavLink
-                            className={classNames({active: this.state.activeTab === 'java'})}
+                            className={classNames({active: this.state.activeLanguage === 'java'})}
                             onClick={() => {
                                 this.toggle('java');
                             }}
@@ -90,7 +92,7 @@ export default class Detail extends React.Component<ComponentProps, { activeTab:
                     </NavItem>
                     <NavItem>
                         <NavLink
-                            className={classNames({active: this.state.activeTab === 'rust'})}
+                            className={classNames({active: this.state.activeLanguage === 'rust'})}
                             onClick={() => {
                                 this.toggle('rust');
                             }}
@@ -99,24 +101,19 @@ export default class Detail extends React.Component<ComponentProps, { activeTab:
                         </NavLink>
                     </NavItem>
                 </Nav>
-                <TabContent activeTab={this.state.activeTab}>
-                    <TabPane tabId={1}>
-                        <Row>
-                            <Col sm={12}>
-                                <Code code={qualityResult.codes.cpp || ""}/>
-                            </Col>
-                        </Row>
-                    </TabPane>
-                    <TabPane tabId={2}>
-                        <Row>
-                            <Col sm={12}>
-                                <Code code={qualityResult.codes.cpp || ""}/>
-                            </Col>
-                        </Row>
-                    </TabPane>
+                <TabContent activeTab={this.state.activeLanguage}>
+                    <Row>
+                        <Col sm={12}>
+                            <Scrollable height={400}>
+                                <Code
+                                    code={qualityResult.codes[this.state.activeLanguage] || ""}
+                                    language={this.state.activeLanguage}
+                                />
+                            </Scrollable>
+                        </Col>
+                    </Row>
                 </TabContent>
             </div>
-            <Code code={qualityResult.codes.cpp || ""}/>
             <h3>定数</h3>
             <Table>
                 <tbody>

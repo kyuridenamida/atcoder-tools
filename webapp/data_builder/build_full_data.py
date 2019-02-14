@@ -1,6 +1,4 @@
 import asyncio
-import io
-
 import json
 import os
 import pickle
@@ -9,10 +7,11 @@ import sys
 import tempfile
 import threading
 
-from atcodertools.codegen.code_generators import cpp
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from atcodertools.common.language import RUST, CPP, JAVA
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
+from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format as predict
 
 from atcodertools.client.models.problem import Problem
@@ -23,9 +22,6 @@ from atcodertools.client.atcoder import AtCoderClient
 
 atcoder = AtCoderClient()
 CACHE_DIR = "./.cache/"
-
-with open('./auto_generated/templates/cpp/template_success.cpp') as f:
-    TEMPLATE_CODE = f.read()
 
 
 class Skipped(Exception):
@@ -124,7 +120,7 @@ def load_problem_content(result: QualityResult):
         result.statement_parse_error = e
 
 
-def apply_clang(cpp: str):
+def apply_clang(cpp: object) -> object:
     temp = tempfile.mktemp()
     with open(temp, 'w') as f:
         f.write(cpp)
@@ -167,10 +163,27 @@ def do_predict_constants(result: QualityResult):
     )
 
 
+CPP_TEMPLATE = load_text_file(CPP.default_template_path)
+JAVA_TEMPLATE = load_text_file(JAVA.default_template_path)
+RUST_TEMPLATE = load_text_file(RUST.default_template_path)
+
+
 def generate_code(result: QualityResult):
     if result.prediction_result is not None:
-        result.codes["cpp"] = apply_clang(cpp.main(CodeGenArgs(
-            TEMPLATE_CODE,
+        result.codes["cpp"] = apply_clang(CPP.default_code_generator(CodeGenArgs(
+            CPP_TEMPLATE,
+            result.prediction_result.format,
+            result.constant_set,
+            CodeStyleConfig()
+        )))
+        result.codes["java"] = apply_clang(JAVA.default_code_generator(CodeGenArgs(
+            JAVA_TEMPLATE,
+            result.prediction_result.format,
+            result.constant_set,
+            CodeStyleConfig()
+        )))
+        result.codes["rust"] = apply_clang(RUST.default_code_generator(CodeGenArgs(
+            RUST_TEMPLATE,
             result.prediction_result.format,
             result.constant_set,
             CodeStyleConfig()

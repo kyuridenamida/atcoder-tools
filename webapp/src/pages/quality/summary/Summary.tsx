@@ -7,6 +7,7 @@ import QualityResult from "../../../models/QualityResult";
 import "./Summary.scss";
 import Detail from "./Detail";
 import ProblemLink from "./ProblemLink";
+import Scrollable from "../../../common/Scrollable";
 
 export default class Summary extends React.Component<{}, {
     showingCode: boolean,
@@ -129,7 +130,7 @@ export default class Summary extends React.Component<{}, {
         };
 
 
-        return <div>
+        return <React.Fragment>
             <Row>
                 <h3>各問題毎の解析結果</h3>
                 <Col sm={12}>
@@ -140,13 +141,14 @@ export default class Summary extends React.Component<{}, {
                     </Label>
                 </Col>
             </Row>
-            <Row>
+            <Row className="page-content">
                 <Col sm={this.state.detailedSearchMode ? 12 : 6}>
                     <ReactTable
                         filterable
                         data={qualityResultList}
                         columns={columns}
                         defaultFilterMethod={defaultFilterMethod}
+                        pageSize={20}
                         style={{
                             height: "100%"
                         }}
@@ -165,11 +167,13 @@ export default class Summary extends React.Component<{}, {
                 </Col>
                 {!this.state.detailedSearchMode && this.state.activeQualityResult &&
                 <Col sm={6}>
-                    <Detail qualityResult={this.state.activeQualityResult}/>
+                    <Scrollable height={"100%"}>
+                        <Detail qualityResult={this.state.activeQualityResult}/>
+                    </Scrollable>
                 </Col>
                 }
             </Row>
-        </div>
+        </React.Fragment>
     }
 
     private getCellText(column, value) {

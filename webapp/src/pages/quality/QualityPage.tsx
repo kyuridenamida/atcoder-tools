@@ -6,13 +6,11 @@ import Summary from "./summary/Summary";
 class QualityPage extends React.Component{
     public render() {
         return (
-            <div>
-                <Router>
-                    <div>
-                        <Route path="/quality/summary" exact component={Summary}/>
-                    </div>
-                </Router>
-            </div>
+            <Router>
+                <React.Fragment>
+                    <Route path="/quality/summary" exact component={Summary}/>
+                </React.Fragment>
+            </Router>
         );
     }
 }

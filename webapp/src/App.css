@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  height: 100%;
 }
 
 .App-logo {
@@ -31,4 +32,23 @@
   padding-top: 10px;
   padding-left: 50px;
   padding-right: 50px;
+  height: calc(100% - 56px);
+  display: flex;
+  flex-direction: column;
+}
+.page-content {
+  flex: 1;
+
+}
+
+body {
+  height:100%;
+}
+
+html {
+  height:100%;
+}
+
+#root {
+  height: 100%;
 }
