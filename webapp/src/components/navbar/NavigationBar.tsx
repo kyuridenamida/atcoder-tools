@@ -22,12 +22,12 @@ class NavigationBar extends React.Component<{},{isOpen: boolean}> {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <NavbarBrand href="/">AtCoder Tools</NavbarBrand>
+                    <NavbarBrand href="#/">AtCoder Tools</NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <NavLink href="/quality/summary">各問題毎の解析結果</NavLink>
+                                <NavLink href="#/quality/summary">各問題毎の解析結果</NavLink>
                             </NavItem>
                             <NavItem>
                                 <NavLink href="https://github.com/kyuridenamida/atcoder-tools">GitHub</NavLink>

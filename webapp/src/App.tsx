@@ -3,7 +3,7 @@ import './App.css';
 
 import NavigationBar from './components/navbar/NavigationBar'
 import HomePage from "./pages/homepage/HomePage";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {HashRouter as Router, Route} from "react-router-dom";
 import QualityPage from "./pages/quality/QualityPage";
 
 class App extends React.Component {
