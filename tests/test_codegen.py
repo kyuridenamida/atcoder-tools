@@ -145,11 +145,14 @@ class TestCodeGenerator(unittest.TestCase):
             exec_result = self._compile_and_run(
                 lang,
                 pred_result.format,
-                _full_path(os.path.join(lang.name, lang.source_code_name("echo_template"))),
-                _full_path(os.path.join(lang.name, lang.source_code_name("expected_echo_generated_code"))),
+                _full_path(os.path.join(
+                    lang.name, lang.source_code_name("echo_template"))),
+                _full_path(os.path.join(lang.name, lang.source_code_name(
+                    "expected_echo_generated_code"))),
                 input_file
             )
-            self.assertEqual(load_text_file(expected_output_file), exec_result.output)
+            self.assertEqual(load_text_file(
+                expected_output_file), exec_result.output)
 
     def _compile_command(self, lang: Language, code_file: str):
         if lang == CPP:
@@ -184,10 +187,12 @@ class TestCodeGenerator(unittest.TestCase):
         )
 
         code = lang.default_code_generator(args)
-        self.compare_two_texts_ignoring_trailing_spaces(load_text_file(expected_generated_code_file), code)
+        self.compare_two_texts_ignoring_trailing_spaces(
+            load_text_file(expected_generated_code_file), code)
         create_code(code, code_file)
         print(run_command(compile_cmd, self.temp_dir))
-        exec_result = run_program(exec_file, input_file, 2, exec_args, self.temp_dir)
+        exec_result = run_program(
+            exec_file, input_file, 2, exec_args, self.temp_dir)
         print("== stdout ==")
         print(exec_result.output)
         print("== stderr ==")
