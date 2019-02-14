@@ -66,6 +66,7 @@ def norm_error(err):
 
 
 class QualityResult:
+
     def __init__(self):
         self.problem = None
         self.contest = None
@@ -154,7 +155,8 @@ def do_predict_constants(result: QualityResult):
     except Exception as e:
         result.modulo_error = e
 
-    result.yes_str, result.no_str = predict_yes_no(result.problem_content.original_html)
+    result.yes_str, result.no_str = predict_yes_no(
+        result.problem_content.original_html)
 
     result.constant_set = ProblemConstantSet(
         mod=result.modulo,
@@ -216,7 +218,8 @@ async def process_problem(problem, contest, total) -> QualityResult:
         do_predict_constants(result)
         generate_code(result)
         increment_counter()
-        print("Processed {} ... {}/{}".format(problem.problem_id, get_counter(), total), file=sys.stderr)
+        print("Processed {} ... {}/{}".format(
+            problem.problem_id, get_counter(), total), file=sys.stderr)
         return result
     except Exception as e:
         print(e, file=sys.stderr)
@@ -242,7 +245,8 @@ def main(output_path: str):
             contest=contest
         ) for problem in problem_list]
     # args_list = args_list[:100]
-    tasks = asyncio.wait([process_problem(**args, total=len(args_list)) for idx, args in enumerate(args_list)])
+    tasks = asyncio.wait([process_problem(**args, total=len(args_list))
+                          for idx, args in enumerate(args_list)])
     done, pending = loop.run_until_complete(tasks)
     done = [x.result() for x in done]
     res = []
