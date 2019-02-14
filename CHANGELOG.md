@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.1.1 / 2018-02-14 
+- [#84](https://github.com/kyuridenamida/atcoder-tools/pull/84) Output stdout even when getting RE or TLE.
+- [#86](https://github.com/kyuridenamida/atcoder-tools/pull/86) Support Rust
+    - Thanks for [@fukatani](https://github.com/fukatani/)'s contribution and [@koba-e964](https://github.com/koba-e964/)'s code review!
+- [#88](https://github.com/kyuridenamida/atcoder-tools/pull/88) Fix a bug you can't specify a code to submit by --code for submit command.
+- [#92](https://github.com/kyuridenamida/atcoder-tools/pull/92) Add unit tests to check if the default templates / code generators are correct, including a bug fix of Java code generator about two-dimensional input.
+
+
 ## 1.1.0 / 2018-01-18 
 This version includes a breaking change. Deleting --replacement parameter requires some changes in your template. See [#79](https://github.com/kyuridenamida/atcoder-tools/pull/79).
 - [#80](https://github.com/kyuridenamida/atcoder-tools/pull/80) Anything configurable from command line is configurable from toml
