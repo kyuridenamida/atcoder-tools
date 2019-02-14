@@ -150,7 +150,8 @@ export default class Summary extends React.Component<{}, {
                         defaultFilterMethod={defaultFilterMethod}
                         pageSize={20}
                         style={{
-                            height: "100%"
+                            height: "100%",
+                            maxHeight: "1000px"
                         }}
                         getTrProps={(state, rowInfo) => {
                             if (!rowInfo || !rowInfo.hasOwnProperty("original")) {
