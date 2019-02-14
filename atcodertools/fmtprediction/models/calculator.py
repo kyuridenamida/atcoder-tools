@@ -16,19 +16,31 @@ class UnknownOperatorError(Exception):
 
 
 def add(a, b):
-    return a + b
+    try:
+        return a + b
+    except TypeError as e:
+        raise EvaluateError(e)
 
 
 def sub(a, b):
-    return a - b
+    try:
+        return a - b
+    except TypeError as e:
+        raise EvaluateError(e)
 
 
 def mul(a, b):
-    return a * b
+    try:
+        return a * b
+    except TypeError as e:
+        raise EvaluateError(e)
 
 
 def div(a, b):
-    return a // b
+    try:
+        return a // b
+    except TypeError as e:
+        raise EvaluateError(e)
 
 
 def _operator_to_string(operator):

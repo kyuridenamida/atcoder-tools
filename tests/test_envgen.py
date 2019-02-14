@@ -6,6 +6,7 @@ import unittest
 from os.path import relpath
 
 from atcodertools.client.atcoder import AtCoderClient
+from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.config import Config
 from atcodertools.tools.envgen import prepare_contest, main
 
@@ -45,7 +46,6 @@ class TestEnvGen(unittest.TestCase):
             ["agc029",
              "--workspace", self.temp_dir,
              "--template", TEMPLATE_PATH,
-             "--replacement", REPLACEMENT_PATH,
              "--lang", "cpp",
              "--without-login",
              '--config', config_path
@@ -60,12 +60,12 @@ class TestEnvGen(unittest.TestCase):
             prepare_contest(
                 AtCoderClient(),
                 "agc029",
-                self.temp_dir,
-                TEMPLATE_PATH,
-                REPLACEMENT_PATH,
-                "cpp",
-                False,
-                Config(),
+                Config(
+                    code_style_config=CodeStyleConfig(
+                        workspace_dir=self.temp_dir,
+                        template_file=TEMPLATE_PATH,
+                        lang="cpp",
+                    ))
             )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 

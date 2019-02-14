@@ -30,6 +30,9 @@ class JavaCodeGenerator(CppCodeGenerator):
             raise NotImplementedError
         return template.format(type=self._convert_type(var.type))
 
+    def _actual_arguments(self) -> str:
+        return ", ".join([v.name for v in self._format.all_vars()])
+
     def _generate_declaration(self, var: Variable):
         if var.dim_num() == 0:
             constructor = ""
@@ -39,7 +42,7 @@ class JavaCodeGenerator(CppCodeGenerator):
                 size=var.first_index.get_length()
             )
         elif var.dim_num() == 2:
-            constructor = " = new {type}[int({row_size})][int({col_size})]".format(
+            constructor = " = new {type}[(int)({row_size})][(int)({col_size})]".format(
                 type=self._convert_type(var.type),
                 row_size=var.first_index.get_length(),
                 col_size=var.second_index.get_length()

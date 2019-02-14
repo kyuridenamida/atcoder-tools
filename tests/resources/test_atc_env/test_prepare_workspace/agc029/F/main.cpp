@@ -1,7 +1,13 @@
-// Failed to generate code
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
 
+void solve(){
+
+}
+
+int main(){
+    
+    solve();
+    return 0;
 }

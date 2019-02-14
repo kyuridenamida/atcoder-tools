@@ -5,21 +5,12 @@ import sys
 import os
 
 from colorama import Fore
-
 from atcodertools.tools.utils import with_color
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.tools import tester
 
 from atcodertools.tools.models.metadata import Metadata
-
-
-def infer_detailed_lang(lang: str):
-    if lang == "java":
-        return "Java8 (OpenJDK 1.8.0)"
-    if lang == "cpp":
-        return "C++14 (GCC 5.4.1)"
-    raise NotImplementedError
 
 
 def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> bool:
@@ -99,13 +90,13 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                                                  metadata.problem.contest.get_submissions_url(submission)), Fore.LIGHTRED_EX))
                     return False
 
-        code_path = os.path.join(args.dir, metadata.code_filename)
+        code_path = args.code or os.path.join(args.dir, metadata.code_filename)
         with open(code_path, 'r') as f:
             source = f.read()
-        detailed_lang = infer_detailed_lang(metadata.lang)
-        logging.info("Submitting {} as {}".format(code_path, detailed_lang))
+        logging.info(
+            "Submitting {} as {}".format(code_path, metadata.lang.name))
         submission = client.submit_source_code(
-            metadata.problem.contest, metadata.problem, detailed_lang, source)
+            metadata.problem.contest, metadata.problem, metadata.lang, source)
         logging.info("{} {}".format(
             with_color("Done!", Fore.LIGHTGREEN_EX),
             metadata.problem.contest.get_submissions_url(submission)))

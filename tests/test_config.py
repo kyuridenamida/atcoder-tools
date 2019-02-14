@@ -4,6 +4,7 @@ import os
 from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, CodeStyleConfigInitError, \
     INDENT_TYPE_TAB
 from atcodertools.config.config import Config
+from atcodertools.tools import get_default_config_path
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -43,6 +44,10 @@ class TestConfig(unittest.TestCase):
                 Config.load(f)
         except TypeError:
             pass
+
+    def test_load_default_config(self):
+        with open(get_default_config_path(), 'r') as f:
+            Config.load(f)
 
     def test_init_code_style_config_with_invalid_parameters(self):
         self._expect_error_when_init_config(

@@ -2,12 +2,16 @@
 indent_type = 'space' # 'tab' or 'space'
 indent_width = 4
 
+workspace_dir = '~/atcoder-workspace/'
+lang = 'cpp' # 'cpp' or 'java' (Currently)
+
 ## template_file is a file path to template code
 #template_file=
 
 ## code_generator_file is a path to .py file defining custom code generator function.
 ## Please check README.md for details.
 #code_generator_file=
+
 
 [postprocess]
 ## exec_on_each_problem_dir is executed after every problem directory's creation
@@ -17,3 +21,8 @@ indent_width = 4
 ## exec_on_contest_dir is executed once after `atcoder-tools gen`
 ## with the contest directory as cwd like arc001/
 #exec_on_contest_dir=
+
+[etc]
+download_without_login=false
+parallel_download=false
+save_no_session_cache=false

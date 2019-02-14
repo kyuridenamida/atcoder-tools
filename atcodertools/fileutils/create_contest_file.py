@@ -5,6 +5,7 @@ from atcodertools.client.models.sample import Sample
 
 
 def _make_text_file(file_path, text):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     with open(file_path, 'w') as f:
         f.write(text)
 

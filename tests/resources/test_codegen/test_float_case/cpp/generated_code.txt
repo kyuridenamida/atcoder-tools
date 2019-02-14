@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void solve(long long L, long long N, long long M, vector<long double> K, vector<long long> A, vector<long double> S){
+void solve(long long L, long long N, long long M, std::vector<long double> K, std::vector<long long> A, std::vector<long double> S){
 
 }
 
@@ -12,16 +12,16 @@ int main(){
     scanf("%lld",&N);
     long long M;
     scanf("%lld",&M);
-    vector<long double> K(L);
+    std::vector<long double> K(L);
     for(int i = 0 ; i < L ; i++){
         scanf("%Lf",&K[i]);
     }
-    vector<long long> A(N);
-    vector<long double> S(N);
+    std::vector<long long> A(N);
+    std::vector<long double> S(N);
     for(int i = 0 ; i < N ; i++){
         scanf("%lld",&A[i]);
         scanf("%Lf",&S[i]);
     }
-    solve(L, N, M, K, A, S);
+    solve(L, N, M, std::move(K), std::move(A), std::move(S));
     return 0;
 }

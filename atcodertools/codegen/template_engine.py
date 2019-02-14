@@ -1,8 +1,8 @@
-import string
 import re
+import string
 import warnings
 
-import jinja2
+from jinja2 import Environment
 
 
 def _substitute(s, reps):
@@ -47,5 +47,5 @@ def old_render(template, **kwargs):
 
 
 def render_by_jinja(template, **kwargs):
-    template = jinja2.Template(template)
-    return template.render(**kwargs) + "\n"
+    return Environment(trim_blocks=True,
+                       lstrip_blocks=True).from_string(template).render(**kwargs) + "\n"

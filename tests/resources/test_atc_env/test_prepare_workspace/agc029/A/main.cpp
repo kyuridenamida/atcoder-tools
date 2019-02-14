@@ -2,16 +2,13 @@
 using namespace std;
 
 
-
-
-
-void solve(string S){
+void solve(std::string S){
 
 }
 
 int main(){
-    string S;
-    cin >> S;
+    std::string S;
+    std::cin >> S;
     solve(S);
     return 0;
 }
