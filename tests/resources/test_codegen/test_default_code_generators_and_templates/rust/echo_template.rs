@@ -5,14 +5,39 @@ use std::*;
 const MOD: i64 = {{ mod }};
 {% endif %}
 {% if yes_str %}
-const YES: &'static str = "{{ yes_str }}";
+static YES: &'static str = "{{ yes_str }}";
 {% endif %}
 {% if no_str %}
-const NO: &'static str = "{{ no_str }}";
+static NO: &'static str = "{{ no_str }}";
 {% endif %}
 {% if prediction_success %}
 fn solve({{ formal_arguments }}) {
+    println!("{} {}", N, M);
+    assert!(H.len() as i64 == N - 1);
+    for i in 0..(N-1) as usize {
+        assert!(H[i].len() as i64 == M - 2);
+        for j in 0..(M-2) as usize {
+            if j > 0 {
+                print!(" ")
+            }
+            print!("{}", H[i][j]);
+        }
+        print!("\n");
+    }
 
+    assert!(A.len() as i64 == N - 1);
+    assert!(B.len() as i64 == N - 1);
+    for i in 0..(N-1) as usize {
+        println!("{} {}", A[i], B[i]);
+    }
+    println!("{}", Q);
+    assert!(X.len() as i64 == M + Q);
+    for i in 0..(M+Q) as usize {
+        println!("{}", X[i]);
+    }
+    println!("{}", YES);
+    println!("{}", NO);
+    println!("{}", MOD);
 }
 {% endif %}
 

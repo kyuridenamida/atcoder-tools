@@ -1,31 +1,42 @@
 use io::*;
 use std::*;
 
-{% if mod %}
-const MOD: i64 = {{ mod }};
-{% endif %}
-{% if yes_str %}
-const YES: &'static str = "{{ yes_str }}";
-{% endif %}
-{% if no_str %}
-const NO: &'static str = "{{ no_str }}";
-{% endif %}
-{% if prediction_success %}
-fn solve({{ formal_arguments }}) {
+const MOD: i64 = 123;
+const YES: &'static str = "yes";
+const NO: &'static str = "NO";
+fn solve(N: i64, M: i64, H: Vec<Vec<String>>, A: Vec<i64>, B: Vec<f64>, Q: i64, X: Vec<i64>) {
 
 }
-{% endif %}
 
 fn main() {
-    {% if prediction_success %}
-    {{input_part}}
+    let con = read_string();
+    let mut scanner = Scanner::new(&con);
+    let mut N: i64;
+    N = scanner.next();
+    let mut M: i64;
+    M = scanner.next();
+    let mut H: Vec<Vec<String>> = vec![vec![String::new(); (M-1-2+1) as usize]; (N-2+1) as usize];
+    for i in 0..(N-2+1) as usize {
+        for j in 0..(M-1-2+1) as usize {
+            H[i][j] = scanner.next();
+        }
+    }
+    let mut A: Vec<i64> = vec![0i64; (N-2+1) as usize];
+    let mut B: Vec<f64> = vec![0f64; (N-2+1) as usize];
+    for i in 0..(N-2+1) as usize {
+        A[i] = scanner.next();
+        B[i] = scanner.next();
+    }
+    let mut Q: i64;
+    Q = scanner.next();
+    let mut X: Vec<i64> = vec![0i64; (M+Q) as usize];
+    for i in 0..(M+Q) as usize {
+        X[i] = scanner.next();
+    }
     // In order to avoid potential stack overflow, spawn a new thread.
     let stack_size = 104_857_600; // 100 MB
     let thd = std::thread::Builder::new().stack_size(stack_size);
-    thd.spawn(move || solve({{ actual_arguments }})).unwrap().join().unwrap();
-    {% else %}
-    // Failed to predict input format
-    {% endif %}
+    thd.spawn(move || solve(N, M, H, A, B, Q, X)).unwrap().join().unwrap();
 }
 
 pub mod io {

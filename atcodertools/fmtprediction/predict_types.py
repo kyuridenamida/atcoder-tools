@@ -1,6 +1,7 @@
 import re
 from typing import List, Dict, Any
 
+from atcodertools.fmtprediction.models.calculator import EvaluateError
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.client.models.sample import Sample
 from atcodertools.fmtprediction.models.variable import SimpleVariable
@@ -146,7 +147,7 @@ def predict_types(simple_format: Format[SimpleVariable], samples: List[Sample]) 
                 predictor.get_typing_result())
         except (
                 TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
-                InvalidLoopIndexError):
+                InvalidLoopIndexError, EvaluateError):
             raise TypePredictionFailedError
 
     return res_type_dict
