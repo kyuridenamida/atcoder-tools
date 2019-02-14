@@ -1,7 +1,7 @@
 import re
 from typing import Pattern, Callable
 
-from atcodertools.codegen.code_generators import cpp, java, rust
+from atcodertools.codegen.code_generators import cpp, java, rust, python
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 
@@ -67,5 +67,14 @@ RUST = Language(
     default_template_path=get_default_template_path('rs'),
 )
 
-ALL_LANGUAGES = [CPP, JAVA, RUST]
+PYTHON = Language(
+    name="python",
+    display_name="Python3",
+    extension="py",
+    submission_lang_pattern=re.compile(".*Python3.*"),
+    default_code_generator=python.main,
+    default_template_path=get_default_template_path('py'),
+)
+
+ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON]
 ALL_LANGUAGE_NAMES = [lang.display_name for lang in ALL_LANGUAGES]
