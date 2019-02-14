@@ -30,8 +30,6 @@
     "eject": "react-scripts-ts eject",
     "partial-deploy": "npm run build && gh-pages -d build",
     "deploy": "./generate.sh && build_data.sh && npm run build && gh-pages -d build"
-
-
   },
   "devDependencies": {
     "@types/classnames": "^2.2.6",
