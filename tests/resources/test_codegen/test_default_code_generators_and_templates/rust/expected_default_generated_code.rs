@@ -2,8 +2,8 @@ use io::*;
 use std::*;
 
 const MOD: i64 = 123;
-static YES: &'static str = "yes";
-static NO: &'static str = "NO";
+const YES: &'static str = "yes";
+const NO: &'static str = "NO";
 fn solve(N: i64, M: i64, H: Vec<Vec<String>>, A: Vec<i64>, B: Vec<f64>, Q: i64, X: Vec<i64>) {
 
 }

@@ -5,10 +5,10 @@ use std::*;
 const MOD: i64 = {{ mod }};
 {% endif %}
 {% if yes_str %}
-static YES: &'static str = "{{ yes_str }}";
+const YES: &'static str = "{{ yes_str }}";
 {% endif %}
 {% if no_str %}
-static NO: &'static str = "{{ no_str }}";
+const NO: &'static str = "{{ no_str }}";
 {% endif %}
 {% if prediction_success %}
 fn solve({{ formal_arguments }}) {
