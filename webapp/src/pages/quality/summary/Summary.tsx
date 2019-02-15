@@ -183,25 +183,32 @@ export default class Summary extends React.Component<{}, {
                 <Col sm={12}>
                     <Row>
                         <Col sm={6}>
-                            <h3>入力フォーマット解析成功率</h3>
-                            <Table>
-                                <tbody>
-                                {
-                                    [
-                                        ["AGC", correctAGC, allAGC],
-                                        ["ARC", correctARC, allARC],
-                                        ["ABC", correctABC, allABC],
-                                        ["レギュラーコンテスト全体(AGC,ABC,ARC)", correctRegularContestCount, allRegularContestCount],
-                                    ].map(([text, correct, all]: [string, number, number]) => {
-                                        return <tr key={text}>
-                                            <th scope="row">{text}</th>
-                                            <td> {correct} / {all} </td>
-                                            <td>{Math.round(100 * correct / all)} %</td>
-                                        </tr>
-                                    })
-                                }
-                                </tbody>
-                            </Table>
+                            <Hidable
+                                showButtonText={"入力フォーマット解析成功率を表示"}
+                                hideButtonText={"入力フォーマット解析成功率を隠す"}
+                                visibleByDefault
+                            >
+                                <h3 style={{display: "inline-block"}}>入力フォーマット解析成功率</h3>
+                                <Table>
+                                    <tbody>
+                                    {
+                                        [
+                                            ["AGC", correctAGC, allAGC],
+                                            ["ARC", correctARC, allARC],
+                                            ["ABC", correctABC, allABC],
+                                            ["レギュラーコンテスト全体(AGC,ABC,ARC)", correctRegularContestCount, allRegularContestCount],
+                                        ].map(([text, correct, all]: [string, number, number]) => {
+                                            return <tr key={text}>
+                                                <th scope="row">{text}</th>
+                                                <td> {correct} / {all} </td>
+                                                <td>{Math.round(100 * correct / all)} %</td>
+                                            </tr>
+                                        })
+                                    }
+                                    </tbody>
+                                </Table>
+                            </Hidable>
+
                         </Col>
                     </Row>
                 </Col>

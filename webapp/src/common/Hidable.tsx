@@ -4,13 +4,14 @@ import { Collapse, Button } from 'reactstrap';
 interface ComponentProps {
     showButtonText: string,
     hideButtonText: string,
+    visibleByDefault?: boolean,
 }
 
 class Hidable extends React.Component<ComponentProps, {collapse: boolean}> {
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
-        this.state = { collapse: false };
+        this.state = { collapse: !!this.props.visibleByDefault };
     }
 
     toggle() {
