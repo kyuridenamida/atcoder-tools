@@ -24,8 +24,6 @@ export default interface QualityResult {
         value: string | null
     },
     codes: {
-        cpp?: string,
-        java?: string,
-        rust?: string,
+        [lang: string] : string,
     }
 }

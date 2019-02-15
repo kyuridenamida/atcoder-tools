@@ -5,6 +5,7 @@ import NavigationBar from './components/navbar/NavigationBar'
 import HomePage from "./pages/homepage/HomePage";
 import {HashRouter as Router, Route} from "react-router-dom";
 import QualityPage from "./pages/quality/QualityPage";
+import TemplatesPage from "./pages/templates/TemplatesPage";
 
 class App extends React.Component {
     public render() {
@@ -15,6 +16,7 @@ class App extends React.Component {
                     <div className="text-left page-wrapper">
                         <Route path="/" exact component={HomePage}/>
                         <Route path="/quality/" component={QualityPage}/>
+                        <Route path="/templates/" component={TemplatesPage}/>
                     </div>
                 </div>
             </Router>

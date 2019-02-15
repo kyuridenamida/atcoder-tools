@@ -27,6 +27,9 @@ class NavigationBar extends React.Component<{},{isOpen: boolean}> {
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
+                                <NavLink href="#/templates">テンプレート</NavLink>
+                            </NavItem>
+                            <NavItem>
                                 <NavLink href="#/quality/summary">各問題毎の解析結果</NavLink>
                             </NavItem>
                             <NavItem>
