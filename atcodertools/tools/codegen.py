@@ -6,6 +6,7 @@ import posixpath
 import re
 import sys
 import urllib
+from io import IOBase
 
 from colorama import Fore
 
@@ -59,7 +60,8 @@ def get_problem_from_url(problem_url: str) -> Problem:
 
 def generate_code(atcoder_client: AtCoderClient,
                   problem_url: str,
-                  config: Config):
+                  config: Config,
+                  output_file: IOBase):
     problem = get_problem_from_url(problem_url)
     template_code_path = config.code_style_config.template_file
     lang = config.code_style_config.lang
@@ -104,7 +106,7 @@ def generate_code(atcoder_client: AtCoderClient,
 
     output_splitter()
 
-    sys.stdout.write(code_generator(
+    output_file.write(code_generator(
         CodeGenArgs(
             template,
             prediction_result.format,
@@ -113,7 +115,7 @@ def generate_code(atcoder_client: AtCoderClient,
         )))
 
 
-def main(prog, args):
+def main(prog, args, output_file=sys.stdout):
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
@@ -172,7 +174,8 @@ def main(prog, args):
 
     generate_code(client,
                   args.url,
-                  config)
+                  config,
+                  output_file=output_file)
 
 
 if __name__ == "__main__":
