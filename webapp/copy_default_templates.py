@@ -16,8 +16,8 @@ def main():
             generator_code = f.read()
             res[lang.name]["generator"] = generator_code
             res[lang.name]["generator_url"] = "https://github.com/kyuridenamida/atcoder-tools/blob/master" \
-                                              "/atcodertools/codegen/code_generators/{}".format(gen_py_file)
-
+                                              "/atcodertools/codegen/code_generators/{}".format(
+                                                  gen_py_file)
 
     json_str = json.dumps(res, indent=1)
     print("export default {};".format(json_str))
