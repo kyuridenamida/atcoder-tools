@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Col, Input, Label, Row} from 'reactstrap';
+import {Col, Input, Label, Row, Table} from 'reactstrap';
 import ReactTable from 'react-table'
 import qualityResultList from "../../../auto_generated/qualityResultList.js"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -8,18 +8,45 @@ import "./Summary.scss";
 import Detail from "./Detail";
 import ProblemLink from "./ProblemLink";
 import Scrollable from "../../../common/Scrollable";
+import qualityResultDefinition from 'src/auto_generated/qualityResultDefinition.js';
+import Hidable from "../../../common/Hidable";
+import Code from "./Code";
+
+
+const filteredQualityResultList = (filterMethod) => {
+    return qualityResultList.filter(filterMethod);
+};
+
+
+const isSomethingBad = (r) => r.statement_parse.error || r.format_prediction.error;
+
+const getAccuracyData = (contestNameRe: string) => {
+    const contestFilter = (r) => r.contest.contest_id.match(contestNameRe);
+    const allContestCount = filteredQualityResultList(contestFilter).length;
+    const correctContestCount = filteredQualityResultList((r) => !isSomethingBad(r) && contestFilter(r)).length;
+    return [allContestCount, correctContestCount]
+};
+
+const [allRegularContestCount, correctRegularContestCount] = getAccuracyData("(abc|arc|agc)");
+const [allAGC, correctAGC] = getAccuracyData("^agc");
+const [allARC, correctARC] = getAccuracyData("^arc");
+const [allABC, correctABC] = getAccuracyData("^abc");
 
 export default class Summary extends React.Component<{}, {
     showingCode: boolean,
     detailedSearchMode: boolean,
+    analysisMode: boolean,
     activeQualityResult: QualityResult | null,
+    analysisQuery: string,
 }> {
     constructor(props: any) {
         super(props);
         this.state = {
             activeQualityResult: null,
             detailedSearchMode: false,
+            analysisMode: false,
             showingCode: false,
+            analysisQuery: 'r.contest.contest_id.match("(abc|agc|arc)")',
         }
     }
 
@@ -34,6 +61,9 @@ export default class Summary extends React.Component<{}, {
         return this.state.activeQualityResult && problemId === this.state.activeQualityResult.problem.problem_id
     };
 
+    onQueryUpdated = (query: string) => {
+        this.setState({analysisQuery: query});
+    };
 
     render() {
         const {detailedSearchMode} = this.state;
@@ -129,23 +159,96 @@ export default class Summary extends React.Component<{}, {
             }
         };
 
+        const analysisFilterMethod = (r) => {
+            return eval(this.state.analysisQuery);
+        };
+
+        let failedToParse = false;
+
+        let resultsForTable;
+        if (this.state.analysisMode && this.state.analysisQuery.length > 0) {
+            try {
+                resultsForTable = filteredQualityResultList(analysisFilterMethod);
+            } catch {
+                resultsForTable = qualityResultList;
+                failedToParse = true;
+            }
+        } else {
+            resultsForTable = qualityResultList;
+        }
+
 
         return <React.Fragment>
             <Row>
-                <h3>各問題毎の解析結果</h3>
                 <Col sm={12}>
+                    <Row>
+                        <Col sm={6}>
+                            <h3>入力フォーマット解析成功率</h3>
+                            <Table>
+                                <tbody>
+                                {
+                                    [
+                                        ["AGC", correctAGC, allAGC],
+                                        ["ARC", correctARC, allARC],
+                                        ["ABC", correctABC, allABC],
+                                        ["レギュラーコンテスト全体(AGC,ABC,ARC)", correctRegularContestCount, allRegularContestCount],
+                                    ].map(([text, correct, all]: [string, number, number]) => {
+                                        return <tr key={text}>
+                                            <th scope="row">{text}</th>
+                                            <td> {correct} / {all} </td>
+                                            <td>{Math.round(100 * correct / all)} %</td>
+                                        </tr>
+                                    })
+                                }
+                                </tbody>
+                            </Table>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col sm={12}>
+                    <h3>各問題毎の解析結果</h3>
+                </Col>
+                <Col sm={1}>
                     <Label>
                         <Input type="checkbox" checked={this.state.detailedSearchMode}
                                onChange={() => this.setState({detailedSearchMode: !this.state.detailedSearchMode})}/>
                         詳細検索モード
                     </Label>
                 </Col>
+                <Col sm={11}>
+                    <Label>
+                        <Input type="checkbox" checked={this.state.analysisMode}
+                               onChange={() => {
+                                   this.setState({analysisMode: !this.state.analysisMode})
+                               }}/>
+                        解析モード (開発者向け)
+                    </Label>
+                </Col>
+                {this.state.analysisMode && <Col sm={6}>
+                    <Hidable
+                        showButtonText={"QualityResultの定義を表示"}
+                        hideButtonText={"QualityResultの定義を隠す"}
+                    >
+                        <Scrollable height={300}>
+                            <Code code={qualityResultDefinition} language={"typescript"}/>
+                        </Scrollable>
+                    </Hidable>
+                    function filter(r: QualityResult) => {"{ return "}
+                    <Input style={{display: "inline-block"}}
+                           value={this.state.analysisQuery}
+                           onChange={(e) => this.onQueryUpdated(e.target.value)}
+                           placeholder={"javascript condition expression"}
+                           invalid={failedToParse}
+                    />
+                    {"; }"}
+                    <p> {resultsForTable.length} 件マッチしました。</p>
+                </Col>}
             </Row>
             <Row className="page-content">
                 <Col sm={this.state.detailedSearchMode ? 12 : 6}>
                     <ReactTable
                         filterable
-                        data={qualityResultList}
+                        data={resultsForTable}
                         columns={columns}
                         defaultFilterMethod={defaultFilterMethod}
                         pageSize={20}
