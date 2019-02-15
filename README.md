@@ -20,6 +20,7 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 |C++|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)|[@asi1024](https://github.com/asi1024/) (template)|
 |Java|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)||
 |Rust|[@fukatani](https://github.com/fukatani/) (generator, template)|[@koba-e964](https://github.com/koba-e964/) (template, CR)|
+|Python3|[@kmyk](https://github.com/kmyk/) (generator, template)||
 
 ## How to install
 `pip3 install atcoder-tools`
@@ -83,6 +84,7 @@ optional arguments:
                         [Default (C++)] /atcodertools/tools/templates/default_template.cpp
                         [Default (Java)] /atcodertools/tools/templates/default_template.java
                         [Default (Rust)] /atcodertools/tools/templates/default_template.rs
+                        [Default (Python3)] /atcodertools/tools/templates/default_template.py
 
   --parallel            Prepare problem directories asynchronously using multi processors.
   --save-no-session-cache
