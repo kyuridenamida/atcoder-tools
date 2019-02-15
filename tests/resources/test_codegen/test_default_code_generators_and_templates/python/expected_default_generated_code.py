@@ -5,7 +5,7 @@ MOD = 123  # type: int
 YES = "yes"  # type: str
 NO = "NO"  # type: str
 
-def solve(N: int, M: int, H: "List[List[str]]", A: "List[int]", B: "List[float]", Q: int, X: "List[int]") -> None:
+def solve(N: int, M: int, H: "List[List[str]]", A: "List[int]", B: "List[float]", Q: int, X: "List[int]"):
     return
 
 

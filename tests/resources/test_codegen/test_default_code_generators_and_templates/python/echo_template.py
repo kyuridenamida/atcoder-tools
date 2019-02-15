@@ -11,7 +11,7 @@ YES = "{{ yes_str }}"  # type: str
 NO = "{{ no_str }}"  # type: str
 {% endif %}
 
-def solve({{ formal_arguments }}) -> None:
+def solve({{ formal_arguments }}):
     print(N, M)
     assert len(H) == N - 1
     for i in range(N - 1):

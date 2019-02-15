@@ -14,7 +14,7 @@ NO = "{{ no_str }}"  # type: str
 {% endif %}
 
 {% if prediction_success %}
-def solve({{ formal_arguments }}) -> None:
+def solve({{ formal_arguments }}):
     return
 
 {% endif %}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def solve(H: int, W: int, K: int, sr: int, sc: int, s: "List[str]", N: int, fr: "List[int]", fc: "List[int]", F: "List[int]", D: "List[int]") -> None:
+def solve(H: int, W: int, K: int, sr: int, sc: int, s: "List[str]", N: int, fr: "List[int]", fc: "List[int]", F: "List[int]", D: "List[int]"):
     return
 
 

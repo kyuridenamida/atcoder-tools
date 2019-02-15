@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def solve(${formal_arguments}) -> None:
+def solve(${formal_arguments}):
     return
 
 
