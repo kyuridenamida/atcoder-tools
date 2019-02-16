@@ -48,7 +48,7 @@ https://kyuridenamida.github.io/atcoder-tools/
 `atcoder-tools gen --help`で`atcoder-tools gen`の引数の詳細について確認することができます。
 
 例: 
-```
+```console
 $ atcoder-tools gen agc001
 $ cd ~/atcoder-workspace/agc001/A
 $ g++ main.cpp
@@ -57,12 +57,12 @@ $ atcoder-tools test
 
 `--without-login` 引数を指定するとログインなしでデータをダウンロードできます(一般公開されているコンテストのみ)。
 
-```
+```console
 $ atcoder-tools gen  [contest_id] --without-login
 ```
 
 ### gen の詳細
-```$xslt
+```
 usage: atcoder-tools gen
        [-h] [--without-login] [--workspace WORKSPACE] [--lang LANG]
        [--template TEMPLATE] [--parallel] [--save-no-session-cache]
@@ -96,7 +96,7 @@ optional arguments:
 
 ### test の詳細
 
-```$xslt
+```
 usage: atcoder-tools test [-h] [--exec EXEC]
                                                          [--num NUM]
                                                          [--dir DIR]
@@ -183,7 +183,7 @@ optional arguments:
 - データの並列ダウンロードを無効にする
 - ログイン情報のクッキーを保存する
 
-```$xslt
+```toml
 [codestyle]
 indent_type='space' # 'tab' or 'space'
 indent_width=4
@@ -222,7 +222,7 @@ save_no_session_cache=false
 - **yes_str** 問題文中に存在する yes や possible などの真を表しそうな文字列値
 - **no_str** 問題文中に存在する no や impossible などの偽を表しそうな文字列値
 
-```
+```c++
 #include <bits/stdc++.h>
 using namespace std;
 
