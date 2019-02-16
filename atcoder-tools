@@ -41,7 +41,8 @@ if __name__ == '__main__':
         print("{} test -- to test codes in your workspace".format(sys.argv[0]))
         print(
             "{} submit -- to submit a code to the contest system".format(sys.argv[0]))
-        print("{} codegen -- to generate a code".format(sys.argv[0]))
+        print(
+            "{} codegen -- to generate a code for a given problem (stdout)".format(sys.argv[0]))
         sys.exit(-1)
 
     prog = " ".join(sys.argv[:2])
