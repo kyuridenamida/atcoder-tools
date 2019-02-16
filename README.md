@@ -138,6 +138,33 @@ optional arguments:
 
 ```
 
+### codegen の詳細
+
+```
+usage: ./atcoder-tools codegen [-h] [--without-login] [--lang LANG]
+                               [--template TEMPLATE] [--save-no-session-cache]
+                               [--config CONFIG]
+                               url
+
+positional arguments:
+  url                   URL (e.g. https://atcoder.jp/contests/abc012/tasks/abc012_3)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --without-login       Download data without login
+  --lang LANG           Programming language of your template code, cpp or java or rust.
+                        [Default] cpp
+  --template TEMPLATE   File path to your template code
+                        [Default (C++)] /home/user/GitHub/atcoder-tools/atcodertools/tools/templates/default_template.cpp
+                        [Default (Java)] /home/user/GitHub/atcoder-tools/atcodertools/tools/templates/default_template.java
+                        [Default (Rust)] /home/user/GitHub/atcoder-tools/atcodertools/tools/templates/default_template.rs
+  --save-no-session-cache
+                        Save no session cache to avoid security risk
+  --config CONFIG       File path to your config file
+                        [Default (Primary)] /home/user/.atcodertools.toml
+                        [Default (Secondary)] /home/user/GitHub/atcoder-tools/atcodertools/tools/atcodertools-default.toml
+```
+
 
 ## 設定ファイルの例
 `~/.atcodertools.toml`に以下の設定を保存すると、コードスタイルや、コード生成後に実行するコマンドを指定できます。
