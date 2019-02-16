@@ -18,7 +18,7 @@ install:
 
 script:
   - flake8 --ignore=E501, W605
-  - autopep8 -r . --diff | tee check_autopep8
+  - autopep8 -r . --exclude 'default_template.py,test_codegen' --diff | tee check_autopep8
   - test ! -s check_autopep8
   - atcoder-tools gen arc050 --without-login
   - nosetests tests --exe -v --with-coverage --cover-package=atcodertools
