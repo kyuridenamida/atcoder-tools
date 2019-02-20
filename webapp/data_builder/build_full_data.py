@@ -177,13 +177,13 @@ def generate_code(result: QualityResult):
             result.constant_set,
             CodeStyleConfig()
         )))
-        result.codes["java"] = apply_clang(JAVA.default_code_generator(CodeGenArgs(
+        result.codes["java"] = JAVA.default_code_generator(CodeGenArgs(
             JAVA_TEMPLATE,
             result.prediction_result.format,
             result.constant_set,
             CodeStyleConfig()
-        )))
-        result.codes["rust"] = apply_clang(RUST.default_code_generator(CodeGenArgs(
+        ))
+        result.codes["rust"] = RUST.default_code_generator(CodeGenArgs(
             RUST_TEMPLATE,
             result.prediction_result.format,
             result.constant_set,
