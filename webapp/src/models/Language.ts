@@ -1,6 +1,6 @@
 
 type Language = 'cpp' | 'rust' | 'java' | 'python';
-export const ALL_LANGUAGES : Language[] = ['cpp', 'rust', 'java'];
+export const ALL_LANGUAGES : Language[] = ['cpp', 'rust', 'java', 'python'];
 
 export const langToDisplayName = (language: Language) => {
     switch (language){
