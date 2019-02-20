@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 mkdir -p ./src/auto_generated/
+mkdir -p ./src/out/
 cd ./data_builder/
 ./prepare.sh
 python3 -m compileall ./build_full_data.py
