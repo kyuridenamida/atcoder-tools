@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.1.2 / 2019-02-21 
+- [#98](https://github.com/kyuridenamida/atcoder-tools/pull/98) Add "codegen" sub command to simply generate the input part for a specific problem without preparing other files. 
+    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
+- [#97](https://github.com/kyuridenamida/atcoder-tools/pull/97) Support Python 3
+    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution again!
+
+
 ## 1.1.1 / 2019-02-14 
 - Add an explicit disclaimer on README.md
 - [#84](https://github.com/kyuridenamida/atcoder-tools/pull/84) Output stdout even when getting RE or TLE.
