@@ -21,5 +21,5 @@ echo "Please run \`build_data.sh\` if you get an error or you would like to upda
 echo -n "export default " > ${quality_result_path}
 cat ${json_path} >> ${quality_result_path}
 echo ";" >> ${quality_result_path}
-mkdir ./public/data/ -p
-cp ${json_path} ./public/data/all.json
+mkdir ./public/api/ -p
+cp ${json_path} ./public/api/all.json
