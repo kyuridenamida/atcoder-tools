@@ -7,18 +7,16 @@ import sys
 import tempfile
 import threading
 
+from atcodertools.client.atcoder import AtCoderClient
+from atcodertools.client.models.problem import Problem
+from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError, ProblemContent
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.common.language import RUST, CPP, JAVA
+from atcodertools.constprediction.constants_prediction import predict_modulo, predict_yes_no
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format as predict
-
-from atcodertools.client.models.problem import Problem
-from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError, ProblemContent
-from atcodertools.constprediction.constants_prediction import predict_modulo, predict_yes_no
-
-from atcodertools.client.atcoder import AtCoderClient
 
 atcoder = AtCoderClient()
 CACHE_DIR = "./.cache/"
@@ -258,8 +256,8 @@ def main(output_path: str):
     json_str = json.dumps(res)
 
     with open(output_path, "w") as fp:
-        fp.write("export default {};".format(json_str))
+        fp.write(json_str)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main("./out/all_data.json")

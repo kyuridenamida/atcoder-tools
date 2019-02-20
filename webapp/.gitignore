@@ -24,3 +24,5 @@ yarn-error.log*
 /src/auto_generated/
 /data_builder/auto_generated/
 /data_builder/.cache/
+/data_builder/out/
+./public/api/
