@@ -12,7 +12,7 @@ from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError, ProblemContent
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.common.language import RUST, CPP, JAVA
+from atcodertools.common.language import RUST, CPP, JAVA, PYTHON
 from atcodertools.constprediction.constants_prediction import predict_modulo, predict_yes_no
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.fileutils.load_text_file import load_text_file
@@ -166,6 +166,7 @@ def do_predict_constants(result: QualityResult):
 CPP_TEMPLATE = load_text_file(CPP.default_template_path)
 JAVA_TEMPLATE = load_text_file(JAVA.default_template_path)
 RUST_TEMPLATE = load_text_file(RUST.default_template_path)
+PYTHON_TEMPLATE = load_text_file(PYTHON.default_template_path)
 
 
 def generate_code(result: QualityResult):
@@ -176,18 +177,24 @@ def generate_code(result: QualityResult):
             result.constant_set,
             CodeStyleConfig()
         )))
-        result.codes["java"] = apply_clang(JAVA.default_code_generator(CodeGenArgs(
+        result.codes["java"] = JAVA.default_code_generator(CodeGenArgs(
             JAVA_TEMPLATE,
             result.prediction_result.format,
             result.constant_set,
             CodeStyleConfig()
-        )))
-        result.codes["rust"] = apply_clang(RUST.default_code_generator(CodeGenArgs(
+        ))
+        result.codes["rust"] = RUST.default_code_generator(CodeGenArgs(
             RUST_TEMPLATE,
             result.prediction_result.format,
             result.constant_set,
             CodeStyleConfig()
-        )))
+        ))
+        result.codes["python"] = PYTHON.default_code_generator(CodeGenArgs(
+            PYTHON_TEMPLATE,
+            result.prediction_result.format,
+            result.constant_set,
+            CodeStyleConfig()
+        ))
 
 
 _counter = 0
