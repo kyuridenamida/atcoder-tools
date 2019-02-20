@@ -20,6 +20,7 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 |C++|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)|[@asi1024](https://github.com/asi1024/) (template)|
 |Java|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)||
 |Rust|[@fukatani](https://github.com/fukatani/) (generator, template)|[@koba-e964](https://github.com/koba-e964/) (template, CR)|
+|Python3|[@kmyk](https://github.com/kmyk/) (generator, template)||
 
 ## How to install
 `pip3 install atcoder-tools`
@@ -47,7 +48,7 @@ https://kyuridenamida.github.io/atcoder-tools/
 `atcoder-tools gen --help`で`atcoder-tools gen`の引数の詳細について確認することができます。
 
 例: 
-```
+```console
 $ atcoder-tools gen agc001
 $ cd ~/atcoder-workspace/agc001/A
 $ g++ main.cpp
@@ -56,12 +57,12 @@ $ atcoder-tools test
 
 `--without-login` 引数を指定するとログインなしでデータをダウンロードできます(一般公開されているコンテストのみ)。
 
-```
+```console
 $ atcoder-tools gen  [contest_id] --without-login
 ```
 
 ### gen の詳細
-```$xslt
+```
 usage: atcoder-tools gen
        [-h] [--without-login] [--workspace WORKSPACE] [--lang LANG]
        [--template TEMPLATE] [--parallel] [--save-no-session-cache]
@@ -83,6 +84,7 @@ optional arguments:
                         [Default (C++)] /atcodertools/tools/templates/default_template.cpp
                         [Default (Java)] /atcodertools/tools/templates/default_template.java
                         [Default (Rust)] /atcodertools/tools/templates/default_template.rs
+                        [Default (Python3)] /atcodertools/tools/templates/default_template.py
 
   --parallel            Prepare problem directories asynchronously using multi processors.
   --save-no-session-cache
@@ -94,7 +96,7 @@ optional arguments:
 
 ### test の詳細
 
-```$xslt
+```
 usage: atcoder-tools test [-h] [--exec EXEC]
                                                          [--num NUM]
                                                          [--dir DIR]
@@ -138,6 +140,33 @@ optional arguments:
 
 ```
 
+### codegen の詳細
+
+```
+usage: ./atcoder-tools codegen [-h] [--without-login] [--lang LANG]
+                               [--template TEMPLATE] [--save-no-session-cache]
+                               [--config CONFIG]
+                               url
+
+positional arguments:
+  url                   URL (e.g. https://atcoder.jp/contests/abc012/tasks/abc012_3)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --without-login       Download data without login
+  --lang LANG           Programming language of your template code, cpp or java or rust.
+                        [Default] cpp
+  --template TEMPLATE   File path to your template code
+                        [Default (C++)] /home/user/GitHub/atcoder-tools/atcodertools/tools/templates/default_template.cpp
+                        [Default (Java)] /home/user/GitHub/atcoder-tools/atcodertools/tools/templates/default_template.java
+                        [Default (Rust)] /home/user/GitHub/atcoder-tools/atcodertools/tools/templates/default_template.rs
+  --save-no-session-cache
+                        Save no session cache to avoid security risk
+  --config CONFIG       File path to your config file
+                        [Default (Primary)] /home/user/.atcodertools.toml
+                        [Default (Secondary)] /home/user/GitHub/atcoder-tools/atcodertools/tools/atcodertools-default.toml
+```
+
 
 ## 設定ファイルの例
 `~/.atcodertools.toml`に以下の設定を保存すると、コードスタイルや、コード生成後に実行するコマンドを指定できます。
@@ -154,7 +183,7 @@ optional arguments:
 - データの並列ダウンロードを無効にする
 - ログイン情報のクッキーを保存する
 
-```$xslt
+```toml
 [codestyle]
 indent_type='space' # 'tab' or 'space'
 indent_width=4
@@ -193,7 +222,7 @@ save_no_session_cache=false
 - **yes_str** 問題文中に存在する yes や possible などの真を表しそうな文字列値
 - **no_str** 問題文中に存在する no や impossible などの偽を表しそうな文字列値
 
-```
+```c++
 #include <bits/stdc++.h>
 using namespace std;
 

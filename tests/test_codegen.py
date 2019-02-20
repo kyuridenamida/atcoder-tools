@@ -6,14 +6,14 @@ from typing import Tuple, List
 
 from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.client.models.sample import Sample
-from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST
+from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST, PYTHON
 from atcodertools.executils.run_command import run_command
 from atcodertools.executils.run_program import run_program
 from atcodertools.fileutils.create_contest_file import create_code
 from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format
 
-from atcodertools.codegen.code_generators import cpp, java, rust
+from atcodertools.codegen.code_generators import cpp, java, rust, python
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
@@ -62,12 +62,17 @@ class TestCodeGenerator(unittest.TestCase):
             RUST: {
                 "old": "template.rust",
                 "jinja": "template_jinja.rust",
+            },
+            PYTHON: {
+                "old": "template.py",
+                "jinja": "template_jinja.py",
             }
         }
         self.lang_to_code_generator_func = {
             CPP: cpp.main,
             JAVA: java.main,
             RUST: rust.main,
+            PYTHON: python.main,
         }
         self.maxDiff = None
 
@@ -161,6 +166,8 @@ class TestCodeGenerator(unittest.TestCase):
             return "javac {}".format(code_file)
         elif lang == RUST:
             return "rustc {}".format(code_file)
+        elif lang == PYTHON:
+            return "python3 -mpy_compile {}".format(code_file)
         else:
             raise NotImplementedError()
 
@@ -171,6 +178,8 @@ class TestCodeGenerator(unittest.TestCase):
             return "java", ["Main"]
         elif lang == RUST:
             return "./main", []
+        elif lang == PYTHON:
+            return "python3", ["main.py"]
         else:
             raise NotImplementedError()
 
