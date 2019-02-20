@@ -2,4 +2,5 @@
 mkdir -p ./src/auto_generated/
 cd ./data_builder/
 ./prepare.sh
-python3 ./build_full_data.py
+python3 -m compileall ./build_full_data.py
+python3 ./__pycache__/build_full_data.*.pyc
