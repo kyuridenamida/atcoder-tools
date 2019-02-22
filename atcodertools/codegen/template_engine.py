@@ -4,6 +4,8 @@ import warnings
 
 from jinja2 import Environment
 
+from atcodertools.release_management.version import __version__
+
 
 def _substitute(s, reps):
     # http://stackoverflow.com/questions/36739667/python-templates-for-generating-python-code-with-proper-multiline-indentation
@@ -25,6 +27,13 @@ def _substitute(s, reps):
 
 
 def render(template, **kwargs):
+    # TODO: refactoring: this should not be here.
+    # TODO: refactoring: the URL should be imported from other module
+    kwargs['atcodertools'] = {
+        'version': __version__,
+        'url': 'https://github.com/kyuridenamida/atcoder-tools',
+    }
+
     if "${" in template:
         # If the template is old, render with the old engine.
         # This logic is for backward compatibility
