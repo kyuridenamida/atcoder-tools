@@ -26,6 +26,7 @@
     "acceptance-tests",
     "webpack",
     "jest",
-    "src/setupTests.ts"
+    "src/setupTests.ts",
+    "src/intex.user.ts"
   ]
 }
