@@ -21,6 +21,7 @@ const fs = require('fs-extra');
 const webpack = require('webpack');
 const bfj = require('bfj');
 const config = require('../config/webpack.config.prod');
+const userScriptConfig = require('../config/webpack.config.userscript');
 const paths = require('../config/paths');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
@@ -64,6 +65,7 @@ checkBrowsers(paths.appPath, isInteractive)
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build
+    buildUserScript();
     return build(previousFileSizes);
   })
   .then(
@@ -120,6 +122,16 @@ checkBrowsers(paths.appPath, isInteractive)
     process.exit(1);
   });
 
+
+function buildUserScript(){
+    let compiler = webpack(userScriptConfig);
+    console.log("Building user script.");
+    compiler.run((err, stats) => {
+        if (err) {
+            return reject(err);
+        }
+    });
+}
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
   console.log('Creating an optimized production build...');
