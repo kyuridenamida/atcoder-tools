@@ -1,34 +1,83 @@
-
 {
   "name": "atcoder-tools-doc",
   "homepage": "https://kyuridenamida.github.io/atcoder-tools",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/core": "7.1.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.12",
     "@fortawesome/free-solid-svg-icons": "^5.6.3",
     "@fortawesome/react-fontawesome": "^0.1.3",
+    "@svgr/webpack": "2.4.1",
     "@types/reactstrap": "^6.4.3",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "9.0.0",
+    "babel-jest": "23.6.0",
+    "babel-loader": "8.0.4",
+    "babel-plugin-named-asset-import": "^0.2.0",
+    "babel-preset-react-app": "^5.0.0",
+    "bfj": "6.1.1",
     "bootstrap": "^4.2.1",
+    "case-sensitive-paths-webpack-plugin": "2.1.2",
+    "chalk": "2.4.1",
     "classnames": "^2.2.6",
+    "css-loader": "1.0.0",
+    "dotenv": "6.0.0",
+    "dotenv-expand": "4.2.0",
+    "eslint": "5.6.0",
+    "eslint-config-react-app": "^3.0.0",
+    "eslint-loader": "2.1.1",
+    "eslint-plugin-flowtype": "2.50.1",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-jsx-a11y": "6.1.1",
+    "eslint-plugin-react": "7.11.1",
+    "file-loader": "2.0.0",
+    "fork-ts-checker-webpack-plugin": "0.4.9",
+    "fs-extra": "7.0.0",
+    "html-webpack-plugin": "4.0.0-alpha.2",
     "i": "^0.3.6",
+    "identity-obj-proxy": "3.0.0",
+    "jest": "23.6.0",
     "marked": "^0.6.0",
+    "mini-css-extract-plugin": "0.4.3",
     "npm": "^6.5.0",
+    "optimize-css-assets-webpack-plugin": "5.0.1",
+    "postcss-flexbugs-fixes": "4.1.0",
+    "postcss-loader": "3.0.0",
+    "postcss-preset-env": "6.0.6",
+    "postcss-safe-parser": "4.0.1",
     "react": "^16.7.0",
+    "react-app-polyfill": "^0.1.1",
+    "react-dev-utils": "^6.0.1",
     "react-dom": "^16.7.0",
     "react-router-dom": "^4.3.1",
     "react-router-tabs": "^1.2.0",
-    "react-scripts-ts": "^4.0.8",
     "react-syntax-highlighter": "^10.1.2",
     "react-table": "^6.8.6",
     "react-treebeard": "github:bitjourney/react-treebeard#bitjourney",
-    "reactstrap": "^7.0.2"
+    "reactstrap": "^7.0.2",
+    "resolve": "1.8.1",
+    "sass-loader": "7.1.0",
+    "source-map-loader": "^0.2.1",
+    "style-loader": "0.23.0",
+    "terser-webpack-plugin": "1.1.0",
+    "thread-loader": "1.2.0",
+    "ts-jest": "22.0.1",
+    "ts-loader": "4.x.x",
+    "tsconfig-paths-webpack-plugin": "^2.0.0",
+    "tslint": "^5.7.0",
+    "tslint-config-prettier": "^1.10.0",
+    "tslint-react": "^3.2.0",
+    "url-loader": "1.1.1",
+    "webpack": "4.19.1",
+    "webpack-dev-server": "3.1.9",
+    "webpack-manifest-plugin": "2.0.4",
+    "workbox-webpack-plugin": "3.6.1"
   },
   "scripts": {
-    "start": "./generate.sh && react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
+    "start": "./generate.sh && node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom",
     "partial-deploy": "npm run build && gh-pages -d build",
     "deploy": "./generate.sh && build_data.sh && npm run build && gh-pages -d build"
   },
@@ -51,5 +100,59 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!**/*.d.ts"
+    ],
+    "setupFiles": [
+      "react-app-polyfill/jsdom"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.(j|t)s?(x)",
+      "<rootDir>/src/**/?(*.)(spec|test).(j|t)s?(x)"
+    ],
+    "testEnvironment": "jsdom",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.tsx?$": "<rootDir>/config/jest/typescriptTransform.js",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "/home/kyuridenamida/personal/atcoder-tools/webapp/tsconfig.test.json"
+      }
+    },
+    "moduleFileExtensions": [
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "web.js",
+      "js",
+      "web.jsx",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  }
 }
