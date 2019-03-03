@@ -1,9 +1,7 @@
 'use strict';
 
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const publicPath = paths.servedPath;
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const publicUrl = publicPath.slice(0, -1);
@@ -25,13 +23,6 @@ module.exports = {
         filename: 'index.user.js',
         publicPath: publicPath,
     },
-    resolve: {
-        extensions: ['.ts'],
-        plugins: [
-            new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
-            new TsconfigPathsPlugin({configFile: paths.appTsProdConfig}),
-        ],
-    },
     module: {
         strictExportPresence: true,
         rules: [
@@ -48,6 +39,9 @@ module.exports = {
                     },
                 ],
             }
-        ]
-    }
+        ],
+    },
+    optimization: {
+        minimize: false
+    },
 };
