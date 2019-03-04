@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 from atcodertools.release_management.version import __version__
 
 try:
-    with open('README.md') as f:
+    with open('README.md',encoding="utf-8") as f:
         readme = f.read()
 except IOError:
     readme = ''
@@ -28,7 +28,11 @@ setup(
     packages=find_packages(exclude=('tests',)),
     install_requires=_requires_from_file('requirements.txt'),
     license="MIT",
-    scripts=['atcoder-tools'],
+    entry_points={
+        'console_scripts': [
+            'atcoder-tools = atcodertools.atcoder_tools:main',
+        ],
+    },
     include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
