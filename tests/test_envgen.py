@@ -22,7 +22,7 @@ def get_all_rel_file_paths(dir_path: str):
     for root, _, filenames in os.walk(dir_path):
         for filename in filenames:
             res.append(relpath(os.path.join(root, filename), dir_path))
-    return res
+    return sorted(res)
 
 
 class TestEnvGen(unittest.TestCase):
