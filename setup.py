@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 from atcodertools.release_management.version import __version__
 
 try:
-    with open('README.md',encoding="utf-8") as f:
+    with open('README.md', encoding="utf-8") as f:
         readme = f.read()
 except IOError:
     readme = ''
