@@ -48,14 +48,14 @@ function getContestIdAndProblemId(): [string, string] {
     return [contestId, problemId];
 }
 
-function getQualityResultForCurrentProblem(allQualityResults: QualityResult[]): QualityResult {
+function getQualityResultForCurrentProblem(allQualityResults: QualityResult[]): QualityResult | null {
     const [contestId, problemId] = getContestIdAndProblemId();
     for (const qualityResult of allQualityResults) {
         if (qualityResult.contest.contest_id === contestId && qualityResult.problem.problem_id === problemId) {
             return qualityResult;
         }
     }
-    throw Error("QualityResult not found");
+    return null;
 }
 
 function getLanguageFromAtCoderDisplayName(languageName: string): Language | null {
@@ -91,11 +91,16 @@ async function main() {
         throw Error("textarea not found. are you logged in?");
     }
 
+    const editor = $(textarea).data('editor');  // of CodeMirror (https://codemirror.net/)
+
     const allQualityResults = await loadAllQualityResults();
     const qualityResult = getQualityResultForCurrentProblem(allQualityResults);
+    if (qualityResult === null) {
+        editor.setValue("atcoder-tools: The pre-rendered templates are not found.");
+        throw Error("QualityResult not found");
+    }
     console.log(`QualityResult: ${qualityResult}`);
 
-    const editor = $(textarea).data('editor');  // of CodeMirror (https://codemirror.net/)
     const run = () => {
         if (isErasableCode(editor.getValue(), qualityResult)) {
             const languageName = languageId.options[languageId.selectedIndex].textContent;
