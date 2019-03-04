@@ -94,12 +94,14 @@ async function main() {
     const editor = $(textarea).data('editor');  // of CodeMirror (https://codemirror.net/)
 
     const allQualityResults = await loadAllQualityResults();
+    console.log('all.json:', allQualityResults);
+
     const qualityResult = getQualityResultForCurrentProblem(allQualityResults);
     if (qualityResult === null) {
         editor.setValue("atcoder-tools: The pre-rendered templates are not found.");
         throw Error("QualityResult not found");
     }
-    console.log(`QualityResult: ${qualityResult}`);
+    console.log('QualityResult:', qualityResult);
 
     const run = () => {
         if (isErasableCode(editor.getValue(), qualityResult)) {
