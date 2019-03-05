@@ -26,7 +26,9 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 <img src="https://user-images.githubusercontent.com/233559/52807100-f6e2d300-30cd-11e9-8906-82b9f9b2dff7.gif" width=70%>
 
 ## How to install
-`pip3 install atcoder-tools` (ただの`pip`だとPython 2系を使ってインストールされる可能性があるためうまくいかないかもしれません。)
+`pip3 install atcoder-tools` 
+
+ただの`pip`だとPython 2系を使ってインストールされる可能性があるためうまくいかないかもしれません。
 
 ## Chrome Extension by [@kmyk](https://github.com/kmyk/) (NEW! 2019/03/06)
 Google ChromeのExtensionです。公開されている過去問を対象として、atcoder-toolsで自動生成されたコードをそのままAtCoderのスニペット上で利用できます。
