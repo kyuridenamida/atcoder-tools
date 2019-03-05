@@ -28,7 +28,7 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 ## How to install
 `pip3 install atcoder-tools`
 
-## Chrome Extension (NEW! 2019/03/06)
+## Chrome Extension by [@kmyk](https://github.com/kmyk/) (NEW! 2019/03/06)
 Google ChromeのExtensionです。公開されている過去問を対象として、atcoder-toolsで自動生成されたコードをそのままAtCoderのスニペット上で利用できます。
 1. https://kyuridenamida.github.io/atcoder-tools/index.user.js をインストールする (tampermonkey経由)
 2. ログインした状態で適当な問題ページに行く(e.g. https://atcoder.jp/contests/abc120/tasks/abc120_d)
