@@ -143,10 +143,11 @@ def predict_format(result: QualityResult):
 
 
 def do_predict_constants(result: QualityResult):
-    if result.problem_content is None:
+    if result.problem_content is None or result.problem_content.original_html is None:
         result.modulo_error = Skipped()
         result.yes_str_error = Skipped()
         result.no_str_error = Skipped()
+        result.constant_set = ProblemConstantSet()
         return
     try:
         result.modulo = predict_modulo(result.problem_content.original_html)
@@ -170,31 +171,35 @@ PYTHON_TEMPLATE = load_text_file(PYTHON.default_template_path)
 
 
 def generate_code(result: QualityResult):
-    if result.prediction_result is not None:
-        result.codes["cpp"] = apply_clang(CPP.default_code_generator(CodeGenArgs(
-            CPP_TEMPLATE,
-            result.prediction_result.format,
-            result.constant_set,
-            CodeStyleConfig()
-        )))
-        result.codes["java"] = JAVA.default_code_generator(CodeGenArgs(
-            JAVA_TEMPLATE,
-            result.prediction_result.format,
-            result.constant_set,
-            CodeStyleConfig()
-        ))
-        result.codes["rust"] = RUST.default_code_generator(CodeGenArgs(
-            RUST_TEMPLATE,
-            result.prediction_result.format,
-            result.constant_set,
-            CodeStyleConfig()
-        ))
-        result.codes["python"] = PYTHON.default_code_generator(CodeGenArgs(
-            PYTHON_TEMPLATE,
-            result.prediction_result.format,
-            result.constant_set,
-            CodeStyleConfig()
-        ))
+    if result.prediction_result is None:
+        result_format = None
+    else:
+        result_format = result.prediction_result.format
+
+    result.codes["cpp"] = apply_clang(CPP.default_code_generator(CodeGenArgs(
+        CPP_TEMPLATE,
+        result_format,
+        result.constant_set,
+        CodeStyleConfig()
+    )))
+    result.codes["java"] = JAVA.default_code_generator(CodeGenArgs(
+        JAVA_TEMPLATE,
+        result_format,
+        result.constant_set,
+        CodeStyleConfig()
+    ))
+    result.codes["rust"] = RUST.default_code_generator(CodeGenArgs(
+        RUST_TEMPLATE,
+        result_format,
+        result.constant_set,
+        CodeStyleConfig()
+    ))
+    result.codes["python"] = PYTHON.default_code_generator(CodeGenArgs(
+        PYTHON_TEMPLATE,
+        result_format,
+        result.constant_set,
+        CodeStyleConfig()
+    ))
 
 
 _counter = 0

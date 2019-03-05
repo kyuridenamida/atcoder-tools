@@ -25,4 +25,4 @@ yarn-error.log*
 /data_builder/auto_generated/
 /data_builder/.cache/
 /data_builder/out/
-./public/api/
+/public/api/
