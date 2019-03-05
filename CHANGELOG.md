@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.1.3 / 2019-03-06
+- [#122](https://github.com/kyuridenamida/atcoder-tools/pull/122) Support pip installation on Windows (cmd.exe)
+    - Thanks for [@kotamanegi](https://github.com/kotamanegi/)'s contribution!
+- [#115](https://github.com/kyuridenamida/atcoder-tools/pull/115) Chrome Extension to see generated code by atcoder-tools for archived contests
+    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
+- [#117](https://github.com/kyuridenamida/atcoder-tools/pull/117) Add tool advertisement on the default codes
+    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution again!
+
 ## 1.1.2 / 2019-02-21 
 - [#98](https://github.com/kyuridenamida/atcoder-tools/pull/98) Add "codegen" sub command to simply generate the input part for a specific problem without preparing other files. 
     - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
