@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 import sys
 
-from atcodertools.release_management.version_check import get_latest_version, VersionCheckError
+from atcodertools.release_management.version_check import (
+    get_latest_version,
+    VersionCheckError,
+)
 from atcodertools.tools.envgen import main as envgen_main
 from atcodertools.tools.tester import main as tester_main
 from atcodertools.tools.submit import main as submit_main
@@ -32,7 +35,7 @@ def notify_if_latest_version_found():
         print(Style.RESET_ALL)
 
 
-if __name__ == '__main__':
+def main():
     notify_if_latest_version_found()
 
     if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen"):
@@ -59,3 +62,7 @@ if __name__ == '__main__':
 
     if sys.argv[1] == "codegen":
         codegen_main(prog, args)
+
+
+if __name__ == '__main__':
+    main()
