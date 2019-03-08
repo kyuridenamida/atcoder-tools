@@ -1,6 +1,6 @@
 from colorama import init, Fore
 
-init(convert=True)
+init()
 
 
 def with_color(msg, color):
