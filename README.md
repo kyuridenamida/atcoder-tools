@@ -30,11 +30,12 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 
 ただの`pip`だとPython 2系を使ってインストールされる可能性があるためうまくいかないかもしれません。
 
-## Chrome Extension by [@kmyk](https://github.com/kmyk/) (NEW! 2019/03/06)
-Google ChromeのExtensionです。公開されている過去問を対象として、atcoder-toolsで自動生成されたコードをそのままAtCoderのスニペット上で利用できます。
-1. https://kyuridenamida.github.io/atcoder-tools/index.user.js をインストールする (tampermonkey経由)
-2. ログインした状態で適当な問題ページに行く(e.g. https://atcoder.jp/contests/abc120/tasks/abc120_d)
-3. 正しくインストールされている場合、ページ下部のコードスニペットにコードが標準で埋め込まれている (atcoder-toolsの対応言語のみ)
+## Userscript by [@kmyk](https://github.com/kmyk/) (NEW! 2019/03/06)
+Tampermonkey(各種ブラウザで動作)でインストールすることが可能なUserscriptです。公開されている過去問を対象として、atcoder-toolsで自動生成されたコードをそのままAtCoderのスニペット上で利用できます。
+1. Tampermonkey をインストールする ([Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo), [FireFox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
+2. https://kyuridenamida.github.io/atcoder-tools/index.user.js にアクセスしてUserscriptをインストール
+3. ログインした状態で適当な問題ページに行く(e.g. https://atcoder.jp/contests/abc120/tasks/abc120_d)
+4. 正しくインストールされている場合、ページ下部のコードスニペットにコードが標準で埋め込まれている (atcoder-toolsの対応言語のみ)
 <img src="https://user-images.githubusercontent.com/233559/53821542-56d3e780-3fb1-11e9-89d9-24a3d0e9af5c.png" width=50%>
 
 ## Analysis
