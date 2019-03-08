@@ -12,7 +12,7 @@ class Contest:
     def get_url(self):
         return "https://{}.contest.atcoder.jp/".format(self.contest_id)
 
-    def get_newurl(self):
+    def get_new_url(self):
         return "https://atcoder.jp/contests/{}/".format(self.contest_id)
 
     def get_problem_list_url(self):
@@ -22,13 +22,10 @@ class Contest:
         return "{}submit".format(self.get_url())
 
     def get_my_submissions_url(self, page=1):
-        return "{}submissions/me/{}".format(self.get_url(), page)
+        return "{}submissions/me/{}".format(self.get_new_url(), page)
 
     def get_submissions_url(self, submission: Submission):
-        return "{}submissions/{}".format(self.get_url(), submission.submission_id)
-
-    def get_submissions_newurl(self, submission: Submission):
-        return "{}submissions/{}".format(self.get_newurl(), submission.submission_id)
+        return "{}submissions/{}".format(self.get_new_url(), submission.submission_id)
 
     def to_dict(self):
         return {
