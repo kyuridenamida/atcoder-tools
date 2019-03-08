@@ -99,7 +99,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
             metadata.problem.contest, metadata.problem, metadata.lang, source)
         logging.info("{} {}".format(
             with_color("Done!", Fore.LIGHTGREEN_EX),
-            metadata.problem.contest.get_submissions_url(submission)))
+            metadata.problem.contest.get_submissions_newurl(submission)))
 
 
 if __name__ == "__main__":
