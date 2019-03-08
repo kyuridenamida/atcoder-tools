@@ -274,6 +274,3 @@ int main(){
 ## Author
 
 [kyuridenamida](https://github.com/kyuridenamida) ([@kyuridenamida](https://twitter.com/kyuridenamida))
-
-## 免責
-このソフトウェア等に起因するいかなる損害に対しても、[@kyuridenamida](https://github.com/kyuridenamida)並びにこのソフトウェアの開発者達は何ら責任を負いません。
