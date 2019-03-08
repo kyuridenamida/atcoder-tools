@@ -3,7 +3,7 @@
 ## 1.1.3 / 2019-03-06
 - [#122](https://github.com/kyuridenamida/atcoder-tools/pull/122) Support pip installation on Windows (cmd.exe)
     - Thanks for [@kotamanegi](https://github.com/kotamanegi/)'s contribution!
-- [#115](https://github.com/kyuridenamida/atcoder-tools/pull/115) Chrome Extension to see generated code by atcoder-tools for archived contests
+- [#115](https://github.com/kyuridenamida/atcoder-tools/pull/115) Userscript to see generated code by atcoder-tools for archived contests
     - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
 - [#117](https://github.com/kyuridenamida/atcoder-tools/pull/117) Add tool advertisement on the default codes
     - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution again!
