@@ -57,7 +57,7 @@ class TestTester(unittest.TestCase):
 
         with patch('atcodertools.tools.tester.open', io_mock):
             self.assertEqual(TestSummary(1, False), tester.run_for_samples('a.out', [('in_1.txt', 'out_1.txt')], 1))
-            run_program_mock.assert_called_once()
+            self.assertEqual(1, run_program_mock.call_count)
 
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'correct', 'stderr', 0))
@@ -66,8 +66,8 @@ class TestTester(unittest.TestCase):
 
         with patch('atcodertools.tools.tester.open', io_mock):
             self.assertEqual(TestSummary(1, True), tester.run_for_samples('a.out', [('in_1.txt', 'out_1.txt')], 1))
-            run_program_mock.assert_called_once()
-            build_details_str_mock.assert_called_once()
+            self.assertEqual(1, run_program_mock.call_count)
+            self.assertEqual(1, build_details_str_mock.call_count)
 
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'wrong', '', 0))
@@ -76,8 +76,8 @@ class TestTester(unittest.TestCase):
 
         with patch('atcodertools.tools.tester.open', io_mock):
             self.assertEqual(TestSummary(0, False), tester.run_for_samples('a.out', [('in_1.txt', 'out_1.txt')], 1))
-            run_program_mock.assert_called_once()
-            build_details_str_mock.assert_called_once()
+            self.assertEqual(1, run_program_mock.call_count)
+            self.assertEqual(1, build_details_str_mock.call_count)
 
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'wrong', '', 0))
@@ -88,8 +88,8 @@ class TestTester(unittest.TestCase):
         with patch('atcodertools.tools.tester.open', io_mock):
             sample_pair_list = [('in_1.txt', 'out_1.txt'), ('in_2.txt', 'out_2.txt')]
             self.assertEqual(TestSummary(0, False), tester.run_for_samples('a.out', sample_pair_list, 1, True))
-            run_program_mock.assert_called_once()
-            build_details_str_mock.assert_called_once()
+            self.assertEqual(1, run_program_mock.call_count)
+            self.assertEqual(1, build_details_str_mock.call_count)
 
     def test_build_details_str(self):
         in_out = 'correct\n'
