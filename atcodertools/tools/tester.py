@@ -60,23 +60,27 @@ def infer_case_num(sample_filename: str):
     return int(result)
 
 
-def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -> str:
+def build_details_str(exec_res: ExecResult, input_file: str, output_file: str, squash_io_on_success: bool) -> str:
     res = ""
 
     def append(text: str, end='\n'):
         nonlocal res
         res += text + end
 
-    append(with_color("[Input]", Fore.LIGHTMAGENTA_EX))
-    with open(input_file, "r") as f:
-        append(f.read(), end='')
-
-    append(with_color("[Expected]", Fore.LIGHTMAGENTA_EX))
     with open(output_file, "r") as f:
-        append(f.read(), end='')
+        expected_output = f.read()
 
-    append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
-    append(exec_res.output, end='')
+    if expected_output != exec_res.output or not squash_io_on_success:
+        append(with_color("[Input]", Fore.LIGHTMAGENTA_EX))
+        with open(input_file, "r") as f:
+            append(f.read(), end='')
+
+        append(with_color("[Expected]", Fore.LIGHTMAGENTA_EX))
+        append(expected_output, end='')
+
+        append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
+        append(exec_res.output, end='')
+
     if exec_res.status != ExecStatus.NORMAL:
         append(with_color("Aborted ({})\n".format(
             exec_res.status.name), Fore.LIGHTYELLOW_EX))
@@ -87,8 +91,8 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
-def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, knock_out: bool = False)\
-        -> TestSummary:
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, knock_out: bool = False,
+                    squash_io_on_success: bool = False) -> TestSummary:
     success_count = 0
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
@@ -127,7 +131,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
         # Output details for incorrect results or has stderr.
         if not is_correct or exec_res.has_stderr():
             print('{}\n'.format(build_details_str(
-                exec_res, in_sample_file, out_sample_file)))
+                exec_res, in_sample_file, out_sample_file, squash_io_on_success)))
 
         if knock_out and not is_correct:
             print('Stop testing ...')
@@ -171,7 +175,8 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
 
-def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool) -> bool:
+def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
+                  squash_stderr_onsuccess: bool) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
         logging.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
@@ -183,7 +188,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         validate_sample_pair(in_sample_file, out_sample_file)
         samples.append((in_sample_file, out_sample_file))
 
-    test_summary = run_for_samples(exec_file, samples, timeout_sec, knock_out)
+    test_summary = run_for_samples(exec_file, samples, timeout_sec, knock_out, squash_stderr_onsuccess)
 
     if len(samples) == 0:
         print("No test cases")
@@ -248,6 +253,12 @@ def main(prog, args) -> bool:
                         action="store_true",
                         default=False)
 
+    parser.add_argument('--squash-inout', '-s',
+                        help='Hide inputs and expected/actual outputs if result is correct and there are error outputs'
+                             ' [Default] False,',
+                        action='store_true',
+                        default=False)
+
     args = parser.parse_args(args)
     exec_file = args.exec or infer_exec_file(
         glob.glob(os.path.join(args.dir, '*')))
@@ -261,7 +272,8 @@ def main(prog, args) -> bool:
         glob.glob(os.path.join(args.dir, out_ex_pattern)))
 
     if args.num is None:
-        return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out)
+        return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
+                             args.squash_inout)
     else:
         return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num)
 

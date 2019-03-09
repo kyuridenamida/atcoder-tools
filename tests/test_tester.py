@@ -1,10 +1,13 @@
 import os
 import unittest
+
+from colorama import Fore
 from unittest.mock import patch, mock_open, MagicMock
 
 from atcodertools.executils.run_program import ExecResult, ExecStatus
 from atcodertools.tools import tester
-from atcodertools.tools.tester import is_executable_file, TestSummary
+from atcodertools.tools.tester import is_executable_file, TestSummary, build_details_str
+from atcodertools.tools.utils import with_color
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -87,6 +90,54 @@ class TestTester(unittest.TestCase):
             self.assertEqual(TestSummary(0, False), tester.run_for_samples('a.out', sample_pair_list, 1, True))
             run_program_mock.assert_called_once()
             build_details_str_mock.assert_called_once()
+
+    def test_build_details_str(self):
+        in_out = 'correct\n'
+        output = 'wrong\n'
+        stderr = 'stderr\n'
+        expected = with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'\
+                   + in_out + with_color('[Expected]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out\
+                   + with_color('[Received]', Fore.LIGHTMAGENTA_EX) + '\n' + output\
+                   + with_color('[Error]', Fore.LIGHTYELLOW_EX) + '\n' + stderr
+        io_mock = mock_open(read_data=in_out)
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            result = build_details_str(ExecResult(ExecStatus.NORMAL, output, stderr), 'in.txt', 'out.txt', False)
+            self.assertEqual(expected, result)
+
+    def test_build_details_str__show_testcase_if_there_is_stderr(self):
+        in_out = 'correct\n'
+        stderr = 'stderr\n'
+        expected = (with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'
+                    + in_out + with_color('[Expected]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + with_color('[Received]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + with_color('[Error]', Fore.LIGHTYELLOW_EX) + '\n' + stderr)
+        io_mock = mock_open(read_data=in_out)
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            result = build_details_str(ExecResult(ExecStatus.NORMAL, in_out, 'stderr\n'), 'in.txt', 'out.txt', False)
+            self.assertEqual(expected, result)
+
+    def test_build_details_str__hide_testcase_on_correct_answer(self):
+        io_mock = mock_open(read_data='correct\n')
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            expected = with_color('[Error]', Fore.LIGHTYELLOW_EX) + '\nstderr\n'
+            result = build_details_str(ExecResult(ExecStatus.NORMAL, 'correct\n', 'stderr\n'), 'in.txt', 'out.txt', True)
+            self.assertEqual(expected, result)
+
+    def test_build_details_str__on_runtime_failure(self):
+        in_out = 'correct\n'
+        stderr = ''
+        expected = (with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'
+                    + in_out + with_color('[Expected]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + with_color('[Received]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + with_color('Aborted ({})\n'.format(ExecStatus.RE.name), Fore.LIGHTYELLOW_EX) + '\n')
+        io_mock = mock_open(read_data=in_out)
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            result = build_details_str(ExecResult(ExecStatus.RE, in_out, stderr), 'in.txt', 'out.txt', False)
+            self.assertEqual(expected, result)
 
 
 if __name__ == '__main__':
