@@ -22,7 +22,7 @@ class Contest:
         return "{}submit".format(self.get_url())
 
     def get_my_submissions_url(self, page=1):
-        return "{}submissions/me/{}".format(self.get_new_url(), page)
+        return "{}submissions/me/{}".format(self.get_url(), page)
 
     def get_submissions_url(self, submission: Submission):
         return "{}submissions/{}".format(self.get_new_url(), submission.submission_id)
