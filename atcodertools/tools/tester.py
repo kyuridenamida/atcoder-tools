@@ -188,7 +188,8 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         validate_sample_pair(in_sample_file, out_sample_file)
         samples.append((in_sample_file, out_sample_file))
 
-    test_summary = run_for_samples(exec_file, samples, timeout_sec, knock_out, squash_stderr_onsuccess)
+    test_summary = run_for_samples(
+        exec_file, samples, timeout_sec, knock_out, squash_stderr_onsuccess)
 
     if len(samples) == 0:
         print("No test cases")
@@ -201,7 +202,8 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         ))
         return False
     elif test_summary.has_error_output:
-        print(with_color("Passed all test case but with stderr. (Please remove stderr!)", Fore.LIGHTYELLOW_EX))
+        print(with_color(
+            "Passed all test case but with stderr. (Please remove stderr!)", Fore.LIGHTYELLOW_EX))
         return False
     else:
         print(with_color("Passed all test cases!!!", Fore.LIGHTGREEN_EX))
