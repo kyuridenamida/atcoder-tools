@@ -56,7 +56,8 @@ class TestTester(unittest.TestCase):
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
-            self.assertEqual(TestSummary(1, False), tester.run_for_samples('a.out', [('in_1.txt', 'out_1.txt')], 1))
+            self.assertEqual(TestSummary(1, False), tester.run_for_samples(
+                'a.out', [('in_1.txt', 'out_1.txt')], 1))
             self.assertEqual(1, run_program_mock.call_count)
 
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
@@ -65,7 +66,8 @@ class TestTester(unittest.TestCase):
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
-            self.assertEqual(TestSummary(1, True), tester.run_for_samples('a.out', [('in_1.txt', 'out_1.txt')], 1))
+            self.assertEqual(TestSummary(1, True), tester.run_for_samples(
+                'a.out', [('in_1.txt', 'out_1.txt')], 1))
             self.assertEqual(1, run_program_mock.call_count)
             self.assertEqual(1, build_details_str_mock.call_count)
 
@@ -75,7 +77,8 @@ class TestTester(unittest.TestCase):
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
-            self.assertEqual(TestSummary(0, False), tester.run_for_samples('a.out', [('in_1.txt', 'out_1.txt')], 1))
+            self.assertEqual(TestSummary(0, False), tester.run_for_samples(
+                'a.out', [('in_1.txt', 'out_1.txt')], 1))
             self.assertEqual(1, run_program_mock.call_count)
             self.assertEqual(1, build_details_str_mock.call_count)
 
@@ -86,8 +89,10 @@ class TestTester(unittest.TestCase):
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
-            sample_pair_list = [('in_1.txt', 'out_1.txt'), ('in_2.txt', 'out_2.txt')]
-            self.assertEqual(TestSummary(0, False), tester.run_for_samples('a.out', sample_pair_list, 1, True))
+            sample_pair_list = [('in_1.txt', 'out_1.txt'),
+                                ('in_2.txt', 'out_2.txt')]
+            self.assertEqual(TestSummary(0, False), tester.run_for_samples(
+                'a.out', sample_pair_list, 1, True))
             self.assertEqual(1, run_program_mock.call_count)
             self.assertEqual(1, build_details_str_mock.call_count)
 
@@ -96,47 +101,56 @@ class TestTester(unittest.TestCase):
         output = 'wrong\n'
         stderr = 'stderr\n'
         expected = (with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'
-                   + in_out + with_color('[Expected]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
-                   + with_color('[Received]', Fore.LIGHTMAGENTA_EX) + '\n' + output
-                   + with_color('[Error]', Fore.LIGHTYELLOW_EX) + '\n' + stderr)
+                    + in_out + with_color('[Expected]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + with_color('[Received]', Fore.LIGHTMAGENTA_EX) + '\n' + output
+                    + with_color('[Error]', Fore.LIGHTYELLOW_EX) + '\n' + stderr)
         io_mock = mock_open(read_data=in_out)
 
         with patch('atcodertools.tools.tester.open', io_mock):
-            result = build_details_str(ExecResult(ExecStatus.NORMAL, output, stderr), 'in.txt', 'out.txt', False)
+            result = build_details_str(ExecResult(
+                ExecStatus.NORMAL, output, stderr), 'in.txt', 'out.txt', False)
             self.assertEqual(expected, result)
 
     def test_build_details_str__show_testcase_if_there_is_stderr(self):
         in_out = 'correct\n'
         stderr = 'stderr\n'
         expected = (with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'
-                    + in_out + with_color('[Expected]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
-                    + with_color('[Received]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + in_out + with_color('[Expected]',
+                                          Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + with_color('[Received]',
+                                 Fore.LIGHTMAGENTA_EX) + '\n' + in_out
                     + with_color('[Error]', Fore.LIGHTYELLOW_EX) + '\n' + stderr)
         io_mock = mock_open(read_data=in_out)
 
         with patch('atcodertools.tools.tester.open', io_mock):
-            result = build_details_str(ExecResult(ExecStatus.NORMAL, in_out, 'stderr\n'), 'in.txt', 'out.txt', False)
+            result = build_details_str(ExecResult(
+                ExecStatus.NORMAL, in_out, stderr), 'in.txt', 'out.txt', False)
             self.assertEqual(expected, result)
 
     def test_build_details_str__hide_testcase_on_correct_answer(self):
         io_mock = mock_open(read_data='correct\n')
 
         with patch('atcodertools.tools.tester.open', io_mock):
-            expected = with_color('[Error]', Fore.LIGHTYELLOW_EX) + '\nstderr\n'
-            result = build_details_str(ExecResult(ExecStatus.NORMAL, 'correct\n', 'stderr\n'), 'in.txt', 'out.txt', True)
+            expected = with_color(
+                '[Error]', Fore.LIGHTYELLOW_EX) + '\nstderr\n'
+            result = build_details_str(ExecResult(
+                ExecStatus.NORMAL, 'correct\n', 'stderr\n'), 'in.txt', 'out.txt', True)
             self.assertEqual(expected, result)
 
     def test_build_details_str__on_runtime_failure(self):
         in_out = 'correct\n'
         stderr = ''
         expected = (with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'
-                    + in_out + with_color('[Expected]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
-                    + with_color('[Received]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + in_out + with_color('[Expected]',
+                                          Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + with_color('[Received]',
+                                 Fore.LIGHTMAGENTA_EX) + '\n' + in_out
                     + with_color('Aborted ({})\n'.format(ExecStatus.RE.name), Fore.LIGHTYELLOW_EX) + '\n')
         io_mock = mock_open(read_data=in_out)
 
         with patch('atcodertools.tools.tester.open', io_mock):
-            result = build_details_str(ExecResult(ExecStatus.RE, in_out, stderr), 'in.txt', 'out.txt', False)
+            result = build_details_str(ExecResult(
+                ExecStatus.RE, in_out, stderr), 'in.txt', 'out.txt', False)
             self.assertEqual(expected, result)
 
 
