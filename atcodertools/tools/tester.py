@@ -22,6 +22,15 @@ class IrregularSampleFileError(Exception):
     pass
 
 
+class TestSummary:
+    def __init__(self, success_count: int, has_error_output: bool):
+        self.success_count = success_count
+        self.has_error_output = has_error_output
+
+    def __eq__(self, other):
+        return self.success_count == other.success_count and self.has_error_output == other.has_error_output
+
+
 def is_executable_file(file_name):
     return os.access(file_name, os.X_OK) and Path(file_name).is_file() \
         and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
@@ -78,8 +87,10 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
-def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, knock_out: bool = False):
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, knock_out: bool = False)\
+        -> TestSummary:
     success_count = 0
+    has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
         # Run program
         exec_res = run_program(exec_file, in_sample_file,
@@ -90,37 +101,38 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
             answer_text = f.read()
 
         is_correct = exec_res.is_correct_output(answer_text)
-        passed = is_correct and not exec_res.has_stderr()
+        has_error_output = has_error_output or exec_res.has_stderr()
 
-        if passed:
-            message = "{} {elapsed} ms".format(
-                with_color("PASSED", Fore.LIGHTGREEN_EX),
-                elapsed=exec_res.elapsed_ms)
-            success_count += 1
-        else:
-            if is_correct:
+        if is_correct:
+            if exec_res.has_stderr():
                 message = with_color(
                     "CORRECT but with stderr (Please remove stderr!)", Fore.LIGHTYELLOW_EX)
             else:
-                if exec_res.status == ExecStatus.NORMAL:
-                    message = with_color("WA", Fore.LIGHTRED_EX)
-                else:
-                    message = with_color(
-                        exec_res.status.name, Fore.LIGHTYELLOW_EX)
+                message = "{} {elapsed} ms".format(
+                    with_color("PASSED", Fore.LIGHTGREEN_EX),
+                    elapsed=exec_res.elapsed_ms)
+            success_count += 1
+        else:
+            if exec_res.status == ExecStatus.NORMAL:
+                message = with_color("WA", Fore.LIGHTRED_EX)
+            else:
+                message = with_color(
+                    exec_res.status.name, Fore.LIGHTYELLOW_EX)
 
         print("# {case_name} ... {message}".format(
             case_name=os.path.basename(in_sample_file),
             message=message,
         ))
 
-        # Output details for incorrect results.
-        if not passed:
+        # Output details for incorrect results or has stderr.
+        if not is_correct or exec_res.has_stderr():
             print('{}\n'.format(build_details_str(
                 exec_res, in_sample_file, out_sample_file)))
-            if knock_out:
-                print('Stop testing ...')
-                break
-    return success_count
+
+        if knock_out and not is_correct:
+            print('Stop testing ...')
+            break
+    return TestSummary(success_count, has_error_output)
 
 
 def validate_sample_pair(in_sample_file, out_sample_file):
@@ -153,10 +165,10 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
 
     validate_sample_pair(in_sample_file, out_sample_file)
 
-    success_count = run_for_samples(
+    test_summary = run_for_samples(
         exec_file, [(in_sample_file, out_sample_file)], timeout_sec)
 
-    return success_count == 1
+    return test_summary.success_count == 1 and not test_summary.has_error_output
 
 
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool) -> bool:
@@ -171,17 +183,20 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         validate_sample_pair(in_sample_file, out_sample_file)
         samples.append((in_sample_file, out_sample_file))
 
-    success_count = run_for_samples(exec_file, samples, timeout_sec, knock_out)
+    test_summary = run_for_samples(exec_file, samples, timeout_sec, knock_out)
 
     if len(samples) == 0:
         print("No test cases")
         return False
-    elif success_count != len(samples):
+    elif test_summary.success_count != len(samples):
         print("{msg} (passed {success_count} of {total})".format(
             msg=with_color("Some cases FAILED", Fore.LIGHTRED_EX),
-            success_count=success_count,
+            success_count=test_summary.success_count,
             total=len(samples),
         ))
+        return False
+    elif test_summary.has_error_output:
+        print(with_color("Passed all test case but with stderr. (Please remove stderr!)", Fore.LIGHTYELLOW_EX))
         return False
     else:
         print(with_color("Passed all test cases!!!", Fore.LIGHTGREEN_EX))
