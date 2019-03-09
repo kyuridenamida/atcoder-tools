@@ -101,8 +101,10 @@ class TestTester(unittest.TestCase):
         output = 'wrong\n'
         stderr = 'stderr\n'
         expected = (with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'
-                    + in_out + with_color('[Expected]', Fore.LIGHTMAGENTA_EX) + '\n' + in_out
-                    + with_color('[Received]', Fore.LIGHTMAGENTA_EX) + '\n' + output
+                    + in_out + with_color('[Expected]',
+                                          Fore.LIGHTMAGENTA_EX) + '\n' + in_out
+                    + with_color('[Received]',
+                                 Fore.LIGHTMAGENTA_EX) + '\n' + output
                     + with_color('[Error]', Fore.LIGHTYELLOW_EX) + '\n' + stderr)
         io_mock = mock_open(read_data=in_out)
 
