@@ -3,3 +3,4 @@ requests
 colorama
 toml
 jinja2
+online-judge-tools
