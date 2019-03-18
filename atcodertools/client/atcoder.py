@@ -8,10 +8,9 @@ from typing import List, Optional, Tuple, Union
 
 import requests
 from bs4 import BeautifulSoup
-from onlinejudge.type import LoginError
+from onlinejudge.type import Submission, LoginError
 from onlinejudge.service.atcoder import AtCoderService, AtCoderContest, AtCoderProblem
 
-from atcodertools.client.models.submission import Submission
 from atcodertools.common.language import Language
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
 from atcodertools.client.models.contest import Contest
@@ -125,14 +124,12 @@ class AtCoderClient(metaclass=Singleton):
         else:
             raise Exception(
                 'failed to recognize the language: {}'.format(lang))
-        submission = problem_.submit_code(
+        return problem_.submit_code(
             source.encode(), language_id=language_id, session=self._session)
-        return Submission(submission.problem_id, submission.submission_id)
 
     def download_submission_list(self, contest: Contest) -> List[Submission]:
-        submissions = list(AtCoderContest.from_url(
+        return list(AtCoderContest.from_url(
             contest.get_url()).iterate_submissions_where(me=True, session=self._session))
-        return [Submission(submission.problem_id, submission.submission_id) for submission in submissions]
 
     def _request(self, url: str, method='GET', **kwargs):
         if method == 'GET':

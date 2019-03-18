@@ -1,5 +1,3 @@
-from atcodertools.client.models.submission import Submission
-
 
 class Contest:
 
@@ -23,9 +21,6 @@ class Contest:
 
     def get_my_submissions_url(self, page=1):
         return "{}submissions/me/{}".format(self.get_url(), page)
-
-    def get_submissions_url(self, submission: Submission):
-        return "{}submissions/{}".format(self.get_new_url(), submission.submission_id)
 
     def to_dict(self):
         return {
