@@ -9,10 +9,9 @@ import urllib
 from io import IOBase
 
 from colorama import Fore
-from onlinejudge.service.atcoder import AtCoderContest
+from onlinejudge.service.atcoder import AtCoderContest, AtCoderProblem
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
-from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
@@ -30,40 +29,13 @@ class UnknownProblemURLError(Exception):
     pass
 
 
-def get_problem_from_url(problem_url: str) -> Problem:
-    dummy_alphabet = 'Z'  # it's impossible to reconstruct the alphabet from URL
-    result = urllib.parse.urlparse(problem_url)
-
-    # old-style (e.g. http://agc012.contest.atcoder.jp/tasks/agc012_d)
-    dirname, basename = posixpath.split(os.path.normpath(result.path))
-    if result.scheme in ('', 'http', 'https') \
-            and result.netloc.count('.') == 3 \
-            and result.netloc.endswith('.contest.atcoder.jp') \
-            and result.netloc.split('.')[0] \
-            and dirname == '/tasks' \
-            and basename:
-        contest_id = result.netloc.split('.')[0]
-        problem_id = basename
-        return Problem(AtCoderContest(contest_id), dummy_alphabet, problem_id)
-
-    # new-style (e.g. https://beta.atcoder.jp/contests/abc073/tasks/abc073_a)
-    m = re.match(
-        r'^/contests/([\w\-_]+)/tasks/([\w\-_]+)$', os.path.normpath(result.path))
-    if result.scheme in ('', 'http', 'https') \
-            and result.netloc in ('atcoder.jp', 'beta.atcoder.jp') \
-            and m:
-        contest_id = m.group(1)
-        problem_id = m.group(2)
-        return Problem(AtCoderContest(contest_id), dummy_alphabet, problem_id)
-
-    raise UnknownProblemURLError
-
-
 def generate_code(atcoder_client: AtCoderClient,
                   problem_url: str,
                   config: Config,
                   output_file: IOBase):
-    problem = get_problem_from_url(problem_url)
+    problem = AtCoderProblem.from_url(problem_url)
+    if problem is None:
+        raise UnknownProblemURLError
     template_code_path = config.code_style_config.template_file
     lang = config.code_style_config.lang
 

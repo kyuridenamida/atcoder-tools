@@ -13,7 +13,6 @@ from onlinejudge.service.atcoder import AtCoderService, AtCoderContest, AtCoderP
 
 from atcodertools.common.language import Language
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
-from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 
 
@@ -86,12 +85,11 @@ class AtCoderClient(metaclass=Singleton):
         if use_local_session_cache and save_session_cache:
             save_cookie(self._session)
 
-    def download_problem_list(self, contest: AtCoderContest) -> List[Problem]:
-        problems = contest.list_problems(session=self._session)
-        return [Problem(contest, problem.get_alphabet(), problem.problem_id) for problem in problems]
+    def download_problem_list(self, contest: AtCoderContest) -> List[AtCoderProblem]:
+        return contest.list_problems(session=self._session)
 
-    def download_problem_content(self, problem: Problem) -> ProblemContent:
-        resp = self._request(problem.get_url())
+    def download_problem_content(self, problem: AtCoderProblem) -> ProblemContent:
+        resp = self._request(problem.get_url(type='old'))
 
         try:
             return ProblemContent.from_html(resp.text)
@@ -102,7 +100,7 @@ class AtCoderClient(metaclass=Singleton):
         return list(AtCoderService().iterate_contests(
             session=self._session))
 
-    def submit_source_code(self, contest: AtCoderContest, problem: Problem, lang: Union[str, Language], source: str) -> Submission:
+    def submit_source_code(self, contest: AtCoderContest, problem: AtCoderProblem, lang: Union[str, Language], source: str) -> Submission:
         if isinstance(lang, str):
             warnings.warn(
                 "Parameter lang as a str object is deprecated. "
@@ -112,15 +110,14 @@ class AtCoderClient(metaclass=Singleton):
         else:
             lang_option_pattern = lang.submission_lang_pattern
 
-        problem_ = AtCoderProblem.from_url(problem.get_url())
-        for available_language in problem_.get_available_languages(session=self._session):
+        for available_language in problem.get_available_languages(session=self._session):
             if re.match(lang_option_pattern, available_language.name):
                 language_id = available_language.id
                 break
         else:
             raise Exception(
                 'failed to recognize the language: {}'.format(lang))
-        return problem_.submit_code(
+        return problem.submit_code(
             source.encode(), language_id=language_id, session=self._session)
 
     def download_submission_list(self, contest: AtCoderContest) -> List[Submission]:

@@ -3,10 +3,9 @@ import tempfile
 import unittest
 
 import requests
-from onlinejudge.service.atcoder import AtCoderContest
+from onlinejudge.service.atcoder import AtCoderContest, AtCoderProblem
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError, save_cookie, load_cookie_to
-from atcodertools.client.models.problem import Problem
 
 
 class TestAtCoderClientReal(unittest.TestCase):
@@ -27,7 +26,7 @@ class TestAtCoderClientReal(unittest.TestCase):
 
     def test_download_problem_content(self):
         content = self.client.download_problem_content(
-            Problem(AtCoderContest("arc002"), "C", "arc002_3"))
+            AtCoderProblem("arc002", "arc002_3"))
         self.assertEqual("N\nc_{1}c_{2}...c_{N}\n", content.input_format_text)
         self.assertEqual(3, len(content.samples))
 

@@ -11,10 +11,9 @@ from time import sleep
 from typing import Tuple
 
 from colorama import Fore
-from onlinejudge.service.atcoder import AtCoderContest
+from onlinejudge.service.atcoder import AtCoderContest, AtCoderProblem
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
-from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
@@ -48,7 +47,7 @@ def _message_on_execution(cwd: str, cmd: str):
 
 
 def prepare_procedure(atcoder_client: AtCoderClient,
-                      problem: Problem,
+                      problem: AtCoderProblem,
                       config: Config):
     workspace_root_path = config.code_style_config.workspace_dir
     template_code_path = config.code_style_config.template_file
@@ -155,7 +154,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     output_splitter()
 
 
-def func(argv: Tuple[AtCoderClient, Problem, Config]):
+def func(argv: Tuple[AtCoderClient, AtCoderProblem, Config]):
     atcoder_client, problem, config = argv
     prepare_procedure(atcoder_client, problem, config)
 
