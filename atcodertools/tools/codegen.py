@@ -9,8 +9,9 @@ import urllib
 from io import IOBase
 
 from colorama import Fore
+from onlinejudge.service.atcoder import AtCoderContest
 
-from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
+from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
@@ -43,7 +44,7 @@ def get_problem_from_url(problem_url: str) -> Problem:
             and basename:
         contest_id = result.netloc.split('.')[0]
         problem_id = basename
-        return Problem(Contest(contest_id), dummy_alphabet, problem_id)
+        return Problem(AtCoderContest(contest_id), dummy_alphabet, problem_id)
 
     # new-style (e.g. https://beta.atcoder.jp/contests/abc073/tasks/abc073_a)
     m = re.match(
@@ -53,7 +54,7 @@ def get_problem_from_url(problem_url: str) -> Problem:
             and m:
         contest_id = m.group(1)
         problem_id = m.group(2)
-        return Problem(Contest(contest_id), dummy_alphabet, problem_id)
+        return Problem(AtCoderContest(contest_id), dummy_alphabet, problem_id)
 
     raise UnknownProblemURLError
 

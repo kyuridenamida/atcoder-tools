@@ -13,7 +13,6 @@ from onlinejudge.service.atcoder import AtCoderService, AtCoderContest, AtCoderP
 
 from atcodertools.common.language import Language
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
-from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 
@@ -87,9 +86,8 @@ class AtCoderClient(metaclass=Singleton):
         if use_local_session_cache and save_session_cache:
             save_cookie(self._session)
 
-    def download_problem_list(self, contest: Contest) -> List[Problem]:
-        problems = AtCoderContest.from_url(
-            contest.get_url()).list_problems(session=self._session)
+    def download_problem_list(self, contest: AtCoderContest) -> List[Problem]:
+        problems = contest.list_problems(session=self._session)
         return [Problem(contest, problem.get_alphabet(), problem.problem_id) for problem in problems]
 
     def download_problem_content(self, problem: Problem) -> ProblemContent:
@@ -100,13 +98,11 @@ class AtCoderClient(metaclass=Singleton):
         except (InputFormatDetectionError, SampleDetectionError) as e:
             raise e
 
-    def download_all_contests(self) -> List[Contest]:
-        contests = list(AtCoderService().iterate_contests(
+    def download_all_contests(self) -> List[AtCoderContest]:
+        return list(AtCoderService().iterate_contests(
             session=self._session))
-        contest_ids = sorted([contest.contest_id for contest in contests])
-        return [Contest(contest_id) for contest_id in contest_ids]
 
-    def submit_source_code(self, contest: Contest, problem: Problem, lang: Union[str, Language], source: str) -> Submission:
+    def submit_source_code(self, contest: AtCoderContest, problem: Problem, lang: Union[str, Language], source: str) -> Submission:
         if isinstance(lang, str):
             warnings.warn(
                 "Parameter lang as a str object is deprecated. "
@@ -127,9 +123,8 @@ class AtCoderClient(metaclass=Singleton):
         return problem_.submit_code(
             source.encode(), language_id=language_id, session=self._session)
 
-    def download_submission_list(self, contest: Contest) -> List[Submission]:
-        return list(AtCoderContest.from_url(
-            contest.get_url()).iterate_submissions_where(me=True, session=self._session))
+    def download_submission_list(self, contest: AtCoderContest) -> List[Submission]:
+        return list(contest.iterate_submissions_where(me=True, session=self._session))
 
     def _request(self, url: str, method='GET', **kwargs):
         if method == 'GET':

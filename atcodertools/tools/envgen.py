@@ -11,8 +11,9 @@ from time import sleep
 from typing import Tuple
 
 from colorama import Fore
+from onlinejudge.service.atcoder import AtCoderContest
 
-from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
+from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
@@ -56,7 +57,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     pid = problem.get_alphabet()
     problem_dir_path = os.path.join(
         workspace_root_path,
-        problem.get_contest().get_id(),
+        problem.get_contest().contest_id,
         pid)
 
     def emit_error(text):
@@ -165,7 +166,7 @@ def prepare_contest(atcoder_client: AtCoderClient,
     retry_duration = 1.5
     while True:
         problem_list = atcoder_client.download_problem_list(
-            Contest(contest_id=contest_id))
+            AtCoderContest(contest_id=contest_id))
         if problem_list:
             break
         sleep(retry_duration)

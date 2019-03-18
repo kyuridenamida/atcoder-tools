@@ -2,7 +2,8 @@ import io
 import os
 import unittest
 
-from atcodertools.client.models.contest import Contest
+from onlinejudge.service.atcoder import AtCoderContest
+
 from atcodertools.client.models.problem import Problem
 from atcodertools.tools.codegen import main, get_problem_from_url
 
@@ -39,7 +40,7 @@ class TestCodeGenCommand(unittest.TestCase):
 
     def test_url_parser(self):
         dummy_alphabet = "Z"
-        problem = Problem(Contest("utpc2014"), "Z", "utpc2014_k")
+        problem = Problem(AtCoderContest("utpc2014"), "Z", "utpc2014_k")
         urls = [
             "http://utpc2014.contest.atcoder.jp/tasks/utpc2014_k",
             "http://beta.atcoder.jp/contests/utpc2014/tasks/utpc2014_k",

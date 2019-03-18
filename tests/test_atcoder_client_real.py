@@ -3,9 +3,9 @@ import tempfile
 import unittest
 
 import requests
+from onlinejudge.service.atcoder import AtCoderContest
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError, save_cookie, load_cookie_to
-from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
 
 
@@ -16,7 +16,8 @@ class TestAtCoderClientReal(unittest.TestCase):
         self.client = AtCoderClient()
 
     def test_submit_source_code(self):
-        problem_list = self.client.download_problem_list(Contest("arc002"))
+        problem_list = self.client.download_problem_list(
+            AtCoderContest("arc002"))
         self.assertEqual(
             ['arc002_1',
              'arc002_2',
@@ -26,7 +27,7 @@ class TestAtCoderClientReal(unittest.TestCase):
 
     def test_download_problem_content(self):
         content = self.client.download_problem_content(
-            Problem(Contest("arc002"), "C", "arc002_3"))
+            Problem(AtCoderContest("arc002"), "C", "arc002_3"))
         self.assertEqual("N\nc_{1}c_{2}...c_{N}\n", content.input_format_text)
         self.assertEqual(3, len(content.samples))
 
@@ -49,7 +50,7 @@ class TestAtCoderClientReal(unittest.TestCase):
 
         # Make sure there is no duplication
         self.assertEqual(
-            len(set([c.get_id() for c in contests])),
+            len(set([c.contest_id for c in contests])),
             len(contests))
 
     def test_check_logging_in_is_false(self):
