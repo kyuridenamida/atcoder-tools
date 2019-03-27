@@ -60,7 +60,7 @@ def infer_case_num(sample_filename: str):
     return int(result)
 
 
-def build_details_str(exec_res: ExecResult, input_file: str, output_file: str, squash_io_on_success: bool) -> str:
+def build_details_str(exec_res: ExecResult, input_file: str, output_file: str, skip_io_on_success: bool) -> str:
     res = ""
 
     def append(text: str, end='\n'):
@@ -70,7 +70,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str, s
     with open(output_file, "r") as f:
         expected_output = f.read()
 
-    if expected_output != exec_res.output or not squash_io_on_success:
+    if expected_output != exec_res.output or not skip_io_on_success:
         append(with_color("[Input]", Fore.LIGHTMAGENTA_EX))
         with open(input_file, "r") as f:
             append(f.read(), end='')
@@ -92,7 +92,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str, s
 
 
 def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, knock_out: bool = False,
-                    squash_io_on_success: bool = False) -> TestSummary:
+                    skip_io_on_success: bool = False) -> TestSummary:
     success_count = 0
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
@@ -131,7 +131,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
         # Output details for incorrect results or has stderr.
         if not is_correct or exec_res.has_stderr():
             print('{}\n'.format(build_details_str(
-                exec_res, in_sample_file, out_sample_file, squash_io_on_success)))
+                exec_res, in_sample_file, out_sample_file, skip_io_on_success)))
 
         if knock_out and not is_correct:
             print('Stop testing ...')
@@ -176,7 +176,7 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
 
 
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
-                  squash_stderr_onsuccess: bool) -> bool:
+                  skip_stderr_on_success: bool) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
         logging.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
@@ -189,7 +189,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         samples.append((in_sample_file, out_sample_file))
 
     test_summary = run_for_samples(
-        exec_file, samples, timeout_sec, knock_out, squash_stderr_onsuccess)
+        exec_file, samples, timeout_sec, knock_out, skip_stderr_on_success)
 
     if len(samples) == 0:
         print("No test cases")
@@ -255,7 +255,7 @@ def main(prog, args) -> bool:
                         action="store_true",
                         default=False)
 
-    parser.add_argument('--squash-inout', '-s',
+    parser.add_argument('--skip-almost-ac-feedback', '-s',
                         help='Hide inputs and expected/actual outputs if result is correct and there are error outputs'
                              ' [Default] False,',
                         action='store_true',
@@ -275,7 +275,7 @@ def main(prog, args) -> bool:
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
-                             args.squash_inout)
+                             args.skip_almost_ac_feedback)
     else:
         return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num)
 
