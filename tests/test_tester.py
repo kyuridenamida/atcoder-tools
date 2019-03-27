@@ -107,7 +107,6 @@ class TestTester(unittest.TestCase):
             self.assertEqual(1, run_program_mock.call_count)
             self.assertEqual(0, build_details_str_mock.call_count)
 
-
     def test_build_details_str(self):
         in_out = 'correct\n'
         output = 'wrong\n'
