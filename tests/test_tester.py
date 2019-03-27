@@ -96,6 +96,18 @@ class TestTester(unittest.TestCase):
             self.assertEqual(1, run_program_mock.call_count)
             self.assertEqual(1, build_details_str_mock.call_count)
 
+    @patch('atcodertools.tools.tester.build_details_str', return_value='')
+    @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'correct', 'stderr', 0))
+    def test_run_for_samples__skip_stderr(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock):
+        io_mock = mock_open(read_data='correct')
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            self.assertEqual(TestSummary(1, True), tester.run_for_samples(
+                'a.out', [('in_1.txt', 'out_1.txt')], 1, skip_io_on_success=True))
+            self.assertEqual(1, run_program_mock.call_count)
+            self.assertEqual(0, build_details_str_mock.call_count)
+
+
     def test_build_details_str(self):
         in_out = 'correct\n'
         output = 'wrong\n'
@@ -110,7 +122,7 @@ class TestTester(unittest.TestCase):
 
         with patch('atcodertools.tools.tester.open', io_mock):
             result = build_details_str(ExecResult(
-                ExecStatus.NORMAL, output, stderr), 'in.txt', 'out.txt', False)
+                ExecStatus.NORMAL, output, stderr), 'in.txt', 'out.txt')
             self.assertEqual(expected, result)
 
     def test_build_details_str__show_testcase_if_there_is_stderr(self):
@@ -126,17 +138,7 @@ class TestTester(unittest.TestCase):
 
         with patch('atcodertools.tools.tester.open', io_mock):
             result = build_details_str(ExecResult(
-                ExecStatus.NORMAL, in_out, stderr), 'in.txt', 'out.txt', False)
-            self.assertEqual(expected, result)
-
-    def test_build_details_str__hide_testcase_on_correct_answer(self):
-        io_mock = mock_open(read_data='correct\n')
-
-        with patch('atcodertools.tools.tester.open', io_mock):
-            expected = with_color(
-                '[Error]', Fore.LIGHTYELLOW_EX) + '\nstderr\n'
-            result = build_details_str(ExecResult(
-                ExecStatus.NORMAL, 'correct\n', 'stderr\n'), 'in.txt', 'out.txt', True)
+                ExecStatus.NORMAL, in_out, stderr), 'in.txt', 'out.txt')
             self.assertEqual(expected, result)
 
     def test_build_details_str__on_runtime_failure(self):
@@ -152,7 +154,7 @@ class TestTester(unittest.TestCase):
 
         with patch('atcodertools.tools.tester.open', io_mock):
             result = build_details_str(ExecResult(
-                ExecStatus.RE, in_out, stderr), 'in.txt', 'out.txt', False)
+                ExecStatus.RE, in_out, stderr), 'in.txt', 'out.txt')
             self.assertEqual(expected, result)
 
 

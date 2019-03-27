@@ -60,7 +60,7 @@ def infer_case_num(sample_filename: str):
     return int(result)
 
 
-def build_details_str(exec_res: ExecResult, input_file: str, output_file: str, skip_io_on_success: bool) -> str:
+def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -> str:
     res = ""
 
     def append(text: str, end='\n'):
@@ -70,16 +70,15 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str, s
     with open(output_file, "r") as f:
         expected_output = f.read()
 
-    if expected_output != exec_res.output or not skip_io_on_success:
-        append(with_color("[Input]", Fore.LIGHTMAGENTA_EX))
-        with open(input_file, "r") as f:
-            append(f.read(), end='')
+    append(with_color("[Input]", Fore.LIGHTMAGENTA_EX))
+    with open(input_file, "r") as f:
+        append(f.read(), end='')
 
-        append(with_color("[Expected]", Fore.LIGHTMAGENTA_EX))
-        append(expected_output, end='')
+    append(with_color("[Expected]", Fore.LIGHTMAGENTA_EX))
+    append(expected_output, end='')
 
-        append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
-        append(exec_res.output, end='')
+    append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
+    append(exec_res.output, end='')
 
     if exec_res.status != ExecStatus.NORMAL:
         append(with_color("Aborted ({})\n".format(
@@ -129,9 +128,9 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
         ))
 
         # Output details for incorrect results or has stderr.
-        if not is_correct or exec_res.has_stderr():
+        if not is_correct or (exec_res.has_stderr() and not skip_io_on_success):
             print('{}\n'.format(build_details_str(
-                exec_res, in_sample_file, out_sample_file, skip_io_on_success)))
+                exec_res, in_sample_file, out_sample_file)))
 
         if knock_out and not is_correct:
             print('Stop testing ...')
