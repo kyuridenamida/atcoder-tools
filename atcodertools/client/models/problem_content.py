@@ -26,6 +26,13 @@ def is_japanese(ch):
     return False
 
 
+def test4(ch):
+    print("ABC")
+
+
+def test5(ch):
+    print("ABC")
+
 class SampleDetectionError(Exception):
     pass
 
