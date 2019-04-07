@@ -24,8 +24,14 @@ def mkdirs(path):
 
 if __name__ == "__main__":
     for contest in atcoder.download_all_contests():
-        for problem in atcoder.download_problem_list(contest):
-            path = "./test_data/{contest}-{problem_id}".format(contest=contest.get_id(),
+        try:
+            problems = atcoder.download_problem_list(contest)
+        except Exception as e:
+            print("Failed to download {}. {}".format(contest.contest_id, e))
+            print("Skipping ...")
+
+        for problem in problems:
+            path = "./test_data/{contest}-{problem_id}".format(contest=contest.contest_id,
                                                                problem_id=problem.get_alphabet())
             if os.path.exists(path) and len(os.listdir(path)) != 0:
                 print("{} already exists -- skipping download".format(path))
@@ -43,12 +49,12 @@ if __name__ == "__main__":
                         f.write(sample.get_input())
             except SampleDetectionError:
                 print(
-                    "failed to parse samples for {} {} -- skipping download".format(contest.get_id(),
+                    "failed to parse samples for {} {} -- skipping download".format(contest.contest_id,
                                                                                     problem.get_alphabet()))
             except InputFormatDetectionError:
                 print(
-                    "failed to parse input for {} {} -- skipping download".format(contest.get_id(),
+                    "failed to parse input for {} {} -- skipping download".format(contest.contest_id,
                                                                                   problem.get_alphabet()))
             except Exception:
                 print("unknown error for {} {} -- skipping download".format(
-                    contest.get_id(), problem.get_alphabet()))
+                    contest.contest_id, problem.get_alphabet()))

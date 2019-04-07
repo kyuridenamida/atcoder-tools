@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 from onlinejudge.type import Submission, LoginError
 from onlinejudge.service.atcoder import AtCoderService, AtCoderContest, AtCoderProblem
 
+from atcodertools.client.models.sample import Sample
 from atcodertools.common.language import Language
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
@@ -89,12 +90,8 @@ class AtCoderClient(metaclass=Singleton):
         return contest.list_problems(session=self._session)
 
     def download_problem_content(self, problem: AtCoderProblem) -> ProblemContent:
-        resp = self._request(problem.get_url(type='old'))
-
-        try:
-            return ProblemContent.from_html(resp.text)
-        except (InputFormatDetectionError, SampleDetectionError) as e:
-            raise e
+        content = problem.download_content(session=self._session)
+        return ProblemContent.from_raw_content(content)
 
     def download_all_contests(self) -> List[AtCoderContest]:
         return list(AtCoderService().iterate_contests(

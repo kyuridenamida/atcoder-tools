@@ -120,7 +120,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
             msg = "Too many prediction -- Failed to understand the input format"
         emit_warning(with_color(msg, Fore.LIGHTRED_EX))
 
-    constants = predict_constants(content.original_html)
+    constants = predict_constants(content)
     code_generator = config.code_style_config.code_generator
     with open(template_code_path, "r") as f:
         template = f.read()

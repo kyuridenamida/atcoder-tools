@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import errno
+import datetime
 import os
 
 from atcodertools.client.atcoder import AtCoderClient
@@ -25,9 +26,15 @@ if __name__ == "__main__":
     htmls_dir = "./problem_htmls/"
     mkdirs(htmls_dir)
     for contest in atcoder.download_all_contests():
-        for problem in atcoder.download_problem_list(contest):
+        try:
+            problems = atcoder.download_problem_list(contest)
+        except Exception as e:
+            print("Failed to download {}. {}".format(contest.contest_id, e))
+            print("Skipping ...")
+
+        for problem in problems:
             html_path = os.path.join(htmls_dir, "{contest}-{problem_id}.html".format(
-                contest=contest.get_id(), problem_id=problem.get_alphabet()))
+                contest=contest.contest_id, problem_id=problem.get_alphabet()))
 
             if os.path.exists(html_path):
                 print(

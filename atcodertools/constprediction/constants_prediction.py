@@ -33,12 +33,12 @@ def is_mod_context(sentence):
     return False
 
 
-def predict_modulo(html: str) -> Optional[int]:
+def predict_modulo(content: ProblemContent) -> Optional[int]:
     def normalize(sentence):
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
             "10^9+7", "1000000007").lower().strip()
 
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(content.get_original_html(), "html.parser")
     sentences = soup.get_text().split("\n")
     sentences = [normalize(s) for s in sentences if is_mod_context(s)]
 
@@ -60,10 +60,10 @@ def predict_modulo(html: str) -> Optional[int]:
     raise MultipleModCandidatesError(mod_cands)
 
 
-def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
+def predict_yes_no(content: ProblemContent) -> Tuple[Optional[str], Optional[str]]:
     try:
         outputs = set()
-        for sample in ProblemContent.from_html(html).get_samples():
+        for sample in content.get_samples():
             for x in sample.get_output().split("\n"):
                 outputs.add(x.strip())
     except (InputFormatDetectionError, SampleDetectionError) as e:
@@ -83,14 +83,14 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     return yes_str, no_str
 
 
-def predict_constants(html: str) -> ProblemConstantSet:
+def predict_constants(content: ProblemContent) -> ProblemConstantSet:
     try:
-        yes_str, no_str = predict_yes_no(html)
+        yes_str, no_str = predict_yes_no(content)
     except YesNoPredictionFailedError:
         yes_str = no_str = None
 
     try:
-        mod = predict_modulo(html)
+        mod = predict_modulo(content)
     except MultipleModCandidatesError as e:
         logging.warning("Modulo prediction failed -- "
                         "two or more candidates {} are detected as modulo values".format(e.cands))

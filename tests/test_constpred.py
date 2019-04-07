@@ -3,6 +3,7 @@ import os
 import tempfile
 import unittest
 
+from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, \
     MultipleModCandidatesError, predict_yes_no, YesNoPredictionFailedError
 from tests.utils.gzip_controller import make_html_data_controller
@@ -51,15 +52,15 @@ class TestConstantsPrediction(unittest.TestCase):
 
     def test_yes_no_prediction_fails_when_failing_to_parse_html(self):
         try:
-            predict_yes_no("broken html")
+            predict_yes_no(ProblemContent(original_html="broken html"))
             self.fail("Must not reach here")
         except YesNoPredictionFailedError:
             pass
 
     def test_modulo_prediction_fails_with_multi_mod_cands(self):
         try:
-            predict_modulo(
-                "<p>101で割った余りを出力してください。もしくは n modulo 103を出力してください。</p>")
+            predict_modulo(ProblemContent(
+                original_html="<p>101で割った余りを出力してください。もしくは n modulo 103を出力してください。</p>"))
             self.fail("Must not reach here")
         except MultipleModCandidatesError:
             pass
@@ -91,7 +92,7 @@ class TestConstantsPrediction(unittest.TestCase):
 
     def _load(self, html_path):
         with open(os.path.join(self.test_dir, html_path), 'r') as f:
-            return f.read()
+            return ProblemContent.from_html(f.read())
 
 
 if __name__ == '__main__':
