@@ -121,7 +121,8 @@ optional arguments:
   --timeout TIMEOUT, -t TIMEOUT
                         Timeout for each test cases (sec) [Default] 1
   --knock-out, -k       Stop execution immediately after any example's failure [Default] False
-
+  --skip-almost-ac-feedback, -s
+                        Hide inputs and expected/actual outputs if result is correct and there are error outputs [Default] False,
 ```
 
 
