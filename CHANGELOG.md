@@ -1,5 +1,15 @@
 # Change Log
 
+## 1.1.4 / 2019-04-11
+- [#138](https://github.com/kyuridenamida/atcoder-tools/pull/138) Fix a bug that generated main.py is not executable by making source files executable when their codes have shebang
+    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
+- [#132](https://github.com/kyuridenamida/atcoder-tools/pull/132) By default, stop showing example details on test command when getting AC but with stderr
+    - Thanks for [@blue-jam](https://github.com/blue-jam/)'s contribution!
+- [#131](https://github.com/kyuridenamida/atcoder-tools/pull/131) Support coloring functionality on Windows
+    - Thanks for [@kotamanegi](https://github.com/kotamanegi/)'s contribution!
+- [#128](https://github.com/kyuridenamida/atcoder-tools/pull/128) Show new AtCoder URL to the submission page
+    - Thanks for [@kotamanegi](https://github.com/kotamanegi/)'s contribution again!
+
 ## 1.1.3 / 2019-03-06
 - [#122](https://github.com/kyuridenamida/atcoder-tools/pull/122) Support pip installation on Windows (cmd.exe)
     - Thanks for [@kotamanegi](https://github.com/kotamanegi/)'s contribution!
