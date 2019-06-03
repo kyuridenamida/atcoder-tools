@@ -8,6 +8,7 @@ from os.path import relpath
 from atcodertools.client.atcoder import AtCoderClient
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.config import Config
+from atcodertools.config.etc_config import EtcConfig
 from atcodertools.tools.envgen import prepare_contest, main
 
 RESOURCE_DIR = os.path.join(
@@ -65,6 +66,10 @@ class TestEnvGen(unittest.TestCase):
                         workspace_dir=self.temp_dir,
                         template_file=TEMPLATE_PATH,
                         lang="cpp",
+                    ),
+                    etc_config=EtcConfig(
+                        in_example_format="input_{}.txt",
+                        out_example_format="output_{}.txt"
                     ))
             )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)

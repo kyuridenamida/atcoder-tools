@@ -37,10 +37,6 @@ class BannedFileDetectedError(Exception):
     pass
 
 
-IN_EXAMPLE_FORMAT = "in_{}.txt"
-OUT_EXAMPLE_FORMAT = "out_{}.txt"
-
-
 def output_splitter():
     # for readability
     print("=================================================", file=sys.stderr)
@@ -90,7 +86,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     else:
         os.makedirs(problem_dir_path, exist_ok=True)
         create_examples(content.get_samples(), problem_dir_path,
-                        IN_EXAMPLE_FORMAT, OUT_EXAMPLE_FORMAT)
+                        config.etc_config.in_example_format, config.etc_config.out_example_format)
         emit_info("Created examples.")
 
     code_file_path = os.path.join(
@@ -143,8 +139,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     metadata_path = os.path.join(problem_dir_path, "metadata.json")
     Metadata(problem,
              os.path.basename(code_file_path),
-             IN_EXAMPLE_FORMAT.replace("{}", "*"),
-             OUT_EXAMPLE_FORMAT.replace("{}", "*"),
+             config.etc_config.in_example_format.replace("{}", "*"),
+             config.etc_config.out_example_format.replace("{}", "*"),
              lang,
              ).save_to(metadata_path)
     emit_info("Saved metadata to {}".format(metadata_path))
