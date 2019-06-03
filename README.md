@@ -193,6 +193,8 @@ optional arguments:
 - AtCoderにログインせずにダウンロードを行う機能を使わない (公開コンテストに対してのみ可能)
 - データの並列ダウンロードを無効にする
 - ログイン情報のクッキーを保存する
+- テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
+- テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
 
 ```toml
 [codestyle]
@@ -210,6 +212,8 @@ exec_on_contest_dir='touch CMakeLists.txt'
 download_without_login=false
 parallel_download=false
 save_no_session_cache=false
+in_example_format="in_{}.txt"
+out_example_format="out_{}.txt"
 
 ```
 
