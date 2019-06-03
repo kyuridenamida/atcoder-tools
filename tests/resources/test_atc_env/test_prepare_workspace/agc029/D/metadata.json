@@ -8,6 +8,6 @@
   },
   "problem_id": "agc029_d"
  },
- "sample_in_pattern": "in_*.txt",
- "sample_out_pattern": "out_*.txt"
+ "sample_in_pattern": "input_*.txt",
+ "sample_out_pattern": "output_*.txt"
 }
