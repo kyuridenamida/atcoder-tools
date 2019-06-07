@@ -1,12 +1,9 @@
+from typing import NamedTuple, Optional
 
 
-class ProblemConstantSet:
+ProblemConstantSet = NamedTuple('ProblemConstantSet', [(
+    'mod', Optional[int]), ('yes_str', Optional[str]), ('no_str', Optional[str])])
 
-    def __init__(self,
-                 mod: int = None,
-                 yes_str: str = None,
-                 no_str: str = None,
-                 ):
-        self.mod = mod
-        self.yes_str = yes_str
-        self.no_str = no_str
+# This is a workaround; newer Python (3.6 ~) has a feature to set defaults values
+ProblemConstantSet.__new__.__defaults__ = (
+    None, ) * len(ProblemConstantSet._fields)
