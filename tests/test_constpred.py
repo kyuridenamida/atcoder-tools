@@ -1,7 +1,7 @@
-import logging
 import os
 import tempfile
 import unittest
+from logging import getLogger, DEBUG
 
 from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, \
     MultipleModCandidatesError, predict_yes_no, YesNoPredictionFailedError
@@ -11,8 +11,9 @@ ANSWER_FILE = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     './resources/test_constpred/answer.txt')
 
-fmt = "%(asctime)s %(levelname)s: %(message)s"
-logging.basicConfig(level=logging.DEBUG, format=fmt)
+logger = getLogger(__name__)
+logger.setLevel(DEBUG)
+logger.format("%(asctime)s %(levelname)s: %(message)s")
 
 
 def _to_str(x):
@@ -39,7 +40,7 @@ class TestConstantsPrediction(unittest.TestCase):
         agc_html_paths = [path for path in sorted(
             os.listdir(self.test_dir)) if "agc" in path]
         for html_path, answer_line in zip(agc_html_paths, answers):
-            logging.debug("Testing {}".format(html_path))
+            logger.debug("Testing {}".format(html_path))
             constants = predict_constants(self._load(html_path))
             output_line = "{:40} [mod]{:10} [yes]{:10} [no]{:10}".format(html_path.split(".")[0],
                                                                          _to_str(
