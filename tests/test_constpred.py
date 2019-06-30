@@ -1,7 +1,7 @@
 import os
 import tempfile
 import unittest
-from logging import getLogger, DEBUG
+from logging import getLogger, DEBUG, Formatter, StreamHandler
 
 from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, \
     MultipleModCandidatesError, predict_yes_no, YesNoPredictionFailedError
@@ -13,7 +13,10 @@ ANSWER_FILE = os.path.join(
 
 logger = getLogger(__name__)
 logger.setLevel(DEBUG)
-logger.format("%(asctime)s %(levelname)s: %(message)s")
+handler = StreamHandler()
+formatter = Formatter("%(asctime)s %(levelname)s: %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 def _to_str(x):
