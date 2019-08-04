@@ -1,7 +1,7 @@
 import re
 from typing import Pattern, Callable
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python
+from atcodertools.codegen.code_generators import cpp, java, rust, python, d
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 
@@ -76,5 +76,14 @@ PYTHON = Language(
     default_template_path=get_default_template_path('py'),
 )
 
-ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON]
+DLANG = Language(
+    name="d",
+    display_name="D",
+    extension="d",
+    submission_lang_pattern=re.compile(".*DMD64.*"),
+    default_code_generator=d.main,
+    default_template_path=get_default_template_path('d'),
+)
+
+ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, DLANG]
 ALL_LANGUAGE_NAMES = [lang.display_name for lang in ALL_LANGUAGES]
