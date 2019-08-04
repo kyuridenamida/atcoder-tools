@@ -106,7 +106,7 @@ class Python3CodeGenerator:
                 ctor = "[{ctor} for _ in range({dim})]".format(
                     ctor=ctor, dim=dim)
 
-        line = "{name} = {constructor}  # type: {decl_type} ".format(
+        line = "{name} = {constructor}  # type: {decl_type}".format(
             name=var.name,
             decl_type=self._get_declaration_type(var),
             constructor=ctor
@@ -131,12 +131,12 @@ class Python3CodeGenerator:
             input_ = self._input_code_for_token(var.type)
 
         elif isinstance(pattern, ParallelPattern):
-            input_ = "[ {input_} for _ in range({length}) ]".format(
+            input_ = "[{input_} for _ in range({length})]".format(
                 input_=self._input_code_for_token(var.type),
                 length=var.first_index.get_length())
 
         elif isinstance(pattern, TwoDimensionalPattern):
-            input_ = "[ [ {input_} for _ in range({second_length}) ] for _ in range({first_length}) ]".format(
+            input_ = "[[{input_} for _ in range({second_length})] for _ in range({first_length})]".format(
                 input_=self._input_code_for_token(var.type),
                 first_length=var.first_index.get_length(),
                 second_length=var.second_index.get_length())
