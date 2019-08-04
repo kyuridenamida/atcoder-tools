@@ -23,7 +23,7 @@ def _loop_header(var: Variable, for_second_index: bool):
     )
 
 
-class CppCodeGenerator:
+class DlangCodeGenerator:
 
     def __init__(self,
                  format_: Optional[Format[Variable]],
@@ -164,7 +164,7 @@ class NoPredictionResultGiven(Exception):
 
 
 def main(args: CodeGenArgs) -> str:
-    code_parameters = CppCodeGenerator(
+    code_parameters = DlangCodeGenerator(
         args.format, args.config).generate_parameters()
     return render(
         args.template,
