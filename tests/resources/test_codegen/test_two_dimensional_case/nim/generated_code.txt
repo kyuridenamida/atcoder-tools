@@ -13,30 +13,24 @@ proc nextString(): string =
       result.add(c)
     else:
       if get: break
-      get = false
 
-{% if mod %}
-let MOD = {{ mod }}
-{% endif %}
-{% if yes_str %}
-let YES = "{{ yes_str }}"
-{% endif %}
-{% if no_str %}
-let NO = "{{ no_str }}"
-{% endif %}
-
-{% if prediction_success %}
-proc solve({{ formal_arguments }}):void =
-  discard
-{% endif %}
+proc solve(H:int, W:int, c:seq[seq[int]], A:seq[seq[int]]):void =
+  return
 
 proc main():void =
-{% if prediction_success %}
-  {{input_part}}
-  solve({{ actual_arguments }});
-{% else %}
-# Failed to predict input format
-{% endif %}
+  var H = 0
+  H = nextInt()
+  var W = 0
+  W = nextInt()
+  var c = newSeqWith(9-0+1, newSeqWith(9-0+1, 0))
+  for i in 0..<9-0+1:
+    for j in 0..<9-0+1:
+      c[i][j] = nextInt()
+  var A = newSeqWith(H, newSeqWith(W, 0))
+  for i in 0..<H:
+    for j in 0..<W:
+      A[i][j] = nextInt()
+  solve(H, W, c, A)
   return
 
 main()

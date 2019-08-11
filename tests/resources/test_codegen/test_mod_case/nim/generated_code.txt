@@ -13,30 +13,18 @@ proc nextString(): string =
       result.add(c)
     else:
       if get: break
-      get = false
 
-{% if mod %}
-let MOD = {{ mod }}
-{% endif %}
-{% if yes_str %}
-let YES = "{{ yes_str }}"
-{% endif %}
-{% if no_str %}
-let NO = "{{ no_str }}"
-{% endif %}
+let MOD = 998244353
 
-{% if prediction_success %}
-proc solve({{ formal_arguments }}):void =
-  discard
-{% endif %}
+proc solve(A:int, B:int):void =
+  return
 
 proc main():void =
-{% if prediction_success %}
-  {{input_part}}
-  solve({{ actual_arguments }});
-{% else %}
-# Failed to predict input format
-{% endif %}
+  var A = 0
+  A = nextInt()
+  var B = 0
+  B = nextInt()
+  solve(A, B)
   return
 
 main()

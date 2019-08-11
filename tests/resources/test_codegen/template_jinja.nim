@@ -13,7 +13,6 @@ proc nextString(): string =
       result.add(c)
     else:
       if get: break
-      get = false
 
 {% if mod %}
 let MOD = {{ mod }}
@@ -25,18 +24,12 @@ let YES = "{{ yes_str }}"
 let NO = "{{ no_str }}"
 {% endif %}
 
-{% if prediction_success %}
 proc solve({{ formal_arguments }}):void =
-  discard
-{% endif %}
+  return
 
 proc main():void =
-{% if prediction_success %}
   {{input_part}}
-  solve({{ actual_arguments }});
-{% else %}
-# Failed to predict input format
-{% endif %}
+  solve({{ actual_arguments }})
   return
 
 main()

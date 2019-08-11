@@ -16,7 +16,7 @@ def _loop_header(var: Variable, for_second_index: bool):
         index = var.first_index
         loop_var = "i"
 
-    return "for {loop_var} in 0..{length}-1:".format(
+    return "for {loop_var} in 0..<{length}:".format(
         loop_var=loop_var,
         length=index.get_length()
     )
@@ -52,6 +52,15 @@ class NimCodeGenerator:
             return "int"
         elif type_ == Type.str:
             return "string"
+        else:
+            raise NotImplementedError
+    def _default_val(self, type_: Type) -> str:
+        if type_ == Type.float:
+            return "0.0"
+        elif type_ == Type.int:
+            return "0"
+        elif type_ == Type.str:
+            return "\"\""
         else:
             raise NotImplementedError
 
@@ -93,31 +102,10 @@ class NimCodeGenerator:
                     var.second_index.get_length()]
         else:
             raise NotImplementedError
-
-        if len(dims) == 0:
-            ctor = ''
-        elif len(dims) == 1:
-            ctor = '({})'.format(dims[0])
-        else:
-            ctor = '({})'.format(dims[-1])
-            ctype = self._convert_type(var.type)
-            for dim in dims[-2::-1]:
-                ctype = 'newSeq[{}]'.format(ctype)
-                ctor = '({}, {}{})'.format(dim, ctype, ctor)
-        decl_type = self._get_declaration_type(var)
-        if len(ctor) == 0:
-            if decl_type == 'string':
-                format_string = "var {name} = \"\""
-            else:
-                format_string = "var {name}:{decl_type}"
-        else:
-            format_string = "var {name} = new{decl_type}{constructor}"
-        line = format_string.format(
-            name=var.name,
-            decl_type=decl_type,
-            constructor=ctor
-        )
-        return line
+        e = self._default_val(var.type)
+        for dim in dims[::-1]:
+            e = "newSeqWith({}, {})".format(dim,e)
+        return "var {name} = {expression}".format(name=var.name,expression=e)
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
@@ -159,7 +147,6 @@ class NimCodeGenerator:
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(2),
                                                      line=self._input_code_for_var(var)))
-            lines.append("{indent}}}".format(indent=self._indent(1)))
         else:
             raise NotImplementedError
 

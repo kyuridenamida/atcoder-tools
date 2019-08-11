@@ -25,18 +25,29 @@ let YES = "{{ yes_str }}"
 let NO = "{{ no_str }}"
 {% endif %}
 
-{% if prediction_success %}
 proc solve({{ formal_arguments }}):void =
-  discard
-{% endif %}
+  echo N," ",M
+  assert H.len == N - 1
+  for i in 0..<N-1:
+    assert H[i].len == M - 2
+    for j in 0..<M-2:
+      stdout.write if j > 0: " " else:"", H[i][j]
+    echo ""
+  assert A.len == N - 1
+  assert B.len == N - 1
+  for i in 0..<N-1:
+    echo A[i]," ",B[i]
+  echo Q
+  assert X.len == M + Q
+  for i in 0..<M + Q:
+    echo X[i]
+  echo YES
+  echo NO
+  echo MOD
 
 proc main():void =
-{% if prediction_success %}
   {{input_part}}
-  solve({{ actual_arguments }});
-{% else %}
-# Failed to predict input format
-{% endif %}
+  solve({{ actual_arguments }})
   return
 
 main()
