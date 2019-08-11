@@ -8,6 +8,7 @@ from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, P
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
+
 def _loop_header(var: Variable, for_second_index: bool):
     if for_second_index:
         index = var.second_index
@@ -54,6 +55,7 @@ class NimCodeGenerator:
             return "string"
         else:
             raise NotImplementedError
+
     def _default_val(self, type_: Type) -> str:
         if type_ == Type.float:
             return "0.0"
@@ -104,8 +106,8 @@ class NimCodeGenerator:
             raise NotImplementedError
         e = self._default_val(var.type)
         for dim in dims[::-1]:
-            e = "newSeqWith({}, {})".format(dim,e)
-        return "var {name} = {expression}".format(name=var.name,expression=e)
+            e = "newSeqWith({}, {})".format(dim, e)
+        return "var {name} = {expression}".format(name=var.name, expression=e)
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)

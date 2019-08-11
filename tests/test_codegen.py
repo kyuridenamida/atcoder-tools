@@ -198,14 +198,14 @@ class TestCodeGenerator(unittest.TestCase):
         exec_file, exec_args = self._exec_file_and_args(lang)
         compile_cmd = self._compile_command(lang, code_file)
         if lang == NIM:
-            cfg = CodeStyleConfig(indent_width = 2)
+            cfg = CodeStyleConfig(indent_width=2)
         else:
             cfg = CodeStyleConfig()
         args = CodeGenArgs(
             template=load_text_file(template_file),
             format_=format,
             constants=ProblemConstantSet(123, "yes", "NO"),
-#            config=CodeStyleConfig()
+            # config=CodeStyleConfig()
             config=cfg
         )
 
@@ -249,7 +249,7 @@ class TestCodeGenerator(unittest.TestCase):
             load_intermediate_types(py_test_name),
             str(response.types))
         if lang == NIM:
-            cfg = CodeStyleConfig(indent_width = 2)
+            cfg = CodeStyleConfig(indent_width=2)
         else:
             cfg = CodeStyleConfig()
 
@@ -260,7 +260,7 @@ class TestCodeGenerator(unittest.TestCase):
                     self.get_template(lang, template_type),
                     response.original_result.format,
                     constants,
-#                    CodeStyleConfig())
+                    # CodeStyleConfig())
                     cfg)
             ))
 
