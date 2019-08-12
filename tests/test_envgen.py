@@ -1,15 +1,17 @@
-import logging
 import os
 import shutil
 import tempfile
 import unittest
 from os.path import relpath
+from logging import getLogger
 
 from atcodertools.client.atcoder import AtCoderClient
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.config import Config
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.tools.envgen import prepare_contest, main
+
+logger = getLogger(__name__)
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -33,7 +35,7 @@ class TestEnvGen(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
-        logging.info(self.temp_dir)
+        logger.info(self.temp_dir)
 
     def test_prepare_workspace(self):
         answer_data_dir_path = os.path.join(

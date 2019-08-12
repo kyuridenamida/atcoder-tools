@@ -1,7 +1,7 @@
-import logging
 import tempfile
 import unittest
 import os
+from logging import getLogger, Formatter, StreamHandler, DEBUG
 
 from tests.utils.gzip_controller import make_tst_data_controller
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner
@@ -10,8 +10,12 @@ ANSWER_FILE = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     './resources/test_fmtprediction/answer.txt')
 
-fmt = "%(asctime)s %(levelname)s: %(message)s"
-logging.basicConfig(level=logging.DEBUG, format=fmt)
+logger = getLogger(__name__)
+logger.setLevel(DEBUG)
+handler = StreamHandler()
+formatter = Formatter("%(asctime)s %(levelname)s: %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class TestFormatPrediction(unittest.TestCase):
@@ -48,11 +52,11 @@ class TestFormatPrediction(unittest.TestCase):
                 # file.
                 case_name = ans.split()[0]
                 content = runner.load_problem_content(case_name)
-                logging.debug("=== {} ===".format(case_name))
-                logging.debug(
+                logger.debug("=== {} ===".format(case_name))
+                logger.debug(
                     "Input Format:\n{}".format(content.input_format_text))
                 for idx, s in enumerate(content.samples):
-                    logging.debug(
+                    logger.debug(
                         "Sample Input {num}:\n{inp}".format(inp=s.get_input(), num=idx + 1))
                 self.assertEqual(ans, out)
 

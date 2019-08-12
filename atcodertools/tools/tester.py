@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import argparse
 import glob
-import logging
 import os
 import sys
 from pathlib import Path
@@ -9,6 +8,7 @@ from typing import List, Tuple
 
 from colorama import Fore
 
+from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
@@ -45,7 +45,7 @@ def infer_exec_file(filenames):
 
     exec_file = exec_files[0]
     if len(exec_files) >= 2:
-        logging.warning("{0}  {1}".format(
+        logger.warning("{0}  {1}".format(
             "There're multiple executable files. '{exec_file}' is selected.".format(
                 exec_file=exec_file),
             "The candidates were {exec_files}.".format(exec_files=exec_files)))
@@ -140,7 +140,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
 def validate_sample_pair(in_sample_file, out_sample_file):
     if infer_case_num(in_sample_file) != infer_case_num(out_sample_file):
-        logging.error(
+        logger.error(
             'The file combination of {} and {} is wrong.'.format(
                 in_sample_file,
                 out_sample_file
@@ -177,7 +177,7 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
                   skip_stderr_on_success: bool) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
-        logging.error("{0}{1}{2}".format(
+        logger.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
             "# of sample inputs: {}\n".format(len(in_sample_file_list)),
             "# of sample outputs: {}\n".format(len(out_sample_file_list))))
@@ -218,7 +218,7 @@ def get_sample_patterns(metadata_file: str) -> Tuple[str, str]:
         metadata = Metadata.load_from(metadata_file)
         return metadata.sample_in_pattern, metadata.sample_out_pattern
     except IOError:
-        logging.warning("{} is not found. Assume the example file name patterns are {} and {}".format(
+        logger.warning("{} is not found. Assume the example file name patterns are {} and {}".format(
             metadata_file,
             DEFAULT_IN_EXAMPLE_PATTERN,
             DEFAULT_OUT_EXAMPLE_PATTERN)
