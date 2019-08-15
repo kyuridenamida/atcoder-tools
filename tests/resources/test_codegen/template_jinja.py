@@ -2,7 +2,9 @@
 {% if prediction_success %}
 import sys
 {% endif %}
+{% if mod or yes_str or no_str %}
 
+{% endif %}
 {% if mod %}
 MOD = {{ mod }}  # type: int
 {% endif %}
@@ -12,12 +14,13 @@ YES = "{{ yes_str }}"  # type: str
 {% if no_str %}
 NO = "{{ no_str }}"  # type: str
 {% endif %}
-
 {% if prediction_success %}
+
+
 def solve({{ formal_arguments }}):
     return
-
 {% endif %}
+
 
 def main():
     {% if prediction_success %}

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+
 
 def solve(H: int, W: int, K: int, sr: int, sc: int, s: "List[str]", N: int, fr: "List[int]", fc: "List[int]", F: "List[int]", D: "List[int]"):
     return
@@ -15,12 +17,12 @@ def main():
     K = int(next(tokens))  # type: int
     sr = int(next(tokens))  # type: int
     sc = int(next(tokens))  # type: int
-    s = [ next(tokens) for _ in range(H) ]  # type: "List[str]"
+    s = [next(tokens) for _ in range(H)]  # type: "List[str]"
     N = int(next(tokens))  # type: int
-    fr = [int()] * (N)  # type: "List[int]" 
-    fc = [int()] * (N)  # type: "List[int]" 
-    F = [int()] * (N)  # type: "List[int]" 
-    D = [int()] * (N)  # type: "List[int]" 
+    fr = [int()] * (N)  # type: "List[int]"
+    fc = [int()] * (N)  # type: "List[int]"
+    F = [int()] * (N)  # type: "List[int]"
+    D = [int()] * (N)  # type: "List[int]"
     for i in range(N):
         fr[i] = int(next(tokens))
         fc[i] = int(next(tokens))

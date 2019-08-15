@@ -3,6 +3,7 @@ import sys
 
 MOD = 998244353  # type: int
 
+
 def solve(A: int, B: int):
     return
 
