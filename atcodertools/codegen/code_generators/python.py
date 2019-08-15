@@ -155,8 +155,10 @@ class Python3CodeGenerator:
         elif isinstance(pattern, TwoDimensionalPattern):
             input_ = "[[{input_} for _ in range({second_length})] for _ in range({first_length})]".format(
                 input_=self._input_code_for_token(var.type),
-                first_length=_insert_space_around_operators(var.first_index.get_length()),
-                second_length=_insert_space_around_operators(var.second_index.get_length()))
+                first_length=_insert_space_around_operators(
+                    var.first_index.get_length()),
+                second_length=_insert_space_around_operators(
+                    var.second_index.get_length()))
 
         else:
             raise NotImplementedError
@@ -188,7 +190,8 @@ class Python3CodeGenerator:
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
                 lines.append("{indent}{name} = {input_}".format(indent=self._indent(1),
-                                                                name=self._get_var_name(var),
+                                                                name=self._get_var_name(
+                                                                    var),
                                                                 input_=self._input_code_for_token(var.type)))
 
         elif isinstance(pattern, TwoDimensionalPattern):
