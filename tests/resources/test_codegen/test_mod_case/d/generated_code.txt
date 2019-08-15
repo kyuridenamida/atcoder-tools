@@ -1,0 +1,25 @@
+import std.algorithm;
+import std.conv;
+import std.stdio;
+import std.string;
+
+immutable long MOD = 998244353;
+
+void solve(long A, long B){
+
+}
+
+int main(){
+    auto input = stdin.byLine.map!split.joiner;
+
+    long A;
+    A = input.front.to!long;
+    input.popFront;
+
+    long B;
+    B = input.front.to!long;
+    input.popFront;
+
+    solve(A, B);
+    return 0;
+}

@@ -1,0 +1,42 @@
+import std.algorithm;
+import std.conv;
+import std.stdio;
+import std.string;
+
+void solve(long L, long N, long M, double[] K, long[] A, double[] S){
+
+}
+
+int main(){
+    auto input = stdin.byLine.map!split.joiner;
+
+    long L;
+    L = input.front.to!long;
+    input.popFront;
+
+    long N;
+    N = input.front.to!long;
+    input.popFront;
+
+    long M;
+    M = input.front.to!long;
+    input.popFront;
+
+    double[] K = new double[](cast(size_t) (L));
+    foreach (i; 0 .. cast(size_t) (L)) {
+        K[i] = input.front.to!double;
+        input.popFront;
+    }
+
+    long[] A = new long[](cast(size_t) (N));
+    double[] S = new double[](cast(size_t) (N));
+    foreach (i; 0 .. cast(size_t) (N)) {
+        A[i] = input.front.to!long;
+        input.popFront;
+        S[i] = input.front.to!double;
+        input.popFront;
+    }
+
+    solve(L, N, M, K, A, S);
+    return 0;
+}
