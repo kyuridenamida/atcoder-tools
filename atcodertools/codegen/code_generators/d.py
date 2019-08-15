@@ -131,7 +131,7 @@ class DlangCodeGenerator:
 
         return line
 
-    def _assignment_code(self, var: Variable, indent_level: int=0) -> str:
+    def _assignment_code(self, var: Variable, indent_level: int = 0) -> str:
         line1 = "{indent}{varname} = input.front.to!{vartype};"
         line2 = "{indent}input.popFront;"
         indent = self._indent(indent_level)
