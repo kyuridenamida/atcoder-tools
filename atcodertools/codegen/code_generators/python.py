@@ -1,10 +1,15 @@
 from typing import Dict, Any, Optional, List
+import re
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
-from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern, \
-    Format
+from atcodertools.fmtprediction.models.format import (
+    Pattern,
+    SingularPattern,
+    ParallelPattern,
+    TwoDimensionalPattern,
+    Format)
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
@@ -19,8 +24,18 @@ def _loop_header(var: Variable, for_second_index: bool):
 
     return "for {loop_var} in range({length}):".format(
         loop_var=loop_var,
-        length=index.get_length()
-    )
+        length=_insert_space_around_operators(index.get_length()))
+
+
+def _insert_space_around_operators(code):
+    code = str(code)
+    precode = code
+    pattern = r"([0-9a-zA-Z_])([+\-\*/])([0-9a-zA-Z_])"
+    code = re.sub(pattern, r"\1 \2 \3", code)
+    while precode != code:
+        precode = code
+        code = re.sub(pattern, r"\1 \2 \3", code)
+    return code
 
 
 class Python3CodeGenerator:
@@ -99,14 +114,16 @@ class Python3CodeGenerator:
         if len(dims) == 0:
             ctor = "{}()".format(ctype)
         elif len(dims) == 1:
-            ctor = "[{ctype}()] * ({dim})".format(ctype=ctype, dim=dims[0])
+            ctor = "[{ctype}()] * ({dim})".format(
+                ctype=ctype, dim=_insert_space_around_operators(dims[0]))
         else:
-            ctor = "[{ctype}()] * ({dim})".format(ctype=ctype, dim=dims[0])
+            ctor = "[{ctype}()] * ({dim})".format(
+                ctype=ctype, dim=_insert_space_around_operators(dims[0]))
             for dim in dims[-2::-1]:
                 ctor = "[{ctor} for _ in range({dim})]".format(
-                    ctor=ctor, dim=dim)
+                    ctor=ctor, dim=_insert_space_around_operators(dim))
 
-        line = "{name} = {constructor}  # type: {decl_type} ".format(
+        line = "{name} = {constructor}  # type: {decl_type}".format(
             name=var.name,
             decl_type=self._get_declaration_type(var),
             constructor=ctor
@@ -131,15 +148,17 @@ class Python3CodeGenerator:
             input_ = self._input_code_for_token(var.type)
 
         elif isinstance(pattern, ParallelPattern):
-            input_ = "[ {input_} for _ in range({length}) ]".format(
+            input_ = "[{input_} for _ in range({length})]".format(
                 input_=self._input_code_for_token(var.type),
-                length=var.first_index.get_length())
+                length=_insert_space_around_operators(var.first_index.get_length()))
 
         elif isinstance(pattern, TwoDimensionalPattern):
-            input_ = "[ [ {input_} for _ in range({second_length}) ] for _ in range({first_length}) ]".format(
+            input_ = "[[{input_} for _ in range({second_length})] for _ in range({first_length})]".format(
                 input_=self._input_code_for_token(var.type),
-                first_length=var.first_index.get_length(),
-                second_length=var.second_index.get_length())
+                first_length=_insert_space_around_operators(
+                    var.first_index.get_length()),
+                second_length=_insert_space_around_operators(
+                    var.second_index.get_length()))
 
         else:
             raise NotImplementedError
