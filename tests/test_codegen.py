@@ -205,7 +205,6 @@ class TestCodeGenerator(unittest.TestCase):
             template=load_text_file(template_file),
             format_=format,
             constants=ProblemConstantSet(123, "yes", "NO"),
-            # config=CodeStyleConfig()
             config=cfg
         )
 
