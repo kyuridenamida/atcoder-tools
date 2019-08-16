@@ -1,7 +1,7 @@
 import re
 from typing import Pattern, Callable
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python
+from atcodertools.codegen.code_generators import cpp, java, rust, python, nim
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 
@@ -76,5 +76,14 @@ PYTHON = Language(
     default_template_path=get_default_template_path('py'),
 )
 
-ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON]
+NIM = Language(
+    name="nim",
+    display_name="NIM",
+    extension="nim",
+    submission_lang_pattern=re.compile(".*Nim \\(0.*"),
+    default_code_generator=nim.main,
+    default_template_path=get_default_template_path('nim'),
+)
+
+ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM]
 ALL_LANGUAGE_NAMES = [lang.display_name for lang in ALL_LANGUAGES]
