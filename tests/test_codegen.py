@@ -259,7 +259,6 @@ class TestCodeGenerator(unittest.TestCase):
                     self.get_template(lang, template_type),
                     response.original_result.format,
                     constants,
-                    # CodeStyleConfig())
                     cfg)
             ))
 
