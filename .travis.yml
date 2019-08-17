@@ -7,8 +7,11 @@ python:
 
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y # for C++14
+  - sudo wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list # for D-lang, see https://d-apt.sourceforge.io/
+  - sudo apt-get update --allow-insecure-repositories
+  - sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring
   - sudo apt-get update
-  - sudo apt-get install rustc g++-4.9 openjdk-8-jdk nim
+  - sudo apt-get install rustc g++-4.9 openjdk-8-jdk nim dmd-compiler
   - sudo ln -f -s /usr/bin/g++-4.9 /usr/bin/g++
 
 install:

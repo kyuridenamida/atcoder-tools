@@ -2,6 +2,8 @@
 import argparse
 import glob
 import os
+import platform
+import re
 import sys
 from pathlib import Path
 from typing import List, Tuple
@@ -32,8 +34,13 @@ class TestSummary:
 
 
 def is_executable_file(file_name):
-    return os.access(file_name, os.X_OK) and Path(file_name).is_file() \
-        and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
+    if platform.system() == "Windows":
+        return any(
+            re.match(r"^.*\{ext}$".format(ext=ext), file_name, re.IGNORECASE)
+            for ext in os.environ.get("pathext", default="").split(";"))
+    else:
+        return os.access(file_name, os.X_OK) and Path(file_name).is_file() \
+            and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
 def infer_exec_file(filenames):
