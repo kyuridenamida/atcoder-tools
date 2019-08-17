@@ -36,7 +36,7 @@ class TestSummary:
 def is_executable_file(file_name):
     if platform.system() == "Windows":
         return any(
-            re.match("^.*\\{ext}$".format(ext=ext), file_name, re.IGNORECASE)
+            re.match(r"^.*\{ext}$".format(ext=ext), file_name, re.IGNORECASE)
             for ext in os.environ.get("pathext", default="").split(";"))
     else:
         return os.access(file_name, os.X_OK) and Path(file_name).is_file() \
