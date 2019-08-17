@@ -50,7 +50,7 @@ class TestTester(unittest.TestCase):
     @patch('pathlib.Path.is_file', return_value=False)
     def test_is_executable_file__directory(self, os_mock, is_file_mock):
         self.assertFalse(is_executable_file('directory'))
-    
+
     @patch("platform.system", return_value="Windows")
     @patch("os.environ.get", return_value=".EXE;.out")
     def test_is_executable_file__windows(self, platform_system_mock, os_environ_get_mock):
