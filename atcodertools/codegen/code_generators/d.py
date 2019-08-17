@@ -176,10 +176,6 @@ class DlangCodeGenerator:
         return self._config.indent(depth)
 
 
-class NoPredictionResultGiven(Exception):
-    pass
-
-
 def main(args: CodeGenArgs) -> str:
     code_parameters = DlangCodeGenerator(
         args.format, args.config).generate_parameters()
