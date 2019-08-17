@@ -33,8 +33,11 @@ def get_problem_from_url(problem_url: str) -> Problem:
     dummy_alphabet = 'Z'  # it's impossible to reconstruct the alphabet from URL
     result = urllib.parse.urlparse(problem_url)
 
+    normpath = os.path.normpath(result.path)
+    normpath = normpath.replace("\\", "/")  # for windows
+
     # old-style (e.g. http://agc012.contest.atcoder.jp/tasks/agc012_d)
-    dirname, basename = posixpath.split(os.path.normpath(result.path))
+    dirname, basename = posixpath.split(normpath)
     if result.scheme in ('', 'http', 'https') \
             and result.netloc.count('.') == 3 \
             and result.netloc.endswith('.contest.atcoder.jp') \
@@ -47,7 +50,7 @@ def get_problem_from_url(problem_url: str) -> Problem:
 
     # new-style (e.g. https://beta.atcoder.jp/contests/abc073/tasks/abc073_a)
     m = re.match(
-        r'^/contests/([\w\-_]+)/tasks/([\w\-_]+)$', os.path.normpath(result.path))
+        r'^/contests/([\w\-_]+)/tasks/([\w\-_]+)$', normpath)
     if result.scheme in ('', 'http', 'https') \
             and result.netloc in ('atcoder.jp', 'beta.atcoder.jp') \
             and m:
