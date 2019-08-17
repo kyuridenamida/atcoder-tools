@@ -7,14 +7,14 @@ from typing import Tuple, List
 
 from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.client.models.sample import Sample
-from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST, PYTHON, DLANG
+from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST, PYTHON, NIM, DLANG
 from atcodertools.executils.run_command import run_command
 from atcodertools.executils.run_program import run_program
 from atcodertools.fileutils.create_contest_file import create_code
 from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python, d
+from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
@@ -68,6 +68,10 @@ class TestCodeGenerator(unittest.TestCase):
                 "old": "template.py",
                 "jinja": "template_jinja.py",
             },
+            NIM: {
+                "old": "template.nim",
+                "jinja": "template_jinja.nim",
+            },
             DLANG: {
                 "old": "template.d",
                 "jinja": "template_jinja.d",
@@ -78,6 +82,7 @@ class TestCodeGenerator(unittest.TestCase):
             JAVA: java.main,
             RUST: rust.main,
             PYTHON: python.main,
+            NIM: nim.main,
             DLANG: d.main,
         }
         self.maxDiff = None
@@ -174,6 +179,8 @@ class TestCodeGenerator(unittest.TestCase):
             return "rustc {}".format(code_file)
         elif lang == PYTHON:
             return "python3 -mpy_compile {}".format(code_file)
+        elif lang == NIM:
+            return "nim c {}".format(code_file)
         elif lang == DLANG:
             return "dmd {} -of=main".format(code_file)
         else:
@@ -188,6 +195,8 @@ class TestCodeGenerator(unittest.TestCase):
             return "./main", []
         elif lang == PYTHON:
             return "python3", ["main.py"]
+        elif lang == NIM:
+            return "./main", []
         elif lang == DLANG:
             return "./main", []
         else:
@@ -197,12 +206,15 @@ class TestCodeGenerator(unittest.TestCase):
         code_file = os.path.join(self.temp_dir, lang.source_code_name("main"))
         exec_file, exec_args = self._exec_file_and_args(lang)
         compile_cmd = self._compile_command(lang, code_file)
-
+        if lang == NIM:
+            cfg = CodeStyleConfig(indent_width=2)
+        else:
+            cfg = CodeStyleConfig()
         args = CodeGenArgs(
             template=load_text_file(template_file),
             format_=format,
             constants=ProblemConstantSet(123, "yes", "NO"),
-            config=CodeStyleConfig()
+            config=cfg
         )
 
         code = lang.default_code_generator(args)
@@ -244,6 +256,11 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(
             load_intermediate_types(py_test_name),
             str(response.types))
+        if lang == NIM:
+            cfg = CodeStyleConfig(indent_width=2)
+        else:
+            cfg = CodeStyleConfig()
+
         self.assertEqual(
             load_generated_code(py_test_name, lang),
             self.lang_to_code_generator_func[lang](
@@ -251,7 +268,7 @@ class TestCodeGenerator(unittest.TestCase):
                     self.get_template(lang, template_type),
                     response.original_result.format,
                     constants,
-                    CodeStyleConfig())
+                    cfg)
             ))
 
     def get_template(self, lang: Language, template_type: str) -> str:

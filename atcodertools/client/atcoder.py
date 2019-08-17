@@ -1,5 +1,4 @@
 import getpass
-import logging
 import os
 import re
 import warnings
@@ -11,6 +10,7 @@ from bs4 import BeautifulSoup
 
 from atcodertools.client.models.submission import Submission
 from atcodertools.common.language import Language
+from atcodertools.common.logging import logger
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
@@ -28,7 +28,7 @@ def save_cookie(session: requests.Session, cookie_path: Optional[str] = None):
     cookie_path = cookie_path or default_cookie_path
     os.makedirs(os.path.dirname(cookie_path), exist_ok=True)
     session.cookies.save()
-    logging.info("Saved session into {}".format(os.path.abspath(cookie_path)))
+    logger.info("Saved session into {}".format(os.path.abspath(cookie_path)))
     os.chmod(cookie_path, 0o600)
 
 
@@ -37,7 +37,7 @@ def load_cookie_to(session: requests.Session, cookie_path: Optional[str] = None)
     session.cookies = LWPCookieJar(cookie_path)
     if os.path.exists(cookie_path):
         session.cookies.load()
-        logging.info(
+        logger.info(
             "Loaded session from {}".format(os.path.abspath(cookie_path)))
         return True
     return False
@@ -80,9 +80,9 @@ class AtCoderClient(metaclass=Singleton):
         if use_local_session_cache:
             load_cookie_to(self._session)
             if self.check_logging_in():
-                logging.info(
+                logger.info(
                     "Successfully Logged in using the previous session cache.")
-                logging.info(
+                logger.info(
                     "If you'd like to invalidate the cache, delete {}.".format(default_cookie_path))
 
                 return
