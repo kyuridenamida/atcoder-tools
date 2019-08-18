@@ -67,7 +67,6 @@ def generate_code(atcoder_client: AtCoderClient,
                   output_file: IOBase):
     problem = get_problem_from_url(problem_url)
     template_code_path = config.code_style_config.template_file
-    lang = config.code_style_config.lang
 
     def emit_error(text):
         logger.error(with_color(text, Fore.RED))
