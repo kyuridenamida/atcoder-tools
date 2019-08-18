@@ -2,8 +2,6 @@ import io
 import os
 import unittest
 
-from onlinejudge.service.atcoder import AtCoderContest
-
 from atcodertools.tools.codegen import main
 
 RESOURCE_DIR = os.path.join(

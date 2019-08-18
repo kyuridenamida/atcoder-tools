@@ -1,15 +1,11 @@
 #!/usr/bin/python3
 import argparse
 import logging
-import os
-import posixpath
-import re
 import sys
-import urllib
 from io import IOBase
 
 from colorama import Fore
-from onlinejudge.service.atcoder import AtCoderContest, AtCoderProblem
+from onlinejudge.service.atcoder import AtCoderProblem
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
