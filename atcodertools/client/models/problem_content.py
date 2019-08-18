@@ -34,7 +34,7 @@ class ProblemContent:
             raise SampleDetectionError
         return self.samples
 
-    def get_original_html(self) -> List[Sample]:
+    def get_original_html(self) -> str:
         assert self.original_html is not None
         return self.original_html
 
