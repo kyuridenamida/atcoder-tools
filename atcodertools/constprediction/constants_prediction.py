@@ -1,4 +1,3 @@
-import logging
 import re
 from typing import Tuple, Optional
 
@@ -6,6 +5,7 @@ from bs4 import BeautifulSoup
 
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
+from atcodertools.common.logging import logger
 
 
 class YesNoPredictionFailedError(Exception):
@@ -92,8 +92,8 @@ def predict_constants(content: ProblemContent) -> ProblemConstantSet:
     try:
         mod = predict_modulo(content)
     except MultipleModCandidatesError as e:
-        logging.warning("Modulo prediction failed -- "
-                        "two or more candidates {} are detected as modulo values".format(e.cands))
+        logger.warning("Modulo prediction failed -- "
+                       "two or more candidates {} are detected as modulo values".format(e.cands))
         mod = None
 
     return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str)

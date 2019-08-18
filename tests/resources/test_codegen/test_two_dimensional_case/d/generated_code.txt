@@ -1,0 +1,39 @@
+import std.algorithm;
+import std.conv;
+import std.stdio;
+import std.string;
+
+void solve(long H, long W, long[][] c, long[][] A){
+
+}
+
+int main(){
+    auto input = stdin.byLine.map!split.joiner;
+
+    long H;
+    H = input.front.to!long;
+    input.popFront;
+
+    long W;
+    W = input.front.to!long;
+    input.popFront;
+
+    long[][] c = new long[][](cast(size_t) (9-0+1), cast(size_t) (9-0+1));
+    foreach (i; 0 .. cast(size_t) (9-0+1)) {
+        foreach (j; 0 .. cast(size_t) (9-0+1)) {
+            c[i][j] = input.front.to!long;
+            input.popFront;
+        }
+    }
+
+    long[][] A = new long[][](cast(size_t) (H), cast(size_t) (W));
+    foreach (i; 0 .. cast(size_t) (H)) {
+        foreach (j; 0 .. cast(size_t) (W)) {
+            A[i][j] = input.front.to!long;
+            input.popFront;
+        }
+    }
+
+    solve(H, W, c, A);
+    return 0;
+}

@@ -51,6 +51,13 @@ class TestTester(unittest.TestCase):
     def test_is_executable_file__directory(self, os_mock, is_file_mock):
         self.assertFalse(is_executable_file('directory'))
 
+    @patch("platform.system", return_value="Windows")
+    @patch("os.environ.get", return_value=".EXE;.out")
+    def test_is_executable_file__windows(self, platform_system_mock, os_environ_get_mock):
+        self.assertTrue(is_executable_file("A.eXe"))
+        self.assertTrue(is_executable_file("A.out"))
+        self.assertFalse(is_executable_file("A.exe.bak"))
+
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'correct', '', 0))
     def test_run_for_samples(self, run_program_mock: MagicMock):
         io_mock = mock_open(read_data='correct')

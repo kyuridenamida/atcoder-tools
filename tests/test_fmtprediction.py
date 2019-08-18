@@ -1,6 +1,6 @@
-import logging
 import unittest
 from typing import Any, Optional, Dict
+from logging import getLogger, Formatter, StreamHandler, DEBUG
 
 from onlinejudge.service.atcoder import AtCoderProblem
 
@@ -8,8 +8,12 @@ from atcodertools.client.atcoder import AtCoderClient
 from atcodertools.fmtprediction.predict_format import predict_format, NoPredictionResultError
 
 
-fmt = "%(asctime)s %(levelname)s: %(message)s"
-logging.basicConfig(level=logging.DEBUG, format=fmt)
+logger = getLogger(__name__)
+logger.setLevel(DEBUG)
+handler = StreamHandler()
+formatter = Formatter("%(asctime)s %(levelname)s: %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class TestFormatPrediction(unittest.TestCase):

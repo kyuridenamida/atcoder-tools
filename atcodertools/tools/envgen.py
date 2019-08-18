@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import argparse
-import logging
 import os
 import shutil
 import sys
@@ -18,6 +17,7 @@ from atcodertools.client.models.problem_content import InputFormatDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.common.language import ALL_LANGUAGES, CPP
+from atcodertools.common.logging import logger
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
@@ -28,9 +28,6 @@ from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
-
-fmt = "%(asctime)s %(levelname)s: %(message)s"
-logging.basicConfig(level=logging.INFO, format=fmt)
 
 
 class BannedFileDetectedError(Exception):
@@ -60,13 +57,13 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         pid)
 
     def emit_error(text):
-        logging.error(with_color("Problem {}: {}".format(pid, text), Fore.RED))
+        logger.error(with_color("Problem {}: {}".format(pid, text), Fore.RED))
 
     def emit_warning(text):
-        logging.warning("Problem {}: {}".format(pid, text))
+        logger.warning("Problem {}: {}".format(pid, text))
 
     def emit_info(text):
-        logging.info("Problem {}: {}".format(pid, text))
+        logger.info("Problem {}: {}".format(pid, text))
 
     emit_info('{} is used for template'.format(template_code_path))
 
@@ -169,7 +166,7 @@ def prepare_contest(atcoder_client: AtCoderClient,
         if problem_list:
             break
         sleep(retry_duration)
-        logging.warning(
+        logger.warning(
             "Failed to fetch. Will retry in {} seconds".format(retry_duration))
 
     tasks = [(atcoder_client,
@@ -194,8 +191,8 @@ def prepare_contest(atcoder_client: AtCoderClient,
     if config.postprocess_config.exec_cmd_on_contest_dir is not None:
         contest_dir_path = os.path.join(
             config.code_style_config.workspace_dir, contest_id)
-        logging.info(_message_on_execution(contest_dir_path,
-                                           config.postprocess_config.exec_cmd_on_contest_dir))
+        logger.info(_message_on_execution(contest_dir_path,
+                                          config.postprocess_config.exec_cmd_on_contest_dir))
         config.postprocess_config.execute_on_contest_dir(
             contest_dir_path)
 
@@ -206,7 +203,7 @@ USER_CONFIG_PATH = os.path.join(
 
 def get_config(args: argparse.Namespace) -> Config:
     def _load(path: str) -> Config:
-        logging.info("Going to load {} as config".format(path))
+        logger.info("Going to load {} as config".format(path))
         with open(path, 'r') as f:
             return Config.load(f, args)
 
@@ -277,9 +274,9 @@ def main(prog, args):
     args = parser.parse_args(args)
 
     if args.replacement is not None:
-        logging.error(with_color("Sorry! --replacement argument no longer exists"
-                                 " and you can only use --template."
-                                 " See the official document for details.", Fore.LIGHTRED_EX))
+        logger.error(with_color("Sorry! --replacement argument no longer exists"
+                                " and you can only use --template."
+                                " See the official document for details.", Fore.LIGHTRED_EX))
         raise DeletedFunctionalityError
 
     config = get_config(args)
@@ -296,13 +293,13 @@ def main(prog, args):
         try:
             client.login(
                 save_session_cache=not config.etc_config.save_no_session_cache)
-            logging.info("Login successful.")
+            logger.info("Login successful.")
         except LoginError:
-            logging.error(
+            logger.error(
                 "Failed to login (maybe due to wrong username/password combination?)")
             sys.exit(-1)
     else:
-        logging.info("Downloading data without login.")
+        logger.info("Downloading data without login.")
 
     prepare_contest(client,
                     args.contest_id,

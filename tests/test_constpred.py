@@ -1,5 +1,5 @@
-import logging
 import unittest
+from logging import getLogger, DEBUG, Formatter, StreamHandler
 
 from onlinejudge.service.atcoder import AtCoderProblem
 
@@ -8,8 +8,12 @@ from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.constprediction.constants_prediction import predict_modulo, predict_constants, MultipleModCandidatesError
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 
-fmt = "%(asctime)s %(levelname)s: %(message)s"
-logging.basicConfig(level=logging.DEBUG, format=fmt)
+logger = getLogger(__name__)
+logger.setLevel(DEBUG)
+handler = StreamHandler()
+formatter = Formatter("%(asctime)s %(levelname)s: %(message)s")
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class TestConstantsPrediction(unittest.TestCase):

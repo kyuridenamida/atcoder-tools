@@ -1,0 +1,34 @@
+import std.algorithm;
+import std.conv;
+import std.stdio;
+import std.string;
+
+immutable string YES = "YES";
+immutable string NO = "NO";
+
+void solve(long N, long M, long A, long B){
+
+}
+
+int main(){
+    auto input = stdin.byLine.map!split.joiner;
+
+    long N;
+    N = input.front.to!long;
+    input.popFront;
+
+    long M;
+    M = input.front.to!long;
+    input.popFront;
+
+    long A;
+    A = input.front.to!long;
+    input.popFront;
+
+    long B;
+    B = input.front.to!long;
+    input.popFront;
+
+    solve(N, M, A, B);
+    return 0;
+}

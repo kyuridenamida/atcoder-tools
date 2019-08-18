@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import errno
-import datetime
 import os
 
 from atcodertools.client.atcoder import AtCoderClient

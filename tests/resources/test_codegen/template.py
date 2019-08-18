@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import sys
+
 
 def solve(${formal_arguments}):
     return

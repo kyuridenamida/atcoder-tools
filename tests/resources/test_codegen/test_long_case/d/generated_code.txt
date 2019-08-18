@@ -1,0 +1,60 @@
+import std.algorithm;
+import std.conv;
+import std.stdio;
+import std.string;
+
+void solve(long H, long W, long K, long sr, long sc, string[] s, long N, long[] fr, long[] fc, long[] F, long[] D){
+
+}
+
+int main(){
+    auto input = stdin.byLine.map!split.joiner;
+
+    long H;
+    H = input.front.to!long;
+    input.popFront;
+
+    long W;
+    W = input.front.to!long;
+    input.popFront;
+
+    long K;
+    K = input.front.to!long;
+    input.popFront;
+
+    long sr;
+    sr = input.front.to!long;
+    input.popFront;
+
+    long sc;
+    sc = input.front.to!long;
+    input.popFront;
+
+    string[] s = new string[](cast(size_t) (H));
+    foreach (i; 0 .. cast(size_t) (H)) {
+        s[i] = input.front.to!string;
+        input.popFront;
+    }
+
+    long N;
+    N = input.front.to!long;
+    input.popFront;
+
+    long[] fr = new long[](cast(size_t) (N));
+    long[] fc = new long[](cast(size_t) (N));
+    long[] F = new long[](cast(size_t) (N));
+    long[] D = new long[](cast(size_t) (N));
+    foreach (i; 0 .. cast(size_t) (N)) {
+        fr[i] = input.front.to!long;
+        input.popFront;
+        fc[i] = input.front.to!long;
+        input.popFront;
+        F[i] = input.front.to!long;
+        input.popFront;
+        D[i] = input.front.to!long;
+        input.popFront;
+    }
+
+    solve(H, W, K, sr, sc, s, N, fr, fc, F, D);
+    return 0;
+}

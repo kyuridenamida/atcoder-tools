@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import argparse
-import logging
 import sys
 from io import IOBase
 
@@ -12,6 +11,7 @@ from atcodertools.client.models.problem_content import InputFormatDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.common.language import ALL_LANGUAGES, CPP
+from atcodertools.common.logging import logger
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
@@ -33,16 +33,15 @@ def generate_code(atcoder_client: AtCoderClient,
     if problem is None:
         raise UnknownProblemURLError
     template_code_path = config.code_style_config.template_file
-    lang = config.code_style_config.lang
 
     def emit_error(text):
-        logging.error(with_color(text, Fore.RED))
+        logger.error(with_color(text, Fore.RED))
 
     def emit_warning(text):
-        logging.warning(text)
+        logger.warning(text)
 
     def emit_info(text):
-        logging.info(text)
+        logger.info(text)
 
     emit_info('{} is used for template'.format(template_code_path))
 
@@ -133,13 +132,13 @@ def main(prog, args, output_file=sys.stdout):
         try:
             client.login(
                 save_session_cache=not config.etc_config.save_no_session_cache)
-            logging.info("Login successful.")
+            logger.info("Login successful.")
         except LoginError:
-            logging.error(
+            logger.error(
                 "Failed to login (maybe due to wrong username/password combination?)")
             sys.exit(-1)
     else:
-        logging.info("Downloading data without login.")
+        logger.info("Downloading data without login.")
 
     generate_code(client,
                   args.url,

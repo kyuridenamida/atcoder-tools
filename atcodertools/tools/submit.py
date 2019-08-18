@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import argparse
-import logging
 import sys
 import os
 
@@ -9,6 +8,7 @@ from atcodertools.tools.utils import with_color
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.tools import tester
+from atcodertools.common.logging import logger
 
 from atcodertools.tools.models.metadata import Metadata
 
@@ -58,7 +58,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
     try:
         metadata = Metadata.load_from(metadata_file)
     except IOError:
-        logging.error(
+        logger.error(
             "{0} is not found! You need {0} to use this submission functionality.".format(metadata_file))
         return False
 
@@ -69,7 +69,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                      use_local_session_cache=use_local_session_cache,
                      )
     except LoginError:
-        logging.error("Login failed. Try again.")
+        logger.error("Login failed. Try again.")
         return False
 
     tester_args = []
@@ -85,19 +85,19 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
         if not args.unlock_safety:
             for submission in submissions:
                 if submission.problem_id == metadata.problem.problem_id:
-                    logging.error(with_color("Cancel submitting because you already sent some code to the problem. Please "
-                                             "specify -u to send the code. {}".format(
-                                                 metadata.problem.contest.get_submissions_url(submission)), Fore.LIGHTRED_EX))
+                    logger.error(with_color("Cancel submitting because you already sent some code to the problem. Please "
+                                            "specify -u to send the code. {}".format(
+                                                metadata.problem.contest.get_submissions_url(submission)), Fore.LIGHTRED_EX))
                     return False
 
         code_path = args.code or os.path.join(args.dir, metadata.code_filename)
         with open(code_path, 'r') as f:
             source = f.read()
-        logging.info(
+        logger.info(
             "Submitting {} as {}".format(code_path, metadata.lang.name))
         submission = client.submit_source_code(
             metadata.problem.contest, metadata.problem, metadata.lang, source)
-        logging.info("{} {}".format(
+        logger.info("{} {}".format(
             with_color("Done!", Fore.LIGHTGREEN_EX),
             metadata.problem.contest.get_submissions_url(submission)))
 

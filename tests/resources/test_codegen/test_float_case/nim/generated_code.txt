@@ -1,0 +1,38 @@
+import sequtils
+proc scanf(formatstr: cstring){.header: "<stdio.h>", varargs.}
+proc getchar(): char {.header: "<stdio.h>", varargs.}
+proc nextInt(): int = scanf("%lld",addr result)
+proc nextFloat(): float = scanf("%lf",addr result)
+proc nextString(): string =
+  var get = false
+  result = ""
+  while true:
+    var c = getchar()
+    if int(c) > int(' '):
+      get = true
+      result.add(c)
+    else:
+      if get: break
+
+proc solve(L:int, N:int, M:int, K:seq[float], A:seq[int], S:seq[float]):void =
+  return
+
+proc main():void =
+  var L = 0
+  L = nextInt()
+  var N = 0
+  N = nextInt()
+  var M = 0
+  M = nextInt()
+  var K = newSeqWith(L, 0.0)
+  for i in 0..<L:
+    K[i] = nextFloat()
+  var A = newSeqWith(N, 0)
+  var S = newSeqWith(N, 0.0)
+  for i in 0..<N:
+    A[i] = nextInt()
+    S[i] = nextFloat()
+  solve(L, N, M, K, A, S)
+  return
+
+main()

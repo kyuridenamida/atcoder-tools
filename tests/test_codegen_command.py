@@ -13,10 +13,6 @@ TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template_jinja.cpp")
 class TestCodeGenCommand(unittest.TestCase):
 
     def test_generate_code(self):
-        answer_data_dir_path = os.path.join(
-            RESOURCE_DIR,
-            "test_prepare_workspace")
-
         config_path = os.path.join(RESOURCE_DIR, "test_codegen_command.toml")
         answer_file_path = os.path.join(RESOURCE_DIR, "generated_code.cpp")
         f1 = io.StringIO()

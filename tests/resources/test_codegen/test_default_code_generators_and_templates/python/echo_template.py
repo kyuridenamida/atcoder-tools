@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
+{% if prediction_success %}
 import sys
+{% endif %}
+{% if mod or yes_str or no_str %}
 
+{% endif %}
 {% if mod %}
 MOD = {{ mod }}  # type: int
 {% endif %}
@@ -10,6 +14,8 @@ YES = "{{ yes_str }}"  # type: str
 {% if no_str %}
 NO = "{{ no_str }}"  # type: str
 {% endif %}
+{% if prediction_success %}
+
 
 def solve({{ formal_arguments }}):
     print(N, M)
@@ -29,6 +35,7 @@ def solve({{ formal_arguments }}):
     print(YES)
     print(NO)
     print(MOD)
+{% endif %}
 
 
 def main():
