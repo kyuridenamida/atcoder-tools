@@ -20,7 +20,7 @@ install:
   - pip install codecov nose
 
 script:
-  - flake8 --ignore=E501, W605
+  - flake8 --ignore=E501,W605 atcodertools tests
   - autopep8 -r . --exclude 'default_template.py,test_codegen' --diff | tee check_autopep8
   - test ! -s check_autopep8
   - atcoder-tools gen arc050 --without-login
