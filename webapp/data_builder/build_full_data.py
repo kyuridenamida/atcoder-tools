@@ -12,7 +12,7 @@ from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError, ProblemContent
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.common.language import RUST, CPP, JAVA, PYTHON
+from atcodertools.common.language import RUST, CPP, JAVA, PYTHON, DLANG, NIM
 from atcodertools.constprediction.constants_prediction import predict_modulo, predict_yes_no
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.fileutils.load_text_file import load_text_file
@@ -168,6 +168,8 @@ CPP_TEMPLATE = load_text_file(CPP.default_template_path)
 JAVA_TEMPLATE = load_text_file(JAVA.default_template_path)
 RUST_TEMPLATE = load_text_file(RUST.default_template_path)
 PYTHON_TEMPLATE = load_text_file(PYTHON.default_template_path)
+D_TEMPLATE = load_text_file(DLANG.default_template_path)
+NIM_TEMPLATE = load_text_file(NIM.default_template_path)
 
 
 def generate_code(result: QualityResult):
@@ -196,6 +198,18 @@ def generate_code(result: QualityResult):
     ))
     result.codes["python"] = PYTHON.default_code_generator(CodeGenArgs(
         PYTHON_TEMPLATE,
+        result_format,
+        result.constant_set,
+        CodeStyleConfig()
+    ))
+    result.codes["d"] = DLANG.default_code_generator(CodeGenArgs(
+        D_TEMPLATE,
+        result_format,
+        result.constant_set,
+        CodeStyleConfig()
+    ))
+    result.codes["nim"] = NIM.default_code_generator(CodeGenArgs(
+        NIM_TEMPLATE,
         result_format,
         result.constant_set,
         CodeStyleConfig()
