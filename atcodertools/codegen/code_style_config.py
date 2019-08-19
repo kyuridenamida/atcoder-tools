@@ -19,8 +19,8 @@ DEFAULT_WORKSPACE_DIR_PATH = os.path.join(expanduser("~"), "atcoder-workspace")
 class CodeStyleConfig:
 
     def __init__(self,
-                 indent_type: str = INDENT_TYPE_SPACE,
-                 indent_width: int = 4,
+                 indent_type: Optional[str] = None,
+                 indent_width: Optional[int] = None,
                  code_generator_file: Optional[str] = None,
                  template_file: Optional[str] = None,
                  workspace_dir: Optional[str] = None,
@@ -36,6 +36,20 @@ class CodeStyleConfig:
         except LanguageNotFoundError:
             raise CodeStyleConfigInitError(
                 "language must be one of {}".format(ALL_LANGUAGE_NAMES))
+
+        print(lang.default_code_style)
+
+        if lang.default_code_style is not None:
+            if "indent_width" in lang.default_code_style:
+                indent_width = lang.default_code_style["indent_width"]
+            if "indent_type" in lang.default_code_style:
+                indent_type = lang.default_code_style["indent_type"]
+
+        if indent_type is None:
+            indent_type = INDENT_TYPE_SPACE
+
+        if indent_width is None:
+            indent_width = 4
 
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
             raise CodeStyleConfigInitError(

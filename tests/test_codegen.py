@@ -205,15 +205,11 @@ class TestCodeGenerator(unittest.TestCase):
         code_file = os.path.join(self.temp_dir, lang.source_code_name("main"))
         exec_file, exec_args = self._exec_file_and_args(lang)
         compile_cmd = self._compile_command(lang, code_file)
-        if lang == NIM:
-            cfg = CodeStyleConfig(indent_width=2)
-        else:
-            cfg = CodeStyleConfig()
         args = CodeGenArgs(
             template=load_text_file(template_file),
             format_=format,
             constants=ProblemConstantSet(123, "yes", "NO"),
-            config=cfg
+            config=CodeStyleConfig(lang=lang.name)
         )
 
         code = lang.default_code_generator(args)
@@ -255,11 +251,6 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(
             load_intermediate_types(py_test_name),
             str(response.types))
-        if lang == NIM:
-            cfg = CodeStyleConfig(indent_width=2)
-        else:
-            cfg = CodeStyleConfig()
-
         self.assertEqual(
             load_generated_code(py_test_name, lang),
             self.lang_to_code_generator_func[lang](
@@ -267,7 +258,7 @@ class TestCodeGenerator(unittest.TestCase):
                     self.get_template(lang, template_type),
                     response.original_result.format,
                     constants,
-                    cfg)
+                    CodeStyleConfig(lang=lang.name))
             ))
 
     def get_template(self, lang: Language, template_type: str) -> str:

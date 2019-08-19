@@ -19,6 +19,7 @@ class Language:
                  submission_lang_pattern: Pattern[str],
                  default_code_generator: Callable[[CodeGenArgs], str],
                  default_template_path: str,
+                 default_code_style=None
                  ):
         self.name = name
         self.display_name = display_name
@@ -26,6 +27,7 @@ class Language:
         self.submission_lang_pattern = submission_lang_pattern
         self.default_code_generator = default_code_generator
         self.default_template_path = default_template_path
+        self.default_code_style = default_code_style
 
     def source_code_name(self, name_without_extension: str) -> str:
         # put extension to the name
@@ -92,6 +94,7 @@ NIM = Language(
     submission_lang_pattern=re.compile(".*Nim \\(0.*"),
     default_code_generator=nim.main,
     default_template_path=get_default_template_path('nim'),
+    default_code_style={"indent_type": "space", "indent_width": 2}
 )
 
 ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG]
