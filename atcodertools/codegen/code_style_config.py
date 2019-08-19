@@ -20,13 +20,13 @@ class CodeStyleConfig:
 
     def __init__(self,
                  indent_type: str = INDENT_TYPE_SPACE,
-                 indent_width: int = 4,
+                 indent_width: Optional[int] = None,
                  code_generator_file: Optional[str] = None,
                  template_file: Optional[str] = None,
                  workspace_dir: Optional[str] = None,
                  lang: str = "cpp",
                  ):
-        from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
+        from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES, NIM
 
         code_generator_file = normalize_path(code_generator_file)
         template_file = normalize_path(template_file)
@@ -41,7 +41,7 @@ class CodeStyleConfig:
             raise CodeStyleConfigInitError(
                 "indent_type must be 'space' or 'tab'")
 
-        if indent_width < 0:
+        if indent_width is not None and indent_width < 0:
             raise CodeStyleConfigInitError(
                 "indent_width must be a positive integer")
 
@@ -56,7 +56,12 @@ class CodeStyleConfig:
             )
 
         self.indent_type = indent_type
-        self.indent_width = indent_width
+
+        if indent_width is not None:
+            self.indent_width = indent_width
+        else:
+            # nim has a special default value
+            self.indent_width = 2 if lang == NIM else 4
 
         if code_generator_file is not None:
             try:
