@@ -15,10 +15,6 @@ TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template_jinja.cpp")
 class TestCodeGenCommand(unittest.TestCase):
 
     def test_generate_code(self):
-        answer_data_dir_path = os.path.join(
-            RESOURCE_DIR,
-            "test_prepare_workspace")
-
         config_path = os.path.join(RESOURCE_DIR, "test_codegen_command.toml")
         answer_file_path = os.path.join(RESOURCE_DIR, "generated_code.cpp")
         f1 = io.StringIO()
@@ -38,7 +34,6 @@ class TestCodeGenCommand(unittest.TestCase):
             self.assertEqual(f1.getvalue(), f2.read())
 
     def test_url_parser(self):
-        dummy_alphabet = "Z"
         problem = Problem(Contest("utpc2014"), "Z", "utpc2014_k")
         urls = [
             "http://utpc2014.contest.atcoder.jp/tasks/utpc2014_k",
