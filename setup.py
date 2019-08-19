@@ -24,6 +24,7 @@ setup(
     url='https://github.com/kyuridenamida/atcoder-tools',
     author='kyuridenamida',
     author_email='tyotyo3@gmail.com',
+    long_description_content_type="text/markdown",
     long_description=readme,
     packages=find_packages(exclude=('tests',)),
     install_requires=_requires_from_file('requirements.txt'),
