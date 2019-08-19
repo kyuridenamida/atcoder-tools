@@ -16,11 +16,13 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
     - 他言語対応のためのコントリビューション(≒中間形式からコードに変換する部分のPR)を募集中です!
 
 |対応言語  |Contributor 1|Contributor 2|
-|:---:|:---:|:---:|
+|---:|:---:|:---:|
 |C++|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)|[@asi1024](https://github.com/asi1024/) (template)|
 |Java|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)||
 |Rust|[@fukatani](https://github.com/fukatani/) (generator, template)|[@koba-e964](https://github.com/koba-e964/) (template, CR)|
-|Python3|[@kmyk](https://github.com/kmyk/) (generator, template)||
+|Python3|[@kmyk](https://github.com/kmyk/) (generator, template)|[@penpenpng](https://github.com/penpenpng/) (generator)|
+|D|[@penpenpng](https://github.com/penpenpng/) (generator, template)||
+|Nim|[@chaemon](https://github.com/chaemon/) (generator, template)||
 
 ## Demo
 <img src="https://user-images.githubusercontent.com/233559/52807100-f6e2d300-30cd-11e9-8906-82b9f9b2dff7.gif" width=70%>
