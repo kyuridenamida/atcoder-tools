@@ -59,10 +59,10 @@ https://kyuridenamida.github.io/atcoder-tools/
 
 例: 
 ```console
-$ atcoder-tools gen agc001
-$ cd ~/atcoder-workspace/agc001/A
-$ g++ main.cpp
-$ atcoder-tools test
+atcoder-tools gen agc001
+cd ~/atcoder-workspace/agc001/A
+g++ main.cpp
+atcoder-tools test
 ```
 
 `--without-login` 引数を指定するとログインなしでデータをダウンロードできます(一般公開されているコンテストのみ)。
@@ -88,14 +88,15 @@ optional arguments:
   --workspace WORKSPACE
                         Path to workspace's root directory. This script will create files in {WORKSPACE}/{contest_name}/{alphabet}/ e.g. ./your-workspace/arc001/A/
                         [Default] /home/kyuridenamida/atcoder-workspace
-  --lang LANG           Programming language of your template code, cpp or java.
+  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d.
                         [Default] cpp
   --template TEMPLATE   File path to your template code
                         [Default (C++)] /atcodertools/tools/templates/default_template.cpp
                         [Default (Java)] /atcodertools/tools/templates/default_template.java
                         [Default (Rust)] /atcodertools/tools/templates/default_template.rs
                         [Default (Python3)] /atcodertools/tools/templates/default_template.py
-
+                        [Default (NIM)] /atcodertools/tools/templates/default_template.nim
+                        [Default (D)] /atcodertools/tools/templates/default_template.d
   --parallel            Prepare problem directories asynchronously using multi processors.
   --save-no-session-cache
                         Save no session cache to avoid security risk
@@ -184,17 +185,19 @@ optional arguments:
 
 以下は、次の挙動を期待する場合の`~/.atcodertools.toml`の例です。
 
-- コードスタイルの設定が幅4のスペースインデントである
-- コード生成テンプレートとして`~/my_template.cpp`を使う
-- ワークスペースのルートは `~/atcoder-workspace/`
-- 言語設定は `cpp` (提出時もしくはデフォルトのコードジェネレーター生成時に使われます)
-- 問題用ディレクトリ内で毎回`clang-format`を実行して、最後に`CMakeLists.txt`(空)をコンテスト用ディレクトリに生成する
-- カスタムコードジェネレーター `custom_code_generator.py`を指定する
-- AtCoderにログインせずにダウンロードを行う機能を使わない (公開コンテストに対してのみ可能)
-- データの並列ダウンロードを無効にする
-- ログイン情報のクッキーを保存する
-- テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
-- テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
+- `indent_type='space'` スペースがインデントに使われる(`'tab'`を指定した場合はタブが使われる)
+- `indent_width=4` インデント幅は4である (`indent_width`が無指定の場合`4`(nim言語以外), `2`(nim言語)が規定値として使われます。)
+- `template_file='~/my_template.cpp'` コード生成テンプレートとして`~/my_template.cpp`を使う
+- `workspace_dir='~/atcoder-workspace/'` ワークスペースのルートは `~/atcoder-workspace/`
+- `lang='cpp'` 言語設定は `cpp` (提出時もしくはデフォルトのコードジェネレーター生成時に使われます)
+- `code_generator_file="~/custom_code_generator.py"` カスタムコードジェネレーター `~/custom_code_generator.py`を指定する
+- `exec_on_each_problem_dir='clang-format -i ./*.cpp'` `exec_on_contest_dir='touch CMakeLists.txt'`
+    - 問題用ディレクトリ内で毎回`clang-format`を実行して、最後に`CMakeLists.txt`(空)をコンテスト用ディレクトリに生成する
+- `download_without_login=false` AtCoderにログインせずにダウンロードを行う機能を使わない (公開コンテストに対してのみ可能)
+- `parallel_download=false` データの並列ダウンロードを無効にする
+- `save_no_session_cache=false` ログイン情報のクッキーを保存する
+- `in_example_format="in_{}.txt"` テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
+- `out_example_format="out_{}.txt"` テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
 
 ```toml
 [codestyle]
@@ -202,7 +205,7 @@ indent_type='space' # 'tab' or 'space'
 indent_width=4
 template_file='~/my_template.cpp'
 workspace_dir='~/atcoder-workspace/'
-lang='cpp' # 'cpp' or 'java' (Currently)
+lang='cpp' # Check README.md for the supported languages.
 code_generator_file="~/custom_code_generator.py"
 [postprocess]
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
