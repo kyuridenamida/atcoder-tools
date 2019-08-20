@@ -26,7 +26,7 @@ class CodeStyleConfig:
                  workspace_dir: Optional[str] = None,
                  lang: str = "cpp",
                  ):
-        from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES, NIM
+        from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
 
         code_generator_file = normalize_path(code_generator_file)
         template_file = normalize_path(template_file)
