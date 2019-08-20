@@ -37,14 +37,6 @@ class CodeStyleConfig:
             raise CodeStyleConfigInitError(
                 "language must be one of {}".format(ALL_LANGUAGE_NAMES))
 
-        print(lang.default_code_style)
-
-        if indent_type is None:
-            indent_type = INDENT_TYPE_SPACE
-
-        if indent_width is None:
-            indent_width = 4
-
         if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
             raise CodeStyleConfigInitError(
                 "indent_type must be 'space' or 'tab'")
