@@ -94,7 +94,7 @@ NIM = Language(
     submission_lang_pattern=re.compile(".*Nim \\(0.*"),
     default_code_generator=nim.main,
     default_template_path=get_default_template_path('nim'),
-    default_code_style={"indent_type": "space", "indent_width": 2}
+    default_code_style={"indent_width": 2}
 )
 
 ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG]
