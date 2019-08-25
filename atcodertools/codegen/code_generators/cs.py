@@ -61,7 +61,7 @@ class NimCodeGenerator:
         if var.dim_num() == 0:
             return ctype
         else:
-            return "{}[{}]".format(ctype, ","*(var.dim_num() - 1))
+            return "{}[{}]".format(ctype, "," * (var.dim_num() - 1))
 
     def _actual_arguments(self) -> str:
         """
