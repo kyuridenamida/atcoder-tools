@@ -5,34 +5,17 @@ using System.Collections;
 using System.Collections.Generic;
 using static System.Console;
 using static System.Math;
-using System.Diagnostics;
 
 public class Program{
-    {% if mod %}
-    const long MOD = {{ mod }};
-    {% endif %}
-    {% if yes_str %}
-    const string YES = "{{ yes_str }}";
-    {% endif %}
-    {% if no_str %}
-    const string NO = "{{ no_str }}";
-    {% endif %}
-
     public static void Main(string[] args){
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
-        {% if prediction_success %}
-        {{ input_part }}
-        new Program().Solve({{ actual_arguments }});
-        {% else %}
-        // Failed to predict input format
-        {% endif %}
+        ${input_part}
+        new Program().Solve(${actual_arguments});
     }
 
-    {% if prediction_success %}
-    public void Solve({{ formal_arguments }}){
+    public void Solve(${formal_arguments}){
         
     }
-    {% endif %}
 }
 
 public class ConsoleInput{

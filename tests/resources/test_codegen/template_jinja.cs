@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using static System.Console;
 using static System.Math;
-using System.Diagnostics;
 
 public class Program{
     {% if mod %}
@@ -20,19 +19,13 @@ public class Program{
 
     public static void Main(string[] args){
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
-        {% if prediction_success %}
         {{ input_part }}
         new Program().Solve({{ actual_arguments }});
-        {% else %}
-        // Failed to predict input format
-        {% endif %}
     }
 
-    {% if prediction_success %}
     public void Solve({{ formal_arguments }}){
         
     }
-    {% endif %}
 }
 
 public class ConsoleInput{

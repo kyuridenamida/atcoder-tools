@@ -5,34 +5,32 @@ using System.Collections;
 using System.Collections.Generic;
 using static System.Console;
 using static System.Math;
-using System.Diagnostics;
 
 public class Program{
-    {% if mod %}
-    const long MOD = {{ mod }};
-    {% endif %}
-    {% if yes_str %}
-    const string YES = "{{ yes_str }}";
-    {% endif %}
-    {% if no_str %}
-    const string NO = "{{ no_str }}";
-    {% endif %}
-
     public static void Main(string[] args){
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
-        {% if prediction_success %}
-        {{ input_part }}
-        new Program().Solve({{ actual_arguments }});
-        {% else %}
-        // Failed to predict input format
-        {% endif %}
+        long L;
+        L = cin.ReadLong;
+        long N;
+        N = cin.ReadLong;
+        long M;
+        M = cin.ReadLong;
+        double[] K = new double[L];
+        for(int i = 0;i < L;i++){
+            K[i] = cin.ReadDouble;
+        }
+        long[] A = new long[N];
+        double[] S = new double[N];
+        for(int i = 0;i < N;i++){
+            A[i] = cin.ReadLong;
+            S[i] = cin.ReadDouble;
+        }
+        new Program().Solve(L, N, M, K, A, S);
     }
 
-    {% if prediction_success %}
-    public void Solve({{ formal_arguments }}){
+    public void Solve(long L, long N, long M, double[] K, long[] A, double[] S){
         
     }
-    {% endif %}
 }
 
 public class ConsoleInput{

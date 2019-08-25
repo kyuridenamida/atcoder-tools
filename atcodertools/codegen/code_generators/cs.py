@@ -17,10 +17,10 @@ def _loop_header(var: Variable, for_second_index: bool):
         index = var.first_index
         loop_var = "i"
 
-    return "for(int {loop_var} = 0;{loop_var} < {length};{loop_var}++)".format(
+    return "for(int {loop_var} = 0;{loop_var} < {len};{loop_var}++)".format(
         loop_var=loop_var,
-        length=index.get_length()
-    )
+        len=index.get_length()
+    ) + "{"
 
 
 class NimCodeGenerator:
@@ -58,9 +58,10 @@ class NimCodeGenerator:
 
     def _get_declaration_type(self, var: Variable):
         ctype = self._convert_type(var.type)
-        for _ in range(var.dim_num()):
-            ctype = '{}[]'.format(ctype)
-        return ctype
+        if var.dim_num() == 0:
+            return ctype
+        else:
+            return "{}[{}]".format(ctype, ","*(var.dim_num() - 1))
 
     def _actual_arguments(self) -> str:
         """
@@ -99,7 +100,7 @@ class NimCodeGenerator:
         if len(dims) > 0:
             t = self._convert_type(var.type)
             d = []
-            for dim in dims[::-1]:
+            for dim in dims:
                 d.append(str(dim))
             ret += " = new {type}[{dims}]".format(type=t, dims=",".join(d))
         ret += ";"
@@ -120,9 +121,10 @@ class NimCodeGenerator:
     def _get_var_name(var: Variable):
         name = var.name
         if var.dim_num() >= 1:
-            name += "[i]"
-        if var.dim_num() >= 2:
-            name += "[j]"
+            name += "[i"
+            if var.dim_num() >= 2:
+                name += ",j"
+            name += "]"
         return name
 
     def _render_pattern(self, pattern: Pattern):
@@ -136,15 +138,18 @@ class NimCodeGenerator:
         elif isinstance(pattern, ParallelPattern):
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
-                lines.append("{indent}{line}".format(indent=self._indent(2),
+                lines.append("{indent}{line}".format(indent=self._indent(1),
                                                      line=self._input_code_for_var(var)))
+            lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
             lines.append(
-                "{indent}{line}".format(indent=self._indent(2), line=_loop_header(representative_var, True)))
+                "{indent}{line}".format(indent=self._indent(1), line=_loop_header(representative_var, True)))
             for var in pattern.all_vars():
-                lines.append("{indent}{line}".format(indent=self._indent(4),
+                lines.append("{indent}{line}".format(indent=self._indent(2),
                                                      line=self._input_code_for_var(var)))
+            lines.append("{indent}}}".format(indent=self._indent(1)))
+            lines.append("}")
         else:
             raise NotImplementedError
 

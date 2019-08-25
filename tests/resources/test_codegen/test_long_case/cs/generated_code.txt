@@ -5,34 +5,42 @@ using System.Collections;
 using System.Collections.Generic;
 using static System.Console;
 using static System.Math;
-using System.Diagnostics;
 
 public class Program{
-    {% if mod %}
-    const long MOD = {{ mod }};
-    {% endif %}
-    {% if yes_str %}
-    const string YES = "{{ yes_str }}";
-    {% endif %}
-    {% if no_str %}
-    const string NO = "{{ no_str }}";
-    {% endif %}
-
     public static void Main(string[] args){
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
-        {% if prediction_success %}
-        {{ input_part }}
-        new Program().Solve({{ actual_arguments }});
-        {% else %}
-        // Failed to predict input format
-        {% endif %}
+        long H;
+        H = cin.ReadLong;
+        long W;
+        W = cin.ReadLong;
+        long K;
+        K = cin.ReadLong;
+        long sr;
+        sr = cin.ReadLong;
+        long sc;
+        sc = cin.ReadLong;
+        string[] s = new string[H];
+        for(int i = 0;i < H;i++){
+            s[i] = cin.Read;
+        }
+        long N;
+        N = cin.ReadLong;
+        long[] fr = new long[N];
+        long[] fc = new long[N];
+        long[] F = new long[N];
+        long[] D = new long[N];
+        for(int i = 0;i < N;i++){
+            fr[i] = cin.ReadLong;
+            fc[i] = cin.ReadLong;
+            F[i] = cin.ReadLong;
+            D[i] = cin.ReadLong;
+        }
+        new Program().Solve(H, W, K, sr, sc, s, N, fr, fc, F, D);
     }
 
-    {% if prediction_success %}
-    public void Solve({{ formal_arguments }}){
+    public void Solve(long H, long W, long K, long sr, long sc, string[] s, long N, long[] fr, long[] fc, long[] F, long[] D){
         
     }
-    {% endif %}
 }
 
 public class ConsoleInput{

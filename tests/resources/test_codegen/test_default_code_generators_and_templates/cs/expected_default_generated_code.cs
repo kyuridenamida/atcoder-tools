@@ -8,31 +8,40 @@ using static System.Math;
 using System.Diagnostics;
 
 public class Program{
-    {% if mod %}
-    const long MOD = {{ mod }};
-    {% endif %}
-    {% if yes_str %}
-    const string YES = "{{ yes_str }}";
-    {% endif %}
-    {% if no_str %}
-    const string NO = "{{ no_str }}";
-    {% endif %}
+    const long MOD = 123;
+    const string YES = "yes";
+    const string NO = "NO";
 
     public static void Main(string[] args){
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
-        {% if prediction_success %}
-        {{ input_part }}
-        new Program().Solve({{ actual_arguments }});
-        {% else %}
-        // Failed to predict input format
-        {% endif %}
+        long N;
+        N = cin.ReadLong;
+        long M;
+        M = cin.ReadLong;
+        string[,] H = new string[N-2+1,M-1-2+1];
+        for(int i = 0;i < N-2+1;i++){
+            for(int j = 0;j < M-1-2+1;j++){
+                H[i,j] = cin.Read;
+            }
+        }
+        long[] A = new long[N-2+1];
+        double[] B = new double[N-2+1];
+        for(int i = 0;i < N-2+1;i++){
+            A[i] = cin.ReadLong;
+            B[i] = cin.ReadDouble;
+        }
+        long Q;
+        Q = cin.ReadLong;
+        long[] X = new long[M+Q];
+        for(int i = 0;i < M+Q;i++){
+            X[i] = cin.ReadLong;
+        }
+        new Program().Solve(N, M, H, A, B, Q, X);
     }
 
-    {% if prediction_success %}
-    public void Solve({{ formal_arguments }}){
+    public void Solve(long N, long M, string[,] H, long[] A, double[] B, long Q, long[] X){
         
     }
-    {% endif %}
 }
 
 public class ConsoleInput{

@@ -20,19 +20,36 @@ public class Program{
 
     public static void Main(string[] args){
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
-        {% if prediction_success %}
         {{ input_part }}
         new Program().Solve({{ actual_arguments }});
-        {% else %}
-        // Failed to predict input format
-        {% endif %}
     }
 
-    {% if prediction_success %}
     public void Solve({{ formal_arguments }}){
-        
+        WriteLine($"{N} {M}");
+        Debug.Assert(H.GetLength(0) == N - 1);
+        for (int i = 0;i < N - 1;i++) {
+            Debug.Assert(H.GetLength(1) == M - 2);
+            for (int j = 0;j < M - 2;j++) {
+                Write((j > 0 ? " " : "") + $"{H[i,j]}");
+            }
+            WriteLine();
+        }
+        Debug.Assert(A.Length == N - 1);
+        Debug.Assert(B.Length == N - 1);
+        for(int i = 0;i < N - 1;i++){
+            WriteLine($"{A[i]} {B[i]}");
+        }
+        WriteLine(Q);
+        Debug.Assert(X.Length == M + Q);
+        for(int i = 0;i < M + Q;i++){
+            WriteLine(X[i]);
+        }
+
+        WriteLine(YES);
+        WriteLine(NO);
+        WriteLine(MOD);
+
     }
-    {% endif %}
 }
 
 public class ConsoleInput{
