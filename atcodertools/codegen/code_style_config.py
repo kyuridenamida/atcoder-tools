@@ -26,7 +26,7 @@ class CodeStyleConfig:
                  workspace_dir: Optional[str] = None,
                  lang: str = "cpp",
                  ):
-        from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES, NIM
+        from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
 
         code_generator_file = normalize_path(code_generator_file)
         template_file = normalize_path(template_file)
@@ -59,9 +59,10 @@ class CodeStyleConfig:
 
         if indent_width is not None:
             self.indent_width = indent_width
+        elif lang.default_code_style is not None and lang.default_code_style.indent_width is not None:
+            self.indent_width = lang.default_code_style.indent_width
         else:
-            # nim has a special default value
-            self.indent_width = 2 if lang == NIM else 4
+            self.indent_width = 4
 
         if code_generator_file is not None:
             try:
