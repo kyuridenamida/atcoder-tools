@@ -99,7 +99,7 @@ NIM = Language(
 
 CSHARP = Language(
     name="cs",
-    display_name="CS",
+    display_name="C#",
     extension="cs",
     submission_lang_pattern=re.compile(".*C# \\(Mono.*"),
     default_code_generator=cs.main,
