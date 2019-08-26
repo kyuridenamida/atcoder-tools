@@ -59,8 +59,8 @@ class CodeStyleConfig:
 
         if indent_width is not None:
             self.indent_width = indent_width
-        elif lang.default_code_style is not None and "indent_width" in lang.default_code_style:
-            self.indent_width = lang.default_code_style["indent_width"]
+        elif lang.default_code_style is not None and lang.default_code_style.indent_width is not None:
+            self.indent_width = lang.default_code_style.indent_width
         else:
             self.indent_width = 4
 

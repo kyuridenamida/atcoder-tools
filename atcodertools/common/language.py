@@ -10,8 +10,14 @@ class LanguageNotFoundError(Exception):
     pass
 
 
-class Language:
+class CodeStyle:
+    def __init__(self,
+                 indent_width=None
+                 ):
+        self.indent_width = indent_width
 
+
+class Language:
     def __init__(self,
                  name: str,
                  display_name: str,
@@ -94,7 +100,7 @@ NIM = Language(
     submission_lang_pattern=re.compile(".*Nim \\(0.*"),
     default_code_generator=nim.main,
     default_template_path=get_default_template_path('nim'),
-    default_code_style={"indent_width": 2}
+    default_code_style=CodeStyle(indent_width=2)
 )
 
 ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG]
