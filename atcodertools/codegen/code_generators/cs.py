@@ -23,7 +23,7 @@ def _loop_header(var: Variable, for_second_index: bool):
     ) + "{"
 
 
-class CsharpCodeGenerator:
+class CSharpCodeGenerator:
 
     def __init__(self,
                  format_: Optional[Format[Variable]],
