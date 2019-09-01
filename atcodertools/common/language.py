@@ -1,7 +1,7 @@
 import re
 from typing import Pattern, Callable
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d
+from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 
@@ -103,5 +103,15 @@ NIM = Language(
     default_code_style=CodeStyle(indent_width=2)
 )
 
-ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG]
+CSHARP = Language(
+    name="cs",
+    display_name="C#",
+    extension="cs",
+    submission_lang_pattern=re.compile(".*C# \\(Mono.*"),
+    default_code_generator=cs.main,
+    default_template_path=get_default_template_path('cs'),
+)
+
+
+ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP]
 ALL_LANGUAGE_NAMES = [lang.display_name for lang in ALL_LANGUAGES]
