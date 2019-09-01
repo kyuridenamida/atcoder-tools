@@ -18,7 +18,6 @@ class CodeStyle:
 
 
 class Language:
-
     def __init__(self,
                  name: str,
                  display_name: str,
