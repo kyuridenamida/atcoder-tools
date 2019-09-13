@@ -20,7 +20,7 @@ class CodeStyleConfig:
 
     def __init__(self,
                  indent_type: str = INDENT_TYPE_SPACE,
-                 indent_width: int = 4,
+                 indent_width: Optional[int] = None,
                  code_generator_file: Optional[str] = None,
                  template_file: Optional[str] = None,
                  workspace_dir: Optional[str] = None,
@@ -41,7 +41,7 @@ class CodeStyleConfig:
             raise CodeStyleConfigInitError(
                 "indent_type must be 'space' or 'tab'")
 
-        if indent_width < 0:
+        if indent_width is not None and indent_width < 0:
             raise CodeStyleConfigInitError(
                 "indent_width must be a positive integer")
 
@@ -56,7 +56,13 @@ class CodeStyleConfig:
             )
 
         self.indent_type = indent_type
-        self.indent_width = indent_width
+
+        if indent_width is not None:
+            self.indent_width = indent_width
+        elif lang.default_code_style is not None and lang.default_code_style.indent_width is not None:
+            self.indent_width = lang.default_code_style.indent_width
+        else:
+            self.indent_width = 4
 
         if code_generator_file is not None:
             try:
