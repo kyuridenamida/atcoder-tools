@@ -3,4 +3,4 @@ requests
 colorama
 toml
 jinja2
-online-judge-tools
+online-judge-tools==7.*

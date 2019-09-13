@@ -1,7 +1,7 @@
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
-from onlinejudge.service.atcoder import AtCoderProblem, AtCoderProblemContent
+from onlinejudge.service.atcoder import AtCoderProblem, AtCoderProblemDetailedData
 
 from atcodertools.client.models.sample import Sample
 
@@ -39,7 +39,7 @@ class ProblemContent:
         return self.original_html
 
     @classmethod
-    def from_raw_content(cls, content: AtCoderProblemContent) -> 'ProblemContent':
+    def from_raw_content(cls, content: AtCoderProblemDetailedData) -> 'ProblemContent':
         if not content.input_format:
             raise InputFormatDetectionError
         input_format_text = BeautifulSoup(content.input_format, 'lxml').text
@@ -58,4 +58,4 @@ class ProblemContent:
     def from_html(cls, html: str) -> 'ProblemContent':
         problem = AtCoderProblem.from_url(
             'https://practice.contest.atcoder.jp/tasks/practice_1')  # dummy
-        return cls.from_raw_content(AtCoderProblemContent.from_html(html, problem))
+        return cls.from_raw_content(AtCoderProblemDetailedData.from_html(html, problem=problem))

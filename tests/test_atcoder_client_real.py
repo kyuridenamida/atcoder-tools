@@ -16,7 +16,7 @@ class TestAtCoderClientReal(unittest.TestCase):
 
     def test_submit_source_code(self):
         problem_list = self.client.download_problem_list(
-            AtCoderContest("arc002"))
+            AtCoderContest(contest_id="arc002"))
         self.assertEqual(
             ['arc002_1',
              'arc002_2',
@@ -26,7 +26,7 @@ class TestAtCoderClientReal(unittest.TestCase):
 
     def test_download_problem_content(self):
         content = self.client.download_problem_content(
-            AtCoderProblem("arc002", "arc002_3"))
+            AtCoderProblem(contest_id="arc002", problem_id="arc002_3"))
         self.assertEqual("N\nc_{1}c_{2}...c_{N}\n", content.input_format_text)
         self.assertEqual(3, len(content.samples))
 

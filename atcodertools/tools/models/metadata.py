@@ -7,8 +7,9 @@ from atcodertools.common.language import Language
 
 class Metadata:
 
-    def __init__(self, problem: AtCoderProblem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str, lang: Language):
+    def __init__(self, problem: AtCoderProblem, alphabet: str, code_filename: str, sample_in_pattern: str, sample_out_pattern: str, lang: Language):
         self.problem = problem
+        self.alphabet = alphabet
         self.code_filename = code_filename
         self.sample_in_pattern = sample_in_pattern
         self.sample_out_pattern = sample_out_pattern
@@ -18,7 +19,7 @@ class Metadata:
         problem_dict = {
             "contest": {"contest_id": self.problem.contest_id},
             "problem_id": self.problem.problem_id,
-            "alphabet": self.problem.get_alphabet(),
+            "alphabet": self.alphabet,
         }
         return {
             "problem": problem_dict,
@@ -36,6 +37,7 @@ class Metadata:
         )
         return Metadata(
             problem=problem,
+            alphabet=dic["problem"]["alphabet"],
             code_filename=dic["code_filename"],
             sample_in_pattern=dic["sample_in_pattern"],
             sample_out_pattern=dic["sample_out_pattern"],

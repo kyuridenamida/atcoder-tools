@@ -50,7 +50,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     template_code_path = config.code_style_config.template_file
     lang = config.code_style_config.lang
 
-    pid = problem.get_alphabet()
+    pid = atcoder_client.download_problem_alphabet(problem)
     problem_dir_path = os.path.join(
         workspace_root_path,
         problem.get_contest().contest_id,
@@ -135,6 +135,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     # Save metadata
     metadata_path = os.path.join(problem_dir_path, "metadata.json")
     Metadata(problem,
+             pid,
              os.path.basename(code_file_path),
              config.etc_config.in_example_format.replace("{}", "*"),
              config.etc_config.out_example_format.replace("{}", "*"),

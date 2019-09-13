@@ -80,7 +80,7 @@ class AtCoderClient(metaclass=Singleton):
 
                 return
 
-        AtCoderService().login(credential_supplier, session=self._session)
+        AtCoderService().login(get_credentials=credential_supplier, session=self._session)
 
         if use_local_session_cache and save_session_cache:
             save_cookie(self._session)
@@ -89,8 +89,12 @@ class AtCoderClient(metaclass=Singleton):
         return contest.list_problems(session=self._session)
 
     def download_problem_content(self, problem: AtCoderProblem) -> ProblemContent:
-        content = problem.download_content(session=self._session)
+        content = problem.download_data(session=self._session)
         return ProblemContent.from_raw_content(content)
+
+    def download_problem_alphabet(self, problem: AtCoderProblem) -> str:
+        content = problem.download_data(session=self._session)
+        return content.alphabet
 
     def download_all_contests(self) -> List[AtCoderContest]:
         return list(AtCoderService().iterate_contests(
