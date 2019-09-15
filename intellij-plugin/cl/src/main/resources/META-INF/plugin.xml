@@ -1,0 +1,60 @@
+<idea-plugin>
+    <id>atcodertools.cl</id>
+    <name>AtCoderTools C++</name>
+    <vendor email="tyotyo3@gmail.com" url="https://github.com/kyuridenamida/atcoder-tools">kyuridenamida</vendor>
+    <description><![CDATA[
+    AtCoderTools integration for C++. Atcoder-tools needs to be installed on your machine for this plugin to work.
+    See <a href="https://github.com/kyuridenamida/atcoder-tools">atcoder-tools</a> for installation.
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.clion</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <directoryProjectGenerator implementation="atcodertools.clion.wizard.AtCoderToolsProjectGenerator"/>
+        <applicationService serviceInterface="atcodertools.intellij.service.AtCoderToolsApplicationService"
+                            serviceImplementation="atcodertools.clion.service.AtCoderToolsApplicationServiceImpl" />
+
+        <projectService serviceInterface="atcodertools.intellij.service.AtCoderToolsProjectService"
+                        serviceImplementation="atcodertools.clion.service.AtCoderToolsProjectServiceImpl" />
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <moduleType id="ATCODER_TOOLS_MODULE"
+                    implementationClass="atcodertools.intellij.module.AtCoderToolsModuleType"/>
+        <moduleBuilder builderClass="atcodertools.intellij.module.AtCoderToolsModuleBuilder"/>
+        <facetType implementation="atcodertools.intellij.facet.AtCoderToolsFacetType"/>
+        <facetType implementation="atcodertools.intellij.facet.AtCoderToolsProblemFacetType"/>
+        <facet.toolWindow id="AtCoderTools"
+                          facetIdList="atcodertools"
+                          anchor="bottom"
+                          icon="AllIcons.General.Information"
+                          canCloseContents="false"
+                          conditionClass="atcodertools.intellij.toolwindow.AtCoderToolsToolWindowFactoryCondition"
+                          factoryClass="atcodertools.intellij.toolwindow.AtCoderToolsToolWindowFactory"/>
+    </extensions>
+
+    <actions>
+        <group id="atcodertools.intellij.action.GroupedActions" text="AtCoderTools" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="atcodertools.intellij.action.GenAction"
+                    class="atcodertools.intellij.action.GenAction"
+                    icon="AllIcons.Actions.Refresh"
+                    text="AtCoder Generate"/>
+            <action id="atcodertools.intellij.action.TestAction"
+                    class="atcodertools.intellij.action.TestAction"
+                    icon="AllIcons.RunConfigurations.TestState.Run"
+                    text="AtCoder Test"/>
+            <action id="atcodertools.intellij.action.SubmitAction"
+                    class="atcodertools.intellij.action.SubmitAction"
+                    icon="AllIcons.Vcs.Push"
+                    text="AtCoder Submit"/>
+            <action id="atcodertools.intellij.action.StopAction"
+                    class="atcodertools.intellij.action.StopAction"
+                    icon="AllIcons.Actions.Suspend"
+                    text="AtCoder Stop"/>
+        </group>
+    </actions>
+</idea-plugin>

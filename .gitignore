@@ -10,3 +10,6 @@ debug.py
 atcoder_tools.egg-info/
 build/
 dist/
+.gradle
+**/guitest.log
+**/stale_outputs_checked

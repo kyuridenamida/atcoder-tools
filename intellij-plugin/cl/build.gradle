@@ -1,0 +1,12 @@
+group 'atcodertools'
+version '0.1-SNAPSHOT'
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    type = 'CL'  // CLion
+}
+
+dependencies {
+    implementation project(':common')
+    implementation "com.google.guava:guava:28.1-jre"
+}

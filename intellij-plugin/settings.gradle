@@ -1,0 +1,5 @@
+rootProject.name = 'atcodertools'
+include 'common'
+include 'ic'
+include 'cl'
+

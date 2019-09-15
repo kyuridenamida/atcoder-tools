@@ -1,0 +1,107 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        google()
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "gradle.plugin.org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.4.15"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+    apply plugin: 'org.jetbrains.intellij'
+    apply plugin: 'jacoco'
+
+    intellij {
+        version '2019.3'
+    }
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+    task testsJar(type: Jar, dependsOn: [classes, testClasses]) {
+        archiveClassifier.set('tests')
+        from sourceSets.test.output
+        exclude 'testData/*'
+    }
+
+    prepareSandbox {
+        from(testsJar) {
+            into "$pluginName/lib"
+        }
+    }
+
+    prepareTestingSandbox {
+        from(testsJar) {
+            into "$pluginName/lib"
+        }
+    }
+
+    runIde {
+        if (System.getProperty("idea.gui.tests.gradle.runner") == "true") {
+            jacoco.applyTo(runIde)
+
+            def sysProps = System.properties.findAll {
+                (it.key as String).startsWith("idea") || (it.key as String).startsWith("jb")
+            }.findAll {
+                (it.key as String) != "idea.home.path" && (it.key as String) != "jb.vmOptionsFile"
+            }
+            sysProps.put("atcodertools.intellij.command.noLogin", true)
+            systemProperties sysProps
+
+            /* Need to split the space-delimited value in the exec.args */
+            args System.getProperty("exec.args", "").split(",")
+
+            jacoco {
+                includeNoLocationClasses = true
+                includes = ["atcodertools.intellij.*"]
+            }
+        }
+    }
+
+    test {
+        def sysProps = System.properties.findAll {
+            (it.key as String).startsWith("idea") || (it.key as String).startsWith("jb")
+        }.findAll {
+            (it.key as String) != "idea.home.path" && (it.key as String) != "jb.vmOptionsFile"
+        }
+        sysProps.put("idea.gui.tests.gradle.runner", true) // Use Gradle Launcher to run GUI tests
+        sysProps.put("idea.debug.mode", false) // Set true to enable debugging with breakpoints
+        systemProperties sysProps
+
+        jacoco {
+            includeNoLocationClasses = true
+            includes = ["atcodertools.intellij.*"]
+        }
+    }
+
+    // Disable jacoco report for now. For some reason, jacoco doesn't handle GuiTest well
+    // and it produces zero test coverage. Let's disable it until we figure out the reason.
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            html.enabled false
+            csv.enabled false
+        }
+    }
+
+    check.dependsOn jacocoTestReport
+}
