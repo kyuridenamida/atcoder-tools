@@ -19,7 +19,7 @@ class MultipleModCandidatesError(Exception):
         self.cands = cands
 
 
-class MultipledecimalCandidatesError(Exception):
+class MultipleDecimalCandidatesError(Exception):
 
     def __init__(self, cands):
         self.cands = cands
@@ -109,7 +109,7 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
 def predict_judge_type(html: str) -> Optional[JudgeType]:
     def normalize(sentence):
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
-            "10^9+7", "1000000007").lower().strip()
+            "1000000007").lower().strip()
 
     soup = BeautifulSoup(html, "html.parser")
     sentences = soup.get_text().split("\n")
@@ -142,7 +142,7 @@ def predict_judge_type(html: str) -> Optional[JudgeType]:
         if len(decimal_val_cands) == 1:
             return JudgeType("decimal", is_absolute, is_relative, 10.0**(int(list(decimal_val_cands)[0])))
 
-        raise MultipledecimalCandidatesError(decimal_cands)
+        raise MultipleDecimalCandidatesError(decimal_cands)
 
     return JudgeType("normal")
 
