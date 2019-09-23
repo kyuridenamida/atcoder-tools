@@ -108,8 +108,7 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
 
 def predict_judge_type(html: str) -> Optional[JudgeType]:
     def normalize(sentence):
-        return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
-            "1000000007").lower().strip()
+        return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").lower().strip()
 
     soup = BeautifulSoup(html, "html.parser")
     sentences = soup.get_text().split("\n")

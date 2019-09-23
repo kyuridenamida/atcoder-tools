@@ -104,11 +104,8 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
         # Run program
-        if judge_type.judge_type == "interactive":
-            pass
-        else:
-            exec_res = run_program(exec_file, in_sample_file,
-                                   timeout_sec=timeout_sec)
+        exec_res = run_program(exec_file, in_sample_file,
+                               timeout_sec=timeout_sec)
 
         # Output header
         with open(out_sample_file, 'r') as f:
@@ -224,7 +221,7 @@ DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
 DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
 
 
-def get_from_metadata(metadata_file: str) -> Tuple[str, str, JudgeType]:
+def get_sample_patterns_and_judge_type(metadata_file: str) -> Tuple[str, str, JudgeType]:
     try:
         metadata = Metadata.load_from(metadata_file)
         return metadata.sample_in_pattern, metadata.sample_out_pattern, metadata.judge_type
@@ -271,8 +268,8 @@ def main(prog, args) -> bool:
                         action='store_true',
                         default=False)
 
-    parser.add_argument('--error', '-er',
-                        help='Allow error'
+    parser.add_argument('--enable-decimal-judge', '-dec',
+                        help='Enable decimal judge'
                              ' [Default] False,',
                         type=float,
                         default=None)
@@ -282,14 +279,14 @@ def main(prog, args) -> bool:
         glob.glob(os.path.join(args.dir, '*')))
 
     metadata_file = os.path.join(args.dir, "metadata.json")
-    in_ex_pattern, out_ex_pattern, judge_type = get_from_metadata(
+    in_ex_pattern, out_ex_pattern, judge_type = get_sample_patterns_and_judge_type(
         metadata_file)
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, in_ex_pattern)))
     out_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, out_ex_pattern)))
-    if (not (args.error is None)):
+    if args.error is not None:
         judge_type = JudgeType("decimal", True, True, args.error)
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
