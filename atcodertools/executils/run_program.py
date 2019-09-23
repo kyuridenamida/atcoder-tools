@@ -1,12 +1,33 @@
 import subprocess
 import time
 from enum import Enum
+from atcodertools.common.judgetype import JudgeType
 
 
 class ExecStatus(Enum):
     NORMAL = "NORMAL"
     TLE = "TLE"
     RE = "RE"
+
+
+def judge_decimal(x, ans: float, judge_type: JudgeType) -> bool:
+    assert(judge_type.judge_type == "decimal")
+    if judge_type.error_type.find("absolute") != -1 and abs(ans-x) <= judge_type.diff:
+        return True
+    if judge_type.error_type.find("relative") != -1 and abs((ans-x)/ans) <= judge_type.diff:
+        return True
+    return False
+
+
+def judge_decimal_line(x, ans, judge_type: JudgeType) -> bool:
+    x = x.strip().split()
+    ans = ans.strip().split()
+    if len(x) != len(ans):
+        return False
+    for i in range(0, len(x)):
+        if not judge_decimal(float(x[i]), float(ans[i]), judge_type):
+            return False
+    return True
 
 
 class ExecResult:
@@ -21,8 +42,13 @@ class ExecResult:
         else:
             self.elapsed_ms = None
 
-    def is_correct_output(self, answer_text):
-        return self.status == ExecStatus.NORMAL and answer_text == self.output
+    def is_correct_output(self, answer_text, judge_type: JudgeType):
+        if self.status != ExecStatus.NORMAL:
+            return False
+        if judge_type.judge_type == "normal":
+            return answer_text == self.output
+        elif judge_type.judge_type == "decimal":
+            return judge_decimal_line(self.output, answer_text, judge_type)
 
     def has_stderr(self):
         return len(self.stderr) > 0
