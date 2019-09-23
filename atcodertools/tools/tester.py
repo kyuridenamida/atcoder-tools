@@ -286,8 +286,9 @@ def main(prog, args) -> bool:
         glob.glob(os.path.join(args.dir, in_ex_pattern)))
     out_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, out_ex_pattern)))
-    if args.error is not None:
-        judge_type = JudgeType("decimal", True, True, args.error)
+    if args.enable_decimal_judge is not None:
+        judge_type = JudgeType("decimal", True, True,
+                               args.enable_decimal_judge)
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
                              args.skip_almost_ac_feedback, judge_type)
