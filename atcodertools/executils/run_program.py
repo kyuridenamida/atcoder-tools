@@ -1,32 +1,13 @@
 import subprocess
 import time
 from enum import Enum
-from atcodertools.common.judgetype import JudgeType
+from atcodertools.common.judgetype import JudgeType, Judge, NormalJudge, DecimalJudge, OtherJudge
 
 
 class ExecStatus(Enum):
     NORMAL = "NORMAL"
     TLE = "TLE"
     RE = "RE"
-
-
-def judge_decimal(out, ans: float, error_type: str, diff: float) -> bool:
-    if error_type in ["absolute", "absolute_or_relative"] and abs(ans-out) <= diff:
-        return True
-    if error_type in ["relative", "absolute_or_relative"] and abs((ans-out)/ans) <= diff:
-        return True
-    return False
-
-
-def judge_decimal_tokens(out, ans, error_type: str, diff: float) -> bool:
-    out = out.strip().split()
-    ans = ans.strip().split()
-    if len(out) != len(ans):
-        return False
-    for i in range(0, len(out)):
-        if not judge_decimal(float(out[i]), float(ans[i]), error_type, diff):
-            return False
-    return True
 
 
 class ExecResult:
@@ -41,13 +22,10 @@ class ExecResult:
         else:
             self.elapsed_ms = None
 
-    def is_correct_output(self, answer_text, judge_type: JudgeType):
+    def is_correct_output(self, answer_text, judge_type):
         if self.status != ExecStatus.NORMAL:
             return False
-        if judge_type.judge_type == "normal":
-            return answer_text == self.output
-        elif judge_type.judge_type == "decimal":
-            return judge_decimal_tokens(self.output, answer_text, judge_type.error_type, judge_type.diff)
+        return judge_type.verify(self.output, answer_text)
 
     def has_stderr(self):
         return len(self.stderr) > 0

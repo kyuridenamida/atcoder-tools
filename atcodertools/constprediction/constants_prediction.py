@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 from atcodertools.common.logging import logger
-from atcodertools.common.judgetype import JudgeType
+from atcodertools.common.judgetype import JudgeType, Judge, NormalJudge, DecimalJudge
 
 
 class YesNoPredictionFailedError(Exception):
@@ -139,11 +139,11 @@ def predict_judge_type(html: str) -> Optional[JudgeType]:
             return None
 
         if len(decimal_val_cands) == 1:
-            return JudgeType("decimal", is_absolute, is_relative, 10.0**(int(list(decimal_val_cands)[0])))
+            return DecimalJudge(is_absolute, is_relative, 10.0**(int(list(decimal_val_cands)[0])))
 
         raise MultipleDecimalCandidatesError(decimal_cands)
 
-    return JudgeType("normal")
+    return NormalJudge()
 
 
 def predict_constants(html: str) -> ProblemConstantSet:
@@ -164,6 +164,6 @@ def predict_constants(html: str) -> ProblemConstantSet:
     except MultipleModCandidatesError as e:
         logger.warning("decimal prediction failed -- "
                        "two or more candidates {} are detected as decimal values".format(e.cands))
-        judge_type = JudgeType()
+        judge_type = NormalJudge()
 
     return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str, judge_type=judge_type)

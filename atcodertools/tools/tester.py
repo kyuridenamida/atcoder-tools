@@ -14,7 +14,7 @@ from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
-from atcodertools.common.judgetype import JudgeType
+from atcodertools.common.judgetype import JudgeType, Judge, NormalJudge, DecimalJudge, OtherJudge
 
 
 class NoExecutableFileError(Exception):
@@ -98,7 +98,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
-def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, judge_type: JudgeType, knock_out: bool = False,
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, judge_type, knock_out: bool = False,
                     skip_io_on_success: bool = False) -> TestSummary:
     success_count = 0
     has_error_output = False
@@ -156,7 +156,7 @@ def validate_sample_pair(in_sample_file, out_sample_file):
         raise IrregularSampleFileError
 
 
-def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int, judge_type: JudgeType) -> bool:
+def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int, judge_type) -> bool:
     def single_or_none(lst: List):
         if len(lst) == 1:
             return lst[0]
@@ -183,7 +183,7 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
 
 
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
-                  skip_stderr_on_success: bool, judge_type: JudgeType) -> bool:
+                  skip_stderr_on_success: bool, judge_type) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
         logger.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
@@ -231,7 +231,7 @@ def get_sample_patterns_and_judge_type(metadata_file: str) -> Tuple[str, str, Ju
             DEFAULT_IN_EXAMPLE_PATTERN,
             DEFAULT_OUT_EXAMPLE_PATTERN)
         )
-        return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN, JudgeType()
+        return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN, NormalJudge()
 
 
 def main(prog, args) -> bool:
@@ -287,8 +287,7 @@ def main(prog, args) -> bool:
     out_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, out_ex_pattern)))
     if args.enable_decimal_judge is not None:
-        judge_type = JudgeType("decimal", True, True,
-                               args.enable_decimal_judge)
+        judge_type = DecimalJudge(True, True, args.enable_decimal_judge)
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
                              args.skip_almost_ac_feedback, judge_type)
