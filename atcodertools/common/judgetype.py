@@ -52,9 +52,9 @@ class DecimalJudge(Judge):
         self.diff = diff
 
     def verify_sub(self, out, ans: float) -> bool:
-        if self.error_type in ["absolute", "absolute_or_relative"] and abs(ans-out) <= self.diff:
+        if self.error_type in ["absolute", "absolute_or_relative"] and abs(ans - out) <= self.diff:
             return True
-        if self.error_type in ["relative", "absolute_or_relative"] and abs((ans-out)/ans) <= self.diff:
+        if self.error_type in ["relative", "absolute_or_relative"] and abs((ans - out) / ans) <= self.diff:
             return True
         return False
 

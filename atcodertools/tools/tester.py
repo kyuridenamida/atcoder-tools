@@ -14,7 +14,7 @@ from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
-from atcodertools.common.judgetype import JudgeType, Judge, NormalJudge, DecimalJudge, OtherJudge
+from atcodertools.common.judgetype import JudgeType, NormalJudge, DecimalJudge
 
 
 class NoExecutableFileError(Exception):

@@ -1,7 +1,6 @@
 import subprocess
 import time
 from enum import Enum
-from atcodertools.common.judgetype import JudgeType, Judge, NormalJudge, DecimalJudge, OtherJudge
 
 
 class ExecStatus(Enum):

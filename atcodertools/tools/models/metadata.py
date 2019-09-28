@@ -2,7 +2,7 @@ import json
 
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.language import Language
-from atcodertools.common.judgetype import JudgeType, Judge, NormalJudge, DecimalJudge, OtherJudge
+from atcodertools.common.judgetype import NormalJudge, DecimalJudge, OtherJudge
 
 
 class Metadata:
