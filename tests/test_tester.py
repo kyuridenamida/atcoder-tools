@@ -99,7 +99,7 @@ class TestTester(unittest.TestCase):
             sample_pair_list = [('in_1.txt', 'out_1.txt'),
                                 ('in_2.txt', 'out_2.txt')]
             self.assertEqual(TestSummary(0, False), tester.run_for_samples(
-                'a.out', sample_pair_list, 1, True))
+                'a.out', sample_pair_list, 1, knock_out=True))
             self.assertEqual(1, run_program_mock.call_count)
             self.assertEqual(1, build_details_str_mock.call_count)
 

@@ -98,7 +98,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
-def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, judge_type, knock_out: bool = False,
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, judge_type = NormalJudge(), knock_out: bool = False,
                     skip_io_on_success: bool = False) -> TestSummary:
     success_count = 0
     has_error_output = False

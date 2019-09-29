@@ -7,7 +7,7 @@ from atcodertools.common.judgetype import NormalJudge, DecimalJudge, OtherJudge
 
 class Metadata:
 
-    def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str, lang: Language, judge_type=None):
+    def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str, lang: Language, judge_type=NormalJudge()):
         self.problem = problem
         self.code_filename = code_filename
         self.sample_in_pattern = sample_in_pattern
@@ -16,7 +16,6 @@ class Metadata:
         self.judge_type = judge_type
 
     def to_dict(self):
-        print(type(self.judge_type))
         return {
             "problem": self.problem.to_dict(),
             "code_filename": self.code_filename,
@@ -35,6 +34,8 @@ class Metadata:
             elif judge_type == "decimal":
                 judge = DecimalJudge.from_dict(dic["judge"])
             else:
+                print("INVALID judge_type!!")
+                assert(False)
                 judge = OtherJudge()
         else:
             judge = NormalJudge()
@@ -56,3 +57,4 @@ class Metadata:
     def save_to(self, filename):
         with open(filename, 'w') as f:
             json.dump(self.to_dict(), f, indent=1, sort_keys=True)
+            f.write('\n')
