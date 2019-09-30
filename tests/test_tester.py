@@ -26,6 +26,38 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main('', ['-d', test_dir, "-n", "1"]))
         self.assertFalse(tester.main('', ['-d', test_dir, "-n", "2"]))
 
+    def test_run_single_test_decimal_absolute(self):
+        test_dir = os.path.join(
+            RESOURCE_DIR, "test_run_single_test_decimal_absolute")
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute_or_relative"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "absolute_or_relative"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "absolute"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "relative"]))
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "relative"]))
+
+    def test_run_single_test_decimal_relative(self):
+        test_dir = os.path.join(
+            RESOURCE_DIR, "test_run_single_test_decimal_relative")
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute_or_relative"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "absolute_or_relative"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute"]))
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "absolute"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "relative"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "relative"]))
+
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
     def test_is_executable_file(self, os_mock, is_file_mock):

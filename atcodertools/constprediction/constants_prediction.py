@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 from atcodertools.common.logging import logger
-from atcodertools.common.judgetype import JudgeType, NormalJudge, DecimalJudge
+from atcodertools.common.judgetype import JudgeType, ErrorType, NormalJudge, DecimalJudge
 
 
 class YesNoPredictionFailedError(Exception):
@@ -139,7 +139,18 @@ def predict_judge_type(html: str) -> Optional[JudgeType]:
             return None
 
         if len(decimal_val_cands) == 1:
-            return DecimalJudge(is_absolute, is_relative, 10.0**(int(list(decimal_val_cands)[0])))
+            if is_absolute:
+                if is_relative:
+                    error_type = ErrorType.AbsoluteOrRelative
+                else:
+                    error_type = ErrorType.Absolute
+            else:
+                if is_relative:
+                    error_type = ErrorType.Relative
+                else:
+                    assert(False)
+
+            return DecimalJudge(error_type, 10.0**(int(list(decimal_val_cands)[0])))
 
         raise MultipleDecimalCandidatesError(decimal_val_cands)
 

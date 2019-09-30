@@ -14,7 +14,7 @@ from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
-from atcodertools.common.judgetype import JudgeType, NormalJudge, DecimalJudge
+from atcodertools.common.judgetype import JudgeType, ErrorType, NormalJudge, DecimalJudge
 
 
 class NoExecutableFileError(Exception):
@@ -274,6 +274,12 @@ def main(prog, args) -> bool:
                         type=float,
                         default=None)
 
+    parser.add_argument('--error-type', '-etype',
+                        help='error type'
+                             'must be one of absolute, relative, absolute_or_relative',
+                        type=str,
+                        default="absolute_and_relative")
+
     args = parser.parse_args(args)
     exec_file = args.exec or infer_exec_file(
         glob.glob(os.path.join(args.dir, '*')))
@@ -287,7 +293,8 @@ def main(prog, args) -> bool:
     out_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, out_ex_pattern)))
     if args.enable_decimal_judge is not None:
-        judge_type = DecimalJudge(True, True, args.enable_decimal_judge)
+        judge_type = DecimalJudge(
+            ErrorType(args.error_type), args.enable_decimal_judge)
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
                              args.skip_almost_ac_feedback, judge_type)

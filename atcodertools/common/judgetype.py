@@ -10,6 +10,12 @@ class JudgeType(Enum):
     Other = "other"
 
 
+class ErrorType(Enum):
+    Absolute = "absolute"
+    Relative = "relative"
+    AbsoluteOrRelative = "absolute_or_relative"
+
+
 class Judge:
     pass
 
@@ -34,27 +40,17 @@ class NormalJudge(Judge):
 
 class DecimalJudge(Judge):
     def __init__(self,
-                 is_absolute: bool = False,
-                 is_relative: bool = False,
+                 error_type: ErrorType = ErrorType.AbsoluteOrRelative,
                  diff: float = 0.0
                  ):
         self.judge_type = JudgeType.Decimal
-        if is_absolute:
-            if is_relative:
-                self.error_type = "absolute_or_relative"
-            else:
-                self.error_type = "absolute"
-        else:
-            if is_relative:
-                self.error_type = "relative"
-            else:
-                self.error_type = None
+        self.error_type = error_type
         self.diff = diff
 
     def verify_sub(self, out, ans: float) -> bool:
-        if self.error_type in ["absolute", "absolute_or_relative"] and abs(ans - out) <= self.diff:
+        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(ans - out) <= self.diff:
             return True
-        if self.error_type in ["relative", "absolute_or_relative"] and abs((ans - out) / ans) <= self.diff:
+        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and abs((ans - out) / ans) <= self.diff:
             return True
         return False
 
@@ -71,7 +67,7 @@ class DecimalJudge(Judge):
     def to_dict(self):
         return {
             "judge_type": self.judge_type.value,
-            "error_type": self.error_type,
+            "error_type": self.error_type.value,
             "diff": self.diff
         }
 
@@ -80,7 +76,7 @@ class DecimalJudge(Judge):
         r = DecimalJudge(
             diff=dic["diff"]
         )
-        r.error_type = dic["error_type"]
+        r.error_type = ErrorType(dic["error_type"])
         return r
 
 
