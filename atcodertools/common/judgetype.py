@@ -17,15 +17,16 @@ class ErrorType(Enum):
 
 
 class Judge:
-    pass
+    def verify(self, output, expected):
+        pass
 
 
 class NormalJudge(Judge):
     def __init__(self):
         self.judge_type = JudgeType.Normal
 
-    def verify(self, out, ans):
-        return out == ans
+    def verify(self, output, expected):
+        return output == expected
 
     def to_dict(self):
         return {
@@ -47,20 +48,20 @@ class DecimalJudge(Judge):
         self.error_type = error_type
         self.diff = diff
 
-    def verify_sub(self, out, ans: float) -> bool:
-        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(ans - out) <= self.diff:
+    def __verify_sub(self, output, expected: float) -> bool:
+        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(expected - output) <= self.diff:
             return True
-        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and abs((ans - out) / ans) <= self.diff:
+        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and abs((expected - output) / expected) <= self.diff:
             return True
         return False
 
-    def verify(self, out, ans) -> bool:
-        out = out.strip().split()
-        ans = ans.strip().split()
-        if len(out) != len(ans):
+    def verify(self, output, expected) -> bool:
+        output = output.strip().split()
+        expected = expected.strip().split()
+        if len(output) != len(expected):
             return False
-        for i in range(0, len(out)):
-            if not self.verify_sub(float(out[i]), float(ans[i])):
+        for i in range(0, len(output)):
+            if not self.__verify_sub(float(output[i]), float(expected[i])):
                 return False
         return True
 

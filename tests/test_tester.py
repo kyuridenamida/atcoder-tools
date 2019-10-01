@@ -26,9 +26,9 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main('', ['-d', test_dir, "-n", "1"]))
         self.assertFalse(tester.main('', ['-d', test_dir, "-n", "2"]))
 
-    def test_run_single_test_decimal_absolute(self):
+    def test_run_single_test_decimal_addition(self):
         test_dir = os.path.join(
-            RESOURCE_DIR, "test_run_single_test_decimal_absolute")
+            RESOURCE_DIR, "test_run_single_test_decimal_addition")
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute_or_relative"]))
         self.assertTrue(tester.main(
@@ -42,9 +42,9 @@ class TestTester(unittest.TestCase):
         self.assertFalse(tester.main(
             '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "relative"]))
 
-    def test_run_single_test_decimal_relative(self):
+    def test_run_single_test_decimal_multiplication(self):
         test_dir = os.path.join(
-            RESOURCE_DIR, "test_run_single_test_decimal_relative")
+            RESOURCE_DIR, "test_run_single_test_decimal_multiplication")
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute_or_relative"]))
         self.assertTrue(tester.main(

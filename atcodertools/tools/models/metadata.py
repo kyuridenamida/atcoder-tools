@@ -2,7 +2,7 @@ import json
 
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.language import Language
-from atcodertools.common.judgetype import NormalJudge, DecimalJudge, OtherJudge
+from atcodertools.common.judgetype import NormalJudge, DecimalJudge
 
 
 class Metadata:
@@ -34,9 +34,7 @@ class Metadata:
             elif judge_type == "decimal":
                 judge = DecimalJudge.from_dict(dic["judge"])
             else:
-                print("INVALID judge_type!!")
-                assert(False)
-                judge = OtherJudge()
+                raise Exception("invalid judge type")
         else:
             judge = NormalJudge()
 
