@@ -82,4 +82,5 @@ class DecimalJudge(Judge):
 
 
 class OtherJudge(Judge):
+    # dummy
     pass
