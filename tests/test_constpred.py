@@ -87,7 +87,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual("War", yes_str)
         self.assertEqual("No War", no_str)
 
-    def test_relative_or_absolute_error_judge_type_case(self):
+    def test_relative_or_absolute_error_judge_method_case(self):
         judge_method = predict_judge_method(
             """
             <section>
@@ -98,7 +98,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
         self.assertEqual(ErrorType.AbsoluteOrRelative.value, judge_method.to_dict()["error_type"])
 
-    def test_absolute_error_judge_type_case(self):
+    def test_absolute_error_judge_method_case(self):
         judge_method = predict_judge_method(
             """
             <div class="part">
@@ -113,7 +113,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
         self.assertEqual(ErrorType.Absolute.value, judge_method.to_dict()["error_type"])
 
-    def test_relative_error_judge_type_case(self):
+    def test_relative_error_judge_method_case(self):
         judge_method = predict_judge_method(
             """
             <div class="part">
@@ -127,7 +127,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
         self.assertEqual(ErrorType.Relative.value, judge_method.to_dict()["error_type"])
 
-    def test_normal_judge_case(self):
+    def test_normal_judge_method_case(self):
         judge_method = predict_judge_method(
             """
             <div class="part">
@@ -138,7 +138,7 @@ class TestConstantsPrediction(unittest.TestCase):
             </div>""")
         self.assertEqual(JudgeType.Normal.value, judge_method.to_dict()["judge_type"])
 
-    def test_judge_type_prediction_fails_with_multiple_cands(self):
+    def test_judge_method_prediction_fails_with_multiple_cands(self):
         try:
             predict_judge_method(
                 "<var>10^{-6}</var> もしくは <var>10^{-5}</var>以下の相対誤差")
@@ -147,9 +147,9 @@ class TestConstantsPrediction(unittest.TestCase):
             pass
 
     @unittest.expectedFailure
-    def test_tricky_judge_type_case(self):
+    def test_tricky_judge_method_case(self):
         # This test exists in order to demonstrate the current wrong behavior that detects unrelated mention wrongly.
-        # Please remove @unittest.expectedFailure when predict_judge_type() behaves
+        # Please remove @unittest.expectedFailure when predict_judge_method() behaves
         # correctly.
         judge_method = predict_judge_method(
             """
