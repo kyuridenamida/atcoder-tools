@@ -58,7 +58,6 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
 
-
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
     def test_is_executable_file(self, os_mock, is_file_mock):

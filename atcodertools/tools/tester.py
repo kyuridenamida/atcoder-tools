@@ -238,7 +238,9 @@ def get_sample_patterns_and_judge_method(metadata_file: str) -> Tuple[str, str, 
         return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN, NormalJudge()
 
 
-USER_FACING_JUDGE_TYPE_LIST = ["normal", "absolute", "relative", "absolute_or_relative"]
+USER_FACING_JUDGE_TYPE_LIST = [
+    "normal", "absolute", "relative", "absolute_or_relative"]
+
 
 def main(prog, args) -> bool:
     parser = argparse.ArgumentParser(
@@ -276,7 +278,8 @@ def main(prog, args) -> bool:
 
     parser.add_argument('--judge-type', '-j',
                         help='error type'
-                             ' must be one of [{}]'.format(", ".join(USER_FACING_JUDGE_TYPE_LIST)),
+                             ' must be one of [{}]'.format(
+                                 ", ".join(USER_FACING_JUDGE_TYPE_LIST)),
                         type=str,
                         default=None)
 
@@ -320,10 +323,12 @@ def main(prog, args) -> bool:
                                     diff=user_input_error_value or EPS)
     elif user_input_error_value is not None:
         assert judge_method.judge_type == JudgeType.Normal
-        logger.warn("error_value {} is ignored because this is normal judge".format(user_input_error_value))
+        logger.warn("error_value {} is ignored because this is normal judge".format(
+            user_input_error_value))
 
     if isinstance(judge_method, DecimalJudge):
-        logger.info("Decimal number judge is enabled. type={}, diff={}".format(judge_method.judge_type.value, judge_method.diff))
+        logger.info("Decimal number judge is enabled. type={}, diff={}".format(
+            judge_method.judge_type.value, judge_method.diff))
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
