@@ -15,5 +15,6 @@ def main():
     ${input_part}
     solve(${actual_arguments})
 
+
 if __name__ == '__main__':
     main()

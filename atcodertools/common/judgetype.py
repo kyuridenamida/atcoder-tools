@@ -53,12 +53,17 @@ class DecimalJudge(Judge):
         self.error_type = error_type
         self.diff = diff
 
-    def __verify_sub(self, output, expected: float) -> bool:
+    def _verify_sub(self, output: float, expected: float) -> bool:
         if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(expected - output) <= self.diff:
             return True
-        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and abs((expected - output) / expected) <= self.diff:
+        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(output, expected):
             return True
         return False
+
+    def _calc_absolute(self, output: float, expected: float) -> bool:
+        if expected == 0:
+            return expected == output
+        return abs((expected - output) / expected) <= self.diff
 
     def verify(self, output, expected) -> bool:
         output = output.strip().split()
@@ -66,7 +71,7 @@ class DecimalJudge(Judge):
         if len(output) != len(expected):
             return False
         for i in range(0, len(output)):
-            if not self.__verify_sub(float(output[i]), float(expected[i])):
+            if not self._verify_sub(float(output[i]), float(expected[i])):
                 return False
         return True
 
