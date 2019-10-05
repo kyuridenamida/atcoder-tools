@@ -95,8 +95,10 @@ class TestConstantsPrediction(unittest.TestCase):
             <p>出力は、ジャッジの出力との絶対誤差または相対誤差が <var>10^{-5}</var> 以下のとき正解と判定される。</p>
             </section>""")
         self.assertEqual(0.00001, judge_method.to_dict()["diff"])
-        self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
-        self.assertEqual(ErrorType.AbsoluteOrRelative.value, judge_method.to_dict()["error_type"])
+        self.assertEqual(JudgeType.Decimal.value,
+                         judge_method.to_dict()["judge_type"])
+        self.assertEqual(ErrorType.AbsoluteOrRelative.value,
+                         judge_method.to_dict()["error_type"])
 
     def test_absolute_error_judge_method_case(self):
         judge_method = predict_judge_method(
@@ -110,8 +112,10 @@ class TestConstantsPrediction(unittest.TestCase):
                 </section>
             </div>""")
         self.assertEqual(0.01, judge_method.to_dict()["diff"])
-        self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
-        self.assertEqual(ErrorType.Absolute.value, judge_method.to_dict()["error_type"])
+        self.assertEqual(JudgeType.Decimal.value,
+                         judge_method.to_dict()["judge_type"])
+        self.assertEqual(ErrorType.Absolute.value,
+                         judge_method.to_dict()["error_type"])
 
     def test_relative_error_judge_method_case(self):
         judge_method = predict_judge_method(
@@ -124,8 +128,10 @@ class TestConstantsPrediction(unittest.TestCase):
             </div>
             </div>""")
         self.assertEqual(0.000000001, judge_method.to_dict()["diff"])
-        self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
-        self.assertEqual(ErrorType.Relative.value, judge_method.to_dict()["error_type"])
+        self.assertEqual(JudgeType.Decimal.value,
+                         judge_method.to_dict()["judge_type"])
+        self.assertEqual(ErrorType.Relative.value,
+                         judge_method.to_dict()["error_type"])
 
     def test_normal_judge_method_case(self):
         judge_method = predict_judge_method(
@@ -136,7 +142,8 @@ class TestConstantsPrediction(unittest.TestCase):
             </section>
             </div>
             </div>""")
-        self.assertEqual(JudgeType.Normal.value, judge_method.to_dict()["judge_type"])
+        self.assertEqual(JudgeType.Normal.value,
+                         judge_method.to_dict()["judge_type"])
 
     def test_judge_method_prediction_fails_with_multiple_cands(self):
         try:
@@ -161,7 +168,8 @@ class TestConstantsPrediction(unittest.TestCase):
             <p>ただし、<var>p</var> に <var>10^{-6}</var> 以下の相対誤差が生じても <var>x</var> は変わらないことが保証されるものとします。</p>
             </section>
             </div>""")
-        self.assertEqual(JudgeType.Normal.value, judge_method.to_dict()["judge_type"])
+        self.assertEqual(JudgeType.Normal.value,
+                         judge_method.to_dict()["judge_type"])
 
     def _load(self, html_path):
         with open(os.path.join(self.test_dir, html_path), 'r') as f:

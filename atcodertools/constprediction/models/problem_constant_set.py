@@ -1,4 +1,4 @@
-from atcodertools.common.judgetype import JudgeType, Judge
+from atcodertools.common.judgetype import Judge
 
 
 class ProblemConstantSet:
