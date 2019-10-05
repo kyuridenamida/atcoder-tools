@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 from atcodertools.common.logging import logger
+from atcodertools.common.judgetype import JudgeType, ErrorType, NormalJudge, DecimalJudge
 
 
 class YesNoPredictionFailedError(Exception):
@@ -18,16 +19,38 @@ class MultipleModCandidatesError(Exception):
         self.cands = cands
 
 
+class MultipleDecimalCandidatesError(Exception):
+
+    def __init__(self, cands):
+        self.cands = cands
+
+
 MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
+DECIMAL_ANCHORS = ["誤差", " error "]
 
 MOD_STRATEGY_RE_LIST = [
     re.compile("([0-9]+).?.?.?で割った"),
     re.compile("modu?l?o?[^0-9]?[^0-9]?[^0-9]?([0-9]+)")
 ]
 
+DECIMAL_STRATEGY_RE_LIST_KEYWORD = [
+    re.compile("(?:絶対|相対)誤差"),
+    re.compile("(?:absolute|relative)")
+]
+DECIMAL_STRATEGY_RE_LIST_VAL = [
+    re.compile("10\^(-[0-9]+)"),
+]
+
 
 def is_mod_context(sentence):
     for kw in MOD_ANCHORS:
+        if kw in sentence:
+            return True
+    return False
+
+
+def is_decimal_context(sentence):
+    for kw in DECIMAL_ANCHORS:
         if kw in sentence:
             return True
     return False
@@ -83,6 +106,57 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     return yes_str, no_str
 
 
+def predict_judge_type(html: str) -> Optional[JudgeType]:
+    def normalize(sentence):
+        return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").lower().strip()
+
+    soup = BeautifulSoup(html, "html.parser")
+    sentences = soup.get_text().split("\n")
+    sentences = [normalize(s) for s in sentences if is_decimal_context(s)]
+
+    decimal_keyword_cands = set()
+    decimal_val_cands = set()
+
+    if len(sentences) > 0:  # Decimal
+        is_absolute = False
+        is_relative = False
+        for s in sentences:
+            for regexp in DECIMAL_STRATEGY_RE_LIST_KEYWORD:
+                r = regexp.findall(s)
+                for t in r:
+                    if t == "絶対誤差" or t == "absolute":
+                        is_absolute = True
+                    elif t == "相対誤差" or t == "relative":
+                        is_relative = True
+                    decimal_keyword_cands.add(t)
+        for s in sentences:
+            for regexp in DECIMAL_STRATEGY_RE_LIST_VAL:
+                r = regexp.findall(s)
+                for t in r:
+                    decimal_val_cands.add(int(t))
+
+        if len(decimal_val_cands) == 0:
+            return None
+
+        if len(decimal_val_cands) == 1:
+            if is_absolute:
+                if is_relative:
+                    error_type = ErrorType.AbsoluteOrRelative
+                else:
+                    error_type = ErrorType.Absolute
+            else:
+                if is_relative:
+                    error_type = ErrorType.Relative
+                else:
+                    assert(False)
+
+            return DecimalJudge(error_type, 10.0**(int(list(decimal_val_cands)[0])))
+
+        raise MultipleDecimalCandidatesError(decimal_val_cands)
+
+    return NormalJudge()
+
+
 def predict_constants(html: str) -> ProblemConstantSet:
     try:
         yes_str, no_str = predict_yes_no(html)
@@ -96,4 +170,11 @@ def predict_constants(html: str) -> ProblemConstantSet:
                        "two or more candidates {} are detected as modulo values".format(e.cands))
         mod = None
 
-    return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str)
+    try:
+        judge_type = predict_judge_type(html)
+    except MultipleModCandidatesError as e:
+        logger.warning("decimal prediction failed -- "
+                       "two or more candidates {} are detected as decimal values".format(e.cands))
+        judge_type = NormalJudge()
+
+    return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str, judge_type=judge_type)

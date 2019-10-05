@@ -1,5 +1,8 @@
 {
  "code_filename": "main.cpp",
+ "judge": {
+  "judge_type": "normal"
+ },
  "lang": "cpp",
  "problem": {
   "alphabet": "D",

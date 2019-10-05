@@ -21,8 +21,10 @@ class ExecResult:
         else:
             self.elapsed_ms = None
 
-    def is_correct_output(self, answer_text):
-        return self.status == ExecStatus.NORMAL and answer_text == self.output
+    def is_correct_output(self, answer_text, judge_type):
+        if self.status != ExecStatus.NORMAL:
+            return False
+        return judge_type.verify(self.output, answer_text)
 
     def has_stderr(self):
         return len(self.stderr) > 0

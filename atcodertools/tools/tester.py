@@ -14,6 +14,7 @@ from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
+from atcodertools.common.judgetype import JudgeType, ErrorType, NormalJudge, DecimalJudge
 
 
 class NoExecutableFileError(Exception):
@@ -97,7 +98,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
-def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, knock_out: bool = False,
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, judge_type=NormalJudge(), knock_out: bool = False,
                     skip_io_on_success: bool = False) -> TestSummary:
     success_count = 0
     has_error_output = False
@@ -110,7 +111,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
         with open(out_sample_file, 'r') as f:
             answer_text = f.read()
 
-        is_correct = exec_res.is_correct_output(answer_text)
+        is_correct = exec_res.is_correct_output(answer_text, judge_type)
         has_error_output = has_error_output or exec_res.has_stderr()
 
         if is_correct:
@@ -155,7 +156,7 @@ def validate_sample_pair(in_sample_file, out_sample_file):
         raise IrregularSampleFileError
 
 
-def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int) -> bool:
+def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int, judge_type) -> bool:
     def single_or_none(lst: List):
         if len(lst) == 1:
             return lst[0]
@@ -176,13 +177,13 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     validate_sample_pair(in_sample_file, out_sample_file)
 
     test_summary = run_for_samples(
-        exec_file, [(in_sample_file, out_sample_file)], timeout_sec)
+        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_type)
 
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
 
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
-                  skip_stderr_on_success: bool) -> bool:
+                  skip_stderr_on_success: bool, judge_type) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
         logger.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
@@ -195,7 +196,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         samples.append((in_sample_file, out_sample_file))
 
     test_summary = run_for_samples(
-        exec_file, samples, timeout_sec, knock_out, skip_stderr_on_success)
+        exec_file, samples, timeout_sec, judge_type, knock_out, skip_stderr_on_success)
 
     if len(samples) == 0:
         print("No test cases")
@@ -220,17 +221,17 @@ DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
 DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
 
 
-def get_sample_patterns(metadata_file: str) -> Tuple[str, str]:
+def get_sample_patterns_and_judge_type(metadata_file: str) -> Tuple[str, str, JudgeType]:
     try:
         metadata = Metadata.load_from(metadata_file)
-        return metadata.sample_in_pattern, metadata.sample_out_pattern
+        return metadata.sample_in_pattern, metadata.sample_out_pattern, metadata.judge_type
     except IOError:
         logger.warning("{} is not found. Assume the example file name patterns are {} and {}".format(
             metadata_file,
             DEFAULT_IN_EXAMPLE_PATTERN,
             DEFAULT_OUT_EXAMPLE_PATTERN)
         )
-        return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN
+        return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN, NormalJudge()
 
 
 def main(prog, args) -> bool:
@@ -267,23 +268,38 @@ def main(prog, args) -> bool:
                         action='store_true',
                         default=False)
 
+    parser.add_argument('--enable-decimal-judge', '-dec',
+                        help='Enable decimal judge'
+                             ' [Default] False,',
+                        type=float,
+                        default=None)
+
+    parser.add_argument('--error-type', '-etype',
+                        help='error type'
+                             'must be one of absolute, relative, absolute_or_relative',
+                        type=str,
+                        default="absolute_and_relative")
+
     args = parser.parse_args(args)
     exec_file = args.exec or infer_exec_file(
         glob.glob(os.path.join(args.dir, '*')))
 
     metadata_file = os.path.join(args.dir, "metadata.json")
-    in_ex_pattern, out_ex_pattern = get_sample_patterns(metadata_file)
+    in_ex_pattern, out_ex_pattern, judge_type = get_sample_patterns_and_judge_type(
+        metadata_file)
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, in_ex_pattern)))
     out_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, out_ex_pattern)))
-
+    if args.enable_decimal_judge is not None:
+        judge_type = DecimalJudge(
+            ErrorType(args.error_type), args.enable_decimal_judge)
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
-                             args.skip_almost_ac_feedback)
+                             args.skip_almost_ac_feedback, judge_type)
     else:
-        return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num)
+        return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num, judge_type)
 
 
 if __name__ == "__main__":
