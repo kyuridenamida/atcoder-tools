@@ -6,6 +6,7 @@ import ProblemLink from "./ProblemLink";
 import Scrollable from "../../../common/Scrollable";
 import Language from "../../../models/Language";
 import LanguageTabs from '../../../common/LanguageTabs';
+import {judgeMethodToText} from "../../../models/JudgeMethod";
 
 interface ComponentProps {
     qualityResult: QualityResult
@@ -53,6 +54,8 @@ export default class Detail extends React.Component<ComponentProps, { activeLang
             ["MOD", qualityResult.modulo.error],
             ["NO", qualityResult.no_str.error],
             ["YES", qualityResult.yes_str.error],
+            ["JUDGE", qualityResult.judge_method.error],
+
         ].map(([text, error]: [string, string | null]) => {
             if (error === null) {
                 return null;
@@ -95,6 +98,7 @@ export default class Detail extends React.Component<ComponentProps, { activeLang
                         ["MOD", qualityResult.modulo.value],
                         ["NO", qualityResult.no_str.value],
                         ["YES", qualityResult.yes_str.value],
+                        ["JUDGE METHOD", qualityResult.judge_method.value ? judgeMethodToText(qualityResult.judge_method.value) : null],
                     ].map(([text, value]: [string, string | null]) => {
                         return <tr key={text}>
                             <th scope="row">{this.renderLabel(text, value !== null)}</th>

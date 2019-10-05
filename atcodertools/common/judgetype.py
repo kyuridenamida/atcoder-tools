@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
+from abc import ABCMeta, abstractmethod
 from enum import Enum
 
 
@@ -16,8 +16,13 @@ class ErrorType(Enum):
     AbsoluteOrRelative = "absolute_or_relative"
 
 
-class Judge:
+class Judge(metaclass=ABCMeta):
+    @abstractmethod
     def verify(self, output, expected):
+        pass
+
+    @abstractmethod
+    def to_dict(self):
         pass
 
 

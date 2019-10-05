@@ -11,6 +11,7 @@ import Scrollable from "../../../common/Scrollable";
 import qualityResultDefinition from 'src/auto_generated/qualityResultDefinition.js';
 import Hidable from "../../../common/Hidable";
 import Code from "./Code";
+import {judgeMethodToText} from "../../../models/JudgeMethod";
 
 
 const filteredQualityResultList = (filterMethod) => {
@@ -68,7 +69,7 @@ export default class Summary extends React.Component<{}, {
     render() {
         const {detailedSearchMode} = this.state;
 
-        const renderValueOrError = ({value}, withOkMark = true) => {
+        const renderValueOrError = ({value}, withOkMark = true, renderingJudgeMethod = false) => {
             if (value.error) {
                 if( value.error === "Skipped"){
                     return <span>
@@ -87,10 +88,14 @@ export default class Summary extends React.Component<{}, {
             return <span>
                 {withOkMark && <FontAwesomeIcon icon="check" color="green"/>}
                 {' '}
-                {value.value || ""}
+                {renderingJudgeMethod ?
+                    (value.value ? judgeMethodToText(value.value) : "")
+                    : (value.value || "")
+                }
                 </span>
         };
         const renderValueOrErrorWithoutOkMark = (props) => renderValueOrError(props, false);
+        const renderValueOrErrorWithoutOkMarkForJudgeMethod = (props) => renderValueOrError(props, false, true);
 
         const columns = [
             {
@@ -145,6 +150,12 @@ export default class Summary extends React.Component<{}, {
                         accessor: 'no_str',
                         Cell: renderValueOrErrorWithoutOkMark,
                         sortMethod: this.sortForErrorAndValue,
+                    }, {
+                        show: detailedSearchMode,
+                        Header: 'JUDGE METHOD',
+                        accessor: 'judge_method',
+                        Cell: renderValueOrErrorWithoutOkMarkForJudgeMethod,
+                        sortMethod: this.sortForErrorAndValueForJudgeMethod,
                     },
                 ]
             }];
@@ -296,6 +307,15 @@ export default class Summary extends React.Component<{}, {
         ) {
             return this.getCellTextWithErrorAndValue(value);
         }
+        if (column.id === "judge_method") {
+            if (value.value) {
+                return judgeMethodToText(value.value)
+            }
+
+            if (value.error) {
+                return String(value.error);
+            }
+        }
         return String(value || "");
     }
 
@@ -306,6 +326,16 @@ export default class Summary extends React.Component<{}, {
     private sortForErrorAndValue = (a, b, desc) => {
         a = this.getCellTextWithErrorAndValue(a);
         b = this.getCellTextWithErrorAndValue(b);
+        return this.compare(a, b);
+    };
+
+    private sortForErrorAndValueForJudgeMethod = (a, b, desc) => {
+        a = a.value ? judgeMethodToText(a.value) : String(a.error);
+        b = b.value ? judgeMethodToText(b.value) : String(b.error);
+        return this.compare(a, b);
+    };
+
+    private compare = (a? : string | number | null, b? : string | number | null) => {
         a = a === null || a === undefined ? '' : a;
         b = b === null || b === undefined ? '' : b;
 
@@ -318,5 +348,5 @@ export default class Summary extends React.Component<{}, {
             return -1;
         }
         return 0
-    };
+    }
 }

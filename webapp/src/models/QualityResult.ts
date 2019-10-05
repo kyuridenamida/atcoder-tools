@@ -1,4 +1,5 @@
 import Problem from './Problem'
+import JudgeMethod from "./JudgeMethod";
 
 export default interface QualityResult {
     problem: Problem,
@@ -22,6 +23,10 @@ export default interface QualityResult {
     no_str: {
         error: string | null
         value: string | null
+    },
+    judge_method: {
+        error: string | null
+        value: JudgeMethod | null
     },
     codes: {
         [lang: string] : string,

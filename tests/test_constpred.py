@@ -3,8 +3,10 @@ import tempfile
 import unittest
 from logging import getLogger, DEBUG, Formatter, StreamHandler
 
+from atcodertools.common.judgetype import JudgeType, ErrorType
 from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, \
-    MultipleModCandidatesError, predict_yes_no, YesNoPredictionFailedError
+    predict_yes_no, YesNoPredictionFailedError, predict_judge_method, \
+    MultipleDecimalCandidatesError
 from tests.utils.gzip_controller import make_html_data_controller
 
 ANSWER_FILE = os.path.join(
@@ -60,14 +62,6 @@ class TestConstantsPrediction(unittest.TestCase):
         except YesNoPredictionFailedError:
             pass
 
-    def test_modulo_prediction_fails_with_multi_mod_cands(self):
-        try:
-            predict_modulo(
-                "<p>101で割った余りを出力してください。もしくは n modulo 103を出力してください。</p>")
-            self.fail("Must not reach here")
-        except MultipleModCandidatesError:
-            pass
-
     def test_case_only_with_no_str(self):
         yes_str, no_str = predict_yes_no(self._load("agc001-D.html"))
         self.assertEqual(None, yes_str)
@@ -92,6 +86,82 @@ class TestConstantsPrediction(unittest.TestCase):
         yes_str, no_str = predict_yes_no(self._load("abc110-B.html"))
         self.assertEqual("War", yes_str)
         self.assertEqual("No War", no_str)
+
+    def test_relative_or_absolute_error_judge_type_case(self):
+        judge_method = predict_judge_method(
+            """
+            <section>
+            <h3>出力</h3><p><var>\\frac{1}{\\frac{1}{A_1} + \ldots + \\frac{1}{A_N}}</var> の値を表す小数 (または整数) を出力せよ。</p>
+            <p>出力は、ジャッジの出力との絶対誤差または相対誤差が <var>10^{-5}</var> 以下のとき正解と判定される。</p>
+            </section>""")
+        self.assertEqual(0.00001, judge_method.to_dict()["diff"])
+        self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
+        self.assertEqual(ErrorType.AbsoluteOrRelative.value, judge_method.to_dict()["error_type"])
+
+    def test_absolute_error_judge_type_case(self):
+        judge_method = predict_judge_method(
+            """
+            <div class="part">
+                <h3>出力</h3>
+                <section>
+                    入力に基づいて逆算した 体重 <var>[kg]</var> を一行に出力せよ。<br />
+                    出力は絶対誤差が <var>10^{−2}</var> 以下であれば許容される。<br />
+                    なお、出力の最後には改行を入れること。
+                </section>
+            </div>""")
+        self.assertEqual(0.01, judge_method.to_dict()["diff"])
+        self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
+        self.assertEqual(ErrorType.Absolute.value, judge_method.to_dict()["error_type"])
+
+    def test_relative_error_judge_type_case(self):
+        judge_method = predict_judge_method(
+            """
+            <div class="part">
+            <section>
+            <h3>出力</h3><p>すべての寿司が無くなるまでの操作回数の期待値を出力せよ。
+            相対誤差が <var>10^{-9}</var> 以下ならば正解となる。</p>
+            </section>
+            </div>
+            </div>""")
+        self.assertEqual(0.000000001, judge_method.to_dict()["diff"])
+        self.assertEqual(JudgeType.Decimal.value, judge_method.to_dict()["judge_type"])
+        self.assertEqual(ErrorType.Relative.value, judge_method.to_dict()["error_type"])
+
+    def test_normal_judge_case(self):
+        judge_method = predict_judge_method(
+            """
+            <div class="part">
+            <section>
+            <h3>出力</h3><p><var>N!</var> の正の約数の個数を <var>10^9+7</var> で割った余りを出力せよ。</p>
+            </section>
+            </div>
+            </div>""")
+        self.assertEqual(JudgeType.Normal.value, judge_method.to_dict()["judge_type"])
+
+    def test_judge_type_prediction_fails_with_multiple_cands(self):
+        try:
+            predict_judge_method(
+                "<var>10^{-6}</var> もしくは <var>10^{-5}</var>以下の相対誤差")
+            self.fail("Must not reach here")
+        except MultipleDecimalCandidatesError:
+            pass
+
+    @unittest.expectedFailure
+    def test_tricky_judge_type_case(self):
+        # This test exists in order to demonstrate the current wrong behavior that detects unrelated mention wrongly.
+        # Please remove @unittest.expectedFailure when predict_judge_type() behaves
+        # correctly.
+        judge_method = predict_judge_method(
+            """
+            <div class="part">
+            <section>
+            <h3>問題文</h3><p><var>N</var> 人のクラスがあり、色 <var>1,2,...,M</var> の中から <var>1</var> つの色を選んでテーマカラーを決めることとなりました。</p>
+            <p>それぞれの人が同確率でどれかの色 <var>1</var> つに投票するとき、色 <var>i(1 \leq i \leq M)</var> に <var>r_i</var> 票集まる確率を <var>p</var> とします。</p>
+            <p><var>p \geq 10^{-x}</var> を満たす最小の整数 <var>x</var> を求めてください。</p>
+            <p>ただし、<var>p</var> に <var>10^{-6}</var> 以下の相対誤差が生じても <var>x</var> は変わらないことが保証されるものとします。</p>
+            </section>
+            </div>""")
+        self.assertEqual(JudgeType.Normal.value, judge_method.to_dict()["judge_type"])
 
     def _load(self, html_path):
         with open(os.path.join(self.test_dir, html_path), 'r') as f:
