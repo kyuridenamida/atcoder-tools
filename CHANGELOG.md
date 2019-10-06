@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.1.6 / 2019-10-06
+
+- [#157](https://github.com/kyuridenamida/atcoder-tools/pull/157) Support decimal number judge
+    - Decimal number judge and the error value for the judge are automatically detected by analyzing the problem statement.
+    - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution! This is a very useful functionality.
+- [#153](https://github.com/kyuridenamida/atcoder-tools/pull/153) Support C#
+    - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution again!
+- [#159](https://github.com/kyuridenamida/atcoder-tools/pull/159) "Show Version" functionality on atcoder-tools command
+
 ## 1.1.5 / 2019-08-20
 
 - [#140](https://github.com/kyuridenamida/atcoder-tools/pull/140) Make example input / output names configurable from EtcConfig

@@ -328,7 +328,7 @@ def main(prog, args) -> bool:
 
     if isinstance(judge_method, DecimalJudge):
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
-            judge_method.judge_type.value, judge_method.diff))
+            judge_method.error_type.value, judge_method.diff))
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
