@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from atcodertools.common.judgetype import JudgeType
-=======
 from atcodertools.common.judgetype import Judge
->>>>>>> kyuri/master
 
 
 class ProblemConstantSet:
