@@ -4,6 +4,8 @@ import sys
 import os
 
 from colorama import Fore
+
+from atcodertools.tools.tester import USER_FACING_JUDGE_TYPE_LIST, DEFAULT_EPS
 from atcodertools.tools.utils import with_color
 
 from atcodertools.client.atcoder import AtCoderClient, LoginError
@@ -52,6 +54,19 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                              " the safety by this option in order to submit codes twice or more.",
                         default=False)
 
+    parser.add_argument('--judge-type', '-j',
+                        help='error type'
+                             ' must be one of [{}]'.format(
+                            ", ".join(USER_FACING_JUDGE_TYPE_LIST)),
+                        type=str,
+                        default=None)
+
+    parser.add_argument('--error-value', '-v',
+                        help='error value for decimal number judge:'
+                             ' [Default] ' + str(DEFAULT_EPS),
+                        type=float,
+                        default=None)
+
     args = parser.parse_args(args)
 
     metadata_file = os.path.join(args.dir, "metadata.json")
@@ -79,6 +94,10 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
         tester_args += ["-d", args.dir]
     if args.timeout:
         tester_args += ["-t", str(args.timeout)]
+    if args.judge_type is not None:
+        tester_args += ["-j", str(args.judge_type)]
+    if args.error_value is not None:
+        tester_args += ["-v", str(args.error_value)]
 
     if args.force or tester.main("", tester_args):
         submissions = client.download_submission_list(metadata.problem.contest)
