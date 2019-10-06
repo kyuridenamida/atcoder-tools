@@ -30,33 +30,33 @@ class TestTester(unittest.TestCase):
         test_dir = os.path.join(
             RESOURCE_DIR, "test_run_single_test_decimal_addition")
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute_or_relative"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "absolute_or_relative"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "--judge-type", "absolute_or_relative"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "absolute"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "absolute"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "relative"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "relative"]))
         self.assertFalse(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "relative"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
 
     def test_run_single_test_decimal_multiplication(self):
         test_dir = os.path.join(
             RESOURCE_DIR, "test_run_single_test_decimal_multiplication")
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute_or_relative"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "absolute_or_relative"]))
+            '', ['-d', test_dir, "-n", "2", "--error-value", "0.01", "-j", "absolute_or_relative"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "absolute"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute"]))
         self.assertFalse(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "absolute"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "absolute"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-dec", "0.01", "-etype", "relative"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "relative"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-dec", "0.01", "-etype", "relative"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
