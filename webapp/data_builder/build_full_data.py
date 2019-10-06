@@ -83,7 +83,6 @@ class QualityResult:
         self.judge_method = None
         self.judge_method_error = None
 
-
     def build_dict(self):
         d = {}
 
@@ -165,7 +164,8 @@ def do_predict_constants(result: QualityResult):
 
     judge_method = None
     try:
-        judge_method = predict_judge_method(result.problem_content.original_html)
+        judge_method = predict_judge_method(
+            result.problem_content.original_html)
         if judge_method is not None:
             result.judge_method = judge_method.to_dict()
 

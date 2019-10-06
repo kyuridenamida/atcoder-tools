@@ -320,7 +320,7 @@ def main(prog, args) -> bool:
                                     diff=user_input_error_value or judge_method.diff)
     elif user_input_decimal_error_type is not None:
         judge_method = DecimalJudge(error_type=user_input_decimal_error_type,
-                                    diff=user_input_error_value or EPS)
+                                    diff=user_input_error_value or DEFAULT_EPS)
     elif user_input_error_value is not None:
         assert judge_method.judge_type == JudgeType.Normal
         logger.warn("error_value {} is ignored because this is normal judge".format(
