@@ -9,7 +9,7 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 このツールには次のような機能があります。
 - AtCoderへのログイン，入出力例データなどの抽出
 - 枝刈り探索による高精度・高速な入力フォーマット解析 (ARC、ABC、AGCについては約9割ほど)
-- 問題文中に含まれるMOD値やYES/NO文字列等の定数値抽出
+- 問題文中に含まれるMOD値、YES/NO文字列、誤差ジャッジのための誤差値等の定数値抽出
 - サンプルのローカルテスト機能
     - 誤差ジャッジに対応 by [@chaemon](https://github.com/chaemon/)
 - コード提出機能
@@ -56,9 +56,10 @@ https://kyuridenamida.github.io/atcoder-tools/
 過去のユーザーの皆様には`AccountInformation.py`を削除して頂くようお願い申し上げます。*
 
 
-- `atcoder-tools gen {contest_id}` コンテスト環境を用意するコマンド
-- `atcoder-tools test` カレント・ディレクトリ上に実行ファイルと入出力(in_\*.txt, out_\*.txt)がある状態で実行するとローカルテストを行う
+- `atcoder-tools gen {contest_id}` コンテスト環境を用意します。
+- `atcoder-tools test` カレント・ディレクトリ上に実行ファイルと入出力(in_\*.txt, out_\*.txt)がある状態で実行するとローカルテストを行います。
 - `atcoder-tools submit` カレント・ディレクトリ上で実行すると対応する問題がサンプルに通る場合ソースコードを提出します。既にAtCoder上にその問題に対する提出がある場合、`-u`を指定しないと提出できないようになっています。
+- `atcoder-tools version` 現在の atcoder-tools のバージョンを出力します。
 
 `atcoder-tools gen --help`で`atcoder-tools gen`の引数の詳細について確認することができます。
 
