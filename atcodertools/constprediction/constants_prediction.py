@@ -3,10 +3,10 @@ from typing import Tuple, Optional
 
 from bs4 import BeautifulSoup
 
-from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
+from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, Judge
 from atcodertools.common.logging import logger
-from atcodertools.common.judgetype import JudgeType, ErrorType, NormalJudge, DecimalJudge
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 
 
 class YesNoPredictionFailedError(Exception):
@@ -106,9 +106,10 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     return yes_str, no_str
 
 
-def predict_judge_type(html: str) -> Optional[JudgeType]:
+def predict_judge_method(html: str) -> Optional[Judge]:
     def normalize(sentence):
-        return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").lower().strip()
+        return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
+            "−", "-").lower().strip()
 
     soup = BeautifulSoup(html, "html.parser")
     sentences = soup.get_text().split("\n")
@@ -139,16 +140,13 @@ def predict_judge_type(html: str) -> Optional[JudgeType]:
             return None
 
         if len(decimal_val_cands) == 1:
-            if is_absolute:
-                if is_relative:
-                    error_type = ErrorType.AbsoluteOrRelative
-                else:
-                    error_type = ErrorType.Absolute
+            if is_absolute and is_relative:
+                error_type = ErrorType.AbsoluteOrRelative
+            elif is_absolute:
+                error_type = ErrorType.Absolute
             else:
-                if is_relative:
-                    error_type = ErrorType.Relative
-                else:
-                    assert(False)
+                assert is_relative
+                error_type = ErrorType.Relative
 
             return DecimalJudge(error_type, 10.0**(int(list(decimal_val_cands)[0])))
 
@@ -171,10 +169,10 @@ def predict_constants(html: str) -> ProblemConstantSet:
         mod = None
 
     try:
-        judge_type = predict_judge_type(html)
+        judge = predict_judge_method(html)
     except MultipleModCandidatesError as e:
         logger.warning("decimal prediction failed -- "
                        "two or more candidates {} are detected as decimal values".format(e.cands))
-        judge_type = NormalJudge()
+        judge = NormalJudge()
 
-    return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str, judge_type=judge_type)
+    return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str, judge_method=judge)

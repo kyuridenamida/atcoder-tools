@@ -12,8 +12,8 @@ from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError, ProblemContent
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.common.language import RUST, CPP, JAVA, PYTHON, DLANG, NIM
-from atcodertools.constprediction.constants_prediction import predict_modulo, predict_yes_no
+from atcodertools.common.language import RUST, CPP, JAVA, PYTHON, DLANG, NIM, CSHARP
+from atcodertools.constprediction.constants_prediction import predict_modulo, predict_yes_no, predict_judge_method
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format as predict
@@ -80,6 +80,8 @@ class QualityResult:
         self.no_str_error = None
         self.codes = {}
         self.constant_set = None
+        self.judge_method = None
+        self.judge_method_error = None
 
     def build_dict(self):
         d = {}
@@ -107,7 +109,10 @@ class QualityResult:
             "error": norm_error(self.no_str_error),
             "value": self.no_str
         }
-
+        d["judge_method"] = {
+            "error": norm_error(self.judge_method_error),
+            "value": self.judge_method
+        }
         d["codes"] = self.codes
         return d
 
@@ -157,10 +162,21 @@ def do_predict_constants(result: QualityResult):
     result.yes_str, result.no_str = predict_yes_no(
         result.problem_content.original_html)
 
+    judge_method = None
+    try:
+        judge_method = predict_judge_method(
+            result.problem_content.original_html)
+        if judge_method is not None:
+            result.judge_method = judge_method.to_dict()
+
+    except Exception as e:
+        result.judge_method_error = e
+
     result.constant_set = ProblemConstantSet(
         mod=result.modulo,
         yes_str=result.yes_str,
-        no_str=result.no_str
+        no_str=result.no_str,
+        judge_method=judge_method
     )
 
 
@@ -170,6 +186,7 @@ RUST_TEMPLATE = load_text_file(RUST.default_template_path)
 PYTHON_TEMPLATE = load_text_file(PYTHON.default_template_path)
 D_TEMPLATE = load_text_file(DLANG.default_template_path)
 NIM_TEMPLATE = load_text_file(NIM.default_template_path)
+CSHARP_TEMPLATE = load_text_file(CSHARP.default_template_path)
 
 
 def generate_code(result: QualityResult):
@@ -182,37 +199,43 @@ def generate_code(result: QualityResult):
         CPP_TEMPLATE,
         result_format,
         result.constant_set,
-        CodeStyleConfig()
+        CodeStyleConfig(lang=CPP.name)
     )))
     result.codes["java"] = JAVA.default_code_generator(CodeGenArgs(
         JAVA_TEMPLATE,
         result_format,
         result.constant_set,
-        CodeStyleConfig()
+        CodeStyleConfig(lang=JAVA.name)
     ))
     result.codes["rust"] = RUST.default_code_generator(CodeGenArgs(
         RUST_TEMPLATE,
         result_format,
         result.constant_set,
-        CodeStyleConfig()
+        CodeStyleConfig(lang=RUST.name)
     ))
     result.codes["python"] = PYTHON.default_code_generator(CodeGenArgs(
         PYTHON_TEMPLATE,
         result_format,
         result.constant_set,
-        CodeStyleConfig()
+        CodeStyleConfig(lang=PYTHON.name)
     ))
     result.codes["d"] = DLANG.default_code_generator(CodeGenArgs(
         D_TEMPLATE,
         result_format,
         result.constant_set,
-        CodeStyleConfig()
+        CodeStyleConfig(lang=DLANG.name)
     ))
     result.codes["nim"] = NIM.default_code_generator(CodeGenArgs(
         NIM_TEMPLATE,
         result_format,
         result.constant_set,
-        CodeStyleConfig()
+        CodeStyleConfig(lang=NIM.name)
+    ))
+    result.codes["csharp"] = CSHARP.default_code_generator(CodeGenArgs(
+        CSHARP_TEMPLATE,
+        result_format,
+        result.constant_set,
+        CodeStyleConfig(lang=CSHARP.name)
     ))
 
 

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from atcodertools.common.judgetype import JudgeType
+=======
+from atcodertools.common.judgetype import Judge
+>>>>>>> kyuri/master
 
 
 class ProblemConstantSet:
@@ -7,9 +11,9 @@ class ProblemConstantSet:
                  mod: int = None,
                  yes_str: str = None,
                  no_str: str = None,
-                 judge_type: JudgeType = None,
+                 judge_method: Judge = None,
                  ):
         self.mod = mod
         self.yes_str = yes_str
         self.no_str = no_str
-        self.judge_type = judge_type
+        self.judge_method = judge_method

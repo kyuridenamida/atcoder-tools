@@ -10,11 +10,14 @@ from typing import List, Tuple
 
 from colorama import Fore
 
+from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, Judge, JudgeType
 from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
 from atcodertools.common.judgetype import JudgeType, ErrorType, NormalJudge, DecimalJudge
+
+DEFAULT_EPS = 0.000000001
 
 
 class NoExecutableFileError(Exception):
@@ -98,7 +101,12 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
+<<<<<<< HEAD
 def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, judge_type=NormalJudge(), knock_out: bool = False,
+=======
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int,
+                    judge_method: Judge = NormalJudge(), knock_out: bool = False,
+>>>>>>> kyuri/master
                     skip_io_on_success: bool = False) -> TestSummary:
     success_count = 0
     has_error_output = False
@@ -111,7 +119,11 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
         with open(out_sample_file, 'r') as f:
             answer_text = f.read()
 
+<<<<<<< HEAD
         is_correct = exec_res.is_correct_output(answer_text, judge_type)
+=======
+        is_correct = exec_res.is_correct_output(answer_text, judge_method)
+>>>>>>> kyuri/master
         has_error_output = has_error_output or exec_res.has_stderr()
 
         if is_correct:
@@ -156,7 +168,12 @@ def validate_sample_pair(in_sample_file, out_sample_file):
         raise IrregularSampleFileError
 
 
+<<<<<<< HEAD
 def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int, judge_type) -> bool:
+=======
+def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int,
+                    judge_method: Judge) -> bool:
+>>>>>>> kyuri/master
     def single_or_none(lst: List):
         if len(lst) == 1:
             return lst[0]
@@ -177,13 +194,21 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     validate_sample_pair(in_sample_file, out_sample_file)
 
     test_summary = run_for_samples(
+<<<<<<< HEAD
         exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_type)
+=======
+        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_method)
+>>>>>>> kyuri/master
 
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
 
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
+<<<<<<< HEAD
                   skip_stderr_on_success: bool, judge_type) -> bool:
+=======
+                  skip_stderr_on_success: bool, judge_method) -> bool:
+>>>>>>> kyuri/master
     if len(in_sample_file_list) != len(out_sample_file_list):
         logger.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
@@ -196,7 +221,11 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         samples.append((in_sample_file, out_sample_file))
 
     test_summary = run_for_samples(
+<<<<<<< HEAD
         exec_file, samples, timeout_sec, judge_type, knock_out, skip_stderr_on_success)
+=======
+        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success)
+>>>>>>> kyuri/master
 
     if len(samples) == 0:
         print("No test cases")
@@ -221,10 +250,17 @@ DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
 DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
 
 
+<<<<<<< HEAD
 def get_sample_patterns_and_judge_type(metadata_file: str) -> Tuple[str, str, JudgeType]:
     try:
         metadata = Metadata.load_from(metadata_file)
         return metadata.sample_in_pattern, metadata.sample_out_pattern, metadata.judge_type
+=======
+def get_sample_patterns_and_judge_method(metadata_file: str) -> Tuple[str, str, Judge]:
+    try:
+        metadata = Metadata.load_from(metadata_file)
+        return metadata.sample_in_pattern, metadata.sample_out_pattern, metadata.judge_method
+>>>>>>> kyuri/master
     except IOError:
         logger.warning("{} is not found. Assume the example file name patterns are {} and {}".format(
             metadata_file,
@@ -232,6 +268,13 @@ def get_sample_patterns_and_judge_type(metadata_file: str) -> Tuple[str, str, Ju
             DEFAULT_OUT_EXAMPLE_PATTERN)
         )
         return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN, NormalJudge()
+<<<<<<< HEAD
+=======
+
+
+USER_FACING_JUDGE_TYPE_LIST = [
+    "normal", "absolute", "relative", "absolute_or_relative"]
+>>>>>>> kyuri/master
 
 
 def main(prog, args) -> bool:
@@ -268,6 +311,7 @@ def main(prog, args) -> bool:
                         action='store_true',
                         default=False)
 
+<<<<<<< HEAD
     parser.add_argument('--enable-decimal-judge', '-dec',
                         help='Enable decimal judge'
                              ' [Default] False,',
@@ -279,19 +323,38 @@ def main(prog, args) -> bool:
                              'must be one of absolute, relative, absolute_or_relative',
                         type=str,
                         default="absolute_and_relative")
+=======
+    parser.add_argument('--judge-type', '-j',
+                        help='error type'
+                             ' must be one of [{}]'.format(
+                                 ', '.join(USER_FACING_JUDGE_TYPE_LIST)),
+                        type=str,
+                        default=None)
+
+    parser.add_argument('--error-value', '-v',
+                        help='error value for decimal number judge:'
+                             ' [Default] ' + str(DEFAULT_EPS),
+                        type=float,
+                        default=None)
+>>>>>>> kyuri/master
 
     args = parser.parse_args(args)
     exec_file = args.exec or infer_exec_file(
         glob.glob(os.path.join(args.dir, '*')))
 
     metadata_file = os.path.join(args.dir, "metadata.json")
+<<<<<<< HEAD
     in_ex_pattern, out_ex_pattern, judge_type = get_sample_patterns_and_judge_type(
+=======
+    in_ex_pattern, out_ex_pattern, judge_method = get_sample_patterns_and_judge_method(
+>>>>>>> kyuri/master
         metadata_file)
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, in_ex_pattern)))
     out_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, out_ex_pattern)))
+<<<<<<< HEAD
     if args.enable_decimal_judge is not None:
         judge_type = DecimalJudge(
             ErrorType(args.error_type), args.enable_decimal_judge)
@@ -300,6 +363,43 @@ def main(prog, args) -> bool:
                              args.skip_almost_ac_feedback, judge_type)
     else:
         return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num, judge_type)
+=======
+
+    user_input_decimal_error_type = None
+    if args.judge_type is not None:
+        if args.judge_type == "normal":
+            judge_method = NormalJudge()
+        elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
+            user_input_decimal_error_type = ErrorType(args.judge_type)
+        else:
+            logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
+                args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))
+            sys.exit(-1)
+
+    user_input_error_value = args.error_value
+
+    if isinstance(judge_method, DecimalJudge):
+        judge_method = DecimalJudge(error_type=user_input_decimal_error_type or judge_method.error_type,
+                                    diff=user_input_error_value or judge_method.diff)
+    elif user_input_decimal_error_type is not None:
+        judge_method = DecimalJudge(error_type=user_input_decimal_error_type,
+                                    diff=user_input_error_value or DEFAULT_EPS)
+    elif user_input_error_value is not None:
+        assert judge_method.judge_type == JudgeType.Normal
+        logger.warn("error_value {} is ignored because this is normal judge".format(
+            user_input_error_value))
+
+    if isinstance(judge_method, DecimalJudge):
+        logger.info("Decimal number judge is enabled. type={}, diff={}".format(
+            judge_method.error_type.value, judge_method.diff))
+
+    if args.num is None:
+        return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
+                             args.skip_almost_ac_feedback, judge_method)
+    else:
+        return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num,
+                               judge_method)
+>>>>>>> kyuri/master
 
 
 if __name__ == "__main__":

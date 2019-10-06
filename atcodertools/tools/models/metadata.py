@@ -1,19 +1,21 @@
 import json
 
 from atcodertools.client.models.problem import Problem
+from atcodertools.common.judgetype import NormalJudge, DecimalJudge, Judge
 from atcodertools.common.language import Language
 from atcodertools.common.judgetype import NormalJudge, DecimalJudge
 
 
 class Metadata:
 
-    def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str, lang: Language, judge_type=NormalJudge()):
+    def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str,
+                 lang: Language, judge_method: Judge = NormalJudge()):
         self.problem = problem
         self.code_filename = code_filename
         self.sample_in_pattern = sample_in_pattern
         self.sample_out_pattern = sample_out_pattern
         self.lang = lang
-        self.judge_type = judge_type
+        self.judge_method = judge_method
 
     def to_dict(self):
         return {
@@ -22,7 +24,7 @@ class Metadata:
             "sample_in_pattern": self.sample_in_pattern,
             "sample_out_pattern": self.sample_out_pattern,
             "lang": self.lang.name,
-            "judge": self.judge_type.to_dict(),
+            "judge": self.judge_method.to_dict(),
         }
 
     @classmethod
@@ -30,13 +32,13 @@ class Metadata:
         if "judge" in dic:
             judge_type = dic["judge"]["judge_type"]
             if judge_type == "normal":
-                judge = NormalJudge.from_dict(dic["judge"])
+                judge_method = NormalJudge.from_dict(dic["judge"])
             elif judge_type == "decimal":
-                judge = DecimalJudge.from_dict(dic["judge"])
+                judge_method = DecimalJudge.from_dict(dic["judge"])
             else:
                 raise Exception("invalid judge type")
         else:
-            judge = NormalJudge()
+            judge_method = NormalJudge()
 
         return Metadata(
             problem=Problem.from_dict(dic["problem"]),
@@ -44,7 +46,7 @@ class Metadata:
             sample_in_pattern=dic["sample_in_pattern"],
             sample_out_pattern=dic["sample_out_pattern"],
             lang=Language.from_name(dic["lang"]),
-            judge_type=judge
+            judge_method=judge_method
         )
 
     @classmethod
