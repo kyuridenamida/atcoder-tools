@@ -38,14 +38,14 @@ def notify_if_latest_version_found():
 def main():
     notify_if_latest_version_found()
 
-    if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen"):
+    if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "version"):
         print("Usage:")
         print("{} gen -- to generate workspace".format(sys.argv[0]))
         print("{} test -- to test codes in your workspace".format(sys.argv[0]))
         print(
             "{} submit -- to submit a code to the contest system".format(sys.argv[0]))
         print(
-            "{} codegen -- to generate a code for a given problem (stdout)".format(sys.argv[0]))
+            "{} version -- show atcoder-tools version".format(sys.argv[0]))
         sys.exit(-1)
 
     prog = " ".join(sys.argv[:2])
@@ -63,6 +63,5 @@ def main():
     if sys.argv[1] == "codegen":
         codegen_main(prog, args)
 
-
-if __name__ == '__main__':
-    main()
+    if sys.argv[1] == "version":
+        print(__version__)
