@@ -15,7 +15,6 @@ from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
-from atcodertools.common.judgetype import JudgeType, ErrorType, NormalJudge, DecimalJudge
 
 DEFAULT_EPS = 0.000000001
 

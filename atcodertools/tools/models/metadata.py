@@ -3,7 +3,6 @@ import json
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.judgetype import NormalJudge, DecimalJudge, Judge
 from atcodertools.common.language import Language
-from atcodertools.common.judgetype import NormalJudge, DecimalJudge
 
 
 class Metadata:
