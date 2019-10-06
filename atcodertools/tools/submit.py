@@ -56,8 +56,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
 
     parser.add_argument('--judge-type', '-j',
                         help='error type'
-                             ' must be one of [{}]'.format(
-                            ", ".join(USER_FACING_JUDGE_TYPE_LIST)),
+                             ' must be one of [{}]'.format(', '.join(USER_FACING_JUDGE_TYPE_LIST)),
                         type=str,
                         default=None)
 
