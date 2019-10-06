@@ -279,7 +279,7 @@ def main(prog, args) -> bool:
     parser.add_argument('--judge-type', '-j',
                         help='error type'
                              ' must be one of [{}]'.format(
-                                 ", ".join(USER_FACING_JUDGE_TYPE_LIST)),
+                                 ', '.join(USER_FACING_JUDGE_TYPE_LIST)),
                         type=str,
                         default=None)
 
