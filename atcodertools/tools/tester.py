@@ -10,9 +10,9 @@ from typing import List, Tuple
 
 from colorama import Fore
 
-from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, Judge, JudgeType
+from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, InteractiveJudge, Judge, JudgeType
 from atcodertools.common.logging import logger
-from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program
+from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program, run_interactive_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
 
@@ -46,14 +46,23 @@ def is_executable_file(file_name):
             and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
+def is_judge_file(file_name):
+    if platform.system() == "Windows":
+        return file_name == "./judge.exe"
+    else:
+        return file_name == "./judge"
+
+
 def infer_exec_file(filenames):
     exec_files = [name for name in sorted(
-        filenames) if is_executable_file(name)]
+        filenames) if is_executable_file(name) and not is_judge_file(name)]
 
     if len(exec_files) == 0:
         raise NoExecutableFileError
-
-    exec_file = exec_files[0]
+    if "./main" in exec_files:
+        exec_file = "./main"
+    else:
+        exec_file = exec_files[0]
     if len(exec_files) >= 2:
         logger.warning("{0}  {1}".format(
             "There're multiple executable files. '{exec_file}' is selected.".format(
@@ -106,16 +115,22 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
     success_count = 0
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
-        # Run program
-        exec_res = run_program(exec_file, in_sample_file,
-                               timeout_sec=timeout_sec)
+        if judge_method.judge_type == JudgeType.Interactive:
+            exec_res = run_interactive_program(exec_file, judge_method.judge_exec_file,
+                                               in_sample_file, out_sample_file,
+                                               timeout_sec=timeout_sec)
+            is_correct = exec_res.is_correct_output()
+        else:
+            # Run program
+            exec_res = run_program(exec_file, in_sample_file,
+                                   timeout_sec=timeout_sec)
 
-        # Output header
-        with open(out_sample_file, 'r') as f:
-            answer_text = f.read()
+            # Output header
+            with open(out_sample_file, 'r') as f:
+                answer_text = f.read()
 
-        is_correct = exec_res.is_correct_output(answer_text, judge_method)
-        has_error_output = has_error_output or exec_res.has_stderr()
+            is_correct = exec_res.is_correct_output(answer_text, judge_method)
+            has_error_output = has_error_output or exec_res.has_stderr()
 
         if is_correct:
             if exec_res.has_stderr():
@@ -308,6 +323,8 @@ def main(prog, args) -> bool:
             judge_method = NormalJudge()
         elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
             user_input_decimal_error_type = ErrorType(args.judge_type)
+        elif args.judge_type == "interactive":
+            judge_method = InteractiveJudge()
         else:
             logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
                 args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))

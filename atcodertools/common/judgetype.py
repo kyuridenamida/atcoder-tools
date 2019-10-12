@@ -7,6 +7,7 @@ from enum import Enum
 class JudgeType(Enum):
     Normal = "normal"
     Decimal = "decimal"
+    Interactive = "interactive"
     Other = "other"
 
 
@@ -88,6 +89,25 @@ class DecimalJudge(Judge):
             diff=dic["diff"]
         )
         r.error_type = ErrorType(dic["error_type"])
+        return r
+
+
+class InteractiveJudge(Judge):
+    def __init__(self):
+        self.judge_type = JudgeType.Interactive
+        self.judge_exec_file = "./judge"
+
+    def verify(self, output, expected):
+        return output == expected
+
+    def to_dict(self):
+        return {
+            "judge_type": self.judge_type.value,
+        }
+
+    @classmethod
+    def from_dict(cls, dic):
+        r = InteractiveJudge()
         return r
 
 

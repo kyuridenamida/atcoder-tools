@@ -110,11 +110,13 @@ class AtCoderClient(metaclass=Singleton):
             res.append(Problem(contest, alphabet, problem_id))
         return res
 
-    def download_problem_content(self, problem: Problem) -> ProblemContent:
+    def download_problem_content_raw_html(self, problem: Problem) -> str:
         resp = self._request(problem.get_url())
+        return resp.text
 
+    def download_problem_content(self, original_html: str) -> ProblemContent:
         try:
-            return ProblemContent.from_html(resp.text)
+            return ProblemContent.from_html(original_html)
         except (InputFormatDetectionError, SampleDetectionError) as e:
             raise e
 
