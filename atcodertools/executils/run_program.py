@@ -2,6 +2,7 @@ import subprocess
 import time
 from enum import Enum
 import threading
+import sys
 
 
 class ExecStatus(Enum):
@@ -107,10 +108,11 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
                 self.proc.stdin.close()
 
         main_thread = RunThread(
-            [exec_file], input_file=input_file, timeout_sec=timeout_sec)
+            [exec_file], input_file=input_file, timeout_sec=timeout_sec, stderr=sys.stderr)
         judge_thread = RunThread([exec_judge_file, input_file, output_file],
                                  stdin=main_thread.proc.stdout,
                                  stdout=main_thread.proc.stdin,
+                                 stderr=sys.stderr,
                                  timeout_sec=timeout_sec + 1)
 
         main_thread.start()
@@ -134,6 +136,10 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
             code = ExecStatus.RE
         elif main_thread.status == ExecStatus.TLE:
             code = ExecStatus.TLE
+        else:
+            print("Your judge program may be incorrect")
+            print(main_thread.status)
+            print(judge_thread.status)
 
         elapsed_sec += time.time()
         err = ""
