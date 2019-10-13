@@ -15,10 +15,6 @@ class JudgeStatus(Enum):
     WA = "WA"
 
 
-AC_TAG = "<<<AC>>>"
-WA_TAG = "<<<WA>>>"
-
-
 class ExecResult:
 
     def __init__(self, status: ExecStatus, output: str = None, stderr: str = None, elapsed_sec: float = None, judge_status: JudgeStatus = None):
@@ -71,107 +67,79 @@ def run_program(exec_file: str, input_file: str, timeout_sec: int, args=None, cu
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
 
 
-log = ""
-lock_log = threading.Lock()
-
-
 def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: str,
                             output_file, timeout_sec: int, args=None,
                             current_working_dir: str = None) -> ExecResult:
-    global log
     if args is None:
         args = []
     try:
         elapsed_sec = -time.time()
 
-        main_proc = subprocess.Popen([exec_file],
-                                     stdin=subprocess.PIPE,
-                                     stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE,
-                                     cwd=current_working_dir
-                                     )
-        judge_proc = subprocess.Popen([exec_judge_file, input_file, output_file],
-                                      stdin=subprocess.PIPE,
-                                      stdout=subprocess.PIPE,
-                                      stderr=subprocess.PIPE,
-                                      cwd=current_working_dir
-                                      )
-
-        log = "Input         Output\n"
-        log += "----------------------\n"
-
-        with open(input_file, "r") as f:
-            for line in f:
-                main_proc.stdin.write(line.encode())
-        main_proc.stdin.flush()
-
-        class PollMain(threading.Thread):
-            def __init__(self, main_proc, judge_proc):
+        class RunThread(threading.Thread):
+            def __init__(self, cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, input_file=None, timeout_sec=None):
                 threading.Thread.__init__(self)
-                self.main_proc = main_proc
-                self.judge_proc = judge_proc
-                pass
+                self.proc = subprocess.Popen(cmd + args,
+                                             stdin=stdin,
+                                             stdout=stdout,
+                                             stderr=stderr,
+                                             cwd=current_working_dir
+                                             )
+                self.timeout_sec = timeout_sec
+                self.input_file = input_file
+
+            def __exit__(self, type, value, traceback):
+                self.close()
 
             def run(self):
-                global log, lock_log
-                while True:
-                    if self.main_proc.poll() is not None:
-                        break
-                    out = self.main_proc.stdout.readline().decode()
-                    if out == '':
-                        continue
-                    lock_log.acquire()
-                    log += out
-                    lock_log.release()
-                    judge_proc.stdin.write(out.encode())
-                    judge_proc.stdin.flush()
+                try:
+                    if self.timeout_sec is not None:
+                        self.return_code = self.proc.wait(
+                            timeout=self.timeout_sec)
+                    else:
+                        self.return_code = self.proc.wait()
+                    self.status = ExecStatus.NORMAL
+                except (SystemError, OSError):
+                    self.status = ExecStatus.RE
+                except subprocess.TimeoutExpired:
+                    self.status = ExecStatus.TLE
 
-        class PollJudge(threading.Thread):
-            def __init__(self, main_proc, judge_proc):
-                threading.Thread.__init__(self)
-                self.main_proc = main_proc
-                self.judge_proc = judge_proc
-                pass
+            def close(self):
+                self.proc.stdin.close()
 
-            def run(self):
-                global log, lock_log
-                while True:
-                    if self.judge_proc.poll() is not None or self.main_proc.poll() is not None:
-                        break
-                    out = judge_proc.stdout.readline().decode()
-                    lock_log.acquire()
-                    log += "              " + out
-                    lock_log.release()
-                    main_proc.stdin.write(out.encode())
-                    main_proc.stdin.flush()
-
-        main_thread = PollMain(main_proc, judge_proc)
-        judge_thread = PollJudge(main_proc, judge_proc)
+        main_thread = RunThread(
+            [exec_file], input_file=input_file, timeout_sec=timeout_sec)
+        judge_thread = RunThread([exec_judge_file, input_file, output_file],
+                                 stdin=main_thread.proc.stdout,
+                                 stdout=main_thread.proc.stdin,
+                                 timeout_sec=timeout_sec + 1)
 
         main_thread.start()
         judge_thread.start()
 
-        main_proc.wait()
-        judge_proc.wait()
+        main_thread.join()
+        judge_thread.join()
 
         judge_status = None
-        if judge_proc.returncode == 0:
-            judge_status = JudgeStatus.AC
-        elif judge_proc.returncode == 1:
-            judge_status = JudgeStatus.WA
-        else:
-            print("ERROR!!!!")
-            assert(False)
-
-        if main_proc.returncode == 0:
-            code = ExecStatus.NORMAL
-        else:
+        if judge_thread.status == ExecStatus.NORMAL:
+            if main_thread.status != ExecStatus.NORMAL:
+                print("main thread didn't ended normally after judge")
+                code = main_thread.status
+            else:
+                code = ExecStatus.NORMAL
+                if judge_thread.return_code == 0:
+                    judge_status = JudgeStatus.AC
+                else:
+                    judge_status = JudgeStatus.WA
+        elif main_thread.status == ExecStatus.RE:
             code = ExecStatus.RE
+        elif main_thread.status == ExecStatus.TLE:
+            code = ExecStatus.TLE
 
         elapsed_sec += time.time()
         err = ""
-        for line in main_proc.stderr:
-            err += line.decode()
+#        for line in main_thread.proc.stderr:
+#            err += line.decode()
+        log = open("./log").read()
         return ExecResult(code, log, err, elapsed_sec=elapsed_sec, judge_status=judge_status)
     except subprocess.TimeoutExpired as e:
         return ExecResult(ExecStatus.TLE, e.stdout, e.stderr)

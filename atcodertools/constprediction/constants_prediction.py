@@ -44,7 +44,7 @@ DECIMAL_STRATEGY_RE_LIST_VAL = [
 # TODO: ENGLISH VERSION!!
 INTERACTIVE_STRATEGY_RE_LIST = [
     # re.compile("<font color=\"red\">.*これはインタラクティブな問題です.*</font>")
-    re.compile("これはインタラクティブな問題")
+    re.compile("インタラクティブ")
 ]
 
 
