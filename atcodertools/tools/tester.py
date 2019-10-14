@@ -10,13 +10,11 @@ from typing import List, Tuple
 
 from colorama import Fore
 
-from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, InteractiveJudge, Judge, JudgeType
+from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, InteractiveJudge, Judge, JudgeType, DEFAULT_EPS
 from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program, run_interactive_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
-
-DEFAULT_EPS = 0.000000001
 
 
 class NoExecutableFileError(Exception):
@@ -95,6 +93,8 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
 
     append(with_color("[Expected]", Fore.LIGHTMAGENTA_EX))
     append(expected_output, end='')
+    if(exec_res.judge_message is not None and exec_res.judge_message != ""):
+        append("judge message: " + exec_res.judge_message)
 
     append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
     append(exec_res.output, end='')
@@ -119,18 +119,23 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
             exec_res = run_interactive_program(exec_file, judge_method.judge_exec_file,
                                                in_sample_file, out_sample_file,
                                                timeout_sec=timeout_sec)
-            is_correct = exec_res.is_correct_output()
+            is_correct = exec_res.is_correct_output(judge_method=judge_method)
         else:
             # Run program
             exec_res = run_program(exec_file, in_sample_file,
                                    timeout_sec=timeout_sec)
 
-            # Output header
-            with open(out_sample_file, 'r') as f:
-                answer_text = f.read()
+            if judge_method.judge_type == JudgeType.MultiSolution:
+                is_correct = exec_res.is_correct_output(
+                    judge_method=judge_method, sample_input_file=in_sample_file, sample_output_file=out_sample_file)
+            else:
+                # Output header
+                with open(out_sample_file, 'r') as f:
+                    expected_answer_text = f.read()
 
-            is_correct = exec_res.is_correct_output(answer_text, judge_method)
-            has_error_output = has_error_output or exec_res.has_stderr()
+                is_correct = exec_res.is_correct_output(
+                    expected_answer_text, judge_method)
+        has_error_output = has_error_output or exec_res.has_stderr()
 
         if is_correct:
             if exec_res.has_stderr():
@@ -254,7 +259,7 @@ def get_sample_patterns_and_judge_method(metadata_file: str) -> Tuple[str, str, 
 
 
 USER_FACING_JUDGE_TYPE_LIST = [
-    "normal", "absolute", "relative", "absolute_or_relative"]
+    "normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
 
 
 def main(prog, args) -> bool:

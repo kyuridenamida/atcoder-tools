@@ -4,11 +4,15 @@ from abc import ABCMeta, abstractmethod
 from enum import Enum
 
 
+class NoJudgeTypeException(Exception):
+    pass
+
+
 class JudgeType(Enum):
     Normal = "normal"
     Decimal = "decimal"
+    MultiSolution = "multisolution"
     Interactive = "interactive"
-    Other = "other"
 
 
 class ErrorType(Enum):
@@ -45,10 +49,13 @@ class NormalJudge(Judge):
         return r
 
 
+DEFAULT_EPS = 0.000000001
+
+
 class DecimalJudge(Judge):
     def __init__(self,
                  error_type: ErrorType = ErrorType.AbsoluteOrRelative,
-                 diff: float = 0.0
+                 diff: float = DEFAULT_EPS
                  ):
         self.judge_type = JudgeType.Decimal
         self.error_type = error_type
@@ -92,6 +99,25 @@ class DecimalJudge(Judge):
         return r
 
 
+class MultiSolutionJudge(Judge):
+    def __init__(self):
+        self.judge_type = JudgeType.MultiSolution
+        self.judge_exec_file = "./judge"
+
+    def verify(self, output, expected):
+        return output == expected
+
+    def to_dict(self):
+        return {
+            "judge_type": self.judge_type.value,
+        }
+
+    @classmethod
+    def from_dict(cls, dic):
+        r = MultiSolutionJudge()
+        return r
+
+
 class InteractiveJudge(Judge):
     def __init__(self):
         self.judge_type = JudgeType.Interactive
@@ -109,8 +135,3 @@ class InteractiveJudge(Judge):
     def from_dict(cls, dic):
         r = InteractiveJudge()
         return r
-
-
-class OtherJudge(Judge):
-    # dummy
-    pass

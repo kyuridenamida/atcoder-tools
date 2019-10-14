@@ -27,6 +27,8 @@ class MultipleDecimalCandidatesError(Exception):
 
 MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
 DECIMAL_ANCHORS = ["誤差", " error "]
+MULTISOLUTION_ANCHORS = ["複数ある場合", "どれを出力しても構わない"]
+INTERACTIVE_ANCHORS = ["インタラクティブ", "リアクティブ"]
 
 MOD_STRATEGY_RE_LIST = [
     re.compile("([0-9]+).?.?.?で割った"),
@@ -39,12 +41,6 @@ DECIMAL_STRATEGY_RE_LIST_KEYWORD = [
 ]
 DECIMAL_STRATEGY_RE_LIST_VAL = [
     re.compile("10\^(-[0-9]+)"),
-]
-
-# TODO: ENGLISH VERSION!!
-INTERACTIVE_STRATEGY_RE_LIST = [
-    # re.compile("<font color=\"red\">.*これはインタラクティブな問題です.*</font>")
-    re.compile("インタラクティブ")
 ]
 
 
@@ -123,10 +119,9 @@ def predict_judge_method(html: str) -> Optional[Judge]:
     interactive_sentences = []
 
     for s in sentences:
-        for regexp in INTERACTIVE_STRATEGY_RE_LIST:
-            r = regexp.findall(s)
-            for t in r:
-                interactive_sentences.append(t)
+        for kw in INTERACTIVE_ANCHORS:
+            if kw in s:
+                interactive_sentences.append(s)
 
     if len(interactive_sentences) > 0:
         return InteractiveJudge()

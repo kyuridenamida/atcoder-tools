@@ -9,6 +9,7 @@ from atcodertools.tools.envgen import main as envgen_main
 from atcodertools.tools.tester import main as tester_main
 from atcodertools.tools.submit import main as submit_main
 from atcodertools.tools.codegen import main as codegen_main
+from atcodertools.tools.judgetype_setter import main as judgetype_setter_main
 from atcodertools.release_management.version import __version__
 from colorama import Fore, Style
 
@@ -38,7 +39,7 @@ def notify_if_latest_version_found():
 def main():
     notify_if_latest_version_found()
 
-    if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "version"):
+    if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "set", "version"):
         print("Usage:")
         print("{} gen -- to generate workspace".format(sys.argv[0]))
         print("{} test -- to test codes in your workspace".format(sys.argv[0]))
@@ -62,6 +63,9 @@ def main():
 
     if sys.argv[1] == "codegen":
         codegen_main(prog, args)
+
+    if sys.argv[1] == "set":
+        judgetype_setter_main(prog, args)
 
     if sys.argv[1] == "version":
         print(__version__)
