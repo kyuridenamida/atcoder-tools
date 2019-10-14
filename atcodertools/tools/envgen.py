@@ -74,7 +74,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     if constants.judge_method.judge_type != JudgeType.Interactive:
         # Fetch problem data from the statement
         try:
-            content = atcoder_client.download_problem_content(original_html)
+            content = atcoder_client.analyze_problem_content(original_html)
         except InputFormatDetectionError as e:
             emit_error("Failed to download input format.")
             raise e
