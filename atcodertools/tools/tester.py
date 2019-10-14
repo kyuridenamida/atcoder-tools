@@ -343,16 +343,15 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-
     exclude_exec_files = []
 
     if hasattr(judge_method, "judge_exec_file"):
-        judge_method.judge_exec_file = os.path.join(args.dir, judge_method.judge_exec_file)
+        judge_method.judge_exec_file = os.path.join(
+            args.dir, judge_method.judge_exec_file)
         exclude_exec_files.append(judge_method.judge_exec_file)
 
     exec_file = args.exec or infer_exec_file(
         glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
-    
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
