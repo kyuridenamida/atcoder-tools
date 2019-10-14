@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from enum import Enum
+import platform
 
 
 class NoJudgeTypeException(Exception):
@@ -99,10 +100,17 @@ class DecimalJudge(Judge):
         return r
 
 
+def get_judge_exec_file_name():
+    if platform.system() == "Windows":
+        return "./judge.exe"
+    else:
+        return "./judge"
+
+
 class MultiSolutionJudge(Judge):
     def __init__(self):
         self.judge_type = JudgeType.MultiSolution
-        self.judge_exec_file = "./judge"
+        self.judge_exec_file = get_judge_exec_file_name()
 
     def verify(self, output, expected):
         return output == expected
@@ -110,6 +118,7 @@ class MultiSolutionJudge(Judge):
     def to_dict(self):
         return {
             "judge_type": self.judge_type.value,
+            "judge_exec_file": self.judge_exec_file,
         }
 
     @classmethod
@@ -121,7 +130,7 @@ class MultiSolutionJudge(Judge):
 class InteractiveJudge(Judge):
     def __init__(self):
         self.judge_type = JudgeType.Interactive
-        self.judge_exec_file = "./judge"
+        self.judge_exec_file = get_judge_exec_file_name()
 
     def verify(self, output, expected):
         return output == expected
@@ -129,6 +138,7 @@ class InteractiveJudge(Judge):
     def to_dict(self):
         return {
             "judge_type": self.judge_type.value,
+            "judge_exec_file": self.judge_exec_file,
         }
 
     @classmethod

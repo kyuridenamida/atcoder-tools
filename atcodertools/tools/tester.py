@@ -44,21 +44,12 @@ def is_executable_file(file_name):
             and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
-def is_judge_file(file_name):
-    if platform.system() == "Windows":
-        return file_name == "./judge.exe"
-    else:
-        return file_name == "./judge"
-
-
-def infer_exec_file(filenames):
+def infer_exec_file(filenames, judge_exec_file):
     exec_files = [name for name in sorted(
-        filenames) if is_executable_file(name) and not is_judge_file(name)]
+        filenames) if is_executable_file(name) and name != judge_exec_file]
 
     if len(exec_files) == 0:
         raise NoExecutableFileError
-    if "./main" in exec_files:
-        exec_file = "./main"
     else:
         exec_file = exec_files[0]
     if len(exec_files) >= 2:
@@ -310,8 +301,6 @@ def main(prog, args) -> bool:
                         default=None)
 
     args = parser.parse_args(args)
-    exec_file = args.exec or infer_exec_file(
-        glob.glob(os.path.join(args.dir, '*')))
 
     metadata_file = os.path.join(args.dir, "metadata.json")
     in_ex_pattern, out_ex_pattern, judge_method = get_sample_patterns_and_judge_method(
@@ -351,6 +340,13 @@ def main(prog, args) -> bool:
     if isinstance(judge_method, DecimalJudge):
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
+
+    judge_exec_file = None
+    if hasattr(judge_method, "judge_exec_file"):
+        judge_exec_file = judge_method.judge_exec_file
+
+    exec_file = args.exec or infer_exec_file(
+        glob.glob(os.path.join(args.dir, '*')), judge_exec_file)
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
