@@ -14,7 +14,7 @@ from atcodertools.common.logging import logger
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
-from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
+from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError, get_problem_content
 
 
 class LoginError(Exception):
@@ -114,15 +114,9 @@ class AtCoderClient(metaclass=Singleton):
         resp = self._request(problem.get_url())
         return resp.text
 
-    def analyze_problem_content(self, original_html: str) -> ProblemContent:
-        try:
-            return ProblemContent.from_html(original_html)
-        except (InputFormatDetectionError, SampleDetectionError) as e:
-            raise e
-
     def download_problem_content(self, problem: Problem) -> ProblemContent:
         html = self.download_problem_content_raw_html(problem)
-        return self.analyze_problem_content(html)
+        return get_problem_content(html)
 
     def download_all_contests(self) -> List[Contest]:
         contest_ids = []

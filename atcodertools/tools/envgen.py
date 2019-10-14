@@ -13,7 +13,7 @@ from colorama import Fore
 
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.client.models.problem import Problem
-from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
+from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError, get_problem_content
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.common.language import ALL_LANGUAGES, CPP
@@ -74,7 +74,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     if constants.judge_method.judge_type != JudgeType.Interactive:
         # Fetch problem data from the statement
         try:
-            content = atcoder_client.analyze_problem_content(original_html)
+            content = get_problem_content(original_html)
         except InputFormatDetectionError as e:
             emit_error("Failed to download input format.")
             raise e
