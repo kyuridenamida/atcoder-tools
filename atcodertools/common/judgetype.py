@@ -102,9 +102,9 @@ class DecimalJudge(Judge):
 
 def get_judge_exec_file_name():
     if platform.system() == "Windows":
-        return "./judge.exe"
+        return "judge.exe"
     else:
-        return "./judge"
+        return "judge"
 
 
 class MultiSolutionJudge(Judge):

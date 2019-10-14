@@ -35,7 +35,7 @@ class ExecResult:
             return False
         if self.judge_status is None:
             if judge_method.judge_type == JudgeType.MultiSolution:
-                judge_exec_res = run_multisolution_judge_program("./judge",
+                judge_exec_res = run_multisolution_judge_program(judge_method.judge_exec_file,
                                                                  self.output,
                                                                  sample_input_file,
                                                                  sample_output_file

@@ -10,7 +10,7 @@ from typing import List, Tuple
 
 from colorama import Fore
 
-from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, InteractiveJudge, Judge, JudgeType, DEFAULT_EPS
+from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, Judge, JudgeType, DEFAULT_EPS
 from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program, run_interactive_program
 from atcodertools.tools.models.metadata import Metadata
@@ -44,9 +44,9 @@ def is_executable_file(file_name):
             and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
-def infer_exec_file(filenames, judge_exec_file):
+def infer_exec_file(filenames, exclude_exec_file):
     exec_files = [name for name in sorted(
-        filenames) if is_executable_file(name) and name != judge_exec_file]
+        filenames) if is_executable_file(name) and (name not in exclude_exec_file)]
 
     if len(exec_files) == 0:
         raise NoExecutableFileError
@@ -317,6 +317,8 @@ def main(prog, args) -> bool:
             judge_method = NormalJudge()
         elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
             user_input_decimal_error_type = ErrorType(args.judge_type)
+        elif args.judge_type == "multisolution":
+            judge_method = MultiSolutionJudge()
         elif args.judge_type == "interactive":
             judge_method = InteractiveJudge()
         else:
@@ -341,12 +343,16 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    judge_exec_file = None
+
+    exclude_exec_files = []
+
     if hasattr(judge_method, "judge_exec_file"):
-        judge_exec_file = judge_method.judge_exec_file
+        judge_method.judge_exec_file = os.path.join(args.dir, judge_method.judge_exec_file)
+        exclude_exec_files.append(judge_method.judge_exec_file)
 
     exec_file = args.exec or infer_exec_file(
-        glob.glob(os.path.join(args.dir, '*')), judge_exec_file)
+        glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
+    
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
