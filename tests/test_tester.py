@@ -61,8 +61,9 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
 
     def test_run_single_test_multisolution(self):
-        test_dir = os.path.join(
-            RESOURCE_DIR, "test_run_single_test_multisolution")
+        run_command(
+            "cp -r test_run_single_test_multisolution /tmp", RESOURCE_DIR)
+        test_dir = "/tmp/test_run_single_test_multisolution"
         run_command("g++ -omain main.cpp", test_dir)
         run_command("g++ -ojudge judge.cpp", test_dir)
         self.assertTrue(tester.main(
@@ -75,8 +76,8 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "4", "-j", "multisolution"]))
 
     def test_run_single_test_interactive(self):
-        test_dir = os.path.join(
-            RESOURCE_DIR, "test_run_single_test_interactive")
+        run_command("cp -r test_run_single_test_interactive /tmp", RESOURCE_DIR)
+        test_dir = "/tmp/test_run_single_test_interactive"
         run_command("g++ -omain main.cpp", test_dir)
         run_command("g++ -ojudge judge.cpp", test_dir)
         self.assertTrue(tester.main(
