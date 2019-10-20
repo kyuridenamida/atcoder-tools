@@ -28,7 +28,7 @@ class MultipleDecimalCandidatesError(Exception):
 MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
 DECIMAL_ANCHORS = ["誤差", " error "]
 MULTISOLUTION_ANCHORS = ["複数ある場合", "どれを出力しても構わない"]
-INTERACTIVE_ANCHORS = ["インタラクティブ", "リアクティブ"]
+INTERACTIVE_ANCHORS = ["インタラクティブ", "リアクティブ", "interactive", "reactive"]
 
 MOD_STRATEGY_RE_LIST = [
     re.compile("([0-9]+).?.?.?で割った"),
