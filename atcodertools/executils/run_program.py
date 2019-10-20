@@ -18,11 +18,11 @@ class JudgeStatus(Enum):
 
 
 class ExecResult:
-    def __init__(self, status: ExecStatus, output: str = None, stderr: str = None, elapsed_sec: float = None, judge_status: JudgeStatus = None, judge_message: str = None):
+    def __init__(self, status: ExecStatus, output: str = None, stderr: str = None, elapsed_sec: float = None, special_judge_status: JudgeStatus = None, judge_message: str = None):
         self.status = status
         self.output = output
         self.stderr = stderr
-        self.judge_status = judge_status
+        self.special_judge_status = special_judge_status
         self.judge_message = judge_message
 
         if elapsed_sec is not None:
@@ -33,8 +33,8 @@ class ExecResult:
     def is_correct_output(self, expected_answer_text=None, judge_method=None, sample_input_file=None, sample_output_file=None):
         if self.status != ExecStatus.NORMAL:
             return False
-        if self.judge_status is not None:
-            return self.judge_status == JudgeStatus.AC
+        if self.special_judge_status is not None:
+            return self.special_judge_status == JudgeStatus.AC
 
         if judge_method.judge_type == JudgeType.MultiSolution:
             judge_exec_res = run_multisolution_judge_program(judge_method.judge_exec_file,
@@ -43,7 +43,7 @@ class ExecResult:
                                                              sample_output_file
                                                              )
             self.judge_message = judge_exec_res.stderr
-            return judge_exec_res.judge_status == JudgeStatus.AC
+            return judge_exec_res.special_judge_status == JudgeStatus.AC
         elif judge_method.judge_type == JudgeType.Interactive:
             raise("No judge status error for interactive!!")
         else:
@@ -103,7 +103,7 @@ def run_multisolution_judge_program(exec_judge_file: str, output: str, sample_in
             judge_status = JudgeStatus.WA
             code = ExecStatus.RE
 
-        return ExecResult(code, proc.stdout, proc.stderr, judge_status=judge_status, judge_message=proc.stderr)
+        return ExecResult(code, proc.stdout, proc.stderr, special_judge_status=judge_status, judge_message=proc.stderr)
     except subprocess.CalledProcessError as e:
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
 
@@ -182,7 +182,7 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
 
         elapsed_sec += time.time()
         return ExecResult(code, judge_thread.proc.stderr.read().decode(), main_thread.proc.stderr.read().decode(),
-                          elapsed_sec=elapsed_sec, judge_status=judge_status)
+                          elapsed_sec=elapsed_sec, special_judge_status=judge_status)
     except subprocess.TimeoutExpired as e:
         return ExecResult(ExecStatus.TLE, e.stdout, e.stderr)
     except subprocess.CalledProcessError as e:
