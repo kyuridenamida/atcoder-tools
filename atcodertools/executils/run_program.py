@@ -10,11 +10,19 @@ class ExecStatus(Enum):
     NORMAL = "NORMAL"
     TLE = "TLE"
     RE = "RE"
+    JUDGEERROR = "JUDGEERROR"
 
 
 class JudgeStatus(Enum):
     AC = "AC"
     WA = "WA"
+
+
+class JudgeError(Exception):
+    def __init__(self, stdout: str = "", stderr: str = ""):
+        self.stdout = stdout
+        self.stderr = stderr
+    pass
 
 
 class ExecResult:
@@ -169,16 +177,21 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
                 code = ExecStatus.NORMAL
                 if judge_thread.return_code == 0:
                     judge_status = JudgeStatus.AC
-                else:
+                elif judge_thread.return_code == 1:
                     judge_status = JudgeStatus.WA
-        elif main_thread.status == ExecStatus.RE:
-            code = ExecStatus.RE
-        elif main_thread.status == ExecStatus.TLE:
-            code = ExecStatus.TLE
+                else:
+                    message = "Your judge program exited with invalid return_code: {:d}\n".format(judge_thread.return_code)
+                    raise JudgeError(message)
         else:
-            print("Your judge program may be incorrect")
-            print(main_thread.status)
-            print(judge_thread.status)
+            if main_thread.status == ExecStatus.RE:
+                code = ExecStatus.RE
+            elif main_thread.status == ExecStatus.TLE:
+                code = ExecStatus.TLE
+            else:
+                message = "Your judge program may be incorrect\n"
+                message += "main_thread_code: {:d}\n".format(main_thread.status)
+                message += "judge_thread_code: {:d}\n".format(judge_thread.status)
+                raise JudgeError(message)
 
         elapsed_sec += time.time()
         return ExecResult(code, judge_thread.proc.stderr.read().decode(), main_thread.proc.stderr.read().decode(),
@@ -187,3 +200,5 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
         return ExecResult(ExecStatus.TLE, e.stdout, e.stderr)
     except subprocess.CalledProcessError as e:
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
+    except JudgeError as e:
+        return ExecResult(ExecStatus.JUDGEERROR, e.stdout, e.stderr)
