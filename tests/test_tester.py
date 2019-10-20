@@ -46,7 +46,6 @@ class TestTester(unittest.TestCase):
     def test_run_single_test_decimal_multiplication(self):
         test_dir = os.path.join(
             RESOURCE_DIR, "test_run_single_test_decimal_multiplication")
-        print(test_dir)
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative"]))
         self.assertTrue(tester.main(
@@ -66,6 +65,8 @@ class TestTester(unittest.TestCase):
         test_dir = "/tmp/test_run_single_test_multisolution"
         run_command("g++ -omain main.cpp", test_dir)
         run_command("g++ -ojudge judge.cpp", test_dir)
+        run_command("chmod 755 judge", test_dir)
+        run_command("chmod 755 main", test_dir)
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "1", "-j", "multisolution"]))
         self.assertTrue(tester.main(
@@ -80,6 +81,8 @@ class TestTester(unittest.TestCase):
         test_dir = "/tmp/test_run_single_test_interactive"
         run_command("g++ -omain main.cpp", test_dir)
         run_command("g++ -ojudge judge.cpp", test_dir)
+        run_command("chmod 755 judge", test_dir)
+        run_command("chmod 755 main", test_dir)
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "1", "-j", "interactive"]))
         self.assertTrue(tester.main(
