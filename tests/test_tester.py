@@ -64,9 +64,12 @@ class TestTester(unittest.TestCase):
             "cp -r test_run_single_test_multisolution /tmp", RESOURCE_DIR)
         test_dir = "/tmp/test_run_single_test_multisolution"
         run_command("chmod 777 {}".format(test_dir), test_dir)
-        run_command("g++ -omain main.cpp", test_dir)
+        result = run_command("g++ -omain main.cpp", test_dir)
+        print("g++ compile result: ", result)
         run_command("g++ -ojudge judge.cpp", test_dir)
         run_command("chmod 755 judge", test_dir)
+        result = run_command("ls -la", test_dir)
+        print("ls result: ", result)
         result = run_command("chmod 755 main", test_dir)
         if result.startswith("chmod:"):
             assert(False)
