@@ -66,7 +66,10 @@ class TestTester(unittest.TestCase):
         run_command("g++ -omain main.cpp", test_dir)
         run_command("g++ -ojudge judge.cpp", test_dir)
         run_command("chmod 755 judge", test_dir)
-        run_command("chmod 755 main", test_dir)
+        result = run_command("chmod 755 main", test_dir)
+        if result.startswith("chmod:"):
+            assert(False)
+
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "1", "-j", "multisolution"]))
         self.assertTrue(tester.main(
