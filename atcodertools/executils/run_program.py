@@ -92,8 +92,7 @@ def run_multisolution_judge_program(exec_judge_file: str, output: str, sample_in
             stdin=tf, universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            cwd=current_working_dir,
-            text=True
+            cwd=current_working_dir
         )
 
         code = ExecStatus.NORMAL
