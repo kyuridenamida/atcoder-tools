@@ -85,8 +85,6 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "1", "-j", "interactive"]))
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "2", "-j", "interactive"]))
-        self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "3", "-j", "interactive"]))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)

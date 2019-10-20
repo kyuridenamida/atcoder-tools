@@ -1,4 +1,5 @@
-#include<bits/stdc++.h>
+/////////start template
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -26,7 +27,12 @@ void output(const string &s){
 	cout<<s<<endl;
 }
 
+///////////////////end template
+
+typedef long long Int;
+
 int main(int argc, char *argv[]){
+	//////////////// start template
 	cerr<<header_prefix<<endl;
 	ifstream in_s_2(argv[1]);
 	while(in_s_2){
@@ -36,38 +42,35 @@ int main(int argc, char *argv[]){
 		cerr<<s<<endl;
 	}
 	ifstream in_s(argv[1]), out_s(argv[2]);
-	int N, Q;
-	string ans, str;
-	in_s>>N>>Q;
-	out_s>>ans;
-	for(int ct = 0;;){
-		str = input();
-		stringstream ss(str);
-		string type;
-		ss>>type;
-		if(type=="?"){
+	//////////////// end template
+	string sN;
+	out_s >> sN;
+	Int N = atoll(sN.c_str());
+	int ct = 0;
+	while(1){
+		string line = input();
+		stringstream ss(line);
+		char q;
+		ss>>q;
+		if(q=='?'){
 			ct++;
-			if(ct > Q)quitWA("too many queries");
-			char p, q;
-			ss>>p>>q;
-			if(not ('A' <= p and p < 'A' + N))quitWA("invalid query");
-			if(not ('A' <= q and q < 'A' + N))quitWA("invalid query");
-			int i = ans.find(p), j = ans.find(q);
-			if(i < j){
-				output("<");
-			}else{
-				output(">");
-			}
-		}else if(type=="!"){
-			string out;
-			ss>>out;
-			if(ans == out){
+			if(ct>64)quitWA("too many queries");
+			string sn;
+			ss>>sn;
+			Int n = atoll(sn.c_str());
+			if((n <= N and sn <= sN) or (n > N and sn > sN))output("Y");
+			else output("N");
+		}else if(q=='!'){
+			Int n;
+			ss>>n;
+			if(n == N){
 				quitAC();
 			}else{
-				quitWA("wrong output");
+				quitWA("incorrect output");
 			}
 		}else{
-			quitWA("invalid type");
+			quitWA("invalid query");
 		}
 	}
 }
+
