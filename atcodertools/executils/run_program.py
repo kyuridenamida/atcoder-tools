@@ -33,23 +33,21 @@ class ExecResult:
     def is_correct_output(self, expected_answer_text=None, judge_method=None, sample_input_file=None, sample_output_file=None):
         if self.status != ExecStatus.NORMAL:
             return False
-        if self.judge_status is None:
-            if judge_method.judge_type == JudgeType.MultiSolution:
-                judge_exec_res = run_multisolution_judge_program(judge_method.judge_exec_file,
-                                                                 self.output,
-                                                                 sample_input_file,
-                                                                 sample_output_file
-                                                                 )
-                self.judge_status = judge_exec_res.judge_status
-                self.judge_message = judge_exec_res.stderr
-            elif judge_method.judge_type == JudgeType.Interactive:
-                raise("No judge status error for interactive!!")
-            else:
-                if judge_method.verify(self.output, expected_answer_text):
-                    self.judge_status = JudgeStatus.AC
-                else:
-                    self.judge_status = JudgeStatus.WA
-        return self.judge_status == JudgeStatus.AC
+        if self.judge_status is not None:
+            return self.judge_status == JudgeStatus.AC
+
+        if judge_method.judge_type == JudgeType.MultiSolution:
+            judge_exec_res = run_multisolution_judge_program(judge_method.judge_exec_file,
+                                                             self.output,
+                                                             sample_input_file,
+                                                             sample_output_file
+                                                             )
+            self.judge_message = judge_exec_res.stderr
+            return judge_exec_res.judge_status == JudgeStatus.AC
+        elif judge_method.judge_type == JudgeType.Interactive:
+            raise("No judge status error for interactive!!")
+        else:
+            return judge_method.verify(self.output, expected_answer_text)
 
     def has_stderr(self):
         return len(self.stderr) > 0
