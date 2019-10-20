@@ -180,7 +180,8 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
                 elif judge_thread.return_code == 1:
                     judge_status = JudgeStatus.WA
                 else:
-                    message = "Your judge program exited with invalid return_code: {:d}\n".format(judge_thread.return_code)
+                    message = "Your judge program exited with invalid return_code: {:d}\n".format(
+                        judge_thread.return_code)
                     raise JudgeError(message)
         else:
             if main_thread.status == ExecStatus.RE:
@@ -189,8 +190,10 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
                 code = ExecStatus.TLE
             else:
                 message = "Your judge program may be incorrect\n"
-                message += "main_thread_code: {:d}\n".format(main_thread.status)
-                message += "judge_thread_code: {:d}\n".format(judge_thread.status)
+                message += "main_thread_code: {:d}\n".format(
+                    main_thread.status)
+                message += "judge_thread_code: {:d}\n".format(
+                    judge_thread.status)
                 raise JudgeError(message)
 
         elapsed_sec += time.time()
