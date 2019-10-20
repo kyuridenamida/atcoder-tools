@@ -113,7 +113,7 @@ class MultiSolutionJudge(Judge):
         self.judge_exec_file = get_judge_exec_file_name()
 
     def verify(self, output, expected):
-        return output == expected
+        raise NotImplementedError()
 
     def to_dict(self):
         return {
@@ -133,7 +133,7 @@ class InteractiveJudge(Judge):
         self.judge_exec_file = get_judge_exec_file_name()
 
     def verify(self, output, expected):
-        return output == expected
+        raise NotImplementedError()
 
     def to_dict(self):
         return {
