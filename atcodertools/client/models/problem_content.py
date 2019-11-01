@@ -128,3 +128,10 @@ class ProblemContent:
         output_tags = sample_tags[1::2]
         input_format_tag = pre_tags[0]
         return input_format_tag, input_tags, output_tags
+
+
+def get_problem_content(original_html: str) -> ProblemContent:
+    try:
+        return ProblemContent.from_html(original_html)
+    except (InputFormatDetectionError, SampleDetectionError) as e:
+        raise e

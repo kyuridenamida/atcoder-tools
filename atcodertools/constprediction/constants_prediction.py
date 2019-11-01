@@ -4,7 +4,7 @@ from typing import Tuple, Optional
 from bs4 import BeautifulSoup
 
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
-from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, Judge
+from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, InteractiveJudge, Judge
 from atcodertools.common.logging import logger
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 
@@ -27,6 +27,8 @@ class MultipleDecimalCandidatesError(Exception):
 
 MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
 DECIMAL_ANCHORS = ["誤差", " error "]
+MULTISOLUTION_ANCHORS = ["複数ある場合", "どれを出力しても構わない"]
+INTERACTIVE_ANCHORS = ["インタラクティブ", "リアクティブ", "interactive", "reactive"]
 
 MOD_STRATEGY_RE_LIST = [
     re.compile("([0-9]+).?.?.?で割った"),
@@ -113,15 +115,27 @@ def predict_judge_method(html: str) -> Optional[Judge]:
 
     soup = BeautifulSoup(html, "html.parser")
     sentences = soup.get_text().split("\n")
-    sentences = [normalize(s) for s in sentences if is_decimal_context(s)]
+
+    interactive_sentences = []
+
+    for s in sentences:
+        for kw in INTERACTIVE_ANCHORS:
+            if kw in s:
+                interactive_sentences.append(s)
+
+    if len(interactive_sentences) > 0:
+        return InteractiveJudge()
+
+    decimal_sentences = [normalize(s)
+                         for s in sentences if is_decimal_context(s)]
 
     decimal_keyword_cands = set()
     decimal_val_cands = set()
 
-    if len(sentences) > 0:  # Decimal
+    if len(decimal_sentences) > 0:  # Decimal
         is_absolute = False
         is_relative = False
-        for s in sentences:
+        for s in decimal_sentences:
             for regexp in DECIMAL_STRATEGY_RE_LIST_KEYWORD:
                 r = regexp.findall(s)
                 for t in r:
@@ -130,7 +144,7 @@ def predict_judge_method(html: str) -> Optional[Judge]:
                     elif t == "相対誤差" or t == "relative":
                         is_relative = True
                     decimal_keyword_cands.add(t)
-        for s in sentences:
+        for s in decimal_sentences:
             for regexp in DECIMAL_STRATEGY_RE_LIST_VAL:
                 r = regexp.findall(s)
                 for t in r:

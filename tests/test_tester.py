@@ -8,6 +8,7 @@ from atcodertools.executils.run_program import ExecResult, ExecStatus
 from atcodertools.tools import tester
 from atcodertools.tools.tester import is_executable_file, TestSummary, build_details_str
 from atcodertools.tools.utils import with_color
+from atcodertools.executils.run_command import run_command
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -57,6 +58,33 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "relative"]))
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
+
+    def test_run_single_test_multisolution(self):
+        run_command(
+            "cp -r test_run_single_test_multisolution /tmp", RESOURCE_DIR)
+        test_dir = "/tmp/test_run_single_test_multisolution"
+        run_command("g++ -std=c++14 -omain main.cpp", test_dir)
+        run_command("g++ -std=c++14 -ojudge judge.cpp", test_dir)
+
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-j", "multisolution"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-j", "multisolution"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "3", "-j", "multisolution"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "4", "-j", "multisolution"]))
+
+    def test_run_single_test_interactive(self):
+        run_command("cp -r test_run_single_test_interactive /tmp", RESOURCE_DIR)
+        test_dir = "/tmp/test_run_single_test_interactive"
+        run_command("g++ -std=c++14 -omain main.cpp", test_dir)
+        run_command("g++ -std=c++14 -ojudge judge.cpp", test_dir)
+
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-j", "interactive"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-j", "interactive"]))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)

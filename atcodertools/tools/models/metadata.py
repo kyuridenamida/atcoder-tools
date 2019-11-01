@@ -1,7 +1,7 @@
 import json
 
 from atcodertools.client.models.problem import Problem
-from atcodertools.common.judgetype import NormalJudge, DecimalJudge, Judge
+from atcodertools.common.judgetype import NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, Judge, NoJudgeTypeException
 from atcodertools.common.language import Language
 
 
@@ -34,8 +34,12 @@ class Metadata:
                 judge_method = NormalJudge.from_dict(dic["judge"])
             elif judge_type == "decimal":
                 judge_method = DecimalJudge.from_dict(dic["judge"])
+            elif judge_type == "multisolution":
+                judge_method = MultiSolutionJudge.from_dict(dic["judge"])
+            elif judge_type == "interactive":
+                judge_method = InteractiveJudge.from_dict(dic["judge"])
             else:
-                raise Exception("invalid judge type")
+                raise NoJudgeTypeException()
         else:
             judge_method = NormalJudge()
 

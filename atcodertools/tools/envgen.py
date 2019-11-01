@@ -13,7 +13,7 @@ from colorama import Fore
 
 from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
 from atcodertools.client.models.problem import Problem
-from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
+from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError, get_problem_content
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.common.language import ALL_LANGUAGES, CPP
@@ -28,6 +28,7 @@ from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
+from atcodertools.common.judgetype import JudgeType
 
 
 class BannedFileDetectedError(Exception):
@@ -67,24 +68,28 @@ def prepare_procedure(atcoder_client: AtCoderClient,
 
     emit_info('{} is used for template'.format(template_code_path))
 
-    # Fetch problem data from the statement
-    try:
-        content = atcoder_client.download_problem_content(problem)
-    except InputFormatDetectionError as e:
-        emit_error("Failed to download input format.")
-        raise e
-    except SampleDetectionError as e:
-        emit_error("Failed to download samples.")
-        raise e
+    original_html = atcoder_client.download_problem_content_raw_html(problem)
+    constants = predict_constants(original_html)
 
-    # Store examples to the directory path
-    if len(content.get_samples()) == 0:
-        emit_info("No samples.")
-    else:
-        os.makedirs(problem_dir_path, exist_ok=True)
-        create_examples(content.get_samples(), problem_dir_path,
-                        config.etc_config.in_example_format, config.etc_config.out_example_format)
-        emit_info("Created examples.")
+    if constants.judge_method.judge_type != JudgeType.Interactive:
+        # Fetch problem data from the statement
+        try:
+            content = get_problem_content(original_html)
+        except InputFormatDetectionError as e:
+            emit_error("Failed to download input format.")
+            raise e
+        except SampleDetectionError as e:
+            emit_error("Failed to download samples.")
+            raise e
+
+        # Store examples to the directory path
+        if len(content.get_samples()) == 0:
+            emit_info("No samples.")
+        else:
+            os.makedirs(problem_dir_path, exist_ok=True)
+            create_examples(content.get_samples(), problem_dir_path,
+                            config.etc_config.in_example_format, config.etc_config.out_example_format)
+            emit_info("Created examples.")
 
     code_file_path = os.path.join(
         problem_dir_path,
@@ -105,19 +110,21 @@ def prepare_procedure(atcoder_client: AtCoderClient,
                 code_file_path,
                 new_path))
 
-    try:
-        prediction_result = predict_format(content)
-        emit_info(
-            with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
-    except (NoPredictionResultError, MultiplePredictionResultsError) as e:
+    if constants.judge_method.judge_type != JudgeType.Interactive:
+        try:
+            prediction_result = predict_format(content)
+            emit_info(
+                with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
+        except (NoPredictionResultError, MultiplePredictionResultsError) as e:
+            prediction_result = FormatPredictionResult.empty_result()
+            if isinstance(e, NoPredictionResultError):
+                msg = "No prediction -- Failed to understand the input format"
+            else:
+                msg = "Too many prediction -- Failed to understand the input format"
+            emit_warning(with_color(msg, Fore.LIGHTRED_EX))
+    else:
         prediction_result = FormatPredictionResult.empty_result()
-        if isinstance(e, NoPredictionResultError):
-            msg = "No prediction -- Failed to understand the input format"
-        else:
-            msg = "Too many prediction -- Failed to understand the input format"
-        emit_warning(with_color(msg, Fore.LIGHTRED_EX))
 
-    constants = predict_constants(content.original_html)
     code_generator = config.code_style_config.code_generator
     with open(template_code_path, "r") as f:
         template = f.read()

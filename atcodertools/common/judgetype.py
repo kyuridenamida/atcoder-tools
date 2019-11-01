@@ -2,12 +2,18 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from enum import Enum
+import platform
+
+
+class NoJudgeTypeException(Exception):
+    pass
 
 
 class JudgeType(Enum):
     Normal = "normal"
     Decimal = "decimal"
-    Other = "other"
+    MultiSolution = "multisolution"
+    Interactive = "interactive"
 
 
 class ErrorType(Enum):
@@ -44,10 +50,13 @@ class NormalJudge(Judge):
         return r
 
 
+DEFAULT_EPS = 0.000000001
+
+
 class DecimalJudge(Judge):
     def __init__(self,
                  error_type: ErrorType = ErrorType.AbsoluteOrRelative,
-                 diff: float = 0.0
+                 diff: float = DEFAULT_EPS
                  ):
         self.judge_type = JudgeType.Decimal
         self.error_type = error_type
@@ -91,6 +100,48 @@ class DecimalJudge(Judge):
         return r
 
 
-class OtherJudge(Judge):
-    # dummy
-    pass
+def get_judge_exec_file_name():
+    if platform.system() == "Windows":
+        return "judge.exe"
+    else:
+        return "judge"
+
+
+class MultiSolutionJudge(Judge):
+    def __init__(self):
+        self.judge_type = JudgeType.MultiSolution
+        self.judge_exec_file = get_judge_exec_file_name()
+
+    def verify(self, output, expected):
+        raise NotImplementedError()
+
+    def to_dict(self):
+        return {
+            "judge_type": self.judge_type.value,
+            "judge_exec_file": self.judge_exec_file,
+        }
+
+    @classmethod
+    def from_dict(cls, dic):
+        r = MultiSolutionJudge()
+        return r
+
+
+class InteractiveJudge(Judge):
+    def __init__(self):
+        self.judge_type = JudgeType.Interactive
+        self.judge_exec_file = get_judge_exec_file_name()
+
+    def verify(self, output, expected):
+        raise NotImplementedError()
+
+    def to_dict(self):
+        return {
+            "judge_type": self.judge_type.value,
+            "judge_exec_file": self.judge_exec_file,
+        }
+
+    @classmethod
+    def from_dict(cls, dic):
+        r = InteractiveJudge()
+        return r
