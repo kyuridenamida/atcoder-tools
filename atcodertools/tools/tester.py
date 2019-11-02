@@ -232,7 +232,6 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         return True
 
 
-
 def get_metadata(metadata_file: str) -> Tuple[str, str, Judge]:
     try:
         metadata = Metadata.load_from(metadata_file)

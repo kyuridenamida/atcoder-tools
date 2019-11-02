@@ -3,7 +3,6 @@
 from abc import ABCMeta, abstractmethod
 from enum import Enum
 import platform
-#from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
 
 
 class NoJudgeTypeException(Exception):

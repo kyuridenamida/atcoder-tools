@@ -1,13 +1,8 @@
 #!/usr/bin/python3
 
-import argparse
-import os
-import shutil
-from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, JudgeType, NoJudgeTypeException, DEFAULT_EPS
+from atcodertools.common.judgetype import JudgeType
 from atcodertools.executils.run_command import run_command
 from atcodertools.tools.models.metadata import Metadata
-from atcodertools.common.language import Language, ALL_LANGUAGES, CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP
-from atcodertools.tools.templates import get_default_judge_template_path
 
 
 def compile(metadata):
@@ -17,15 +12,12 @@ def compile(metadata):
     print(run_command(compile_cmd, "./"))
     if metadata.judge_method.judge_type in [JudgeType.MultiSolution, JudgeType.Interactive]:
         print("Compile Judge...")
-        compile_cmd = metadata.judge_method.judge_code_lang.get_compile_command(metadata.judge_method.judge_code_filename)
+        compile_cmd = metadata.judge_method.judge_code_lang.get_compile_command(
+            metadata.judge_method.judge_code_filename)
         print(run_command(compile_cmd, "./"))
     pass
 
 
 def main(prog, args):
-    print("compile!!")
-
     metadata = Metadata.load_from("./metadata.json")
     compile(metadata)
-
-    
