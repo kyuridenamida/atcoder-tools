@@ -25,7 +25,8 @@ class Language:
                  submission_lang_pattern: Pattern[str],
                  default_code_generator: Callable[[CodeGenArgs], str],
                  default_template_path: str,
-                 default_code_style=None
+                 default_code_style=None,
+                 compile_command=None
                  ):
         self.name = name
         self.display_name = display_name
@@ -34,10 +35,14 @@ class Language:
         self.default_code_generator = default_code_generator
         self.default_template_path = default_template_path
         self.default_code_style = default_code_style
+        self.compile_command = compile_command
 
     def source_code_name(self, name_without_extension: str) -> str:
         # put extension to the name
         return "{}.{}".format(name_without_extension, self.extension)
+
+    def get_compile_command(self, filename: str):
+        return self.compile_command.format(filename=filename)
 
     @classmethod
     def from_name(cls, name: str):
@@ -55,6 +60,7 @@ CPP = Language(
     submission_lang_pattern=re.compile(".*C\\+\\+14 \\(GCC.*"),
     default_code_generator=cpp.main,
     default_template_path=get_default_template_path('cpp'),
+    compile_command="g++ {filename}.cpp -o {filename} -std=c++14"
 )
 
 JAVA = Language(
@@ -64,6 +70,7 @@ JAVA = Language(
     submission_lang_pattern=re.compile(".*Java8.*"),
     default_code_generator=java.main,
     default_template_path=get_default_template_path('java'),
+    compile_command="javac {filename}.java",
 )
 
 RUST = Language(
@@ -73,6 +80,7 @@ RUST = Language(
     submission_lang_pattern=re.compile(".*Rust \\(1.*"),
     default_code_generator=rust.main,
     default_template_path=get_default_template_path('rs'),
+    compile_command="rustc {filename}.rs -o {filename}"
 )
 
 PYTHON = Language(
@@ -82,6 +90,7 @@ PYTHON = Language(
     submission_lang_pattern=re.compile(".*Python3.*"),
     default_code_generator=python.main,
     default_template_path=get_default_template_path('py'),
+    compile_command="python3 -mpy_compile {filename}.py"
 )
 
 DLANG = Language(
@@ -91,6 +100,7 @@ DLANG = Language(
     submission_lang_pattern=re.compile(".*DMD64.*"),
     default_code_generator=d.main,
     default_template_path=get_default_template_path('d'),
+    compile_command="dmd {filename}.d -of={filename}"
 )
 
 NIM = Language(
@@ -100,7 +110,8 @@ NIM = Language(
     submission_lang_pattern=re.compile(".*Nim \\(0.*"),
     default_code_generator=nim.main,
     default_template_path=get_default_template_path('nim'),
-    default_code_style=CodeStyle(indent_width=2)
+    default_code_style=CodeStyle(indent_width=2),
+    compile_command="nim cpp -o:{filename} {filename}.nim"
 )
 
 CSHARP = Language(
@@ -110,6 +121,7 @@ CSHARP = Language(
     submission_lang_pattern=re.compile(".*C# \\(Mono.*"),
     default_code_generator=cs.main,
     default_template_path=get_default_template_path('cs'),
+    compile_command="mcs {filename}.cs -o {filename}"
 )
 
 

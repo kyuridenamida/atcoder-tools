@@ -5,6 +5,10 @@ from atcodertools.common.judgetype import NormalJudge, DecimalJudge, MultiSoluti
 from atcodertools.common.language import Language
 
 
+DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
+DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
+
+
 class Metadata:
 
     def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str,
@@ -50,6 +54,16 @@ class Metadata:
             sample_out_pattern=dic["sample_out_pattern"],
             lang=Language.from_name(dic["lang"]),
             judge_method=judge_method
+        )
+
+    def default_metadata():
+        return Metadata(
+            problem=None,
+            code_filename="main.cpp",
+            sample_in_pattern=DEFAULT_IN_EXAMPLE_PATTERN,
+            sample_out_pattern=DEFAULT_OUT_EXAMPLE_PATTERN,
+            lang=Language.from_name("cpp"),
+            judge_method=NormalJudge()
         )
 
     @classmethod

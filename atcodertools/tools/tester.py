@@ -107,7 +107,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
         if judge_method.judge_type == JudgeType.Interactive:
-            exec_res = run_interactive_program(exec_file, judge_method.judge_exec_file,
+            exec_res = run_interactive_program(exec_file, judge_method.judge_exec_filename,
                                                in_sample_file, out_sample_file,
                                                timeout_sec=timeout_sec)
             is_correct = exec_res.is_correct_output(judge_method=judge_method)
@@ -232,21 +232,16 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         return True
 
 
-DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
-DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
 
-
-def get_sample_patterns_and_judge_method(metadata_file: str) -> Tuple[str, str, Judge]:
+def get_metadata(metadata_file: str) -> Tuple[str, str, Judge]:
     try:
         metadata = Metadata.load_from(metadata_file)
-        return metadata.sample_in_pattern, metadata.sample_out_pattern, metadata.judge_method
+        return metadata
     except IOError:
-        logger.warning("{} is not found. Assume the example file name patterns are {} and {}".format(
-            metadata_file,
-            DEFAULT_IN_EXAMPLE_PATTERN,
-            DEFAULT_OUT_EXAMPLE_PATTERN)
+        logger.warning("{} is not found. Default metadata is selected. ".format(
+            metadata_file)
         )
-        return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN, NormalJudge()
+        return Metadata.default_metadata()
 
 
 USER_FACING_JUDGE_TYPE_LIST = [
@@ -303,13 +298,14 @@ def main(prog, args) -> bool:
     args = parser.parse_args(args)
 
     metadata_file = os.path.join(args.dir, "metadata.json")
-    in_ex_pattern, out_ex_pattern, judge_method = get_sample_patterns_and_judge_method(
-        metadata_file)
+    metadata = get_metadata(metadata_file)
+    judge_method = metadata.judge_method
+    lang = metadata.lang
 
     in_sample_file_list = sorted(
-        glob.glob(os.path.join(args.dir, in_ex_pattern)))
+        glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))
     out_sample_file_list = sorted(
-        glob.glob(os.path.join(args.dir, out_ex_pattern)))
+        glob.glob(os.path.join(args.dir, metadata.sample_out_pattern)))
 
     user_input_decimal_error_type = None
     if args.judge_type is not None:
@@ -318,9 +314,9 @@ def main(prog, args) -> bool:
         elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
             user_input_decimal_error_type = ErrorType(args.judge_type)
         elif args.judge_type == "multisolution":
-            judge_method = MultiSolutionJudge()
+            judge_method = MultiSolutionJudge(lang.name)
         elif args.judge_type == "interactive":
-            judge_method = InteractiveJudge()
+            judge_method = InteractiveJudge(lang.name)
         else:
             logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
                 args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))
@@ -345,10 +341,10 @@ def main(prog, args) -> bool:
 
     exclude_exec_files = []
 
-    if hasattr(judge_method, "judge_exec_file"):
-        judge_method.judge_exec_file = os.path.join(
-            args.dir, judge_method.judge_exec_file)
-        exclude_exec_files.append(judge_method.judge_exec_file)
+    if hasattr(judge_method, "judge_exec_filename"):
+        judge_method.judge_exec_filename = os.path.join(
+            args.dir, judge_method.judge_exec_filename)
+        exclude_exec_files.append(judge_method.judge_exec_filename)
 
     exec_file = args.exec or infer_exec_file(
         glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)

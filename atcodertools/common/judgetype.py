@@ -3,6 +3,7 @@
 from abc import ABCMeta, abstractmethod
 from enum import Enum
 import platform
+#from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
 
 
 class NoJudgeTypeException(Exception):
@@ -100,17 +101,22 @@ class DecimalJudge(Judge):
         return r
 
 
-def get_judge_exec_file_name():
+def get_judge_filename():
+    judge_code_filename = "judge.cpp"
     if platform.system() == "Windows":
-        return "judge.exe"
+        judge_exec_filename = "judge.exe"
     else:
-        return "judge"
+        judge_exec_filename = "judge"
+    return judge_code_filename, judge_exec_filename
 
 
 class MultiSolutionJudge(Judge):
-    def __init__(self):
+    def __init__(self, judge_code_lang="cpp"):
         self.judge_type = JudgeType.MultiSolution
-        self.judge_exec_file = get_judge_exec_file_name()
+        self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
+
+        from atcodertools.common.language import Language
+        self.judge_code_lang = Language.from_name(judge_code_lang)
 
     def verify(self, output, expected):
         raise NotImplementedError()
@@ -118,19 +124,23 @@ class MultiSolutionJudge(Judge):
     def to_dict(self):
         return {
             "judge_type": self.judge_type.value,
-            "judge_exec_file": self.judge_exec_file,
+            "judge_code_filename": self.judge_code_filename,
+            "judge_exec_filename": self.judge_exec_filename,
+            "judge_code_lang": "cpp"
         }
 
     @classmethod
     def from_dict(cls, dic):
-        r = MultiSolutionJudge()
+        r = MultiSolutionJudge(dic["judge_code_lang"])
         return r
 
 
 class InteractiveJudge(Judge):
-    def __init__(self):
+    def __init__(self, judge_code_lang=None):
         self.judge_type = JudgeType.Interactive
-        self.judge_exec_file = get_judge_exec_file_name()
+        self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
+        from atcodertools.common.language import Language
+        self.judge_code_lang = Language.from_name(judge_code_lang)
 
     def verify(self, output, expected):
         raise NotImplementedError()
@@ -138,10 +148,12 @@ class InteractiveJudge(Judge):
     def to_dict(self):
         return {
             "judge_type": self.judge_type.value,
-            "judge_exec_file": self.judge_exec_file,
+            "judge_code_filename": self.judge_code_filename,
+            "judge_exec_filename": self.judge_exec_filename,
+            "judge_code_lang": "cpp"
         }
 
     @classmethod
     def from_dict(cls, dic):
-        r = InteractiveJudge()
+        r = InteractiveJudge(dic["judge_code_lang"])
         return r
