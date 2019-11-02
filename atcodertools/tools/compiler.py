@@ -17,9 +17,8 @@ def compile(metadata):
     print(run_command(compile_cmd, "./"))
     if metadata.judge_method.judge_type in [JudgeType.MultiSolution, JudgeType.Interactive]:
         print("Compile Judge...")
-        compile_cmd = _compile_command(metadata.judge_method.judge_code_lang, metadata.judge_method.judge_code_filename)
+        compile_cmd = metadata.judge_method.judge_code_lang.get_compile_command(metadata.judge_method.judge_code_filename)
         print(run_command(compile_cmd, "./"))
-        print("MULTISOLUTION or INTERACTIVE")
     pass
 
 

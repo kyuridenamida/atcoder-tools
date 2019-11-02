@@ -102,7 +102,7 @@ class DecimalJudge(Judge):
 
 
 def get_judge_filename():
-    judge_code_filename = "judge.cpp"
+    judge_code_filename = "judge"
     if platform.system() == "Windows":
         judge_exec_filename = "judge.exe"
     else:
