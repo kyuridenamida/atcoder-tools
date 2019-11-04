@@ -4,6 +4,7 @@ from typing import Pattern, Callable
 from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
+import platform
 
 
 class LanguageNotFoundError(Exception):
@@ -26,7 +27,9 @@ class Language:
                  default_code_generator: Callable[[CodeGenArgs], str],
                  default_template_path: str,
                  default_code_style=None,
-                 compile_command=None
+                 compile_command=None,
+                 test_command=None, 
+                 exec_filename=None
                  ):
         self.name = name
         self.display_name = display_name
@@ -36,6 +39,12 @@ class Language:
         self.default_template_path = default_template_path
         self.default_code_style = default_code_style
         self.compile_command = compile_command
+        self.test_command = test_command
+        self.code_filename = "{filename}." + extension
+        if platform.system() == "Windows":
+            self.exec_filename = exec_filename.replace("{exec_extension}", ".exe")
+        else:
+            self.exec_filename = exec_filename.replace("{exec_extension}", "")
 
     def source_code_name(self, name_without_extension: str) -> str:
         # put extension to the name
@@ -43,6 +52,21 @@ class Language:
 
     def get_compile_command(self, filename: str):
         return self.compile_command.format(filename=filename)
+
+    def get_code_filename(self, filename: str):
+        return self.code_filename.format(filename=filename)
+
+    def get_exec_filename(self, filename: str):
+        return self.exec_filename.format(filename=filename, capitalized_filename=filename.capitalize())
+
+    def get_test_command(self, filename: str, cwd: str = '.'):
+        exec_filename = cwd + '/'
+        if platform.system() == "Windows":
+            exec_filename += filename + ".exe"
+        else:
+            exec_filename += filename
+        capitalized_filename = filename.capitalize()
+        return self.test_command.format(filename=filename, exec_filename=exec_filename, capitalized_filename=capitalized_filename)
 
     @classmethod
     def from_name(cls, name: str):
@@ -60,7 +84,9 @@ CPP = Language(
     submission_lang_pattern=re.compile(".*C\\+\\+14 \\(GCC.*"),
     default_code_generator=cpp.main,
     default_template_path=get_default_template_path('cpp'),
-    compile_command="g++ {filename}.cpp -o {filename} -std=c++14"
+    compile_command="g++ {filename}.cpp -o {filename} -std=c++14",
+    test_command="{exec_filename}",
+    exec_filename="{filename}{exec_extension}"
 )
 
 JAVA = Language(
@@ -71,6 +97,8 @@ JAVA = Language(
     default_code_generator=java.main,
     default_template_path=get_default_template_path('java'),
     compile_command="javac {filename}.java",
+    test_command="java {capitalized_filename}",
+    exec_filename="{capitalized_filename}.class"
 )
 
 RUST = Language(
@@ -80,7 +108,9 @@ RUST = Language(
     submission_lang_pattern=re.compile(".*Rust \\(1.*"),
     default_code_generator=rust.main,
     default_template_path=get_default_template_path('rs'),
-    compile_command="rustc {filename}.rs -o {filename}"
+    compile_command="rustc {filename}.rs -o {filename}",
+    test_command="./{exec_filename}",
+    exec_filename="{filename}{exec_extension}"
 )
 
 PYTHON = Language(
@@ -90,7 +120,9 @@ PYTHON = Language(
     submission_lang_pattern=re.compile(".*Python3.*"),
     default_code_generator=python.main,
     default_template_path=get_default_template_path('py'),
-    compile_command="python3 -mpy_compile {filename}.py"
+    compile_command="python3 -mpy_compile {filename}.py",
+    test_command="python3 {filename}.py",
+    exec_filename="{filename}.pyc"
 )
 
 DLANG = Language(
@@ -100,7 +132,9 @@ DLANG = Language(
     submission_lang_pattern=re.compile(".*DMD64.*"),
     default_code_generator=d.main,
     default_template_path=get_default_template_path('d'),
-    compile_command="dmd {filename}.d -of={filename}"
+    compile_command="dmd {filename}.d -of={filename}",
+    test_command="./{exec_filename}",
+    exec_filename="{filename}{exec_extension}"
 )
 
 NIM = Language(
@@ -111,7 +145,9 @@ NIM = Language(
     default_code_generator=nim.main,
     default_template_path=get_default_template_path('nim'),
     default_code_style=CodeStyle(indent_width=2),
-    compile_command="nim cpp -o:{filename} {filename}.nim"
+    compile_command="nim cpp -o:{filename} {filename}.nim",
+    test_command="./{exec_filename}",
+    exec_filename="{filename}{exec_extension}"
 )
 
 CSHARP = Language(
@@ -121,7 +157,9 @@ CSHARP = Language(
     submission_lang_pattern=re.compile(".*C# \\(Mono.*"),
     default_code_generator=cs.main,
     default_template_path=get_default_template_path('cs'),
-    compile_command="mcs {filename}.cs -o {filename}"
+    compile_command="mcs {filename}.cs -o {filename}",
+    test_command="./{exec_filename}",
+    exec_filename="{filename}{exec_extension}"
 )
 
 

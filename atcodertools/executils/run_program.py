@@ -38,14 +38,14 @@ class ExecResult:
         else:
             self.elapsed_ms = None
 
-    def is_correct_output(self, expected_answer_text=None, judge_method=None, sample_input_file=None, sample_output_file=None):
+    def is_correct_output(self, expected_answer_text=None, judge_method=None, sample_input_file=None, sample_output_file=None, cwd=None):
         if self.status != ExecStatus.NORMAL:
             return False
         if self.special_judge_status is not None:
             return self.special_judge_status == JudgeStatus.AC
 
         if judge_method.judge_type == JudgeType.MultiSolution:
-            judge_exec_res = run_multisolution_judge_program(judge_method.judge_exec_filename,
+            judge_exec_res = run_multisolution_judge_program(judge_method.judge_code_lang.get_test_command('judge', cwd),
                                                              self.output,
                                                              sample_input_file,
                                                              sample_output_file
@@ -67,7 +67,7 @@ def run_program(exec_file: str, input_file: str, timeout_sec: int, args=None, cu
     try:
         elapsed_sec = -time.time()
         proc = subprocess.run(
-            [exec_file] + args, stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec,
+            exec_file.split() + args, stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=current_working_dir
@@ -94,7 +94,7 @@ def run_multisolution_judge_program(exec_judge_file: str, output: str, sample_in
         tf.write(output.encode())
         tf.seek(0)
         proc = subprocess.run(
-            [exec_judge_file, sample_input_file, sample_output_file] + args,
+            exec_judge_file.split() + [sample_input_file, sample_output_file] + args,
             stdin=tf, universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -157,7 +157,7 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
 
         main_thread = RunThread(
             [exec_file], input_file=input_file, timeout_sec=timeout_sec)
-        judge_thread = RunThread([exec_judge_file, input_file, output_file],
+        judge_thread = RunThread(exec_judge_file.split() + [input_file, output_file],
                                  stdin=main_thread.proc.stdout,
                                  stdout=main_thread.proc.stdin,
                                  timeout_sec=timeout_sec + 1)

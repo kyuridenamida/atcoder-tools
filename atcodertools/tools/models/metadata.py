@@ -59,10 +59,10 @@ class Metadata:
     def default_metadata():
         return Metadata(
             problem=None,
-            code_filename="main.cpp",
+            code_filename=None,
             sample_in_pattern=DEFAULT_IN_EXAMPLE_PATTERN,
             sample_out_pattern=DEFAULT_OUT_EXAMPLE_PATTERN,
-            lang=Language.from_name("cpp"),
+            lang=None,
             judge_method=NormalJudge()
         )
 

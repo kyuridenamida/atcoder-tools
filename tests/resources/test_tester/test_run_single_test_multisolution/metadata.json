@@ -1,0 +1,19 @@
+{
+ "code_filename": "main.cpp",
+ "judge": {
+  "judge_code_filename": "judge",
+  "judge_code_lang": "cpp",
+  "judge_exec_filename": "judge",
+  "judge_type": "multisolution"
+ },
+ "lang": "cpp",
+ "problem": {
+  "alphabet": "A",
+  "contest": {
+   "contest_id": "dummy_contest"
+  },
+  "problem_id": "dummy_contest_a"
+ },
+ "sample_in_pattern": "in_*.txt",
+ "sample_out_pattern": "out_*.txt"
+}

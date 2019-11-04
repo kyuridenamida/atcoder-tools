@@ -15,6 +15,7 @@ from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program, run_interactive_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
+from atcodertools.tools.compiler import compile_codes
 
 
 class NoExecutableFileError(Exception):
@@ -102,14 +103,17 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
 
 def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int,
                     judge_method: Judge = NormalJudge(), knock_out: bool = False,
-                    skip_io_on_success: bool = False) -> TestSummary:
+                    skip_io_on_success: bool = False, cwd: str = "./") -> TestSummary:
     success_count = 0
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
         if judge_method.judge_type == JudgeType.Interactive:
-            exec_res = run_interactive_program(exec_file, judge_method.judge_exec_filename,
+            exec_res = run_interactive_program(exec_file, 
+                                               judge_method.judge_code_lang.get_test_command('judge', cwd),
                                                in_sample_file, out_sample_file,
-                                               timeout_sec=timeout_sec)
+                                               timeout_sec=timeout_sec,
+                                               current_working_dir=cwd
+                                               )
             is_correct = exec_res.is_correct_output(judge_method=judge_method)
         else:
             # Run program
@@ -118,7 +122,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
             if judge_method.judge_type == JudgeType.MultiSolution:
                 is_correct = exec_res.is_correct_output(
-                    judge_method=judge_method, sample_input_file=in_sample_file, sample_output_file=out_sample_file)
+                    judge_method=judge_method, sample_input_file=in_sample_file, sample_output_file=out_sample_file, cwd=cwd)
             else:
                 # Output header
                 with open(out_sample_file, 'r') as f:
@@ -171,7 +175,7 @@ def validate_sample_pair(in_sample_file, out_sample_file):
 
 
 def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int,
-                    judge_method: Judge) -> bool:
+                    judge_method: Judge, cwd) -> bool:
     def single_or_none(lst: List):
         if len(lst) == 1:
             return lst[0]
@@ -192,13 +196,13 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     validate_sample_pair(in_sample_file, out_sample_file)
 
     test_summary = run_for_samples(
-        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_method)
+        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_method, cwd=cwd)
 
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
 
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
-                  skip_stderr_on_success: bool, judge_method) -> bool:
+                  skip_stderr_on_success: bool, judge_method, cwd) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
         logger.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
@@ -211,7 +215,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         samples.append((in_sample_file, out_sample_file))
 
     test_summary = run_for_samples(
-        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success)
+        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success, cwd=cwd)
 
     if len(samples) == 0:
         print("No test cases")
@@ -338,22 +342,30 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    exclude_exec_files = []
 
-    if hasattr(judge_method, "judge_exec_filename"):
-        judge_method.judge_exec_filename = os.path.join(
-            args.dir, judge_method.judge_exec_filename)
-        exclude_exec_files.append(judge_method.judge_exec_filename)
+    if metadata.code_filename is None:
+        exclude_exec_files = []
+    
+        if hasattr(judge_method, "judge_exec_filename"):
+            judge_method.judge_exec_filename = os.path.join(
+                args.dir, judge_method.judge_exec_filename)
+            exclude_exec_files.append(judge_method.judge_exec_filename)
+    
+        exec_file = args.exec or infer_exec_file(
+            glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
+    else:
+        exec_file = lang.get_test_command('main', args.dir)
+        print("command: ", exec_file)
 
-    exec_file = args.exec or infer_exec_file(
-        glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
+        # Compile
+        compile_codes(metadata, args.dir)
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
-                             args.skip_almost_ac_feedback, judge_method)
+                             args.skip_almost_ac_feedback, judge_method, args.dir)
     else:
         return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num,
-                               judge_method)
+                               judge_method, args.dir)
 
 
 if __name__ == "__main__":
