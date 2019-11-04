@@ -28,7 +28,7 @@ class Language:
                  default_template_path: str,
                  default_code_style=None,
                  compile_command=None,
-                 test_command=None, 
+                 test_command=None,
                  exec_filename=None
                  ):
         self.name = name
@@ -42,7 +42,8 @@ class Language:
         self.test_command = test_command
         self.code_filename = "{filename}." + extension
         if platform.system() == "Windows":
-            self.exec_filename = exec_filename.replace("{exec_extension}", ".exe")
+            self.exec_filename = exec_filename.replace(
+                "{exec_extension}", ".exe")
         else:
             self.exec_filename = exec_filename.replace("{exec_extension}", "")
 

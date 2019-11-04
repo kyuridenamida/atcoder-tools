@@ -86,7 +86,7 @@ def run_program(exec_file: str, input_file: str, timeout_sec: int, args=None, cu
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
 
 
-def run_multisolution_judge_program(exec_judge_file: str, output: str, sample_input_file: str, sample_output_file: str, args=None, current_working_dir: str = None) -> ExecResult:
+def run_multisolution_judge_program(judge_cmd: str, output: str, sample_input_file: str, sample_output_file: str, args=None, current_working_dir: str = None) -> ExecResult:
     if args is None:
         args = []
     try:
@@ -94,7 +94,7 @@ def run_multisolution_judge_program(exec_judge_file: str, output: str, sample_in
         tf.write(output.encode())
         tf.seek(0)
         proc = subprocess.run(
-            exec_judge_file.split() + [sample_input_file, sample_output_file] + args,
+            judge_cmd.split() + [sample_input_file, sample_output_file] + args,
             stdin=tf, universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

@@ -108,8 +108,9 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
         if judge_method.judge_type == JudgeType.Interactive:
-            exec_res = run_interactive_program(exec_file, 
-                                               judge_method.judge_code_lang.get_test_command('judge', cwd),
+            exec_res = run_interactive_program(exec_file,
+                                               judge_method.judge_code_lang.get_test_command(
+                                                   'judge', cwd),
                                                in_sample_file, out_sample_file,
                                                timeout_sec=timeout_sec,
                                                current_working_dir=cwd
@@ -342,15 +343,14 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-
     if metadata.code_filename is None:
         exclude_exec_files = []
-    
+
         if hasattr(judge_method, "judge_exec_filename"):
             judge_method.judge_exec_filename = os.path.join(
                 args.dir, judge_method.judge_exec_filename)
             exclude_exec_files.append(judge_method.judge_exec_filename)
-    
+
         exec_file = args.exec or infer_exec_file(
             glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
     else:
