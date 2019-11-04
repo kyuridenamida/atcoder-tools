@@ -58,6 +58,8 @@ class ExecResult:
             return judge_method.verify(self.output, expected_answer_text)
 
     def has_stderr(self):
+        if self.stderr is None:
+            return False
         return len(self.stderr) > 0
 
 

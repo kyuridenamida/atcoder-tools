@@ -358,7 +358,8 @@ def main(prog, args) -> bool:
         print("command: ", exec_file)
 
         # Compile
-        compile_codes(metadata, args.dir)
+        if not compile_codes(metadata, args.dir):
+            exit()
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
