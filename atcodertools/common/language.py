@@ -110,7 +110,7 @@ RUST = Language(
     default_code_generator=rust.main,
     default_template_path=get_default_template_path('rs'),
     compile_command="rustc {filename}.rs -o {filename}",
-    test_command="./{exec_filename}",
+    test_command="{exec_filename}",
     exec_filename="{filename}{exec_extension}"
 )
 
@@ -134,7 +134,7 @@ DLANG = Language(
     default_code_generator=d.main,
     default_template_path=get_default_template_path('d'),
     compile_command="dmd {filename}.d -of={filename}",
-    test_command="./{exec_filename}",
+    test_command="{exec_filename}",
     exec_filename="{filename}{exec_extension}"
 )
 
@@ -147,7 +147,7 @@ NIM = Language(
     default_template_path=get_default_template_path('nim'),
     default_code_style=CodeStyle(indent_width=2),
     compile_command="nim cpp -o:{filename} {filename}.nim",
-    test_command="./{exec_filename}",
+    test_command="{exec_filename}",
     exec_filename="{filename}{exec_extension}"
 )
 
@@ -159,7 +159,7 @@ CSHARP = Language(
     default_code_generator=cs.main,
     default_template_path=get_default_template_path('cs'),
     compile_command="mcs {filename}.cs -o {filename}",
-    test_command="./{exec_filename}",
+    test_command="{exec_filename}",
     exec_filename="{filename}{exec_extension}"
 )
 

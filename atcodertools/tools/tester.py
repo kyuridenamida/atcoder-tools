@@ -119,7 +119,7 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
         else:
             # Run program
             exec_res = run_program(exec_file, in_sample_file,
-                                   timeout_sec=timeout_sec)
+                                   timeout_sec=timeout_sec, current_working_dir=cwd)
 
             if judge_method.judge_type == JudgeType.MultiSolution:
                 is_correct = exec_res.is_correct_output(
@@ -299,6 +299,12 @@ def main(prog, args) -> bool:
                         type=float,
                         default=None)
 
+    parser.add_argument('--compile', '-c',
+                        help='compile source [ture, false]: '
+                             ' [Default]: auto compile ',
+                        type=bool,
+                        default=None)
+
     args = parser.parse_args(args)
 
     metadata_file = os.path.join(args.dir, "metadata.json")
@@ -343,7 +349,8 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    if metadata.code_filename is None:
+    if metadata.code_filename is None or (args.compile is not None and not args.compile):
+        print("compile is skipped and infer exec file")
         exclude_exec_files = []
 
         if hasattr(judge_method, "judge_exec_filename"):
@@ -354,11 +361,15 @@ def main(prog, args) -> bool:
         exec_file = args.exec or infer_exec_file(
             glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
     else:
+        if args.compile is not None:
+            force_compile = True
+        else:
+            force_compile = False
         exec_file = lang.get_test_command('main', args.dir)
         print("command: ", exec_file)
-
+        print("directory: ", args.dir)
         # Compile
-        if not compile_codes(metadata, args.dir):
+        if not compile_codes(metadata, args.dir, force_compile=force_compile):
             exit()
 
     if args.num is None:

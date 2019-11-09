@@ -9,6 +9,9 @@ from atcodertools.tools import tester
 from atcodertools.tools.tester import is_executable_file, TestSummary, build_details_str
 from atcodertools.tools.utils import with_color
 from atcodertools.executils.run_command import run_command
+from atcodertools.tools.judgetype_setter import main as judge_type_setter_main
+from atcodertools.tools.compiler import compile_codes
+from atcodertools.common.language import ALL_LANGUAGES
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -81,6 +84,19 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "1", "-j", "interactive"]))
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "2", "-j", "interactive"]))
+
+    def test_compiler_and_tester(self):
+        run_command("cp -r test_compiler_and_tester /tmp", RESOURCE_DIR)
+        test_dir = "/tmp/test_compiler_and_tester"
+        os.chdir(test_dir)
+
+        for lang in ALL_LANGUAGES:
+            metadata = judge_type_setter_main(
+                '', ["normal", "--lang", lang.name])
+            compile_codes(metadata, force_compile=True)
+            for i in [1, 2, 3, 4]:
+                self.assertTrue(tester.main(
+                    '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)

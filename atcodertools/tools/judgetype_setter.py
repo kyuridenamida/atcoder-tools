@@ -7,7 +7,7 @@ from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, 
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.common.language import Language, ALL_LANGUAGES
 from atcodertools.tools.templates import get_default_judge_template_path
-
+from atcodertools.tools.codegen import main as codegen_main
 
 def main(prog, args):
     if len(args) == 0:
@@ -73,8 +73,14 @@ def main(prog, args):
             shutil.copy(judge_template_path, "./judge.cpp")
         else:
             print("Judge Code exists")
+
     if args.lang is not None:
         if args.lang != metadata.lang.name:
             metadata.lang = Language.from_name(args.lang)
-            # TODO: generate code
+            metadata.code_filename = metadata.lang.get_code_filename('main')
+            url = "https://atcoder.jp/contests/{}/tasks/{}".format(
+                metadata.problem.contest.contest_id, metadata.problem.problem_id)
+            codegen_main("", ["--lang", metadata.lang.name, url], open(metadata.code_filename, 'w'))
+
     metadata.save_to("./metadata.json")
+    return metadata

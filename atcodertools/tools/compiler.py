@@ -7,34 +7,35 @@ import os
 import pathlib
 
 
-def compile(code_filename, exec_filename, compile_cmd, cwd):
-    code_p = pathlib.Path(cwd + '/' + code_filename)
-    if os.path.exists(cwd + '/' + exec_filename):
-        exec_p = pathlib.Path(cwd + '/' + exec_filename)
-    else:
-        exec_p = None
-    if exec_p is not None and code_p.stat().st_mtime < exec_p.stat().st_mtime:
-        print("No need to compile")
+def compile(code_filename, exec_filename, compile_cmd, cwd, force_compile):
+    if not force_compile:
+        code_p = pathlib.Path(cwd + '/' + code_filename)
+        if os.path.exists(cwd + '/' + exec_filename):
+            exec_p = pathlib.Path(cwd + '/' + exec_filename)
+        else:
+            exec_p = None
+        if exec_p is not None and code_p.stat().st_mtime < exec_p.stat().st_mtime:
+            print("No need to compile")
+            return True
+    print("Compileing: ")
+    print(compile_cmd)
+    code, stdout = run_command_with_returncode(compile_cmd, cwd)
+    print(stdout)
+    if code == 0:
         return True
     else:
-        print("Compileing: ")
-        print(compile_cmd)
-        code, stdout = run_command_with_returncode(compile_cmd, cwd)
-        print(stdout)
-        if code == 0:
-            return True
-        else:
-            return False
+        return False
 
 
-def compile_codes(metadata, cwd="./"):
+def compile_codes(metadata, cwd="./", force_compile=False):
     valid = True
     lang = metadata.lang
     print("code file: ")
     compile_cmd = lang.get_compile_command('main')
     code_filename = lang.get_code_filename('main')
     exec_filename = lang.get_exec_filename('main')
-    code = compile(code_filename, exec_filename, compile_cmd, cwd)
+    code = compile(code_filename, exec_filename,
+                   compile_cmd, cwd, force_compile)
     if not code:
         valid = False
     if metadata.judge_method.judge_type in [JudgeType.MultiSolution, JudgeType.Interactive]:
@@ -44,7 +45,8 @@ def compile_codes(metadata, cwd="./"):
         code_filename = lang.get_code_filename('judge')
         exec_filename = lang.get_exec_filename('judge')
 
-        code = compile(code_filename, exec_filename, compile_cmd, cwd)
+        code = compile(code_filename, exec_filename,
+                       compile_cmd, cwd, force_compile)
         if not code:
             valid = False
     return valid
@@ -52,4 +54,4 @@ def compile_codes(metadata, cwd="./"):
 
 def main(prog, args):
     metadata = Metadata.load_from("./metadata.json")
-    compile_codes(metadata)
+    compile_codes(metadata, force_compile=True)

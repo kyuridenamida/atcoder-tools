@@ -121,7 +121,6 @@ def main(prog, args, output_file=sys.stdout):
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
-
     parser.add_argument("url",
                         help="URL (e.g. https://atcoder.jp/contests/abc012/tasks/abc012_3)")
 
