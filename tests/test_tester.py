@@ -9,7 +9,7 @@ from atcodertools.tools import tester
 from atcodertools.tools.tester import is_executable_file, TestSummary, build_details_str
 from atcodertools.tools.utils import with_color
 from atcodertools.executils.run_command import run_command
-from atcodertools.tools.judgetype_setter import main as judge_type_setter_main
+from atcodertools.tools.setter import main as setter_main
 from atcodertools.tools.compiler import compile_codes
 from atcodertools.common.language import ALL_LANGUAGES
 
@@ -91,8 +91,7 @@ class TestTester(unittest.TestCase):
         os.chdir(test_dir)
 
         for lang in ALL_LANGUAGES:
-            metadata = judge_type_setter_main(
-                '', ["normal", "--lang", lang.name])
+            metadata = setter_main('', ["--lang", lang.name])
             compile_codes(metadata, force_compile=True)
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main(
