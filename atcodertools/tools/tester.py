@@ -74,6 +74,8 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
 
     def append(text: str, end='\n'):
         nonlocal res
+        print(type(text))
+        print(text)
         res += text + end
 
     with open(output_file, "r") as f:
@@ -131,6 +133,16 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
                 is_correct = exec_res.is_correct_output(
                     expected_answer_text, judge_method)
+
+        if exec_res.output is None:
+            exec_res.output = ""
+        elif isinstance(exec_res.output, bytes):
+            exec_res.output = exec_res.output.decode()
+        if exec_res.stderr is None:
+            exec_res.stderr = ""
+        elif isinstance(exec_res.stderr, bytes):
+            exec_res.stderr = exec_res.stderr.decode()
+
         has_error_output = has_error_output or exec_res.has_stderr()
 
         if is_correct:
