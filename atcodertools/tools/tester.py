@@ -74,8 +74,6 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
 
     def append(text: str, end='\n'):
         nonlocal res
-        print(type(text))
-        print(text)
         res += text + end
 
     with open(output_file, "r") as f:
