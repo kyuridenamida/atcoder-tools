@@ -45,6 +45,12 @@ class Config:
                                                             template_file=args.template,
                                                             workspace_dir=args.workspace,
                                                             lang=args.lang))
+
+            lang = code_style_config_dic['lang']
+            if lang in config_dic:
+                code_style_config_dic = _update_config_dict(
+                    code_style_config_dic, config_dic[lang])
+
             etc_config_dic = _update_config_dict(etc_config_dic,
                                                  dict(
                                                      download_without_login=args.without_login,
