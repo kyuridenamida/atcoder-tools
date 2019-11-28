@@ -155,7 +155,7 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
 
             def close(self):
                 self.proc.stdin.close()
-
+        import os
         main_thread = RunThread(
             [exec_file], input_file=input_file, timeout_sec=timeout_sec)
         judge_thread = RunThread(exec_judge_file.split() + [input_file, output_file],
@@ -198,8 +198,13 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
                 raise JudgeError(message)
 
         elapsed_sec += time.time()
-        return ExecResult(code, judge_thread.proc.stderr.read().decode(), main_thread.proc.stderr.read().decode(),
-                          elapsed_sec=elapsed_sec, special_judge_status=judge_status)
+
+################### main_thread.proc.stderr.read().decode()を呼ぶといつまでも結果が帰ってこない問題
+#        result = ExecResult(code, judge_thread.proc.stderr.read().decode(), main_thread.proc.stderr.read().decode(),
+#                            elapsed_sec=elapsed_sec, special_judge_status=judge_status)
+        result = ExecResult(code, judge_thread.proc.stderr.read().decode(), "",
+                            elapsed_sec=elapsed_sec, special_judge_status=judge_status)
+        return result
     except subprocess.TimeoutExpired as e:
         return ExecResult(ExecStatus.TLE, e.stdout, e.stderr)
     except subprocess.CalledProcessError as e:

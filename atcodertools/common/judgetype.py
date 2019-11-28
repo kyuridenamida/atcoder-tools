@@ -79,9 +79,14 @@ class DecimalJudge(Judge):
         expected = expected.strip().split()
         if len(output) != len(expected):
             return False
-        for i in range(0, len(output)):
-            if not self._verify_sub(float(output[i]), float(expected[i])):
-                return False
+        for i in range(0, len(expected)):
+            try:
+                f = float(expected[i])
+                if not self._verify_sub(float(output[i]), f):
+                    return False
+            except ValueError:
+                if output[i] != expected[i]:
+                    return False
         return True
 
     def to_dict(self):
@@ -135,7 +140,7 @@ class MultiSolutionJudge(Judge):
 
 
 class InteractiveJudge(Judge):
-    def __init__(self, judge_code_lang=None):
+    def __init__(self, judge_code_lang="cpp"):
         self.judge_type = JudgeType.Interactive
         self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
         from atcodertools.common.language import Language
