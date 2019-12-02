@@ -7,7 +7,7 @@ import os
 import pathlib
 
 
-def compile(code_filename, exec_filename, compile_cmd, cwd, force_compile):
+def compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str, force_compile: bool) -> bool:
     if not force_compile:
         code_p = pathlib.Path(cwd + '/' + code_filename)
         if os.path.exists(cwd + '/' + exec_filename):
@@ -27,7 +27,7 @@ def compile(code_filename, exec_filename, compile_cmd, cwd, force_compile):
         return False
 
 
-def compile_codes(metadata, cwd="./", force_compile=False):
+def compile_codes(metadata: Metadata, cwd="./", force_compile=False):
     valid = True
     lang = metadata.lang
     print("code file: ")

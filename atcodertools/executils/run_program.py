@@ -198,9 +198,6 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
 
         elapsed_sec += time.time()
 
-# main_thread.proc.stderr.read().decode()を呼ぶといつまでも結果が帰ってこない問題
-#        result = ExecResult(code, judge_thread.proc.stderr.read().decode(), main_thread.proc.stderr.read().decode(),
-#                            elapsed_sec=elapsed_sec, special_judge_status=judge_status)
         result = ExecResult(code, judge_thread.proc.stderr.read().decode(), "",
                             elapsed_sec=elapsed_sec, special_judge_status=judge_status)
         return result

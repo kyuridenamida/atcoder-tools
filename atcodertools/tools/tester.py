@@ -247,7 +247,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         return True
 
 
-def get_metadata(metadata_file: str) -> Tuple[str, str, Judge]:
+def get_metadata(metadata_file: str) -> Metadata:
     try:
         metadata = Metadata.load_from(metadata_file)
         return metadata
@@ -311,7 +311,7 @@ def main(prog, args) -> bool:
 
     parser.add_argument('--compile', '-c',
                         help='compile source [ture, false]: '
-                             ' [Default]: auto compile ',
+                             ' [Default]: compile source only if it was changed',
                         type=bool,
                         default=None)
 
