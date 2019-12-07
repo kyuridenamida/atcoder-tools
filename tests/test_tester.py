@@ -82,7 +82,8 @@ class TestTester(unittest.TestCase):
 
         metadata = setter_main('', ['-d', test_dir, "-j", "multisolution"])
 
-        self.assertTrue(metadata.judge_method.judge_type == JudgeType.MultiSolution)
+        self.assertTrue(metadata.judge_method.judge_type ==
+                        JudgeType.MultiSolution)
 
         self.assertTrue(tester.main(
             '', ['-d', test_dir, '-n', '1', '-c', 'on']))

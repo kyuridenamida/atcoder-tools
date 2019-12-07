@@ -18,7 +18,6 @@ def main(prog, args):
         print("Usage: atcoder tools set [options]")
         return
 
-
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
