@@ -1,11 +1,16 @@
 from argparse import Namespace
 from typing import TextIO, Dict, Any, Optional
 
+import os
+import argparse
+from os.path import expanduser
 import toml
+from atcodertools.common.logging import logger
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
+from atcodertools.tools import get_default_config_path
 
 
 def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
@@ -40,25 +45,52 @@ class Config:
         etc_config_dic = config_dic.get('etc', {})
 
         if args:
-            code_style_config_dic = _update_config_dict(code_style_config_dic,
-                                                        dict(
-                                                            template_file=args.template,
-                                                            workspace_dir=args.workspace,
-                                                            lang=args.lang))
+            d = dict()
+            if hasattr(args, 'template'):
+                d['template_file'] = args.template
+            if hasattr(args, 'workspace'):
+                d['workspace_dir'] = args.workspace
+            if hasattr(args, 'lang'):
+                d['lang'] = args.lang
+            code_style_config_dic = _update_config_dict(
+                code_style_config_dic, d)
 
             lang = code_style_config_dic['lang']
             if lang in config_dic:
                 code_style_config_dic = _update_config_dict(
                     code_style_config_dic, config_dic[lang])
 
-            etc_config_dic = _update_config_dict(etc_config_dic,
-                                                 dict(
-                                                     download_without_login=args.without_login,
-                                                     parallel_download=args.parallel,
-                                                     save_no_session_cache=args.save_no_session_cache))
+            d = dict()
+            if hasattr(args, 'without_login'):
+                d['download_without_login'] = args.without_login
+            if hasattr(args, 'parallel'):
+                d['parallel_download'] = args.parallel
+            if hasattr(args, 'save_no_session_cache'):
+                d['save_no_session_cache'] = args.save_no_session_cache
+
+            etc_config_dic = _update_config_dict(etc_config_dic, d)
 
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
             postprocess_config=PostprocessConfig(**postprocess_config_dic),
             etc_config=EtcConfig(**etc_config_dic)
         )
+
+
+USER_CONFIG_PATH = os.path.join(
+    expanduser("~"), ".atcodertools.toml")
+
+
+def get_config(args: argparse.Namespace) -> Config:
+    def _load(path: str) -> Config:
+        logger.info("Going to load {} as config".format(path))
+        with open(path, 'r') as f:
+            return Config.load(f, args)
+
+    if args.config:
+        return _load(args.config)
+
+    if os.path.exists(USER_CONFIG_PATH):
+        return _load(USER_CONFIG_PATH)
+
+    return _load(get_default_config_path())

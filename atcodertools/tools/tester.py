@@ -16,6 +16,9 @@ from atcodertools.executils.run_program import ExecResult, ExecStatus, run_progr
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
 from atcodertools.tools.compiler import compile_main_and_judge_programs
+from atcodertools.config.config import get_config, USER_CONFIG_PATH
+from atcodertools.tools import get_default_config_path
+from atcodertools.config.etc_config import CompileType
 
 
 class NoExecutableFileError(Exception):
@@ -309,13 +312,27 @@ def main(prog, args) -> bool:
                         type=float,
                         default=None)
 
-    parser.add_argument('--compile', '-c',
-                        help='compile source before testing [ture, false]: '
-                             ' [Default]: compile source only if it was changed',
-                        type=bool,
+    parser.add_argument('--compile-type', '-c',
+                        help='compile source before testing [off, on, force]: '
+                             ' [Default]: on (compile source only if it was changed)',
+                        type=str,
                         default=None)
 
+    parser.add_argument("--config",
+                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
+                            USER_CONFIG_PATH),
+                            "[Default (Secondary)] {}\n".format(
+                                get_default_config_path()))
+                        )
+
     args = parser.parse_args(args)
+    if args.compile_type is not None:
+        args.compile_type = CompileType(args.compile_type)
+
+    config = get_config(args)
+    if config.etc_config.compile_type is not None:
+        if args.compile_type is None:
+            args.compile_type = config.etc_config.compile_type
 
     metadata_file = os.path.join(args.dir, "metadata.json")
     metadata = get_metadata(metadata_file)
@@ -359,7 +376,7 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    if metadata.code_filename is None or (args.compile is not None and not args.compile):
+    if metadata.code_filename is None or args.compile_type == CompileType.OFF:
         print("compile is skipped and infer exec file")
         exclude_exec_files = []
 
@@ -371,7 +388,7 @@ def main(prog, args) -> bool:
         exec_file = args.exec or infer_exec_file(
             glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
     else:
-        if args.compile is not None:
+        if args.compile_type == CompileType.FORCE:
             force_compile = True
         else:
             force_compile = False
