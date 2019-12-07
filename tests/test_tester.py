@@ -92,22 +92,22 @@ class TestTester(unittest.TestCase):
         self.assertTrue(metadata.lang.name == 'cpp')
 
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, '-n', '1', '-c', 'on']))
+            '', ['-d', test_dir, '-n', '1', '-c', "True"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-c", "on"]))
+            '', ['-d', test_dir, "-n", "2", "-c", "True"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "3", "-c", "on"]))
+            '', ['-d', test_dir, "-n", "3", "-c", "True"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "4", "-c", "on"]))
+            '', ['-d', test_dir, "-n", "4", "-c", "True"]))
 
     def test_run_single_test_interactive(self):
         run_command("cp -r test_run_single_test_interactive /tmp", RESOURCE_DIR)
         test_dir = "/tmp/test_run_single_test_interactive"
 
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-j", "interactive", '-c', 'on']))
+            '', ['-d', test_dir, "-n", "1", "-j", "interactive", '-c', "True"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-j", "interactive", '-c', 'on']))
+            '', ['-d', test_dir, "-n", "2", "-j", "interactive", '-c', "True"]))
 
     def test_compiler_and_tester(self):
         run_command("cp -r test_compiler_and_tester /tmp", RESOURCE_DIR)

@@ -18,7 +18,6 @@ from atcodertools.tools.utils import with_color
 from atcodertools.tools.compiler import compile_main_and_judge_programs
 from atcodertools.config.config import get_config, USER_CONFIG_PATH
 from atcodertools.tools import get_default_config_path
-from atcodertools.config.etc_config import CompileType
 
 
 class NoExecutableFileError(Exception):
@@ -312,10 +311,16 @@ def main(prog, args) -> bool:
                         type=float,
                         default=None)
 
-    parser.add_argument('--compile-type', '-c',
-                        help='compile source before testing [off, on, force]: '
-                             ' [Default]: on (compile source only if it was changed)',
-                        type=str,
+    parser.add_argument('--compile-before-testing', '-c',
+                        help='compile source before testing [true, false]: '
+                             ' [Default]: false',
+                        type=bool,
+                        default=None)
+
+    parser.add_argument('--only-when-diff-detected',
+                        help='compile only when diff detected [true, false]'
+                             ' [Default]: true',
+                        type=bool,
                         default=None)
 
     parser.add_argument("--config",
@@ -326,13 +331,14 @@ def main(prog, args) -> bool:
                         )
 
     args = parser.parse_args(args)
-    if args.compile_type is not None:
-        args.compile_type = CompileType(args.compile_type)
 
     config = get_config(args)
-    if config.etc_config.compile_type is not None:
-        if args.compile_type is None:
-            args.compile_type = config.etc_config.compile_type
+
+    if config.etc_config.compile_before_testing is not None and args.compile_before_testing is None:
+        args.compile_before_testing = config.etc_config.compile_before_testing
+    if args.compile_before_testing:
+        if config.etc_config.only_when_diff_detected is not None and args.only_when_diff_detected is None:
+            args.only_when_diff_detected = config.etc_config.only_when_diff_detected
 
     metadata_file = os.path.join(args.dir, "metadata.json")
     metadata = get_metadata(metadata_file)
@@ -376,7 +382,7 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    if metadata.code_filename is None or args.compile_type == CompileType.OFF:
+    if metadata.code_filename is None or not args.compile_before_testing:
         print("compile is skipped and infer exec file")
         exclude_exec_files = []
 
@@ -388,7 +394,7 @@ def main(prog, args) -> bool:
         exec_file = args.exec or infer_exec_file(
             glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
     else:
-        if args.compile_type == CompileType.FORCE:
+        if args.only_when_diff_detected:
             force_compile = True
         else:
             force_compile = False

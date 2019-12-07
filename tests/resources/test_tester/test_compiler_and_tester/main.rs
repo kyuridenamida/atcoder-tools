@@ -5,9 +5,9 @@ const YES: &'static str = "Yes";
 const NO: &'static str = "No";
 fn solve(A: i64, B: i64, C: i64) {
     if A + B >= C{
-        print(YES)
+        print!("{}\n", YES)
     }else{
-        print(NO)
+        print!("{}\n", NO)
     }
 }
 
