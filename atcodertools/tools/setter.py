@@ -18,7 +18,6 @@ def main(prog, args):
         print("Usage: atcoder tools set [options]")
         return
 
-    metadata = Metadata.load_from("./metadata.json")
 
     parser = argparse.ArgumentParser(
         prog=prog,
@@ -42,7 +41,14 @@ def main(prog, args):
                             " or ".join([lang.name for lang in ALL_LANGUAGES])),
                         default=None)
 
+    parser.add_argument("--dir", '-d',
+                        help="Target directory to test. [Default] Current directory",
+                        default=".")
+
     args = parser.parse_args(args)
+
+    metadata = Metadata.load_from(args.dir + "/metadata.json")
+    print(args.dir)
 
     new_judge_type = args.judge_type
     if new_judge_type in ["decimal", "absolute", "relative", "absolute_or_relative"]:
@@ -98,5 +104,5 @@ def main(prog, args):
                 print("file exists: ", metadata.code_filename)
         else:
             print("already set to {}".format(args.lang))
-    metadata.save_to("./metadata.json")
+    metadata.save_to(args.dir + "/metadata.json")
     return metadata

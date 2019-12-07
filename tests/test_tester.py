@@ -12,6 +12,7 @@ from atcodertools.executils.run_command import run_command
 from atcodertools.tools.setter import main as setter_main
 from atcodertools.tools.compiler import compile_main_and_judge_programs
 from atcodertools.common.language import ALL_LANGUAGES
+from atcodertools.common.judgetype import JudgeType
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -79,14 +80,18 @@ class TestTester(unittest.TestCase):
             "cp -r test_run_single_test_multisolution /tmp", RESOURCE_DIR)
         test_dir = "/tmp/test_run_single_test_multisolution"
 
+        metadata = setter_main('', ['-d', test_dir, "-j", "multisolution"])
+
+        self.assertTrue(metadata.judge_method.judge_type == JudgeType.MultiSolution)
+
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-j", "multisolution"]))
+            '', ['-d', test_dir, '-n', '1', '-c', 'on']))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-j", "multisolution"]))
+            '', ['-d', test_dir, "-n", "2", "-c", "on"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "3", "-j", "multisolution"]))
+            '', ['-d', test_dir, "-n", "3", "-c", "on"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "4", "-j", "multisolution"]))
+            '', ['-d', test_dir, "-n", "4", "-c", "on"]))
 
     def test_run_single_test_interactive(self):
         run_command("cp -r test_run_single_test_interactive /tmp", RESOURCE_DIR)

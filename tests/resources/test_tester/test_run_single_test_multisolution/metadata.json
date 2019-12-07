@@ -1,10 +1,7 @@
 {
  "code_filename": "main.cpp",
  "judge": {
-  "judge_code_filename": "judge",
-  "judge_code_lang": "cpp",
-  "judge_exec_filename": "judge",
-  "judge_type": "multisolution"
+  "judge_type": "normal"
  },
  "lang": "cpp",
  "problem": {
