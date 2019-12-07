@@ -7,7 +7,7 @@ class EtcConfig:
                  in_example_format: str = "in_{}.txt",
                  out_example_format: str = "out_{}.txt",
                  compile_before_testing: bool = False,
-                 only_when_diff_detected: bool = True,
+                 compile_only_when_diff_detected: bool = True,
                  ):
         self.download_without_login = download_without_login
         self.parallel_download = parallel_download
@@ -15,4 +15,4 @@ class EtcConfig:
         self.in_example_format = in_example_format
         self.out_example_format = out_example_format
         self.compile_before_testing = compile_before_testing
-        self.only_when_diff_detected = only_when_diff_detected
+        self.compile_only_when_diff_detected = compile_only_when_diff_detected

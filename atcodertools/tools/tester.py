@@ -317,7 +317,7 @@ def main(prog, args) -> bool:
                         type=bool,
                         default=None)
 
-    parser.add_argument('--only-when-diff-detected',
+    parser.add_argument('--compile-only-when-diff-detected',
                         help='compile only when diff detected [true, false]'
                              ' [Default]: true',
                         type=bool,
@@ -337,8 +337,8 @@ def main(prog, args) -> bool:
     if config.etc_config.compile_before_testing is not None and args.compile_before_testing is None:
         args.compile_before_testing = config.etc_config.compile_before_testing
     if args.compile_before_testing:
-        if config.etc_config.only_when_diff_detected is not None and args.only_when_diff_detected is None:
-            args.only_when_diff_detected = config.etc_config.only_when_diff_detected
+        if config.etc_config.compile_only_when_diff_detected is not None and args.compile_only_when_diff_detected is None:
+            args.compile_only_when_diff_detected = config.etc_config.compile_only_when_diff_detected
 
     metadata_file = os.path.join(args.dir, "metadata.json")
     metadata = get_metadata(metadata_file)
@@ -394,7 +394,7 @@ def main(prog, args) -> bool:
         exec_file = args.exec or infer_exec_file(
             glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
     else:
-        if args.only_when_diff_detected:
+        if args.compile_only_when_diff_detected:
             force_compile = True
         else:
             force_compile = False

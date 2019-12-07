@@ -62,13 +62,13 @@ class ExecResult:
         return len(self.stderr) > 0
 
 
-def run_program(exec_file: str, input_file: str, timeout_sec: int, args=None, current_working_dir: str = None) -> ExecResult:
+def run_program(exec_cmd: str, input_file: str, timeout_sec: int, args=None, current_working_dir: str = None) -> ExecResult:
     if args is None:
         args = []
     try:
         elapsed_sec = -time.time()
         proc = subprocess.run(
-            exec_file.split() + args, stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec,
+            exec_cmd.split() + args, stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=current_working_dir
