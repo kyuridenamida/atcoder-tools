@@ -310,7 +310,7 @@ def main(prog, args) -> bool:
                         default=None)
 
     parser.add_argument('--compile', '-c',
-                        help='compile source [ture, false]: '
+                        help='compile source before testing [ture, false]: '
                              ' [Default]: compile source only if it was changed',
                         type=bool,
                         default=None)
