@@ -5,7 +5,6 @@ import shutil
 import sys
 import traceback
 from multiprocessing import Pool, cpu_count
-from os.path import expanduser
 from time import sleep
 from typing import Tuple
 
@@ -18,7 +17,7 @@ from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.common.language import ALL_LANGUAGES, CPP
 from atcodertools.common.logging import logger
-from atcodertools.config.config import Config
+from atcodertools.config.config import Config, get_config, USER_CONFIG_PATH
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
     create_code
@@ -203,25 +202,6 @@ def prepare_contest(atcoder_client: AtCoderClient,
                                           config.postprocess_config.exec_cmd_on_contest_dir))
         config.postprocess_config.execute_on_contest_dir(
             contest_dir_path)
-
-
-USER_CONFIG_PATH = os.path.join(
-    expanduser("~"), ".atcodertools.toml")
-
-
-def get_config(args: argparse.Namespace) -> Config:
-    def _load(path: str) -> Config:
-        logger.info("Going to load {} as config".format(path))
-        with open(path, 'r') as f:
-            return Config.load(f, args)
-
-    if args.config:
-        return _load(args.config)
-
-    if os.path.exists(USER_CONFIG_PATH):
-        return _load(USER_CONFIG_PATH)
-
-    return _load(get_default_config_path())
 
 
 class DeletedFunctionalityError(Exception):

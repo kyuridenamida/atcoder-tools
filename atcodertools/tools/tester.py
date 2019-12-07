@@ -15,6 +15,9 @@ from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program, run_interactive_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
+from atcodertools.tools.compiler import compile_main_and_judge_programs
+from atcodertools.config.config import get_config, USER_CONFIG_PATH
+from atcodertools.tools import get_default_config_path
 
 
 class NoExecutableFileError(Exception):
@@ -102,23 +105,27 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
 
 def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int,
                     judge_method: Judge = NormalJudge(), knock_out: bool = False,
-                    skip_io_on_success: bool = False) -> TestSummary:
+                    skip_io_on_success: bool = False, cwd: str = "./") -> TestSummary:
     success_count = 0
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
         if judge_method.judge_type == JudgeType.Interactive:
-            exec_res = run_interactive_program(exec_file, judge_method.judge_exec_file,
+            exec_res = run_interactive_program(exec_file,
+                                               judge_method.judge_code_lang.get_test_command(
+                                                   'judge', cwd),
                                                in_sample_file, out_sample_file,
-                                               timeout_sec=timeout_sec)
+                                               timeout_sec=timeout_sec,
+                                               current_working_dir=cwd
+                                               )
             is_correct = exec_res.is_correct_output(judge_method=judge_method)
         else:
             # Run program
             exec_res = run_program(exec_file, in_sample_file,
-                                   timeout_sec=timeout_sec)
+                                   timeout_sec=timeout_sec, current_working_dir=cwd)
 
             if judge_method.judge_type == JudgeType.MultiSolution:
                 is_correct = exec_res.is_correct_output(
-                    judge_method=judge_method, sample_input_file=in_sample_file, sample_output_file=out_sample_file)
+                    judge_method=judge_method, sample_input_file=in_sample_file, sample_output_file=out_sample_file, cwd=cwd)
             else:
                 # Output header
                 with open(out_sample_file, 'r') as f:
@@ -126,6 +133,16 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
                 is_correct = exec_res.is_correct_output(
                     expected_answer_text, judge_method)
+
+        if exec_res.output is None:
+            exec_res.output = ""
+        elif isinstance(exec_res.output, bytes):
+            exec_res.output = exec_res.output.decode()
+        if exec_res.stderr is None:
+            exec_res.stderr = ""
+        elif isinstance(exec_res.stderr, bytes):
+            exec_res.stderr = exec_res.stderr.decode()
+
         has_error_output = has_error_output or exec_res.has_stderr()
 
         if is_correct:
@@ -171,7 +188,7 @@ def validate_sample_pair(in_sample_file, out_sample_file):
 
 
 def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int,
-                    judge_method: Judge) -> bool:
+                    judge_method: Judge, cwd) -> bool:
     def single_or_none(lst: List):
         if len(lst) == 1:
             return lst[0]
@@ -192,13 +209,13 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     validate_sample_pair(in_sample_file, out_sample_file)
 
     test_summary = run_for_samples(
-        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_method)
+        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_method, cwd=cwd)
 
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
 
 def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
-                  skip_stderr_on_success: bool, judge_method) -> bool:
+                  skip_stderr_on_success: bool, judge_method, cwd) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
         logger.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
@@ -211,7 +228,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         samples.append((in_sample_file, out_sample_file))
 
     test_summary = run_for_samples(
-        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success)
+        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success, cwd=cwd)
 
     if len(samples) == 0:
         print("No test cases")
@@ -232,21 +249,15 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         return True
 
 
-DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
-DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
-
-
-def get_sample_patterns_and_judge_method(metadata_file: str) -> Tuple[str, str, Judge]:
+def get_metadata(metadata_file: str) -> Metadata:
     try:
         metadata = Metadata.load_from(metadata_file)
-        return metadata.sample_in_pattern, metadata.sample_out_pattern, metadata.judge_method
+        return metadata
     except IOError:
-        logger.warning("{} is not found. Assume the example file name patterns are {} and {}".format(
-            metadata_file,
-            DEFAULT_IN_EXAMPLE_PATTERN,
-            DEFAULT_OUT_EXAMPLE_PATTERN)
+        logger.warning("{} is not found. Default metadata is selected. ".format(
+            metadata_file)
         )
-        return DEFAULT_IN_EXAMPLE_PATTERN, DEFAULT_OUT_EXAMPLE_PATTERN, NormalJudge()
+        return Metadata.default_metadata()
 
 
 USER_FACING_JUDGE_TYPE_LIST = [
@@ -300,16 +311,44 @@ def main(prog, args) -> bool:
                         type=float,
                         default=None)
 
+    parser.add_argument('--compile-before-testing', '-c',
+                        help='compile source before testing [true, false]: '
+                             ' [Default]: false',
+                        type=bool,
+                        default=None)
+
+    parser.add_argument('--compile-only-when-diff-detected',
+                        help='compile only when diff detected [true, false]'
+                             ' [Default]: true',
+                        type=bool,
+                        default=None)
+
+    parser.add_argument("--config",
+                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
+                            USER_CONFIG_PATH),
+                            "[Default (Secondary)] {}\n".format(
+                                get_default_config_path()))
+                        )
+
     args = parser.parse_args(args)
 
+    config = get_config(args)
+
+    if config.etc_config.compile_before_testing is not None and args.compile_before_testing is None:
+        args.compile_before_testing = config.etc_config.compile_before_testing
+    if args.compile_before_testing:
+        if config.etc_config.compile_only_when_diff_detected is not None and args.compile_only_when_diff_detected is None:
+            args.compile_only_when_diff_detected = config.etc_config.compile_only_when_diff_detected
+
     metadata_file = os.path.join(args.dir, "metadata.json")
-    in_ex_pattern, out_ex_pattern, judge_method = get_sample_patterns_and_judge_method(
-        metadata_file)
+    metadata = get_metadata(metadata_file)
+    judge_method = metadata.judge_method
+    lang = metadata.lang
 
     in_sample_file_list = sorted(
-        glob.glob(os.path.join(args.dir, in_ex_pattern)))
+        glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))
     out_sample_file_list = sorted(
-        glob.glob(os.path.join(args.dir, out_ex_pattern)))
+        glob.glob(os.path.join(args.dir, metadata.sample_out_pattern)))
 
     user_input_decimal_error_type = None
     if args.judge_type is not None:
@@ -318,9 +357,9 @@ def main(prog, args) -> bool:
         elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
             user_input_decimal_error_type = ErrorType(args.judge_type)
         elif args.judge_type == "multisolution":
-            judge_method = MultiSolutionJudge()
+            judge_method = MultiSolutionJudge(lang.name)
         elif args.judge_type == "interactive":
-            judge_method = InteractiveJudge()
+            judge_method = InteractiveJudge(lang.name)
         else:
             logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
                 args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))
@@ -343,22 +382,35 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    exclude_exec_files = []
+    if metadata.code_filename is None or not args.compile_before_testing:
+        print("compile is skipped and infer exec file")
+        exclude_exec_files = []
 
-    if hasattr(judge_method, "judge_exec_file"):
-        judge_method.judge_exec_file = os.path.join(
-            args.dir, judge_method.judge_exec_file)
-        exclude_exec_files.append(judge_method.judge_exec_file)
+        if hasattr(judge_method, "judge_exec_filename"):
+            judge_method.judge_exec_filename = os.path.join(
+                args.dir, judge_method.judge_exec_filename)
+            exclude_exec_files.append(judge_method.judge_exec_filename)
 
-    exec_file = args.exec or infer_exec_file(
-        glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
+        exec_file = args.exec or infer_exec_file(
+            glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
+    else:
+        if args.compile_only_when_diff_detected:
+            force_compile = True
+        else:
+            force_compile = False
+        exec_file = lang.get_test_command('main', args.dir)
+        print("command: ", exec_file)
+        print("directory: ", args.dir)
+        # Compile
+        if not compile_main_and_judge_programs(metadata, args.dir, force_compile=force_compile):
+            exit()
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
-                             args.skip_almost_ac_feedback, judge_method)
+                             args.skip_almost_ac_feedback, judge_method, args.dir)
     else:
         return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num,
-                               judge_method)
+                               judge_method, args.dir)
 
 
 if __name__ == "__main__":

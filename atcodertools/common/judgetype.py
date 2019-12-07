@@ -79,9 +79,14 @@ class DecimalJudge(Judge):
         expected = expected.strip().split()
         if len(output) != len(expected):
             return False
-        for i in range(0, len(output)):
-            if not self._verify_sub(float(output[i]), float(expected[i])):
-                return False
+        for i in range(0, len(expected)):
+            try:
+                f = float(expected[i])
+                if not self._verify_sub(float(output[i]), f):
+                    return False
+            except ValueError:
+                if output[i] != expected[i]:
+                    return False
         return True
 
     def to_dict(self):
@@ -100,17 +105,22 @@ class DecimalJudge(Judge):
         return r
 
 
-def get_judge_exec_file_name():
+def get_judge_filename():
+    judge_code_filename = "judge"
     if platform.system() == "Windows":
-        return "judge.exe"
+        judge_exec_filename = "judge.exe"
     else:
-        return "judge"
+        judge_exec_filename = "judge"
+    return judge_code_filename, judge_exec_filename
 
 
 class MultiSolutionJudge(Judge):
-    def __init__(self):
+    def __init__(self, judge_code_lang="cpp"):
         self.judge_type = JudgeType.MultiSolution
-        self.judge_exec_file = get_judge_exec_file_name()
+        self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
+
+        from atcodertools.common.language import Language
+        self.judge_code_lang = Language.from_name(judge_code_lang)
 
     def verify(self, output, expected):
         raise NotImplementedError()
@@ -118,19 +128,23 @@ class MultiSolutionJudge(Judge):
     def to_dict(self):
         return {
             "judge_type": self.judge_type.value,
-            "judge_exec_file": self.judge_exec_file,
+            "judge_code_filename": self.judge_code_filename,
+            "judge_exec_filename": self.judge_exec_filename,
+            "judge_code_lang": "cpp"
         }
 
     @classmethod
     def from_dict(cls, dic):
-        r = MultiSolutionJudge()
+        r = MultiSolutionJudge(dic["judge_code_lang"])
         return r
 
 
 class InteractiveJudge(Judge):
-    def __init__(self):
+    def __init__(self, judge_code_lang="cpp"):
         self.judge_type = JudgeType.Interactive
-        self.judge_exec_file = get_judge_exec_file_name()
+        self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
+        from atcodertools.common.language import Language
+        self.judge_code_lang = Language.from_name(judge_code_lang)
 
     def verify(self, output, expected):
         raise NotImplementedError()
@@ -138,10 +152,12 @@ class InteractiveJudge(Judge):
     def to_dict(self):
         return {
             "judge_type": self.judge_type.value,
-            "judge_exec_file": self.judge_exec_file,
+            "judge_code_filename": self.judge_code_filename,
+            "judge_exec_filename": self.judge_exec_filename,
+            "judge_code_lang": "cpp"
         }
 
     @classmethod
     def from_dict(cls, dic):
-        r = InteractiveJudge()
+        r = InteractiveJudge(dic["judge_code_lang"])
         return r

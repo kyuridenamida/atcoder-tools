@@ -41,7 +41,7 @@ proc main():void =
   var X = newSeqWith(M+Q, 0)
   for i in 0..<M+Q:
     X[i] = nextInt()
-  solve(N, M, H, A, B, Q, X);
+  solve(N, M, H, A, B, Q, X)
   return
 
 main()

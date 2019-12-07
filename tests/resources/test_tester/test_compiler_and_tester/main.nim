@@ -1,4 +1,8 @@
-import sequtils
+#{{{ header
+import algorithm, sequtils, tables, macros, math, sets, strutils
+when defined(MYDEBUG):
+  import header
+
 proc scanf(formatstr: cstring){.header: "<stdio.h>", varargs.}
 proc getchar(): char {.header: "<stdio.h>", varargs.}
 proc nextInt(): int = scanf("%lld",addr result)
@@ -14,29 +18,18 @@ proc nextString(): string =
     else:
       if get: break
       get = false
-
-{% if mod %}
-let MOD = {{ mod }}
-{% endif %}
-{% if yes_str %}
-let YES = "{{ yes_str }}"
-{% endif %}
-{% if no_str %}
-let NO = "{{ no_str }}"
-{% endif %}
-
-{% if prediction_success %}
-proc solve({{ formal_arguments }}):void =
-  discard
-{% endif %}
+template `max=`*(x,y:typed):void = x = max(x,y)
+template `min=`*(x,y:typed):void = x = min(x,y)
+template infty(T): untyped = ((T(1) shl T(sizeof(T)*8-2)) - 1)
+#}}}
 
 proc main():void =
-{% if prediction_success %}
-  {{input_part}}
-  solve({{ actual_arguments }})
-{% else %}
-# Failed to predict input format
-{% endif %}
-  return
+  let
+    A = nextInt()
+    B = nextInt()
+    C = nextInt()
+  if A + B >= C: echo "Yes"
+  else: echo "No"
 
 main()
+

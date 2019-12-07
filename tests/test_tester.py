@@ -9,6 +9,10 @@ from atcodertools.tools import tester
 from atcodertools.tools.tester import is_executable_file, TestSummary, build_details_str
 from atcodertools.tools.utils import with_color
 from atcodertools.executils.run_command import run_command
+from atcodertools.tools.setter import main as setter_main
+from atcodertools.tools.compiler import compile_main_and_judge_programs
+from atcodertools.common.language import ALL_LANGUAGES
+from atcodertools.common.judgetype import JudgeType
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -59,32 +63,63 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
 
+    def test_run_single_test_decimal_mixed(self):
+        test_dir = os.path.join(
+            RESOURCE_DIR, "test_run_single_test_decimal_mixed")
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "absolute_or_relative"]))
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-v", "0.0001", "-j", "absolute_or_relative"]))
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-v", "0.0001", "-j", "absolute_or_relative"]))
+
     def test_run_single_test_multisolution(self):
         run_command(
             "cp -r test_run_single_test_multisolution /tmp", RESOURCE_DIR)
         test_dir = "/tmp/test_run_single_test_multisolution"
-        run_command("g++ -std=c++14 -omain main.cpp", test_dir)
-        run_command("g++ -std=c++14 -ojudge judge.cpp", test_dir)
+
+        metadata = setter_main('', ['-d', test_dir, "-j", "multisolution"])
+
+        set_result = metadata.judge_method.judge_type == JudgeType.MultiSolution
+
+        self.assertTrue(set_result)
+
+        # Already set
+        metadata = setter_main('', ['-d', test_dir, "--lang", "cpp"])
+
+        self.assertTrue(metadata.lang.name == 'cpp')
 
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-j", "multisolution"]))
+            '', ['-d', test_dir, '-n', '1', '-c', "True"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-j", "multisolution"]))
+            '', ['-d', test_dir, "-n", "2", "-c", "True"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "3", "-j", "multisolution"]))
+            '', ['-d', test_dir, "-n", "3", "-c", "True"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "4", "-j", "multisolution"]))
+            '', ['-d', test_dir, "-n", "4", "-c", "True"]))
 
     def test_run_single_test_interactive(self):
         run_command("cp -r test_run_single_test_interactive /tmp", RESOURCE_DIR)
         test_dir = "/tmp/test_run_single_test_interactive"
-        run_command("g++ -std=c++14 -omain main.cpp", test_dir)
-        run_command("g++ -std=c++14 -ojudge judge.cpp", test_dir)
 
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-j", "interactive"]))
+            '', ['-d', test_dir, "-n", "1", "-j", "interactive", '-c', "True"]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-j", "interactive"]))
+            '', ['-d', test_dir, "-n", "2", "-j", "interactive", '-c', "True"]))
+
+    def test_compiler_and_tester(self):
+        run_command("cp -r test_compiler_and_tester /tmp", RESOURCE_DIR)
+        test_dir = "/tmp/test_compiler_and_tester"
+        os.chdir(test_dir)
+
+        for lang in ALL_LANGUAGES:
+            metadata = setter_main('', ["--lang", lang.name])
+            compile_main_and_judge_programs(metadata, force_compile=True)
+            for i in [1, 2, 3, 4]:
+                self.assertTrue(tester.main(
+                    '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)

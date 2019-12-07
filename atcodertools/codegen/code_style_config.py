@@ -24,6 +24,7 @@ class CodeStyleConfig:
                  code_generator_file: Optional[str] = None,
                  template_file: Optional[str] = None,
                  workspace_dir: Optional[str] = None,
+                 compile_command: Optional[str] = None,
                  lang: str = "cpp",
                  ):
         from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
@@ -54,6 +55,9 @@ class CodeStyleConfig:
                 "The specified template file '{}' is not found".format(
                     template_file)
             )
+
+        if compile_command is not None:
+            lang.compile_command = compile_command
 
         self.indent_type = indent_type
 

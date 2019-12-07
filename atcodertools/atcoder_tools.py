@@ -9,7 +9,8 @@ from atcodertools.tools.envgen import main as envgen_main
 from atcodertools.tools.tester import main as tester_main
 from atcodertools.tools.submit import main as submit_main
 from atcodertools.tools.codegen import main as codegen_main
-from atcodertools.tools.judgetype_setter import main as judgetype_setter_main
+from atcodertools.tools.setter import main as setter_main
+from atcodertools.tools.compiler import main as compiler_main
 from atcodertools.release_management.version import __version__
 from colorama import Fore, Style
 
@@ -39,7 +40,7 @@ def notify_if_latest_version_found():
 def main():
     notify_if_latest_version_found()
 
-    if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "set", "version"):
+    if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "set", "version", "compile"):
         print("Usage:")
         print("{} gen -- to generate workspace".format(sys.argv[0]))
         print("{} test -- to test codes in your workspace".format(sys.argv[0]))
@@ -47,6 +48,11 @@ def main():
             "{} submit -- to submit a code to the contest system".format(sys.argv[0]))
         print(
             "{} version -- show atcoder-tools version".format(sys.argv[0]))
+        print(
+            "{} set -- set judge type".format(sys.argv[0]))
+        print(
+            "{} compile -- compile source code".format(sys.argv[0]))
+
         sys.exit(-1)
 
     prog = " ".join(sys.argv[:2])
@@ -65,7 +71,10 @@ def main():
         codegen_main(prog, args)
 
     if sys.argv[1] == "set":
-        judgetype_setter_main(prog, args)
+        setter_main(prog, args)
+
+    if sys.argv[1] == "compile":
+        compiler_main(prog, args)
 
     if sys.argv[1] == "version":
         print(__version__)
