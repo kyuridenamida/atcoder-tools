@@ -82,8 +82,9 @@ class TestTester(unittest.TestCase):
 
         metadata = setter_main('', ['-d', test_dir, "-j", "multisolution"])
 
-        self.assertTrue(metadata.judge_method.judge_type ==
-                        JudgeType.MultiSolution)
+        set_result = metadata.judge_method.judge_type == JudgeType.MultiSolution
+
+        self.assertTrue(set_result)
 
         self.assertTrue(tester.main(
             '', ['-d', test_dir, '-n', '1', '-c', 'on']))
@@ -99,9 +100,9 @@ class TestTester(unittest.TestCase):
         test_dir = "/tmp/test_run_single_test_interactive"
 
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-j", "interactive"]))
+            '', ['-d', test_dir, "-n", "1", "-j", "interactive", '-c', 'on']))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-j", "interactive"]))
+            '', ['-d', test_dir, "-n", "2", "-j", "interactive", '-c', 'on']))
 
     def test_compiler_and_tester(self):
         run_command("cp -r test_compiler_and_tester /tmp", RESOURCE_DIR)
