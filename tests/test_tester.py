@@ -86,6 +86,11 @@ class TestTester(unittest.TestCase):
 
         self.assertTrue(set_result)
 
+        # Already set
+        metadata = setter_main('', ['-d', test_dir, "--lang", "cpp"])
+
+        self.assertTrue(metadata.lang.name == 'cpp')
+
         self.assertTrue(tester.main(
             '', ['-d', test_dir, '-n', '1', '-c', 'on']))
         self.assertTrue(tester.main(

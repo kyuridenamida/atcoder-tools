@@ -47,7 +47,6 @@ def main(prog, args):
     args = parser.parse_args(args)
 
     metadata = Metadata.load_from(args.dir + "/metadata.json")
-    print(args.dir)
 
     new_judge_type = args.judge_type
     if new_judge_type in ["decimal", "absolute", "relative", "absolute_or_relative"]:
