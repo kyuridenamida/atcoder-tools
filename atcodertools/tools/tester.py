@@ -15,7 +15,7 @@ from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program, run_interactive_program
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
-from atcodertools.tools.compiler import compile_codes
+from atcodertools.tools.compiler import compile_main_and_judge_programs
 
 
 class NoExecutableFileError(Exception):
@@ -379,7 +379,7 @@ def main(prog, args) -> bool:
         print("command: ", exec_file)
         print("directory: ", args.dir)
         # Compile
-        if not compile_codes(metadata, args.dir, force_compile=force_compile):
+        if not compile_main_and_judge_programs(metadata, args.dir, force_compile=force_compile):
             exit()
 
     if args.num is None:

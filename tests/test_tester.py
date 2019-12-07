@@ -10,7 +10,7 @@ from atcodertools.tools.tester import is_executable_file, TestSummary, build_det
 from atcodertools.tools.utils import with_color
 from atcodertools.executils.run_command import run_command
 from atcodertools.tools.setter import main as setter_main
-from atcodertools.tools.compiler import compile_codes
+from atcodertools.tools.compiler import compile_main_and_judge_programs
 from atcodertools.common.language import ALL_LANGUAGES
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
@@ -104,7 +104,7 @@ class TestTester(unittest.TestCase):
 
         for lang in ALL_LANGUAGES:
             metadata = setter_main('', ["--lang", lang.name])
-            compile_codes(metadata, force_compile=True)
+            compile_main_and_judge_programs(metadata, force_compile=True)
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main(
                     '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))

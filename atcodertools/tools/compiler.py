@@ -7,7 +7,7 @@ import os
 import pathlib
 
 
-def compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str, force_compile: bool) -> bool:
+def _compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str, force_compile: bool) -> bool:
     if not force_compile:
         code_p = pathlib.Path(cwd + '/' + code_filename)
         if os.path.exists(cwd + '/' + exec_filename):
@@ -27,15 +27,15 @@ def compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str, 
         return False
 
 
-def compile_codes(metadata: Metadata, cwd="./", force_compile=False):
+def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=False):
     valid = True
     lang = metadata.lang
     print("code file: ")
     compile_cmd = lang.get_compile_command('main')
     code_filename = lang.get_code_filename('main')
     exec_filename = lang.get_exec_filename('main')
-    code = compile(code_filename, exec_filename,
-                   compile_cmd, cwd, force_compile)
+    code = _compile(code_filename, exec_filename,
+                    compile_cmd, cwd, force_compile)
     if not code:
         valid = False
     if metadata.judge_method.judge_type in [JudgeType.MultiSolution, JudgeType.Interactive]:
@@ -45,8 +45,8 @@ def compile_codes(metadata: Metadata, cwd="./", force_compile=False):
         code_filename = lang.get_code_filename('judge')
         exec_filename = lang.get_exec_filename('judge')
 
-        code = compile(code_filename, exec_filename,
-                       compile_cmd, cwd, force_compile)
+        code = _compile(code_filename, exec_filename,
+                        compile_cmd, cwd, force_compile)
         if not code:
             valid = False
     return valid
@@ -54,4 +54,4 @@ def compile_codes(metadata: Metadata, cwd="./", force_compile=False):
 
 def main(prog, args):
     metadata = Metadata.load_from("./metadata.json")
-    compile_codes(metadata, force_compile=True)
+    compile_main_and_judge_programs(metadata, force_compile=True)
