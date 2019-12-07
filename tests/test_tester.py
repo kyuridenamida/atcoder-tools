@@ -62,6 +62,19 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
 
+    def test_run_single_test_decimal_mixed(self):
+        test_dir = os.path.join(
+            RESOURCE_DIR, "test_run_single_test_decimal_mixed")
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "absolute_or_relative"]))
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "1", "-v", "0.0001", "-j", "absolute_or_relative"]))
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "2", "-v", "0.0001", "-j", "absolute_or_relative"]))
+
+
     def test_run_single_test_multisolution(self):
         run_command(
             "cp -r test_run_single_test_multisolution /tmp", RESOURCE_DIR)
