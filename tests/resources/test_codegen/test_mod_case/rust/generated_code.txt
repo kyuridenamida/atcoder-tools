@@ -1,16 +1,16 @@
 use std::*;
 
 const MOD: i64 = 998244353;
-fn solve(A: i64, B: i64) {
+fn solve(A: String, B: String) {
 
 }
 
 fn main() {
     let con = read_string();
     let mut scanner = Scanner::new(&con);
-    let mut A: i64;
+    let mut A: String;
     A = scanner.next();
-    let mut B: i64;
+    let mut B: String;
     B = scanner.next();
     solve(A, B);
 }
