@@ -5,12 +5,18 @@ import os
 import argparse
 from os.path import expanduser
 import toml
+from colorama import Fore
 from atcodertools.common.logging import logger
 
-from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.code_style_config import CodeStyleConfig, DEFAULT_LANGUAGE
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
 from atcodertools.tools import get_default_config_path
+from atcodertools.tools.utils import with_color
+
+_POST_PROCESS_CONFIG_KEY = "postprocess"
+
+_CODE_STYLE_CONFIG_KEY = "codestyle"
 
 
 def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
@@ -40,36 +46,49 @@ class Config:
         """
         config_dic = toml.load(fp)
 
-        code_style_config_dic = config_dic.get('codestyle', {})
-        postprocess_config_dic = config_dic.get('postprocess', {})
+        # Root 'codestyle' is common code style
+        common_code_style_config_dic = config_dic.get(_CODE_STYLE_CONFIG_KEY, {})
+
+        postprocess_config_dic = config_dic.get(_POST_PROCESS_CONFIG_KEY, {})
         etc_config_dic = config_dic.get('etc', {})
+        code_style_config_dic = {**common_code_style_config_dic}
+
+        # Handle config override strategy in the following code
+        # (Most preferred) program arguments > lang-specific > common config (Least preferred)
+        lang = args.lang or common_code_style_config_dic.get("lang", DEFAULT_LANGUAGE)
+        code_style_config_dic = _update_config_dict(code_style_config_dic, dict(lang=lang))
+
+        if lang in config_dic:
+            lang_specific_config_dic = config_dic[lang]  # e.g. [cpp.codestyle]
+            if _CODE_STYLE_CONFIG_KEY in lang_specific_config_dic:
+                lang_code_style = lang_specific_config_dic[_CODE_STYLE_CONFIG_KEY]
+                if "lang" in lang_code_style:
+                    logger.warn(
+                        with_color("'lang' is only valid in common code style config, "
+                                   "but detected in language-specific code style config. It will be ignored.",
+                                   Fore.RED))
+                    del lang_code_style["lang"]
+
+                code_style_config_dic = _update_config_dict(code_style_config_dic,
+                                                            lang_code_style)
+
+            if _POST_PROCESS_CONFIG_KEY in lang_specific_config_dic:  # e.g. [cpp.postprocess]
+                postprocess_config_dic = _update_config_dict(postprocess_config_dic,
+                                                             lang_specific_config_dic[_POST_PROCESS_CONFIG_KEY])
 
         if args:
-            d = dict()
-            if hasattr(args, 'template'):
-                d['template_file'] = args.template
-            if hasattr(args, 'workspace'):
-                d['workspace_dir'] = args.workspace
-            if hasattr(args, 'lang'):
-                d['lang'] = args.lang
             code_style_config_dic = _update_config_dict(
-                code_style_config_dic, d)
+                code_style_config_dic,
+                dict(template_file=args.template,
+                     workspace_dir=args.workspace)
+            )
+            etc_config_dic = _update_config_dict(
+                etc_config_dic,
+                dict(download_without_login=args.without_login,
+                     parallel_download=args.parallel,
+                     save_no_session_cache=args.save_no_session_cache)
+            )
 
-            lang = code_style_config_dic['lang']
-            if lang in config_dic:
-                code_style_config_dic = _update_config_dict(
-                    code_style_config_dic, config_dic[lang])
-
-            d = dict()
-            if hasattr(args, 'without_login'):
-                d['download_without_login'] = args.without_login
-            if hasattr(args, 'parallel'):
-                d['parallel_download'] = args.parallel
-            if hasattr(args, 'save_no_session_cache'):
-                d['save_no_session_cache'] = args.save_no_session_cache
-
-            etc_config_dic = _update_config_dict(etc_config_dic, d)
-        print(code_style_config_dic)
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
             postprocess_config=PostprocessConfig(**postprocess_config_dic),

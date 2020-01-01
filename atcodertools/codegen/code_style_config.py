@@ -14,6 +14,7 @@ class CodeStyleConfigInitError(Exception):
 
 
 DEFAULT_WORKSPACE_DIR_PATH = os.path.join(expanduser("~"), "atcoder-workspace")
+DEFAULT_LANGUAGE = "cpp"
 
 
 class CodeStyleConfig:
@@ -25,7 +26,7 @@ class CodeStyleConfig:
                  template_file: Optional[str] = None,
                  workspace_dir: Optional[str] = None,
                  compile_command: Optional[str] = None,
-                 lang: str = "cpp",
+                 lang: str = DEFAULT_LANGUAGE,
                  ):
         from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
 
