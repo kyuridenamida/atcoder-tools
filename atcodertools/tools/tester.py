@@ -396,7 +396,7 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    if metadata.code_filename is None or not args.compile_before_testing:
+    if metadata.code_filename is None or not config.etc_config.compile_before_testing:
         logger.info("Compile is skipped. Inferring exec file ...")
         exclude_exec_files = []
 
