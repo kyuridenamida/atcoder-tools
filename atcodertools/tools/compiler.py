@@ -1,6 +1,9 @@
 #!/usr/bin/python3
+import argparse
+import sys
 
 from atcodertools.common.judgetype import JudgeType
+from atcodertools.common.logging import logger
 from atcodertools.executils.run_command import run_command_with_returncode
 from atcodertools.tools.models.metadata import Metadata
 import os
@@ -53,5 +56,11 @@ def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=
 
 
 def main(prog, args):
+    parser = argparse.ArgumentParser(
+        prog=prog,
+        usage="Compile your program in the current directory (no argument)",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.parse_args(args)
+
     metadata = Metadata.load_from("./metadata.json")
     compile_main_and_judge_programs(metadata, force_compile=True)
