@@ -3,7 +3,24 @@ indent_type = 'tab' # 'tab' or 'space'
 indent_width = 8
 template_file="./custom_template.cpp"
 code_generator_file='./custom_code_generator.py'
+workspace_dir="workspace_dir"
+lang="cpp"
+[run]
+compile_command="g++ main.cpp"
+run_command="./main"
 
 [postprocess]
 exec_on_each_problem_dir='echo problem && ls'
 exec_on_contest_dir='echo contest && ls'
+
+[etc]
+download_without_login=true
+parallel_download=true
+save_no_session_cache=true
+in_example_format="in"
+out_example_format="out"
+compile_before_testing=true
+compile_only_when_diff_detected=false
+
+[cpp.codestyle]
+indent_width = 3 # This value has high priority than the common code style

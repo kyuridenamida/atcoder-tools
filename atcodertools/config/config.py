@@ -11,12 +11,15 @@ from atcodertools.common.logging import logger
 from atcodertools.codegen.code_style_config import CodeStyleConfig, DEFAULT_LANGUAGE
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
+from atcodertools.config.run_config import RunConfig
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.utils import with_color
 
 _POST_PROCESS_CONFIG_KEY = "postprocess"
 
 _CODE_STYLE_CONFIG_KEY = "codestyle"
+
+_RUN_CONFIG_KEY = "run"
 
 
 def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
@@ -31,11 +34,13 @@ class Config:
     def __init__(self,
                  code_style_config: CodeStyleConfig = CodeStyleConfig(),
                  postprocess_config: PostprocessConfig = PostprocessConfig(),
-                 etc_config: EtcConfig = EtcConfig()
+                 etc_config: EtcConfig = EtcConfig(),
+                 run_config: RunConfig = RunConfig()
                  ):
         self.code_style_config = code_style_config
         self.postprocess_config = postprocess_config
         self.etc_config = etc_config
+        self.run_config = run_config
 
     @classmethod
     def load(cls, fp: TextIO, args: Optional[Namespace] = None):
@@ -51,11 +56,12 @@ class Config:
 
         postprocess_config_dic = config_dic.get(_POST_PROCESS_CONFIG_KEY, {})
         etc_config_dic = config_dic.get('etc', {})
+        run_config_dic = config_dic.get(_RUN_CONFIG_KEY, {})
         code_style_config_dic = {**common_code_style_config_dic}
 
         # Handle config override strategy in the following code
         # (Most preferred) program arguments > lang-specific > common config (Least preferred)
-        lang = args.lang or common_code_style_config_dic.get("lang", DEFAULT_LANGUAGE)
+        lang = (args and args.lang) or common_code_style_config_dic.get("lang", DEFAULT_LANGUAGE)
         code_style_config_dic = _update_config_dict(code_style_config_dic, dict(lang=lang))
 
         if lang in config_dic:
@@ -76,6 +82,10 @@ class Config:
                 postprocess_config_dic = _update_config_dict(postprocess_config_dic,
                                                              lang_specific_config_dic[_POST_PROCESS_CONFIG_KEY])
 
+            if _RUN_CONFIG_KEY in lang_specific_config_dic:  # e.g. [cpp.run]
+                run_config_dic = _update_config_dict(run_config_dic,
+                                                     lang_specific_config_dic[_RUN_CONFIG_KEY])
+
         if args:
             code_style_config_dic = _update_config_dict(
                 code_style_config_dic,
@@ -92,7 +102,8 @@ class Config:
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
             postprocess_config=PostprocessConfig(**postprocess_config_dic),
-            etc_config=EtcConfig(**etc_config_dic)
+            etc_config=EtcConfig(**etc_config_dic),
+            run_config=RunConfig(**run_config_dic)
         )
 
 
