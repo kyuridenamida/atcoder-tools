@@ -3,7 +3,8 @@
 import argparse
 import os
 import shutil
-from atcodertools.common.judgetype import NormalJudge, DecimalJudge, ErrorType, MultiSolutionJudge, InteractiveJudge, JudgeType, NoJudgeTypeException, DEFAULT_EPS
+from atcodertools.common.judgetype import NormalJudge, DecimalJudge, ErrorType, MultiSolutionJudge, InteractiveJudge, \
+    JudgeType, NoJudgeTypeException, DEFAULT_EPS
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.common.language import Language, ALL_LANGUAGES
 from atcodertools.tools.templates import get_default_judge_template_path
@@ -25,7 +26,7 @@ def main(prog, args):
     parser.add_argument('--judge-type', '-j',
                         help='error type'
                              ' must be one of [{}]'.format(
-                                 ', '.join(USER_FACING_JUDGE_TYPE_LIST)),
+                            ', '.join(USER_FACING_JUDGE_TYPE_LIST)),
                         type=str,
                         default=None)
 
@@ -77,13 +78,13 @@ def main(prog, args):
         metadata.judge_method.error_type = ErrorType(args.judge_type)
     elif new_judge_type == JudgeType.MultiSolution.value:
         if not os.path.exists("./judge.cpp"):
-            print("touch ./judge.cpp (multi sotlution)")
+            print("touch ./judge.cpp (multi solution)")
             judge_template_path = get_default_judge_template_path('cpp')
             shutil.copy(judge_template_path, "./judge.cpp")
         else:
             print("Judge Code exists")
     elif new_judge_type == JudgeType.Interactive.value:
-        if not os.path.exists("/judge.cpp"):
+        if not os.path.exists("./judge.cpp"):
             print("touch ./judge.cpp (interactive)")
             judge_template_path = get_default_judge_template_path('cpp')
             shutil.copy(judge_template_path, "./judge.cpp")
@@ -103,5 +104,5 @@ def main(prog, args):
                 print("file exists: ", metadata.code_filename)
         else:
             print("already set to {}".format(args.lang))
-    metadata.save_to(args.dir + "/metadata.json")
+    metadata.save_to(os.path.join(args.dir, "metadata.json"))
     return metadata
