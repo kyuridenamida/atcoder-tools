@@ -1,0 +1,31 @@
+[codestyle]
+lang="nim"
+code_generator_file='old_value'
+template_file="./custom_template.cpp"
+[nim.codestyle]
+lang="This lang is ignored because it's in a language-specific code style config"
+code_generator_file='./custom_code_generator.py'
+
+[run]
+compile_command='ignored'
+run_command='kept_value'
+[nim.run]
+compile_command="new_value"
+
+[postprocess]
+exec_on_each_problem_dir='old_value'
+exec_on_contest_dir='kept_value'
+[nim.postprocess]
+exec_on_each_problem_dir='new_value'
+
+[etc]
+in_example_format="kept_value"
+
+
+[nim.etc] # THIS IS IGNORED CURRENTLY!
+# Why ignored? -> language-specific option doesn't support 'etc' config.
+# This specification can be changed depending on use cases.
+in_example_format="new_value" # overriding is not expected
+
+
+

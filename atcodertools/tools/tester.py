@@ -332,6 +332,8 @@ def main(prog, args) -> bool:
 
     args = parser.parse_args(args)
 
+    # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
+    # TODO: All information required to run tester should be from metadata.json except for etc config
     config = get_config(args)
 
     if config.etc_config.compile_before_testing is not None and args.compile_before_testing is None:
