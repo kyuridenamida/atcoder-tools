@@ -14,99 +14,195 @@ buildscript {
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        mavenCentral()
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.intellij'
+apply plugin: 'jacoco'
+
+group 'atcodertools'
+version '0.1-SNAPSHOT'
+
+intellij {
+    version '2019.3'
+
+    def optionalPlugins = [
+            'com.intellij.testGuiFramework:193.SNAPSHOT.1@nightly',  // https://plugins.jetbrains.com/plugin/11114-test-gui-framework/versions
+    ]
+
+    if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
+        type = 'CL'  // CLion.
+    } else {
+        type = 'IC'  // IntelliJ community edition (IDEA).
+        optionalPlugins << 'java'
     }
 
-    apply plugin: 'java'
-    apply plugin: 'kotlin'
-    apply plugin: 'org.jetbrains.intellij'
-    apply plugin: 'jacoco'
+    plugins = optionalPlugins
+}
 
-    intellij {
-        version '2019.3'
-    }
+configurations {
+    intelliJApi
+}
 
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
+dependencies {
+    // Artifact names can be looked up from
+    // https://github.com/JetBrains/gradle-intellij-plugin/blob/master/src/main/groovy/org/jetbrains/intellij/dependency/IdeaDependencyManager.groovy
+    intelliJApi "com.jetbrains.intellij.idea:ideaIC:${project.intellij.version}"
+    intelliJApi "com.jetbrains.intellij.clion:clion:${project.intellij.version}"
+}
 
-    task testsJar(type: Jar, dependsOn: [classes, testClasses]) {
-        archiveClassifier.set('tests')
-        from sourceSets.test.output
-        exclude 'testData/*'
-    }
+task extractIntelliJApi(type: Sync) {
+    dependsOn configurations.intelliJApi
 
-    prepareSandbox {
-        from(testsJar) {
-            into "$pluginName/lib"
-        }
-    }
-
-    prepareTestingSandbox {
-        from(testsJar) {
-            into "$pluginName/lib"
-        }
-    }
-
-    runIde {
-        if (System.getProperty("idea.gui.tests.gradle.runner") == "true") {
-            jacoco.applyTo(runIde)
-
-            def ideaSysProps = System.properties.findAll {
-                (it.key as String).startsWith("idea") || (it.key as String).startsWith("jb")
-            }
-            ideaSysProps.remove("idea.home.path")
-            ideaSysProps.remove("jb.vmOptionsFile")
-            ideaSysProps.remove("idea.version")
-            ideaSysProps.remove("idea.platform.prefix")
-            ideaSysProps.put("atcodertools.intellij.command.noLogin", true)
-            systemProperties ideaSysProps
-
-            /* Need to split the space-delimited value in the exec.args */
-            args System.getProperty("exec.args", "").split(",")
-
-            jacoco {
-                includeNoLocationClasses = true
-                includes = ["atcodertools.intellij.*"]
+    from {
+        configurations.intelliJApi.collect { 
+            zipTree(it).matching {
+                include 'lib/**/*.jar'
+                include 'plugins/java/lib/**/*.jar'
             }
         }
     }
 
-    test {
+    into "$buildDir/intelliJApi/"
+}
+
+compileJava.dependsOn(extractIntelliJApi)
+compileKotlin.dependsOn(extractIntelliJApi)
+
+if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
+    sourceSets {
+        test {
+            java {
+                exclude 'atcodertools/intellij/idea/**'
+            }
+        }
+    }
+} else {
+    sourceSets {
+        test {
+            java {
+                exclude 'atcodertools/intellij/clion/**'
+            }
+        }
+    }
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+dependencies {
+    api fileTree("$buildDir/intelliJApi")
+    testApi fileTree("$buildDir/intelliJApi")
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.truth:truth:1.0'
+    testImplementation 'com.google.truth.extensions:truth-java8-extension:1.0'
+}
+
+task testsJar(type: Jar, dependsOn: [classes, testClasses]) {
+    archiveClassifier.set('tests')
+    from sourceSets.test.output
+}
+
+task removeIntelliJApiFromPluginLib(type: Delete) {
+    def jarsToBeDeleted = fileTree("$buildDir/intelliJApi").toSet().collect {
+        it.name
+    }
+    delete fileTree("${project.intellij.sandboxDirectory}/plugins/${project.intellij.pluginName}/lib").matching {
+        include jarsToBeDeleted
+    }
+    delete fileTree("${project.intellij.sandboxDirectory}/plugins-test/${project.intellij.pluginName}/lib").matching {
+        include jarsToBeDeleted
+    }
+}
+
+buildSearchableOptions.mustRunAfter(removeIntelliJApiFromPluginLib)
+runIde.mustRunAfter(removeIntelliJApiFromPluginLib)
+test.mustRunAfter(removeIntelliJApiFromPluginLib)
+
+prepareSandbox {
+    from(testsJar) {
+        into "$pluginName/lib"
+    }
+    finalizedBy(removeIntelliJApiFromPluginLib)
+}
+
+prepareTestingSandbox {
+    from(testsJar) {
+        into "$pluginName/lib"
+    }
+    finalizedBy(removeIntelliJApiFromPluginLib)
+}
+
+runIde {
+    if (System.getProperty("idea.gui.tests.gradle.runner") == "true") {
+        jacoco.applyTo(runIde)
+
         def ideaSysProps = System.properties.findAll {
-            (it.key as String).startsWith("idea") || (it.key as String).startsWith("jb")
+            def key = it.key as String
+            key.startsWithAny("idea", "jb", "atcodertools")
         }
         ideaSysProps.remove("idea.home.path")
         ideaSysProps.remove("jb.vmOptionsFile")
         ideaSysProps.remove("idea.version")
         ideaSysProps.remove("idea.platform.prefix")
-        ideaSysProps.put("idea.gui.tests.gradle.runner", true) // Use Gradle Launcher to run GUI tests
-        ideaSysProps.put("idea.debug.mode", false) // Set true to enable debugging with breakpoints
-        ideaSysProps.put("atcodertools.intellij.command.noLogin", true)
+        ideaSysProps.put("atcodertools.intellij.common.command.noLogin", true)
         systemProperties ideaSysProps
+
+        /* Need to split the space-delimited value in the exec.args */
+        args System.getProperty("exec.args", "").split(",")
 
         jacoco {
             includeNoLocationClasses = true
             includes = ["atcodertools.intellij.*"]
         }
     }
+}
 
-    // Disable jacoco report for now. For some reason, jacoco doesn't handle GuiTest well
-    // and it produces zero test coverage. Let's disable it until we figure out the reason.
-    jacocoTestReport {
-        reports {
-            xml.enabled false
-            html.enabled false
-            csv.enabled false
-        }
+test {
+    def ideaSysProps = System.properties.findAll {
+        def key = it.key as String
+        key.startsWithAny("idea", "jb", "atcodertools")
+    }
+    ideaSysProps.remove("idea.home.path")
+    ideaSysProps.remove("jb.vmOptionsFile")
+    ideaSysProps.remove("idea.version")
+    ideaSysProps.remove("idea.platform.prefix")
+    ideaSysProps.put("idea.gui.tests.gradle.runner", true) // Use Gradle Launcher to run GUI tests
+    ideaSysProps.put("idea.debug.mode", false) // Set true to enable debugging with breakpoints
+    ideaSysProps.put("atcodertools.intellij.common.command.noLogin", true)
+    systemProperties ideaSysProps
+
+    jacoco {
+        includeNoLocationClasses = true
+        includes = ["atcodertools.intellij.*"]
     }
 
-    check.dependsOn jacocoTestReport
+    filter {
+        // Exclude uitest/testcase package because they are included in UiTestSuite.
+        // If we don't exclude them here they will be executed twice.
+        // Note that GuiTestCase needs to be wrapped by GuiTestSuite because it doesn't shutdown IDE
+        // after the test execution resulted in timeout exception.
+        excludeTestsMatching "atcodertools.intellij.uitest.testcase.*"
+    }
 }
+
+// Disable jacoco report for now. For some reason, jacoco doesn't handle GuiTest well
+// and it produces zero test coverage. Let's disable it until we figure out the reason.
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        html.enabled false
+        csv.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport

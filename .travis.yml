@@ -30,7 +30,7 @@ script:
   - test ! -s check_autopep8
   - atcoder-tools gen arc050 --without-login
   - nosetests tests --exe -v --with-coverage --cover-package=atcodertools
-  - (cd intellij-plugin && ./gradlew ic:check)
+  - (cd intellij-plugin && ./gradlew check)
   - codecov
 
 notifications:

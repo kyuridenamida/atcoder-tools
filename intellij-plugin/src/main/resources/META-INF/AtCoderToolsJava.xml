@@ -1,0 +1,9 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceInterface="atcodertools.intellij.common.service.AtCoderToolsApplicationService"
+                            serviceImplementation="atcodertools.intellij.idea.service.AtCoderToolsApplicationServiceImpl" />
+
+        <projectService serviceInterface="atcodertools.intellij.common.service.AtCoderToolsProjectService"
+                        serviceImplementation="atcodertools.intellij.idea.service.AtCoderToolsProjectServiceImpl" />
+    </extensions>
+</idea-plugin>
