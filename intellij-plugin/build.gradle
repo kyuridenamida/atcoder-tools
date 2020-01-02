@@ -59,13 +59,15 @@ allprojects {
         if (System.getProperty("idea.gui.tests.gradle.runner") == "true") {
             jacoco.applyTo(runIde)
 
-            def sysProps = System.properties.findAll {
+            def ideaSysProps = System.properties.findAll {
                 (it.key as String).startsWith("idea") || (it.key as String).startsWith("jb")
-            }.findAll {
-                (it.key as String) != "idea.home.path" && (it.key as String) != "jb.vmOptionsFile"
             }
-            sysProps.put("atcodertools.intellij.command.noLogin", true)
-            systemProperties sysProps
+            ideaSysProps.remove("idea.home.path")
+            ideaSysProps.remove("jb.vmOptionsFile")
+            ideaSysProps.remove("idea.version")
+            ideaSysProps.remove("idea.platform.prefix")
+            ideaSysProps.put("atcodertools.intellij.command.noLogin", true)
+            systemProperties ideaSysProps
 
             /* Need to split the space-delimited value in the exec.args */
             args System.getProperty("exec.args", "").split(",")
@@ -78,14 +80,17 @@ allprojects {
     }
 
     test {
-        def sysProps = System.properties.findAll {
+        def ideaSysProps = System.properties.findAll {
             (it.key as String).startsWith("idea") || (it.key as String).startsWith("jb")
-        }.findAll {
-            (it.key as String) != "idea.home.path" && (it.key as String) != "jb.vmOptionsFile"
         }
-        sysProps.put("idea.gui.tests.gradle.runner", true) // Use Gradle Launcher to run GUI tests
-        sysProps.put("idea.debug.mode", false) // Set true to enable debugging with breakpoints
-        systemProperties sysProps
+        ideaSysProps.remove("idea.home.path")
+        ideaSysProps.remove("jb.vmOptionsFile")
+        ideaSysProps.remove("idea.version")
+        ideaSysProps.remove("idea.platform.prefix")
+        ideaSysProps.put("idea.gui.tests.gradle.runner", true) // Use Gradle Launcher to run GUI tests
+        ideaSysProps.put("idea.debug.mode", false) // Set true to enable debugging with breakpoints
+        ideaSysProps.put("atcodertools.intellij.command.noLogin", true)
+        systemProperties ideaSysProps
 
         jacoco {
             includeNoLocationClasses = true

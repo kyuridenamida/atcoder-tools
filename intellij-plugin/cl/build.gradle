@@ -4,9 +4,22 @@ version '0.1-SNAPSHOT'
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     type = 'CL'  // CLion
+    plugins = [
+            'com.intellij.testGuiFramework:193.SNAPSHOT.1@nightly',  // https://plugins.jetbrains.com/plugin/11114-test-gui-framework/versions
+    ]
 }
 
 dependencies {
     implementation project(':common')
     implementation "com.google.guava:guava:28.1-jre"
+}
+
+test {
+    filter {
+        // Exclude uitest package because they are included in UiTestSuite.
+        // If we don't exclude them here they will be executed twice.
+        // Note that GuiTestCase needs to be wrapped by GuiTestSuite because it doesn't shutdown IDE
+        // after the test execution resulted in timeout exception.
+        excludeTestsMatching "atcodertools.intellij.uitest.*"
+    }
 }

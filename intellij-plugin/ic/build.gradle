@@ -3,11 +3,11 @@ version '0.1-SNAPSHOT'
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
+    type = 'IC'  // IntelliJ community edition.
     plugins = [
             'java',
             'com.intellij.testGuiFramework:193.SNAPSHOT.1@nightly',  // https://plugins.jetbrains.com/plugin/11114-test-gui-framework/versions
     ]
-    type = 'IC'  // IntelliJ community edition.
 }
 
 dependencies {

@@ -12,6 +12,8 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.clion</depends>
 
+    <depends optional="true" config-file="">com.intellij.testGuiFramework</depends>
+
     <extensions defaultExtensionNs="com.intellij">
         <directoryProjectGenerator implementation="atcodertools.clion.wizard.AtCoderToolsProjectGenerator"/>
         <applicationService serviceInterface="atcodertools.intellij.service.AtCoderToolsApplicationService"

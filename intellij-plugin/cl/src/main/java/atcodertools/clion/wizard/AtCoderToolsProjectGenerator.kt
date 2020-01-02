@@ -52,7 +52,7 @@ class AtCoderToolsProjectGenerator : CMakeCPPProjectGenerator() {
     /**
      * Returns the name of this project type. Displayed in the new project wizard dialog.
      */
-    override fun getName() = "AtCoder Tools"
+    override fun getName() = "AtCoderTools"
 
     /**
      * Returns the icon of this project type. Displayed in the new project wizard dialog.

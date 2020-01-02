@@ -3,9 +3,7 @@ package atcodertools.intellij.uitest
 import com.intellij.execution.impl.ConsoleViewImpl
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.testGuiFramework.fixtures.ActionButtonFixture
-import com.intellij.testGuiFramework.impl.GuiTestCase
-import com.intellij.testGuiFramework.impl.button
-import com.intellij.testGuiFramework.impl.jList
+import com.intellij.testGuiFramework.impl.*
 import com.intellij.testGuiFramework.util.attempt
 import com.intellij.testGuiFramework.util.step
 import com.intellij.testGuiFramework.util.waitFor
@@ -22,14 +20,10 @@ class EndToEndIntegrationTest : GuiTestCase() {
     @Test
     fun createAtCoderToolsProject() {
         welcomeFrame {
-            createNewProject()
-            dialog("New Project") {
-                jList("AtCoderTools").clickItem("AtCoderTools")
-                button("Next").click()
-                typeText("agc029")
-                button("Next").click()
-                button("Finish").click()
-            }
+            actionLink("New Project").click()
+            jList("AtCoderTools").clickItem("AtCoderTools")
+            textfield("Contest ID:").setText("agc029")
+            button("Create").click()
         }
 
         ideFrame {
@@ -43,16 +37,16 @@ class EndToEndIntegrationTest : GuiTestCase() {
                 // Make sure that gen command finishes successfully and the solution file of
                 // the first problem is open automatically.
                 val currentSelectedFile = requireNotNull(currentFile)
-                assertThat(currentSelectedFile.name).isEqualTo("main.java")
+                assertThat(currentSelectedFile.name).isEqualTo("main.cpp")
                 assertThat(currentSelectedFile.parent.name).isEqualTo("A")
 
                 // Also make sure that all other solution files are opened.
-                waitFor { hasTab("A/main.java") }
-                waitFor { hasTab("B/main.java") }
-                waitFor { hasTab("C/main.java") }
-                waitFor { hasTab("D/main.java") }
-                waitFor { hasTab("E/main.java") }
-                waitFor { hasTab("F/main.java") }
+                waitFor { hasTab("A/main.cpp") }
+                waitFor { hasTab("B/main.cpp") }
+                waitFor { hasTab("C/main.cpp") }
+                waitFor { hasTab("D/main.cpp") }
+                waitFor { hasTab("E/main.cpp") }
+                waitFor { hasTab("F/main.cpp") }
             }
 
             toolwindow("AtCoderTools") {
