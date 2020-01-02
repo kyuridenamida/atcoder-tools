@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 import argparse
-import sys
 
 from atcodertools.common.judgetype import JudgeType
-from atcodertools.common.logging import logger
 from atcodertools.executils.run_command import run_command_with_returncode
 from atcodertools.tools.models.metadata import Metadata
 import os

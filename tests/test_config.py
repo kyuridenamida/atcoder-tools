@@ -4,7 +4,7 @@ from argparse import Namespace
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, CodeStyleConfigInitError, \
     INDENT_TYPE_TAB
-from atcodertools.common.language import Language, CPP, PYTHON
+from atcodertools.common.language import CPP, PYTHON
 from atcodertools.config.config import Config
 from atcodertools.tools import get_default_config_path
 
@@ -33,7 +33,8 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(CPP, config.code_style_config.lang)
         self.assertEqual("g++ main.cpp", config.run_config.compile_command)
         self.assertEqual("./main", config.run_config.run_command)
-        self.assertEqual("workspace_dir", config.code_style_config.workspace_dir)
+        self.assertEqual(
+            "workspace_dir", config.code_style_config.workspace_dir)
 
         self.assertEqual(True, config.etc_config.download_without_login)
         self.assertEqual(True, config.etc_config.parallel_download)
@@ -41,7 +42,8 @@ class TestConfig(unittest.TestCase):
         self.assertEqual("in", config.etc_config.in_example_format)
         self.assertEqual("out", config.etc_config.out_example_format)
         self.assertEqual(True, config.etc_config.compile_before_testing)
-        self.assertEqual(False, config.etc_config.compile_only_when_diff_detected)
+        self.assertEqual(
+            False, config.etc_config.compile_only_when_diff_detected)
 
         contest_dir = os.path.join(RESOURCE_DIR, "mock_contest")
         problem_dir = os.path.join(contest_dir, "mock_problem")
@@ -64,8 +66,10 @@ class TestConfig(unittest.TestCase):
         self.assertEqual('new_value', config.run_config.compile_command)
         self.assertEqual('kept_value', config.run_config.run_command)
 
-        self.assertEqual('new_value', config.postprocess_config.exec_cmd_on_problem_dir)
-        self.assertEqual('kept_value', config.postprocess_config.exec_cmd_on_contest_dir)
+        self.assertEqual(
+            'new_value', config.postprocess_config.exec_cmd_on_problem_dir)
+        self.assertEqual(
+            'kept_value', config.postprocess_config.exec_cmd_on_contest_dir)
 
         self.assertEqual('kept_value', config.etc_config.in_example_format)
 

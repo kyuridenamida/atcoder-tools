@@ -52,7 +52,8 @@ class Config:
         config_dic = toml.load(fp)
 
         # Root 'codestyle' is common code style
-        common_code_style_config_dic = config_dic.get(_CODE_STYLE_CONFIG_KEY, {})
+        common_code_style_config_dic = config_dic.get(
+            _CODE_STYLE_CONFIG_KEY, {})
 
         postprocess_config_dic = config_dic.get(_POST_PROCESS_CONFIG_KEY, {})
         etc_config_dic = config_dic.get('etc', {})
@@ -61,8 +62,10 @@ class Config:
 
         # Handle config override strategy in the following code
         # (Most preferred) program arguments > lang-specific > common config (Least preferred)
-        lang = (args and args.lang) or common_code_style_config_dic.get("lang", DEFAULT_LANGUAGE)
-        code_style_config_dic = _update_config_dict(code_style_config_dic, dict(lang=lang))
+        lang = (args and args.lang) or common_code_style_config_dic.get(
+            "lang", DEFAULT_LANGUAGE)
+        code_style_config_dic = _update_config_dict(
+            code_style_config_dic, dict(lang=lang))
 
         if lang in config_dic:
             lang_specific_config_dic = config_dic[lang]  # e.g. [cpp.codestyle]
@@ -78,7 +81,8 @@ class Config:
                 code_style_config_dic = _update_config_dict(code_style_config_dic,
                                                             lang_code_style)
 
-            if _POST_PROCESS_CONFIG_KEY in lang_specific_config_dic:  # e.g. [cpp.postprocess]
+            # e.g. [cpp.postprocess]
+            if _POST_PROCESS_CONFIG_KEY in lang_specific_config_dic:
                 postprocess_config_dic = _update_config_dict(postprocess_config_dic,
                                                              lang_specific_config_dic[_POST_PROCESS_CONFIG_KEY])
 
