@@ -1,4 +1,3 @@
-from argparse import Namespace
 from typing import TextIO, Dict, Any, Optional
 
 import os
@@ -22,6 +21,36 @@ _CODE_STYLE_CONFIG_KEY = "codestyle"
 _RUN_CONFIG_KEY = "run"
 
 
+class ProgramArgs:
+    def __init__(
+            self,
+            template: Optional[str] = None,
+            workspace: Optional[str] = None,
+            without_login: Optional[bool] = None,
+            parallel: Optional[bool] = None,
+            save_no_session_cache: Optional[bool] = None,
+            lang: Optional[str] = None
+    ):
+        self.template = template
+        self.workspace = workspace
+        self.without_login = without_login
+        self.parallel = parallel
+        self.save_no_session_cache = save_no_session_cache
+        self.lang = lang
+
+    @classmethod
+    def load(cls, program_args: argparse.Namespace):
+        return ProgramArgs(
+            **{k: v for k, v in program_args.__dict__.items() if k in (
+                "template",
+                "workspace",
+                "without_login",
+                "parallel",
+                "save_no_session_cache",
+                "lang"
+            )})
+
+
 def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
     return {
         **target_dic,
@@ -43,14 +72,13 @@ class Config:
         self.run_config = run_config
 
     @classmethod
-    def load(cls, fp: TextIO, args: Optional[Namespace] = None):
+    def load(cls, fp: TextIO, args: Optional[ProgramArgs] = None):
         """
         :param fp: .toml file's file pointer
         :param args: command line arguments
         :return: Config instance
         """
         config_dic = toml.load(fp)
-
         # Root 'codestyle' is common code style
         common_code_style_config_dic = config_dic.get(
             _CODE_STYLE_CONFIG_KEY, {})
@@ -119,7 +147,7 @@ def get_config(args: argparse.Namespace) -> Config:
     def _load(path: str) -> Config:
         logger.info("Going to load {} as config".format(path))
         with open(path, 'r') as f:
-            return Config.load(f, args)
+            return Config.load(f, ProgramArgs.load(args))
 
     if args.config:
         return _load(args.config)
