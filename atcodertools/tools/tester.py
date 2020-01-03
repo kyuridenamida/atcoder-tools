@@ -6,16 +6,18 @@ import platform
 import re
 import sys
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from colorama import Fore
 
-from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, Judge, JudgeType, DEFAULT_EPS
+from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, \
+    Judge, JudgeType, DEFAULT_EPS
+from atcodertools.common.language import Language
 from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program, run_interactive_program
-from atcodertools.tools.models.metadata import Metadata
+from atcodertools.tools.models.metadata import Metadata, DEFAULT_METADATA
 from atcodertools.tools.utils import with_color
-from atcodertools.tools.compiler import compile_main_and_judge_programs
+from atcodertools.tools.compiler import compile_main_and_judge_programs, BadStatusCodeException
 from atcodertools.config.config import get_config, USER_CONFIG_PATH
 from atcodertools.tools import get_default_config_path
 
@@ -25,6 +27,10 @@ class NoExecutableFileError(Exception):
 
 
 class IrregularSampleFileError(Exception):
+    pass
+
+
+class InvalidJudgeTypeError(Exception):
     pass
 
 
@@ -47,9 +53,9 @@ def is_executable_file(file_name):
             and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
-def infer_exec_file(filenames, exclude_exec_file):
+def infer_exec_file(filenames: List[str], excluded_exec_files: List[str]):
     exec_files = [name for name in sorted(
-        filenames) if is_executable_file(name) and (name not in exclude_exec_file)]
+        filenames) if is_executable_file(name) and (name not in excluded_exec_files)]
 
     if len(exec_files) == 0:
         raise NoExecutableFileError
@@ -87,7 +93,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
 
     append(with_color("[Expected]", Fore.LIGHTMAGENTA_EX))
     append(expected_output, end='')
-    if(exec_res.judge_message is not None and exec_res.judge_message != ""):
+    if exec_res.judge_message is not None and exec_res.judge_message != "":
         append("judge message: " + exec_res.judge_message)
 
     append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
@@ -125,7 +131,8 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
 
             if judge_method.judge_type == JudgeType.MultiSolution:
                 is_correct = exec_res.is_correct_output(
-                    judge_method=judge_method, sample_input_file=in_sample_file, sample_output_file=out_sample_file, cwd=cwd)
+                    judge_method=judge_method, sample_input_file=in_sample_file, sample_output_file=out_sample_file,
+                    cwd=cwd)
             else:
                 # Output header
                 with open(out_sample_file, 'r') as f:
@@ -257,11 +264,53 @@ def get_metadata(metadata_file: str) -> Metadata:
         logger.warning("{} is not found. Default metadata is selected. ".format(
             metadata_file)
         )
-        return Metadata.default_metadata()
+        return DEFAULT_METADATA
 
 
 USER_FACING_JUDGE_TYPE_LIST = [
     "normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
+
+
+def _decide_judge_method(args: argparse.Namespace, metadata: Metadata, lang: Optional[Language]):
+    def _decide_decimal_judge():
+        if args.error_value is not None:
+            diff = args.error_value
+        elif isinstance(metadata.judge_method, DecimalJudge):
+            diff = metadata.judge_method.diff
+        else:
+            diff = DEFAULT_EPS
+
+        if args.judge_type:
+            assert args.judge_type in ["absolute",
+                                       "relative", "absolute_or_relative"]
+            error_type = ErrorType(args.judge_type)
+        elif isinstance(metadata.judge_method, DecimalJudge):
+            error_type = metadata.judge_method.error_type
+        else:
+            raise Exception("Must not reach")
+
+        return DecimalJudge(diff=diff, error_type=error_type)
+
+    if args.judge_type is not None:
+        if args.judge_type == "normal":
+            return NormalJudge()
+        elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
+            return _decide_decimal_judge()
+        elif args.judge_type == "multisolution":
+            assert lang is not None
+            return MultiSolutionJudge(lang)
+        elif args.judge_type == "interactive":
+            assert lang is not None
+            return InteractiveJudge(lang)
+        else:
+            logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
+                args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))
+            raise InvalidJudgeTypeError()
+
+    if isinstance(metadata.judge_method, DecimalJudge):
+        return _decide_decimal_judge()
+
+    return metadata.judge_method
 
 
 def main(prog, args) -> bool:
@@ -332,60 +381,39 @@ def main(prog, args) -> bool:
 
     args = parser.parse_args(args)
 
-    # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
-    # TODO: All information required to run tester should be from metadata.json except for etc config
-    config = get_config(args)
-
-    if config.etc_config.compile_before_testing is not None and args.compile_before_testing is None:
-        args.compile_before_testing = config.etc_config.compile_before_testing
-    if args.compile_before_testing:
-        if config.etc_config.compile_only_when_diff_detected is not None and args.compile_only_when_diff_detected is None:
-            args.compile_only_when_diff_detected = config.etc_config.compile_only_when_diff_detected
-
     metadata_file = os.path.join(args.dir, "metadata.json")
     metadata = get_metadata(metadata_file)
-    judge_method = metadata.judge_method
     lang = metadata.lang
+
+    # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
+    # TODO: All information required to run tester should be from metadata.json except for etc config
+    # TODO: https://github.com/kyuridenamida/atcoder-tools/issues/177
+    config = get_config(args, lang)
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))
     out_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_out_pattern)))
 
-    user_input_decimal_error_type = None
-    if args.judge_type is not None:
-        if args.judge_type == "normal":
-            judge_method = NormalJudge()
-        elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
-            user_input_decimal_error_type = ErrorType(args.judge_type)
-        elif args.judge_type == "multisolution":
-            judge_method = MultiSolutionJudge(lang.name)
-        elif args.judge_type == "interactive":
-            judge_method = InteractiveJudge(lang.name)
-        else:
-            logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
-                args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))
-            sys.exit(-1)
-
-    user_input_error_value = args.error_value
-
-    if isinstance(judge_method, DecimalJudge):
-        judge_method = DecimalJudge(error_type=user_input_decimal_error_type or judge_method.error_type,
-                                    diff=user_input_error_value or judge_method.diff)
-    elif user_input_decimal_error_type is not None:
-        judge_method = DecimalJudge(error_type=user_input_decimal_error_type,
-                                    diff=user_input_error_value or DEFAULT_EPS)
-    elif user_input_error_value is not None:
-        assert judge_method.judge_type == JudgeType.Normal
-        logger.warn("error_value {} is ignored because this is normal judge".format(
-            user_input_error_value))
+    judge_method = _decide_judge_method(args, metadata, lang)
 
     if isinstance(judge_method, DecimalJudge):
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    if metadata.code_filename is None or not args.compile_before_testing:
-        print("compile is skipped and infer exec file")
+    if config.etc_config.compile_before_testing:
+        # Use atcoder-tools's functionality to compile source code
+        try:
+            compile_main_and_judge_programs(
+                metadata,
+                args.dir,
+                force_compile=not config.etc_config.compile_only_when_diff_detected
+            )
+        except BadStatusCodeException as e:
+            raise e
+        exec_file = lang.get_test_command('main', args.dir)
+    else:
+        logger.info("Inferring exec file ...")
         exclude_exec_files = []
 
         if hasattr(judge_method, "judge_exec_filename"):
@@ -395,17 +423,6 @@ def main(prog, args) -> bool:
 
         exec_file = args.exec or infer_exec_file(
             glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
-    else:
-        if args.compile_only_when_diff_detected:
-            force_compile = True
-        else:
-            force_compile = False
-        exec_file = lang.get_test_command('main', args.dir)
-        print("command: ", exec_file)
-        print("directory: ", args.dir)
-        # Compile
-        if not compile_main_and_judge_programs(metadata, args.dir, force_compile=force_compile):
-            exit()
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,

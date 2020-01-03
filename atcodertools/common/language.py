@@ -165,4 +165,4 @@ CSHARP = Language(
 
 
 ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP]
-ALL_LANGUAGE_NAMES = [lang.display_name for lang in ALL_LANGUAGES]
+ALL_LANGUAGE_NAMES = [lang.name for lang in ALL_LANGUAGES]
