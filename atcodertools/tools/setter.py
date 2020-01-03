@@ -73,6 +73,8 @@ def main(prog, args):
         else:
             raise NoJudgeTypeException()
 
+    judge_code_filename = os.path.join(args.dir, "judge.cpp")
+
     if new_metadata_judge_type == JudgeType.Decimal.value:
         if args.error_value is not None:
             output_metadata.judge_method.diff = args.error_value
@@ -82,17 +84,17 @@ def main(prog, args):
         output_metadata.judge_method.error_type = ErrorType(args.judge_type)
 
     elif new_metadata_judge_type == JudgeType.MultiSolution.value:
-        if not os.path.exists("./judge.cpp"):
-            print("touch ./judge.cpp (multi solution)")
+        if not os.path.exists(judge_code_filename):
+            print("Creating {} (multi-solution)".format(judge_code_filename))
             judge_template_path = get_default_judge_template_path('cpp')
-            shutil.copy(judge_template_path, "./judge.cpp")
+            shutil.copy(judge_template_path, judge_code_filename)
         else:
             print("Judge code exists. Skipping creating judge code...")
     elif new_metadata_judge_type == JudgeType.Interactive.value:
-        if not os.path.exists("./judge.cpp"):
-            print("touch ./judge.cpp (interactive)")
+        if not os.path.exists(judge_code_filename):
+            print("Creating {} (interactive)".format(judge_code_filename))
             judge_template_path = get_default_judge_template_path('cpp')
-            shutil.copy(judge_template_path, "./judge.cpp")
+            shutil.copy(judge_template_path, judge_code_filename)
         else:
             print("Judge code exists. Skipping creating judge code...")
 
