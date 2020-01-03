@@ -119,13 +119,13 @@ class TestTester(unittest.TestCase):
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
-        os.chdir(test_dir)
 
         for lang in ALL_LANGUAGES:
-            setter_main('', ["--lang", lang.name])
+            setter_main('', ["--lang", lang.name, '-d', test_dir])
             metadata = Metadata.load_from(
                 os.path.join(test_dir, "metadata.json"))
-            compile_main_and_judge_programs(metadata, force_compile=True)
+            compile_main_and_judge_programs(
+                metadata, force_compile=True, cwd=test_dir)
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main(
                     '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))
