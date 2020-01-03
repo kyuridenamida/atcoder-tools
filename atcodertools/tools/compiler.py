@@ -25,7 +25,7 @@ def _compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str,
     code, stdout = run_command_with_returncode(compile_cmd, cwd)
     print(stdout)
     if code != 0:
-        raise BadStatusCodeException()
+        raise BadStatusCodeException
 
 
 def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=False) -> None:

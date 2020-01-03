@@ -67,11 +67,9 @@ def main(prog, args):
         elif new_metadata_judge_type == JudgeType.Decimal.value:
             output_metadata.judge_method = DecimalJudge()
         elif new_metadata_judge_type == JudgeType.MultiSolution.value:
-            output_metadata.judge_method = MultiSolutionJudge(
-                Language.from_name('cpp'))
+            output_metadata.judge_method = MultiSolutionJudge()
         elif new_metadata_judge_type == JudgeType.Interactive.value:
-            output_metadata.judge_method = InteractiveJudge(
-                Language.from_name('cpp'))
+            output_metadata.judge_method = InteractiveJudge()
         else:
             raise NoJudgeTypeException()
 
