@@ -52,7 +52,7 @@ def main():
         print(
             "{} version -- show atcoder-tools version".format(sys.argv[0]))
         print(
-            "{} set -- switch program language or judge type".format(sys.argv[0]))
+            "{} set -- switch program language/judge method".format(sys.argv[0]))
         print(
             "{} compile -- compile source code".format(sys.argv[0]))
 
