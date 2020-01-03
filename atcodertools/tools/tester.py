@@ -70,8 +70,9 @@ def infer_exec_file(filenames: List[str], excluded_exec_files: List[str]):
 
 
 def infer_case_num(sample_filename: str):
+    sample_basename = os.path.basename(sample_filename)
     result = ""
-    for c in sample_filename:
+    for c in sample_basename:
         if c.isdigit():
             result += c
     return int(result)

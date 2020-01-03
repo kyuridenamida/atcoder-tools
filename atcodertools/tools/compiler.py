@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import argparse
 
-from atcodertools.common.judgetype import JudgeType
+from atcodertools.common.judgetype import MultiSolutionJudge, InteractiveJudge
 from atcodertools.executils.run_command import run_command_with_returncode
 from atcodertools.tools.models.metadata import Metadata
 import os
@@ -40,9 +40,9 @@ def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=
     except BadStatusCodeException as e:
         raise e
 
-    if metadata.judge_method.judge_type in [JudgeType.MultiSolution, JudgeType.Interactive]:
+    if isinstance(metadata.judge_method, MultiSolutionJudge) or isinstance(metadata.judge_method, InteractiveJudge):
         print("[Judge Program]")
-        lang = metadata.judge_method.judge_code_lang
+        # TODO: Use judge_lang instead of lang
         compile_cmd = lang.get_compile_command('judge')
         code_filename = lang.get_code_filename('judge')
         exec_filename = lang.get_exec_filename('judge')

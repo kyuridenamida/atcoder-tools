@@ -15,7 +15,7 @@ USER_FACING_JUDGE_TYPE_LIST = [
     "normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
 
 
-def main(prog, args):
+def main(prog, args) -> None:
     if len(args) == 0:
         print("Usage: atcoder tools set [options]")
         return
@@ -113,4 +113,3 @@ def main(prog, args):
         else:
             print("Already set to {}. Skipping changing language...".format(args.lang))
     output_metadata.save_to(os.path.join(args.dir, "metadata.json"))
-    return output_metadata
