@@ -30,6 +30,10 @@ class IrregularSampleFileError(Exception):
     pass
 
 
+class InvalidJudgeTypeError(Exception):
+    pass
+
+
 class TestSummary:
     def __init__(self, success_count: int, has_error_output: bool):
         self.success_count = success_count
@@ -49,9 +53,9 @@ def is_executable_file(file_name):
             and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
-def infer_exec_file(filenames, exclude_exec_file):
+def infer_exec_file(filenames: List[str], excluded_exec_files: List[str]):
     exec_files = [name for name in sorted(
-        filenames) if is_executable_file(name) and (name not in exclude_exec_file)]
+        filenames) if is_executable_file(name) and (name not in excluded_exec_files)]
 
     if len(exec_files) == 0:
         raise NoExecutableFileError
@@ -301,7 +305,7 @@ def _decide_judge_method(args: argparse.Namespace, metadata: Metadata, lang: Opt
         else:
             logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
                 args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))
-            sys.exit(-1)
+            raise InvalidJudgeTypeError()
 
     if isinstance(metadata.judge_method, DecimalJudge):
         return _decide_decimal_judge()
@@ -377,13 +381,14 @@ def main(prog, args) -> bool:
 
     args = parser.parse_args(args)
 
-    # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
-    # TODO: All information required to run tester should be from metadata.json except for etc config
-    config = get_config(args)
-
     metadata_file = os.path.join(args.dir, "metadata.json")
     metadata = get_metadata(metadata_file)
     lang = metadata.lang
+
+    # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
+    # TODO: All information required to run tester should be from metadata.json except for etc config
+    # TODO: https://github.com/kyuridenamida/atcoder-tools/issues/177
+    config = get_config(args, lang)
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))
@@ -396,8 +401,19 @@ def main(prog, args) -> bool:
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    if metadata.code_filename is None or not config.etc_config.compile_before_testing:
-        logger.info("Compile is skipped. Inferring exec file ...")
+    if config.etc_config.compile_before_testing:
+        # Use atcoder-tools's functionality to compile source code
+        try:
+            compile_main_and_judge_programs(
+                metadata,
+                args.dir,
+                force_compile=not config.etc_config.compile_only_when_diff_detected
+            )
+        except BadStatusCodeException as e:
+            raise e
+        exec_file = lang.get_test_command('main', args.dir)
+    else:
+        logger.info("Inferring exec file ...")
         exclude_exec_files = []
 
         if hasattr(judge_method, "judge_exec_filename"):
@@ -407,17 +423,6 @@ def main(prog, args) -> bool:
 
         exec_file = args.exec or infer_exec_file(
             glob.glob(os.path.join(args.dir, '*')), exclude_exec_files)
-    else:
-        if config.etc_config.compile_only_when_diff_detected:
-            force_compile = True
-        else:
-            force_compile = False
-        exec_file = lang.get_test_command('main', args.dir)
-        try:
-            compile_main_and_judge_programs(
-                metadata, args.dir, force_compile=force_compile)
-        except BadStatusCodeException as e:
-            raise e
 
     if args.num is None:
         return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
