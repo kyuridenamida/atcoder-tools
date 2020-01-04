@@ -64,6 +64,7 @@ task extractIntelliJApi(type: Sync) {
             zipTree(it).matching {
                 include 'lib/**/*.jar'
                 include 'plugins/java/lib/**/*.jar'
+                includeEmptyDirs false
             }
         }
     }
@@ -100,8 +101,8 @@ compileTestKotlin {
 }
 
 dependencies {
-    api fileTree("$buildDir/intelliJApi")
-    testApi fileTree("$buildDir/intelliJApi")
+    compileOnly fileTree("$buildDir/intelliJApi")
+    testCompileOnly fileTree("$buildDir/intelliJApi")
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.truth:truth:1.0'
     testImplementation 'com.google.truth.extensions:truth-java8-extension:1.0'
