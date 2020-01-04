@@ -109,8 +109,8 @@ class GoCodeGenerator:
         lines = []
 
         if len(dims) == 0:
-            lines.append("{name} := {decl_type}{{}}".format(name=var.name,
-                                                            decl_type=self._get_declaration_type(var)))
+            lines.append("var {name} {decl_type}".format(name=var.name,
+                                                         decl_type=self._get_declaration_type(var)))
         else:
             lines.append("{name} := make({decl_type}, {dim})".format(name=var.name,
                                                                      decl_type=self._get_declaration_type(
