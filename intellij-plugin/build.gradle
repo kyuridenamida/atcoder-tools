@@ -113,34 +113,38 @@ task testsJar(type: Jar, dependsOn: [classes, testClasses]) {
     from sourceSets.test.output
 }
 
-task removeIntelliJApiFromPluginLib(type: Delete) {
+def removeIntelliJApiFromPluginLib() {
     def jarsToBeDeleted = fileTree("$buildDir/intelliJApi").toSet().collect {
         it.name
     }
-    delete fileTree("${project.intellij.sandboxDirectory}/plugins/${project.intellij.pluginName}/lib").matching {
+    fileTree("${project.intellij.sandboxDirectory}/plugins/${project.intellij.pluginName}/lib").matching {
         include jarsToBeDeleted
+    }.toSet().forEach {
+        it.delete()
     }
-    delete fileTree("${project.intellij.sandboxDirectory}/plugins-test/${project.intellij.pluginName}/lib").matching {
+    fileTree("${project.intellij.sandboxDirectory}/plugins-test/${project.intellij.pluginName}/lib").matching {
         include jarsToBeDeleted
+    }.toSet().forEach {
+        it.delete()
     }
 }
-
-buildSearchableOptions.mustRunAfter(removeIntelliJApiFromPluginLib)
-runIde.mustRunAfter(removeIntelliJApiFromPluginLib)
-test.mustRunAfter(removeIntelliJApiFromPluginLib)
 
 prepareSandbox {
     from(testsJar) {
         into "$pluginName/lib"
     }
-    finalizedBy(removeIntelliJApiFromPluginLib)
+    doLast {
+        removeIntelliJApiFromPluginLib()
+    }
 }
 
 prepareTestingSandbox {
     from(testsJar) {
         into "$pluginName/lib"
     }
-    finalizedBy(removeIntelliJApiFromPluginLib)
+    doLast {
+        removeIntelliJApiFromPluginLib()
+    }
 }
 
 runIde {
