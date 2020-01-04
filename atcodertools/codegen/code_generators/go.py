@@ -126,13 +126,13 @@ class GoCodeGenerator:
                 indexes += "[{}]".format(loop_var)
                 brackets = "[]" * (len(dims) - i - 1)
                 lines.append(
-                    "{indent}{name}{indexes} = make({dims}{ctype}, {brackets})".format(indent=self._indent(i + 1),
-                                                                                       name=var.name,
-                                                                                       indexes=indexes,
-                                                                                       brackets=brackets,
-                                                                                       ctype=ctype,
-                                                                                       dim=dim
-                                                                                       ))
+                    "{indent}{name}{indexes} = make({brackets}{ctype}, {dim})".format(indent=self._indent(i + 1),
+                                                                                      name=var.name,
+                                                                                      indexes=indexes,
+                                                                                      brackets=brackets,
+                                                                                      ctype=ctype,
+                                                                                      dim=dim
+                                                                                      ))
 
             for i in reversed(range(len(dims) - 1)):
                 lines.append("{indent}}}".format(indent=self._indent(i)))

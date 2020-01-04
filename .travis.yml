@@ -8,6 +8,7 @@ python:
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y # for C++14
   - sudo wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list # for D-lang, see https://d-apt.sourceforge.io/
+  - sudo add-apt-repository ppa:longsleep/golang-backports # for Go, see https://github.com/golang/go/wiki/Ubuntu
   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
   - sudo apt-get update --allow-insecure-repositories
   - sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring
