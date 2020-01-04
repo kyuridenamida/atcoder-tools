@@ -10,7 +10,7 @@ from atcodertools.fmtprediction.models.variable import Variable
 
 
 def _make_loop_header(loop_var: str, length: str):
-    return "for {loop_var} := 0; i < {length}; {loop_var}++ {{".format(
+    return "for {loop_var} := int64(0); {loop_var} < {length}; {loop_var}++ {{".format(
         loop_var=loop_var,
         length=length
     )
@@ -23,7 +23,7 @@ def _loop_header(var: Variable, for_second_index: bool):
     else:
         index = var.first_index
         loop_var = "i"
-    return "for {loop_var} := 0; i < {length}; {loop_var}++ {{".format(
+    return "for {loop_var} := int64(0); {loop_var} < {length}; {loop_var}++ {{".format(
         loop_var=loop_var,
         length=index.get_length()
     )
