@@ -149,8 +149,6 @@ prepareTestingSandbox {
 
 runIde {
     if (System.getProperty("idea.gui.tests.gradle.runner") == "true") {
-        jacoco.applyTo(runIde)
-
         def ideaSysProps = System.properties.findAll {
             def key = it.key as String
             key.startsWithAny("idea", "jb", "atcodertools")
@@ -210,4 +208,4 @@ jacocoTestReport {
     }
 }
 
-check.dependsOn jacocoTestReport
+jacocoTestReport.dependsOn check
