@@ -93,6 +93,11 @@ if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
     }
 }
 
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
@@ -162,11 +167,12 @@ runIde {
 
         /* Need to split the space-delimited value in the exec.args */
         args System.getProperty("exec.args", "").split(",")
+    }
 
-        jacoco {
-            includeNoLocationClasses = true
-            includes = ["atcodertools.intellij.*"]
-        }
+    jacoco.applyTo(runIde)
+    jacoco {
+        includeNoLocationClasses = true
+        includes = ["atcodertools.*"]
     }
 }
 
@@ -184,11 +190,6 @@ test {
     ideaSysProps.put("atcodertools.intellij.common.command.noLogin", true)
     systemProperties ideaSysProps
 
-    jacoco {
-        includeNoLocationClasses = true
-        includes = ["atcodertools.intellij.*"]
-    }
-
     filter {
         // Exclude uitest/testcase package because they are included in UiTestSuite.
         // If we don't exclude them here they will be executed twice.
@@ -196,16 +197,24 @@ test {
         // after the test execution resulted in timeout exception.
         excludeTestsMatching "atcodertools.intellij.uitest.testcase.*"
     }
-}
 
-// Disable jacoco report for now. For some reason, jacoco doesn't handle GuiTest well
-// and it produces zero test coverage. Let's disable it until we figure out the reason.
-jacocoTestReport {
-    reports {
-        xml.enabled false
-        html.enabled false
-        csv.enabled false
+    jacoco {
+        includeNoLocationClasses = true
+        includes = ["atcodertools.*"]
     }
 }
 
-jacocoTestReport.dependsOn check
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+jacocoTestReport {
+    dependsOn(test)
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+    executionData(test, runIde)
+}
+
+check.dependsOn jacocoTestReport
