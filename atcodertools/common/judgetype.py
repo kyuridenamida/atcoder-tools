@@ -63,9 +63,11 @@ class DecimalJudge(Judge):
         self.diff = diff
 
     def _verify_sub(self, output: float, expected: float) -> bool:
-        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(expected - output) <= self.diff:
+        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(
+                expected - output) <= self.diff:
             return True
-        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(output, expected):
+        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(output,
+                                                                                                         expected):
             return True
         return False
 
@@ -115,12 +117,13 @@ def get_judge_filename():
 
 
 class MultiSolutionJudge(Judge):
-    def __init__(self, judge_code_lang="cpp"):
+
+    def __init__(self, judge_code_lang: 'Language'):
+
         self.judge_type = JudgeType.MultiSolution
         self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
 
-        from atcodertools.common.language import Language
-        self.judge_code_lang = Language.from_name(judge_code_lang)
+        self.judge_code_lang = judge_code_lang
 
     def verify(self, output, expected):
         raise NotImplementedError()
@@ -135,16 +138,16 @@ class MultiSolutionJudge(Judge):
 
     @classmethod
     def from_dict(cls, dic):
-        r = MultiSolutionJudge(dic["judge_code_lang"])
-        return r
+        from atcodertools.common.language import Language
+        return MultiSolutionJudge(Language.from_name(dic["judge_code_lang"]))
 
 
 class InteractiveJudge(Judge):
-    def __init__(self, judge_code_lang="cpp"):
+
+    def __init__(self, judge_code_lang: 'Language'):
         self.judge_type = JudgeType.Interactive
         self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
-        from atcodertools.common.language import Language
-        self.judge_code_lang = Language.from_name(judge_code_lang)
+        self.judge_code_lang = judge_code_lang
 
     def verify(self, output, expected):
         raise NotImplementedError()
@@ -159,5 +162,5 @@ class InteractiveJudge(Judge):
 
     @classmethod
     def from_dict(cls, dic):
-        r = InteractiveJudge(dic["judge_code_lang"])
-        return r
+        from atcodertools.common.language import Language
+        return InteractiveJudge(Language.from_name(dic["judge_code_lang"]))

@@ -44,18 +44,17 @@ def main():
         print("Usage:")
         print("{} gen -- to generate workspace".format(sys.argv[0]))
         print(
-            "{} codegen -- to generate code of the specified single problem".format(sys.argv[0]))
-        print(
             "{} test -- to test your code in the workspace".format(sys.argv[0]))
         print(
             "{} submit -- to submit your code to the contest system".format(sys.argv[0]))
         print(
-            "{} version -- show atcoder-tools version".format(sys.argv[0]))
-        print(
-            "{} set -- set judge type".format(sys.argv[0]))
-        print(
             "{} compile -- compile source code".format(sys.argv[0]))
-
+        print(
+            "{} set -- switch program language/judge method".format(sys.argv[0]))
+        print(
+            "{} codegen -- to generate code of the specified single problem".format(sys.argv[0]))
+        print(
+            "{} version -- show atcoder-tools version".format(sys.argv[0]))
         sys.exit(-1)
 
     prog = " ".join(sys.argv[:2])

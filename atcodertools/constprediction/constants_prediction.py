@@ -108,7 +108,7 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     return yes_str, no_str
 
 
-def predict_judge_method(html: str) -> Optional[Judge]:
+def predict_judge_method(html: str) -> Judge:
     def normalize(sentence):
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
             "−", "-").lower().strip()
@@ -151,7 +151,8 @@ def predict_judge_method(html: str) -> Optional[Judge]:
                     decimal_val_cands.add(int(t))
 
         if len(decimal_val_cands) == 0:
-            return None
+            # No error value candidate is found
+            return NormalJudge()
 
         if len(decimal_val_cands) == 1:
             if is_absolute and is_relative:

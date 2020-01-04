@@ -8,49 +8,50 @@ import os
 import pathlib
 
 
-def _compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str, force_compile: bool) -> bool:
+class BadStatusCodeException(Exception):
+    pass
+
+
+def _compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str, force_compile: bool) -> None:
     if not force_compile:
-        code_p = pathlib.Path(cwd + '/' + code_filename)
-        if os.path.exists(cwd + '/' + exec_filename):
-            exec_p = pathlib.Path(cwd + '/' + exec_filename)
-        else:
-            exec_p = None
-        if exec_p is not None and code_p.stat().st_mtime < exec_p.stat().st_mtime:
+        code_path = pathlib.Path(os.path.join(cwd, code_filename))
+        exec_path_name = os.path.join(cwd, exec_filename)
+
+        if os.path.exists(exec_path_name) and code_path.stat().st_mtime < pathlib.Path(exec_path_name).stat().st_mtime:
             print("No need to compile")
-            return True
-    print("Compileing: ")
-    print(compile_cmd)
+            return
+
+    print("Compiling... (command: `{}`)".format(compile_cmd))
     code, stdout = run_command_with_returncode(compile_cmd, cwd)
     print(stdout)
-    if code == 0:
-        return True
-    else:
-        return False
+    if code != 0:
+        raise BadStatusCodeException()
 
 
-def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=False):
-    valid = True
+def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=False) -> None:
     lang = metadata.lang
-    print("code file: ")
+    print("[Main Program]")
     compile_cmd = lang.get_compile_command('main')
     code_filename = lang.get_code_filename('main')
     exec_filename = lang.get_exec_filename('main')
-    code = _compile(code_filename, exec_filename,
-                    compile_cmd, cwd, force_compile)
-    if not code:
-        valid = False
+
+    try:
+        _compile(code_filename, exec_filename, compile_cmd, cwd, force_compile)
+    except BadStatusCodeException as e:
+        raise e
+
     if metadata.judge_method.judge_type in [JudgeType.MultiSolution, JudgeType.Interactive]:
-        print("judge file: ")
+        print("[Judge Program]")
         lang = metadata.judge_method.judge_code_lang
         compile_cmd = lang.get_compile_command('judge')
         code_filename = lang.get_code_filename('judge')
         exec_filename = lang.get_exec_filename('judge')
 
-        code = _compile(code_filename, exec_filename,
-                        compile_cmd, cwd, force_compile)
-        if not code:
-            valid = False
-    return valid
+        try:
+            _compile(code_filename, exec_filename,
+                     compile_cmd, cwd, force_compile)
+        except BadStatusCodeException as e:
+            raise e
 
 
 def main(prog, args):
