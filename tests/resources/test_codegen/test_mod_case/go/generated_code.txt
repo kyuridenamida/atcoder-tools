@@ -1,0 +1,25 @@
+package main
+
+import (
+	"bufio"
+	"os"
+	"strconv"
+)
+
+const MOD = 998244353
+
+func solve(A string, B string) {
+
+}
+
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanWords)
+	var A string
+	scanner.Scan()
+	A = scanner.Text()
+	var B string
+	scanner.Scan()
+	B = scanner.Text()
+	solve(A, B)
+}
