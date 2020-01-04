@@ -124,15 +124,15 @@ class GoCodeGenerator:
                 lines.append(_make_loop_header(loop_var, dims[i-1]))
                 indexes += "[{}]".format(loop_var)
                 lines.append(
-                    "{indent}{name}{indexes} := make({dims}{ctype}, {dim})".format(indent=self._indent(i),
-                                                                                   name=var.name,
-                                                                                   indexes=indexes,
-                                                                                   dims="[]" *
-                                                                                   (len(
+                    "{indent}{name}{indexes} = make({dims}{ctype}, {dim})".format(indent=self._indent(i),
+                                                                                  name=var.name,
+                                                                                  indexes=indexes,
+                                                                                  dims="[]" *
+                                                                                  (len(
                                                                                        dims)-i),
-                                                                                   ctype=ctype,
-                                                                                   dim=dim
-                                                                                   ))
+                                                                                  ctype=ctype,
+                                                                                  dim=dim
+                                                                                  ))
 
             for i in range(len(dims)-1):
                 lines.append("{indent}}}".format(indent=self._indent(i)))
