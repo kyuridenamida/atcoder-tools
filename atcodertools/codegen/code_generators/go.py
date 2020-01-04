@@ -124,18 +124,17 @@ class GoCodeGenerator:
                 loop_var = loop_vars[i]
                 lines.append(_make_loop_header(loop_var, dims[i]))
                 indexes += "[{}]".format(loop_var)
+                brackets = "[]" * (len(dims) - i - 1)
                 lines.append(
-                    "{indent}{name}{indexes} = make({dims}{ctype}, {dim})".format(indent=self._indent(i+1),
-                                                                                  name=var.name,
-                                                                                  indexes=indexes,
-                                                                                  dims="[]" *
-                                                                                  (len(
-                                                                                      dims)-i-1),
-                                                                                  ctype=ctype,
-                                                                                  dim=dim
-                                                                                  ))
+                    "{indent}{name}{indexes} = make({dims}{ctype}, {brackets})".format(indent=self._indent(i + 1),
+                                                                                       name=var.name,
+                                                                                       indexes=indexes,
+                                                                                       brackets=brackets,
+                                                                                       ctype=ctype,
+                                                                                       dim=dim
+                                                                                       ))
 
-            for i in reversed(range(len(dims)-1)):
+            for i in reversed(range(len(dims) - 1)):
                 lines.append("{indent}}}".format(indent=self._indent(i)))
 
         return lines
