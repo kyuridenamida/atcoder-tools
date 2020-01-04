@@ -4,6 +4,7 @@ package main
 import (
 	"bufio"
 	"os"
+	"strconv"
 )
 {% endif %}
 {% if mod %}
