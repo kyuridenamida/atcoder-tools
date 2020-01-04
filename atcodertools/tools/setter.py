@@ -105,7 +105,8 @@ def main(prog, args) -> None:
                 'main')
             url = "https://atcoder.jp/contests/{}/tasks/{}".format(
                 output_metadata.problem.contest.contest_id, output_metadata.problem.problem_id)
-            main_code_filename = os.path.join(args.dir, output_metadata.code_filename)
+            main_code_filename = os.path.join(
+                args.dir, output_metadata.code_filename)
             if not os.path.exists(main_code_filename):
                 codegen_main("", ["--lang", output_metadata.lang.name,
                                   url], open(main_code_filename, 'w'))
