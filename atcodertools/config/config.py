@@ -5,6 +5,8 @@ import argparse
 from os.path import expanduser
 import toml
 from colorama import Fore
+
+from atcodertools.common.language import Language
 from atcodertools.common.logging import logger
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig, DEFAULT_LANGUAGE
@@ -143,11 +145,17 @@ USER_CONFIG_PATH = os.path.join(
     expanduser("~"), ".atcodertools.toml")
 
 
-def get_config(args: argparse.Namespace) -> Config:
+def get_config(args: argparse.Namespace, language: Language = None) -> Config:
     def _load(path: str) -> Config:
         logger.info("Going to load {} as config".format(path))
         with open(path, 'r') as f:
-            return Config.load(f, ProgramArgs.load(args))
+            program_args = ProgramArgs.load(args)
+
+            if language is not None:
+                assert program_args.lang is None
+                program_args.lang = language.name
+
+            return Config.load(f, program_args)
 
     if args.config:
         return _load(args.config)
