@@ -7,8 +7,11 @@ import (
 	"strconv"
 )
 {% endif %}
+{% if mod or yes_str or no_str %}
+
+{% endif %}
 {% if mod %}
-const MOD = 1
+const MOD = {{mod}}
 {% endif %}
 {% if yes_str %}
 const YES = "{{ yes_str }}"
@@ -26,6 +29,7 @@ func solve({{ formal_arguments }}) {
 func main() {
 	{% if prediction_success %}
 	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanWords)
 	{{ input_part }}
 	solve({{ actual_arguments }})
 	{% else %}

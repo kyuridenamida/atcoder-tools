@@ -91,8 +91,8 @@ class GoCodeGenerator:
         array[1..n][1..m] ->
         [
             "array := make([][]int, n)",
-            "for index0 := 0; index0 < m; index0++ {",
-            "	array[index0] = make([]int, m)",
+            "for i := 0; i < m; i++ {",
+            "	array[i] = make([]int, m)",
             "}",
         ]
         """
@@ -118,23 +118,24 @@ class GoCodeGenerator:
                                                                      dim=dims[0]))
 
             indexes = ""
+            loop_vars = list("ijk")
             ctype = self._convert_type(var.type)
-            for i, dim in enumerate(dims[1::1], start=1):
-                loop_var = "index" + str(i)
-                lines.append(_make_loop_header(loop_var, dims[i-1]))
+            for i, dim in enumerate(dims[1::1]):
+                loop_var = loop_vars[i]
+                lines.append(_make_loop_header(loop_var, dims[i]))
                 indexes += "[{}]".format(loop_var)
                 lines.append(
-                    "{indent}{name}{indexes} = make({dims}{ctype}, {dim})".format(indent=self._indent(i),
+                    "{indent}{name}{indexes} = make({dims}{ctype}, {dim})".format(indent=self._indent(i+1),
                                                                                   name=var.name,
                                                                                   indexes=indexes,
                                                                                   dims="[]" *
                                                                                   (len(
-                                                                                       dims)-i),
+                                                                                      dims)-i-1),
                                                                                   ctype=ctype,
                                                                                   dim=dim
                                                                                   ))
 
-            for i in range(len(dims)-1):
+            for i in reversed(range(len(dims)-1)):
                 lines.append("{indent}}}".format(indent=self._indent(i)))
 
         return lines
@@ -194,7 +195,9 @@ class GoCodeGenerator:
         return lines
 
     def _indent(self, depth):
-        return self._config.indent(depth)
+        # TODO: 言語設定でタブのデフォルト設定ができるようになったら_configを使う
+        # return self._config.indent(depth)
+        return "\t" * 1 * depth
 
 
 class NoPredictionResultGiven(Exception):

@@ -236,7 +236,6 @@ class TestCodeGenerator(unittest.TestCase):
             os.remove(os.path.join(self.temp_dir, "main.exe"))
         elif lang == GO:
             os.remove(os.path.join(self.temp_dir, "main"))
-            os.remove()
         else:
             raise NotImplementedError()
 
