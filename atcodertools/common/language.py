@@ -1,7 +1,7 @@
 import re
 from typing import Pattern, Callable
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs
+from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, go
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 import platform
@@ -163,6 +163,18 @@ CSHARP = Language(
     exec_filename="{filename}{exec_extension}"
 )
 
+GO = Language(
+    name="go",
+    display_name="Go",
+    extension="go",
+    submission_lang_pattern=re.compile(".*Go \\(1.*"),
+    default_code_generator=go.main,
+    default_template_path=get_default_template_path('go'),
+    compile_command="go build -o {filename} {filename}.go",
+    test_command="{exec_filename}",
+    exec_filename="{filename}{exec_extension}"
+)
 
-ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP]
+
+ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP, GO]
 ALL_LANGUAGE_NAMES = [lang.display_name for lang in ALL_LANGUAGES]
