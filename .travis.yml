@@ -22,7 +22,7 @@ before_install:
 install:
   - pip install .
   - pip install flake8 autopep8
-  - pip install coverage nose
+  - pip install codecov nose
 
 script:
   - flake8 --ignore=E501,W503,W605 --exclude=atcodertools/tools/templates/,tests/resources/test_codegen/ atcodertools tests
@@ -31,7 +31,7 @@ script:
   - atcoder-tools gen arc050 --without-login
   - nosetests tests --exe -v --with-coverage --cover-package=atcodertools
   - (cd intellij-plugin && ./gradlew check)
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
 
 notifications:
   email: false
