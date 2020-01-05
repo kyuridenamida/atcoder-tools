@@ -12,6 +12,7 @@ func solve(L int64, N int64, M int64, K []float64, A []int64, S []float64) {
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Buffer(make([]byte, 1000000), 1000000)
 	scanner.Split(bufio.ScanWords)
 	var L int64
 	scanner.Scan()
