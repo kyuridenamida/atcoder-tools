@@ -2,6 +2,7 @@ import re
 from typing import Pattern, Callable
 
 from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, go
+from atcodertools.codegen.code_style_config import INDENT_TYPE_TAB
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 import platform
@@ -13,8 +14,10 @@ class LanguageNotFoundError(Exception):
 
 class CodeStyle:
     def __init__(self,
+                 indent_type=None,
                  indent_width=None
                  ):
+        self.indent_type = indent_type
         self.indent_width = indent_width
 
 
@@ -170,6 +173,7 @@ GO = Language(
     submission_lang_pattern=re.compile(".*Go \\(1.*"),
     default_code_generator=go.main,
     default_template_path=get_default_template_path('go'),
+    default_code_style=CodeStyle(indent_type=INDENT_TYPE_TAB),
     compile_command="go build -o {filename} {filename}.go",
     test_command="{exec_filename}",
     exec_filename="{filename}{exec_extension}"

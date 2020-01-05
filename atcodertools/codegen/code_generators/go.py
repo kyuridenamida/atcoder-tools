@@ -91,7 +91,7 @@ class GoCodeGenerator:
         array[1..n][1..m] ->
         [
             "array := make([][]int, n)",
-            "for i := 0; i < m; i++ {",
+            "for i := 0; i < n; i++ {",
             "	array[i] = make([]int, m)",
             "}",
         ]
@@ -194,9 +194,7 @@ class GoCodeGenerator:
         return lines
 
     def _indent(self, depth):
-        # TODO: 言語設定でタブのデフォルト設定ができるようになったら_configを使う
-        # return self._config.indent(depth)
-        return "\t" * 1 * depth
+        return self._config.indent(depth)
 
 
 class NoPredictionResultGiven(Exception):
