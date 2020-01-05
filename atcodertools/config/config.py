@@ -31,7 +31,9 @@ class ProgramArgs:
             without_login: Optional[bool] = None,
             parallel: Optional[bool] = None,
             save_no_session_cache: Optional[bool] = None,
-            lang: Optional[str] = None
+            lang: Optional[str] = None,
+            compile_before_testing: Optional[bool] = None,
+            compile_only_when_diff_detected: Optional[bool] = None
     ):
         self.template = template
         self.workspace = workspace
@@ -39,6 +41,8 @@ class ProgramArgs:
         self.parallel = parallel
         self.save_no_session_cache = save_no_session_cache
         self.lang = lang
+        self.compile_before_testing = compile_before_testing
+        self.compile_only_when_diff_detected = compile_only_when_diff_detected
 
     @classmethod
     def load(cls, program_args: argparse.Namespace):
@@ -49,7 +53,9 @@ class ProgramArgs:
                 "without_login",
                 "parallel",
                 "save_no_session_cache",
-                "lang"
+                "lang",
+                "compile_before_testing",
+                "compile_only_when_diff_detected"
             )})
 
 
@@ -128,9 +134,13 @@ class Config:
             )
             etc_config_dic = _update_config_dict(
                 etc_config_dic,
-                dict(download_without_login=args.without_login,
-                     parallel_download=args.parallel,
-                     save_no_session_cache=args.save_no_session_cache)
+                dict(
+                    download_without_login=args.without_login,
+                    parallel_download=args.parallel,
+                    save_no_session_cache=args.save_no_session_cache,
+                    compile_before_testing=args.compile_before_testing,
+                    compile_only_when_diff_detected=args.compile_only_when_diff_detected
+                )
             )
 
         return Config(

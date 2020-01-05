@@ -4,7 +4,7 @@ from typing import Optional
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.judgetype import NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, Judge, \
     NoJudgeTypeException
-from atcodertools.common.language import Language
+from atcodertools.common.language import Language, CPP
 
 DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
 DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
@@ -45,9 +45,9 @@ class Metadata:
             elif judge_type == "decimal":
                 judge_method = DecimalJudge.from_dict(dic["judge"])
             elif judge_type == "multisolution":
-                judge_method = MultiSolutionJudge.from_dict(dic["judge"])
+                judge_method = MultiSolutionJudge()
             elif judge_type == "interactive":
-                judge_method = InteractiveJudge.from_dict(dic["judge"])
+                judge_method = InteractiveJudge()
             else:
                 raise NoJudgeTypeException()
         else:
@@ -78,6 +78,6 @@ DEFAULT_METADATA = Metadata(
     code_filename=None,
     sample_in_pattern=DEFAULT_IN_EXAMPLE_PATTERN,
     sample_out_pattern=DEFAULT_OUT_EXAMPLE_PATTERN,
-    lang=None,
+    lang=CPP,
     judge_method=NormalJudge()
 )

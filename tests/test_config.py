@@ -5,7 +5,7 @@ from argparse import Namespace
 from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, CodeStyleConfigInitError, \
     INDENT_TYPE_TAB
 from atcodertools.common.language import CPP, PYTHON
-from atcodertools.config.config import Config
+from atcodertools.config.config import Config, ProgramArgs
 from atcodertools.tools import get_default_config_path
 
 RESOURCE_DIR = os.path.join(
@@ -104,14 +104,14 @@ class TestConfig(unittest.TestCase):
         os.chdir(RESOURCE_DIR)
 
         with open(os.path.join(RESOURCE_DIR, "all_options.toml"), 'r') as f:
-            config = Config.load(f, Namespace(
+            config = Config.load(f, ProgramArgs.load(Namespace(
                 lang="python",
                 template=None,
                 workspace=None,
                 without_login=None,
                 parallel=None,
                 save_no_session_cache=None
-            ))
+            )))
 
         self.assertEqual(PYTHON, config.code_style_config.lang)
 

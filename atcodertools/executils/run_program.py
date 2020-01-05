@@ -2,20 +2,29 @@ import subprocess
 import time
 from enum import Enum
 import threading
-from atcodertools.common.judgetype import JudgeType
+from typing import Optional
+
+from atcodertools.common.judgetype import Judge, MultiSolutionJudge, InteractiveJudge, DecimalJudge, \
+    NormalJudge
 import tempfile
+
+from atcodertools.common.language import Language
 
 
 class ExecStatus(Enum):
     NORMAL = "NORMAL"
     TLE = "TLE"
     RE = "RE"
-    JUDGEERROR = "JUDGEERROR"
+    JUDGE_ERROR = "JUDGE_ERROR"
 
 
 class JudgeStatus(Enum):
     AC = "AC"
     WA = "WA"
+
+
+class UnknownJudgeError(Exception):
+    pass
 
 
 class JudgeError(Exception):
@@ -25,7 +34,14 @@ class JudgeError(Exception):
 
 
 class ExecResult:
-    def __init__(self, status: ExecStatus, output: str = None, stderr: str = None, elapsed_sec: float = None, special_judge_status: JudgeStatus = None, judge_message: str = None):
+    def __init__(
+            self,
+            status: ExecStatus, output: str = None,
+            stderr: str = None,
+            elapsed_sec: float = None,
+            special_judge_status: JudgeStatus = None,
+            judge_message: str = None
+    ):
         self.status = status
         self.output = output
         self.stderr = stderr
@@ -37,24 +53,38 @@ class ExecResult:
         else:
             self.elapsed_ms = None
 
-    def is_correct_output(self, expected_answer_text=None, judge_method=None, sample_input_file=None, sample_output_file=None, cwd=None):
+    def is_correct_output(
+            self,
+            expected_answer_text: Optional[str] = None,
+            judge_method: Optional[Judge] = None,
+            sample_input_file: Optional[str] = None,
+            sample_output_file: Optional[str] = None,
+            cwd: Optional[str] = None,
+            judge_program_language: Optional[Language] = None
+    ):
         if self.status != ExecStatus.NORMAL:
             return False
+
         if self.special_judge_status is not None:
             return self.special_judge_status == JudgeStatus.AC
 
-        if judge_method.judge_type == JudgeType.MultiSolution:
-            judge_exec_res = run_multisolution_judge_program(judge_method.judge_code_lang.get_test_command('judge', cwd),
-                                                             self.output,
-                                                             sample_input_file,
-                                                             sample_output_file
-                                                             )
+        if isinstance(judge_method, MultiSolutionJudge):
+            judge_exec_res = run_multisolution_judge_program(
+                judge_program_language.get_test_command('judge', cwd),
+                self.output,
+                sample_input_file,
+                sample_output_file
+            )
             self.judge_message = judge_exec_res.stderr
             return judge_exec_res.special_judge_status == JudgeStatus.AC
-        elif judge_method.judge_type == JudgeType.Interactive:
-            raise("No judge status error for interactive!!")
-        else:
+        elif isinstance(judge_method, InteractiveJudge):
+            raise UnknownJudgeError("No judge status error for interactive!!")
+        elif isinstance(judge_method, DecimalJudge):
             return judge_method.verify(self.output, expected_answer_text)
+        elif isinstance(judge_method, NormalJudge):
+            return judge_method.verify(self.output, expected_answer_text)
+        else:
+            raise NotImplementedError
 
     def has_stderr(self):
         if self.stderr is None:
@@ -62,7 +92,8 @@ class ExecResult:
         return len(self.stderr) > 0
 
 
-def run_program(exec_cmd: str, input_file: str, timeout_sec: int, args=None, current_working_dir: str = None) -> ExecResult:
+def run_program(exec_cmd: str, input_file: str, timeout_sec: int, args=None,
+                current_working_dir: str = None) -> ExecResult:
     if args is None:
         args = []
     try:
@@ -87,7 +118,8 @@ def run_program(exec_cmd: str, input_file: str, timeout_sec: int, args=None, cur
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
 
 
-def run_multisolution_judge_program(judge_cmd: str, output: str, sample_input_file: str, sample_output_file: str, args=None, current_working_dir: str = None) -> ExecResult:
+def run_multisolution_judge_program(judge_cmd: str, output: str, sample_input_file: str, sample_output_file: str,
+                                    args=None, current_working_dir: str = None) -> ExecResult:
     if args is None:
         args = []
     try:
@@ -126,7 +158,8 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
         elapsed_sec = -time.time()
 
         class RunThread(threading.Thread):
-            def __init__(self, cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, input_file=None, timeout_sec=None):
+            def __init__(self, cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         input_file=None, timeout_sec=None):
                 threading.Thread.__init__(self)
                 self.proc = subprocess.Popen(cmd + args,
                                              stdin=stdin,
@@ -155,6 +188,7 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
 
             def close(self):
                 self.proc.stdin.close()
+
         main_thread = RunThread(
             [exec_file], input_file=input_file, timeout_sec=timeout_sec)
         judge_thread = RunThread(exec_judge_file.split() + [input_file, output_file],
@@ -206,4 +240,4 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
     except subprocess.CalledProcessError as e:
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
     except JudgeError as e:
-        return ExecResult(ExecStatus.JUDGEERROR, e.stdout, e.stderr)
+        return ExecResult(ExecStatus.JUDGE_ERROR, e.stdout, e.stderr)

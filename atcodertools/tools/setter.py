@@ -15,7 +15,7 @@ USER_FACING_JUDGE_TYPE_LIST = [
     "normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
 
 
-def main(prog, args):
+def main(prog, args) -> None:
     if len(args) == 0:
         print("Usage: atcoder tools set [options]")
         return
@@ -67,13 +67,13 @@ def main(prog, args):
         elif new_metadata_judge_type == JudgeType.Decimal.value:
             output_metadata.judge_method = DecimalJudge()
         elif new_metadata_judge_type == JudgeType.MultiSolution.value:
-            output_metadata.judge_method = MultiSolutionJudge(
-                Language.from_name('cpp'))
+            output_metadata.judge_method = MultiSolutionJudge()
         elif new_metadata_judge_type == JudgeType.Interactive.value:
-            output_metadata.judge_method = InteractiveJudge(
-                Language.from_name('cpp'))
+            output_metadata.judge_method = InteractiveJudge()
         else:
             raise NoJudgeTypeException()
+
+    judge_code_filename = os.path.join(args.dir, "judge.cpp")
 
     if new_metadata_judge_type == JudgeType.Decimal.value:
         if args.error_value is not None:
@@ -84,17 +84,17 @@ def main(prog, args):
         output_metadata.judge_method.error_type = ErrorType(args.judge_type)
 
     elif new_metadata_judge_type == JudgeType.MultiSolution.value:
-        if not os.path.exists("./judge.cpp"):
-            print("touch ./judge.cpp (multi solution)")
+        if not os.path.exists(judge_code_filename):
+            print("Creating {} (multi-solution)".format(judge_code_filename))
             judge_template_path = get_default_judge_template_path('cpp')
-            shutil.copy(judge_template_path, "./judge.cpp")
+            shutil.copy(judge_template_path, judge_code_filename)
         else:
             print("Judge code exists. Skipping creating judge code...")
     elif new_metadata_judge_type == JudgeType.Interactive.value:
-        if not os.path.exists("./judge.cpp"):
-            print("touch ./judge.cpp (interactive)")
+        if not os.path.exists(judge_code_filename):
+            print("Creating {} (interactive)".format(judge_code_filename))
             judge_template_path = get_default_judge_template_path('cpp')
-            shutil.copy(judge_template_path, "./judge.cpp")
+            shutil.copy(judge_template_path, judge_code_filename)
         else:
             print("Judge code exists. Skipping creating judge code...")
 
@@ -105,12 +105,13 @@ def main(prog, args):
                 'main')
             url = "https://atcoder.jp/contests/{}/tasks/{}".format(
                 output_metadata.problem.contest.contest_id, output_metadata.problem.problem_id)
-            if not os.path.exists(output_metadata.code_filename):
+            main_code_filename = os.path.join(
+                args.dir, output_metadata.code_filename)
+            if not os.path.exists(main_code_filename):
                 codegen_main("", ["--lang", output_metadata.lang.name,
-                                  url], open(output_metadata.code_filename, 'w'))
+                                  url], open(main_code_filename, 'w'))
             else:
                 print("File exists: ", output_metadata.code_filename)
         else:
             print("Already set to {}. Skipping changing language...".format(args.lang))
     output_metadata.save_to(os.path.join(args.dir, "metadata.json"))
-    return output_metadata
