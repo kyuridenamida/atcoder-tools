@@ -28,17 +28,20 @@ apply plugin: 'jacoco'
 group 'atcodertools'
 version '0.1-SNAPSHOT'
 
-intellij {
-    version '2019.3'
+ext.ideaApiVersion = '2019.3.1'
+ext.clionApiVersion = '2019.3.2'
 
+intellij {
     def optionalPlugins = [
             'com.intellij.testGuiFramework:193.SNAPSHOT.1@nightly',  // https://plugins.jetbrains.com/plugin/11114-test-gui-framework/versions
     ]
 
     if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
         type = 'CL'  // CLion.
+        version project.ext.clionApiVersion
     } else {
         type = 'IC'  // IntelliJ community edition (IDEA).
+        version project.ext.ideaApiVersion
         optionalPlugins << 'java'
     }
 
@@ -52,15 +55,15 @@ configurations {
 dependencies {
     // Artifact names can be looked up from
     // https://github.com/JetBrains/gradle-intellij-plugin/blob/master/src/main/groovy/org/jetbrains/intellij/dependency/IdeaDependencyManager.groovy
-    intelliJApi "com.jetbrains.intellij.idea:ideaIC:${project.intellij.version}"
-    intelliJApi "com.jetbrains.intellij.clion:clion:${project.intellij.version}"
+    intelliJApi "com.jetbrains.intellij.idea:ideaIC:${project.ext.ideaApiVersion}"
+    intelliJApi "com.jetbrains.intellij.clion:clion:${project.ext.clionApiVersion}"
 }
 
 task extractIntelliJApi(type: Sync) {
     dependsOn configurations.intelliJApi
 
     from {
-        configurations.intelliJApi.collect { 
+        configurations.intelliJApi.collect {
             zipTree(it).matching {
                 include 'lib/**/*.jar'
                 include 'plugins/java/lib/**/*.jar'
