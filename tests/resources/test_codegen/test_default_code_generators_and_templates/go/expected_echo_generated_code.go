@@ -56,7 +56,9 @@ func solve(N int64, M int64, H [][]string, A []int64, B []float64, Q int64, X []
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Buffer(make([]byte, 1000000), 1000000)
+	const initialBufSize = 4096
+	const maxBufSize = 1000000
+	scanner.Buffer(make([]byte, initialBufSize), maxBufSize)
 	scanner.Split(bufio.ScanWords)
 	var N int64
 	scanner.Scan()

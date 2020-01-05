@@ -69,7 +69,9 @@ func solve({{ formal_arguments }}) {
 func main() {
 	{% if prediction_success %}
 	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Buffer(make([]byte, 1000000), 1000000)
+	const initialBufSize = 4096
+	const maxBufSize = 1000000
+	scanner.Buffer(make([]byte, initialBufSize), maxBufSize)
 	scanner.Split(bufio.ScanWords)
 	{{ input_part }}
 	solve({{ actual_arguments }})
