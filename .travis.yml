@@ -30,7 +30,7 @@ script:
   - test ! -s check_autopep8
   - atcoder-tools gen arc050 --without-login
   - nosetests tests --exe -v --with-coverage --cover-package=atcodertools
-  - (cd intellij-plugin && ./gradlew check)
+  - (cd intellij-plugin && ./gradlew check -x clionTest) # CLion test is excluded due to licensing issue.
   - codecov
 
 notifications:

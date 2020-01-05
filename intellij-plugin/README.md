@@ -7,9 +7,9 @@ IntelliJ Platformで動作するIDEからAtCoder Toolsを使用するためのPl
 C++ (CLion), Java (IntelliJ IDEA)に対応しています。
 
 # Development
-- To run IntelliJ IDEA with the plugin built locally, run `./gradlew runIde`.
-- To run CLion with the plugin built locally, run `./gradlew runIde -Didea.atcodertools.intellij.runInCLion=true`.
+- To run IntelliJ IDEA with the plugin built locally, run `./gradlew runIdea`.
+- To run CLion with the plugin built locally, run `./gradlew runClion`.
 
 ## Test
-- To run tests with IntelliJ IDEA, run `./gradlew check`.
-- To run tests with CLion, run `./gradlew check -Didea.atcodertools.intellij.runInCLion=true`.
+- To run tests, run `./gradlew check`.
+- To run tests without CLion, run `./gradlew check -x clionTest`.

@@ -1,3 +1,5 @@
+import org.jetbrains.intellij.tasks.RunIdeTask
+
 buildscript {
     repositories {
         maven {
@@ -28,8 +30,8 @@ apply plugin: 'jacoco'
 group 'atcodertools'
 version '0.1-SNAPSHOT'
 
-ext.ideaApiVersion = '2019.3.1'
-ext.clionApiVersion = '2019.3.2'
+ext.ideaVersion = '2019.3.1'
+ext.clionVersion = '2019.3.2'
 
 intellij {
     def optionalPlugins = [
@@ -38,10 +40,10 @@ intellij {
 
     if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
         type = 'CL'  // CLion.
-        version project.ext.clionApiVersion
+        version project.ext.clionVersion
     } else {
         type = 'IC'  // IntelliJ community edition (IDEA).
-        version project.ext.ideaApiVersion
+        version project.ext.ideaVersion
         optionalPlugins << 'java'
     }
 
@@ -49,49 +51,75 @@ intellij {
 }
 
 configurations {
-    intelliJApi
+    intelliJIdeaZip
+    intelliJCLionZip
 }
 
 dependencies {
     // Artifact names can be looked up from
     // https://github.com/JetBrains/gradle-intellij-plugin/blob/master/src/main/groovy/org/jetbrains/intellij/dependency/IdeaDependencyManager.groovy
-    intelliJApi "com.jetbrains.intellij.idea:ideaIC:${project.ext.ideaApiVersion}"
-    intelliJApi "com.jetbrains.intellij.clion:clion:${project.ext.clionApiVersion}"
+    intelliJIdeaZip "com.jetbrains.intellij.idea:ideaIC:${project.ext.ideaVersion}"
+    intelliJCLionZip "com.jetbrains.intellij.clion:clion:${project.ext.clionVersion}"
+}
+
+task unzipIntelliJIdea(type: Sync) {
+    dependsOn configurations.intelliJIdeaZip
+
+    from {
+        configurations.intelliJIdeaZip.collect {
+            zipTree(it)
+        }
+    }
+    into "$buildDir/intelliJIdea/"
+}
+
+task unzipIntelliJCLion(type: Sync) {
+    dependsOn configurations.intelliJCLionZip
+
+    from {
+        configurations.intelliJCLionZip.collect {
+            zipTree(it)
+        }
+    }
+    into "$buildDir/intelliJCLion/"
 }
 
 task extractIntelliJApi(type: Sync) {
-    dependsOn configurations.intelliJApi
+    dependsOn(unzipIntelliJIdea, unzipIntelliJCLion)
 
-    from {
-        configurations.intelliJApi.collect {
-            zipTree(it).matching {
+    from(
+            fileTree("$buildDir/intelliJIdea/").matching {
                 include 'lib/**/*.jar'
                 include 'plugins/java/lib/**/*.jar'
                 includeEmptyDirs false
+            },
+            fileTree("$buildDir/intelliJCLion/").matching {
+                include 'lib/**/*.jar'
+                includeEmptyDirs false
             }
-        }
-    }
-
+    )
     into "$buildDir/intelliJApi/"
 }
 
 compileJava.dependsOn(extractIntelliJApi)
 compileKotlin.dependsOn(extractIntelliJApi)
 
-if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
-    sourceSets {
-        test {
-            java {
+sourceSets {
+    test {
+        java {
+            if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
                 exclude 'atcodertools/intellij/idea/**'
+            } else {
+                exclude 'atcodertools/intellij/clion/**'
             }
         }
     }
-} else {
-    sourceSets {
-        test {
-            java {
-                exclude 'atcodertools/intellij/clion/**'
-            }
+    clionTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+        java {
+            srcDir 'src/test/java'
+            exclude 'atcodertools/intellij/idea/**'
         }
     }
 }
@@ -101,11 +129,16 @@ compileJava {
     targetCompatibility = '1.8'
 }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+
+configurations {
+    clionTestImplementation.extendsFrom implementation
+    clionTestCompileOnly.extendsFrom compileOnly
+    clionTestRuntimeOnly.extendsFrom runtimeOnly
 }
 
 dependencies {
@@ -114,6 +147,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'com.google.truth:truth:1.0'
     testImplementation 'com.google.truth.extensions:truth-java8-extension:1.0'
+    clionTestCompileOnly fileTree("$buildDir/intelliJApi")
+    clionTestImplementation 'junit:junit:4.12'
+    clionTestImplementation 'com.google.truth:truth:1.0'
+    clionTestImplementation 'com.google.truth.extensions:truth-java8-extension:1.0'
 }
 
 task testsJar(type: Jar, dependsOn: [classes, testClasses]) {
@@ -156,6 +193,12 @@ prepareTestingSandbox {
 }
 
 runIde {
+    if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
+        ideDirectory = "$buildDir/intelliJCLion"
+    } else {
+        ideDirectory = "$buildDir/intelliJIdea"
+    }
+
     if (System.getProperty("idea.gui.tests.gradle.runner") == "true") {
         def ideaSysProps = System.properties.findAll {
             def key = it.key as String
@@ -176,35 +219,60 @@ runIde {
     jacoco {
         includeNoLocationClasses = true
         includes = ["atcodertools.*"]
+        if (System.getProperty("idea.atcodertools.intellij.runInCLion") == "true") {
+            destinationFile = file("$buildDir/jacoco/clionUiTest.exec")
+        } else {
+            destinationFile = file("$buildDir/jacoco/ideaUiTest.exec")
+        }
+    }
+}
+
+task runIdea(type: RunIdeTask) {
+    ideDirectory = "$buildDir/intelliJIdea"
+}
+
+task runClion(type: RunIdeTask) {
+    ideDirectory = "$buildDir/intelliJCLion"
+}
+
+def configureTest(Test task) {
+    task.with {
+        def ideaSysProps = System.properties.findAll {
+            def key = it.key as String
+            key.startsWithAny("idea", "jb", "atcodertools")
+        }
+        ideaSysProps.remove("idea.home.path")
+        ideaSysProps.remove("jb.vmOptionsFile")
+        ideaSysProps.remove("idea.version")
+        ideaSysProps.remove("idea.platform.prefix")
+        ideaSysProps.put("idea.gui.tests.gradle.runner", true) // Use Gradle Launcher to run GUI tests
+        ideaSysProps.put("idea.debug.mode", false) // Set true to enable debugging with breakpoints
+        ideaSysProps.put("atcodertools.intellij.common.command.noLogin", true)
+        systemProperties ideaSysProps
+
+        filter {
+            // Exclude uitest/testcase package because they are included in UiTestSuite.
+            // If we don't exclude them here they will be executed twice.
+            // Note that GuiTestCase needs to be wrapped by GuiTestSuite because it doesn't shutdown IDE
+            // after the test execution resulted in timeout exception.
+            excludeTestsMatching "atcodertools.intellij.uitest.testcase.*"
+        }
+
+        jacoco {
+            includeNoLocationClasses = true
+            includes = ["atcodertools.*"]
+        }
     }
 }
 
 test {
-    def ideaSysProps = System.properties.findAll {
-        def key = it.key as String
-        key.startsWithAny("idea", "jb", "atcodertools")
-    }
-    ideaSysProps.remove("idea.home.path")
-    ideaSysProps.remove("jb.vmOptionsFile")
-    ideaSysProps.remove("idea.version")
-    ideaSysProps.remove("idea.platform.prefix")
-    ideaSysProps.put("idea.gui.tests.gradle.runner", true) // Use Gradle Launcher to run GUI tests
-    ideaSysProps.put("idea.debug.mode", false) // Set true to enable debugging with breakpoints
-    ideaSysProps.put("atcodertools.intellij.common.command.noLogin", true)
-    systemProperties ideaSysProps
+    configureTest(test)
+}
 
-    filter {
-        // Exclude uitest/testcase package because they are included in UiTestSuite.
-        // If we don't exclude them here they will be executed twice.
-        // Note that GuiTestCase needs to be wrapped by GuiTestSuite because it doesn't shutdown IDE
-        // after the test execution resulted in timeout exception.
-        excludeTestsMatching "atcodertools.intellij.uitest.testcase.*"
-    }
-
-    jacoco {
-        includeNoLocationClasses = true
-        includes = ["atcodertools.*"]
-    }
+task clionTest(type: Test) {
+    configureTest(clionTest)
+    systemProperty("idea.atcodertools.intellij.runInCLion", "true")
+    testClassesDirs = sourceSets.clionTest.output.classesDirs
 }
 
 jacoco {
@@ -212,12 +280,14 @@ jacoco {
 }
 
 jacocoTestReport {
-    dependsOn(test)
+    dependsOn(test, clionTest)
     reports {
         xml.enabled true
         html.enabled true
     }
-    executionData(test, runIde)
+    executionData(fileTree("$buildDir/jacoco").matching {
+        include '**/*.exec'
+    })
 }
 
 check.dependsOn jacocoTestReport
