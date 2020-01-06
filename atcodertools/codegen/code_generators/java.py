@@ -1,5 +1,5 @@
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.codegen.code_generators.cpp import CppCodeGenerator
+#from atcodertools.codegen.code_generators.cpp import CppCodeGenerator
 from atcodertools.codegen.template_engine import render
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
@@ -7,7 +7,8 @@ from atcodertools.fmtprediction.models.variable import Variable
 
 # JavaCodeGenerator uses part of CppCodeGenerator just for less code clone.
 
-class JavaCodeGenerator(CppCodeGenerator):
+#class JavaCodeGenerator(CppCodeGenerator):
+class JavaCodeGenerator():
 
     def _convert_type(self, type_: Type) -> str:
         if type_ == Type.float:

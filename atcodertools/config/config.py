@@ -69,7 +69,6 @@ class Config:
                 d['save_no_session_cache'] = args.save_no_session_cache
 
             etc_config_dic = _update_config_dict(etc_config_dic, d)
-        print(code_style_config_dic)
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
             postprocess_config=PostprocessConfig(**postprocess_config_dic),
