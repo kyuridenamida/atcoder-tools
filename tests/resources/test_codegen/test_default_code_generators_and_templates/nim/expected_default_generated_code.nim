@@ -23,18 +23,15 @@ proc solve(N:int, M:int, H:seq[seq[string]], A:seq[int], B:seq[float], Q:int, X:
   discard
 
 proc main():void =
-  var N:int
-  N = nextInt()
-  var M:int
-  M = nextInt()
+  var N = nextInt()
+  var M = nextInt()
   var H = newSeqWith(N-2+1, newSeqWith(M-1-2+1, nextString()))
   var A = newSeqWith(N-2+1, 0)
   var B = newSeqWith(N-2+1, 0.0)
   for i in 0..<N-2+1:
     A[i] = nextInt()
     B[i] = nextFloat()
-  var Q:int
-  Q = nextInt()
+  var Q = nextInt()
   var X = newSeqWith(M+Q, nextInt())
   solve(N, M, H, A, B, Q, X)
   return

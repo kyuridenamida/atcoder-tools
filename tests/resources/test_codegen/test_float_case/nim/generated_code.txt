@@ -18,12 +18,9 @@ proc solve(L:int, N:int, M:int, K:seq[float], A:seq[int], S:seq[float]):void =
   return
 
 proc main():void =
-  var L:int
-  L = nextInt()
-  var N:int
-  N = nextInt()
-  var M:int
-  M = nextInt()
+  var L = nextInt()
+  var N = nextInt()
+  var M = nextInt()
   var K = newSeqWith(L, nextFloat())
   var A = newSeqWith(N, 0)
   var S = newSeqWith(N, 0.0)

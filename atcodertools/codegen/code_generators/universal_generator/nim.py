@@ -5,6 +5,7 @@
 class CodeGeneratorInfo:
     def __init__(self):
         self.base_indent = 1
+        self.insert_space_around_operators = False
 
         # global変数宣言時の接頭辞
         self.global_prefix = ""
@@ -47,6 +48,11 @@ class CodeGeneratorInfo:
         self.input_int = "{name} = " + self.input_func_int
         self.input_float = "{name} = " + self.input_func_float
         self.input_string = "{name} = " + self.input_func_string
+
+        # 宣言と入力
+        self.declare_and_input_int = "var " + self.input_int
+        self.declare_and_input_float = "var " + self.input_float
+        self.declare_and_input_string = "var " + self.input_string
 
         # 確保と入力
         self.allocate_and_input_seq = "{name} = newSeqWith({length}, {input_func})"

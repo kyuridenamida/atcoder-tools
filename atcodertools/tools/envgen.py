@@ -158,7 +158,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     output_splitter()
 
 
-def func(argv: Tuple[AtCoderClient, Problem, Config]):
+def func(argv: Tuple[AtCoderClient, Problem, Config, bool]):
     atcoder_client, problem, config = argv
     prepare_procedure(atcoder_client, problem, config)
 

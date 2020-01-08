@@ -1,8 +1,7 @@
 from typing import Dict, Any, Optional
+import re
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
-from atcodertools.codegen.models.code_gen_args import CodeGenArgs
-from atcodertools.codegen.template_engine import render
 from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern, \
     Format
 from atcodertools.fmtprediction.models.type import Type
@@ -14,12 +13,15 @@ class CodeGenerator():
 
     def __init__(self,
                  format_: Optional[Format[Variable]],
-                 config: CodeStyleConfig, 
+                 config: CodeStyleConfig,
                  info: CodeGeneratorInfo):
         super(CodeGenerator, self).__init__()
         self._format = format_
         self._config = config
         self.info = info
+
+    def _get_length(self, index) -> str:
+        return self._insert_space_around_operators(index.get_length())
 
     def _loop_header(self, var: Variable, for_second_index: bool):
         if for_second_index:
@@ -31,8 +33,20 @@ class CodeGenerator():
 
         return self.info.loop_header.format(
             loop_var=loop_var,
-            length=index.get_length()
+            length=self._get_length(index)
         )
+
+    def _insert_space_around_operators(self, code):
+        if not self.info.insert_space_around_operators:
+            return code
+        code = str(code)
+        precode = code
+        pattern = r"([0-9a-zA-Z_])([+\-\*/])([0-9a-zA-Z_])"
+        code = re.sub(pattern, r"\1 \2 \3", code)
+        while precode != code:
+            precode = code
+            code = re.sub(pattern, r"\1 \2 \3", code)
+        return code
 
     def _global_declaration(self) -> str:
         lines = []
@@ -133,14 +147,14 @@ class CodeGenerator():
             else:
                 raise NotImplementedError
         elif var.dim_num() == 1:
-            return self.info.declare_seq.format(name=var.name, 
-                                                type=self._convert_type(var.type), 
-                                                length=var.first_index.get_length())
+            return self.info.declare_seq.format(name=var.name,
+                                                type=self._convert_type(var.type),
+                                                length=self._get_length(var.first_index))
         elif var.dim_num() == 2:
-            return self.info.declare_2d_seq.format(name=var.name, 
-                                                   type=self._convert_type(var.type), 
-                                                   length_i=var.first_index.get_length(), 
-                                                   length_j=var.second_index.get_length())
+            return self.info.declare_2d_seq.format(name=var.name,
+                                                   type=self._convert_type(var.type),
+                                                   length_i=self._get_length(var.first_index),
+                                                   length_j=self._get_length(var.second_index))
 
     def _generate_allocation(self, var: Variable):
         """
@@ -149,15 +163,15 @@ class CodeGenerator():
         if var.dim_num() == 0:
             return ""
         elif var.dim_num() == 1:
-            return self.info.allocate_seq.format(name=var.name, 
-                                                 length=var.first_index.get_length(),
+            return self.info.allocate_seq.format(name=var.name,
+                                                 length=self._get_length(var.first_index),
                                                  default=self._default_val(var.type),
                                                  type=self._convert_type(var.type))
         elif var.dim_num() == 2:
-            return self.info.allocate_2d_seq.format(name=var.name, 
+            return self.info.allocate_2d_seq.format(name=var.name,
                                                     type=self._convert_type(var.type),
-                                                    length_i=var.first_index.get_length(),
-                                                    length_j=var.second_index.get_length(),
+                                                    length_i=self._get_length(var.first_index),
+                                                    length_j=self._get_length(var.second_index),
                                                     default=self._default_val(var.type))
         else:
             raise NotImplementedError
@@ -178,13 +192,13 @@ class CodeGenerator():
         elif var.dim_num() == 1:
             return self.info.declare_and_allocate_seq.format(name=var.name,
                                                              type=self._convert_type(var.type),
-                                                             length=var.first_index.get_length(),
+                                                             length=self._get_length(var.first_index),
                                                              default=self._default_val(var.type))
         elif var.dim_num() == 2:
             return self.info.declare_and_allocate_2d_seq.format(name=var.name,
                                                                 type=self._convert_type(var.type),
-                                                                length_i=var.first_index.get_length(),
-                                                                length_j=var.second_index.get_length(),
+                                                                length_i=self._get_length(var.first_index),
+                                                                length_j=self._get_length(var.second_index),
                                                                 default=self._default_val(var.type))
 
     def _get_input_func(self, type: Type) -> str:
@@ -206,16 +220,16 @@ class CodeGenerator():
         else:
             raise NotImplementedError
 
-    def _input_code(self, var: Variable) -> str:
-        if var.dim_num() == 0:
-            return self._input_code_for_var(var)
-        elif var.dim_num() == 1:
-            return self.info.input_seq.format(length=var.first_index.get_length(),
-                                              input=self._input_code_for_var(var))
-        elif var.dim_num() == 2:
-            return self.info.input_2d_seq.format(length_i=var.first_index.get_length(),
-                                                 length_j=var.second_index.get_length(),
-                                                 input=self._input_code_for_var(var))
+#    def _input_code(self, var: Variable) -> str:
+#        if var.dim_num() == 0:
+#            return self._input_code_for_var(var)
+#        elif var.dim_num() == 1:
+#            return self.info.input_seq.format(length=self._get_length(var.first_index),
+#                                              input=self._input_code_for_var(var))
+#        elif var.dim_num() == 2:
+#            return self.info.input_2d_seq.format(length_i=self._get_length(var.first_index),
+#                                                 length_j=self._get_length(var.second_index),
+#                                                 input=self._input_code_for_var(var))
 
     def _get_var_name(self, var: Variable):
         name = var.name
@@ -242,14 +256,33 @@ class CodeGenerator():
         else:
             for var in pattern.all_vars():
                 self._append(lines, self._generate_declaration_and_allocation(var))
+    
+    def _append_singular_pattern(self, lines, pattern: Pattern, global_mode):
+        var = pattern.all_vars()[0]
+        if not global_mode:
+            if var.type == Type.int:
+                if hasattr(self.info, "declare_and_input_int"):
+                    self._append(lines, self.info.declare_and_input_int.format(name=var.name))
+                    return
+            elif var.type == Type.float:
+                if hasattr(self.info, "declare_and_input_float"):
+                    self._append(lines, self.info.declare_and_input_float.format(name=var.name))
+                    return
+            elif var.type == Type.str:
+                if hasattr(self.info, "declare_and_input_string"):
+                    self._append(lines, self.info.declare_and_input_string.format(name=var.name))
+                    return
+            else:
+                raise NotImplementedError
+        self._append_declaration_and_allocation(lines, pattern, global_mode)
+        self._append(lines, self._input_code_for_var(var))
 
     def _render_pattern(self, pattern: Pattern, global_mode):
         lines = []
 
         representative_var = pattern.all_vars()[0]
         if isinstance(pattern, SingularPattern):
-            self._append_declaration_and_allocation(lines, pattern, global_mode)
-            self._append(lines, self._input_code_for_var(representative_var))
+            self._append_singular_pattern(lines, pattern, global_mode)
         elif isinstance(pattern, ParallelPattern):
             added = False
             if len(pattern.all_vars()) == 1:
@@ -258,15 +291,16 @@ class CodeGenerator():
                     if hasattr(self.info, "allocate_and_input_seq"):
                         self._append(lines, self.info.allocate_and_input_seq.
                                      format(input_func=self._get_input_func(var.type),
-                                            length=var.first_index.get_length(),
+                                            length=self._get_length(var.first_index),
                                             name=var.name))
                         added = True
                 else:
                     if hasattr(self.info, "declare_and_allocate_and_input_seq"):
                         self._append(lines, self.info.declare_and_allocate_and_input_seq.
                                      format(input_func=self._get_input_func(var.type),
-                                            length=var.first_index.get_length(),
-                                            name=var.name))
+                                            length=self._get_length(var.first_index),
+                                            name=var.name,
+                                            type=self._convert_type(var.type)))
 
                         added = True
             if not added:
@@ -283,17 +317,18 @@ class CodeGenerator():
                     if hasattr(self.info, "allocate_and_input_2d_seq"):
                         self._append(lines, self.info.allocate_and_input_2d_seq.
                                      format(input_func=self._get_input_func(var.type),
-                                            length_i=var.first_index.get_length(),
-                                            length_j=var.second_index.get_length(),
+                                            length_i=self._get_length(var.first_index),
+                                            length_j=self._get_length(var.second_index),
                                             name=var.name))
                         added = True
                 else:
                     if hasattr(self.info, "declare_and_allocate_and_input_2d_seq"):
                         self._append(lines, self.info.declare_and_allocate_and_input_2d_seq.
                                      format(input_func=self._get_input_func(var.type),
-                                            length_i=var.first_index.get_length(),
-                                            length_j=var.second_index.get_length(),
-                                            name=var.name))
+                                            length_i=self._get_length(var.first_index),
+                                            length_j=self._get_length(var.second_index),
+                                            name=var.name,
+                                            type=self._convert_type(var.type)))
                         added = True
             if not added:
                 self._append_declaration_and_allocation(lines, pattern, global_mode)
@@ -314,4 +349,3 @@ class CodeGenerator():
 
 class NoPredictionResultGiven(Exception):
     pass
-

@@ -6,6 +6,7 @@ class CodeGeneratorInfo:
     def __init__(self):
         self.base_indent = 2
         self.global_base_indent = 1
+        self.insert_space_around_operators = False
 
         # global変数宣言時の接頭辞
         self.global_prefix = ""
