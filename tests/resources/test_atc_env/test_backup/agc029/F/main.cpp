@@ -1,6 +1,6 @@
-#include <bits/stdc++.h>
-using namespace std;
-
+#include<iostream>
+#include<vector>
+#include<string>
 
 void solve(){
 

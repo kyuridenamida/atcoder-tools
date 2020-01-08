@@ -15,7 +15,6 @@ int main(){
     string A;
     A = input.front.to!string;
     input.popFront;
-
     string B;
     B = input.front.to!string;
     input.popFront;

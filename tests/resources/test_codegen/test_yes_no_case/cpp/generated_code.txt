@@ -1,20 +1,21 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include<iostream>
+#include<vector>
+#include<string>
 
-const string YES = "YES";
-const string NO = "NO";
+const std::string YES = "YES";
+const std::string NO = "NO";
 void solve(long long N, long long M, long long A, long long B){
 
 }
 int main(){
     long long N;
-    scanf("%lld",&N);
+    std::cin >> N;
     long long M;
-    scanf("%lld",&M);
+    std::cin >> M;
     long long A;
-    scanf("%lld",&A);
+    std::cin >> A;
     long long B;
-    scanf("%lld",&B);
+    std::cin >> B;
     solve(N, M, A, B);
     return 0;
 }

@@ -16,7 +16,7 @@ class Main {
         sc = sc.nextLong();
         String[] s = new String[(int)(H)];
         for(int i = 0 ; i < H ; i++){
-                s[i] = sc.next();
+            s[i] = sc.next();
         }
         long N;
         N = sc.nextLong();
@@ -25,10 +25,10 @@ class Main {
         long[] F = new long[(int)(N)];
         long[] D = new long[(int)(N)];
         for(int i = 0 ; i < N ; i++){
-                fr[i] = sc.nextLong();
-                fc[i] = sc.nextLong();
-                F[i] = sc.nextLong();
-                D[i] = sc.nextLong();
+            fr[i] = sc.nextLong();
+            fc[i] = sc.nextLong();
+            F[i] = sc.nextLong();
+            D[i] = sc.nextLong();
         }
         solve(H, W, K, sr, sc, s, N, fr, fc, F, D);
     }

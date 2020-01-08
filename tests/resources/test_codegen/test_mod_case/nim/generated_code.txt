@@ -20,9 +20,9 @@ proc solve(A:string, B:string):void =
   return
 
 proc main():void =
-  var A = ""
+  var A:string
   A = nextString()
-  var B = ""
+  var B:string
   B = nextString()
   solve(A, B)
   return

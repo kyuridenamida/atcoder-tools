@@ -1,41 +1,41 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <cassert>
-using namespace std;
 
 {% if mod is not none %}
 const int mod = {{ mod }};
 {% endif %}
 {% if yes_str is not none %}
-const string YES = "{{ yes_str }}";
+const std::string YES = "{{ yes_str }}";
 {% endif %}
 {% if no_str is not none %}
-const string NO = "{{ no_str }}";
+const std::string NO = "{{ no_str }}";
 {% endif %}
 void solve({{ formal_arguments }}){
-    cout << N << " " << M << endl;
+    std::cout << N << " " << M << std::endl;
     assert(H.size() == N - 1);
     for (int i = 0; i < N - 1; i++) {
         assert(H[i].size() == M - 2);
         for (int j = 0; j < M - 2; j++) {
-            cout << (j > 0 ? " " : "") << H[i][j];
+            std::cout << (j > 0 ? " " : "") << H[i][j];
         }
-        cout << endl;
+        std::cout << std::endl;
     }
     assert(A.size() == N - 1);
     assert(B.size() == N - 1);
-    for(int i = 0 ; i < N - 1 ; i++){
-        cout << A[i] << " " << B[i] << endl;
+    for(int i = 0;i < N - 1;i++){
+        std::cout << A[i] << " " << B[i] << std::endl;
     }
-    cout << Q << endl;
+    std::cout << Q << std::endl;
     assert(X.size() == M + Q);
-    for(int i = 0 ; i < M + Q ; i++){
-        cout << X[i] << endl;
+    for(int i = 0;i < M + Q;i++){
+        std::cout << X[i] << std::endl;
     }
 
-    cout << YES << endl;
-    cout << NO << endl;
-    cout << mod << endl;
+    std::cout << YES << std::endl;
+    std::cout << NO << std::endl;
+    std::cout << mod << std::endl;
 
 }
 

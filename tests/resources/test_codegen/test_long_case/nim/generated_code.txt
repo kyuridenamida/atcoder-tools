@@ -18,20 +18,18 @@ proc solve(H:int, W:int, K:int, sr:int, sc:int, s:seq[string], N:int, fr:seq[int
   return
 
 proc main():void =
-  var H = 0
+  var H:int
   H = nextInt()
-  var W = 0
+  var W:int
   W = nextInt()
-  var K = 0
+  var K:int
   K = nextInt()
-  var sr = 0
+  var sr:int
   sr = nextInt()
-  var sc = 0
+  var sc:int
   sc = nextInt()
-  var s = newSeqWith(H, "")
-  for i in 0..<H:
-    s[i] = nextString()
-  var N = 0
+  var s = newSeqWith(H, nextString())
+  var N:int
   N = nextInt()
   var fr = newSeqWith(N, 0)
   var fc = newSeqWith(N, 0)

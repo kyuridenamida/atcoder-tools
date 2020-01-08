@@ -21,13 +21,13 @@ proc solve(N:int, M:int, A:int, B:int):void =
   return
 
 proc main():void =
-  var N = 0
+  var N:int
   N = nextInt()
-  var M = 0
+  var M:int
   M = nextInt()
-  var A = 0
+  var A:int
   A = nextInt()
-  var B = 0
+  var B:int
   B = nextInt()
   solve(N, M, A, B)
   return

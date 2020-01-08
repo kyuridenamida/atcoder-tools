@@ -12,6 +12,8 @@ static NO: &'static str = "{{ no_str }}";
 {% endif %}
 {% if prediction_success %}
 fn solve({{ formal_arguments }}) {
+    let con = read_string();
+    let mut scanner = Scanner::new(&con);
     println!("{} {}", N, M);
     assert!(H.len() as i64 == N - 1);
     for i in 0..(N-1) as usize {
@@ -42,6 +44,8 @@ fn solve({{ formal_arguments }}) {
 {% endif %}
 
 fn main() {
+    let con = read_string();
+    let mut scanner = Scanner::new(&con);
     {% if prediction_success %}
     {{input_part}}
     // In order to avoid potential stack overflow, spawn a new thread.
