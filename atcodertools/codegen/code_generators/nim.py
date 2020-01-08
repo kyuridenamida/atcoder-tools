@@ -1,12 +1,5 @@
-from typing import Dict, Any, Optional
-
-from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
-from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern, \
-    Format
-from atcodertools.fmtprediction.models.type import Type
-from atcodertools.fmtprediction.models.variable import Variable
 
 from atcodertools.codegen.code_generators.universal_code_generator import CodeGenerator
 from atcodertools.codegen.code_generators.universal_generator.nim import CodeGeneratorInfo

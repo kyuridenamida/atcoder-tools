@@ -21,20 +21,42 @@ class CodeGenerator():
         self._config = config
         self.info = info
 
+    def _loop_header(self, var: Variable, for_second_index: bool):
+        if for_second_index:
+            index = var.second_index
+            loop_var = "j"
+        else:
+            index = var.first_index
+            loop_var = "i"
+
+        return self.info.loop_header.format(
+            loop_var=loop_var,
+            length=index.get_length()
+        )
+
+    def _global_declaration(self) -> str:
+        lines = []
+        for pattern in self._format.sequence:
+            for var in pattern.all_vars():
+                self._append(lines, self.info.global_prefix + self._generate_declaration(var))
+        return "\n".join(lines)
+
     def generate_parameters(self) -> Dict[str, Any]:
         if self._format is None:
             return dict(prediction_success=False)
 
         return dict(formal_arguments=self._formal_arguments(),
                     actual_arguments=self._actual_arguments(),
-                    input_part=self._input_part(),
+                    input_part=self._input_part(global_mode=False),
+                    global_declaration=self._global_declaration(),
+                    global_input_part=self._input_part(global_mode=True),
                     prediction_success=True)
 
-    def _input_part(self):
+    def _input_part(self, global_mode):
         lines = []
         for pattern in self._format.sequence:
-            lines += self._render_pattern(pattern)
-        return "\n{indent}".format(indent=self._indent(1)).join(lines)
+            lines += self._render_pattern(pattern, global_mode)
+        return "\n{indent}".format(indent=self._indent(self.info.base_indent)).join(lines)
 
     def _convert_type(self, type_: Type) -> str:
         if type_ == Type.float:
@@ -75,9 +97,21 @@ class CodeGenerator():
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
-        return ", ".join([
-            v.name if v.dim_num() == 0 else '{}'.format(v.name)
-            for v in self._format.all_vars()])
+        ret = []
+        for v in self._format.all_vars():
+            if v.dim_num() == 0:
+                ret.append(v.name)
+            elif v.dim_num() == 1:
+                if hasattr(self.info, "actual_argument_1d"):
+                    ret.append(self.info.actual_argument_1d.format(name=v.name))
+                else:
+                    ret.append(v.name)
+            elif v.dim_num() == 2:
+                if hasattr(self.info, "actual_argument_2d"):
+                    ret.append(self.info.actual_argument_2d.format(name=v.name))
+                else:
+                    ret.append(v.name)
+        return ", ".join(ret)
 
     def _formal_arguments(self):
         """
@@ -117,7 +151,8 @@ class CodeGenerator():
         elif var.dim_num() == 1:
             return self.info.allocate_seq.format(name=var.name, 
                                                  length=var.first_index.get_length(),
-                                                 default=self._default_val(var.type))
+                                                 default=self._default_val(var.type),
+                                                 type=self._convert_type(var.type))
         elif var.dim_num() == 2:
             return self.info.allocate_2d_seq.format(name=var.name, 
                                                     type=self._convert_type(var.type),
@@ -126,6 +161,39 @@ class CodeGenerator():
                                                     default=self._default_val(var.type))
         else:
             raise NotImplementedError
+
+    def _generate_declaration_and_allocation(self, var: Variable):
+        """
+        :return: Create declaration part E.g. array[1..n] -> std::vector<int> array = std::vector<int>(n-1+1);
+        """
+        if var.dim_num() == 0:
+            if var.type == Type.int:
+                return self.info.declare_int.format(name=var.name)
+            elif var.type == Type.float:
+                return self.info.declare_float.format(name=var.name)
+            elif var.type == Type.str:
+                return self.info.declare_string.format(name=var.name)
+            else:
+                raise NotImplementedError
+        elif var.dim_num() == 1:
+            return self.info.declare_and_allocate_seq.format(name=var.name,
+                                                             type=self._convert_type(var.type),
+                                                             length=var.first_index.get_length(),
+                                                             default=self._default_val(var.type))
+        elif var.dim_num() == 2:
+            return self.info.declare_and_allocate_2d_seq.format(name=var.name,
+                                                                type=self._convert_type(var.type),
+                                                                length_i=var.first_index.get_length(),
+                                                                length_j=var.second_index.get_length(),
+                                                                default=self._default_val(var.type))
+
+    def _get_input_func(self, type: Type) -> str:
+        if type == Type.float:
+            return self.info.input_func_float
+        elif type == Type.int:
+            return self.info.input_func_int
+        elif type == Type.str:
+            return self.info.input_func_string
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
@@ -149,31 +217,95 @@ class CodeGenerator():
                                                  length_j=var.second_index.get_length(),
                                                  input=self._input_code_for_var(var))
 
-
-    @staticmethod
-    def _get_var_name(var: Variable):
+    def _get_var_name(self, var: Variable):
         name = var.name
-        if var.dim_num() >= 1:
-            name += "[i]"
-        if var.dim_num() >= 2:
-            name += "[j]"
-        return name
+        if var.dim_num() == 0:
+            return name
+        elif var.dim_num() == 1:
+            return self.info.access_1d.format(name=name)
+        elif var.dim_num() == 2:
+            return self.info.access_2d.format(name=name)
+        else:
+            raise NotImplementedError
 
-    def append(self, lines, s, indent=0):
+    def _append(self, lines, s, indent=0):
         if s == "":
             return
         for line in s.split("\n"):
             lines.append("{indent}{line}".format(indent=self._indent(indent),
                                                  line=line))
 
-    def _render_pattern(self, pattern: Pattern):
+    def _append_declaration_and_allocation(self, lines, pattern: Pattern, global_mode):
+        if global_mode:
+            for var in pattern.all_vars():
+                self._append(lines, self._generate_allocation(var))
+        else:
+            for var in pattern.all_vars():
+                self._append(lines, self._generate_declaration_and_allocation(var))
+
+    def _render_pattern(self, pattern: Pattern, global_mode):
         lines = []
-        for var in pattern.all_vars():
-            self.append(lines, self._generate_declaration(var))
-            self.append(lines, self._generate_allocation(var))
 
         representative_var = pattern.all_vars()[0]
-        self.append(lines, self._input_code(representative_var))
+        if isinstance(pattern, SingularPattern):
+            self._append_declaration_and_allocation(lines, pattern, global_mode)
+            self._append(lines, self._input_code_for_var(representative_var))
+        elif isinstance(pattern, ParallelPattern):
+            added = False
+            if len(pattern.all_vars()) == 1:
+                var = pattern.all_vars()[0]
+                if global_mode:
+                    if hasattr(self.info, "allocate_and_input_seq"):
+                        self._append(lines, self.info.allocate_and_input_seq.
+                                     format(input_func=self._get_input_func(var.type),
+                                            length=var.first_index.get_length(),
+                                            name=var.name))
+                        added = True
+                else:
+                    if hasattr(self.info, "declare_and_allocate_and_input_seq"):
+                        self._append(lines, self.info.declare_and_allocate_and_input_seq.
+                                     format(input_func=self._get_input_func(var.type),
+                                            length=var.first_index.get_length(),
+                                            name=var.name))
+
+                        added = True
+            if not added:
+                self._append_declaration_and_allocation(lines, pattern, global_mode)
+                self._append(lines, self._loop_header(representative_var, False))
+                for var in pattern.all_vars():
+                    self._append(lines, self._input_code_for_var(var), 1)
+                self._append(lines, self.info.loop_footer)
+        elif isinstance(pattern, TwoDimensionalPattern):
+            added = False
+            if len(pattern.all_vars()) == 1:
+                var = pattern.all_vars()[0]
+                if global_mode:
+                    if hasattr(self.info, "allocate_and_input_2d_seq"):
+                        self._append(lines, self.info.allocate_and_input_2d_seq.
+                                     format(input_func=self._get_input_func(var.type),
+                                            length_i=var.first_index.get_length(),
+                                            length_j=var.second_index.get_length(),
+                                            name=var.name))
+                        added = True
+                else:
+                    if hasattr(self.info, "declare_and_allocate_and_input_2d_seq"):
+                        self._append(lines, self.info.declare_and_allocate_and_input_2d_seq.
+                                     format(input_func=self._get_input_func(var.type),
+                                            length_i=var.first_index.get_length(),
+                                            length_j=var.second_index.get_length(),
+                                            name=var.name))
+                        added = True
+            if not added:
+                self._append_declaration_and_allocation(lines, pattern, global_mode)
+                self._append(lines, self._loop_header(representative_var, False))
+                self._append(lines, self._loop_header(representative_var, True), 1)
+                for var in pattern.all_vars():
+                    self._append(lines, self._input_code_for_var(var), 2)
+                self._append(lines, self.info.loop_footer, 1)
+                self._append(lines, self.info.loop_footer)
+        else:
+            raise NotImplementedError
+
         return lines
 
     def _indent(self, depth):
