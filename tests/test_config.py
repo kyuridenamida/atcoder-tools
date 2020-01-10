@@ -1,9 +1,11 @@
 import unittest
 import os
+from argparse import Namespace
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, CodeStyleConfigInitError, \
     INDENT_TYPE_TAB
-from atcodertools.config.config import Config
+from atcodertools.common.language import CPP, PYTHON
+from atcodertools.config.config import Config, ProgramArgs
 from atcodertools.tools import get_default_config_path
 
 RESOURCE_DIR = os.path.join(
@@ -26,8 +28,22 @@ class TestConfig(unittest.TestCase):
         with open(os.path.join(RESOURCE_DIR, "all_options.toml"), 'r') as f:
             config = Config.load(f)
 
-        self.assertEqual(8, config.code_style_config.indent_width)
+        self.assertEqual(3, config.code_style_config.indent_width)
         self.assertEqual(INDENT_TYPE_TAB, config.code_style_config.indent_type)
+        self.assertEqual(CPP, config.code_style_config.lang)
+        self.assertEqual("g++ main.cpp", config.run_config.compile_command)
+        self.assertEqual("./main", config.run_config.run_command)
+        self.assertEqual(
+            "workspace_dir", config.code_style_config.workspace_dir)
+
+        self.assertEqual(True, config.etc_config.download_without_login)
+        self.assertEqual(True, config.etc_config.parallel_download)
+        self.assertEqual(True, config.etc_config.save_no_session_cache)
+        self.assertEqual("in", config.etc_config.in_example_format)
+        self.assertEqual("out", config.etc_config.out_example_format)
+        self.assertEqual(True, config.etc_config.compile_before_testing)
+        self.assertEqual(
+            False, config.etc_config.compile_only_when_diff_detected)
 
         contest_dir = os.path.join(RESOURCE_DIR, "mock_contest")
         problem_dir = os.path.join(contest_dir, "mock_problem")
@@ -37,6 +53,25 @@ class TestConfig(unittest.TestCase):
                          config.postprocess_config.execute_on_contest_dir(problem_dir))
         with open(config.code_style_config.template_file, 'r') as f:
             self.assertEqual("this is custom_template.cpp", f.read())
+
+    def test_language_specific_options(self):
+        os.chdir(RESOURCE_DIR)
+
+        with open(os.path.join(RESOURCE_DIR, "lang_specific_options.toml"), 'r') as f:
+            config = Config.load(f)
+
+        self.assertEqual('new_value', config.run_config.compile_command)
+        self.assertEqual('kept_value', config.run_config.run_command)
+
+        self.assertEqual('new_value', config.run_config.compile_command)
+        self.assertEqual('kept_value', config.run_config.run_command)
+
+        self.assertEqual(
+            'new_value', config.postprocess_config.exec_cmd_on_problem_dir)
+        self.assertEqual(
+            'kept_value', config.postprocess_config.exec_cmd_on_contest_dir)
+
+        self.assertEqual('kept_value', config.etc_config.in_example_format)
 
     def test_load_config_fails_due_to_typo(self):
         try:
@@ -64,6 +99,21 @@ class TestConfig(unittest.TestCase):
         self._expect_error_when_init_config(
             template_file='not existing path'
         )
+
+    def test_load_with_program_args(self):
+        os.chdir(RESOURCE_DIR)
+
+        with open(os.path.join(RESOURCE_DIR, "all_options.toml"), 'r') as f:
+            config = Config.load(f, ProgramArgs.load(Namespace(
+                lang="python",
+                template=None,
+                workspace=None,
+                without_login=None,
+                parallel=None,
+                save_no_session_cache=None
+            )))
+
+        self.assertEqual(PYTHON, config.code_style_config.lang)
 
     def _expect_error_when_init_config(self, **kwargs):
         try:

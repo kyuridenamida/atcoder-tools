@@ -1,4 +1,6 @@
 import os
+import shutil
+import tempfile
 import unittest
 
 from colorama import Fore
@@ -6,13 +8,13 @@ from unittest.mock import patch, mock_open, MagicMock
 
 from atcodertools.executils.run_program import ExecResult, ExecStatus
 from atcodertools.tools import tester
+from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.tester import is_executable_file, TestSummary, build_details_str
 from atcodertools.tools.utils import with_color
-from atcodertools.executils.run_command import run_command
 from atcodertools.tools.setter import main as setter_main
 from atcodertools.tools.compiler import compile_main_and_judge_programs
 from atcodertools.common.language import ALL_LANGUAGES
-from atcodertools.common.judgetype import JudgeType
+from atcodertools.common.judgetype import MultiSolutionJudge
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -20,6 +22,11 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 
 
 class TestTester(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir)
 
     def test_multiple_exec_files(self):
         all_ok = tester.main(
@@ -76,19 +83,17 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "2", "-v", "0.0001", "-j", "absolute_or_relative"]))
 
     def test_run_single_test_multisolution(self):
-        run_command(
-            "cp -r test_run_single_test_multisolution /tmp", RESOURCE_DIR)
-        test_dir = "/tmp/test_run_single_test_multisolution"
+        test_dir = os.path.join(self.temp_dir, "test")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_run_single_test_multisolution"), test_dir)
 
-        metadata = setter_main('', ['-d', test_dir, "-j", "multisolution"])
-
-        set_result = metadata.judge_method.judge_type == JudgeType.MultiSolution
-
-        self.assertTrue(set_result)
+        setter_main('', ['-d', test_dir, "-j", "multisolution"])
+        metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
+        self.assertTrue(isinstance(metadata.judge_method, MultiSolutionJudge))
 
         # Already set
-        metadata = setter_main('', ['-d', test_dir, "--lang", "cpp"])
-
+        setter_main('', ['-d', test_dir, "--lang", "cpp"])
+        metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
         self.assertTrue(metadata.lang.name == 'cpp')
 
         self.assertTrue(tester.main(
@@ -101,8 +106,9 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "4", "-c", "True"]))
 
     def test_run_single_test_interactive(self):
-        run_command("cp -r test_run_single_test_interactive /tmp", RESOURCE_DIR)
-        test_dir = "/tmp/test_run_single_test_interactive"
+        test_dir = os.path.join(self.temp_dir, "test")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_run_single_test_interactive"), test_dir)
 
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "1", "-j", "interactive", '-c', "True"]))
@@ -110,13 +116,16 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "2", "-j", "interactive", '-c', "True"]))
 
     def test_compiler_and_tester(self):
-        run_command("cp -r test_compiler_and_tester /tmp", RESOURCE_DIR)
-        test_dir = "/tmp/test_compiler_and_tester"
-        os.chdir(test_dir)
+        test_dir = os.path.join(self.temp_dir, "test")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
 
         for lang in ALL_LANGUAGES:
-            metadata = setter_main('', ["--lang", lang.name])
-            compile_main_and_judge_programs(metadata, force_compile=True)
+            setter_main('', ["--lang", lang.name, '-d', test_dir])
+            metadata = Metadata.load_from(
+                os.path.join(test_dir, "metadata.json"))
+            compile_main_and_judge_programs(
+                metadata, force_compile=True, cwd=test_dir)
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main(
                     '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))

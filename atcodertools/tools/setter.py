@@ -3,7 +3,9 @@
 import argparse
 import os
 import shutil
-from atcodertools.common.judgetype import NormalJudge, DecimalJudge, ErrorType, MultiSolutionJudge, InteractiveJudge, JudgeType, NoJudgeTypeException, DEFAULT_EPS
+from atcodertools.common.judgetype import NormalJudge, DecimalJudge, ErrorType, MultiSolutionJudge, InteractiveJudge, \
+    JudgeType, NoJudgeTypeException, DEFAULT_EPS
+from atcodertools.common.logging import logger
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.common.language import Language, ALL_LANGUAGES
 from atcodertools.tools.templates import get_default_judge_template_path
@@ -13,7 +15,7 @@ USER_FACING_JUDGE_TYPE_LIST = [
     "normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
 
 
-def main(prog, args):
+def main(prog, args) -> None:
     if len(args) == 0:
         print("Usage: atcoder tools set [options]")
         return
@@ -46,61 +48,70 @@ def main(prog, args):
 
     args = parser.parse_args(args)
 
-    metadata = Metadata.load_from(args.dir + "/metadata.json")
+    old_metadata = Metadata.load_from(os.path.join(args.dir, "metadata.json"))
 
-    new_judge_type = args.judge_type
-    if new_judge_type in ["decimal", "absolute", "relative", "absolute_or_relative"]:
-        new_judge_type = "decimal"
-        if args.judge_type == "decimal":
-            args.judge_type = "absolute_or_relative"
+    # Use the old metadata as base metadata.
+    output_metadata = Metadata.load_from(
+        os.path.join(args.dir, "metadata.json"))
 
-    old_judge_type = metadata.judge_method.judge_type.value
+    if args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
+        new_metadata_judge_type = "decimal"
+    else:
+        new_metadata_judge_type = args.judge_type
 
-    if new_judge_type is not None and new_judge_type != old_judge_type:
-        if new_judge_type == JudgeType.Normal.value:
-            metadata.judge_method = NormalJudge()
-        elif new_judge_type == JudgeType.Decimal.value:
-            metadata.judge_method = DecimalJudge()
-        elif new_judge_type == JudgeType.MultiSolution.value:
-            metadata.judge_method = MultiSolutionJudge()
-        elif new_judge_type == JudgeType.Interactive.value:
-            metadata.judge_method = InteractiveJudge()
+    old_metadata_judge_type = old_metadata.judge_method.judge_type.value
+
+    if new_metadata_judge_type is not None and new_metadata_judge_type != old_metadata_judge_type:
+        if new_metadata_judge_type == JudgeType.Normal.value:
+            output_metadata.judge_method = NormalJudge()
+        elif new_metadata_judge_type == JudgeType.Decimal.value:
+            output_metadata.judge_method = DecimalJudge()
+        elif new_metadata_judge_type == JudgeType.MultiSolution.value:
+            output_metadata.judge_method = MultiSolutionJudge()
+        elif new_metadata_judge_type == JudgeType.Interactive.value:
+            output_metadata.judge_method = InteractiveJudge()
         else:
             raise NoJudgeTypeException()
 
-    if new_judge_type == JudgeType.Decimal.value:
+    judge_code_filename = os.path.join(args.dir, "judge.cpp")
+
+    if new_metadata_judge_type == JudgeType.Decimal.value:
         if args.error_value is not None:
-            metadata.judge_method.diff = args.error_value
+            output_metadata.judge_method.diff = args.error_value
         else:
-            print("Warning: error-value is not specified default value is set. ")
-        metadata.judge_method.error_type = ErrorType(args.judge_type)
-    elif new_judge_type == JudgeType.MultiSolution.value:
-        if not os.path.exists("./judge.cpp"):
-            print("touch ./judge.cpp (multi sotlution)")
+            logger.warn(
+                "Error-value is not specified. Default value will be set.")
+        output_metadata.judge_method.error_type = ErrorType(args.judge_type)
+
+    elif new_metadata_judge_type == JudgeType.MultiSolution.value:
+        if not os.path.exists(judge_code_filename):
+            print("Creating {} (multi-solution)".format(judge_code_filename))
             judge_template_path = get_default_judge_template_path('cpp')
-            shutil.copy(judge_template_path, "./judge.cpp")
+            shutil.copy(judge_template_path, judge_code_filename)
         else:
-            print("Judge Code exists")
-    elif new_judge_type == JudgeType.Interactive.value:
-        if not os.path.exists("/judge.cpp"):
-            print("touch ./judge.cpp (interactive)")
+            print("Judge code exists. Skipping creating judge code...")
+    elif new_metadata_judge_type == JudgeType.Interactive.value:
+        if not os.path.exists(judge_code_filename):
+            print("Creating {} (interactive)".format(judge_code_filename))
             judge_template_path = get_default_judge_template_path('cpp')
-            shutil.copy(judge_template_path, "./judge.cpp")
+            shutil.copy(judge_template_path, judge_code_filename)
         else:
-            print("Judge Code exists")
+            print("Judge code exists. Skipping creating judge code...")
 
     if args.lang is not None:
-        if args.lang != metadata.lang.name:
-            metadata.lang = Language.from_name(args.lang)
-            metadata.code_filename = metadata.lang.get_code_filename('main')
+        if args.lang != output_metadata.lang.name:
+            output_metadata.lang = Language.from_name(args.lang)
+            output_metadata.code_filename = output_metadata.lang.get_code_filename(
+                'main')
             url = "https://atcoder.jp/contests/{}/tasks/{}".format(
-                metadata.problem.contest.contest_id, metadata.problem.problem_id)
-            if not os.path.exists(metadata.code_filename):
-                codegen_main("", ["--lang", metadata.lang.name,
-                                  url], open(metadata.code_filename, 'w'))
+                output_metadata.problem.contest.contest_id, output_metadata.problem.problem_id)
+            main_code_filename = os.path.join(
+                args.dir, output_metadata.code_filename)
+            if not os.path.exists(main_code_filename):
+                codegen_main("", ["--lang", output_metadata.lang.name,
+                                  url], open(main_code_filename, 'w'))
             else:
-                print("file exists: ", metadata.code_filename)
+                print("File exists: ", output_metadata.code_filename)
         else:
-            print("already set to {}".format(args.lang))
-    metadata.save_to(args.dir + "/metadata.json")
-    return metadata
+            print("Already set to {}. Skipping changing language...".format(args.lang))
+    output_metadata.save_to(os.path.join(args.dir, "metadata.json"))
