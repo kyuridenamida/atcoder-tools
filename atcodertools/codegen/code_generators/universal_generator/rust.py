@@ -54,4 +54,3 @@ class CodeGeneratorInfo:
         # 配列アクセス
         self.access_1d = "{name}[i]"
         self.access_2d = "{name}[i][j]"
-

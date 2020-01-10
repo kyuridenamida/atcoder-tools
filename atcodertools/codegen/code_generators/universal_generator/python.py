@@ -36,8 +36,10 @@ class CodeGeneratorInfo:
         self.allocate_2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]"
 
         # 宣言と確保
-        self.declare_and_allocate_seq = self.allocate_seq + "  # type: \"List[{type}]\""
-        self.declare_and_allocate_2d_seq = self.allocate_2d_seq + "  # type: \"List[List[{type}]]\""
+        self.declare_and_allocate_seq = self.allocate_seq + \
+            "  # type: \"List[{type}]\""
+        self.declare_and_allocate_2d_seq = self.allocate_2d_seq + \
+            "  # type: \"List[List[{type}]]\""
 
         # 入力関数
         self.input_func_int = "int(next(tokens))"
@@ -59,8 +61,10 @@ class CodeGeneratorInfo:
         self.allocate_and_input_2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]"
 
         # 宣言と確保と入力
-        self.declare_and_allocate_and_input_seq = self.allocate_and_input_seq + "  # type: \"List[{type}]\""
-        self.declare_and_allocate_and_input_2d_seq = self.allocate_and_input_2d_seq + "  # type: \"List[List[{type}]]\""
+        self.declare_and_allocate_and_input_seq = self.allocate_and_input_seq + \
+            "  # type: \"List[{type}]\""
+        self.declare_and_allocate_and_input_2d_seq = self.allocate_and_input_2d_seq + \
+            "  # type: \"List[List[{type}]]\""
 
         # 引数
         self.arg_int = "{name}: int"
