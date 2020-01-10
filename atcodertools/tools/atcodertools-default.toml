@@ -13,7 +13,7 @@ lang = 'cpp' # 'cpp' or 'java' (Currently)
 #code_generator_file=
 
 
-[postprocess]
+[cpp.postprocess]
 ## exec_on_each_problem_dir is executed after every problem directory's creation
 ## with its problem directory as cwd like arc001/A
 #exec_on_each_problem_dir='clang-format -i ./*.cpp'
@@ -22,9 +22,18 @@ lang = 'cpp' # 'cpp' or 'java' (Currently)
 ## with the contest directory as cwd like arc001/
 #exec_on_contest_dir=
 
+[cpp.run]
+## compile_command is used by `atcoder-tools compile`.
+# compile_command="g++ main.cpp"
+
+## run_command is used by `atcoder-tools test` to execute your program after compilation.
+# run_command="./main"
+
 [etc]
 download_without_login=false
 parallel_download=false
 save_no_session_cache=false
 in_example_format="in_{}.txt"
 out_example_format="out_{}.txt"
+compile_before_testing=false
+compile_only_when_diff_detected=false

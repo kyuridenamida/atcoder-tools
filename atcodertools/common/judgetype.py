@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from enum import Enum
-import platform
 
 
 class NoJudgeTypeException(Exception):
@@ -23,8 +22,9 @@ class ErrorType(Enum):
 
 
 class Judge(metaclass=ABCMeta):
+    @property
     @abstractmethod
-    def verify(self, output, expected):
+    def judge_type(self):
         pass
 
     @abstractmethod
@@ -33,8 +33,10 @@ class Judge(metaclass=ABCMeta):
 
 
 class NormalJudge(Judge):
+    judge_type = JudgeType.Normal
+
     def __init__(self):
-        self.judge_type = JudgeType.Normal
+        pass
 
     def verify(self, output, expected):
         return output == expected
@@ -54,6 +56,8 @@ DEFAULT_EPS = 0.000000001
 
 
 class DecimalJudge(Judge):
+    judge_type = JudgeType.Decimal
+
     def __init__(self,
                  error_type: ErrorType = ErrorType.AbsoluteOrRelative,
                  diff: float = DEFAULT_EPS
@@ -63,9 +67,11 @@ class DecimalJudge(Judge):
         self.diff = diff
 
     def _verify_sub(self, output: float, expected: float) -> bool:
-        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(expected - output) <= self.diff:
+        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(
+                expected - output) <= self.diff:
             return True
-        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(output, expected):
+        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(output,
+                                                                                                         expected):
             return True
         return False
 
@@ -105,59 +111,28 @@ class DecimalJudge(Judge):
         return r
 
 
-def get_judge_filename():
-    judge_code_filename = "judge"
-    if platform.system() == "Windows":
-        judge_exec_filename = "judge.exe"
-    else:
-        judge_exec_filename = "judge"
-    return judge_code_filename, judge_exec_filename
-
-
 class MultiSolutionJudge(Judge):
-    def __init__(self, judge_code_lang="cpp"):
-        self.judge_type = JudgeType.MultiSolution
-        self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
+    judge_type = JudgeType.MultiSolution
 
-        from atcodertools.common.language import Language
-        self.judge_code_lang = Language.from_name(judge_code_lang)
+    def __init__(self):
+        pass
 
     def verify(self, output, expected):
         raise NotImplementedError()
 
     def to_dict(self):
         return {
-            "judge_type": self.judge_type.value,
-            "judge_code_filename": self.judge_code_filename,
-            "judge_exec_filename": self.judge_exec_filename,
-            "judge_code_lang": "cpp"
+            "judge_type": self.judge_type.value
         }
-
-    @classmethod
-    def from_dict(cls, dic):
-        r = MultiSolutionJudge(dic["judge_code_lang"])
-        return r
 
 
 class InteractiveJudge(Judge):
-    def __init__(self, judge_code_lang="cpp"):
-        self.judge_type = JudgeType.Interactive
-        self.judge_code_filename, self.judge_exec_filename = get_judge_filename()
-        from atcodertools.common.language import Language
-        self.judge_code_lang = Language.from_name(judge_code_lang)
+    judge_type = JudgeType.Interactive
 
     def verify(self, output, expected):
         raise NotImplementedError()
 
     def to_dict(self):
         return {
-            "judge_type": self.judge_type.value,
-            "judge_code_filename": self.judge_code_filename,
-            "judge_exec_filename": self.judge_exec_filename,
-            "judge_code_lang": "cpp"
+            "judge_type": self.judge_type.value
         }
-
-    @classmethod
-    def from_dict(cls, dic):
-        r = InteractiveJudge(dic["judge_code_lang"])
-        return r

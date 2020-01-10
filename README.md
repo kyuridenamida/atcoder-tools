@@ -11,7 +11,7 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 - 枝刈り探索による高精度・高速な入力フォーマット解析 (ARC、ABC、AGCについては約9割ほど)
 - 問題文中に含まれるMOD値、YES/NO文字列、誤差ジャッジのための誤差値等の定数値抽出
 - サンプルのローカルテスト機能
-    - 誤差ジャッジに対応 by [@chaemon](https://github.com/chaemon/)
+    - 誤差ジャッジ・特殊ジャッジに対応 by [@chaemon](https://github.com/chaemon/)
 - コード提出機能
 - 入力フォーマット解析結果や抽出した定数値を用いたテンプレートからのコード自動生成(以下の表に記載されている言語をサポートしています)
     - カスタムテンプレートに対応
@@ -48,7 +48,7 @@ https://kyuridenamida.github.io/atcoder-tools/
 
 各問題ごとの解析結果などが載っています。
 
-## Usage
+## 使用方法
 
 
 *重要: かつてパスワード入力なしでログインを実現するために`AccountInformation.py`にログイン情報を書き込むことを要求していましたが、セキュリティリスクが高すぎるため、セッション情報のみを保持する方針に切り替えました。
@@ -57,11 +57,16 @@ https://kyuridenamida.github.io/atcoder-tools/
 
 
 - `atcoder-tools gen {contest_id}` コンテスト環境を用意します。
+- `atcoder-tools codegen {problem_url}` 指定されたURLが示す問題に対するソースコードを生成し、標準出力に出力します。
 - `atcoder-tools test` カレント・ディレクトリ上に実行ファイルと入出力(in_\*.txt, out_\*.txt)がある状態で実行するとローカルテストを行います。
 - `atcoder-tools submit` カレント・ディレクトリ上で実行すると対応する問題がサンプルに通る場合ソースコードを提出します。既にAtCoder上にその問題に対する提出がある場合、`-u`を指定しないと提出できないようになっています。
 - `atcoder-tools version` 現在の atcoder-tools のバージョンを出力します。
+- `atcoder-tools compile` カレント・ディレクトリ上で実行するとコードをコンパイルします。
+- `atcoder-tools set` 現在のジャッジタイプを変更します。
 
-`atcoder-tools gen --help`で`atcoder-tools gen`の引数の詳細について確認することができます。
+
+使用方法を確認するためには`atcoder-tools (コマンド名) --help`を用います。
+例えば`atcoder-tools gen --help`で`atcoder-tools gen`の引数の詳細について確認することができます。
 
 例: 
 ```console
@@ -115,12 +120,16 @@ optional arguments:
 ### test の詳細
 
 ```
-usage: atcoder-tools test [-h] [--exec EXEC] [--num NUM]
-                                         [--dir DIR] [--timeout TIMEOUT]
-                                         [--knock-out]
-                                         [--skip-almost-ac-feedback]
-                                         [--judge-type JUDGE_TYPE]
-                                         [--error-value ERROR_VALUE]
+usage: ./atcoder-tools test [-h] [--exec EXEC]
+                                                      [--num NUM] [--dir DIR]
+                                                      [--timeout TIMEOUT]
+                                                      [--knock-out]
+                                                      [--skip-almost-ac-feedback]
+                                                      [--judge-type JUDGE_TYPE]
+                                                      [--error-value ERROR_VALUE]
+                                                      [--compile-before-testing COMPILE_BEFORE_TESTING]
+                                                      [--compile-only-when-diff-detected COMPILE_ONLY_WHEN_DIFF_DETECTED]
+                                                      [--config CONFIG]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -133,9 +142,16 @@ optional arguments:
   --skip-almost-ac-feedback, -s
                         Hide inputs and expected/actual outputs if result is correct and there are error outputs [Default] False,
   --judge-type JUDGE_TYPE, -j JUDGE_TYPE
-                        error type must be one of [normal, absolute, relative, absolute_or_relative]
+                        error type must be one of [normal, absolute, relative, absolute_or_relative, multisolution, interactive]
   --error-value ERROR_VALUE, -v ERROR_VALUE
-                        error value for decimal number judge: [Default] 0.000000001
+                        error value for decimal number judge: [Default] 1e-09
+  --compile-before-testing COMPILE_BEFORE_TESTING, -c COMPILE_BEFORE_TESTING
+                        compile source before testing [true, false]:  [Default]: false
+  --compile-only-when-diff-detected COMPILE_ONLY_WHEN_DIFF_DETECTED
+                        compile only when diff detected [true, false] [Default]: true
+  --config CONFIG       File path to your config file
+                        [Default (Primary)] ~/.atcodertools.toml
+                        [Default (Secondary)] atcodertools-default.toml
 ```
 
 
@@ -194,11 +210,58 @@ optional arguments:
 ```
 
 
+### set の詳細
+```
+usage: ./atcoder-tools set [-h]
+                                                     [--judge-type JUDGE_TYPE]
+                                                     [--error-value ERROR_VALUE]
+                                                     [--lang LANG] [--dir DIR]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --judge-type JUDGE_TYPE, -j JUDGE_TYPE
+                        error type must be one of [normal, absolute, relative, absolute_or_relative, multisolution, interactive]
+  --error-value ERROR_VALUE, -v ERROR_VALUE
+                        error value for decimal number judge: [Default] 1e-09
+  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs.
+  --dir DIR, -d DIR     Target directory to test. [Default] Current directory
+
+```
+
+
+### compileの詳細
+```
+usage: Compile your program in the current directory (no argument)
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
 ## 設定ファイルの例
 `~/.atcodertools.toml`に以下の設定を保存すると、コードスタイルや、コード生成後に実行するコマンドを指定できます。
 
-以下は、次の挙動を期待する場合の`~/.atcodertools.toml`の例です。
+### 仕様
+現在 4 種類に大別される設定カテゴリがサポートされています。
+- **codestyle**: コード生成時に使われるコードスタイル・テンプレートや出力先に関する設定
+- **postprocess**: コード生成後の後処理に関する設定
+- **run**: コードコンパイル・実行時に使われるコマンドに関する設定
+- **etc**: その他の設定
 
+バージョン1.1.7以降では、言語毎に`codestyle`, `postprocess`, `run`を指定できます。([言語毎の設定](#言語毎の指定)を参照してください)
+
+### 有効なオプション
+- **codestyle**
+    - indent_type
+    - indent_width
+    - template_file
+    - workspace_dir
+    - lang (commonの設定内でのみ)
+- **postprocess**: コード生成後の後処理に関する設定
+- **run**: コードコンパイル・実行時に使われるコマンドに関する設定
+- **etc**: その他の設定
+
+### 例
+以下は、次の挙動を期待する場合の`~/.atcodertools.toml`の例です。
 - `indent_type='space'` スペースがインデントに使われる(`'tab'`を指定した場合はタブが使われる)
 - `indent_width=4` インデント幅は4である (`indent_width`が無指定の場合`4`(nim言語以外), `2`(nim言語)が規定値として使われます。)
 - `template_file='~/my_template.cpp'` コード生成テンプレートとして`~/my_template.cpp`を使う
@@ -212,6 +275,8 @@ optional arguments:
 - `save_no_session_cache=false` ログイン情報のクッキーを保存する
 - `in_example_format="in_{}.txt"` テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
 - `out_example_format="out_{}.txt"` テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
+- `compile_command="g++ main.cpp -o main.out"` プログラムを`atcoder-tools compile`でコンパイルする場合に実行されるコマンド
+- `run_command="./main.out"` コンパイルしたプログラムを`atcoder-tools test`で実行する場合に実行されるコマンド
 
 ```toml
 [codestyle]
@@ -225,14 +290,49 @@ code_generator_file="~/custom_code_generator.py"
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
 
+[run]
+compile_command="g++ main.cpp -o main.out"
+run_command="./main.out"
+
 [etc]
 download_without_login=false
 parallel_download=false
 save_no_session_cache=false
 in_example_format="in_{}.txt"
 out_example_format="out_{}.txt"
+compile_before_testing=false
+compile_only_when_diff_detected=false
 
 ```
+
+### 言語毎の設定
+バージョン1.1.7以降では、言語毎に`codestyle`, `postprocess`, `run`を指定できます。
+
+`(言語名).(設定カテゴリ名)`に対して設定を行うと、言語毎の設定になります。言語名が無い場合の通常の指定は共通のデフォルト設定として扱われます。
+atcoder-tools起動時に使われる言語固有の設定は、`--lang` プログラム引数が存在すればそれを、なければ`codestyle.lang`に指定された値に基づきます。
+`(言語名).codestyle.lang`は無視されます。
+
+以下の設定では、
+- 共通のコードスタイルとしてインデント幅が4のスペースインデントを用いる。`--lang`引数無しで起動した際に使用される言語はPythonである。ただし
+   - c++のコード生成においてはタブインデントを用い(幅は4のまま)、加えてC++用のpostprocess設定を用いる。
+   - Pythonのコード生成においてはインデント幅を2とする。
+```toml
+[codestyle]
+lang='python'
+indent_type='space'
+indent_width=4
+[cpp.codestyle]
+indent_type='tab'
+code_generator_file="~/custom_code_generator.py"
+[cpp.postprocess]
+exec_on_each_problem_dir='clang-format -i ./*.cpp'
+exec_on_contest_dir='touch CMakeLists.txt'
+[java.run]
+
+[python.codestyle]
+indent_width=2
+```
+
 
 ### カスタムコードジェネレーター
 [標準のC++コードジェネレーター](https://github.com/kyuridenamida/atcoder-tools/blob/master/atcodertools/codegen/code_generators/cpp.py)に倣って、
