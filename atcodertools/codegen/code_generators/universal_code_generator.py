@@ -6,7 +6,7 @@ from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, P
     Format
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
-from atcodertools.codegen.code_generators.universal_generator.nim import CodeGeneratorInfo
+# TODO why NIM?
 
 
 class CodeGenerator():
@@ -14,7 +14,7 @@ class CodeGenerator():
     def __init__(self,
                  format_: Optional[Format[Variable]],
                  config: CodeStyleConfig,
-                 info: CodeGeneratorInfo):
+                 info):
         super(CodeGenerator, self).__init__()
         self._format = format_
         self._config = config
