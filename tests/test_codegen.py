@@ -7,14 +7,14 @@ from typing import Tuple, List
 
 from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.client.models.sample import Sample
-from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP
+from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP, JULIA
 from atcodertools.executils.run_command import run_command
 from atcodertools.executils.run_program import run_program
 from atcodertools.fileutils.create_contest_file import create_code
 from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs
+from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, julia
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
@@ -78,6 +78,10 @@ class TestCodeGenerator(unittest.TestCase):
             CSHARP: {
                 "old": "template.cs",
                 "jinja": "template_jinja.cs",
+            },
+            JULIA: {
+                "old": "template.jl",
+                "jinja": "template_jinja.jl",
             }
         }
         self.lang_to_code_generator_func = {
@@ -88,6 +92,7 @@ class TestCodeGenerator(unittest.TestCase):
             NIM: nim.main,
             DLANG: d.main,
             CSHARP: cs.main,
+            JULIA: julia.main,
         }
         self.maxDiff = None
 
@@ -189,6 +194,8 @@ class TestCodeGenerator(unittest.TestCase):
             return "dmd {} -of=main".format(code_file)
         elif lang == CSHARP:
             return "mcs {}".format(code_file)
+        elif lang == JULIA:
+            return "julia {} ONLINE_JUDGE".format(code_file)
         else:
             raise NotImplementedError()
 
@@ -207,6 +214,8 @@ class TestCodeGenerator(unittest.TestCase):
             return "./main", []
         elif lang == CSHARP:
             return "mono", ["main.exe"]
+        elif lang == JULIA:
+            return "julia", ["main.jl"]
         else:
             raise NotImplementedError()
 
@@ -225,6 +234,8 @@ class TestCodeGenerator(unittest.TestCase):
             os.remove(os.path.join(self.temp_dir, "main"))
         elif lang == CSHARP:
             os.remove(os.path.join(self.temp_dir, "main.exe"))
+        elif lang == JULIA:
+            return
         else:
             raise NotImplementedError()
 

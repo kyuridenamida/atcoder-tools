@@ -1,0 +1,40 @@
+#!/usr/bin/env julia
+
+function solve(H::Int, W::Int, K::Int, sr::Int, sc::Int, s::Vector{String}, N::Int, fr::Vector{Int}, fc::Vector{Int}, F::Vector{Int}, D::Vector{Int})
+  
+end
+
+function main()
+    tokens = Channel{String}(32)
+    Task() do
+        for line in eachline(@static VERSION < v"0.6" ? STDIN : stdin)
+            for token in split(chomp(line))
+                put!(tokens, token)
+            end
+        end
+        close(tokens)
+    end |> schedule
+    H = parse(Int, take!(tokens))
+    W = parse(Int, take!(tokens))
+    K = parse(Int, take!(tokens))
+    sr = parse(Int, take!(tokens))
+    sc = parse(Int, take!(tokens))
+    s = similar(Vector{String}, H)
+    for i in 1:H
+        s[i] = take!(tokens)
+    end
+    N = parse(Int, take!(tokens))
+    fr = similar(Vector{Int}, N)
+    fc = similar(Vector{Int}, N)
+    F = similar(Vector{Int}, N)
+    D = similar(Vector{Int}, N)
+    for i in 1:N
+        fr[i] = parse(Int, take!(tokens))
+        fc[i] = parse(Int, take!(tokens))
+        F[i] = parse(Int, take!(tokens))
+        D[i] = parse(Int, take!(tokens))
+    end
+    solve(H, W, K, sr, sc, s, N, fr, fc, F, D)
+end
+
+isempty(ARGS) && main()

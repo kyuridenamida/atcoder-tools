@@ -1,0 +1,26 @@
+#!/usr/bin/env julia
+const YES = "YES"
+const NO = "NO"
+
+function solve(N::Int, M::Int, A::Int, B::Int)
+  
+end
+
+function main()
+    tokens = Channel{String}(32)
+    Task() do
+        for line in eachline(@static VERSION < v"0.6" ? STDIN : stdin)
+            for token in split(chomp(line))
+                put!(tokens, token)
+            end
+        end
+        close(tokens)
+    end |> schedule
+    N = parse(Int, take!(tokens))
+    M = parse(Int, take!(tokens))
+    A = parse(Int, take!(tokens))
+    B = parse(Int, take!(tokens))
+    solve(N, M, A, B)
+end
+
+isempty(ARGS) && main()
