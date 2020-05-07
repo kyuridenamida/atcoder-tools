@@ -34,8 +34,9 @@ def render(template, **kwargs):
         # Successfully estimated the indents of template
         if 'indent' in kwargs:
             indent = kwargs['indent']
-        else :
-            indent_kwargs = [estimate_indent(v) for v in kwargs.values() if isinstance(v, str)]
+        else:
+            indent_kwargs = [estimate_indent(
+                v) for v in kwargs.values() if isinstance(v, str)]
             indent_kwargs = set(filter(lambda v: v != '', indent_kwargs))
             if len(indent_kwargs) == 1:
                 # Successfully estimated the indents of kwargs
@@ -43,13 +44,13 @@ def render(template, **kwargs):
         if indent_template != indent:
             # Align the indent of template with kwargs
             def fixindent(line):
-                new_indent = ''                
+                new_indent = ''
                 while line.startswith(indent_template):
                     line = line[len(indent_template):]
                     new_indent = new_indent + indent
                 return new_indent + line
             template = '\n'.join(map(fixindent, template.split('\n')))
-            
+
     # TODO: refactoring: this should not be here.
     # TODO: refactoring: the URL should be imported from other module
     kwargs['atcodertools'] = {
@@ -81,6 +82,7 @@ def old_render(template, **kwargs):
 def render_by_jinja(template, **kwargs):
     return Environment(trim_blocks=True,
                        lstrip_blocks=True).from_string(template).render(**kwargs) + "\n"
+
 
 def estimate_indent(code):
     indents = re.findall(r'^([ \t]+)(?=\S)', code, re.MULTILINE)
