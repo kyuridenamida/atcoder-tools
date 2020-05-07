@@ -33,12 +33,13 @@ class CSharpCodeGenerator:
 
     def generate_parameters(self) -> Dict[str, Any]:
         if self._format is None:
-            return dict(prediction_success=False)
+            return dict(prediction_success=False, indent=self._indent(1))
 
         return dict(formal_arguments=self._formal_arguments(),
                     actual_arguments=self._actual_arguments(),
                     input_part=self._input_part(),
-                    prediction_success=True)
+                    prediction_success=True,
+                    indent=self._indent(1))
 
     def _input_part(self):
         lines = []
