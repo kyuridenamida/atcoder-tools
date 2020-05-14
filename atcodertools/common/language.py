@@ -52,7 +52,7 @@ CPP = Language(
     name="cpp",
     display_name="C++",
     extension="cpp",
-    submission_lang_pattern=re.compile(".*C\\+\\+14 \\(GCC.*"),
+    submission_lang_pattern=re.compile(".*C\\+\\+ \\(GCC.*"),
     default_code_generator=cpp.main,
     default_template_path=get_default_template_path('cpp'),
 )
@@ -61,7 +61,7 @@ JAVA = Language(
     name="java",
     display_name="Java",
     extension="java",
-    submission_lang_pattern=re.compile(".*Java8.*"),
+    submission_lang_pattern=re.compile(".*Java.*"),
     default_code_generator=java.main,
     default_template_path=get_default_template_path('java'),
 )
@@ -79,7 +79,7 @@ PYTHON = Language(
     name="python",
     display_name="Python3",
     extension="py",
-    submission_lang_pattern=re.compile(".*Python3.*"),
+    submission_lang_pattern=re.compile(".*Python.*"),
     default_code_generator=python.main,
     default_template_path=get_default_template_path('py'),
 )
@@ -88,7 +88,7 @@ DLANG = Language(
     name="d",
     display_name="D",
     extension="d",
-    submission_lang_pattern=re.compile(".*DMD64.*"),
+    submission_lang_pattern=re.compile(".*D \\(DMD.*"),
     default_code_generator=d.main,
     default_template_path=get_default_template_path('d'),
 )
@@ -97,7 +97,7 @@ NIM = Language(
     name="nim",
     display_name="NIM",
     extension="nim",
-    submission_lang_pattern=re.compile(".*Nim \\(0.*"),
+    submission_lang_pattern=re.compile(".*Nim \\(1.*"),
     default_code_generator=nim.main,
     default_template_path=get_default_template_path('nim'),
     default_code_style=CodeStyle(indent_width=2)
