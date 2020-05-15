@@ -104,7 +104,7 @@ class AtCoderClient(metaclass=Singleton):
         resp = self._request(contest.get_problem_list_url())
         soup = BeautifulSoup(resp.text, "html.parser")
         res = []
-        for tag in soup.select('.linkwrapper')[0::2]:
+        for tag in soup.select('.table a')[0::2]:
             alphabet = tag.text
             problem_id = tag.get("href").split("/")[-1]
             res.append(Problem(contest, alphabet, problem_id))
