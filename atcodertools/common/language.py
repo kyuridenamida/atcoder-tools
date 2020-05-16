@@ -4,6 +4,7 @@ from typing import Pattern, Callable
 from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
+import platform
 
 
 class LanguageNotFoundError(Exception):
@@ -52,7 +53,7 @@ CPP = Language(
     name="cpp",
     display_name="C++",
     extension="cpp",
-    submission_lang_pattern=re.compile(".*C\\+\\+14 \\(GCC.*"),
+    submission_lang_pattern=re.compile(".*C\\+\\+ \\(GCC 9.*|.*C\\+\\+14 \\(GCC 5.*"),
     default_code_generator=cpp.main,
     default_template_path=get_default_template_path('cpp'),
 )
