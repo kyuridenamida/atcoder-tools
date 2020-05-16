@@ -52,7 +52,7 @@ CPP = Language(
     name="cpp",
     display_name="C++",
     extension="cpp",
-    submission_lang_pattern=re.compile(".*C\\+\\+ \\(GCC.*"),
+    submission_lang_pattern=re.compile(".*C\\+\\+14 \\(GCC.*"),
     default_code_generator=cpp.main,
     default_template_path=get_default_template_path('cpp'),
 )
@@ -61,7 +61,7 @@ JAVA = Language(
     name="java",
     display_name="Java",
     extension="java",
-    submission_lang_pattern=re.compile(".*Java.*"),
+    submission_lang_pattern=re.compile(".*Java8.*|.*Java \\(OpenJDK 11.*"),
     default_code_generator=java.main,
     default_template_path=get_default_template_path('java'),
 )
@@ -79,7 +79,7 @@ PYTHON = Language(
     name="python",
     display_name="Python3",
     extension="py",
-    submission_lang_pattern=re.compile(".*Python.*"),
+    submission_lang_pattern=re.compile(".*Python3.*"),
     default_code_generator=python.main,
     default_template_path=get_default_template_path('py'),
 )
