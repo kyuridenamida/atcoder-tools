@@ -1,5 +1,22 @@
 # Change Log
 
+## 1.1.7 / 2020-05-17
+
+#### Patches for the recent AtCoder judge system update
+- [#191](https://github.com/kyuridenamida/atcoder-tools/pull/191) C++
+   - Thanks for [@hiramekun](https://github.com/hiramekun/)'s contribution!
+   - Thanks for [@dnek](https://github.com/dnek/)'s contribution!
+- [#192](https://github.com/kyuridenamida/atcoder-tools/pull/192) Python
+   - Thanks for [@Matts966](https://github.com/Matts966/)'s contribution!
+- [#198](https://github.com/kyuridenamida/atcoder-tools/pull/198) Java / D + Stop using old AtCoder URLs in AtCoder Client
+   - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution!
+#### Other changes
+- [#172](https://github.com/kyuridenamida/atcoder-tools/pull/172) Recognize an integer token as a string token when it has a leading zero or too many digits in format prediction
+   - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution!
+- [#174](https://github.com/kyuridenamida/atcoder-tools/pull/174) Makes gen command retry with exponential backoff
+   - Thanks for [@yuuki3655](https://github.com/yuuki3655/)'s contribution!
+- [#187](https://github.com/kyuridenamida/atcoder-tools/pull/187) Support \dots in input formats
+
 ## 1.1.6 / 2019-10-06
 
 - [#157](https://github.com/kyuridenamida/atcoder-tools/pull/157) Support decimal number judge
