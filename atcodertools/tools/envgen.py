@@ -11,7 +11,7 @@ from typing import Tuple
 
 from colorama import Fore
 
-from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
+from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError, PageNotFoundError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
@@ -169,17 +169,18 @@ def prepare_contest(atcoder_client: AtCoderClient,
                     retry_max_tries: int = 10):
     attempt_count = 1
     while True:
-        problem_list = atcoder_client.download_problem_list(
-            Contest(contest_id=contest_id))
-        if problem_list:
+        try:
+            problem_list = atcoder_client.download_problem_list(
+                Contest(contest_id=contest_id))
             break
-        if 0 < retry_max_tries < attempt_count:
-            raise EnvironmentInitializationError
-        logger.warning(
-            "Failed to fetch. Will retry in {} seconds. (Attempt {})".format(retry_delay_secs, attempt_count))
-        time.sleep(retry_delay_secs)
-        retry_delay_secs = min(retry_delay_secs * 2, retry_max_delay_secs)
-        attempt_count += 1
+        except PageNotFoundError:
+            if 0 < retry_max_tries < attempt_count:
+                raise EnvironmentInitializationError
+            logger.warning(
+                "Failed to fetch. Will retry in {} seconds. (Attempt {})".format(retry_delay_secs, attempt_count))
+            time.sleep(retry_delay_secs)
+            retry_delay_secs = min(retry_delay_secs * 2, retry_max_delay_secs)
+            attempt_count += 1
 
     tasks = [(atcoder_client,
               problem,
