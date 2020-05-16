@@ -89,8 +89,10 @@ class AtCoderClient(metaclass=Singleton):
 
         username, password = credential_supplier()
 
-        soup = BeautifulSoup(self._session.get("https://atcoder.jp/login").text, "html.parser")
-        token = soup.find_all("form")[1].find("input", type="hidden").get("value")
+        soup = BeautifulSoup(self._session.get(
+            "https://atcoder.jp/login").text, "html.parser")
+        token = soup.find_all("form")[1].find(
+            "input", type="hidden").get("value")
         resp = self._request("https://atcoder.jp/login", data={
             'username': username,
             "password": password,
