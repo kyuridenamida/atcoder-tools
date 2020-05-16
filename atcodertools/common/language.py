@@ -62,7 +62,7 @@ JAVA = Language(
     name="java",
     display_name="Java",
     extension="java",
-    submission_lang_pattern=re.compile(".*Java8.*"),
+    submission_lang_pattern=re.compile(".*Java8.*|.*Java \\(OpenJDK 11.*"),
     default_code_generator=java.main,
     default_template_path=get_default_template_path('java'),
 )
@@ -89,7 +89,7 @@ DLANG = Language(
     name="d",
     display_name="D",
     extension="d",
-    submission_lang_pattern=re.compile(".*DMD64.*"),
+    submission_lang_pattern=re.compile(".*D \\(DMD.*"),
     default_code_generator=d.main,
     default_template_path=get_default_template_path('d'),
 )
@@ -98,7 +98,7 @@ NIM = Language(
     name="nim",
     display_name="NIM",
     extension="nim",
-    submission_lang_pattern=re.compile(".*Nim \\(0.*"),
+    submission_lang_pattern=re.compile(".*Nim \\(1.*"),
     default_code_generator=nim.main,
     default_template_path=get_default_template_path('nim'),
     default_code_style=CodeStyle(indent_width=2)
