@@ -26,6 +26,7 @@ Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 |D|[@penpenpng](https://github.com/penpenpng/) (generator, template)||
 |Nim|[@chaemon](https://github.com/chaemon/) (generator, template)||
 |C#|[@chaemon](https://github.com/chaemon/) (generator, template)||
+|Julia|[@yatra9](https://github.com/yatra9/) (generator, template)||
 
 ## Demo
 <img src="https://user-images.githubusercontent.com/233559/52807100-f6e2d300-30cd-11e9-8906-82b9f9b2dff7.gif" width=70%>
@@ -99,7 +100,7 @@ optional arguments:
   --workspace WORKSPACE
                         Path to workspace's root directory. This script will create files in {WORKSPACE}/{contest_name}/{alphabet}/ e.g. ./your-workspace/arc001/A/
                         [Default] /home/kyuridenamida/atcoder-workspace
-  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs.
+  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs or julia.
                         [Default] cpp
   --template TEMPLATE   File path to your template code
                         [Default (C++)] /atcodertools/tools/templates/default_template.cpp
@@ -109,6 +110,7 @@ optional arguments:
                         [Default (NIM)] /atcodertools/tools/templates/default_template.nim
                         [Default (D)] /atcodertools/tools/templates/default_template.d
                         [Default (C#)] /atcodertools/tools/templates/default_template.cs
+                        [Default (Julia)] /atcodertools/tools/templates/default_template.jl
   --parallel            Prepare problem directories asynchronously using multi processors.
   --save-no-session-cache
                         Save no session cache to avoid security risk
@@ -223,7 +225,7 @@ optional arguments:
                         error type must be one of [normal, absolute, relative, absolute_or_relative, multisolution, interactive]
   --error-value ERROR_VALUE, -v ERROR_VALUE
                         error value for decimal number judge: [Default] 1e-09
-  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs.
+  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs or julia.
   --dir DIR, -d DIR     Target directory to test. [Default] Current directory
 
 ```

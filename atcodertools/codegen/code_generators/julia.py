@@ -1,3 +1,4 @@
+import re
 from typing import Dict, Any, Optional
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
@@ -16,14 +17,15 @@ def _loop_header(var: Variable, for_second_index: bool):
     else:
         index = var.first_index
         loop_var = "i"
-
-    return "for(int {loop_var} = 0 ; {loop_var} < {length} ; {loop_var}++){{".format(
+    lenstr = "{}".format(index.get_length())
+    if not re.match(r'^\w+$', lenstr):
+        lenstr = "({})".format(lenstr)
+    return "for {loop_var} in 1:{lenstr}".format(
         loop_var=loop_var,
-        length=index.get_length()
-    )
+        lenstr=lenstr)
 
 
-class CppCodeGenerator:
+class JuliaCodeGenerator:
 
     def __init__(self,
                  format_: Optional[Format[Variable]],
@@ -49,26 +51,31 @@ class CppCodeGenerator:
 
     def _convert_type(self, type_: Type) -> str:
         if type_ == Type.float:
-            return "long double"
+            return "Float64"
         elif type_ == Type.int:
-            return "long long"
+            return "Int"
         elif type_ == Type.str:
-            return "std::string"
+            return "String"
         else:
             raise NotImplementedError
 
     def _get_declaration_type(self, var: Variable):
-        ctype = self._convert_type(var.type)
-        for _ in range(var.dim_num()):
-            ctype = 'std::vector<{}>'.format(ctype)
-        return ctype
+        type = self._convert_type(var.type)
+        if var.dim_num() == 0:
+            return type
+        elif var.dim_num() == 1:
+            return "Vector{{{}}}".format(type)
+        elif var.dim_num() == 2:
+            return "Matrix{{{}}}".format(type)
+        else:
+            return "Array{{{t}, {nd}}}".format(t=type, nd=var.dim_num())
 
     def _actual_arguments(self) -> str:
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
         return ", ".join([
-            v.name if v.dim_num() == 0 else 'std::move({})'.format(v.name)
+            v.name if v.dim_num() == 0 else '{}'.format(v.name)
             for v in self._format.all_vars()])
 
     def _formal_arguments(self):
@@ -76,7 +83,7 @@ class CppCodeGenerator:
             :return the string form of formal arguments e.g. "int N, int K, std::vector<int> a"
         """
         return ", ".join([
-            "{decl_type} {name}".format(
+            "{name}::{decl_type}".format(
                 decl_type=self._get_declaration_type(v),
                 name=v.name)
             for v in self._format.all_vars()
@@ -96,32 +103,31 @@ class CppCodeGenerator:
         else:
             raise NotImplementedError
 
+        t = self._convert_type(var.type)
         if len(dims) == 0:
-            ctor = ''
-        elif len(dims) == 1:
-            ctor = '({})'.format(dims[0])
+            ret = ""
         else:
-            ctor = '({})'.format(dims[-1])
-            ctype = self._convert_type(var.type)
-            for dim in dims[-2::-1]:
-                ctype = 'std::vector<{}>'.format(ctype)
-                ctor = '({}, {}{})'.format(dim, ctype, ctor)
-
-        line = "{decl_type} {name}{constructor};".format(
-            name=var.name,
-            decl_type=self._get_declaration_type(var),
-            constructor=ctor
-        )
-        return line
+            d = []
+            for dim in dims:
+                d.append(str(dim))
+            if len(dims) == 1:
+                jtype = "Vector"
+            elif len(dims) == 2:
+                jtype = "Matrix"
+            else:
+                jtype = "Array"
+            ret = "{name} = similar({jtype}{{{type}}}, {dims})".format(
+                type=t, name=var.name, jtype=jtype, dims=", ".join(d))
+        return ret
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
         if var.type == Type.float:
-            return 'scanf("%Lf",&{name});'.format(name=name)
+            return '{name} = parse(Float64, take!(tokens))'.format(name=name)
         elif var.type == Type.int:
-            return 'scanf("%lld",&{name});'.format(name=name)
+            return '{name} = parse(Int, take!(tokens))'.format(name=name)
         elif var.type == Type.str:
-            return 'std::cin >> {name};'.format(name=name)
+            return '{name} = take!(tokens)'.format(name=name)
         else:
             raise NotImplementedError
 
@@ -129,15 +135,18 @@ class CppCodeGenerator:
     def _get_var_name(var: Variable):
         name = var.name
         if var.dim_num() >= 1:
-            name += "[i]"
-        if var.dim_num() >= 2:
-            name += "[j]"
+            name += "[i"
+            if var.dim_num() >= 2:
+                name += ",j"
+            name += "]"
         return name
 
     def _render_pattern(self, pattern: Pattern):
         lines = []
         for var in pattern.all_vars():
-            lines.append(self._generate_declaration(var))
+            line = self._generate_declaration(var)
+            if len(line) > 0:
+                lines.append(line)
 
         representative_var = pattern.all_vars()[0]
         if isinstance(pattern, SingularPattern):
@@ -147,7 +156,7 @@ class CppCodeGenerator:
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(1),
                                                      line=self._input_code_for_var(var)))
-            lines.append("}")
+            lines.append("end")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
             lines.append(
@@ -155,8 +164,8 @@ class CppCodeGenerator:
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(2),
                                                      line=self._input_code_for_var(var)))
-            lines.append("{indent}}}".format(indent=self._indent(1)))
-            lines.append("}")
+            lines.append("{indent}end".format(indent=self._indent(1)))
+            lines.append("end")
         else:
             raise NotImplementedError
 
@@ -171,7 +180,7 @@ class NoPredictionResultGiven(Exception):
 
 
 def main(args: CodeGenArgs) -> str:
-    code_parameters = CppCodeGenerator(
+    code_parameters = JuliaCodeGenerator(
         args.format, args.config).generate_parameters()
     return render(
         args.template,

@@ -1,0 +1,33 @@
+#!/usr/bin/env julia
+
+function solve(L::Int, N::Int, M::Int, K::Vector{Float64}, A::Vector{Int}, S::Vector{Float64})
+  
+end
+
+function main()
+    tokens = Channel{String}(32)
+    Task() do
+        for line in eachline(@static VERSION < v"0.6" ? STDIN : stdin)
+            for token in split(chomp(line))
+                put!(tokens, token)
+            end
+        end
+        close(tokens)
+    end |> schedule
+    L = parse(Int, take!(tokens))
+    N = parse(Int, take!(tokens))
+    M = parse(Int, take!(tokens))
+    K = similar(Vector{Float64}, L)
+    for i in 1:L
+        K[i] = parse(Float64, take!(tokens))
+    end
+    A = similar(Vector{Int}, N)
+    S = similar(Vector{Float64}, N)
+    for i in 1:N
+        A[i] = parse(Int, take!(tokens))
+        S[i] = parse(Float64, take!(tokens))
+    end
+    solve(L, N, M, K, A, S)
+end
+
+isempty(ARGS) && main()

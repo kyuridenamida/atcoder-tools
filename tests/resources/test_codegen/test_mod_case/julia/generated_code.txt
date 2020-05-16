@@ -1,0 +1,23 @@
+#!/usr/bin/env julia
+const MOD = 998244353
+
+function solve(A::String, B::String)
+  
+end
+
+function main()
+    tokens = Channel{String}(32)
+    Task() do
+        for line in eachline(@static VERSION < v"0.6" ? STDIN : stdin)
+            for token in split(chomp(line))
+                put!(tokens, token)
+            end
+        end
+        close(tokens)
+    end |> schedule
+    A = take!(tokens)
+    B = take!(tokens)
+    solve(A, B)
+end
+
+isempty(ARGS) && main()

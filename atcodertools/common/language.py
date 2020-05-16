@@ -1,7 +1,7 @@
 import re
 from typing import Pattern, Callable
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs
+from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, julia
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
 import platform
@@ -163,6 +163,17 @@ CSHARP = Language(
     exec_filename="{filename}{exec_extension}"
 )
 
+JULIA = Language(
+    name="julia",
+    display_name="Julia",
+    extension="jl",
+    submission_lang_pattern=re.compile(".*Julia.*"),
+    default_code_generator=julia.main,
+    default_template_path=get_default_template_path('jl'),
+    compile_command="julia {filename}.jl ONLINE_JUDGE",
+    test_command="julia {filename}.jl",
+    exec_filename="{filename}.ji"
+)
 
-ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP]
+ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP, JULIA]
 ALL_LANGUAGE_NAMES = [lang.name for lang in ALL_LANGUAGES]

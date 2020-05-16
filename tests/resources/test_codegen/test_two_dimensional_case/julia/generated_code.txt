@@ -1,0 +1,34 @@
+#!/usr/bin/env julia
+
+function solve(H::Int, W::Int, c::Matrix{Int}, A::Matrix{Int})
+  
+end
+
+function main()
+    tokens = Channel{String}(32)
+    Task() do
+        for line in eachline(@static VERSION < v"0.6" ? STDIN : stdin)
+            for token in split(chomp(line))
+                put!(tokens, token)
+            end
+        end
+        close(tokens)
+    end |> schedule
+    H = parse(Int, take!(tokens))
+    W = parse(Int, take!(tokens))
+    c = similar(Matrix{Int}, 9-0+1, 9-0+1)
+    for i in 1:(9-0+1)
+        for j in 1:(9-0+1)
+            c[i,j] = parse(Int, take!(tokens))
+        end
+    end
+    A = similar(Matrix{Int}, H, W)
+    for i in 1:H
+        for j in 1:W
+            A[i,j] = parse(Int, take!(tokens))
+        end
+    end
+    solve(H, W, c, A)
+end
+
+isempty(ARGS) && main()
