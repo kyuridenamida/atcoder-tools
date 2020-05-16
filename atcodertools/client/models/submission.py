@@ -3,9 +3,9 @@ import re
 from bs4 import BeautifulSoup
 
 PROB_URL_RE = re.compile(
-    r'"/tasks/([A-Za-z0-9\'~+\-_]+)"')
+    r'"/contests/.*/tasks/([A-Za-z0-9\'~+\-_]+)"')
 SUBMISSION_URL_RE = re.compile(
-    r'"/submissions/([0-9]+)"')
+    r'/submissions/([0-9]+)')
 
 
 class Submission:

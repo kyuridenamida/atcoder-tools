@@ -5,14 +5,14 @@ class Main {
     static final int mod = 998244353;
     public static void main(String[] args) throws Exception {
         final Scanner sc = new Scanner(System.in);
-        long A;
-        A = sc.nextLong();
-        long B;
-        B = sc.nextLong();
+        String A;
+        A = sc.next();
+        String B;
+        B = sc.next();
         solve(A, B);
     }
 
-    static void solve(long A, long B){
+    static void solve(String A, String B){
 
     }
 }

@@ -16,14 +16,14 @@ proc nextString(): string =
 
 let MOD = 998244353
 
-proc solve(A:int, B:int):void =
+proc solve(A:string, B:string):void =
   return
 
 proc main():void =
-  var A = 0
-  A = nextInt()
-  var B = 0
-  B = nextInt()
+  var A = ""
+  A = nextString()
+  var B = ""
+  B = nextString()
   solve(A, B)
   return
 

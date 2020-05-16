@@ -1,471 +1,861 @@
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Submit - AtCoder Regular Contest 001 | AtCoder</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="
-">
-    <meta name="keyword" content="AtCoder,アットコーダー,あっとこーだー,プログラミングコンテスト
-">
-    <meta name="author" content="Atcoder" />
-    <meta name="copyright" content="Copyright (C) 2012 Atcoder" />
-    <meta name="format-detection" content="telephone=no" />
+    <title>提出 - AtCoder Regular Contest 001</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Language" content="ja">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="google-site-verification" content="nXGC_JxO0yoP1qBzMnYD_xgufO6leSLw1kyNo2HZltM" />
 
-    <link rel="stylesheet" type="text/css" href="/css/all.css?v=2">
-    <link rel="stylesheet" type="text/css" href="/css/print.css?v=1" media="print">
-    <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
-    <script src="/js/jquery.js"></script>
-    <link rel="shortcut icon" href="/img/favicon.ico">
+    <meta name="description" content="プログラミング初級者から上級者まで楽しめる、競技プログラミングコンテストサイト「AtCoder」。オンラインで毎週開催プログラミングコンテストを開催しています。競技プログラミングを用いて、客観的に自分のスキルを計ることのできるサービスです。">
+    <meta name="author" content="AtCoder Inc.">
 
-    <script type="text/javascript">
+    <meta property="og:site_name" content="AtCoder">
 
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-30554866-3']);
-        _gaq.push(['_setDomainName', 'atcoder.jp']);
-        _gaq.push(['_trackPageview']);
+    <meta property="og:title" content="提出 - AtCoder Regular Contest 001" />
+    <meta property="og:description" content="プログラミング初級者から上級者まで楽しめる、競技プログラミングコンテストサイト「AtCoder」。オンラインで毎週開催プログラミングコンテストを開催しています。競技プログラミングを用いて、客観的に自分のスキルを計ることのできるサービスです。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://atcoder.jp/contests/arc001/submit" />
+    <meta property="og:image" content="https://img.atcoder.jp/assets/atcoder.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@atcoder" />
 
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
+    <meta property="twitter:title" content="提出 - AtCoder Regular Contest 001" />
 
+    <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.min.css?v=202005132348">
+    <link rel="stylesheet" type="text/css" href="/public/css/base.css?v=202005132348">
+    <link rel="shortcut icon" type="image/png" href="//img.atcoder.jp/assets/favicon.png">
+    <link rel="apple-touch-icon" href="//img.atcoder.jp/assets/atcoder.png">
+    <script src="/public/js/lib/jquery-1.9.1.min.js?v=202005132348"></script>
+    <script src="/public/js/lib/bootstrap.min.js?v=202005132348"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ja.js"></script>
+    <script>
+        var LANG = "ja";
+        var userScreenName = "kyuridenamida";
+        var csrfToken = "2TfLiM/mkOoZRM9OnbCFUYWuq1gqpC5lhkAlhRNZ3as="
     </script>
-    <!--[if lt IE 9]><style>.navbar-fixed-top{ position: relative!important; }</style><![endif]-->
+    <script src="/public/js/utils.js?v=202005132348"></script>
 
+
+    <script src="/public/js/contest.js?v=202005132348"></script>
+    <link href="/public/css/contest.css?v=202005132348" rel="stylesheet" />
+    <script>
+        var contestScreenName = "arc001";
+        var remainingText = "残り時間";
+        var countDownText = "開始まであと";
+        var startTime = moment("2012-04-14T21:00:00+09:00");
+        var endTime = moment("2012-04-15T02:00:00+09:00");
+    </script>
+    <style></style>
+
+
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
+    <script src="/public/js/lib/select2.min.js?v=202005132348"></script>
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/codemirror.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/codemirror.min.js"></script>
+    <script src="/public/js/codeMirror/merged.js?v=202005132348"></script>
+
+
+
+
+
+
+
+
+
+
+
+    <script src="/public/js/base.js?v=202005132348"></script>
+    <script src="/public/js/ga.js?v=202005132348"></script>
 </head>
 
-
 <body>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="/"><span class="contest-name">AtCoder Regular Contest 001</span><span class="bland-small"><time>2012/04/14 12:00:00 +0000</time> ~ <time>2012/04/14 17:00:00 +0000</time></span></a>
 
-            <div class="nav-collapse">
-                <ul class="nav">
-                    <li class="divider-vertical"></li>
-                    <li><a href="http://atcoder.jp" target="_blank"><span class="lang"><span class="lang-en">back to atcoder.jp</span><span class="lang-ja">AtCoderへ戻る</span></span></a></li>
-                </ul>
-                <ul  id="nav-right-logined" class="nav pull-right" style="display:none;">
-                    <li class="dropdown">
-                        <a href="#" lang="ja" class="dropdown-toggle static-nav-language-selector-dropdown" data-toggle="dropdown" style="display:none;">
-                            <i class="flag-ja"></i> 日本語 <b class="caret"></b>
-                        </a>
-                        <a href="#" lang="en" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
-                            <i class="flag-en"></i> English <b class="caret"></b>
-                        </a>
-                        <a href="#" lang="ko" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
-                            <i class="flag-ko"></i> 한국어 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li> <a lang="ja" class="static-nav-language-selector" href="#"><i class="flag-ja"></i> 日本語</a></li>
-                            <li> <a lang="en" class="static-nav-language-selector" href="#"><i class="flag-en"></i> English</a></li>
-                            <li> <a lang="ko" class="static-nav-language-selector" href="#"><i class="flag-ko"></i> 한국어</a></li>
-                        </ul>
-                    </li>
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i> <span id="nav-right-username"></span><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/me"><span class="lang"><span class="lang-en">My Profile</span><span class="lang-ja">マイプロフィール</span></span></a></li>
-                            <li><a href="/settings"><span class="lang"><span class="lang-en">Settings</span><span class="lang-ja">設定</span></span></a></li>
-                            <li><a href="/settings/password"><span class="lang"><span class="lang-en">Change password</span><span class="lang-ja">パスワードの変更</span></span></a></li>
-                            <li class="divider"></li>
-                            <li><a href="/logout"><span class="lang"><span class="lang-en">Sign out</span><span class="lang-ja">ログアウト</span></span></a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul id="nav-right-not-login" class="nav pull-right" style="display:none;">
-                    <li class="dropdown">
-                        <a href="#" lang="ja" class="dropdown-toggle static-nav-language-selector-dropdown" data-toggle="dropdown" style="display:none;">
-                            <i class="flag-ja"></i> 日本語 <b class="caret"></b>
-                        </a>
-                        <a href="#" lang="en" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
-                            <i class="flag-en"></i> English <b class="caret"></b>
-                        </a>
-                        <a href="#" lang="ko" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
-                            <i class="flag-ko"></i> 한국어 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li> <a lang="ja" class="static-nav-language-selector" href="#"><i class="flag-ja"></i> 日本語</a></li>
-                            <li> <a lang="en" class="static-nav-language-selector" href="#"><i class="flag-en"></i> English</a></li>
-                            <li> <a lang="ko" class="static-nav-language-selector" href="#"><i class="flag-ko"></i> 한국어</a></li>
-                        </ul>
-                    </li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="/register"><span class="lang"><span class="lang-en">Sign up</span><span class="lang-ja">新規登録</span></span></a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="/login"><span class="lang"><span class="lang-en">Sign in</span><span class="lang-ja">ログイン</span></span></a></li>
-                </ul>
+<script type="text/javascript">
+    var __pParams = __pParams || [];
+    __pParams.push({client_id: '468', c_1: 'atcodercontest', c_2: 'ClientSite'});
+</script>
+<script type="text/javascript" src="https://cdn.d2-apps.net/js/tr.js" async></script>
+
+
+<div id="modal-contest-start" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">コンテスト開始</h4>
+            </div>
+            <div class="modal-body">
+                <p>AtCoder Regular Contest 001が開始されました。</p>
+            </div>
+            <div class="modal-footer">
+
+                <a class="btn btn-primary" href='/contests/arc001/tasks'>問題一覧ページへ移動</a>
+
             </div>
         </div>
     </div>
 </div>
-<div class="modal hide fade" style="display:none;" id="modal-contest-end">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3><span class="lang"><span class="lang-en">AtCoder Regular Contest 001 has ended</span><span class="lang-ja">AtCoder Regular Contest 001が終了しました</span></span></h3>
-    </div>
-    <div class="modal-body">
-        <p><span class="lang"><span class="lang-en">Contest has ended</span><span class="lang-ja">コンテスト終了です</span></span></p>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal"><span class="lang"><span class="lang-en">Close</span><span class="lang-ja">閉じる</span></span></a>
-    </div>
-</div>
-
-<div class="modal hide fade" style="display:none;" id="modal-contest-begin">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3><span class="lang"><span class="lang-en">AtCoder Regular Contest 001 is now opening</span><span class="lang-ja">AtCoder Regular Contest 001の開催時間になりました</span></span></h3>
-    </div>
-    <div class="modal-body">
-        <p><span class="lang"><span class="lang-en">Contest has started</span><span class="lang-ja">問題一覧のページへ移動してください</span></span></p>
-    </div>
-    <div class="modal-footer">
-        <a href="/assignments" class="btn btn-primary"><span class="lang"><span class="lang-en">Go to the task list page</span><span class="lang-ja">問題一覧のページへ移動</span></span></a>
-    </div>
-</div>
-
-<div id="outer-inner" class="container">
-    <h1 class="site-title">
-        AtCoder Regular Contest 001
-    </h1>
-    <time style="display:none" id="contest-start-time">2012/04/14 12:00:00 +0000</time>
-    <time style="display:none" id="contest-end-time">2012/04/14 17:00:00 +0000</time>
-    <time style="display:none" id="server-current-time">2018/12/31 09:54:03 +0000</time>
-
-
-    <ul class="nav nav-tabs">
-        <li><a href="https://arc001.contest.atcoder.jp/"><i class="icon-home"></i> <span class="lang"><span class="lang-en">Home</span><span class="lang-ja">トップページ</span><span class="lang-ko">톱 페이지</span></span></a></li>
-        <li><a href="https://arc001.contest.atcoder.jp/assignments"><i class="icon-list-alt"></i> <span class="lang"><span class="lang-en">Tasks</span><span class="lang-ja">問題</span><span class="lang-ko">문제</span></span></a></li>
-        <li class="active"><a href="https://arc001.contest.atcoder.jp/submit"><i class="icon-upload"></i> <span class="lang"><span class="lang-en">Submit</span><span class="lang-ja">提出</span><span class="lang-ko">제출</span></span></a></li>
-        <li><a href="https://arc001.contest.atcoder.jp/clarifications"><i class="icon-question-sign"></i> <span class="lang"><span class="lang-en">Clarifications</span><span class="lang-ja">質問</span><span class="lang-ko">질문</span></span></a></li>
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <b class="caret"></b><i class="icon-download-alt"></i> <span class="lang"><span class="lang-en">Results</span><span class="lang-ja">結果</span><span class="lang-ko">채점 결과</span></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li><a href="https://arc001.contest.atcoder.jp/submissions/all"><span class="lang"><span class="lang-en">All submissions</span><span class="lang-ja">すべての結果</span><span class="lang-ko">모든 결과</span></span></a></li>
-                <li><a href="https://arc001.contest.atcoder.jp/submissions/me"><span class="lang"><span class="lang-en">My submissions</span><span class="lang-ja">自分の結果</span><span class="lang-ko">자신의 결과</span></span></a></li>
-            </ul>
-        </li>
-        <li><a href="/standings"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Standings</span><span class="lang-ja">順位表</span><span class="lang-ko">순위표</span></span></a></li>
-        <li><a href="/custom_test"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Custom Test</span><span class="lang-ja">コードテスト</span></span></a></li>
-        <li><a href="/editorial"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Editorial</span><span class="lang-ja">解説</span></span></a></li>
-    </ul>
-    <div id="alert_box" class="alert alert-block" style="display:none">
-        <a class="close" data-dismiss="alert">×</a>
-        <h4 id="alert_box_heading" class="alert-heading" style="display:none"></h4>
-        <p id="alert_box_content"></p>
-    </div>
-
-
-    <div class="row">
-        <div class="span10 offset1 well form-2c">
-            <form class="form-horizontal" method="POST" action="/submit?task_id=45">
-                <input type="hidden" name="__session" value="13b29d0135d48e0e15d1df823a1bfbd5">
-                <legend><span class="lang"><span class="lang-en">Submit</span><span class="lang-ja">提出</span><span class="lang-ko">제출</span></span></legend>
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="task_id"><span class="lang"><span class="lang-en">Task</span><span class="lang-ja">問題</span></span></label>
-                        <div class="controls">
-                            <select name="task_id" id="submit-task-selector">
-                                <option value="45" selected>A - センター採点</option>
-                                <option value="46">B - リモコン</option>
-                                <option value="47">C - パズルのお手伝い</option>
-                                <option value="48">D - レースゲーム</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" for="language_id"><span class="lang"><span class="lang-en">Language</span><span class="lang-ja">言語</span></span></label>
-                        <div class="controls">
-                            <select class="submit-language-selector" name="language_id_45" id="submit-language-selector-45">
-
-                                <option value="3003">C++14 (GCC 5.4.1)</option>
-                                <option value="3001">Bash (GNU bash v4.3.11)</option>
-                                <option value="3002">C (GCC 5.4.1)</option>
-                                <option value="3004">C (Clang 3.8.0)</option>
-                                <option value="3029">C++ (GCC 5.4.1)</option>
-                                <option value="3030">C++ (Clang 3.8.0)</option>
-                                <option value="3005">C++14 (Clang 3.8.0)</option>
-                                <option value="3006">C# (Mono 4.6.2.0)</option>
-                                <option value="3007">Clojure (1.8.0)</option>
-                                <option value="3008">Common Lisp (SBCL 1.1.14)</option>
-                                <option value="3009">D (DMD64 v2.070.1)</option>
-                                <option value="3010">D (LDC 0.17.0)</option>
-                                <option value="3011">D (GDC 4.9.4)</option>
-                                <option value="3012">Fortran (gfortran v4.8.4)</option>
-                                <option value="3013">Go (1.6)</option>
-                                <option value="3014">Haskell (GHC 7.10.3)</option>
-                                <option value="3015">Java7 (OpenJDK 1.7.0)</option>
-                                <option value="3016">Java8 (OpenJDK 1.8.0)</option>
-                                <option value="3017">JavaScript (node.js v5.12)</option>
-                                <option value="3018">OCaml (4.02.3)</option>
-                                <option value="3019">Pascal (FPC 2.6.2)</option>
-                                <option value="3020">Perl (v5.18.2)</option>
-                                <option value="3021">PHP (5.6.30)</option>
-                                <option value="3022">Python2 (2.7.6)</option>
-                                <option value="3023">Python3 (3.4.3)</option>
-                                <option value="3024">Ruby (2.3.3)</option>
-                                <option value="3025">Scala (2.11.7)</option>
-                                <option value="3026">Scheme (Gauche 0.9.3.3)</option>
-                                <option value="3027">Text (cat)</option>
-                                <option value="3028">Visual Basic (Mono 4.0.1)</option>
-                                <option value="3501">Objective-C (GCC 5.3.0)</option>
-                                <option value="3502">Objective-C (Clang3.8.0)</option>
-                                <option value="3503">Swift (swift-2.2-RELEASE)</option>
-                                <option value="3504">Rust (1.15.1)</option>
-                                <option value="3505">Sed (GNU sed 4.2.2)</option>
-                                <option value="3506">Awk (mawk 1.3.3)</option>
-                                <option value="3507">Brainfuck (bf 20041219)</option>
-                                <option value="3508">Standard ML (MLton 20100608)</option>
-                                <option value="3509">PyPy2 (5.6.0)</option>
-                                <option value="3510">PyPy3 (2.4.0)</option>
-                                <option value="3511">Crystal (0.20.5)</option>
-                                <option value="3512">F# (Mono 4.0)</option>
-                                <option value="3513">Unlambda (0.1.3)</option>
-                                <option value="3514">Lua (5.3.2)</option>
-                                <option value="3515">LuaJIT (2.0.4)</option>
-                                <option value="3516">MoonScript (0.5.0)</option>
-                                <option value="3517">Ceylon (1.2.1)</option>
-                                <option value="3518">Julia (0.5.0)</option>
-                                <option value="3519">Octave (4.0.2)</option>
-                                <option value="3520">Nim (0.13.0)</option>
-                                <option value="3521">TypeScript (2.1.6)</option>
-                                <option value="3522">Perl6 (rakudo-star 2016.01)</option>
-                                <option value="3523">Kotlin (1.0.0)</option>
-                                <option value="3524">PHP7 (7.0.15)</option>
-                            </select>
-                            <select class="submit-language-selector" name="language_id_46" id="submit-language-selector-46" style="display:none">
-
-                                <option value="3003">C++14 (GCC 5.4.1)</option>
-                                <option value="3001">Bash (GNU bash v4.3.11)</option>
-                                <option value="3002">C (GCC 5.4.1)</option>
-                                <option value="3004">C (Clang 3.8.0)</option>
-                                <option value="3029">C++ (GCC 5.4.1)</option>
-                                <option value="3030">C++ (Clang 3.8.0)</option>
-                                <option value="3005">C++14 (Clang 3.8.0)</option>
-                                <option value="3006">C# (Mono 4.6.2.0)</option>
-                                <option value="3007">Clojure (1.8.0)</option>
-                                <option value="3008">Common Lisp (SBCL 1.1.14)</option>
-                                <option value="3009">D (DMD64 v2.070.1)</option>
-                                <option value="3010">D (LDC 0.17.0)</option>
-                                <option value="3011">D (GDC 4.9.4)</option>
-                                <option value="3012">Fortran (gfortran v4.8.4)</option>
-                                <option value="3013">Go (1.6)</option>
-                                <option value="3014">Haskell (GHC 7.10.3)</option>
-                                <option value="3015">Java7 (OpenJDK 1.7.0)</option>
-                                <option value="3016">Java8 (OpenJDK 1.8.0)</option>
-                                <option value="3017">JavaScript (node.js v5.12)</option>
-                                <option value="3018">OCaml (4.02.3)</option>
-                                <option value="3019">Pascal (FPC 2.6.2)</option>
-                                <option value="3020">Perl (v5.18.2)</option>
-                                <option value="3021">PHP (5.6.30)</option>
-                                <option value="3022">Python2 (2.7.6)</option>
-                                <option value="3023">Python3 (3.4.3)</option>
-                                <option value="3024">Ruby (2.3.3)</option>
-                                <option value="3025">Scala (2.11.7)</option>
-                                <option value="3026">Scheme (Gauche 0.9.3.3)</option>
-                                <option value="3027">Text (cat)</option>
-                                <option value="3028">Visual Basic (Mono 4.0.1)</option>
-                                <option value="3501">Objective-C (GCC 5.3.0)</option>
-                                <option value="3502">Objective-C (Clang3.8.0)</option>
-                                <option value="3503">Swift (swift-2.2-RELEASE)</option>
-                                <option value="3504">Rust (1.15.1)</option>
-                                <option value="3505">Sed (GNU sed 4.2.2)</option>
-                                <option value="3506">Awk (mawk 1.3.3)</option>
-                                <option value="3507">Brainfuck (bf 20041219)</option>
-                                <option value="3508">Standard ML (MLton 20100608)</option>
-                                <option value="3509">PyPy2 (5.6.0)</option>
-                                <option value="3510">PyPy3 (2.4.0)</option>
-                                <option value="3511">Crystal (0.20.5)</option>
-                                <option value="3512">F# (Mono 4.0)</option>
-                                <option value="3513">Unlambda (0.1.3)</option>
-                                <option value="3514">Lua (5.3.2)</option>
-                                <option value="3515">LuaJIT (2.0.4)</option>
-                                <option value="3516">MoonScript (0.5.0)</option>
-                                <option value="3517">Ceylon (1.2.1)</option>
-                                <option value="3518">Julia (0.5.0)</option>
-                                <option value="3519">Octave (4.0.2)</option>
-                                <option value="3520">Nim (0.13.0)</option>
-                                <option value="3521">TypeScript (2.1.6)</option>
-                                <option value="3522">Perl6 (rakudo-star 2016.01)</option>
-                                <option value="3523">Kotlin (1.0.0)</option>
-                                <option value="3524">PHP7 (7.0.15)</option>
-                            </select>
-                            <select class="submit-language-selector" name="language_id_47" id="submit-language-selector-47" style="display:none">
-
-                                <option value="3003">C++14 (GCC 5.4.1)</option>
-                                <option value="3001">Bash (GNU bash v4.3.11)</option>
-                                <option value="3002">C (GCC 5.4.1)</option>
-                                <option value="3004">C (Clang 3.8.0)</option>
-                                <option value="3029">C++ (GCC 5.4.1)</option>
-                                <option value="3030">C++ (Clang 3.8.0)</option>
-                                <option value="3005">C++14 (Clang 3.8.0)</option>
-                                <option value="3006">C# (Mono 4.6.2.0)</option>
-                                <option value="3007">Clojure (1.8.0)</option>
-                                <option value="3008">Common Lisp (SBCL 1.1.14)</option>
-                                <option value="3009">D (DMD64 v2.070.1)</option>
-                                <option value="3010">D (LDC 0.17.0)</option>
-                                <option value="3011">D (GDC 4.9.4)</option>
-                                <option value="3012">Fortran (gfortran v4.8.4)</option>
-                                <option value="3013">Go (1.6)</option>
-                                <option value="3014">Haskell (GHC 7.10.3)</option>
-                                <option value="3015">Java7 (OpenJDK 1.7.0)</option>
-                                <option value="3016">Java8 (OpenJDK 1.8.0)</option>
-                                <option value="3017">JavaScript (node.js v5.12)</option>
-                                <option value="3018">OCaml (4.02.3)</option>
-                                <option value="3019">Pascal (FPC 2.6.2)</option>
-                                <option value="3020">Perl (v5.18.2)</option>
-                                <option value="3021">PHP (5.6.30)</option>
-                                <option value="3022">Python2 (2.7.6)</option>
-                                <option value="3023">Python3 (3.4.3)</option>
-                                <option value="3024">Ruby (2.3.3)</option>
-                                <option value="3025">Scala (2.11.7)</option>
-                                <option value="3026">Scheme (Gauche 0.9.3.3)</option>
-                                <option value="3027">Text (cat)</option>
-                                <option value="3028">Visual Basic (Mono 4.0.1)</option>
-                                <option value="3501">Objective-C (GCC 5.3.0)</option>
-                                <option value="3502">Objective-C (Clang3.8.0)</option>
-                                <option value="3503">Swift (swift-2.2-RELEASE)</option>
-                                <option value="3504">Rust (1.15.1)</option>
-                                <option value="3505">Sed (GNU sed 4.2.2)</option>
-                                <option value="3506">Awk (mawk 1.3.3)</option>
-                                <option value="3507">Brainfuck (bf 20041219)</option>
-                                <option value="3508">Standard ML (MLton 20100608)</option>
-                                <option value="3509">PyPy2 (5.6.0)</option>
-                                <option value="3510">PyPy3 (2.4.0)</option>
-                                <option value="3511">Crystal (0.20.5)</option>
-                                <option value="3512">F# (Mono 4.0)</option>
-                                <option value="3513">Unlambda (0.1.3)</option>
-                                <option value="3514">Lua (5.3.2)</option>
-                                <option value="3515">LuaJIT (2.0.4)</option>
-                                <option value="3516">MoonScript (0.5.0)</option>
-                                <option value="3517">Ceylon (1.2.1)</option>
-                                <option value="3518">Julia (0.5.0)</option>
-                                <option value="3519">Octave (4.0.2)</option>
-                                <option value="3520">Nim (0.13.0)</option>
-                                <option value="3521">TypeScript (2.1.6)</option>
-                                <option value="3522">Perl6 (rakudo-star 2016.01)</option>
-                                <option value="3523">Kotlin (1.0.0)</option>
-                                <option value="3524">PHP7 (7.0.15)</option>
-                            </select>
-                            <select class="submit-language-selector" name="language_id_48" id="submit-language-selector-48" style="display:none">
-
-                                <option value="3003">C++14 (GCC 5.4.1)</option>
-                                <option value="3001">Bash (GNU bash v4.3.11)</option>
-                                <option value="3002">C (GCC 5.4.1)</option>
-                                <option value="3004">C (Clang 3.8.0)</option>
-                                <option value="3029">C++ (GCC 5.4.1)</option>
-                                <option value="3030">C++ (Clang 3.8.0)</option>
-                                <option value="3005">C++14 (Clang 3.8.0)</option>
-                                <option value="3006">C# (Mono 4.6.2.0)</option>
-                                <option value="3007">Clojure (1.8.0)</option>
-                                <option value="3008">Common Lisp (SBCL 1.1.14)</option>
-                                <option value="3009">D (DMD64 v2.070.1)</option>
-                                <option value="3010">D (LDC 0.17.0)</option>
-                                <option value="3011">D (GDC 4.9.4)</option>
-                                <option value="3012">Fortran (gfortran v4.8.4)</option>
-                                <option value="3013">Go (1.6)</option>
-                                <option value="3014">Haskell (GHC 7.10.3)</option>
-                                <option value="3015">Java7 (OpenJDK 1.7.0)</option>
-                                <option value="3016">Java8 (OpenJDK 1.8.0)</option>
-                                <option value="3017">JavaScript (node.js v5.12)</option>
-                                <option value="3018">OCaml (4.02.3)</option>
-                                <option value="3019">Pascal (FPC 2.6.2)</option>
-                                <option value="3020">Perl (v5.18.2)</option>
-                                <option value="3021">PHP (5.6.30)</option>
-                                <option value="3022">Python2 (2.7.6)</option>
-                                <option value="3023">Python3 (3.4.3)</option>
-                                <option value="3024">Ruby (2.3.3)</option>
-                                <option value="3025">Scala (2.11.7)</option>
-                                <option value="3026">Scheme (Gauche 0.9.3.3)</option>
-                                <option value="3027">Text (cat)</option>
-                                <option value="3028">Visual Basic (Mono 4.0.1)</option>
-                                <option value="3501">Objective-C (GCC 5.3.0)</option>
-                                <option value="3502">Objective-C (Clang3.8.0)</option>
-                                <option value="3503">Swift (swift-2.2-RELEASE)</option>
-                                <option value="3504">Rust (1.15.1)</option>
-                                <option value="3505">Sed (GNU sed 4.2.2)</option>
-                                <option value="3506">Awk (mawk 1.3.3)</option>
-                                <option value="3507">Brainfuck (bf 20041219)</option>
-                                <option value="3508">Standard ML (MLton 20100608)</option>
-                                <option value="3509">PyPy2 (5.6.0)</option>
-                                <option value="3510">PyPy3 (2.4.0)</option>
-                                <option value="3511">Crystal (0.20.5)</option>
-                                <option value="3512">F# (Mono 4.0)</option>
-                                <option value="3513">Unlambda (0.1.3)</option>
-                                <option value="3514">Lua (5.3.2)</option>
-                                <option value="3515">LuaJIT (2.0.4)</option>
-                                <option value="3516">MoonScript (0.5.0)</option>
-                                <option value="3517">Ceylon (1.2.1)</option>
-                                <option value="3518">Julia (0.5.0)</option>
-                                <option value="3519">Octave (4.0.2)</option>
-                                <option value="3520">Nim (0.13.0)</option>
-                                <option value="3521">TypeScript (2.1.6)</option>
-                                <option value="3522">Perl6 (rakudo-star 2016.01)</option>
-                                <option value="3523">Kotlin (1.0.0)</option>
-                                <option value="3524">PHP7 (7.0.15)</option>
-                            </select>
-                            <p class="help-block"><span class="lang"><span class="lang-en">The languages you can use may differ depending on tasks.</span><span class="lang-ja">※問題によって使用できる言語が異なる場合があります</span></span></p>
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" for="source_code"><span class="lang"><span class="lang-en">Source code</span><span class="lang-ja">ソースコード</span></span></label>
-                        <div class="controls">
-                            <textarea name="source_code" class="input-xlarge span6" rows="12"></textarea>
-                            <p class="help-block">※<span class="lang"><span class="lang-en">Not more than 60,000 UTF-8 characters.</span><span class="lang-ja">UTF-8で60,000文字以下</span></span></p>
-                            <p class="help-block">※<span class="lang"><span class="lang-en">Notice: Your source code will be saved as Main.extension.</span><span class="lang-ja">※ソースコードは Main.拡張子 で保存されます</span></span></p>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary btn-large">
-                            <span class="lang"><span class="lang-en">Submit your answer</span><span class="lang-ja">ソースコードを提出する</span></span>
-                        </button>
-                    </div>
-                </fieldset>
-            </form>
+<div id="modal-contest-end" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">コンテスト終了</h4>
+            </div>
+            <div class="modal-body">
+                <p>AtCoder Regular Contest 001は終了しました。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+            </div>
         </div>
     </div>
+</div>
+<div id="main-div" class="float-container">
 
 
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/home"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+
+                    <li><a class="contest-title" href="/contests/arc001">AtCoder Regular Contest 001</a></li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <img src='//img.atcoder.jp/assets/top/img/flag-lang/ja.png'> 日本語 <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/contests/arc001/submit?lang=ja"><img src='//img.atcoder.jp/assets/top/img/flag-lang/ja.png'> 日本語</a></li>
+                            <li><a href="/contests/arc001/submit?lang=en"><img src='//img.atcoder.jp/assets/top/img/flag-lang/en.png'> English</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> sigma425 (Contestant) <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/users/kyuridenamida"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> マイプロフィール</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/settings"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> 基本設定</a></li>
+                            <li><a href="/settings/icon"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> アイコン設定</a></li>
+                            <li><a href="/settings/password"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> パスワードの変更</a></li>
+                            <li><a href="/settings/fav"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> お気に入り管理</a></li>
+
+
+
+                            <li class="divider"></li>
+                            <li><a href="javascript:void(form_logout.submit())"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> ログアウト</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <form method="POST" name="form_logout" action="/logout?continue=https%3A%2F%2Fatcoder.jp%2Fcontests%2Farc001%2Fsubmit">
+        <input type="hidden" name="csrf_token" value="2TfLiM/mkOoZRM9OnbCFUYWuq1gqpC5lhkAlhRNZ3as=" />
+    </form>
+    <div id="main-container" class="container"
+         style="padding-top:50px;">
+
+
+        <div class="row">
+            <div id="contest-nav-tabs" class="col-sm-12 mb-2 cnvtb-fixed">
+                <div>
+                    <small class="contest-duration">
+
+                        コンテスト時間:
+                        <a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20120414T2100&p1=248' target='blank'><time class='fixtime fixtime-full'>2012-04-14 21:00:00+0900</time></a> ~ <a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20120415T0200&p1=248' target='blank'><time class='fixtime fixtime-full'>2012-04-15 02:00:00+0900</time></a>
+                        (300分)
+
+                    </small>
+                    <small class="back-to-home pull-right"><a href="/home">AtCoderホームへ戻る</a></small>
+                </div>
+                <ul class="nav nav-tabs">
+                    <li><a href="/contests/arc001"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> トップ</a></li>
+
+                    <li><a href="/contests/arc001/tasks"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> 問題</a></li>
+
+
+
+                    <li><a href="/contests/arc001/clarifications"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> 質問 <span id="clar-badge" class="badge"></span></a></li>
+
+
+
+                    <li class="active"><a href="/contests/arc001/submit"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> 提出</a></li>
+
+
+
+                    <li>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 提出結果<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/contests/arc001/submissions"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> すべての提出</a></li>
+
+                            <li><a href="/contests/arc001/submissions/me"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 自分の提出</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/contests/arc001/score"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 自分の得点状況</a></li>
+
+                        </ul>
+                    </li>
+
+
+
+
+
+                    <li><a href="/contests/arc001/standings"><span class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span> 順位表</a></li>
+
+
+
+                    <li><a href="/contests/arc001/standings/virtual"><span class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span> バーチャル順位表</a></li>
+
+
+
+
+
+                    <li><a href="/contests/arc001/custom_test"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> コードテスト</a></li>
+
+
+
+
+
+                    <li><a href="http://www.slideshare.net/chokudai/arc001" target="_blank"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> 解説</a></li>
+
+
+
+
+
+                    <li class="pull-right"><a id="fix-cnvtb" href="javascript:void(0)"><span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span></a></li>
+                </ul>
+            </div>
+            <div class="col-sm-12">
+                <h2>提出</h2>
+                <hr>
+
+                <form class="form-horizontal form-code-submit" action="/contests/arc001/submit" method="POST">
+
+                    <div class="form-group ">
+                        <label class="control-label col-sm-2" for="select-task">問題</label>
+                        <div class="col-sm-5">
+                            <select class="form-control" id="select-task" name="data.TaskScreenName">
+
+                                <option value="arc001_1">A - センター採点</option>
+
+                                <option value="arc001_2">B - リモコン</option>
+
+                                <option value="arc001_3">C - パズルのお手伝い</option>
+
+                                <option value="arc001_4">D - レースゲーム</option>
+
+                            </select>
+                            <span class="error"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group ">
+                        <label class="control-label col-sm-2" for="select-lang">言語</label>
+                        <div id="select-lang" class="col-sm-5" data-name="data.LanguageId" style="display:none;">
+
+                            <div id="select-lang-arc001_1">
+                                <select class="form-control" data-placeholder="-" style="width:300px;">
+                                    <option></option>
+
+                                    <option value="3003" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (GCC 5.4.1)</option>
+
+                                    <option value="3001" data-mime="text/x-sh">Bash (GNU bash v4.3.11)</option>
+
+                                    <option value="3002" data-mime="text/x-csrc">C (GCC 5.4.1)</option>
+
+                                    <option value="3004" data-mime="text/x-csrc">C (Clang 3.8.0)</option>
+
+                                    <option value="3005" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (Clang 3.8.0)</option>
+
+                                    <option value="3006" data-mime="text/x-csharp">C# (Mono 4.6.2.0)</option>
+
+                                    <option value="3007" data-mime="text/x-clojure">Clojure (1.8.0)</option>
+
+                                    <option value="3008" data-mime="text/x-common-lisp">Common Lisp (SBCL 1.1.14)</option>
+
+                                    <option value="3009" data-mime="text/x-d">D (DMD64 v2.070.1)</option>
+
+                                    <option value="3010" data-mime="text/x-d">D (LDC 0.17.0)</option>
+
+                                    <option value="3011" data-mime="text/x-d">D (GDC 4.9.4)</option>
+
+                                    <option value="3012" data-mime="text/x-fortran">Fortran (gfortran v4.8.4)</option>
+
+                                    <option value="3013" data-mime="text/x-go">Go (1.6)</option>
+
+                                    <option value="3014" data-mime="text/x-haskell">Haskell (GHC 7.10.3)</option>
+
+                                    <option value="3015" data-mime="text/x-java">Java7 (OpenJDK 1.7.0)</option>
+
+                                    <option value="3016" data-mime="text/x-java">Java8 (OpenJDK 1.8.0)</option>
+
+                                    <option value="3017" data-mime="text/javascript">JavaScript (node.js v5.12)</option>
+
+                                    <option value="3018" data-mime="text/x-ocaml">OCaml (4.02.3)</option>
+
+                                    <option value="3019" data-mime="text/x-pascal">Pascal (FPC 2.6.2)</option>
+
+                                    <option value="3020" data-mime="text/x-perl">Perl (v5.18.2)</option>
+
+                                    <option value="3021" data-mime="text/x-php">PHP (5.6.30)</option>
+
+                                    <option value="3022" data-mime="text/x-python">Python2 (2.7.6)</option>
+
+                                    <option value="3023" data-mime="text/x-python">Python3 (3.4.3)</option>
+
+                                    <option value="3024" data-mime="text/x-ruby">Ruby (2.3.3)</option>
+
+                                    <option value="3025" data-mime="text/x-scala">Scala (2.11.7)</option>
+
+                                    <option value="3026" data-mime="text/x-scheme">Scheme (Gauche 0.9.3.3)</option>
+
+                                    <option value="3027" data-mime="text/plain">Text (cat)</option>
+
+                                    <option value="3028" data-mime="text/x-vb">Visual Basic (Mono 4.0.1)</option>
+
+                                    <option value="3029" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (GCC 5.4.1)</option>
+
+                                    <option value="3030" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (Clang 3.8.0)</option>
+
+                                    <option value="3501" data-mime="text/x-objectivec">Objective-C (GCC 5.3.0)</option>
+
+                                    <option value="3502" data-mime="text/x-objectivec">Objective-C (Clang3.8.0)</option>
+
+                                    <option value="3503" data-mime="text/x-swift">Swift (swift-2.2-RELEASE)</option>
+
+                                    <option value="3504" data-mime="text/x-rust">Rust (1.15.1)</option>
+
+                                    <option value="3505" data-mime="text/x-sh">Sed (GNU sed 4.2.2)</option>
+
+                                    <option value="3506" data-mime="text/x-sh">Awk (mawk 1.3.3)</option>
+
+                                    <option value="3507" data-mime="text/x-brainfuck">Brainfuck (bf 20041219)</option>
+
+                                    <option value="3508" data-mime="text/x-sml">Standard ML (MLton 20100608)</option>
+
+                                    <option value="3509" data-mime="text/x-python">PyPy2 (5.6.0)</option>
+
+                                    <option value="3510" data-mime="text/x-python">PyPy3 (2.4.0)</option>
+
+                                    <option value="3511" data-mime="text/x-crystal">Crystal (0.20.5)</option>
+
+                                    <option value="3512" data-mime="text/x-fsharp">F# (Mono 4.0)</option>
+
+                                    <option value="3513" data-mime="text/x-unlambda">Unlambda (0.1.3)</option>
+
+                                    <option value="3514" data-mime="text/x-lua">Lua (5.3.2)</option>
+
+                                    <option value="3515" data-mime="text/x-lua">LuaJIT (2.0.4)</option>
+
+                                    <option value="3516" data-mime="text/x-moonscript">MoonScript (0.5.0)</option>
+
+                                    <option value="3517" data-mime="text/x-ceylon">Ceylon (1.2.1)</option>
+
+                                    <option value="3518" data-mime="text/x-julia">Julia (0.5.0)</option>
+
+                                    <option value="3519" data-mime="text/x-octave">Octave (4.0.2)</option>
+
+                                    <option value="3520" data-mime="text/x-nim">Nim (0.13.0)</option>
+
+                                    <option value="3521" data-mime="text/typescript">TypeScript (2.1.6)</option>
+
+                                    <option value="3522" data-mime="text/x-perl">Perl6 (rakudo-star 2016.01)</option>
+
+                                    <option value="3523" data-mime="text/x-kotlin">Kotlin (1.0.0)</option>
+
+                                    <option value="3524" data-mime="text/x-php">PHP7 (7.0.15)</option>
+
+                                    <option value="3525" data-mime="text/x-cobol">COBOL - Fixed (OpenCOBOL 1.1.0)</option>
+
+                                    <option value="3526" data-mime="text/x-cobol">COBOL - Free (OpenCOBOL 1.1.0)</option>
+
+                                </select>
+                            </div>
+
+                            <div id="select-lang-arc001_2">
+                                <select class="form-control" data-placeholder="-" style="width:300px;">
+                                    <option></option>
+
+                                    <option value="3003" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (GCC 5.4.1)</option>
+
+                                    <option value="3001" data-mime="text/x-sh">Bash (GNU bash v4.3.11)</option>
+
+                                    <option value="3002" data-mime="text/x-csrc">C (GCC 5.4.1)</option>
+
+                                    <option value="3004" data-mime="text/x-csrc">C (Clang 3.8.0)</option>
+
+                                    <option value="3005" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (Clang 3.8.0)</option>
+
+                                    <option value="3006" data-mime="text/x-csharp">C# (Mono 4.6.2.0)</option>
+
+                                    <option value="3007" data-mime="text/x-clojure">Clojure (1.8.0)</option>
+
+                                    <option value="3008" data-mime="text/x-common-lisp">Common Lisp (SBCL 1.1.14)</option>
+
+                                    <option value="3009" data-mime="text/x-d">D (DMD64 v2.070.1)</option>
+
+                                    <option value="3010" data-mime="text/x-d">D (LDC 0.17.0)</option>
+
+                                    <option value="3011" data-mime="text/x-d">D (GDC 4.9.4)</option>
+
+                                    <option value="3012" data-mime="text/x-fortran">Fortran (gfortran v4.8.4)</option>
+
+                                    <option value="3013" data-mime="text/x-go">Go (1.6)</option>
+
+                                    <option value="3014" data-mime="text/x-haskell">Haskell (GHC 7.10.3)</option>
+
+                                    <option value="3015" data-mime="text/x-java">Java7 (OpenJDK 1.7.0)</option>
+
+                                    <option value="3016" data-mime="text/x-java">Java8 (OpenJDK 1.8.0)</option>
+
+                                    <option value="3017" data-mime="text/javascript">JavaScript (node.js v5.12)</option>
+
+                                    <option value="3018" data-mime="text/x-ocaml">OCaml (4.02.3)</option>
+
+                                    <option value="3019" data-mime="text/x-pascal">Pascal (FPC 2.6.2)</option>
+
+                                    <option value="3020" data-mime="text/x-perl">Perl (v5.18.2)</option>
+
+                                    <option value="3021" data-mime="text/x-php">PHP (5.6.30)</option>
+
+                                    <option value="3022" data-mime="text/x-python">Python2 (2.7.6)</option>
+
+                                    <option value="3023" data-mime="text/x-python">Python3 (3.4.3)</option>
+
+                                    <option value="3024" data-mime="text/x-ruby">Ruby (2.3.3)</option>
+
+                                    <option value="3025" data-mime="text/x-scala">Scala (2.11.7)</option>
+
+                                    <option value="3026" data-mime="text/x-scheme">Scheme (Gauche 0.9.3.3)</option>
+
+                                    <option value="3027" data-mime="text/plain">Text (cat)</option>
+
+                                    <option value="3028" data-mime="text/x-vb">Visual Basic (Mono 4.0.1)</option>
+
+                                    <option value="3029" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (GCC 5.4.1)</option>
+
+                                    <option value="3030" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (Clang 3.8.0)</option>
+
+                                    <option value="3501" data-mime="text/x-objectivec">Objective-C (GCC 5.3.0)</option>
+
+                                    <option value="3502" data-mime="text/x-objectivec">Objective-C (Clang3.8.0)</option>
+
+                                    <option value="3503" data-mime="text/x-swift">Swift (swift-2.2-RELEASE)</option>
+
+                                    <option value="3504" data-mime="text/x-rust">Rust (1.15.1)</option>
+
+                                    <option value="3505" data-mime="text/x-sh">Sed (GNU sed 4.2.2)</option>
+
+                                    <option value="3506" data-mime="text/x-sh">Awk (mawk 1.3.3)</option>
+
+                                    <option value="3507" data-mime="text/x-brainfuck">Brainfuck (bf 20041219)</option>
+
+                                    <option value="3508" data-mime="text/x-sml">Standard ML (MLton 20100608)</option>
+
+                                    <option value="3509" data-mime="text/x-python">PyPy2 (5.6.0)</option>
+
+                                    <option value="3510" data-mime="text/x-python">PyPy3 (2.4.0)</option>
+
+                                    <option value="3511" data-mime="text/x-crystal">Crystal (0.20.5)</option>
+
+                                    <option value="3512" data-mime="text/x-fsharp">F# (Mono 4.0)</option>
+
+                                    <option value="3513" data-mime="text/x-unlambda">Unlambda (0.1.3)</option>
+
+                                    <option value="3514" data-mime="text/x-lua">Lua (5.3.2)</option>
+
+                                    <option value="3515" data-mime="text/x-lua">LuaJIT (2.0.4)</option>
+
+                                    <option value="3516" data-mime="text/x-moonscript">MoonScript (0.5.0)</option>
+
+                                    <option value="3517" data-mime="text/x-ceylon">Ceylon (1.2.1)</option>
+
+                                    <option value="3518" data-mime="text/x-julia">Julia (0.5.0)</option>
+
+                                    <option value="3519" data-mime="text/x-octave">Octave (4.0.2)</option>
+
+                                    <option value="3520" data-mime="text/x-nim">Nim (0.13.0)</option>
+
+                                    <option value="3521" data-mime="text/typescript">TypeScript (2.1.6)</option>
+
+                                    <option value="3522" data-mime="text/x-perl">Perl6 (rakudo-star 2016.01)</option>
+
+                                    <option value="3523" data-mime="text/x-kotlin">Kotlin (1.0.0)</option>
+
+                                    <option value="3524" data-mime="text/x-php">PHP7 (7.0.15)</option>
+
+                                    <option value="3525" data-mime="text/x-cobol">COBOL - Fixed (OpenCOBOL 1.1.0)</option>
+
+                                    <option value="3526" data-mime="text/x-cobol">COBOL - Free (OpenCOBOL 1.1.0)</option>
+
+                                </select>
+                            </div>
+
+                            <div id="select-lang-arc001_3">
+                                <select class="form-control" data-placeholder="-" style="width:300px;">
+                                    <option></option>
+
+                                    <option value="3003" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (GCC 5.4.1)</option>
+
+                                    <option value="3001" data-mime="text/x-sh">Bash (GNU bash v4.3.11)</option>
+
+                                    <option value="3002" data-mime="text/x-csrc">C (GCC 5.4.1)</option>
+
+                                    <option value="3004" data-mime="text/x-csrc">C (Clang 3.8.0)</option>
+
+                                    <option value="3005" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (Clang 3.8.0)</option>
+
+                                    <option value="3006" data-mime="text/x-csharp">C# (Mono 4.6.2.0)</option>
+
+                                    <option value="3007" data-mime="text/x-clojure">Clojure (1.8.0)</option>
+
+                                    <option value="3008" data-mime="text/x-common-lisp">Common Lisp (SBCL 1.1.14)</option>
+
+                                    <option value="3009" data-mime="text/x-d">D (DMD64 v2.070.1)</option>
+
+                                    <option value="3010" data-mime="text/x-d">D (LDC 0.17.0)</option>
+
+                                    <option value="3011" data-mime="text/x-d">D (GDC 4.9.4)</option>
+
+                                    <option value="3012" data-mime="text/x-fortran">Fortran (gfortran v4.8.4)</option>
+
+                                    <option value="3013" data-mime="text/x-go">Go (1.6)</option>
+
+                                    <option value="3014" data-mime="text/x-haskell">Haskell (GHC 7.10.3)</option>
+
+                                    <option value="3015" data-mime="text/x-java">Java7 (OpenJDK 1.7.0)</option>
+
+                                    <option value="3016" data-mime="text/x-java">Java8 (OpenJDK 1.8.0)</option>
+
+                                    <option value="3017" data-mime="text/javascript">JavaScript (node.js v5.12)</option>
+
+                                    <option value="3018" data-mime="text/x-ocaml">OCaml (4.02.3)</option>
+
+                                    <option value="3019" data-mime="text/x-pascal">Pascal (FPC 2.6.2)</option>
+
+                                    <option value="3020" data-mime="text/x-perl">Perl (v5.18.2)</option>
+
+                                    <option value="3021" data-mime="text/x-php">PHP (5.6.30)</option>
+
+                                    <option value="3022" data-mime="text/x-python">Python2 (2.7.6)</option>
+
+                                    <option value="3023" data-mime="text/x-python">Python3 (3.4.3)</option>
+
+                                    <option value="3024" data-mime="text/x-ruby">Ruby (2.3.3)</option>
+
+                                    <option value="3025" data-mime="text/x-scala">Scala (2.11.7)</option>
+
+                                    <option value="3026" data-mime="text/x-scheme">Scheme (Gauche 0.9.3.3)</option>
+
+                                    <option value="3027" data-mime="text/plain">Text (cat)</option>
+
+                                    <option value="3028" data-mime="text/x-vb">Visual Basic (Mono 4.0.1)</option>
+
+                                    <option value="3029" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (GCC 5.4.1)</option>
+
+                                    <option value="3030" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (Clang 3.8.0)</option>
+
+                                    <option value="3501" data-mime="text/x-objectivec">Objective-C (GCC 5.3.0)</option>
+
+                                    <option value="3502" data-mime="text/x-objectivec">Objective-C (Clang3.8.0)</option>
+
+                                    <option value="3503" data-mime="text/x-swift">Swift (swift-2.2-RELEASE)</option>
+
+                                    <option value="3504" data-mime="text/x-rust">Rust (1.15.1)</option>
+
+                                    <option value="3505" data-mime="text/x-sh">Sed (GNU sed 4.2.2)</option>
+
+                                    <option value="3506" data-mime="text/x-sh">Awk (mawk 1.3.3)</option>
+
+                                    <option value="3507" data-mime="text/x-brainfuck">Brainfuck (bf 20041219)</option>
+
+                                    <option value="3508" data-mime="text/x-sml">Standard ML (MLton 20100608)</option>
+
+                                    <option value="3509" data-mime="text/x-python">PyPy2 (5.6.0)</option>
+
+                                    <option value="3510" data-mime="text/x-python">PyPy3 (2.4.0)</option>
+
+                                    <option value="3511" data-mime="text/x-crystal">Crystal (0.20.5)</option>
+
+                                    <option value="3512" data-mime="text/x-fsharp">F# (Mono 4.0)</option>
+
+                                    <option value="3513" data-mime="text/x-unlambda">Unlambda (0.1.3)</option>
+
+                                    <option value="3514" data-mime="text/x-lua">Lua (5.3.2)</option>
+
+                                    <option value="3515" data-mime="text/x-lua">LuaJIT (2.0.4)</option>
+
+                                    <option value="3516" data-mime="text/x-moonscript">MoonScript (0.5.0)</option>
+
+                                    <option value="3517" data-mime="text/x-ceylon">Ceylon (1.2.1)</option>
+
+                                    <option value="3518" data-mime="text/x-julia">Julia (0.5.0)</option>
+
+                                    <option value="3519" data-mime="text/x-octave">Octave (4.0.2)</option>
+
+                                    <option value="3520" data-mime="text/x-nim">Nim (0.13.0)</option>
+
+                                    <option value="3521" data-mime="text/typescript">TypeScript (2.1.6)</option>
+
+                                    <option value="3522" data-mime="text/x-perl">Perl6 (rakudo-star 2016.01)</option>
+
+                                    <option value="3523" data-mime="text/x-kotlin">Kotlin (1.0.0)</option>
+
+                                    <option value="3524" data-mime="text/x-php">PHP7 (7.0.15)</option>
+
+                                    <option value="3525" data-mime="text/x-cobol">COBOL - Fixed (OpenCOBOL 1.1.0)</option>
+
+                                    <option value="3526" data-mime="text/x-cobol">COBOL - Free (OpenCOBOL 1.1.0)</option>
+
+                                </select>
+                            </div>
+
+                            <div id="select-lang-arc001_4">
+                                <select class="form-control" data-placeholder="-" style="width:300px;">
+                                    <option></option>
+
+                                    <option value="3003" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (GCC 5.4.1)</option>
+
+                                    <option value="3001" data-mime="text/x-sh">Bash (GNU bash v4.3.11)</option>
+
+                                    <option value="3002" data-mime="text/x-csrc">C (GCC 5.4.1)</option>
+
+                                    <option value="3004" data-mime="text/x-csrc">C (Clang 3.8.0)</option>
+
+                                    <option value="3005" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (Clang 3.8.0)</option>
+
+                                    <option value="3006" data-mime="text/x-csharp">C# (Mono 4.6.2.0)</option>
+
+                                    <option value="3007" data-mime="text/x-clojure">Clojure (1.8.0)</option>
+
+                                    <option value="3008" data-mime="text/x-common-lisp">Common Lisp (SBCL 1.1.14)</option>
+
+                                    <option value="3009" data-mime="text/x-d">D (DMD64 v2.070.1)</option>
+
+                                    <option value="3010" data-mime="text/x-d">D (LDC 0.17.0)</option>
+
+                                    <option value="3011" data-mime="text/x-d">D (GDC 4.9.4)</option>
+
+                                    <option value="3012" data-mime="text/x-fortran">Fortran (gfortran v4.8.4)</option>
+
+                                    <option value="3013" data-mime="text/x-go">Go (1.6)</option>
+
+                                    <option value="3014" data-mime="text/x-haskell">Haskell (GHC 7.10.3)</option>
+
+                                    <option value="3015" data-mime="text/x-java">Java7 (OpenJDK 1.7.0)</option>
+
+                                    <option value="3016" data-mime="text/x-java">Java8 (OpenJDK 1.8.0)</option>
+
+                                    <option value="3017" data-mime="text/javascript">JavaScript (node.js v5.12)</option>
+
+                                    <option value="3018" data-mime="text/x-ocaml">OCaml (4.02.3)</option>
+
+                                    <option value="3019" data-mime="text/x-pascal">Pascal (FPC 2.6.2)</option>
+
+                                    <option value="3020" data-mime="text/x-perl">Perl (v5.18.2)</option>
+
+                                    <option value="3021" data-mime="text/x-php">PHP (5.6.30)</option>
+
+                                    <option value="3022" data-mime="text/x-python">Python2 (2.7.6)</option>
+
+                                    <option value="3023" data-mime="text/x-python">Python3 (3.4.3)</option>
+
+                                    <option value="3024" data-mime="text/x-ruby">Ruby (2.3.3)</option>
+
+                                    <option value="3025" data-mime="text/x-scala">Scala (2.11.7)</option>
+
+                                    <option value="3026" data-mime="text/x-scheme">Scheme (Gauche 0.9.3.3)</option>
+
+                                    <option value="3027" data-mime="text/plain">Text (cat)</option>
+
+                                    <option value="3028" data-mime="text/x-vb">Visual Basic (Mono 4.0.1)</option>
+
+                                    <option value="3029" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (GCC 5.4.1)</option>
+
+                                    <option value="3030" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (Clang 3.8.0)</option>
+
+                                    <option value="3501" data-mime="text/x-objectivec">Objective-C (GCC 5.3.0)</option>
+
+                                    <option value="3502" data-mime="text/x-objectivec">Objective-C (Clang3.8.0)</option>
+
+                                    <option value="3503" data-mime="text/x-swift">Swift (swift-2.2-RELEASE)</option>
+
+                                    <option value="3504" data-mime="text/x-rust">Rust (1.15.1)</option>
+
+                                    <option value="3505" data-mime="text/x-sh">Sed (GNU sed 4.2.2)</option>
+
+                                    <option value="3506" data-mime="text/x-sh">Awk (mawk 1.3.3)</option>
+
+                                    <option value="3507" data-mime="text/x-brainfuck">Brainfuck (bf 20041219)</option>
+
+                                    <option value="3508" data-mime="text/x-sml">Standard ML (MLton 20100608)</option>
+
+                                    <option value="3509" data-mime="text/x-python">PyPy2 (5.6.0)</option>
+
+                                    <option value="3510" data-mime="text/x-python">PyPy3 (2.4.0)</option>
+
+                                    <option value="3511" data-mime="text/x-crystal">Crystal (0.20.5)</option>
+
+                                    <option value="3512" data-mime="text/x-fsharp">F# (Mono 4.0)</option>
+
+                                    <option value="3513" data-mime="text/x-unlambda">Unlambda (0.1.3)</option>
+
+                                    <option value="3514" data-mime="text/x-lua">Lua (5.3.2)</option>
+
+                                    <option value="3515" data-mime="text/x-lua">LuaJIT (2.0.4)</option>
+
+                                    <option value="3516" data-mime="text/x-moonscript">MoonScript (0.5.0)</option>
+
+                                    <option value="3517" data-mime="text/x-ceylon">Ceylon (1.2.1)</option>
+
+                                    <option value="3518" data-mime="text/x-julia">Julia (0.5.0)</option>
+
+                                    <option value="3519" data-mime="text/x-octave">Octave (4.0.2)</option>
+
+                                    <option value="3520" data-mime="text/x-nim">Nim (0.13.0)</option>
+
+                                    <option value="3521" data-mime="text/typescript">TypeScript (2.1.6)</option>
+
+                                    <option value="3522" data-mime="text/x-perl">Perl6 (rakudo-star 2016.01)</option>
+
+                                    <option value="3523" data-mime="text/x-kotlin">Kotlin (1.0.0)</option>
+
+                                    <option value="3524" data-mime="text/x-php">PHP7 (7.0.15)</option>
+
+                                    <option value="3525" data-mime="text/x-cobol">COBOL - Fixed (OpenCOBOL 1.1.0)</option>
+
+                                    <option value="3526" data-mime="text/x-cobol">COBOL - Free (OpenCOBOL 1.1.0)</option>
+
+                                </select>
+                            </div>
+
+                            <span class="error"></span>
+                        </div>
+                    </div>
+                    <script>var currentLang = getLS('defaultLang');</script>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="sourceCode">ソースコード</label>
+                        <div class="col-sm-7" id="sourceCode">
+                            <div class="div-editor">
+                                <textarea class="form-control editor" name="sourceCode"></textarea>
+                            </div>
+                            <textarea class="form-control plain-textarea" style="display:none;"></textarea>
+                            <p>
+                                <span class="gray">※ 512 KiB まで</span><br>
+                                <span class="gray">※ ソースコードは「Main.<i>拡張子</i>」で保存されます</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-3 editor-buttons">
+                            <p><button id="btn-open-file" type="button" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; ファイルを開く
+                            </button></p>
+                            <p><button type="button" class="btn btn-default btn-sm btn-toggle-editor" data-toggle="button" aria-pressed="false" autocomplete="off">
+                                エディタ切り替え
+                            </button></p>
+                            <p><button type="button" class="btn btn-default btn-sm btn-auto-height" data-toggle="button" aria-pressed="false" autocomplete="off">
+                                高さ自動調節
+                            </button></p>
+                        </div>
+                        <input id="input-open-file" type="file" style="display:none;">
+                    </div>
+
+                    <input type="hidden" name="csrf_token" value="2TfLiM/mkOoZRM9OnbCFUYWuq1gqpC5lhkAlhRNZ3as=" />
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="submit"></label>
+                        <div class="col-sm-5">
+                            <button id="submit" type="submit" class="btn btn-primary">提出</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+
+
+
+        <hr>
+
+
+
+        <div class="a2a_kit a2a_kit_size_20 a2a_default_style pull-right" data-a2a-url="https://atcoder.jp/contests/arc001/submit?lang=ja" data-a2a-title="提出 - AtCoder Regular Contest 001">
+            <a class="a2a_button_facebook"></a>
+            <a class="a2a_button_twitter"></a>
+
+            <a class="a2a_button_hatena"></a>
+
+            <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+        </div>
+
+
+        <script async src="//static.addtoany.com/menu/page.js"></script>
+
+    </div>
+    <hr>
 </div>
 
-<footer>
-    <ul>
-        <li><a href="/tos"><span class="lang"><span class="lang-en">Terms of service</span><span class="lang-ja">利用規約</span></span></a></li>
-        <li><a href="/privacy"><span class="lang"><span class="lang-en">Privacy</span><span class="lang-ja">プライバシーポリシー</span></span></a></li>
-        <li><a href="/personal"><span class="lang"><span class="lang-en">Personal Information</span><span class="lang-ja">個人情報保護方針</span></span></a></li>
-        <li><a href="/tutorial"><span class="lang"><span class="lang-en">Tutorial</span><span class="lang-ja">チュートリアル</span></span></a></li>
-        <li><a href="/rules"><span class="lang"><span class="lang-en">Rules</span><span class="lang-ja">ルール</span></span></a></li>
-        <li><a href="/glossary"><span class="lang"><span class="lang-en">Glossary</span><span class="lang-ja">用語集</span></span></a></li>
-        <li><a href="/faq"><span class="lang"><span class="lang-en">FAQ</span><span class="lang-ja">よくある質問</span></span></a></li>
-    </ul>
-    <p id="copyright">&copy; 2017 AtCoder Inc. All rights reserved.</p>
-</footer>
+<div class="container" style="margin-bottom: 80px;">
+    <footer class="footer">
 
-<p id="fixed-server-timer" style="display: none;"></p>
+        <ul>
+            <li><a href="/contests/arc001/rules">ルール</a></li>
+            <li><a href="/contests/arc001/glossary">用語集</a></li>
 
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/prettify.js"></script>
-<script src="/js/lang-vb.js"></script>
-<script src="/js/lang-hs.js"></script>
-<script src="/js/varmath.js"></script>
-<script src="/js/script.js?v=2"></script>
+        </ul>
+
+        <ul>
+            <li><a href="/tos">利用規約</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+            <li><a href="/personal">個人情報保護方針</a></li>
+            <li><a href="/company">企業情報</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/contact">お問い合わせ</a></li>
+            <li><a href="/documents/request">資料請求</a></li>
+        </ul>
+        <div class="text-center">
+            <small id="copyright">Copyright Since 2012 &copy;<a href="http://atcoder.co.jp">AtCoder Inc.</a> All rights reserved.</small>
+        </div>
+    </footer>
+</div>
+<p id="fixed-server-timer" class="contest-timer"></p>
+<div id="scroll-page-top" style="display:none;"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> ページトップ</div>
+
 </body>
 </html>
+

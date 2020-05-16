@@ -11,14 +11,14 @@ public class Program{
 
     public static void Main(string[] args){
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
-        long A;
-        A = cin.ReadLong;
-        long B;
-        B = cin.ReadLong;
+        string A;
+        A = cin.Read;
+        string B;
+        B = cin.Read;
         new Program().Solve(A, B);
     }
 
-    public void Solve(long A, long B){
+    public void Solve(string A, string B){
         
     }
 }

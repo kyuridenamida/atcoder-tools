@@ -96,29 +96,29 @@ class TestCodeGenerator(unittest.TestCase):
 
     def test_long_case(self):
         response = self.runner.run('rco-contest-2017-qual-B')
-        for l in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name, l)
+        for lang in ALL_LANGUAGES:
+            self.verify(response, sys._getframe().f_code.co_name, lang)
 
     def test_two_dimensional_case(self):
         response = self.runner.run('abc079-D')
-        for l in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name, l)
+        for lang in ALL_LANGUAGES:
+            self.verify(response, sys._getframe().f_code.co_name, lang)
 
     def test_float_case(self):
         response = self.runner.run('tenka1-2014-qualb-E')
-        for l in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name, l)
+        for lang in ALL_LANGUAGES:
+            self.verify(response, sys._getframe().f_code.co_name, lang)
 
     def test_mod_case(self):
         response = self.runner.run('agc019-E')
-        for l in ALL_LANGUAGES:
+        for lang in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name,
-                        l, "jinja", ProblemConstantSet(mod=998244353))
+                        lang, "jinja", ProblemConstantSet(mod=998244353))
 
     def test_yes_no_case(self):
         response = self.runner.run('agc021-C')
-        for l in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name, l, "jinja",
+        for lang in ALL_LANGUAGES:
+            self.verify(response, sys._getframe().f_code.co_name, lang, "jinja",
                         ProblemConstantSet(yes_str="YES", no_str="NO"))
 
     def test_nested_embeddings_on_template(self):
@@ -127,7 +127,7 @@ class TestCodeGenerator(unittest.TestCase):
                 return f.read()
 
         def _trim(text):
-            return "\n".join([l.rstrip() for l in text.split("\n")])
+            return "\n".join([lang.rstrip() for lang in text.split("\n")])
 
         template = _load_text_file("template.txt")
         self.assertEqual(_load_text_file("answer_x_0_y_2.txt"),

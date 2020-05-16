@@ -2,14 +2,14 @@
 using namespace std;
 
 const int mod = 998244353;
-void solve(long long A, long long B){
+void solve(std::string A, std::string B){
 
 }
 int main(){
-    long long A;
-    scanf("%lld",&A);
-    long long B;
-    scanf("%lld",&B);
+    std::string A;
+    std::cin >> A;
+    std::string B;
+    std::cin >> B;
     solve(A, B);
     return 0;
 }

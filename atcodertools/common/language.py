@@ -41,9 +41,9 @@ class Language:
 
     @classmethod
     def from_name(cls, name: str):
-        for l in ALL_LANGUAGES:
-            if l.name == name:
-                return l
+        for lang in ALL_LANGUAGES:
+            if lang.name == name:
+                return lang
         raise LanguageNotFoundError(
             "No language support for '{}'".format(ALL_LANGUAGE_NAMES))
 
@@ -52,7 +52,8 @@ CPP = Language(
     name="cpp",
     display_name="C++",
     extension="cpp",
-    submission_lang_pattern=re.compile(".*C\\+\\+14 \\(GCC.*"),
+    submission_lang_pattern=re.compile(
+        ".*C\\+\\+ \\(GCC 9.*|.*C\\+\\+14 \\(GCC 5.*"),
     default_code_generator=cpp.main,
     default_template_path=get_default_template_path('cpp'),
 )
@@ -61,7 +62,7 @@ JAVA = Language(
     name="java",
     display_name="Java",
     extension="java",
-    submission_lang_pattern=re.compile(".*Java8.*"),
+    submission_lang_pattern=re.compile(".*Java8.*|.*Java \\(OpenJDK 11.*"),
     default_code_generator=java.main,
     default_template_path=get_default_template_path('java'),
 )
@@ -77,9 +78,9 @@ RUST = Language(
 
 PYTHON = Language(
     name="python",
-    display_name="Python3",
+    display_name="Python",
     extension="py",
-    submission_lang_pattern=re.compile(".*Python3.*"),
+    submission_lang_pattern=re.compile(".*Python3.*|^Python$"),
     default_code_generator=python.main,
     default_template_path=get_default_template_path('py'),
 )
@@ -88,7 +89,7 @@ DLANG = Language(
     name="d",
     display_name="D",
     extension="d",
-    submission_lang_pattern=re.compile(".*DMD64.*"),
+    submission_lang_pattern=re.compile(".*D \\(DMD.*"),
     default_code_generator=d.main,
     default_template_path=get_default_template_path('d'),
 )
@@ -97,7 +98,7 @@ NIM = Language(
     name="nim",
     display_name="NIM",
     extension="nim",
-    submission_lang_pattern=re.compile(".*Nim \\(0.*"),
+    submission_lang_pattern=re.compile(".*Nim \\(1.*"),
     default_code_generator=nim.main,
     default_template_path=get_default_template_path('nim'),
     default_code_style=CodeStyle(indent_width=2)

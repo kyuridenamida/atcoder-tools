@@ -6,7 +6,7 @@ import sys
 import traceback
 from multiprocessing import Pool, cpu_count
 from os.path import expanduser
-from time import sleep
+import time
 from typing import Tuple
 
 from colorama import Fore
@@ -31,6 +31,10 @@ from atcodertools.tools.utils import with_color
 
 
 class BannedFileDetectedError(Exception):
+    pass
+
+
+class EnvironmentInitializationError(Exception):
     pass
 
 
@@ -159,16 +163,23 @@ def func(argv: Tuple[AtCoderClient, Problem, Config]):
 
 def prepare_contest(atcoder_client: AtCoderClient,
                     contest_id: str,
-                    config: Config):
-    retry_duration = 1.5
+                    config: Config,
+                    retry_delay_secs: float = 1.5,
+                    retry_max_delay_secs: float = 60,
+                    retry_max_tries: int = 10):
+    attempt_count = 1
     while True:
         problem_list = atcoder_client.download_problem_list(
             Contest(contest_id=contest_id))
         if problem_list:
             break
-        sleep(retry_duration)
+        if 0 < retry_max_tries < attempt_count:
+            raise EnvironmentInitializationError
         logger.warning(
-            "Failed to fetch. Will retry in {} seconds".format(retry_duration))
+            "Failed to fetch. Will retry in {} seconds. (Attempt {})".format(retry_delay_secs, attempt_count))
+        time.sleep(retry_delay_secs)
+        retry_delay_secs = min(retry_delay_secs * 2, retry_max_delay_secs)
+        attempt_count += 1
 
     tasks = [(atcoder_client,
               problem,

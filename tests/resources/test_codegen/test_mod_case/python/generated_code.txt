@@ -4,7 +4,7 @@ import sys
 MOD = 998244353  # type: int
 
 
-def solve(A: int, B: int):
+def solve(A: str, B: str):
     return
 
 
@@ -14,8 +14,8 @@ def main():
             for word in line.split():
                 yield word
     tokens = iterate_tokens()
-    A = int(next(tokens))  # type: int
-    B = int(next(tokens))  # type: int
+    A = next(tokens)  # type: str
+    B = next(tokens)  # type: str
     solve(A, B)
 
 if __name__ == '__main__':
