@@ -19,6 +19,9 @@ class MultipleModCandidatesError(Exception):
         self.cands = cands
 
 
+class NoDecimalCandidatesError(Exception):
+    pass
+
 class MultipleDecimalCandidatesError(Exception):
 
     def __init__(self, cands):
@@ -39,8 +42,8 @@ DECIMAL_STRATEGY_RE_LIST_KEYWORD = [
 ]
 DECIMAL_STRATEGY_RE_LIST_VAL = [
     re.compile("10\^(-[0-9]+)"),
+    re.compile("1e(-[0-9]+)")
 ]
-
 
 def is_mod_context(sentence):
     for kw in MOD_ANCHORS:
@@ -106,7 +109,7 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     return yes_str, no_str
 
 
-def predict_judge_method(html: str) -> Optional[Judge]:
+def predict_judge_method(html: str) -> Judge:
     def normalize(sentence):
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
             "−", "-").lower().strip()
@@ -137,7 +140,7 @@ def predict_judge_method(html: str) -> Optional[Judge]:
                     decimal_val_cands.add(int(t))
 
         if len(decimal_val_cands) == 0:
-            return None
+            raise NoDecimalCandidatesError
 
         if len(decimal_val_cands) == 1:
             if is_absolute and is_relative:
