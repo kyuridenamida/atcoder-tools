@@ -22,6 +22,7 @@ class MultipleModCandidatesError(Exception):
 class NoDecimalCandidatesError(Exception):
     pass
 
+
 class MultipleDecimalCandidatesError(Exception):
 
     def __init__(self, cands):
@@ -40,10 +41,12 @@ DECIMAL_STRATEGY_RE_LIST_KEYWORD = [
     re.compile("(?:絶対|相対)誤差"),
     re.compile("(?:absolute|relative)")
 ]
+
 DECIMAL_STRATEGY_RE_LIST_VAL = [
     re.compile("10\^(-[0-9]+)"),
     re.compile("1e(-[0-9]+)")
 ]
+
 
 def is_mod_context(sentence):
     for kw in MOD_ANCHORS:
