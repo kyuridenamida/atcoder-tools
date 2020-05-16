@@ -8,16 +8,20 @@ from typing import List, Optional, Tuple, Union
 import requests
 from bs4 import BeautifulSoup
 
+from atcodertools.client.models.contest import Contest
+from atcodertools.client.models.problem import Problem
+from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 from atcodertools.client.models.submission import Submission
 from atcodertools.common.language import Language
 from atcodertools.common.logging import logger
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
-from atcodertools.client.models.contest import Contest
-from atcodertools.client.models.problem import Problem
-from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
 
 
 class LoginError(Exception):
+    pass
+
+
+class PageNotFoundError(Exception):
     pass
 
 
@@ -108,6 +112,8 @@ class AtCoderClient(metaclass=Singleton):
     def download_problem_list(self, contest: Contest) -> List[Problem]:
         resp = self._request(contest.get_problem_list_url())
         soup = BeautifulSoup(resp.text, "html.parser")
+        if resp.status_code == 404:
+            raise PageNotFoundError
         res = []
         for tag in soup.find('table').select('tr')[1::]:
             tag = tag.find("a")
