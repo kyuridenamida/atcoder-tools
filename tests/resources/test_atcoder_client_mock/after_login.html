@@ -1,281 +1,918 @@
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>AtCoder Regular Contest 001
-        - AtCoder Regular Contest 001 | AtCoder</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="
-">
-    <meta name="keyword" content="AtCoder,アットコーダー,あっとこーだー,プログラミングコンテスト
-">
-    <meta name="author" content="Atcoder" />
-    <meta name="copyright" content="Copyright (C) 2012 Atcoder" />
-    <meta name="format-detection" content="telephone=no" />
+    <title>AtCoder：競技プログラミングコンテストを開催する国内最大のサイト</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Language" content="ja">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="google-site-verification" content="nXGC_JxO0yoP1qBzMnYD_xgufO6leSLw1kyNo2HZltM" />
 
-    <link rel="stylesheet" type="text/css" href="/css/all.css?v=2">
-    <link rel="stylesheet" type="text/css" href="/css/print.css?v=1" media="print">
-    <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
-    <script src="/js/jquery.js"></script>
-    <link rel="shortcut icon" href="/img/favicon.ico">
+    <meta name="description" content="プログラミング初級者から上級者まで楽しめる、競技プログラミングコンテストサイト「AtCoder」。オンラインで毎週開催プログラミングコンテストを開催しています。競技プログラミングを用いて、客観的に自分のスキルを計ることのできるサービスです。">
+    <meta name="author" content="AtCoder Inc.">
 
-    <script type="text/javascript">
+    <meta property="og:site_name" content="AtCoder">
 
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-30554866-3']);
-        _gaq.push(['_setDomainName', 'atcoder.jp']);
-        _gaq.push(['_trackPageview']);
+    <meta property="og:title" content="AtCoder：競技プログラミングコンテストを開催する国内最大のサイト" />
+    <meta property="og:description" content="プログラミング初級者から上級者まで楽しめる、競技プログラミングコンテストサイト「AtCoder」。オンラインで毎週開催プログラミングコンテストを開催しています。競技プログラミングを用いて、客観的に自分のスキルを計ることのできるサービスです。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://atcoder.jp/home" />
+    <meta property="og:image" content="https://img.atcoder.jp/assets/atcoder.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@atcoder" />
 
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
+    <meta property="twitter:title" content="AtCoder：競技プログラミングコンテストを開催する国内最大のサイト" />
 
+    <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.min.css?v=202005132348">
+    <link rel="stylesheet" type="text/css" href="/public/css/base.css?v=202005132348">
+    <link rel="shortcut icon" type="image/png" href="//img.atcoder.jp/assets/favicon.png">
+    <link rel="apple-touch-icon" href="//img.atcoder.jp/assets/atcoder.png">
+    <script src="/public/js/lib/jquery-1.9.1.min.js?v=202005132348"></script>
+    <script src="/public/js/lib/bootstrap.min.js?v=202005132348"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ja.js"></script>
+    <script>
+        var LANG = "ja";
+        var userScreenName = "kyuridenamida";
+        var csrfToken = "2TfLiM/mkOoZRM9OnbCFUYWuq1gqpC5lhkAlhRNZ3as="
     </script>
-    <!--[if lt IE 9]><style>.navbar-fixed-top{ position: relative!important; }</style><![endif]-->
+    <script src="/public/js/utils.js?v=202005132348"></script>
 
+
+
+
+
+
+    <script src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({messageStyle:"none",tex2jax:{skipTags:["script","noscript","style","textarea","code"],inlineMath:[['$','$'],['\\(','\\)']]}});</script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    <script src="/public/js/lib/marked.js?v=202005132348"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.2/jquery.timeago.min.js"></script>
+    <script src="/public/js/lib/jquery.timeago.ja.js?v=202005132348"></script>
+    <script src="/public/js/blog.js?v=202005132348"></script>
+
+
+
+
+
+
+
+
+    <link rel="stylesheet" href="/public/css/top/common.css?v=202005132348">
+
+    <script src="/public/js/base.js?v=202005132348"></script>
+    <script src="/public/js/ga.js?v=202005132348"></script>
 </head>
 
-
 <body>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="/"><span class="contest-name">AtCoder Regular Contest 001</span><span class="bland-small"><time>2012/04/14 12:00:00 +0000</time> ~ <time>2012/04/14 17:00:00 +0000</time></span></a>
 
-            <div class="nav-collapse">
-                <ul class="nav">
-                    <li class="divider-vertical"></li>
-                    <li><a href="http://atcoder.jp" target="_blank"><span class="lang"><span class="lang-en">back to atcoder.jp</span><span class="lang-ja">AtCoderへ戻る</span></span></a></li>
+<script type="text/javascript">
+    var __pParams = __pParams || [];
+    __pParams.push({client_id: '468', c_1: 'atcodercontest', c_2: 'ClientSite'});
+</script>
+<script type="text/javascript" src="https://cdn.d2-apps.net/js/tr.js" async></script>
+
+
+
+<div id="main-div" class="float-container">
+
+
+
+    <header id="header">
+        <div class="header-inner">
+            <div class="header-bar">
+                <a href="/" class="header-logo"><img src="//img.atcoder.jp/assets/top/img/logo_bk.svg" alt="AtCoder"></a>
+                <div class="header-icon">
+                    <a class="header-menubtn menu3 j-menu">
+                        <div class="header-menubtn_inner">
+                            <span class="top"></span>
+                            <span class="middle"></span>
+                            <span class="bottom"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <nav class="header-nav j-menu_gnav">
+                <ul class="header-page">
+                    <li><a href="/">AtCoder.jp</a></li>
+                    <li class="is-active"><a href="/home">コンテスト</a></li>
+                    <li><a href="//jobs.atcoder.jp/" target="_blank">AtCoderJobs</a></li>
+                    <li><a href="//past.atcoder.jp" target="_blank">検定</a></li>
                 </ul>
-                <ul  id="nav-right-logined" class="nav pull-right" style="display:none;">
-                    <li class="dropdown">
-                        <a href="#" lang="ja" class="dropdown-toggle static-nav-language-selector-dropdown" data-toggle="dropdown" style="display:none;">
-                            <i class="flag-ja"></i> 日本語 <b class="caret"></b>
-                        </a>
-                        <a href="#" lang="en" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
-                            <i class="flag-en"></i> English <b class="caret"></b>
-                        </a>
-                        <a href="#" lang="ko" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
-                            <i class="flag-ko"></i> 한국어 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li> <a lang="ja" class="static-nav-language-selector" href="#"><i class="flag-ja"></i> 日本語</a></li>
-                            <li> <a lang="en" class="static-nav-language-selector" href="#"><i class="flag-en"></i> English</a></li>
-                            <li> <a lang="ko" class="static-nav-language-selector" href="#"><i class="flag-ko"></i> 한국어</a></li>
-                        </ul>
-                    </li>
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog icon-white"></i> <span id="nav-right-username"></span><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/me"><span class="lang"><span class="lang-en">My Profile</span><span class="lang-ja">マイプロフィール</span></span></a></li>
-                            <li><a href="/settings"><span class="lang"><span class="lang-en">Settings</span><span class="lang-ja">設定</span></span></a></li>
-                            <li><a href="/settings/password"><span class="lang"><span class="lang-en">Change password</span><span class="lang-ja">パスワードの変更</span></span></a></li>
-                            <li class="divider"></li>
-                            <li><a href="/logout"><span class="lang"><span class="lang-en">Sign out</span><span class="lang-ja">ログアウト</span></span></a></li>
-                        </ul>
-                    </li>
+                <div class="header-control">
+                    <ul class="header-lang">
+                        <li class="is-active"><a href="/home?lang=ja">JP</a></li>
+                        <li><a href="/home?lang=en">EN</a></li>
+                    </ul>
+
+                </div>
+            </nav>
+
+            <div class="header-mypage">
+                <div class="j-dropdown_mypage">
+                    <div class="header-mypage_btn">
+							<span class="inner">
+								<span class="user-yellow bold">kyuridenamida</span>
+							</span>
+                    </div>
+                    <div class="header-mypage_detail" style="display: none;">
+                        <div class="inner">
+                            <ul class="header-mypage_list">
+                                <li class="large"><a href="/users/kyuridenamida"><i class="a-icon a-icon-user"></i> マイプロフィール</a></li>
+                                <li><a href="/settings"><i class="a-icon a-icon-setting"></i> 基本設定</a></li>
+                                <li><a href="/settings/icon"><i class="a-icon a-icon-image"></i> アイコン設定</a></li>
+                                <li><a href="/settings/password"><i class="a-icon a-icon-key"></i> パスワードの変更</a></li>
+                                <li><a href="/settings/fav"><i class="a-icon a-icon-star"></i> お気に入り管理</a></li>
+
+
+
+
+
+                                <li class="large"><a href="javascript:void(form_logout.submit())"><i class="a-icon a-icon-logout"></i> ログアウト</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="header-sub">
+            <nav class="header-sub_nav">
+                <ul class="header-sub_page">
+                    <li class="is-active"><a href="/home"><span>ホーム</span></a></li>
+                    <li><a href="/contests/"><span>コンテスト一覧</span></a></li>
+                    <li><a href="/ranking"><span>ランキング</span></a></li>
+
+                    <li><a href="//atcoder.jp/posts/261"><span>便利リンク集</span></a></li>
                 </ul>
-                <ul id="nav-right-not-login" class="nav pull-right" style="display:none;">
-                    <li class="dropdown">
-                        <a href="#" lang="ja" class="dropdown-toggle static-nav-language-selector-dropdown" data-toggle="dropdown" style="display:none;">
-                            <i class="flag-ja"></i> 日本語 <b class="caret"></b>
-                        </a>
-                        <a href="#" lang="en" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
-                            <i class="flag-en"></i> English <b class="caret"></b>
-                        </a>
-                        <a href="#" lang="ko" class="dropdown-toggle static-nav-language-selector-dropdown"  data-toggle="dropdown" style="display:none;">
-                            <i class="flag-ko"></i> 한국어 <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li> <a lang="ja" class="static-nav-language-selector" href="#"><i class="flag-ja"></i> 日本語</a></li>
-                            <li> <a lang="en" class="static-nav-language-selector" href="#"><i class="flag-en"></i> English</a></li>
-                            <li> <a lang="ko" class="static-nav-language-selector" href="#"><i class="flag-ko"></i> 한국어</a></li>
-                        </ul>
-                    </li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="/register"><span class="lang"><span class="lang-en">Sign up</span><span class="lang-ja">新規登録</span></span></a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="/login"><span class="lang"><span class="lang-en">Sign in</span><span class="lang-ja">ログイン</span></span></a></li>
-                </ul>
+            </nav>
+        </div>
+
+    </header>
+
+    <form method="POST" name="form_logout" action="/logout?continue=https%3A%2F%2Fatcoder.jp%2Fhome">
+        <input type="hidden" name="csrf_token" value="2TfLiM/mkOoZRM9OnbCFUYWuq1gqpC5lhkAlhRNZ3as=" />
+    </form>
+    <div id="main-container" class="container is-new_header"
+         style="">
+
+
+        <br>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading collapse-heading" data-toggle="collapse" data-target="#collapse-contest">
+                        <h3 class="panel-title">
+                            コンテスト
+                            <span class="glyphicon pull-right"></span>
+                        </h3>
+                    </div>
+                    <div id="collapse-contest" class="panel-body panel-collapse collapse in">
+
+
+
+                        <div id="contest-table-permanent">
+                            <h4>常設中のコンテスト</h4>
+
+
+                            <div class="table-responsive">
+                                <table class="table table-default table-striped table-hover table-condensed small" style="margin-bottom:0;">
+                                    <thead>
+                                    <tr>
+
+                                        <th>コンテスト名</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+
+                                        <td><small><span class="">◉</span> <a href='/contests/practice'>practice contest</a></small></td>
+                                    </tr>
+
+                                    <tr>
+
+                                        <td><small><span class="">◉</span> <a href='/contests/APG4b'>C&#43;&#43;入門 AtCoder Programming Guide for beginners (APG4b)</a></small></td>
+                                    </tr>
+
+                                    <tr>
+
+                                        <td><small><span class="">◉</span> <a href='/contests/abs'>AtCoder Beginners Selection</a></small></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <hr>
+                        <div id="contest-table-upcoming">
+                            <h4>予定されたコンテスト</h4>
+
+
+                            <div class="table-responsive">
+                                <table class="table table-default table-striped table-hover table-condensed small" style="margin-bottom:0;">
+                                    <thead>
+                                    <tr>
+                                        <th width="36%">開始時刻</th>
+                                        <th>コンテスト名</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200517T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-05-17 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-blue">◉</span> <a href='/contests/abc168'>AtCoder Beginner Contest 168</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200523T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-05-23 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-red">◉</span> <a href='/contests/agc044'>AtCoder Grand Contest 044</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200530T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-05-30 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-orange">◉</span> <a href='/contests/nomura2020'>NOMURA プログラミングコンテスト 2020</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200607T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-06-07 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-red">◉</span> <a href='/contests/agc045'>AtCoder Grand Contest 045</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200620T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-06-20 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-red">◉</span> <a href='/contests/agc046'>AtCoder Grand Contest 046</a></small></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <hr>
+                        <div id="contest-table-recent">
+                            <h4>終了後のコンテスト(最新 10 件)</h4>
+
+
+                            <div class="table-responsive">
+                                <table class="table table-default table-striped table-hover table-condensed small" style="margin-bottom:0;">
+                                    <thead>
+                                    <tr>
+                                        <th width="36%">開始時刻</th>
+                                        <th>コンテスト名</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200510T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-05-10 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-blue">◉</span> <a href='/contests/abc167'>AtCoder Beginner Contest 167</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200430T1000&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-04-30 10:00:00+0900</time></a></small></td>
+                                        <td><small><span class="">◉</span> <a href='/contests/asprocon6'>第6回 Asprova プログラミングコンテスト</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200503T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-05-03 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-blue">◉</span> <a href='/contests/abc166'>AtCoder Beginner Contest 166</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200502T2110&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-05-02 21:10:00+0900</time></a></small></td>
+                                        <td><small><span class="user-blue">◉</span> <a href='/contests/abc165'>AtCoder Beginner Contest 165</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200426T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-04-26 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-blue">◉</span> <a href='/contests/abc164'>AtCoder Beginner Contest 164</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200419T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-04-19 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-blue">◉</span> <a href='/contests/abc163'>AtCoder Beginner Contest 163</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200418T1300&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-04-18 13:00:00+0900</time></a></small></td>
+                                        <td><small><span class="">◉</span> <a href='/contests/past202004-open'>第二回 アルゴリズム実技検定</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200412T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-04-12 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-blue">◉</span> <a href='/contests/abc162'>AtCoder Beginner Contest 162</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200405T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-04-05 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="">◉</span> <a href='/contests/judge-update-202004'>Judge System Update Test Contest 202004</a></small></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><small><a href='http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200404T2100&p1=248' target='blank'><time class='fixtime fixtime-short'>2020-04-04 21:00:00+0900</time></a></small></td>
+                                        <td><small><span class="user-blue">◉</span> <a href='/contests/abc161'>AtCoder Beginner Contest 161</a></small></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <br>
+                        <p class="btn-text-group">
+                            <a href='/contests/' class="btn-text">詳細</a>
+
+
+                        </p>
+                    </div>
+                </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading collapse-heading" data-toggle="collapse" data-target="#collapse-ranking">
+                        <h3 class="panel-title">
+                            ランキング
+                            <span class="glyphicon pull-right"></span>
+                        </h3>
+                    </div>
+                    <div id="collapse-ranking" class="panel-body panel-collapse collapse in">
+                        <div class="table-responsive">
+                            <table class="table table-default table-striped table-hover table-condensed">
+                                <thead>
+                                <tr>
+                                    <th width="8%"></th>
+                                    <th>ユーザ</th>
+                                    <th width="20%">Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/BY.png"> <img src="//img.atcoder.jp/assets/icon/crown4000.gif"> <a href="/users/tourist" class="username"><span class="user-red">tourist</span></a></td>
+                                    <td>4151</td>
+                                </tr>
+
+                                <tr>
+                                    <td>2</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/RU.png"> <img src="//img.atcoder.jp/assets/icon/crown3600.gif"> <a href="/users/Um_nik" class="username"><span style="color:#08E8DE;">Um_nik</span></a></td>
+                                    <td>3803</td>
+                                </tr>
+
+                                <tr>
+                                    <td>3</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/CN.png"> <img src="//img.atcoder.jp/assets/icon/crown3600.gif"> <a href="/users/apiad" class="username"><span class="user-red">apiad</span></a></td>
+                                    <td>3774</td>
+                                </tr>
+
+                                <tr>
+                                    <td>4</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/CA.png"> <img src="//img.atcoder.jp/assets/icon/crown3600.gif"> <a href="/users/ksun48" class="username"><span style="color:#FF00FF;">ksun48</span></a></td>
+                                    <td>3738</td>
+                                </tr>
+
+                                <tr>
+                                    <td>5</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/CH.png"> <img src="//img.atcoder.jp/assets/icon/crown3600.gif"> <a href="/users/Petr" class="username"><span class="user-red">Petr</span></a></td>
+                                    <td>3735</td>
+                                </tr>
+
+                                <tr>
+                                    <td>6</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/US.png"> <img src="//img.atcoder.jp/assets/icon/crown3600.gif"> <a href="/users/ecnerwala" class="username"><span class="user-red">ecnerwala</span></a></td>
+                                    <td>3713</td>
+                                </tr>
+
+                                <tr>
+                                    <td>7</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/RU.png"> <img src="//img.atcoder.jp/assets/icon/crown3600.gif"> <a href="/users/LHiC" class="username"><span class="user-red">LHiC</span></a></td>
+                                    <td>3671</td>
+                                </tr>
+
+                                <tr>
+                                    <td>8</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/RU.png"> <img src="//img.atcoder.jp/assets/icon/crown3600.gif"> <a href="/users/cospleermusora" class="username"><span class="user-red">cospleermusora</span></a></td>
+                                    <td>3606</td>
+                                </tr>
+
+                                <tr>
+                                    <td>9</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/PL.png"> <img src="//img.atcoder.jp/assets/icon/crown3200.gif"> <a href="/users/mnbvmar" class="username"><span class="user-red">mnbvmar</span></a></td>
+                                    <td>3571</td>
+                                </tr>
+
+                                <tr>
+                                    <td>10</td>
+                                    <td><img src="//img.atcoder.jp/assets/flag/JP.png"> <img src="//img.atcoder.jp/assets/icon/crown3200.gif"> <a href="/users/yutaka1999" class="username"><span class="user-red">yutaka1999</span></a></td>
+                                    <td>3557</td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="btn-text-group">
+                            <a href='/ranking' class="btn-text">すべて表示</a>
+                            <span class="divider"></span>
+                            <a href='/hof' class="btn-text">殿堂入り</a>
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading collapse-heading" data-toggle="collapse" data-target="#collapse-twitter">
+                        <h3 class="panel-title">
+                            Twitter
+                            <span class="glyphicon pull-right"></span>
+                        </h3>
+                    </div>
+                    <div id="collapse-twitter" class="panel-body panel-collapse collapse in">
+                        <a class="twitter-timeline" data-lang="ja" data-height="500" data-chrome="noheader" href="https://twitter.com/atcoder?ref_src=twsrc%5Etfw">Tweets by atcoder</a>
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-8">
+
+
+
+
+                <div class="text-center blog-post">&lt;a href=&#34;https://engineers.recruit-jinji.jp/event/job-for-student-2020s/?utm_source=X6dNjEQz&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://img.atcoder.jp/img/RECRUITJobForStudent2020_2.png&#34; alt=&#34;[PR] RECRUIT Job for Student 2020&#34; class=&#34;img-responsive center-block&#34;&gt;&lt;/a&gt;</div>
+                <br>
+
+
+
+
+
+
+                <div class="panel panel-info">
+                    <div class="panel-heading post-heading">
+                        <h3 class="panel-title"><a href="/posts/36">インフォメーション</a></h3>
+
+                    </div>
+                    <div class="panel-body blog-post">&lt;big&gt;AtCoder&lt;/big&gt;は、オンラインで参加できるプログラミングコンテスト(競技プログラミング)のサイトです。リアルタイムのコンテストで競い合ったり、約3000問のコンテストの過去問にいつでも挑戦することが出来ます。
+
+                        &lt;b&gt;[チュートリアル](https://beta.atcoder.jp/posts/37)&lt;/b&gt; / [便利リンク集](https://beta.atcoder.jp/posts/261)
+
+                        &lt;div class=&#39;cleafix&#39;&gt;
+                        &lt;div style=&#39;float:left;margin-right:8px;&#39;&gt;[&lt;img src=&#34;https://img.atcoder.jp/past-sample/pastmini2.png&#34; height=40&gt;](https://past.atcoder.jp/) &lt;/div&gt;
+                        &lt;b&gt;[アルゴリズム実技検定](https://past.atcoder.jp/)過去問掲載中です。&lt;/b&gt; アルゴリズムの設計および実装能力を、資格で証明することが可能です。
+                        &lt;/div&gt;&lt;br&gt;
+
+                        &lt;div class=&#39;cleafix&#39;&gt;
+                        &lt;div style=&#39;float:left;margin-right:8px;&#39;&gt;[&lt;img src=&#34;https://img.atcoder.jp/file/jobs_banner.png&#34; height=40&gt;](https://jobs.atcoder.jp/) &lt;/div&gt;
+                        &lt;b&gt;[AtCoderJobs](https://jobs.atcoder.jp/)提供中です。&lt;/b&gt; AtCoderのレーティングを用いた就職・転職サービスです。ぜひご活用ください。
+                        &lt;/div&gt;
+                    </div>
+
+                </div>
+
+
+
+                <hr>
+
+
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading post-heading">
+                        <h3 class="panel-title"><a href="/posts/479">AtCoder Beginner Contest 168 告知</a></h3>
+
+                        <small>投稿日時:
+                            <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1589654391">
+							<time class="timeago" datetime="2020/05/17 03:39:51"></time>
+						</span>
+                        </small>
+
+                    </div>
+                    <div class="panel-body blog-post">&lt;a href=&#34;https://atcoder.jp/contests/abc168&#34;&gt;AtCoder Beginner Contest 168&lt;/a&gt; が開催されます。
+
+                        - コンテストページ： https://atcoder.jp/contests/abc168
+                        - 開始時刻： &lt;a href=&#39;http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200517T2100&amp;p1=248&#39; target=&#39;blank&#39;&gt;&lt;time class=&#39;fixtime fixtime-full&#39;&gt;2020-05-17 21:00:00&#43;0900&lt;/time&gt;&lt;/a&gt;
+                        - コンテスト時間：  100 分
+                        - 問題数： 6
+                        - writer：&lt;a href=&#34;/users/sheyasutaka&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;sheyasutaka&lt;/span&gt;&lt;/a&gt;
+                        - レーティング変化：  ~ 1999
+
+                        配点は 100-200-300-400-500-600 です。
+
+                        皆様、是非ご参加ください！
+                    </div>
+
+                    <div class="panel-footer post-footer">
+                        <div class="row">
+                            <div class="col-xs-7">
+                                <small>最終更新:
+                                    <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1589654391">
+									<time class="timeago" datetime="2020/05/17 03:39:51"></time>
+								</span>
+                                </small>
+                            </div>
+                            <div class="col-xs-5 clearfix">
+
+
+
+                                <div class="a2a_kit a2a_kit_size_20 a2a_default_style pull-right" data-a2a-url="https://atcoder.jp/posts/479?lang=ja" data-a2a-title="AtCoder Beginner Contest 168 告知">
+                                    <a class="a2a_button_facebook"></a>
+                                    <a class="a2a_button_twitter"></a>
+
+                                    <a class="a2a_button_hatena"></a>
+
+                                    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading post-heading">
+                        <h3 class="panel-title"><a href="/posts/477">AtCoder Beginner Contest 167 告知</a></h3>
+
+                        <small>投稿日時:
+                            <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1589046044">
+							<time class="timeago" datetime="2020/05/10 02:40:44"></time>
+						</span>
+                        </small>
+
+                    </div>
+                    <div class="panel-body blog-post">&lt;a href=&#34;https://atcoder.jp/contests/abc167&#34;&gt;AtCoder Beginner Contest 167&lt;/a&gt; が開催されます。
+
+                        - コンテストページ： https://atcoder.jp/contests/abc167
+                        - 開始時刻： &lt;a href=&#39;http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200510T2100&amp;p1=248&#39; target=&#39;blank&#39;&gt;&lt;time class=&#39;fixtime fixtime-full&#39;&gt;2020-05-10 21:00:00&#43;0900&lt;/time&gt;&lt;/a&gt;
+                        - コンテスト時間：  100 分
+                        - 問題数： 6
+                        - writer：&lt;a href=&#34;/users/gazelle&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;gazelle&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/kort0n&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;kort0n&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/kyopro_friends&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;kyopro_friends&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/potetisensei&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;potetisensei&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/sheyasutaka&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;sheyasutaka&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/tempura0224&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-red&#34;&gt;tempura0224&lt;/span&gt;&lt;/a&gt;
+                        - レーティング変化：  ~ 1999
+
+                        配点は 100-200-300-400-500-600 です。
+
+                        皆様、是非ご参加ください！
+                    </div>
+
+                    <div class="panel-footer post-footer">
+                        <div class="row">
+                            <div class="col-xs-7">
+                                <small>最終更新:
+                                    <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1589046044">
+									<time class="timeago" datetime="2020/05/10 02:40:44"></time>
+								</span>
+                                </small>
+                            </div>
+                            <div class="col-xs-5 clearfix">
+
+
+
+                                <div class="a2a_kit a2a_kit_size_20 a2a_default_style pull-right" data-a2a-url="https://atcoder.jp/posts/477?lang=ja" data-a2a-title="AtCoder Beginner Contest 167 告知">
+                                    <a class="a2a_button_facebook"></a>
+                                    <a class="a2a_button_twitter"></a>
+
+                                    <a class="a2a_button_hatena"></a>
+
+                                    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading post-heading">
+                        <h3 class="panel-title"><a href="/posts/474">AtCoder Beginner Contest 166 告知</a></h3>
+
+                        <small>投稿日時:
+                            <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1588478709">
+							<time class="timeago" datetime="2020/05/03 13:05:09"></time>
+						</span>
+                        </small>
+
+                    </div>
+                    <div class="panel-body blog-post">&lt;a href=&#34;https://atcoder.jp/contests/abc166&#34;&gt;AtCoder Beginner Contest 166&lt;/a&gt; が開催されます。
+
+                        - コンテストページ： https://atcoder.jp/contests/abc166
+                        - 開始時刻： &lt;a href=&#39;http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200503T2100&amp;p1=248&#39; target=&#39;blank&#39;&gt;&lt;time class=&#39;fixtime fixtime-full&#39;&gt;2020-05-03 21:00:00&#43;0900&lt;/time&gt;&lt;/a&gt;
+                        - コンテスト時間：  100 分
+                        - 問題数： 6
+                        - writer：&lt;a href=&#34;/users/gazelle&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;gazelle&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/kort0n&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;kort0n&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/kyopro_friends&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;kyopro_friends&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/sheyasutaka&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;sheyasutaka&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/ynymxiaolongbao&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;ynymxiaolongbao&lt;/span&gt;&lt;/a&gt;
+                        - レーティング変化：  ~ 1999
+
+                        配点は 100-200-300-400-500-600 です。
+
+                        皆様、是非ご参加ください！
+                    </div>
+
+                    <div class="panel-footer post-footer">
+                        <div class="row">
+                            <div class="col-xs-7">
+                                <small>最終更新:
+                                    <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1588478709">
+									<time class="timeago" datetime="2020/05/03 13:05:09"></time>
+								</span>
+                                </small>
+                            </div>
+                            <div class="col-xs-5 clearfix">
+
+
+
+                                <div class="a2a_kit a2a_kit_size_20 a2a_default_style pull-right" data-a2a-url="https://atcoder.jp/posts/474?lang=ja" data-a2a-title="AtCoder Beginner Contest 166 告知">
+                                    <a class="a2a_button_facebook"></a>
+                                    <a class="a2a_button_twitter"></a>
+
+                                    <a class="a2a_button_hatena"></a>
+
+                                    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading post-heading">
+                        <h3 class="panel-title"><a href="/posts/472">AtCoder Beginner Contest 165 告知</a></h3>
+
+                        <small>投稿日時:
+                            <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1588403888">
+							<time class="timeago" datetime="2020/05/02 16:18:08"></time>
+						</span>
+                        </small>
+
+                    </div>
+                    <div class="panel-body blog-post">&lt;a href=&#34;https://atcoder.jp/contests/abc165&#34;&gt;AtCoder Beginner Contest 165&lt;/a&gt; が開催されます。
+
+                        - コンテストページ： https://atcoder.jp/contests/abc165
+                        - 開始時刻： &lt;a href=&#39;http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200502T2100&amp;p1=248&#39; target=&#39;blank&#39;&gt;&lt;time class=&#39;fixtime fixtime-full&#39;&gt;2020-05-02 21:00:00&#43;0900&lt;/time&gt;&lt;/a&gt;
+                        - コンテスト時間：  100 分
+                        - 問題数： 6
+                        - writer：&lt;a href=&#34;/users/beet&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;beet&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/DEGwer&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-red&#34;&gt;DEGwer&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/kort0n&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;kort0n&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/sheyasutaka&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;sheyasutaka&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/tozangezan&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-red&#34;&gt;tozangezan&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/ynymxiaolongbao&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;ynymxiaolongbao&lt;/span&gt;&lt;/a&gt;
+                        - レーティング変化：  ~ 1999
+
+                        配点は 100-200-300-400-500-600 です。
+
+                        皆様、是非ご参加ください！
+                    </div>
+
+                    <div class="panel-footer post-footer">
+                        <div class="row">
+                            <div class="col-xs-7">
+                                <small>最終更新:
+                                    <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1588404038">
+									<time class="timeago" datetime="2020/05/02 16:20:38"></time>
+								</span>
+                                </small>
+                            </div>
+                            <div class="col-xs-5 clearfix">
+
+
+
+                                <div class="a2a_kit a2a_kit_size_20 a2a_default_style pull-right" data-a2a-url="https://atcoder.jp/posts/472?lang=ja" data-a2a-title="AtCoder Beginner Contest 165 告知">
+                                    <a class="a2a_button_facebook"></a>
+                                    <a class="a2a_button_twitter"></a>
+
+                                    <a class="a2a_button_hatena"></a>
+
+                                    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading post-heading">
+                        <h3 class="panel-title"><a href="/posts/470">AtCoder Beginner Contest 164 告知</a></h3>
+
+                        <small>投稿日時:
+                            <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1587831350">
+							<time class="timeago" datetime="2020/04/26 01:15:50"></time>
+						</span>
+                        </small>
+
+                    </div>
+                    <div class="panel-body blog-post">&lt;a href=&#34;https://atcoder.jp/contests/abc164&#34;&gt;AtCoder Beginner Contest 164&lt;/a&gt; が開催されます。
+
+                        - コンテストページ： https://atcoder.jp/contests/abc164
+                        - 開始時刻： &lt;a href=&#39;http://www.timeanddate.com/worldclock/fixedtime.html?iso=20200426T2100&amp;p1=248&#39; target=&#39;blank&#39;&gt;&lt;time class=&#39;fixtime fixtime-full&#39;&gt;2020-04-26 21:00:00&#43;0900&lt;/time&gt;&lt;/a&gt;
+                        - コンテスト時間： 未定 (二時間程度)
+                        - 問題数： 6
+                        - writer：&lt;a href=&#34;/users/kyopro_friends&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;kyopro_friends&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/Kmcode&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;Kmcode&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/latte0119&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-red&#34;&gt;latte0119&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/tozangezan&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-red&#34;&gt;tozangezan&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/ynymxiaolongbao&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-orange&#34;&gt;ynymxiaolongbao&lt;/span&gt;&lt;/a&gt;, &lt;a href=&#34;/users/wo01&#34; class=&#34;username&#34;&gt;&lt;span class=&#34;user-red&#34;&gt;wo01&lt;/span&gt;&lt;/a&gt;
+                        - レーティング変化：  ~ 1999
+
+                        配点は 100-200-300-400-500-600 です。
+
+                        皆様、是非ご参加ください！
+                    </div>
+
+                    <div class="panel-footer post-footer">
+                        <div class="row">
+                            <div class="col-xs-7">
+                                <small>最終更新:
+                                    <span class="tooltip-unix" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="1587831350">
+									<time class="timeago" datetime="2020/04/26 01:15:50"></time>
+								</span>
+                                </small>
+                            </div>
+                            <div class="col-xs-5 clearfix">
+
+
+
+                                <div class="a2a_kit a2a_kit_size_20 a2a_default_style pull-right" data-a2a-url="https://atcoder.jp/posts/470?lang=ja" data-a2a-title="AtCoder Beginner Contest 164 告知">
+                                    <a class="a2a_button_facebook"></a>
+                                    <a class="a2a_button_twitter"></a>
+
+                                    <a class="a2a_button_hatena"></a>
+
+                                    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <p class="text-center"><a class="btn-text" href="/posts/">記事アーカイブ</a></p>
             </div>
         </div>
+
+        <script>
+
+            var userAgent = window.navigator.userAgent.toLowerCase();
+            if (userAgent.toLowerCase().indexOf('msie') !== -1 || userAgent.toLowerCase().indexOf('trident') !== -1) {
+                var text = 'AtCoderはInternet Explorerに対応していません。EdgeやChromeやFirefoxなどの別のブラウザをお使いください。\n';
+                text += 'AtCoder do not support Internet Explorer. Please use other web browser such as Edge, Chrome or Firefox.';
+                alert(text);
+            }
+        </script>
+
+
+
+
+
+        <hr>
+
+
+
+        <div class="a2a_kit a2a_kit_size_20 a2a_default_style pull-right" data-a2a-url="https://atcoder.jp/home?lang=ja" data-a2a-title="AtCoder：競技プログラミングコンテストを開催する国内最大のサイト">
+            <a class="a2a_button_facebook"></a>
+            <a class="a2a_button_twitter"></a>
+
+            <a class="a2a_button_hatena"></a>
+
+            <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+        </div>
+
+
+        <script async src="//static.addtoany.com/menu/page.js"></script>
+
     </div>
+    <hr>
 </div>
-<div class="modal hide fade" style="display:none;" id="modal-contest-end">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3><span class="lang"><span class="lang-en">AtCoder Regular Contest 001 has ended</span><span class="lang-ja">AtCoder Regular Contest 001が終了しました</span></span></h3>
-    </div>
-    <div class="modal-body">
-        <p><span class="lang"><span class="lang-en">Contest has ended</span><span class="lang-ja">コンテスト終了です</span></span></p>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal"><span class="lang"><span class="lang-en">Close</span><span class="lang-ja">閉じる</span></span></a>
-    </div>
-</div>
 
-<div class="modal hide fade" style="display:none;" id="modal-contest-begin">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">×</a>
-        <h3><span class="lang"><span class="lang-en">AtCoder Regular Contest 001 is now opening</span><span class="lang-ja">AtCoder Regular Contest 001の開催時間になりました</span></span></h3>
-    </div>
-    <div class="modal-body">
-        <p><span class="lang"><span class="lang-en">Contest has started</span><span class="lang-ja">問題一覧のページへ移動してください</span></span></p>
-    </div>
-    <div class="modal-footer">
-        <a href="/assignments" class="btn btn-primary"><span class="lang"><span class="lang-en">Go to the task list page</span><span class="lang-ja">問題一覧のページへ移動</span></span></a>
-    </div>
-</div>
-
-<div id="outer-inner" class="container">
-    <h1 class="site-title">
-        AtCoder Regular Contest 001
-    </h1>
-    <time style="display:none" id="contest-start-time">2012/04/14 12:00:00 +0000</time>
-    <time style="display:none" id="contest-end-time">2012/04/14 17:00:00 +0000</time>
-    <time style="display:none" id="server-current-time">2018/12/31 09:17:13 +0000</time>
-
-
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="https://arc001.contest.atcoder.jp/"><i class="icon-home"></i> <span class="lang"><span class="lang-en">Home</span><span class="lang-ja">トップページ</span><span class="lang-ko">톱 페이지</span></span></a></li>
-        <li><a href="https://arc001.contest.atcoder.jp/assignments"><i class="icon-list-alt"></i> <span class="lang"><span class="lang-en">Tasks</span><span class="lang-ja">問題</span><span class="lang-ko">문제</span></span></a></li>
-        <li><a href="https://arc001.contest.atcoder.jp/submit"><i class="icon-upload"></i> <span class="lang"><span class="lang-en">Submit</span><span class="lang-ja">提出</span><span class="lang-ko">제출</span></span></a></li>
-        <li><a href="https://arc001.contest.atcoder.jp/clarifications"><i class="icon-question-sign"></i> <span class="lang"><span class="lang-en">Clarifications</span><span class="lang-ja">質問</span><span class="lang-ko">질문</span></span></a></li>
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <b class="caret"></b><i class="icon-download-alt"></i> <span class="lang"><span class="lang-en">Results</span><span class="lang-ja">結果</span><span class="lang-ko">채점 결과</span></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li><a href="https://arc001.contest.atcoder.jp/submissions/all"><span class="lang"><span class="lang-en">All submissions</span><span class="lang-ja">すべての結果</span><span class="lang-ko">모든 결과</span></span></a></li>
-                <li><a href="https://arc001.contest.atcoder.jp/submissions/me"><span class="lang"><span class="lang-en">My submissions</span><span class="lang-ja">自分の結果</span><span class="lang-ko">자신의 결과</span></span></a></li>
-            </ul>
-        </li>
-        <li><a href="/standings"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Standings</span><span class="lang-ja">順位表</span><span class="lang-ko">순위표</span></span></a></li>
-        <li><a href="/custom_test"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Custom Test</span><span class="lang-ja">コードテスト</span></span></a></li>
-        <li><a href="/editorial"><i class="icon-user"></i> <span class="lang"><span class="lang-en">Editorial</span><span class="lang-ja">解説</span></span></a></li>
-    </ul>
-    <div id="alert_box" class="alert alert-block" style="display:none">
-        <a class="close" data-dismiss="alert">×</a>
-        <h4 id="alert_box_heading" class="alert-heading" style="display:none"></h4>
-        <p id="alert_box_content"></p>
-    </div>
-
-
-    <div class="insert-participant-box">
-        <h1>AtCoder Regular Contest 001</h1>
-    </div>
-
-
-
-    <div id="contest-statement"><h2>Welcome to AtCoder Regular Contest #001!</h2>
-
-        <section class="lang">
-            <div class="lang-ja">
-                <h3>AtCoder Regular Contest #001の中止のお知らせ</h3>
-                今回のコンテストにつきまして、サーバーに接続できない問題があり、中止させて頂きます。<br/>
-                参加者の皆様にはご迷惑をおかけし、誠に申し訳ありませんでした。<br/>
-                コンテストの問題につきましては、過去問として挑戦可能とさせて頂きます。<br/>
-                次回のコンテストでは、皆様に楽しんで参加できるように、誠心誠意取り組んでまいりますので、<br/>
-                よろしくお願いいたします。<br/>
+<footer id="footer">
+    <div class="t-inner">
+        <nav class="footer-nav">
+            <div class="footer-logo">
+                <a href="/"><img src="//img.atcoder.jp/assets/top/img/logo_wh.svg" alt="AtCoder"></a>
             </div>
-            <div class="lang-en">
-                <h3>News: AtCoder Regular Contest #001 was canceled.</h3>
-                We are sorry, but we cannot hold the contest because of server troubles.
-                The tasks of the contest were served as tasks for practice.
-                We are looking forward to seeing you in the next competition of AtCoder.
-                Thank you.
+            <div class="f-flex f-flex_mg0_s footer-page">
+                <div class="f-flex3 f-flex12_s">
+                    <dl class="j-dropdown_footer">
+                        <dt class="footer-nav_btn"><a href="/home">コンテスト</a></dt>
+                        <dd class="footer-nav_detail">
+                            <div class="inner">
+                                <ul>
+                                    <li><a href="/home">ホーム</a></li>
+                                    <li><a href="/contests/">コンテスト一覧</a></li>
+                                    <li><a href="/ranking">ランキング</a></li>
+
+                                    <li><a href="//atcoder.jp/posts/261">便利リンク集</a></li>
+                                </ul>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="f-flex3 f-flex12_s">
+                    <dl class="j-dropdown_footer">
+                        <dt class="footer-nav_btn"><a href="//jobs.atcoder.jp" target="_blank">AtCoderJobs</a></dt>
+                        <dd class="footer-nav_detail">
+                            <div class="inner">
+                                <ul>
+                                    <li><a href="//jobs.atcoder.jp">AtCoderJobsトップ</a></li>
+
+                                    <li><a href="//jobs.atcoder.jp/offers/list?f.CategoryScreenName=jobchange">中途採用求人一覧</a></li>
+
+                                    <li><a href="//jobs.atcoder.jp/offers/list?f.CategoryScreenName=intern">インターン求人一覧</a></li>
+
+                                    <li><a href="//jobs.atcoder.jp/offers/list?f.CategoryScreenName=parttime">アルバイト求人一覧</a></li>
+
+                                    <li><a href="//jobs.atcoder.jp/offers/list?f.CategoryScreenName=2021grad">2021年新卒採用求人一覧</a></li>
+
+                                    <li><a href="//jobs.atcoder.jp/offers/list?f.CategoryScreenName=others">その他求人一覧</a></li>
+
+                                    <li><a href="//jobs.atcoder.jp/offers/list?f.CategoryScreenName=2022grad">2022年新卒採用求人一覧</a></li>
+
+                                    <li><a href="//jobs.atcoder.jp/info/recruit">採用担当者の方へ</a></li>
+                                </ul>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="f-flex3 f-flex12_s">
+                    <dl class="j-dropdown_footer">
+                        <dt class="footer-nav_btn"><a href="//past.atcoder.jp" target="_blank">検定</a></dt>
+                        <dd class="footer-nav_detail">
+                            <div class="inner">
+                                <ul>
+                                    <li><a href="//past.atcoder.jp">検定トップ</a></li>
+                                    <li><a href="//past.atcoder.jp/login">マイページ</a></li>
+                                </ul>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="f-flex3 f-flex12_s">
+                    <dl class="j-dropdown_footer">
+
+                        <dt class="footer-nav_btn"><a href="javascript:void(0)">About</a></dt>
+                        <dd class="footer-nav_detail">
+                            <div class="inner">
+                                <ul>
+                                    <li><a href="/company">企業情報</a></li>
+                                    <li><a href="/faq">よくある質問</a></li>
+                                    <li><a href="/contact">お問い合わせ</a></li>
+                                    <li><a href="/documents/request">資料請求</a></li>
+                                </ul>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
             </div>
-        </section>
-
-        <h3>コンテストについて</h3>
-
-        <section>
-            このコンテストの開催時間は、2012/04/14 21:00 ～ 2012/04/14 22:30となります。<br/>
-            コンテストに参加するには、コンテスト開始の10分後までに、<a href="/register">ユーザ登録ページ</a>よりユーザ登録を行ってください。<br/>
-            ログイン後に<a href="/">トップページ</a>に下部に表示される参加ボタンを押すことで参加できます。<br />
-            コンテストの開催時間になると、<a href="/assignments">問題一覧ページ</a>より問題を確認し、解答することができます<br/>
-
-            <h3>コンテストの流れ</h3>
-
-            <section>
-                コンテストの流れは、以下のようになります。<br/>
-                <ol>
-                    <li>問題ボタンから好きな問題を１問開き、解き方を考えます。</li>
-                    <li>解き方が思いついたら、ソースコードを書きます。思いつかない場合は、他の問題を見ても問題ありません。</li>
-                    <li>正しいソースコードが書けたと思ったら、解答ボタンを選択し、問題及び言語を選択し、ソースコードを貼り付け、提出します。</li>
-                    <li>解答ボタンより、自分の解答を確認すると、ソースコードに対するジャッジ結果が表示されます。ACと表示されれば正解、それ以外は不正解となります。なお、WJと表示されている場合は、ジャッジ待ちの状態ですので、定期的に更新ボタンを押しながら、暫くお待ちください。</li>
-                    <li>正解だった場合は、次の問題へ挑戦しましょう。不正解だった場合は、また同じ問題に挑戦しても、別の問題を解いてみても構いません。</li>
-                    <li>コンテストが終了すると、結果に応じて、順位表にて自分の順位が確認閲覧出来ます。なお、コンテスト中でも、途中経過を確認することは可能です。</li>
-            </section>
-
-            <h3>メニューについて</h3>
-
-            なお、上メニューバーの各ボタンの機能は、以下の通りです。<br/>
-            <ul>
-                <li>トップ: 現在閲覧中のページです。</li>
-                <li>問題: コンテストの問題の閲覧ができます。</li>
-                <li>提出: コンテストの問題に対する、解答ソースコードを提出することが出来ます。</li>
-                <li>質問: コンテスト全体、および各問題に対して、コンテスト中に質問し、その回答を閲覧することが出来ます。</li>
-                <li>解答: 今までに自分が提出した解答を閲覧することができます。また、コンテスト終了後には他の参加者の解答状況を閲覧することが出来ます。</li>
-                <li>順位表: 現在のコンテストの順位表が閲覧できます。</li>
+        </nav>
+        <div class="footer-btm">
+            <div class="footer-copy">
+                Copyright Since 2012 (C) AtCoder Inc. All rights reserved.
+            </div>
+            <ul class="footer-link">
+                <li><a href="/tos">利用規約</a></li>
+                <li><a href="/privacy">プライバシーポリシー</a></li>
+                <li><a href="/personal">個人情報保護方針</a></li>
             </ul>
-
-            <h3>使用可能な言語</h3>
-            コンテストで使用可能な言語は、以下の通りです。<br/>
-
-            <ul>
-                <li>C++ (GCC4.4.6)</li>
-                <li>C (GCC4.4.6)</li>
-                <li>D (DMD 2.058)</li>
-                <li>Java (OpenJDK 1.6.0)</li>
-                <li>C# (Mono 2.10.5)</li>
-                <li>PHP (PHP 5.3.6)</li>
-                <li>Python (2.7.2)</li>
-                <li>Perl (5.12.4)</li>
-                <li>Ruby (1.9.2)</li>
-                <li>C++11 (GCC 4.6.1)</li>
-                <li>Haskell (GHC 7.0.3)</li>
-            </ul>
-
-        </section></div>
-
-
-
-
-
-</div>
-
-<footer>
-    <ul>
-        <li><a href="/tos"><span class="lang"><span class="lang-en">Terms of service</span><span class="lang-ja">利用規約</span></span></a></li>
-        <li><a href="/privacy"><span class="lang"><span class="lang-en">Privacy</span><span class="lang-ja">プライバシーポリシー</span></span></a></li>
-        <li><a href="/personal"><span class="lang"><span class="lang-en">Personal Information</span><span class="lang-ja">個人情報保護方針</span></span></a></li>
-        <li><a href="/tutorial"><span class="lang"><span class="lang-en">Tutorial</span><span class="lang-ja">チュートリアル</span></span></a></li>
-        <li><a href="/rules"><span class="lang"><span class="lang-en">Rules</span><span class="lang-ja">ルール</span></span></a></li>
-        <li><a href="/glossary"><span class="lang"><span class="lang-en">Glossary</span><span class="lang-ja">用語集</span></span></a></li>
-        <li><a href="/faq"><span class="lang"><span class="lang-en">FAQ</span><span class="lang-ja">よくある質問</span></span></a></li>
-    </ul>
-    <p id="copyright">&copy; 2017 AtCoder Inc. All rights reserved.</p>
+        </div>
+    </div>
 </footer>
 
-<p id="fixed-server-timer" style="display: none;"></p>
+<div id="scroll-page-top-new" style="display:none;"><div class="inner">Page top</div></div>
+<script src="/public/js/top/common.js?v=202005132348"></script>
 
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/prettify.js"></script>
-<script src="/js/lang-vb.js"></script>
-<script src="/js/lang-hs.js"></script>
-<script src="/js/varmath.js"></script>
-<script src="/js/script.js?v=2"></script>
 </body>
 </html>
+
+
