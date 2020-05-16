@@ -1,5 +1,7 @@
 # Change Log
 
+## 1.1.7.1 / 2020-05-17
+- [#201](https://github.com/kyuridenamida/atcoder-tools/pull/201) Fix crash bug of envgen when getting 404
 ## 1.1.7 / 2020-05-17
 
 #### Patches for the recent AtCoder judge system update
