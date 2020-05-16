@@ -73,7 +73,6 @@ class RustCodeGenerator(CppCodeGenerator):
         elif var.dim_num() == 1:
             if var.type == Type.str:
                 constructor = " = vec![String::new(); ({size}) as usize]".format(
-                    type=self._convert_type(var.type),
                     size=var.first_index.get_length()
                 )
             else:
@@ -84,7 +83,6 @@ class RustCodeGenerator(CppCodeGenerator):
         elif var.dim_num() == 2:
             if var.type == Type.str:
                 constructor = " = vec![vec![String::new(); ({col_size}) as usize]; ({row_size}) as usize]".format(
-                    type=self._convert_type(var.type),
                     row_size=var.first_index.get_length(),
                     col_size=var.second_index.get_length()
                 )

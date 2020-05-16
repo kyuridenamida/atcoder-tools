@@ -4,7 +4,6 @@ from typing import Pattern, Callable
 from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
-import platform
 
 
 class LanguageNotFoundError(Exception):
@@ -42,9 +41,9 @@ class Language:
 
     @classmethod
     def from_name(cls, name: str):
-        for l in ALL_LANGUAGES:
-            if l.name == name:
-                return l
+        for lang in ALL_LANGUAGES:
+            if lang.name == name:
+                return lang
         raise LanguageNotFoundError(
             "No language support for '{}'".format(ALL_LANGUAGE_NAMES))
 
