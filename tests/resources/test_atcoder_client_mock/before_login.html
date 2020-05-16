@@ -42,7 +42,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ja.js"></script>
     <script>
         var LANG = "en";
-        var userScreenName = "kyuridenamida";
+        var userScreenName = "";
         var csrfToken = "="
     </script>
     <script src="/public/js/utils.js?v=202005132348"></script>
@@ -117,24 +117,8 @@
                     </li>
 
 
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> kyuridenamida <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/users/kyuridenamida"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> My Profile</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/settings"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> General Settings</a></li>
-                            <li><a href="/settings/icon"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> Change Photo</a></li>
-                            <li><a href="/settings/password"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Change Password</a></li>
-                            <li><a href="/settings/fav"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Manage Fav</a></li>
-
-
-
-                            <li class="divider"></li>
-                            <li><a href="javascript:void(form_logout.submit())"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Sign Out</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="/register?continue=https%3A%2F%2Fatcoder.jp%2Fhome">Sign Up</a></li>
+                    <li><a href="/login?continue=https%3A%2F%2Fatcoder.jp%2Fhome">Sign In</a></li>
 
                 </ul>
             </div>

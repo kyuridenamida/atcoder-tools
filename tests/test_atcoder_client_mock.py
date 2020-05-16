@@ -63,12 +63,13 @@ class TestAtCoderClientMock(unittest.TestCase):
             {
                 contest.get_my_submissions_url(1): fake_resp("my_submissions/1.html"),
                 contest.get_my_submissions_url(2): fake_resp("my_submissions/2.html"),
-                contest.get_my_submissions_url(3): fake_resp("my_submissions/3.html")
+                contest.get_my_submissions_url(3): fake_resp("my_submissions/3.html"),
+                contest.get_my_submissions_url(4): fake_resp("my_submissions/4.html")
             }
         )
         submissions = self.client.download_submission_list(Contest("arc001"))
         submission_ids = [x.submission_id for x in submissions]
-        self.assertEqual(33, len(submission_ids))
+        self.assertEqual(50, len(submission_ids))
         self.assertEqual(sorted(submission_ids, reverse=True), submission_ids)
 
     @restore_client_after_run
@@ -85,14 +86,14 @@ class TestAtCoderClientMock(unittest.TestCase):
         for lang in [CPP, "C++14 (GCC 5.4.1)"]:
             submission = self.client.submit_source_code(
                 contest, problem, lang, "x")
-            self.assertEqual(3905485, submission.submission_id)
+            self.assertEqual(13269587, submission.submission_id)
             self.assertEqual("arc001_1", submission.problem_id)
 
     @restore_client_after_run
     def test_login_success(self):
         self.client._request = create_fake_request_func(
             post_url_to_resp={
-                "https://arc001.contest.atcoder.jp/login": fake_resp("after_login.html")
+                "https://atcoder.jp/login": fake_resp("after_login.html")
             }
         )
 
@@ -104,13 +105,19 @@ class TestAtCoderClientMock(unittest.TestCase):
 
     @restore_client_after_run
     def test_check_logging_in_success(self):
-        setting_url = "https://arc001.contest.atcoder.jp/settings"
+        setting_url = "https://atcoder.jp/home"
         self.client._request = create_fake_request_func(
-            {
-                setting_url: MockResponse(url=setting_url)
-            }
+            {setting_url: fake_resp("after_login.html")},
         )
         self.assertTrue(self.client.check_logging_in())
+
+    @restore_client_after_run
+    def test_check_logging_in_fail(self):
+        setting_url = "https://atcoder.jp/home"
+        self.client._request = create_fake_request_func(
+            {setting_url: fake_resp("before_login.html")}
+        )
+        self.assertFalse(self.client.check_logging_in())
 
 
 if __name__ == "__main__":
