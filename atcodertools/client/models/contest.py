@@ -25,7 +25,7 @@ class Contest:
         return "{}submissions/me/?page={}".format(self.get_new_url(), page)
 
     def get_submissions_url(self, submission: Submission):
-        return "{}submissions/?page={}".format(self.get_new_url(), submission.submission_id)
+        return "{}submissions/{}".format(self.get_new_url(), submission.submission_id)
 
     def to_dict(self):
         return {
