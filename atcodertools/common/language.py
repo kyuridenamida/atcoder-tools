@@ -82,10 +82,10 @@ CPP = Language(
     name="cpp",
     display_name="C++",
     extension="cpp",
-    submission_lang_pattern=re.compile(".*C\\+\\+14 \\(GCC.*"),
+    submission_lang_pattern=re.compile(".*C\\+\\+ \\(GCC 9.*|.*C\\+\\+14 \\(GCC 5.*"),
     default_code_generator=cpp.main,
     default_template_path=get_default_template_path('cpp'),
-    compile_command="g++ {filename}.cpp -o {filename} -std=c++14",
+    compile_command="g++ {filename}.cpp -o {filename} -std=c++17",
     test_command="{exec_filename}",
     exec_filename="{filename}{exec_extension}"
 )
