@@ -78,9 +78,9 @@ RUST = Language(
 
 PYTHON = Language(
     name="python",
-    display_name="Python3",
+    display_name="Python",
     extension="py",
-    submission_lang_pattern=re.compile(".*Python3.*"),
+    submission_lang_pattern=re.compile(".*Python3.*|^Python$"),
     default_code_generator=python.main,
     default_template_path=get_default_template_path('py'),
 )
