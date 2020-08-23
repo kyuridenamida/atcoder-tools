@@ -16,6 +16,7 @@ from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from atcodertools.codegen.template_engine import render
 from atcodertools.common.language import ALL_LANGUAGES, CPP
 from atcodertools.common.logging import logger
 from atcodertools.config.config import Config
@@ -47,17 +48,21 @@ def _message_on_execution(cwd: str, cmd: str):
     return "Executing the following command in `{}`: {}".format(cwd, cmd)
 
 
+def contest_dir_path(config: Config, contest_id: str):
+    return os.path.join(
+        config.code_style_config.workspace_dir,
+        render(config.code_style_config.contest_dir, contest_id=contest_id).strip())
+
+
 def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
                       config: Config):
-    workspace_root_path = config.code_style_config.workspace_dir
     template_code_path = config.code_style_config.template_file
     lang = config.code_style_config.lang
 
     pid = problem.get_alphabet()
     problem_dir_path = os.path.join(
-        workspace_root_path,
-        problem.get_contest().get_id(),
+        contest_dir_path(config, problem.get_contest().get_id()),
         pid)
 
     def emit_error(text):
@@ -202,12 +207,10 @@ def prepare_contest(atcoder_client: AtCoderClient,
                 pass
 
     if config.postprocess_config.exec_cmd_on_contest_dir is not None:
-        contest_dir_path = os.path.join(
-            config.code_style_config.workspace_dir, contest_id)
-        logger.info(_message_on_execution(contest_dir_path,
+        path = contest_dir_path(config, contest_id)
+        logger.info(_message_on_execution(path,
                                           config.postprocess_config.exec_cmd_on_contest_dir))
-        config.postprocess_config.execute_on_contest_dir(
-            contest_dir_path)
+        config.postprocess_config.execute_on_contest_dir(path)
 
 
 USER_CONFIG_PATH = os.path.join(

@@ -14,6 +14,7 @@ class CodeStyleConfigInitError(Exception):
 
 
 DEFAULT_WORKSPACE_DIR_PATH = os.path.join(expanduser("~"), "atcoder-workspace")
+DEFAULT_CONTEST_DIR_PATH = "{{contest_id}}"
 
 
 class CodeStyleConfig:
@@ -24,6 +25,7 @@ class CodeStyleConfig:
                  code_generator_file: Optional[str] = None,
                  template_file: Optional[str] = None,
                  workspace_dir: Optional[str] = None,
+                 contest_dir: Optional[str] = None,
                  lang: str = "cpp",
                  ):
         from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
@@ -79,6 +81,8 @@ class CodeStyleConfig:
             template_file or lang.default_template_path)
         self.workspace_dir = normalize_path(
             workspace_dir or DEFAULT_WORKSPACE_DIR_PATH)
+        self.contest_dir = normalize_path(
+            contest_dir or DEFAULT_CONTEST_DIR_PATH)
         self.lang = lang
 
     def indent(self, depth):
