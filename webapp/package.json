@@ -38,7 +38,7 @@
     "i": "^0.3.6",
     "identity-obj-proxy": "3.0.0",
     "jest": "^24.1.0",
-    "marked": "^0.6.0",
+    "marked": "^0.7.0",
     "mini-css-extract-plugin": "0.4.3",
     "npm": "^6.5.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
