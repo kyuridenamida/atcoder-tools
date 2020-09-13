@@ -1,9 +1,14 @@
 from argparse import Namespace
 from typing import TextIO, Dict, Any, Optional
 
+import os
+import argparse
+from os.path import expanduser
 import toml
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.common.logging import logger
+
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
 from atcodertools.config.submit_config import SubmitConfig
@@ -26,6 +31,7 @@ class Config:
         self.code_style_config = code_style_config
         self.postprocess_config = postprocess_config
         self.etc_config = etc_config
+        self.submit_config = submit_config
 
     @classmethod
     def load(cls, fp: TextIO, args: Optional[Namespace] = None):
@@ -39,7 +45,7 @@ class Config:
         code_style_config_dic = config_dic.get('codestyle', {})
         postprocess_config_dic = config_dic.get('postprocess', {})
         etc_config_dic = config_dic.get('etc', {})
-        submit_config_dic = config_dic.get(_SUBMIT_CONFIG_KEY, {})
+        submit_config_dic = config_dic.get('submit', {})
 
         if args:
             code_style_config_dic = _update_config_dict(code_style_config_dic,
@@ -59,3 +65,24 @@ class Config:
             etc_config=EtcConfig(**etc_config_dic),
             submit_config=SubmitConfig(**submit_config_dic),
         )
+
+
+USER_CONFIG_PATH = os.path.join(
+    expanduser("~"), ".atcodertools.toml")
+
+
+def get_config(args: argparse.Namespace) -> Config:
+    def _load(path: str) -> Config:
+        logger.info("Going to load {} as config".format(path))
+        with open(path, 'r') as f:
+#            program_args = ProgramArgs.load(args)
+
+            return Config.load(f)
+
+    if args.config:
+        return _load(args.config)
+
+    if os.path.exists(USER_CONFIG_PATH):
+        return _load(USER_CONFIG_PATH)
+
+    return _load(get_default_config_path())
