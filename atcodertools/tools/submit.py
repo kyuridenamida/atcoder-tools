@@ -13,6 +13,9 @@ from atcodertools.tools import tester
 from atcodertools.common.logging import logger
 
 from atcodertools.tools.models.metadata import Metadata
+from atcodertools.config.config import get_config, USER_CONFIG_PATH
+from atcodertools.tools import get_default_config_path
+from atcodertools.executils.run_command import run_command
 
 
 def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> bool:
@@ -67,9 +70,17 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                         type=float,
                         default=None)
 
+    parser.add_argument("--config",
+                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
+                            USER_CONFIG_PATH),
+                            "[Default (Secondary)] {}\n".format(
+                                get_default_config_path()))
+                        )
     args = parser.parse_args(args)
+    config = get_config(args)
 
     metadata_file = os.path.join(args.dir, "metadata.json")
+
     try:
         metadata = Metadata.load_from(metadata_file)
     except IOError:
@@ -110,6 +121,11 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                     return False
 
         code_path = args.code or os.path.join(args.dir, metadata.code_filename)
+        if config.submit_config.run_exec_before_submit:
+            run_command(config.submit_config.exec_before_submit, "./")
+            code_path = config.submit_config.submit_filename
+            print("changed to submit_filename")
+
         with open(code_path, 'r') as f:
             source = f.read()
         logger.info(
