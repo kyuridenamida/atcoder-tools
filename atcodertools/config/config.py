@@ -6,7 +6,7 @@ import toml
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
-
+from atcodertools.config.submit_config import SubmitConfig
 
 def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
     return {
@@ -20,7 +20,8 @@ class Config:
     def __init__(self,
                  code_style_config: CodeStyleConfig = CodeStyleConfig(),
                  postprocess_config: PostprocessConfig = PostprocessConfig(),
-                 etc_config: EtcConfig = EtcConfig()
+                 etc_config: EtcConfig = EtcConfig(),
+                 submit_config: SubmitConfig = SubmitConfig()
                  ):
         self.code_style_config = code_style_config
         self.postprocess_config = postprocess_config
@@ -38,6 +39,7 @@ class Config:
         code_style_config_dic = config_dic.get('codestyle', {})
         postprocess_config_dic = config_dic.get('postprocess', {})
         etc_config_dic = config_dic.get('etc', {})
+        submit_config_dic = config_dic.get(_SUBMIT_CONFIG_KEY, {})
 
         if args:
             code_style_config_dic = _update_config_dict(code_style_config_dic,
@@ -54,5 +56,6 @@ class Config:
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
             postprocess_config=PostprocessConfig(**postprocess_config_dic),
-            etc_config=EtcConfig(**etc_config_dic)
+            etc_config=EtcConfig(**etc_config_dic),
+            submit_config=SubmitConfig(**submit_config_dic),
         )
