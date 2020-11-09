@@ -80,7 +80,7 @@ PYTHON = Language(
     name="python",
     display_name="Python",
     extension="py",
-    submission_lang_pattern=re.compile(".*Python3.*|^Python$"),
+    submission_lang_pattern=re.compile(".*Python3.*|^Python$|^Python \\(3\\..*"),
     default_code_generator=python.main,
     default_template_path=get_default_template_path('py'),
 )
