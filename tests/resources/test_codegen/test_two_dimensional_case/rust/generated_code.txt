@@ -11,9 +11,9 @@ fn main() {
     H = scanner.next();
     let mut W: i64;
     W = scanner.next();
-    let mut c: Vec<Vec<i64>> = vec![vec![0i64; (9-0+1) as usize]; (9-0+1) as usize];
-    for i in 0..(9-0+1) as usize {
-        for j in 0..(9-0+1) as usize {
+    let mut c: Vec<Vec<i64>> = vec![vec![0i64; (9+1) as usize]; (9+1) as usize];
+    for i in 0..(9+1) as usize {
+        for j in 0..(9+1) as usize {
             c[i][j] = scanner.next();
         }
     }

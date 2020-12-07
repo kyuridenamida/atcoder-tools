@@ -149,6 +149,7 @@ class CalcNode:
             next_formula = re.sub(r"-1\+1$", "", current_formula)
             next_formula = re.sub(r"\+0$", "", next_formula)
             next_formula = re.sub(r"-0$", "", next_formula)
+            next_formula = re.sub(r"[+-]0\+", "+", next_formula)
             if next_formula == current_formula:
                 break
             current_formula = next_formula
