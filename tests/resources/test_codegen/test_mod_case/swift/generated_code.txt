@@ -1,0 +1,32 @@
+import Foundation
+
+let MOD = 998244353
+
+func solve(_ A:String, _ B:String) {
+    var ans = 0
+
+    print(ans)
+}
+
+func main() {
+    var tokenIndex = 0
+    var tokenBuffer = [String]()
+    func nextToken() -> String {
+        if tokenIndex >= tokenBuffer.count {
+            tokenIndex = 0
+            tokenBuffer = readLine()!.split(separator: " ").map { String($0) }
+        }
+        tokenIndex += 1
+        return tokenBuffer[tokenIndex - 1]
+    }
+    let A = nextToken()
+    let B = nextToken()
+    solve(A, B)
+}
+
+#if DEBUG
+let caseNumber = 1
+_ = freopen("in_\(caseNumber).txt", "r", stdin)
+#endif
+
+main()

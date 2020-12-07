@@ -1,0 +1,35 @@
+import Foundation
+
+let YES = "YES"
+let NO = "NO"
+
+func solve(_ N:Int, _ M:Int, _ A:Int, _ B:Int) {
+    var ans = false
+
+    print(ans ? YES : NO)
+}
+
+func main() {
+    var tokenIndex = 0
+    var tokenBuffer = [String]()
+    func nextToken() -> String {
+        if tokenIndex >= tokenBuffer.count {
+            tokenIndex = 0
+            tokenBuffer = readLine()!.split(separator: " ").map { String($0) }
+        }
+        tokenIndex += 1
+        return tokenBuffer[tokenIndex - 1]
+    }
+    let N = Int(nextToken())!
+    let M = Int(nextToken())!
+    let A = Int(nextToken())!
+    let B = Int(nextToken())!
+    solve(N, M, A, B)
+}
+
+#if DEBUG
+let caseNumber = 1
+_ = freopen("in_\(caseNumber).txt", "r", stdin)
+#endif
+
+main()

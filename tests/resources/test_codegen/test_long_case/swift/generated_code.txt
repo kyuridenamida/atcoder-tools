@@ -1,0 +1,34 @@
+import Foundation
+
+func solve(_ H:Int, _ W:Int, _ K:Int, _ sr:Int, _ sc:Int, _ s:[String], _ N:Int, _ fr:[Int], _ fc:[Int], _ F:[Int], _ D:[Int]) {
+
+}
+
+func main() {
+    func nextToken() -> String {
+        return ""
+    }
+    let H = Int(nextToken())!
+    let W = Int(nextToken())!
+    let K = Int(nextToken())!
+    let sr = Int(nextToken())!
+    let sc = Int(nextToken())!
+    var s = [String]()
+    for _ in 0..<H {
+        s.append(nextToken())
+    }
+    let N = Int(nextToken())!
+    var fr = [Int]()
+    var fc = [Int]()
+    var F = [Int]()
+    var D = [Int]()
+    for _ in 0..<N {
+        fr.append(Int(nextToken())!)
+        fc.append(Int(nextToken())!)
+        F.append(Int(nextToken())!)
+        D.append(Int(nextToken())!)
+    }
+    solve(H, W, K, sr, sc, s, N, fr, fc, F, D)
+}
+
+main()

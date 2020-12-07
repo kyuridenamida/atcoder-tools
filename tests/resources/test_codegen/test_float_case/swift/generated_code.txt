@@ -1,0 +1,27 @@
+import Foundation
+
+func solve(_ L:Int, _ N:Int, _ M:Int, _ K:[Double], _ A:[Int], _ S:[Double]) {
+
+}
+
+func main() {
+    func nextToken() -> String {
+        return ""
+    }
+    let L = Int(nextToken())!
+    let N = Int(nextToken())!
+    let M = Int(nextToken())!
+    var K = [Double]()
+    for _ in 0..<L {
+        K.append(Double(nextToken())!)
+    }
+    var A = [Int]()
+    var S = [Double]()
+    for _ in 0..<N {
+        A.append(Int(nextToken())!)
+        S.append(Double(nextToken())!)
+    }
+    solve(L, N, M, K, A, S)
+}
+
+main()
