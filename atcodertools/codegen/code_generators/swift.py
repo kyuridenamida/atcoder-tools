@@ -83,10 +83,7 @@ class SwiftCodeGenerator:
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
         ctype = self._convert_type(var.type)
-        if var.type == Type.str:
-            getnext = 'nextToken()'
-        else:
-            getnext = '{ctype}(nextToken())!'.format(ctype=ctype)
+        getnext = 'read{ctype}()'.format(ctype=ctype)
         if var.dim_num() == 0:
             return 'let {name} = {getnext}'.format(name=name, getnext=getnext)
         else:

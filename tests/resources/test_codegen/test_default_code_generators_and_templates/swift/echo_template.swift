@@ -49,16 +49,17 @@ func solve({{ formal_arguments }}) -> Bool {
 }
 
 func main() {
-    var tokenIndex = 0
-    var tokenBuffer = [String]()
-    func nextToken() -> String {
+    var tokenIndex = 0, tokenBuffer = [String]()
+    func readString() -> String {
         if tokenIndex >= tokenBuffer.count {
             tokenIndex = 0
             tokenBuffer = readLine()!.split(separator: " ").map { String($0) }
         }
-        tokenIndex += 1
-        return tokenBuffer[tokenIndex - 1]
+        defer { tokenIndex += 1 }
+        return tokenBuffer[tokenIndex]
     }
+    func readInt() -> Int { Int(readString())! }
+    func readDouble() -> Double { Double(readString())! }
     {{input_part}}
     _ = solve({{ actual_arguments }})
 }

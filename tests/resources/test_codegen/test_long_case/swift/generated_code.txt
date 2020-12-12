@@ -5,28 +5,28 @@ func solve(_ H:Int, _ W:Int, _ K:Int, _ sr:Int, _ sc:Int, _ s:[String], _ N:Int,
 }
 
 func main() {
-    func nextToken() -> String {
-        return ""
-    }
-    let H = Int(nextToken())!
-    let W = Int(nextToken())!
-    let K = Int(nextToken())!
-    let sr = Int(nextToken())!
-    let sc = Int(nextToken())!
+    func readString() -> String { "" }
+    func readInt() -> Int { 0 }
+    func readDouble() -> Double { 0 }
+    let H = readInt()
+    let W = readInt()
+    let K = readInt()
+    let sr = readInt()
+    let sc = readInt()
     var s = [String]()
     for _ in 0..<H {
-        s.append(nextToken())
+        s.append(readString())
     }
-    let N = Int(nextToken())!
+    let N = readInt()
     var fr = [Int]()
     var fc = [Int]()
     var F = [Int]()
     var D = [Int]()
     for _ in 0..<N {
-        fr.append(Int(nextToken())!)
-        fc.append(Int(nextToken())!)
-        F.append(Int(nextToken())!)
-        D.append(Int(nextToken())!)
+        fr.append(readInt())
+        fc.append(readInt())
+        F.append(readInt())
+        D.append(readInt())
     }
     solve(H, W, K, sr, sc, s, N, fr, fc, F, D)
 }

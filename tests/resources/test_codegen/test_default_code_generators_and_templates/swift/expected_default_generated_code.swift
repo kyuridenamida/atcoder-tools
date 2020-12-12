@@ -11,35 +11,36 @@ func solve(_ N:Int, _ M:Int, _ H:[[String]], _ A:[Int], _ B:[Double], _ Q:Int, _
 }
 
 func main() {
-    var tokenIndex = 0
-    var tokenBuffer = [String]()
-    func nextToken() -> String {
+    var tokenIndex = 0, tokenBuffer = [String]()
+    func readString() -> String {
         if tokenIndex >= tokenBuffer.count {
             tokenIndex = 0
             tokenBuffer = readLine()!.split(separator: " ").map { String($0) }
         }
-        tokenIndex += 1
-        return tokenBuffer[tokenIndex - 1]
+        defer { tokenIndex += 1 }
+        return tokenBuffer[tokenIndex]
     }
-    let N = Int(nextToken())!
-    let M = Int(nextToken())!
+    func readInt() -> Int { readInt() }
+    func readDouble() -> Double { readDouble() }
+    let N = readInt()
+    let M = readInt()
     var H = [[String]]()
     for i in 0..<N-2+1 {
         H.append([String]())
         for _ in 0..<M-1-2+1 {
-            H[i].append(nextToken())
+            H[i].append(readString())
         }
     }
     var A = [Int]()
     var B = [Double]()
     for _ in 0..<N-2+1 {
-        A.append(Int(nextToken())!)
-        B.append(Double(nextToken())!)
+        A.append(readInt())
+        B.append(readDouble())
     }
-    let Q = Int(nextToken())!
+    let Q = readInt()
     var X = [Int]()
     for _ in 0..<M+Q {
-        X.append(Int(nextToken())!)
+        X.append(readInt())
     }
     solve(N, M, H, A, B, Q, X)
 }

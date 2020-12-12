@@ -10,20 +10,21 @@ func solve(_ N:Int, _ M:Int, _ A:Int, _ B:Int) {
 }
 
 func main() {
-    var tokenIndex = 0
-    var tokenBuffer = [String]()
-    func nextToken() -> String {
+    var tokenIndex = 0, tokenBuffer = [String]()
+    func readString() -> String {
         if tokenIndex >= tokenBuffer.count {
             tokenIndex = 0
             tokenBuffer = readLine()!.split(separator: " ").map { String($0) }
         }
-        tokenIndex += 1
-        return tokenBuffer[tokenIndex - 1]
+        defer { tokenIndex += 1 }
+        return tokenBuffer[tokenIndex]
     }
-    let N = Int(nextToken())!
-    let M = Int(nextToken())!
-    let A = Int(nextToken())!
-    let B = Int(nextToken())!
+    func readInt() -> Int { Int(readString())! }
+    func readDouble() -> Double { Double(readString())! }
+    let N = readInt()
+    let M = readInt()
+    let A = readInt()
+    let B = readInt()
     solve(N, M, A, B)
 }
 
