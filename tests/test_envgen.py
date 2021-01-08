@@ -6,7 +6,7 @@ from unittest import mock
 from os.path import relpath
 from logging import getLogger
 
-from atcodertools.client.atcoder import AtCoderClient
+from atcodertools.client.atcoder import AtCoderClient, PageNotFoundError
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.config import Config
 from atcodertools.config.etc_config import EtcConfig
@@ -80,7 +80,7 @@ class TestEnvGen(unittest.TestCase):
     @mock.patch('time.sleep')
     def test_prepare_contest_aborts_after_max_retry_attempts(self, mock_sleep):
         mock_client = mock.Mock(spec=AtCoderClient)
-        mock_client.download_problem_list.return_value = []
+        mock_client.download_problem_list.side_effect = PageNotFoundError
         self.assertRaises(
             EnvironmentInitializationError,
             prepare_contest,
