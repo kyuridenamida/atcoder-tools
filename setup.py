@@ -26,7 +26,7 @@ setup(
     author_email='tyotyo3@gmail.com',
     long_description_content_type="text/markdown",
     long_description=readme,
-    packages=find_packages(exclude=('tests',)),
+    packages=find_packages(exclude=['tests', 'tests.*']),
     install_requires=_requires_from_file('requirements.txt'),
     license="MIT",
     entry_points={
