@@ -50,6 +50,6 @@ def run_program(exec_file: str, input_file: str, timeout_sec: int, args=None, cu
         elapsed_sec += time.time()
         return ExecResult(code, proc.stdout, proc.stderr, elapsed_sec=elapsed_sec)
     except subprocess.TimeoutExpired as e:
-        return ExecResult(ExecStatus.TLE, e.stdout, e.stderr)
+        return ExecResult(ExecStatus.TLE, e.stdout or "", e.stderr or "")
     except subprocess.CalledProcessError as e:
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
