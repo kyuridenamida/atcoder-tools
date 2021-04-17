@@ -1,4 +1,4 @@
-name: run-tests
+name: Run unit tests & integration tests
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 3.5, 3.8 ]
+        python-version: [ 3.6, 3.8 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -41,12 +41,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install nim mono-complete
-
-      - name: Check styles
-        run: |
-          poetry run flake8 --ignore=E501,W503,W605 --exclude=atcodertools/tools/templates/,tests/resources/test_codegen/ atcodertools tests
-          poetry run autopep8 -r . --exclude 'default_template.py,test_codegen' --diff | tee check_autopep8
-          test ! -s check_autopep8
 
       - name: Run Unit Tests and Integration Tests
         run: |
