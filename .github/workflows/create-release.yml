@@ -1,0 +1,37 @@
+name: Create Release
+on:
+  workflow_dispatch:
+    inputs:
+      releaseversion:
+        description: 'Specify release version (e.g. 2.0.1)'
+        required: true
+        default: ''
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Replace Versions
+        run: |
+          sed -i "s/^version = .*$/version = \"${{github.event.inputs.releaseversion}}\"/g" pyproject.toml
+          sed -i "s/^__version__ = .*$/__version__ = \"${{github.event.inputs.releaseversion}}\"/g"  atcodertools/release_management/version.py
+      - name: Make sure diff exists
+        run: |
+          git diff --stat --exit-code atcodertools/release_management/version.py
+          git diff --stat --exit-code pyproject.toml
+      - uses: EndBug/add-and-commit@v7.0.0
+        with:
+          author_name: github-actions
+          author_email: 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.event.inputs.releaseversion }}
+          release_name: Release ${{ github.event.inputs.releaseversion }}
+          body: |
+            Release version ${{ github.event.inputs.releaseversion }}
+          draft: false
+          prerelease: false
