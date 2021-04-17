@@ -14,4 +14,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
           issues: false
-          max-issues: 10000
+          maxIssues: 10000
