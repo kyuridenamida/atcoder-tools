@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "atcodertools"
+version = "1.1.7.1"
+description = "Convenient modules & tools for AtCoder users, written in Python 3.5"
+authors = ["kyuridenamida <tyotyo3@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.5"
+beautifulsoup4 = "^4.9.3"
+requests = "^2.25.1"
+colorama = "^0.4.4"
+toml = "^0.10.2"
+Jinja2 = "^2.11.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
