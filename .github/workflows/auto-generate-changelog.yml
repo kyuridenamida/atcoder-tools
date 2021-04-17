@@ -1,7 +1,7 @@
 name: Generate changelog
 on:
-  workflow_dispatch:
-
+  release:
+    types: [created, edited]
 jobs:
   generate-changelog:
     runs-on: ubuntu-latest
@@ -9,9 +9,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+      - uses: BobAnkh/auto-generate-changelog@master
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          output: CHANGELOG.md
-          issues: false
-          maxIssues: 10000
+          REPO_NAME: 'BobAnkh/auto-generate-changelog'
+          ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PATH: '/CHANGELOG.md'
+          COMMIT_MESSAGE: 'docs(CHANGELOG): update release notes'
+          TYPE: 'feat:Feature,fix:Bug Fixes,docs:Documentation,refactor:Refactor,perf:Performance Improvements'
+      - uses: EndBug/add-and-commit@v7.0.0
+        with:
+          author_name: github-actions
+          author_email: 41898282+github-actions[bot]@users.noreply.github.com
