@@ -26,12 +26,16 @@ jobs:
           author_name: github-actions
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
 
+      - name: Get latest commitish
+        run: echo "COMMITISH=`git rev-parse HEAD`" >> $GITHUB_ENV
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          commitish: ${{ env.COMMITISH }}
           tag_name: ${{ github.event.inputs.releaseversion }}
           release_name: Release ${{ github.event.inputs.releaseversion }}
           body: |

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "atcodertools"
-version = "2.0.0"
+version = "2.0.1"
 description = "Convenient modules & tools for AtCoder users, written in Python 3.6"
 authors = ["kyuridenamida <tyotyo3@gmail.com>"]
 license = "MIT"
