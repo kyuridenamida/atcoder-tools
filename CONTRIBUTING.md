@@ -1,4 +1,4 @@
-_Sorry for non-Japanese readers, but currently the English version of the contribution guide is unavailable.
+_Sorry for non-Japanese readers, but currently the English version of the contribution guide is unavailable although your contribution is welcome.
 In the meanwhile, please try machine translation or ask [@kyuridenamida](https://twitter.com/kyuridenamida) directly on Twitter for the contribution guideline._ 
 
 # コントリビューションガイド
@@ -19,7 +19,7 @@ AtCoderToolsへのコントリビューションに興味を持って頂きあ�
 
 ### 2. Poetryを通じたパッケージにインストール
 依存ライブラリのインストールはpoetryを通じて行います。
-poetryのインストールはhttps://cocoatomo.github.io/poetry-ja/を参照してください。
+poetryのインストールはhttps://cocoatomo.github.io/poetry-ja/ を参照してください。
 
 プロジェクトのルートディレクトリで以下のコマンドを実行することで環境がインストールできます。
 ```
@@ -68,7 +68,7 @@ TODO: ここ
 変更をCommitしてPushします。できるだけ英語だと嬉しいです。
 実装とテストのコミットが複数あっても構いませんし細かいことは気にしません。
 
-### 8. マージリクエストを送る
+### 8. プルリクエストを送る
 
 変更内容の概要を書いてください。英語で書いてくれると嬉しいですが、日本語とその機械翻訳の結果とかでもいいです。
 概要はテンプレートに従うと楽ですが、必要に応じて独自の書き方でも構いません。

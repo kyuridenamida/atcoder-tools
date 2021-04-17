@@ -1,0 +1,55 @@
+name: run-tests
+
+on:
+  push:
+    branches: [ stable ]
+  pull_request:
+    branches: [ stable ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ 3.5, 3.8 ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+
+      - name: Add path for Poetry
+        run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Install Dependencies
+        run: poetry install --no-interaction
+
+      # Install Compilers for integration tests
+      - name: Install D compiler
+        uses: dlang-community/setup-dlang@v1
+        with:
+          compiler: dmd-latest
+
+      - name: Install other compilers
+        run: |
+          sudo apt-get update
+          sudo apt-get install nim mono-complete
+
+      - name: Check styles
+        run: |
+          poetry run flake8 --ignore=E501,W503,W605 --exclude=atcodertools/tools/templates/,tests/resources/test_codegen/ atcodertools tests
+          poetry run autopep8 -r . --exclude 'default_template.py,test_codegen' --diff | tee check_autopep8
+          test ! -s check_autopep8
+
+      - name: Run Unit Tests and Integration Tests
+        run: |
+          poetry run atcoder-tools gen arc050 --without-login
+          poetry run nosetests tests --exe -v --with-coverage --cover-package=atcodertools
+          poetry run codecov
