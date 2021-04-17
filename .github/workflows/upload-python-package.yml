@@ -31,5 +31,5 @@ jobs:
         run: |
           rm -rf dist/
           poetry build
-          poetry run twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+          poetry run twine upload dist/*
 
