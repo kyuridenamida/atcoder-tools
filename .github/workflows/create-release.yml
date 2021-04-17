@@ -10,14 +10,17 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Replace Versions
         run: |
           sed -i "s/^version = .*$/version = \"${{github.event.inputs.releaseversion}}\"/g" pyproject.toml
           sed -i "s/^__version__ = .*$/__version__ = \"${{github.event.inputs.releaseversion}}\"/g"  atcodertools/release_management/version.py
       - name: Make sure diff exists
         run: |
-          git diff --stat --exit-code atcodertools/release_management/version.py
-          git diff --stat --exit-code pyproject.toml
+          ! git diff --stat --exit-code atcodertools/release_management/version.py
+          ! git diff --stat --exit-code pyproject.toml
       - uses: EndBug/add-and-commit@v7.0.0
         with:
           author_name: github-actions
