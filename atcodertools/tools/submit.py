@@ -79,7 +79,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
 
     try:
         client = AtCoderClient()
-        client.login(save_session_cache=args.save_no_session_cache,
+        client.login(save_session_cache=not args.save_no_session_cache,
                      credential_supplier=credential_supplier,
                      use_local_session_cache=use_local_session_cache,
                      )
