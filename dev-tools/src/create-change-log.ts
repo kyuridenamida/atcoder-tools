@@ -24,8 +24,8 @@ interface PullRequest {
     body: string
     user: {
         login: string,
-        avatar_url: "https://avatars.githubusercontent.com/u/233559?v=4",
-        url: "https://api.github.com/users/kyuridenamida",
+        avatar_url: string;
+        html_url: string;
     },
     merged_at: string,
     milestone: {
@@ -147,7 +147,7 @@ const createChangelog = async (latestVersion: string, changelogMdPath: string) =
 
 
             pullRequests.forEach(pr => {
-                if (pr.labels.find((label) => label.name == "Release") !== undefined) {
+                if (pr.labels.find((label) => label.name === "release") !== undefined) {
                     // Exclude Release PRs because they are useless to show
                     return;
                 }
@@ -157,7 +157,7 @@ const createChangelog = async (latestVersion: string, changelogMdPath: string) =
                     `[#${pr.number}](${pr.html_url})`,
                     `${pr.title}`.replace(/\|/g, " "),
                     labels.join("<br/>") || " ",
-                    `[${pr.user.login}](${pr.user.url})`
+                    `[${pr.user.login}](${pr.user.html_url})`
                 ];
                 changeLogMarkdownLines.push(`|${columns.join("|")}|`);
             });
