@@ -1,117 +1,101 @@
 # Change Log
-
-## 1.1.7.1 / 2020-05-17
-- [#201](https://github.com/kyuridenamida/atcoder-tools/pull/201) Fix crash bug of envgen when getting 404
-## 1.1.7 / 2020-05-17
-
-#### Patches for the recent AtCoder judge system update
-- [#191](https://github.com/kyuridenamida/atcoder-tools/pull/191) C++
-   - Thanks for [@hiramekun](https://github.com/hiramekun/)'s contribution!
-   - Thanks for [@dnek](https://github.com/dnek/)'s contribution!
-- [#192](https://github.com/kyuridenamida/atcoder-tools/pull/192) Python
-   - Thanks for [@Matts966](https://github.com/Matts966/)'s contribution!
-- [#198](https://github.com/kyuridenamida/atcoder-tools/pull/198) Java / D + Stop using old AtCoder URLs in AtCoder Client
-   - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution!
-#### Other changes
-- [#172](https://github.com/kyuridenamida/atcoder-tools/pull/172) Recognize an integer token as a string token when it has a leading zero or too many digits in format prediction
-   - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution!
-- [#174](https://github.com/kyuridenamida/atcoder-tools/pull/174) Makes gen command retry with exponential backoff
-   - Thanks for [@yuuki3655](https://github.com/yuuki3655/)'s contribution!
-- [#187](https://github.com/kyuridenamida/atcoder-tools/pull/187) Support \dots in input formats
-
-## 1.1.6 / 2019-10-06
-
-- [#157](https://github.com/kyuridenamida/atcoder-tools/pull/157) Support decimal number judge
-    - Decimal number judge and the error value for the judge are automatically detected by analyzing the problem statement.
-    - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution! This is a very useful functionality.
-- [#153](https://github.com/kyuridenamida/atcoder-tools/pull/153) Support C#
-    - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution again!
-- [#159](https://github.com/kyuridenamida/atcoder-tools/pull/159) "Show Version" functionality on atcoder-tools command
-
-## 1.1.5 / 2019-08-20
-
-- [#140](https://github.com/kyuridenamida/atcoder-tools/pull/140) Make example input / output names configurable from EtcConfig
-    - Thanks for [@kitagawa-hr](https://github.com/kitagawa-hr/)'s contribution!
-- [#146](https://github.com/kyuridenamida/atcoder-tools/pull/146) Support NIM
-    - Thanks for [@chaemon](https://github.com/chaemon/)'s contribution!
-- [#145](https://github.com/kyuridenamida/atcoder-tools/pull/145) Support DLang
-    - Thanks for [@penpenpng](https://github.com/penpenpng/)'s contribution!
-- [#148](https://github.com/kyuridenamida/atcoder-tools/pull/148) Fix "codegen" error on Windows
-    - Thanks for [@penpenpng](https://github.com/penpenpng/)'s contribution!
-- [#144](https://github.com/kyuridenamida/atcoder-tools/pull/144) Fix Python code generator to generate codes following PEP8
-    - Thanks for [@penpenpng](https://github.com/penpenpng/)'s contribution!
-- [#142](https://github.com/kyuridenamida/atcoder-tools/pull/142) Stop using root logger
-    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
-- [#150](https://github.com/kyuridenamida/atcoder-tools/pull/150) Fix a bug flake8 in .travis.yml doesn't work
-    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
-
-## 1.1.4 / 2019-04-11
-- [#138](https://github.com/kyuridenamida/atcoder-tools/pull/138) Fix a bug that generated main.py is not executable by making source files executable when their codes have shebang
-    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
-- [#132](https://github.com/kyuridenamida/atcoder-tools/pull/132) By default, stop showing example details on test command when getting AC but with stderr
-    - Thanks for [@blue-jam](https://github.com/blue-jam/)'s contribution!
-- [#131](https://github.com/kyuridenamida/atcoder-tools/pull/131) Support coloring functionality on Windows
-    - Thanks for [@kotamanegi](https://github.com/kotamanegi/)'s contribution!
-- [#128](https://github.com/kyuridenamida/atcoder-tools/pull/128) Show new AtCoder URL to the submission page
-    - Thanks for [@kotamanegi](https://github.com/kotamanegi/)'s contribution again!
-
-## 1.1.3 / 2019-03-06
-- [#122](https://github.com/kyuridenamida/atcoder-tools/pull/122) Support pip installation on Windows (cmd.exe)
-    - Thanks for [@kotamanegi](https://github.com/kotamanegi/)'s contribution!
-- [#115](https://github.com/kyuridenamida/atcoder-tools/pull/115) Userscript to see generated code by atcoder-tools for archived contests
-    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
-- [#117](https://github.com/kyuridenamida/atcoder-tools/pull/117) Add tool advertisement on the default codes
-    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution again!
-
-## 1.1.2 / 2019-02-21 
-- [#98](https://github.com/kyuridenamida/atcoder-tools/pull/98) Add "codegen" sub command to simply generate the input part for a specific problem without preparing other files. 
-    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution!
-- [#97](https://github.com/kyuridenamida/atcoder-tools/pull/97) Support Python 3
-    - Thanks for [@kmyk](https://github.com/kmyk/)'s contribution again!
-
-
-## 1.1.1 / 2019-02-14 
-- Add an explicit disclaimer on README.md
-- [#84](https://github.com/kyuridenamida/atcoder-tools/pull/84) Output stdout even when getting RE or TLE.
-- [#86](https://github.com/kyuridenamida/atcoder-tools/pull/86) Support Rust
-    - Thanks for [@fukatani](https://github.com/fukatani/)'s contribution and [@koba-e964](https://github.com/koba-e964/)'s code review!
-- [#88](https://github.com/kyuridenamida/atcoder-tools/pull/88) Fix a bug you can't specify a code to submit by --code for submit command.
-- [#92](https://github.com/kyuridenamida/atcoder-tools/pull/92) Add unit tests to check if the default templates / code generators are correct, including a bug fix of Java code generator about two-dimensional input.
-
-
-## 1.1.0 / 2019-01-18 
-This version includes a breaking change. Deleting --replacement parameter requires some changes in your template. See [#79](https://github.com/kyuridenamida/atcoder-tools/pull/79).
-- [#80](https://github.com/kyuridenamida/atcoder-tools/pull/80) Anything configurable from command line is configurable from toml
-- [#79](https://github.com/kyuridenamida/atcoder-tools/pull/79) Delete --replacement and use template for both failure and success instead 
-- [#78](https://github.com/kyuridenamida/atcoder-tools/pull/78) Better default C++ template with move semantics
-
-## 1.0.6.1 / 2019-01-13
-- [#76](https://github.com/kyuridenamida/atcoder-tools/pull/76) Fix a bug the default templates are wrong. 
-
-## 1.0.6 / 2019-01-13
-- [#68](https://github.com/kyuridenamida/atcoder-tools/pull/68) Support custom code generator specification.
-- [#69](https://github.com/kyuridenamida/atcoder-tools/pull/69) Support template file specification in toml.
-- [#65](https://github.com/kyuridenamida/atcoder-tools/pull/65) Ignore exception while checking version.
-- [#64](https://github.com/kyuridenamida/atcoder-tools/pull/64) Increase recall of input format prediction, supporting tex formula.
-- [#71](https://github.com/kyuridenamida/atcoder-tools/pull/71) Minor speeding up of prediction.
-- [#73](https://github.com/kyuridenamida/atcoder-tools/pull/73) Colorful messages in gen / tester / submit.
-- Fix a bug that the color never goes back when you get a message saying "the latest version is available".
-
-
-## 1.0.5 / 2019-01-06
-- [#59](https://github.com/kyuridenamida/atcoder-tools/pull/59) Support user-defined postprocessor commands after code generation.
-- [#54](https://github.com/kyuridenamida/atcoder-tools/pull/54) Support constants (MOD/YES/NO) prediction so you can use them in your template.
-- [#52](https://github.com/kyuridenamida/atcoder-tools/pull/52) Support codestyle configuration.
-- [#50](https://github.com/kyuridenamida/atcoder-tools/pull/50) Add version checker to notify new versions to users.
-- [#49](https://github.com/kyuridenamida/atcoder-tools/pull/49) Support "atcoder-tools submit" command.
-
-## 1.0.4 / 2018-12-30
-- Fix a bug that requirements.txt is not found during package installation.
-- [#44](https://github.com/kyuridenamida/atcoder-tools/pull/44) Implement more parameters for the test script (See PR for details)
-
-
+## 1.1.7.1 / 2020-5-16
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#201](https://github.com/kyuridenamida/atcoder-tools/pull/201)|Fix crash bug of envgen when getting 404|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+## 1.1.7 / 2020-5-16
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#200](https://github.com/kyuridenamida/atcoder-tools/pull/200)|Release/1.1.7|![#F130A9](https://via.placeholder.com/15/F130A9/000000?text=+) **release**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#199](https://github.com/kyuridenamida/atcoder-tools/pull/199)|Add cherry-picked release candidates for 1.1.7| |[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#196](https://github.com/kyuridenamida/atcoder-tools/pull/196)|新しい言語のバージョンに対応|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://api.github.com/users/chaemon)|
+|[#192](https://github.com/kyuridenamida/atcoder-tools/pull/192)|Pythonの言語アップデートに対応|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[Matts966](https://api.github.com/users/Matts966)|
+|[#191](https://github.com/kyuridenamida/atcoder-tools/pull/191)|C++言語アップデートへの対応|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[hiramekun](https://api.github.com/users/hiramekun)|
+|[#187](https://github.com/kyuridenamida/atcoder-tools/pull/187)|#186 Support \dots in input formats|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#174](https://github.com/kyuridenamida/atcoder-tools/pull/174)|Makes gen command retry with exponential backoff|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[yuuki3655](https://api.github.com/users/yuuki3655)|
+|[#172](https://github.com/kyuridenamida/atcoder-tools/pull/172)|Recognize an integer token as a string token when it has a leading zero or too many digits in format prediction|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://api.github.com/users/chaemon)|
+## 1.1.6 / 2019-10-7
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#162](https://github.com/kyuridenamida/atcoder-tools/pull/162)|Release/1.1.6|![#F130A9](https://via.placeholder.com/15/F130A9/000000?text=+) **release**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#161](https://github.com/kyuridenamida/atcoder-tools/pull/161)|support judge type and error value on submit command|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#159](https://github.com/kyuridenamida/atcoder-tools/pull/159)|"Show Version" functionality on atcoder-tools command|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#157](https://github.com/kyuridenamida/atcoder-tools/pull/157)|Reinforce unit tests & Support C# & error type on documentation page|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#156](https://github.com/kyuridenamida/atcoder-tools/pull/156)|Support decimal number judge|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://api.github.com/users/chaemon)|
+|[#154](https://github.com/kyuridenamida/atcoder-tools/pull/154)|Make default code style configurable at language level|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://api.github.com/users/chaemon)|
+|[#153](https://github.com/kyuridenamida/atcoder-tools/pull/153)|Support C#|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://api.github.com/users/chaemon)|
+## 1.1.5 / 2019-8-19
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#152](https://github.com/kyuridenamida/atcoder-tools/pull/152)|Release 1.1.5|![#F130A9](https://via.placeholder.com/15/F130A9/000000?text=+) **release**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#151](https://github.com/kyuridenamida/atcoder-tools/pull/151)|Fix nim to work with the default indent setting|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#150](https://github.com/kyuridenamida/atcoder-tools/pull/150)|Fix a bug flake8 in .travis.yml doesn't work|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kmyk](https://api.github.com/users/kmyk)|
+|[#148](https://github.com/kyuridenamida/atcoder-tools/pull/148)|Fix "codegen" error on Windows|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[penpenpng](https://api.github.com/users/penpenpng)|
+|[#146](https://github.com/kyuridenamida/atcoder-tools/pull/146)|Support NIM|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://api.github.com/users/chaemon)|
+|[#145](https://github.com/kyuridenamida/atcoder-tools/pull/145)|Support DLang|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[penpenpng](https://api.github.com/users/penpenpng)|
+|[#144](https://github.com/kyuridenamida/atcoder-tools/pull/144)|Fix Python code generator to generate codes following PEP8|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[penpenpng](https://api.github.com/users/penpenpng)|
+|[#142](https://github.com/kyuridenamida/atcoder-tools/pull/142)|Stop using root logger|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://api.github.com/users/kmyk)|
+|[#141](https://github.com/kyuridenamida/atcoder-tools/pull/141)|Make example input / output names configurable from EtcConfig|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kitagawa-hr](https://api.github.com/users/kitagawa-hr)|
+## 1.1.4 / 2019-4-10
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#138](https://github.com/kyuridenamida/atcoder-tools/pull/138)|Make generated files executable when they have shebang|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://api.github.com/users/kmyk)|
+|[#132](https://github.com/kyuridenamida/atcoder-tools/pull/132)|Distinguish AC with stderr from WA on test command|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[blue-jam](https://api.github.com/users/blue-jam)|
+|[#131](https://github.com/kyuridenamida/atcoder-tools/pull/131)|Support coloring functionality on Windows|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kotamanegi](https://api.github.com/users/kotamanegi)|
+|[#128](https://github.com/kyuridenamida/atcoder-tools/pull/128)|Show new AtCoder URL to the submission page|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kotamanegi](https://api.github.com/users/kotamanegi)|
+## 1.1.3 / 2019-3-5
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#125](https://github.com/kyuridenamida/atcoder-tools/pull/125)|Release 1.1.3|![#F130A9](https://via.placeholder.com/15/F130A9/000000?text=+) **release**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#122](https://github.com/kyuridenamida/atcoder-tools/pull/122)|Fix compatibility problem on Windows|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kotamanegi](https://api.github.com/users/kotamanegi)|
+|[#117](https://github.com/kyuridenamida/atcoder-tools/pull/117)|Add PR to the default templates|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://api.github.com/users/kmyk)|
+|[#115](https://github.com/kyuridenamida/atcoder-tools/pull/115)|userscriptを追加|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://api.github.com/users/kmyk)|
+## 1.1.2 / 2019-2-20
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#110](https://github.com/kyuridenamida/atcoder-tools/pull/110)|Store all quality results into /api/all.json in Doc|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#98](https://github.com/kyuridenamida/atcoder-tools/pull/98)| Add the "codegen" subcommand|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://api.github.com/users/kmyk)|
+|[#97](https://github.com/kyuridenamida/atcoder-tools/pull/97)|Add a code generator for Python 3|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://api.github.com/users/kmyk)|
+## 1.1.1 / 2019-2-14
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#94](https://github.com/kyuridenamida/atcoder-tools/pull/94)|Release/1.1.1|![#F130A9](https://via.placeholder.com/15/F130A9/000000?text=+) **release**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#92](https://github.com/kyuridenamida/atcoder-tools/pull/92)|Add local compile tests for default templates / code generators|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#91](https://github.com/kyuridenamida/atcoder-tools/pull/91)|Refactor codes around language|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#88](https://github.com/kyuridenamida/atcoder-tools/pull/88)|#87 fix bug you can't specify a code to submit by --code for submit command|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#86](https://github.com/kyuridenamida/atcoder-tools/pull/86)|generate rust code.|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[fukatani](https://api.github.com/users/fukatani)|
+|[#84](https://github.com/kyuridenamida/atcoder-tools/pull/84)|Output stdout even when getting RE or TLE|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+## 1.1.0 / 2019-1-17
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#80](https://github.com/kyuridenamida/atcoder-tools/pull/80)|Anything configurable from command line is configurable from toml|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#79](https://github.com/kyuridenamida/atcoder-tools/pull/79)|Delete --replacement and use template for both failure and success instead|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#78](https://github.com/kyuridenamida/atcoder-tools/pull/78)|Better default C++ template with move semantics|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[asi1024](https://api.github.com/users/asi1024)|
+## 1.0.6 / 2019-1-13
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#75](https://github.com/kyuridenamida/atcoder-tools/pull/75)|Release/1.0.6|![#F130A9](https://via.placeholder.com/15/F130A9/000000?text=+) **release**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#73](https://github.com/kyuridenamida/atcoder-tools/pull/73)|Feature/colorful|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#71](https://github.com/kyuridenamida/atcoder-tools/pull/71)|Speed up prediction|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#69](https://github.com/kyuridenamida/atcoder-tools/pull/69)|Add template_file option in toml configuration |![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#68](https://github.com/kyuridenamida/atcoder-tools/pull/68)|Enable custom code generator function|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#67](https://github.com/kyuridenamida/atcoder-tools/pull/67)|Refactor code base|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#65](https://github.com/kyuridenamida/atcoder-tools/pull/65)|ignore version check exception|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#64](https://github.com/kyuridenamida/atcoder-tools/pull/64)|Increase recall of input format prediction|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+## 1.0.5 / 2019-1-6
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#61](https://github.com/kyuridenamida/atcoder-tools/pull/61)|Release/1.0.5|![#F130A9](https://via.placeholder.com/15/F130A9/000000?text=+) **release**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#59](https://github.com/kyuridenamida/atcoder-tools/pull/59)|introduce postprocess config with exec_on_each_problem_dir / exec_on_contest_dir…|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#54](https://github.com/kyuridenamida/atcoder-tools/pull/54)|Support Problem Constants Injection|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#52](https://github.com/kyuridenamida/atcoder-tools/pull/52)|Add code gen configuration|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#50](https://github.com/kyuridenamida/atcoder-tools/pull/50)|Feature/version checker|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+|[#49](https://github.com/kyuridenamida/atcoder-tools/pull/49)|Feature/submit|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
+## 1.0.4 / 2018-12-29
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#44](https://github.com/kyuridenamida/atcoder-tools/pull/44)|Feature/powerful tester|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
 ## 1.0.3 / 2018-12-27
-- [#41](https://github.com/kyuridenamida/atcoder-tools/pull/41) Cleaner input code generation ([Difference](https://github.com/kyuridenamida/atcoder-tools/commit/34cc603a73c3d455fe95f0fa7669f791c207f927#diff-a7157845521bbb208641f228d4f55aa9))
-
-## 1.0.2 / 2018-12-26
-- No history
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#41](https://github.com/kyuridenamida/atcoder-tools/pull/41)|Feature/cleaner input code|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**<br/>![#b60205](https://via.placeholder.com/15/b60205/000000?text=+) **messy-changeset**|[kyuridenamida](https://api.github.com/users/kyuridenamida)|
