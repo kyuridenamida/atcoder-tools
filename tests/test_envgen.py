@@ -78,7 +78,8 @@ class TestEnvGen(unittest.TestCase):
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
     def test_skip_existing_problem(self):
-        answer_data_dir_path = os.path.join(RESOURCE_DIR, "test_skip_existing_problem")
+        answer_data_dir_path = os.path.join(
+            RESOURCE_DIR, "test_skip_existing_problem")
         temp_contest_dir_path = os.path.join(self.temp_dir, "agc029")
 
         # Prepare workspace, modify A, and remove B
