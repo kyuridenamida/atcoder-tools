@@ -1,4 +1,10 @@
 # Change Log
+## 2.1.0 / 2021-4-21
+Release version 2.1.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#217](https://github.com/kyuridenamida/atcoder-tools/pull/217)|Fix run_program crash on TLE test cases|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[penpenpng](https://github.com/penpenpng)|
+|[#210](https://github.com/kyuridenamida/atcoder-tools/pull/210)|Remove redundant -0|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**<br/>![#849AD0](https://via.placeholder.com/15/849AD0/000000?text=+) **generator**|[firewood](https://github.com/firewood)|
 ## 2.0.0 / 2021-4-17
 Release version 2.0.0. Python 3.5 is not supported anymore.
 |PR|Change Summary|Label|Author|
