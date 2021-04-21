@@ -1,4 +1,11 @@
 # Change Log
+## 2.0.0 / 2021-4-17
+Release version 2.0.0. Python 3.5 is not supported anymore.
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#221](https://github.com/kyuridenamida/atcoder-tools/pull/221)|Add a github workflow to autogenerate changelog|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://github.com/kyuridenamida)|
+|[#219](https://github.com/kyuridenamida/atcoder-tools/pull/219)|Refactor contribution process + Stop supporting Python 3.5|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://github.com/kyuridenamida)|
+|[#214](https://github.com/kyuridenamida/atcoder-tools/pull/214)|Bump react-dev-utils from 6.1.1 to 11.0.4 in /webapp|![#0366d6](https://via.placeholder.com/15/0366d6/000000?text=+) **dependencies**|[dependabot[bot]](https://github.com/apps/dependabot)|
 ## 1.1.7.1 / 2020-5-16
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
@@ -7,9 +14,9 @@
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
 |[#199](https://github.com/kyuridenamida/atcoder-tools/pull/199)|Add cherry-picked release candidates for 1.1.7| |[kyuridenamida](https://github.com/kyuridenamida)|
-|[#196](https://github.com/kyuridenamida/atcoder-tools/pull/196)|新しい言語のバージョンに対応|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
-|[#192](https://github.com/kyuridenamida/atcoder-tools/pull/192)|Pythonの言語アップデートに対応|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[Matts966](https://github.com/Matts966)|
-|[#191](https://github.com/kyuridenamida/atcoder-tools/pull/191)|C++言語アップデートへの対応|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[hiramekun](https://github.com/hiramekun)|
+|[#196](https://github.com/kyuridenamida/atcoder-tools/pull/196)|Support the latest AtCoder language list|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
+|[#192](https://github.com/kyuridenamida/atcoder-tools/pull/192)|Support AtCoder submission with the latest Python language|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[Matts966](https://github.com/Matts966)|
+|[#191](https://github.com/kyuridenamida/atcoder-tools/pull/191)|Support AtCoder submission with the latest C++ language|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[hiramekun](https://github.com/hiramekun)|
 |[#187](https://github.com/kyuridenamida/atcoder-tools/pull/187)|#186 Support \dots in input formats|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#174](https://github.com/kyuridenamida/atcoder-tools/pull/174)|Makes gen command retry with exponential backoff|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[yuuki3655](https://github.com/yuuki3655)|
 |[#172](https://github.com/kyuridenamida/atcoder-tools/pull/172)|Recognize an integer token as a string token when it has a leading zero or too many digits in format prediction|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
@@ -45,7 +52,7 @@
 |:---|:---|:---|:---:|
 |[#122](https://github.com/kyuridenamida/atcoder-tools/pull/122)|Fix compatibility problem on Windows|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kotamanegi](https://github.com/kotamanegi)|
 |[#117](https://github.com/kyuridenamida/atcoder-tools/pull/117)|Add PR to the default templates|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://github.com/kmyk)|
-|[#115](https://github.com/kyuridenamida/atcoder-tools/pull/115)|userscriptを追加|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://github.com/kmyk)|
+|[#115](https://github.com/kyuridenamida/atcoder-tools/pull/115)|Add userscript|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://github.com/kmyk)|
 ## 1.1.2 / 2019-2-20
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
@@ -82,8 +89,8 @@
 |[#59](https://github.com/kyuridenamida/atcoder-tools/pull/59)|introduce postprocess config with exec_on_each_problem_dir / exec_on_contest_dir…|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#54](https://github.com/kyuridenamida/atcoder-tools/pull/54)|Support Problem Constants Injection|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#52](https://github.com/kyuridenamida/atcoder-tools/pull/52)|Add code gen configuration|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
-|[#50](https://github.com/kyuridenamida/atcoder-tools/pull/50)|Feature/version checker|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
-|[#49](https://github.com/kyuridenamida/atcoder-tools/pull/49)|Feature/submit|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
+|[#50](https://github.com/kyuridenamida/atcoder-tools/pull/50)|Add version checker|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
+|[#49](https://github.com/kyuridenamida/atcoder-tools/pull/49)|Submit feature|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
 ## 1.0.4 / 2018-12-29
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
