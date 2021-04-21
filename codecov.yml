@@ -10,3 +10,6 @@ coverage:
         target: 0%
         threshold: null
         base: auto
+
+ignore:
+  - "intellij-plugin/src/main/java/atcodertools/intellij/clion"  # Ignore clion package since we are unable to run tests on CI.
