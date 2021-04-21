@@ -112,13 +112,15 @@ class SwiftCodeGenerator:
         if isinstance(pattern, SingularPattern):
             lines.append(self._input_code_for_var(representative_var))
         elif isinstance(pattern, ParallelPattern):
-            lines.append(_loop_header(representative_var, representative_var.first_index, True))
+            lines.append(_loop_header(representative_var,
+                         representative_var.first_index, True))
             for var in pattern.all_vars():
                 lines.append("{indent}{line}".format(indent=self._indent(1),
                                                      line=self._input_code_for_var(var)))
             lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
-            lines.append(_loop_header(representative_var, representative_var.first_index, False))
+            lines.append(_loop_header(representative_var,
+                         representative_var.first_index, False))
             lines.append("{indent}{line}".format(indent=self._indent(1),
                                                  line=self._two_dimension_header(representative_var)))
             lines.append("{indent}{line}".format(indent=self._indent(1),
