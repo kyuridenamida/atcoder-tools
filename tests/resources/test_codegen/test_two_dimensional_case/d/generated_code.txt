@@ -18,9 +18,9 @@ int main(){
     W = input.front.to!long;
     input.popFront;
 
-    long[][] c = new long[][](cast(size_t) (9-0+1), cast(size_t) (9-0+1));
-    foreach (i; 0 .. cast(size_t) (9-0+1)) {
-        foreach (j; 0 .. cast(size_t) (9-0+1)) {
+    long[][] c = new long[][](cast(size_t) (9+1), cast(size_t) (9+1));
+    foreach (i; 0 .. cast(size_t) (9+1)) {
+        foreach (j; 0 .. cast(size_t) (9+1)) {
             c[i][j] = input.front.to!long;
             input.popFront;
         }

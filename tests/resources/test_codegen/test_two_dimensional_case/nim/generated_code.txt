@@ -22,9 +22,9 @@ proc main():void =
   H = nextInt()
   var W = 0
   W = nextInt()
-  var c = newSeqWith(9-0+1, newSeqWith(9-0+1, 0))
-  for i in 0..<9-0+1:
-    for j in 0..<9-0+1:
+  var c = newSeqWith(9+1, newSeqWith(9+1, 0))
+  for i in 0..<9+1:
+    for j in 0..<9+1:
       c[i][j] = nextInt()
   var A = newSeqWith(H, newSeqWith(W, 0))
   for i in 0..<H:

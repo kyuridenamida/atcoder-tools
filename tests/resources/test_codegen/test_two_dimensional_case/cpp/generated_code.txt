@@ -10,9 +10,9 @@ int main(){
     scanf("%lld",&H);
     long long W;
     scanf("%lld",&W);
-    std::vector<std::vector<long long>> c(9-0+1, std::vector<long long>(9-0+1));
-    for(int i = 0 ; i < 9-0+1 ; i++){
-        for(int j = 0 ; j < 9-0+1 ; j++){
+    std::vector<std::vector<long long>> c(9+1, std::vector<long long>(9+1));
+    for(int i = 0 ; i < 9+1 ; i++){
+        for(int j = 0 ; j < 9+1 ; j++){
             scanf("%lld",&c[i][j]);
         }
     }
