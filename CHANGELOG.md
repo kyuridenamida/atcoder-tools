@@ -6,6 +6,8 @@ Release version 2.0.0. Python 3.5 is not supported anymore.
 |[#221](https://github.com/kyuridenamida/atcoder-tools/pull/221)|Add a github workflow to autogenerate changelog|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#219](https://github.com/kyuridenamida/atcoder-tools/pull/219)|Refactor contribution process + Stop supporting Python 3.5|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#214](https://github.com/kyuridenamida/atcoder-tools/pull/214)|Bump react-dev-utils from 6.1.1 to 11.0.4 in /webapp|![#0366d6](https://via.placeholder.com/15/0366d6/000000?text=+) **dependencies**|[dependabot[bot]](https://github.com/apps/dependabot)|
+|[#212](https://github.com/kyuridenamida/atcoder-tools/pull/212)|Test by GitHub Actions|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[firewood](https://github.com/firewood)|
+|[#206](https://github.com/kyuridenamida/atcoder-tools/pull/206)|Bump marked from 0.6.0 to 0.7.0 in /webapp|![#0366d6](https://via.placeholder.com/15/0366d6/000000?text=+) **dependencies**|[dependabot[bot]](https://github.com/apps/dependabot)|
 ## 1.1.7.1 / 2020-5-16
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
