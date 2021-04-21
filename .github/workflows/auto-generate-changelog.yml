@@ -1,18 +1,34 @@
-name: Generate changelog
+name: Update Changelog
 on:
   workflow_dispatch:
-
+    inputs:
+      releaseversion:
+        description: 'Specify release version (e.g. 2.0.1)'
+        required: true
+        default: ''
 jobs:
   generate-changelog:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: setup node
+        uses: actions/setup-node@v1
         with:
-          fetch-depth: 0
-      - uses: BobAnkh/auto-generate-changelog@master
+          node-version: "15.x"
+
+      - name: Install packages
+        run: npm install
+        working-directory: ./dev-tools
+
+      - name: Generate CHANGELOG.md
+        run: npm run create-changelog -- --releaseVersion=${{github.event.inputs.releaseversion}}
+        working-directory: ./dev-tools
+
+      - uses: EndBug/add-and-commit@v7.0.0
         with:
-          REPO_NAME: 'BobAnkh/auto-generate-changelog'
-          ACCESS_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          PATH: '/CHANGELOG.md'
-          COMMIT_MESSAGE: 'docs(CHANGELOG): update release notes'
-          TYPE: 'feat:Feature,fix:Bug Fixes,docs:Documentation,refactor:Refactor,perf:Performance Improvements'
+          author_name: github-actions
+          author_email: 41898282+github-actions[bot]@users.noreply.github.com
