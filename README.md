@@ -116,7 +116,7 @@ optional arguments:
   --save-no-session-cache
                         Save no session cache to avoid security risk
   --skip-existing-problem
-                        Skip processing each problem for which a directory already exists
+                        Skip processing every problem for which a directory already exists
   --config CONFIG       File path to your config file
                         [Default (Primary)] /home/kyuridenamida/.atcodertools.toml
                         [Default (Secondary)] /atcoder-tools/atcodertools/tools/atcodertools-default.toml

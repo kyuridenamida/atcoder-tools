@@ -285,7 +285,7 @@ def main(prog, args):
 
     parser.add_argument("--skip-existing-problem",
                         action="store_true",
-                        help="Skip processing each problem for which a directory already exists",
+                        help="Skip processing every problem for which a directory already exists",
                         default=None)
 
     parser.add_argument("--config",
