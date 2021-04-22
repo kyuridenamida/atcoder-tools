@@ -1,0 +1,34 @@
+import Foundation
+
+func solve(_ H:Int, _ W:Int, _ K:Int, _ sr:Int, _ sc:Int, _ s:[String], _ N:Int, _ fr:[Int], _ fc:[Int], _ F:[Int], _ D:[Int]) {
+
+}
+
+func main() {
+    func readString() -> String { "" }
+    func readInt() -> Int { 0 }
+    func readDouble() -> Double { 0 }
+    let H = readInt()
+    let W = readInt()
+    let K = readInt()
+    let sr = readInt()
+    let sc = readInt()
+    var s = [String]()
+    for _ in 0..<H {
+        s.append(readString())
+    }
+    let N = readInt()
+    var fr = [Int]()
+    var fc = [Int]()
+    var F = [Int]()
+    var D = [Int]()
+    for _ in 0..<N {
+        fr.append(readInt())
+        fc.append(readInt())
+        F.append(readInt())
+        D.append(readInt())
+    }
+    solve(H, W, K, sr, sc, s, N, fr, fc, F, D)
+}
+
+main()
