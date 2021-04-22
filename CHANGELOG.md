@@ -1,4 +1,10 @@
 # Change Log
+## 2.2.0 / 2021-4-22
+Release version 2.2.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#223](https://github.com/kyuridenamida/atcoder-tools/pull/223)|Fix no inversion of save_no_session_cache in submit.py|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[dnek](https://github.com/dnek)|
+|[#222](https://github.com/kyuridenamida/atcoder-tools/pull/222)|New option to skip preparing existing problem directories|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[dnek](https://github.com/dnek)|
 ## 2.1.0 / 2021-4-21
 Release version 2.1.0
 |PR|Change Summary|Label|Author|
