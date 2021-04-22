@@ -20,8 +20,8 @@ func main() {
         defer { tokenIndex += 1 }
         return tokenBuffer[tokenIndex]
     }
-    func readInt() -> Int { readInt() }
-    func readDouble() -> Double { readDouble() }
+    func readInt() -> Int { Int(readString())! }
+    func readDouble() -> Double { Double(readString())! }
     let N = readInt()
     let M = readInt()
     var H = [[String]]()

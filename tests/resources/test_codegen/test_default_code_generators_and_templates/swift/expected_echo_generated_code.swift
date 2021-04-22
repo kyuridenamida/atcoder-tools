@@ -52,27 +52,27 @@ func main() {
         defer { tokenIndex += 1 }
         return tokenBuffer[tokenIndex]
     }
-    func readInt() -> Int { readInt() }
-    func readDouble() -> Double { readDouble() }
+    func readInt() -> Int { Int(readString())! }
+    func readDouble() -> Double { Double(readString())! }
     let N = readInt()
     let M = readInt()
     var H = [[String]]()
     for i in 0..<N-2+1 {
         H.append([String]())
         for _ in 0..<M-1-2+1 {
-            H[i].append(nextToken())
+            H[i].append(readString())
         }
     }
     var A = [Int]()
     var B = [Double]()
     for _ in 0..<N-2+1 {
         A.append(readInt())
-        B.append(Double(nextToken())!)
+        B.append(readDouble())
     }
-    let Q = Int(nextToken())!
+    let Q = readInt()
     var X = [Int]()
     for _ in 0..<M+Q {
-        X.append(Int(nextToken())!)
+        X.append(readInt())
     }
     _ = solve(N, M, H, A, B, Q, X)
 }
