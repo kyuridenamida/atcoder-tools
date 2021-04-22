@@ -1,6 +1,6 @@
 # Change Log
 ## 2.2.0 / 2021-4-22
-Release version 2.2.0
+Release version 2.2.0. From this version on, you can't use Python 3.6 because f-string is used in the code. Please upgrade your Python to at least 3.6 when you encounter some error about syntax.
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
 |[#223](https://github.com/kyuridenamida/atcoder-tools/pull/223)|Fix no inversion of save_no_session_cache in submit.py|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[dnek](https://github.com/dnek)|
