@@ -70,7 +70,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         logger.info("Problem {}: {}".format(pid, text))
 
     # Return if a directory for the problem already exists
-    if config.etc_config.skip_existing_problem:
+    if config.etc_config.skip_existing_problems:
         if os.path.exists(problem_dir_path):
             emit_info("Skip since a directory already exists.")
             return
@@ -283,7 +283,7 @@ def main(prog, args):
                         help="Save no session cache to avoid security risk",
                         default=None)
 
-    parser.add_argument("--skip-existing-problem",
+    parser.add_argument("--skip-existing-problems",
                         action="store_true",
                         help="Skip processing every problem for which a directory already exists",
                         default=None)

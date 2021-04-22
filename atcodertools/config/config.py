@@ -50,7 +50,7 @@ class Config:
                                                      download_without_login=args.without_login,
                                                      parallel_download=args.parallel,
                                                      save_no_session_cache=args.save_no_session_cache,
-                                                     skip_existing_problem=args.skip_existing_problem))
+                                                     skip_existing_problems=args.skip_existing_problems))
 
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),

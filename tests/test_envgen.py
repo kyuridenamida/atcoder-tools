@@ -77,9 +77,9 @@ class TestEnvGen(unittest.TestCase):
             )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
-    def test_skip_existing_problem(self):
+    def test_skip_existing_problems(self):
         answer_data_dir_path = os.path.join(
-            RESOURCE_DIR, "test_skip_existing_problem")
+            RESOURCE_DIR, "test_skip_existing_problems")
         temp_contest_dir_path = os.path.join(self.temp_dir, "agc029")
 
         # Prepare workspace, modify A, and remove B
@@ -93,7 +93,7 @@ class TestEnvGen(unittest.TestCase):
                     lang="cpp",
                 ),
                 etc_config=EtcConfig(
-                    skip_existing_problem=True,
+                    skip_existing_problems=True,
                     in_example_format="input_{}.txt",
                     out_example_format="output_{}.txt"
                 ))
@@ -113,7 +113,7 @@ class TestEnvGen(unittest.TestCase):
                     lang="cpp",
                 ),
                 etc_config=EtcConfig(
-                    skip_existing_problem=True,
+                    skip_existing_problems=True,
                     in_example_format="input_{}.txt",
                     out_example_format="output_{}.txt"
                 ))

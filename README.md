@@ -90,7 +90,7 @@ $ atcoder-tools gen  [contest_id] --without-login
 usage: atcoder-tools gen
        [-h] [--without-login] [--workspace WORKSPACE] [--lang LANG]
        [--template TEMPLATE] [--parallel] [--save-no-session-cache]
-       [--skip-existing-problem] [--config CONFIG]
+       [--skip-existing-problems] [--config CONFIG]
        contest_id
 
 positional arguments:
@@ -115,7 +115,7 @@ optional arguments:
   --parallel            Prepare problem directories asynchronously using multi processors.
   --save-no-session-cache
                         Save no session cache to avoid security risk
-  --skip-existing-problem
+  --skip-existing-problems
                         Skip processing every problem for which a directory already exists
   --config CONFIG       File path to your config file
                         [Default (Primary)] /home/kyuridenamida/.atcodertools.toml
@@ -220,7 +220,7 @@ optional arguments:
 - `download_without_login=false` AtCoderにログインせずにダウンロードを行う機能を使わない (公開コンテストに対してのみ可能)
 - `parallel_download=false` データの並列ダウンロードを無効にする
 - `save_no_session_cache=false` ログイン情報のクッキーを保存する
-- `skip_existing_problem=false` ディレクトリが既に存在する問題の処理をスキップする
+- `skip_existing_problems=false` ディレクトリが既に存在する問題の処理をスキップする
 - `in_example_format="in_{}.txt"` テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
 - `out_example_format="out_{}.txt"` テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
 
@@ -240,7 +240,7 @@ exec_on_contest_dir='touch CMakeLists.txt'
 download_without_login=false
 parallel_download=false
 save_no_session_cache=false
-skip_existing_problem=false
+skip_existing_problems=false
 in_example_format="in_{}.txt"
 out_example_format="out_{}.txt"
 

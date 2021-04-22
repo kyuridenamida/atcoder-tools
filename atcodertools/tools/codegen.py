@@ -159,7 +159,7 @@ def main(prog, args, output_file=sys.stdout):
 
     args.workspace = DEFAULT_WORKSPACE_DIR_PATH  # dummy for get_config()
     args.parallel = False  # dummy for get_config()
-    args.skip_existing_problem = False  # dummy for get_config()
+    args.skip_existing_problems = False  # dummy for get_config()
     config = get_config(args)
 
     client = AtCoderClient()
