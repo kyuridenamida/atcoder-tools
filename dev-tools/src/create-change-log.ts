@@ -75,7 +75,13 @@ const isValidVersion = (version: string) => {
 }
 
 const fetchMilestonesInNewerOrderUpTo = async (latestVersion: string) => {
-    const allMilestones = await githubFetch<Milestone[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/milestones?state=open,closed");
+    // Explicitly fetch open and closed milestones separately because if we specify "?state=open,closed" together,
+    // sometimes a new mile stone is missing.
+    const allMilestones = 
+          [
+              ...await githubFetch<Milestone[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/milestones?state=open"),
+              ...await githubFetch<Milestone[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/milestones?state=closed");
+          ];
     return allMilestones.filter(milestone => {
         if (!isValidVersion(milestone.title)) {
             throw Error(`Non-semantic-versioned milestone title: ${milestone.title} has been detected.`);
