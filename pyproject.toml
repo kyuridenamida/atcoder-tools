@@ -3,7 +3,7 @@ name = "atcoder-tools"
 packages = [
     {include = "atcodertools"}
 ]
-version = "2.1.0"
+version = "2.2.0"
 description = "Convenient modules & tools for AtCoder users, written in Python 3.6"
 authors = ["kyuridenamida <tyotyo3@gmail.com>"]
 license = "MIT"
