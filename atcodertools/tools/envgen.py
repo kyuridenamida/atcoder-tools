@@ -72,7 +72,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     # Return if a directory for the problem already exists
     if config.etc_config.skip_existing_problems:
         if os.path.exists(problem_dir_path):
-            emit_info("Skip since a directory already exists.")
+            emit_info(
+                f"Skipped preparation because the directory already exists: {problem_dir_path}")
             return
 
     emit_info('{} is used for template'.format(template_code_path))
