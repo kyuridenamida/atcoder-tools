@@ -26,5 +26,6 @@ lang = 'cpp' # 'cpp' or 'java' (Currently)
 download_without_login=false
 parallel_download=false
 save_no_session_cache=false
+skip_existing_problems=false
 in_example_format="in_{}.txt"
 out_example_format="out_{}.txt"

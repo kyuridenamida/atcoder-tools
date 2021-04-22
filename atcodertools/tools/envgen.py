@@ -69,6 +69,13 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     def emit_info(text):
         logger.info("Problem {}: {}".format(pid, text))
 
+    # Return if a directory for the problem already exists
+    if config.etc_config.skip_existing_problems:
+        if os.path.exists(problem_dir_path):
+            emit_info(
+                f"Skipped preparation because the directory already exists: {problem_dir_path}")
+            return
+
     emit_info('{} is used for template'.format(template_code_path))
 
     # Fetch problem data from the statement
@@ -275,6 +282,11 @@ def main(prog, args):
     parser.add_argument("--save-no-session-cache",
                         action="store_true",
                         help="Save no session cache to avoid security risk",
+                        default=None)
+
+    parser.add_argument("--skip-existing-problems",
+                        action="store_true",
+                        help="Skip processing every problem for which a directory already exists",
                         default=None)
 
     parser.add_argument("--config",

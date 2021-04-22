@@ -77,6 +77,50 @@ class TestEnvGen(unittest.TestCase):
             )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
+    def test_skip_existing_problems(self):
+        answer_data_dir_path = os.path.join(
+            RESOURCE_DIR, "test_skip_existing_problems")
+        temp_contest_dir_path = os.path.join(self.temp_dir, "agc029")
+
+        # Prepare workspace, modify A, and remove B
+        prepare_contest(
+            AtCoderClient(),
+            "agc029",
+            Config(
+                code_style_config=CodeStyleConfig(
+                    workspace_dir=self.temp_dir,
+                    template_file=TEMPLATE_PATH,
+                    lang="cpp",
+                ),
+                etc_config=EtcConfig(
+                    skip_existing_problems=True,
+                    in_example_format="input_{}.txt",
+                    out_example_format="output_{}.txt"
+                ))
+        )
+        with open(os.path.join(temp_contest_dir_path, "A", "main.cpp"), mode='w') as f:
+            f.write("test")
+        shutil.rmtree(os.path.join(temp_contest_dir_path, "B"))
+
+        # Prepare workspace again
+        prepare_contest(
+            AtCoderClient(),
+            "agc029",
+            Config(
+                code_style_config=CodeStyleConfig(
+                    workspace_dir=self.temp_dir,
+                    template_file=TEMPLATE_PATH,
+                    lang="cpp",
+                ),
+                etc_config=EtcConfig(
+                    skip_existing_problems=True,
+                    in_example_format="input_{}.txt",
+                    out_example_format="output_{}.txt"
+                ))
+        )
+
+        self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
+
     @mock.patch('time.sleep')
     def test_prepare_contest_aborts_after_max_retry_attempts(self, mock_sleep):
         mock_client = mock.Mock(spec=AtCoderClient)
