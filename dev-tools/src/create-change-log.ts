@@ -79,8 +79,8 @@ const fetchMilestonesInNewerOrderUpTo = async (latestVersion: string) => {
     // sometimes a new mile stone is missing.
     const allMilestones = 
           [
-              ...await githubFetch<Milestone[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/milestones?state=open"),
-              ...await githubFetch<Milestone[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/milestones?state=closed");
+              ...(await githubFetch<Milestone[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/milestones?state=open")),
+              ...(await githubFetch<Milestone[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/milestones?state=closed"))
           ];
     return allMilestones.filter(milestone => {
         if (!isValidVersion(milestone.title)) {
