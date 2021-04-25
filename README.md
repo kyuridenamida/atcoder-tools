@@ -12,7 +12,7 @@
 
 AtCoder Tools
 ====
-Python 3.6 以降で動作する [AtCoder](http://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
+Python 3.6 以降で動作する [AtCoder](https://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
 
 このツールには次のような機能があります。
 - AtCoderへのログイン，入出力例データなどの抽出
@@ -34,6 +34,7 @@ Python 3.6 以降で動作する [AtCoder](http://atcoder.jp/) からサンプ�
 |D|[@penpenpng](https://github.com/penpenpng/) (generator, template)||
 |Nim|[@chaemon](https://github.com/chaemon/) (generator, template)||
 |C#|[@chaemon](https://github.com/chaemon/) (generator, template)||
+|Swift|[@firewood](https://github.com/firewood/) (generator, template)||
 
 ## Demo
 <img src="https://user-images.githubusercontent.com/233559/52807100-f6e2d300-30cd-11e9-8906-82b9f9b2dff7.gif" width=70%>
@@ -299,7 +300,8 @@ int main(){
 
 
 ## Contribution
-気軽にPRを送ってください。
+
+[CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
 
 ## Licence
 
