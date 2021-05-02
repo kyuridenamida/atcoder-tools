@@ -379,16 +379,168 @@ indent_width=2
 
 以下は入力コードの冗長性を下げる目的で指定するテーブルで省略可能なものです。指定方法についてはpythonの設定を参照してください。
 
-- *[input_func]* int, float, stringについて入力時に呼び出す関数を記述します。省略可能です。
-- *[allocate_and_input]* `seq`, `2d_seq`について確保と入力をまとめて行うことができる場合に記述します。省略可能です。省略した場合、上記で指定した確保と入力の方式を複合したものが挿入されます
-- *[declare_and_allocate_and_input]* `seq`, `2d_seq`について宣言・確保・入力をまとめて行うことができる場合に記述します。省略可能です。省略した場合、上記で指定した宣言と確保と入力の方式を複合したものが挿入されます
+- *[input_func]* int, float, stringについて入力時に呼び出す関数を記述します。
+- *[allocate_and_input]* `seq`, `2d_seq`について確保と入力をまとめて行うことができる場合に記述します。省略した場合、上記で指定した確保と入力の方式を複合したものが挿入されます
+- *[declare_and_allocate_and_input]* `seq`, `2d_seq`について宣言・確保・入力をまとめて行うことができる場合に記述します。省略した場合、上記で指定した宣言と確保と入力の方式を複合したものが挿入されます
 
 例えばC++での設定方法は以下です。
 ```toml
+base_indent = 1
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# ループ
+[loop]
+header = "for(int {loop_var} = 0 ; {loop_var} < {length} ; {loop_var}++){{"
+footer = "}}"
+
+# タイプ
+[type]
+int = "long long"
+float = "long double"
+string = "std::string"
+
+# デフォルト値
+[default]
+int = "0"
+float = "0.0"
+string = "\"\""
+
+# 宣言
+[declare]
+int = "long long {name};"
+float = "long double {name};"
+string = "std::string {name};"
+seq = "std::std::vector<{type}> {name};"
+2d_seq = "std::vector<std::vector<{type}>> {name};"
+
+# 確保
+[allocate]
+seq = "{name}.assign({length}, {default});"
+2d_seq = "{name}.assign({length_i}, std::vector<{type}>({length_j}));"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "std::vector<{type}> {name}({length});"
+2d_seq = "std::vector<std::vector<{type}>> {name}({length_i}, std::vector<{type}>({length_j}));"
+
+# 入力
+[input]
+#int = "std::cin >> {name};"
+int = "scanf(\"%lld\",&{name});"
+#float = "std::cin >> {name};"
+float = "scanf(\"%Lf\",&{name});"
+string = "std::cin >> {name};"
+
+# 引数
+[arg]
+int = "long long {name}"
+float = "double {name}"
+string = "std::string {name}"
+seq = "std::vector<{type}> {name}"
+2d_seq = "std::vector<std::vector<{type}>> {name}"
+
+# 引数への渡し方
+[actual_arg]
+seq = "std::move({name})"
+2d_seq = "std::move({name})"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index_i}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
 ```
 
 例えばpythonでの設定方法は以下です。
 ```toml
+base_indent = 1
+insert_space_around_operators = true
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# インデックス
+[index]
+i = "i"
+j = "j"
+
+# ループ
+[loop]
+header = "for {loop_var} in range({length}):"
+footer = ""
+
+# タイプ
+[type]
+int = "int"
+float = "float"
+string = "str"
+
+# デフォルト値
+[default]
+int = "int()"
+float = "float()"
+string = "str()"
+
+# 宣言
+[declare]
+int = ""
+float = ""
+string = ""
+seq = ""
+2d_seq = ""
+
+# 確保
+[allocate]
+seq = "{name} = [{default}] * ({length})"
+2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "{name} = [{default}] * ({length})  # type: \"List[{type}]\""
+self.declare_and_allocate_2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]  # type: \"List[List[{type}]]\""
+
+# 入力関数
+[input_func]
+int = "int(next(tokens))"
+float = "float(next(tokens))"
+string = "next(tokens)"
+
+# 入力
+[input]
+int = "{name} = int(next(tokens))"
+float = "{name} = float(next(tokens))"
+string = "{name} = next(tokens)"
+
+# 宣言と入力
+[declare_and_input]
+int = "{name} = int(next(tokens))  # type: int"
+float = "{name} = float(next(tokens))  # type: float"
+string = "{name} = next(tokens)  # type: str"
+
+# 確保と入力
+[allocate_and_input]
+seq = "{name} = [{input_func} for _ in range({length})]"
+2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]"
+
+# 宣言と確保と入力
+[declare_and_allocate_and_input]
+seq = "{name} = [{input_func} for _ in range({length})]  # type: \"List[{type}]\""
+2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]  # type: \"List[List[{type}]]\""
+
+# 引数
+[arg]
+int = "{name}: int"
+float = "{name}: float"
+string = "{name}: str"
+seq = "{name}: \"List[{type}]\""
+2d_seq = "{name}: \"List[List[{type}]]\""
+
+# 配列アクセス
+[access]
+seq = "{name}[{index_i}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
 ```
 
 ## テンプレートの例
