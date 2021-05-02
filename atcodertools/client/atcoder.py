@@ -15,12 +15,6 @@ from atcodertools.client.models.submission import Submission
 from atcodertools.common.language import Language
 from atcodertools.common.logging import logger
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
-<<<<<<< HEAD
-=======
-from atcodertools.client.models.contest import Contest
-from atcodertools.client.models.problem import Problem
-from atcodertools.client.models.problem_content import ProblemContent, get_problem_content
->>>>>>> 42186c678e4df69fe3092c45c9db231ac701a3c7
 
 
 class LoginError(Exception):
