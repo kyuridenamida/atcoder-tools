@@ -1,6 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <cassert>
+#include <bits/stdc++.h>
 using namespace std;
 
 const int mod = 123;

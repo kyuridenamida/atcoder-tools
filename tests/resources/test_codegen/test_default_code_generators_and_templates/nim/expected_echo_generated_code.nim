@@ -40,24 +40,16 @@ proc solve(N:int, M:int, H:seq[seq[string]], A:seq[int], B:seq[float], Q:int, X:
   echo MOD
 
 proc main():void =
-  var N = 0
-  N = nextInt()
-  var M = 0
-  M = nextInt()
-  var H = newSeqWith(N-2+1, newSeqWith(M-1-2+1, ""))
-  for i in 0..<N-2+1:
-    for j in 0..<M-1-2+1:
-      H[i][j] = nextString()
+  var N = nextInt()
+  var M = nextInt()
+  var H = newSeqWith(N-2+1, newSeqWith(M-1-2+1, nextString()))
   var A = newSeqWith(N-2+1, 0)
   var B = newSeqWith(N-2+1, 0.0)
   for i in 0..<N-2+1:
     A[i] = nextInt()
     B[i] = nextFloat()
-  var Q = 0
-  Q = nextInt()
-  var X = newSeqWith(M+Q, 0)
-  for i in 0..<M+Q:
-    X[i] = nextInt()
+  var Q = nextInt()
+  var X = newSeqWith(M+Q, nextInt())
   solve(N, M, H, A, B, Q, X)
   return
 
