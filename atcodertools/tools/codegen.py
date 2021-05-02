@@ -19,7 +19,8 @@ from atcodertools.common.logging import logger
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
-from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, NoPredictionResultError, predict_format
+from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, NoPredictionResultError, \
+    predict_format
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.envgen import USER_CONFIG_PATH, get_config, output_splitter
 from atcodertools.tools.utils import with_color
@@ -121,7 +122,6 @@ def main(prog, args, output_file=sys.stdout):
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
-
     parser.add_argument("url",
                         help="URL (e.g. https://atcoder.jp/contests/abc012/tasks/abc012_3)")
 

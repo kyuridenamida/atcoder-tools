@@ -40,7 +40,6 @@ def predict_format(content: ProblemContent) -> FormatPredictionResult:
                 break
             except (TypePredictionFailedError, SimpleFormatPredictionFailedError):
                 pass
-
     if len(output_cands) > 1:
         raise MultiplePredictionResultsError(output_cands)
     if len(output_cands) == 0:

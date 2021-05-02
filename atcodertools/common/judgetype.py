@@ -4,10 +4,15 @@ from abc import ABCMeta, abstractmethod
 from enum import Enum
 
 
+class NoJudgeTypeException(Exception):
+    pass
+
+
 class JudgeType(Enum):
     Normal = "normal"
     Decimal = "decimal"
-    Other = "other"
+    MultiSolution = "multisolution"
+    Interactive = "interactive"
 
 
 class ErrorType(Enum):
@@ -17,8 +22,9 @@ class ErrorType(Enum):
 
 
 class Judge(metaclass=ABCMeta):
+    @property
     @abstractmethod
-    def verify(self, output, expected):
+    def judge_type(self):
         pass
 
     @abstractmethod
@@ -27,8 +33,10 @@ class Judge(metaclass=ABCMeta):
 
 
 class NormalJudge(Judge):
+    judge_type = JudgeType.Normal
+
     def __init__(self):
-        self.judge_type = JudgeType.Normal
+        pass
 
     def verify(self, output, expected):
         return output == expected
@@ -44,19 +52,26 @@ class NormalJudge(Judge):
         return r
 
 
+DEFAULT_EPS = 0.000000001
+
+
 class DecimalJudge(Judge):
+    judge_type = JudgeType.Decimal
+
     def __init__(self,
                  error_type: ErrorType = ErrorType.AbsoluteOrRelative,
-                 diff: float = 0.0
+                 diff: float = DEFAULT_EPS
                  ):
         self.judge_type = JudgeType.Decimal
         self.error_type = error_type
         self.diff = diff
 
     def _verify_sub(self, output: float, expected: float) -> bool:
-        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(expected - output) <= self.diff:
+        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(
+                expected - output) <= self.diff:
             return True
-        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(output, expected):
+        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(output,
+                                                                                                         expected):
             return True
         return False
 
@@ -70,9 +85,14 @@ class DecimalJudge(Judge):
         expected = expected.strip().split()
         if len(output) != len(expected):
             return False
-        for i in range(0, len(output)):
-            if not self._verify_sub(float(output[i]), float(expected[i])):
-                return False
+        for i in range(0, len(expected)):
+            try:
+                f = float(expected[i])
+                if not self._verify_sub(float(output[i]), f):
+                    return False
+            except ValueError:
+                if output[i] != expected[i]:
+                    return False
         return True
 
     def to_dict(self):
@@ -91,6 +111,28 @@ class DecimalJudge(Judge):
         return r
 
 
-class OtherJudge(Judge):
-    # dummy
-    pass
+class MultiSolutionJudge(Judge):
+    judge_type = JudgeType.MultiSolution
+
+    def __init__(self):
+        pass
+
+    def verify(self, output, expected):
+        raise NotImplementedError()
+
+    def to_dict(self):
+        return {
+            "judge_type": self.judge_type.value
+        }
+
+
+class InteractiveJudge(Judge):
+    judge_type = JudgeType.Interactive
+
+    def verify(self, output, expected):
+        raise NotImplementedError()
+
+    def to_dict(self):
+        return {
+            "judge_type": self.judge_type.value
+        }

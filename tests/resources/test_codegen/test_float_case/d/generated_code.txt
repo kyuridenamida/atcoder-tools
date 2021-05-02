@@ -13,21 +13,17 @@ int main(){
     long L;
     L = input.front.to!long;
     input.popFront;
-
     long N;
     N = input.front.to!long;
     input.popFront;
-
     long M;
     M = input.front.to!long;
     input.popFront;
-
     double[] K = new double[](cast(size_t) (L));
     foreach (i; 0 .. cast(size_t) (L)) {
         K[i] = input.front.to!double;
         input.popFront;
     }
-
     long[] A = new long[](cast(size_t) (N));
     double[] S = new double[](cast(size_t) (N));
     foreach (i; 0 .. cast(size_t) (N)) {

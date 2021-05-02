@@ -1,14 +1,15 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include<iostream>
+#include<vector>
+#include<string>
 
 {% if mod %}
 const long long MOD = {{ mod }};
 {% endif %}
 {% if yes_str %}
-const string YES = "{{ yes_str }}";
+const std::string YES = "{{ yes_str }}";
 {% endif %}
 {% if no_str %}
-const string NO = "{{ no_str }}";
+const std::string NO = "{{ no_str }}";
 {% endif %}
 
 {% if prediction_success %}
