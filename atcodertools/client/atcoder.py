@@ -122,13 +122,13 @@ class AtCoderClient(metaclass=Singleton):
             res.append(Problem(contest, alphabet, problem_id))
         return res
 
-    def download_problem_content_raw_html(self, problem: Problem) -> str:
-        resp = self._request(problem.get_url())
-        return resp.text
-
     def download_problem_content(self, problem: Problem) -> ProblemContent:
-        html = self.download_problem_content_raw_html(problem)
-        return get_problem_content(html)
+        resp = self._request(problem.get_url())
+
+        try:
+            return ProblemContent.from_html(resp.text)
+        except (InputFormatDetectionError, SampleDetectionError) as e:
+            raise e
 
     def download_all_contests(self) -> List[Contest]:
         contest_ids = []
