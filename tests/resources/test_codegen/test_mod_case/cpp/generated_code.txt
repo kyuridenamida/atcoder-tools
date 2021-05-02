@@ -1,6 +1,5 @@
-#include<iostream>
-#include<vector>
-#include<string>
+#include <bits/stdc++.h>
+using namespace std;
 
 const int mod = 998244353;
 void solve(std::string A, std::string B){

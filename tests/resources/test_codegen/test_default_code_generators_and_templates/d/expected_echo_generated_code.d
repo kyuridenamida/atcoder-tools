@@ -36,9 +36,11 @@ int main(){
     long N;
     N = input.front.to!long;
     input.popFront;
+
     long M;
     M = input.front.to!long;
     input.popFront;
+
     string[][] H = new string[][](cast(size_t) (N-2+1), cast(size_t) (M-1-2+1));
     foreach (i; 0 .. cast(size_t) (N-2+1)) {
         foreach (j; 0 .. cast(size_t) (M-1-2+1)) {
@@ -46,6 +48,7 @@ int main(){
             input.popFront;
         }
     }
+
     long[] A = new long[](cast(size_t) (N-2+1));
     double[] B = new double[](cast(size_t) (N-2+1));
     foreach (i; 0 .. cast(size_t) (N-2+1)) {
@@ -54,9 +57,11 @@ int main(){
         B[i] = input.front.to!double;
         input.popFront;
     }
+
     long Q;
     Q = input.front.to!long;
     input.popFront;
+
     long[] X = new long[](cast(size_t) (M+Q));
     foreach (i; 0 .. cast(size_t) (M+Q)) {
         X[i] = input.front.to!long;

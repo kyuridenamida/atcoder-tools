@@ -33,7 +33,7 @@ proc main():void =
     B[i] = nextFloat()
   var Q = nextInt()
   var X = newSeqWith(M+Q, nextInt())
-  solve(N, M, H, A, B, Q, X);
+  solve(N, M, H, A, B, Q, X)
   return
 
 main()

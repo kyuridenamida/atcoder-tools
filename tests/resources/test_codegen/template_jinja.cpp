@@ -1,15 +1,14 @@
-#include<iostream>
-#include<vector>
-#include<string>
+#include <bits/stdc++.h>
+using namespace std;
 
 {% if mod is not none %}
 const int mod = {{ mod }};
 {% endif %}
 {% if yes_str is not none %}
-const std::string YES = "{{ yes_str }}";
+const string YES = "{{ yes_str }}";
 {% endif %}
 {% if no_str is not none %}
-const std::string NO = "{{ no_str }}";
+const string NO = "{{ no_str }}";
 {% endif %}
 void solve({{ formal_arguments }}){
 

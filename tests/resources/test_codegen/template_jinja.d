@@ -24,11 +24,8 @@ void solve({{ formal_arguments }}){
 
 {% endif %}
 int main(){
-    auto input = stdin.byLine.map!split.joiner;
-
     {% if prediction_success %}
     {{ input_part }}
-
     solve({{ actual_arguments }});
     {% else %}
     {% endif %}

@@ -1,6 +1,5 @@
-#include<iostream>
-#include<vector>
-#include<string>
+#include <bits/stdc++.h>
+using namespace std;
 
 void solve(long long L, long long N, long long M, std::vector<long double> K, std::vector<long long> A, std::vector<long double> S){
 
@@ -8,20 +7,20 @@ void solve(long long L, long long N, long long M, std::vector<long double> K, st
 
 int main(){
     long long L;
-    std::cin >> L;
+    scanf("%lld",&L);
     long long N;
-    std::cin >> N;
+    scanf("%lld",&N);
     long long M;
-    std::cin >> M;
+    scanf("%lld",&M);
     std::vector<long double> K(L);
     for(int i = 0 ; i < L ; i++){
-        std::cin >> K[i];
+        scanf("%Lf",&K[i]);
     }
     std::vector<long long> A(N);
     std::vector<long double> S(N);
     for(int i = 0 ; i < N ; i++){
-        std::cin >> A[i];
-        std::cin >> S[i];
+        scanf("%lld",&A[i]);
+        scanf("%Lf",&S[i]);
     }
     solve(L, N, M, std::move(K), std::move(A), std::move(S));
     return 0;

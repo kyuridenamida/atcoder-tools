@@ -3,6 +3,7 @@ insert_space_around_operators = false
 
 # global変数宣言時の接頭辞
 global_prefix = "static "
+input_part_prefix = "final Scanner sc = new Scanner(System.in);"
 
 # ループ
 [loop]

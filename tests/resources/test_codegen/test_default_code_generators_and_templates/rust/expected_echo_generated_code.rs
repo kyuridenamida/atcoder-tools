@@ -5,8 +5,6 @@ const MOD: i64 = 123;
 static YES: &'static str = "yes";
 static NO: &'static str = "NO";
 fn solve(N: i64, M: i64, H: Vec<Vec<String>>, A: Vec<i64>, B: Vec<f64>, Q: i64, X: Vec<i64>) {
-    let con = read_string();
-    let mut scanner = Scanner::new(&con);
     println!("{} {}", N, M);
     assert!(H.len() as i64 == N - 1);
     for i in 0..(N-1) as usize {

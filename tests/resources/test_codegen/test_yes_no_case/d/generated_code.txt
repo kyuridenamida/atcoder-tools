@@ -16,12 +16,15 @@ int main(){
     long N;
     N = input.front.to!long;
     input.popFront;
+
     long M;
     M = input.front.to!long;
     input.popFront;
+
     long A;
     A = input.front.to!long;
     input.popFront;
+
     long B;
     B = input.front.to!long;
     input.popFront;

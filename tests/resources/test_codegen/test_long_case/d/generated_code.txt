@@ -13,26 +13,33 @@ int main(){
     long H;
     H = input.front.to!long;
     input.popFront;
+
     long W;
     W = input.front.to!long;
     input.popFront;
+
     long K;
     K = input.front.to!long;
     input.popFront;
+
     long sr;
     sr = input.front.to!long;
     input.popFront;
+
     long sc;
     sc = input.front.to!long;
     input.popFront;
+
     string[] s = new string[](cast(size_t) (H));
     foreach (i; 0 .. cast(size_t) (H)) {
         s[i] = input.front.to!string;
         input.popFront;
     }
+
     long N;
     N = input.front.to!long;
     input.popFront;
+
     long[] fr = new long[](cast(size_t) (N));
     long[] fc = new long[](cast(size_t) (N));
     long[] F = new long[](cast(size_t) (N));
