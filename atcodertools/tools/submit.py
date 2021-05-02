@@ -110,8 +110,13 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                     return False
 
         code_path = args.code or os.path.join(args.dir, metadata.code_filename)
-        with open(code_path, 'r') as f:
-            source = f.read()
+        for encoding in ['utf8', 'utf-8_sig', 'cp932']:
+            try:
+                with open(code_path, 'r', encoding=encoding) as f:
+                    source = f.read()
+                break
+            except UnicodeDecodeError:
+                logger.warning("code wasn't recognized as {}".format(encoding))
         logger.info(
             "Submitting {} as {}".format(code_path, metadata.lang.name))
         submission = client.submit_source_code(
