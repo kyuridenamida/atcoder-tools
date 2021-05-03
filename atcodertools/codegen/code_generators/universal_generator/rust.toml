@@ -14,19 +14,19 @@ footer = "}}"
 [type]
 int = "i64"
 float = "f64"
-string = "String"
+str = "String"
 
 # デフォルト値
 [default]
 int = "0i64"
 float = "0f64"
-string = "String::new()"
+str = "String::new()"
 
 # 宣言
 [declare]
 int = "let mut {name}: i64;"
 float = "let mut {name}: f64;"
-string = "let mut {name}: String;"
+str = "let mut {name}: String;"
 seq = "let mut {name}: Vec<{type}>;"
 2d_seq = "let mut {name}: Vec<Vec<{type}>>;"
 
@@ -44,13 +44,13 @@ seq = "let mut {name}: Vec<{type}> = vec![{default}; ({length}) as usize];"
 [input]
 int = "{name} = scanner.next();"
 float = "{name} = scanner.next();"
-string = "{name} = scanner.next();"
+str = "{name} = scanner.next();"
 
 # 引数
 [arg]
 int = "{name}: i64"
 float = "{name}: f64"
-string = "{name}: String"
+str = "{name}: String"
 seq = "{name}: Vec<{type}>"
 2d_seq = "{name}: Vec<Vec<{type}>>"
 

@@ -14,12 +14,11 @@ class UniversalCodeGenerator():
     def __init__(self,
                  format_: Optional[Format[Variable]],
                  config: CodeStyleConfig,
-                 lang):
+                 path):
         super(UniversalCodeGenerator, self).__init__()
         self._format = format_
         self._config = config
-        self.info = toml.load(
-            Path(__file__).parent / "universal_generator" / "{lang}.toml".format(lang=lang))
+        self.info = toml.load(path)
         if "index" not in self.info:
             self.info["index"] = {"i": "i", "j": "j"}
 
@@ -100,35 +99,14 @@ class UniversalCodeGenerator():
         return result
 
     def _convert_type(self, type_: Type) -> str:
-        if type_ == Type.float:
-            return self.info["type"]["float"]
-        elif type_ == Type.int:
-            return self.info["type"]["int"]
-        elif type_ == Type.str:
-            return self.info["type"]["string"]
-        else:
-            raise NotImplementedError
+        return self.info["type"][type_.value]
 
     def _default_val(self, type_: Type) -> str:
-        if type_ == Type.float:
-            return self.info["default"]["float"]
-        elif type_ == Type.int:
-            return self.info["default"]["int"]
-        elif type_ == Type.str:
-            return self.info["default"]["string"]
-        else:
-            raise NotImplementedError
+        return self.info["default"][type_.value]
 
     def _get_argument(self, var: Variable):
         if var.dim_num() == 0:
-            if var.type == Type.float:
-                return self.info["arg"]["float"].format(name=var.name)
-            elif var.type == Type.int:
-                return self.info["arg"]["int"].format(name=var.name)
-            elif var.type == Type.str:
-                return self.info["arg"]["string"].format(name=var.name)
-            else:
-                raise NotImplementedError
+            return self.info["arg"][var.type.value].format(name=var.name)
         elif var.dim_num() == 1:
             return self.info["arg"]["seq"].format(name=var.name, type=self._convert_type(var.type))
         elif var.dim_num() == 2:
@@ -167,14 +145,7 @@ class UniversalCodeGenerator():
         :return: Create declaration part E.g. array[1..n] -> std::vector<int> array = std::vector<int>(n-1+1);
         """
         if var.dim_num() == 0:
-            if var.type == Type.int:
-                return self.info["declare"]["int"].format(name=var.name)
-            elif var.type == Type.float:
-                return self.info["declare"]["float"].format(name=var.name)
-            elif var.type == Type.str:
-                return self.info["declare"]["string"].format(name=var.name)
-            else:
-                raise NotImplementedError
+            return self.info["declare"][var.type.value].format(name=var.name)
         elif var.dim_num() == 1:
             return self.info["declare"]["seq"].format(name=var.name,
                                                       type=self._convert_type(
@@ -218,14 +189,7 @@ class UniversalCodeGenerator():
         :return: Create declaration part E.g. array[1..n] -> std::vector<int> array = std::vector<int>(n-1+1);
         """
         if var.dim_num() == 0:
-            if var.type == Type.int:
-                return self.info["declare"]["int"].format(name=var.name)
-            elif var.type == Type.float:
-                return self.info["declare"]["float"].format(name=var.name)
-            elif var.type == Type.str:
-                return self.info["declare"]["string"].format(name=var.name)
-            else:
-                raise NotImplementedError
+            return self.info["declare"][var.type.value].format(name=var.name)
         elif var.dim_num() == 1:
             return self.info["declare_and_allocate"]["seq"].format(name=var.name,
                                                                    type=self._convert_type(
@@ -244,23 +208,11 @@ class UniversalCodeGenerator():
                                                                       default=self._default_val(var.type))
 
     def _get_input_func(self, type: Type) -> str:
-        if type == Type.float:
-            return self.info["input_func"]["float"]
-        elif type == Type.int:
-            return self.info["input_func"]["int"]
-        elif type == Type.str:
-            return self.info["input_func"]["string"]
+        return self.info["input_func"][type.value]
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
-        if var.type == Type.float:
-            return self.info["input"]["float"].format(name=name)
-        elif var.type == Type.int:
-            return self.info["input"]["int"].format(name=name)
-        elif var.type == Type.str:
-            return self.info["input"]["string"].format(name=name)
-        else:
-            raise NotImplementedError
+        return self.info["input"][var.type.value].format(name=name)
 
     def _get_var_name(self, var: Variable):
         name = var.name
@@ -295,23 +247,10 @@ class UniversalCodeGenerator():
     def _append_singular_pattern(self, lines, pattern: Pattern, global_mode):
         var = pattern.all_vars()[0]
         if not global_mode:
-            if var.type == Type.int:
-                if "declare_and_input" in self.info:
-                    self._append(
-                        lines, self.info["declare_and_input"]["int"].format(name=var.name))
-                    return
-            elif var.type == Type.float:
-                if "declare_and_input" in self.info:
-                    self._append(
-                        lines, self.info["declare_and_input"]["float"].format(name=var.name))
-                    return
-            elif var.type == Type.str:
-                if "declare_and_input" in self.info:
-                    self._append(
-                        lines, self.info["declare_and_input"]["string"].format(name=var.name))
-                    return
-            else:
-                raise NotImplementedError
+            if "declare_and_input" in self.info:
+                self._append(
+                    lines, self.info["declare_and_input"][var.type.value].format(name=var.name))
+                return
         self._append_declaration_and_allocation(lines, pattern, global_mode)
         self._append(lines, self._input_code_for_var(var))
 
@@ -394,6 +333,10 @@ class UniversalCodeGenerator():
 
     def _indent(self, depth):
         return self._config.indent(depth)
+
+
+def get_builtin_code_generator_info_toml_path(lang):
+    return Path(__file__).parent / "universal_generator" / "{lang}.toml".format(lang=lang)
 
 
 class NoPredictionResultGiven(Exception):

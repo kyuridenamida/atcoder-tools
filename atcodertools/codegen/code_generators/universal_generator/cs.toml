@@ -14,19 +14,19 @@ footer = "}}"
 [type]
 int = "long"
 float = "double"
-string = "string"
+str = "string"
 
 # デフォルト値
 [default]
 int = "long()"
 float = "double()"
-string = "string()"
+str = "string()"
 
 # 宣言
 [declare]
 int = "long {name};"
 float = "double {name};"
-string = "string {name};"
+str = "string {name};"
 seq = "{type}[] {name};"
 2d_seq = "{type}[,] {name};"
 
@@ -44,19 +44,19 @@ seq = "{type}[] {name} = new {type}[{length}];"
 [input_func]
 int = "cin.ReadLong;"
 float = "cin.ReadDouble;"
-string = "cin.Read;"
+str = "cin.Read;"
 
 # 入力
 [input]
 int = "{name} = cin.ReadLong;"
 float = "{name} = cin.ReadDouble;"
-string = "{name} = cin.Read;"
+str = "{name} = cin.Read;"
 
 # 引数
 [arg]
 int = "long {name}"
 float = "double {name}"
-string = "string {name}"
+str = "string {name}"
 seq = "{type}[] {name}"
 2d_seq = "{type}[,] {name}"
 

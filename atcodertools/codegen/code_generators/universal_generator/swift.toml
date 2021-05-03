@@ -13,19 +13,19 @@ footer = "}}"
 [type]
 int = "Int"
 float = "Double"
-string = "String"
+str = "String"
 
 # デフォルト値
 [default]
 int = "0"
 float = "0.0"
-string = '""'
+str = '""'
 
 # 宣言
 [declare]
 int = "let {name}:Int"
 float = "let {name}:Double"
-string = "let {name}:String"
+str = "let {name}:String"
 seq = "var {name}:[{type}]"
 2d_seq = "var {name}:[[{type}]]"
 
@@ -41,25 +41,25 @@ seq = "var {name} = [{type}](repeating: {default}, count: {length})"
 [input_func]
 int = "readInt()"
 float = "readDouble()"
-string = "readString()"
+str = "readString()"
 
 # 入力
 [input]
 int = "{name} = readInt()"
 float = "{name} = readDouble()"
-string = "{name} = readString()"
+str = "{name} = readString()"
 
 # 宣言と入力
 [declare_and_input]
 int = "let {name} = readInt()"
 float = "let {name} = readDouble()"
-string = "let {name} = readString()"
+str = "let {name} = readString()"
 
 # 引数
 [arg]
 int = "_ {name}:Int"
 float = "_ {name}:Double"
-string = "_ {name}:String"
+str = "_ {name}:String"
 seq = "_ {name}:[{type}]"
 2d_seq = "_ {name}:[[{type}]]"
 

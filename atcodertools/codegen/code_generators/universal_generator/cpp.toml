@@ -13,19 +13,19 @@ footer = "}}"
 [type]
 int = "long long"
 float = "long double"
-string = "std::string"
+str = "std::string"
 
 # デフォルト値
 [default]
 int = "0"
 float = "0.0"
-string = "\"\""
+str = "\"\""
 
 # 宣言
 [declare]
 int = "long long {name};"
 float = "long double {name};"
-string = "std::string {name};"
+str = "std::string {name};"
 seq = "std::std::vector<{type}> {name};"
 2d_seq = "std::vector<std::vector<{type}>> {name};"
 
@@ -45,13 +45,13 @@ seq = "std::vector<{type}> {name}({length});"
 int = "scanf(\"%lld\", &{name});"
 #float = "std::cin >> {name};"
 float = "scanf(\"%Lf\", &{name});"
-string = "std::cin >> {name};"
+str = "std::cin >> {name};"
 
 # 引数
 [arg]
 int = "long long {name}"
 float = "double {name}"
-string = "std::string {name}"
+str = "std::string {name}"
 seq = "std::vector<{type}> {name}"
 2d_seq = "std::vector<std::vector<{type}>> {name}"
 

@@ -18,19 +18,19 @@ footer = ""
 [type]
 int = "int"
 float = "float"
-string = "str"
+str = "str"
 
 # デフォルト値
 [default]
 int = "int()"
 float = "float()"
-string = "str()"
+str = "str()"
 
 # 宣言
 [declare]
 int = ""
 float = ""
-string = ""
+str = ""
 seq = ""
 2d_seq = ""
 
@@ -48,19 +48,19 @@ self.declare_and_allocate_2d_seq = "{name} = [[{default}] * ({length_j}) for _ i
 [input_func]
 int = "int(next(tokens))"
 float = "float(next(tokens))"
-string = "next(tokens)"
+str = "next(tokens)"
 
 # 入力
 [input]
 int = "{name} = int(next(tokens))"
 float = "{name} = float(next(tokens))"
-string = "{name} = next(tokens)"
+str = "{name} = next(tokens)"
 
 # 宣言と入力
 [declare_and_input]
 int = "{name} = int(next(tokens))  # type: int"
 float = "{name} = float(next(tokens))  # type: float"
-string = "{name} = next(tokens)  # type: str"
+str = "{name} = next(tokens)  # type: str"
 
 # 確保と入力
 [allocate_and_input]
@@ -76,7 +76,7 @@ seq = "{name} = [{input_func} for _ in range({length})]  # type: \"List[{type}]\
 [arg]
 int = "{name}: int"
 float = "{name}: float"
-string = "{name}: str"
+str = "{name}: str"
 seq = "{name}: \"List[{type}]\""
 2d_seq = "{name}: \"List[List[{type}]]\""
 

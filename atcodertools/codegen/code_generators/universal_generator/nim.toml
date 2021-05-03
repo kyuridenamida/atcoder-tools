@@ -13,19 +13,19 @@ footer = ""
 [type]
 int = "int"
 float = "float"
-string = "string"
+str = "string"
 
 # デフォルト値
 [default]
 int = "0"
 float = "0.0"
-string = "\"\""
+str = "\"\""
 
 # 宣言
 [declare]
 int = "var {name}:int"
 float = "var {name}:float"
-string = "var {name}:string"
+str = "var {name}:string"
 seq = "var {name}:seq[{type}]"
 2d_seq = "var {name}:seq[seq[{type}]]"
 
@@ -43,19 +43,19 @@ seq = "var {name} = newSeqWith({length}, {default})"
 [input_func]
 int = "nextInt()"
 float = "nextFloat()"
-string = "nextString()"
+str = "nextString()"
 
 # 入力
 [input]
 int = "{name} = nextInt()"
 float = "{name} = nextFloat()"
-string = "{name} = nextString()"
+str = "{name} = nextString()"
 
 # 宣言と入力
 [declare_and_input]
 int = "var {name} = nextInt()"
 float = "var {name} = nextFloat()"
-string = "var {name} = nextString()"
+str = "var {name} = nextString()"
 
 # 確保と入力
 [allocate_and_input]
@@ -71,7 +71,7 @@ seq = "var {name} = newSeqWith({length}, {input_func})"
 [arg]
 int = "{name}:int"
 float = "{name}:float"
-string = "{name}:string"
+str = "{name}:string"
 seq = "{name}:seq[{type}]"
 2d_seq = "{name}:seq[seq[{type}]]"
 

@@ -14,19 +14,19 @@ footer = "}}"
 [type]
 int = "long"
 float = "double"
-string = "String"
+str = "String"
 
 # デフォルト値
 [default]
 int = "0"
 float = "0.0"
-string = "\"\""
+str = "\"\""
 
 # 宣言
 [declare]
 int = "long {name};"
 float = "double {name};"
-string = "String {name};"
+str = "String {name};"
 seq = "{type} {name}[];"
 2d_seq = "{type} {name}[][];"
 
@@ -44,7 +44,7 @@ seq = "{type}[] {name} = new {type}[(int)({length})];"
 [input]
 int = "{name} = sc.nextLong();"
 float = "{name} = sc.nextDouble();"
-string = "{name} = sc.next();"
+str = "{name} = sc.next();"
 seq = """for(int i = 0;i < {length};i++)
     {input}"""
 2d_seq = """for(int i = 0;i <{length_i};i++)
@@ -55,7 +55,7 @@ seq = """for(int i = 0;i < {length};i++)
 [arg]
 int = "long {name}"
 float = "double {name}"
-string = "String {name}"
+str = "String {name}"
 seq = "{type}[] {name}"
 2d_seq = "{type}[][] {name}"
 

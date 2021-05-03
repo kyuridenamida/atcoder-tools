@@ -15,19 +15,19 @@ footer = "}}"
 [type]
 int = "long"
 float = "double"
-string = "string"
+str = "string"
 
 # デフォルト値
 [default]
 int = "0"
 float = "0.0"
-string = "\"\""
+str = "\"\""
 
 # 宣言
 [declare]
 int = "long {name};"
 float = "double {name};"
-string = "string {name};"
+str = "string {name};"
 seq = "{type}[] {name};"
 2d_seq = "{type}[][] {name};"
 
@@ -44,13 +44,13 @@ seq = "{type}[] {name} = new {type}[](cast(size_t) ({length}));"
 [input]
 int = "{name} = input.front.to!long;\ninput.popFront;"
 float = "{name} = input.front.to!double;\ninput.popFront;"
-string = "{name} = input.front.to!string;\ninput.popFront;"
+str = "{name} = input.front.to!string;\ninput.popFront;"
 
 # 引数
 [arg]
 int = "long {name}"
 float = "double {name}"
-string = "string {name}"
+str = "string {name}"
 seq = "{type}[] {name}"
 2d_seq = "{type}[][] {name}"
 
