@@ -33,7 +33,7 @@ proc solve({{ formal_arguments }}):void =
 proc main():void =
 {% if prediction_success %}
   {{input_part}}
-  solve({{ actual_arguments }});
+  solve({{ actual_arguments }})
 {% else %}
 # Failed to predict input format
 {% endif %}

@@ -13,22 +13,22 @@ func main() {
     let K = readInt()
     let sr = readInt()
     let sc = readInt()
-    var s = [String]()
-    for _ in 0..<H {
-        s.append(readString())
+    var s = [String](repeating: "", count: H)
+    for i in 0..<H {
+        s[i] = readString()
     }
     let N = readInt()
-    var fr = [Int]()
-    var fc = [Int]()
-    var F = [Int]()
-    var D = [Int]()
-    for _ in 0..<N {
-        fr.append(readInt())
-        fc.append(readInt())
-        F.append(readInt())
-        D.append(readInt())
+    var fr = [Int](repeating: 0, count: N)
+    var fc = [Int](repeating: 0, count: N)
+    var F = [Int](repeating: 0, count: N)
+    var D = [Int](repeating: 0, count: N)
+    for i in 0..<N {
+        fr[i] = readInt()
+        fc[i] = readInt()
+        F[i] = readInt()
+        D[i] = readInt()
     }
-    solve(H, W, K, sr, sc, s, N, fr, fc, F, D)
+    _ = solve(H, W, K, sr, sc, s, N, fr, fc, F, D)
 }
 
 main()

@@ -1,6 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <cassert>
+#include<bits/stdc++.h>
 using namespace std;
 
 {% if mod is not none %}

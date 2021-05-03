@@ -9,7 +9,7 @@ func main() {
     func readInt() -> Int { 0 }
     func readDouble() -> Double { 0 }
     {{input_part}}
-    solve({{ actual_arguments }})
+    _ = solve({{ actual_arguments }})
 }
 
 main()

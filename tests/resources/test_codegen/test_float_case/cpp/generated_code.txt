@@ -7,20 +7,20 @@ void solve(long long L, long long N, long long M, std::vector<long double> K, st
 
 int main(){
     long long L;
-    scanf("%lld",&L);
+    scanf("%lld", &L);
     long long N;
-    scanf("%lld",&N);
+    scanf("%lld", &N);
     long long M;
-    scanf("%lld",&M);
+    scanf("%lld", &M);
     std::vector<long double> K(L);
     for(int i = 0 ; i < L ; i++){
-        scanf("%Lf",&K[i]);
+        scanf("%Lf", &K[i]);
     }
     std::vector<long long> A(N);
     std::vector<long double> S(N);
     for(int i = 0 ; i < N ; i++){
-        scanf("%lld",&A[i]);
-        scanf("%Lf",&S[i]);
+        scanf("%lld", &A[i]);
+        scanf("%Lf", &S[i]);
     }
     solve(L, N, M, std::move(K), std::move(A), std::move(S));
     return 0;

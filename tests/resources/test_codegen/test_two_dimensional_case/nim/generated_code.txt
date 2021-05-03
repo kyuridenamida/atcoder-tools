@@ -18,18 +18,10 @@ proc solve(H:int, W:int, c:seq[seq[int]], A:seq[seq[int]]):void =
   return
 
 proc main():void =
-  var H = 0
-  H = nextInt()
-  var W = 0
-  W = nextInt()
-  var c = newSeqWith(9+1, newSeqWith(9+1, 0))
-  for i in 0..<9+1:
-    for j in 0..<9+1:
-      c[i][j] = nextInt()
-  var A = newSeqWith(H, newSeqWith(W, 0))
-  for i in 0..<H:
-    for j in 0..<W:
-      A[i][j] = nextInt()
+  var H = nextInt()
+  var W = nextInt()
+  var c = newSeqWith(9+1, newSeqWith(9+1, nextInt()))
+  var A = newSeqWith(H, newSeqWith(W, nextInt()))
   solve(H, W, c, A)
   return
 

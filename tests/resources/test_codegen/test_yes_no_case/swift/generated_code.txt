@@ -25,7 +25,7 @@ func main() {
     let M = readInt()
     let A = readInt()
     let B = readInt()
-    solve(N, M, A, B)
+    _ = solve(N, M, A, B)
 }
 
 #if DEBUG

@@ -250,7 +250,200 @@ out_example_format="out_{}.txt"
 ### カスタムコードジェネレーター
 [標準のC++コードジェネレーター](https://github.com/kyuridenamida/atcoder-tools/blob/master/atcodertools/codegen/code_generators/cpp.py)に倣って、
 `(CogeGenArgs) -> str(ソースコード)`が型であるような`main`関数を定義した.pyファイルを`code_generator_file`で指定すると、コード生成時にカスタムコードジェネレーターを利用できます。
- 
+
+
+### ユニバーサルコードジェネレーター
+ユニバーサルコードジェネレータはループ・配列アクセス方法等のいくつかの言語仕様を記述するだけでカスタムコードジェネレータよりも簡単にコード生成することを意図して作成したジェネレータです。設定ファイル`(言語名).toml`を`atcodertools/codegen/code_generators/universal_generator`に配置してください。設定ファイルの書き方は以下です。
+
+- *base_indent* 入力部分のインデント数
+- *insert_space_around_operators* 入力部分の変数や演算子の間にスペースを入れるかどうかをtrue/falseで指定
+- *newline_after_input* 入力部分で入力ごとに空行を入れるかどうかをtrue/falseで指定
+- *global_prefix* グローバル変数の宣言時に入れる接頭辞(Javaなどでstaticを指定したりできます)
+
+以下のようにテーブルを定義します
+
+- *[index]* ループインデックスの名称を指定します。１重目を`i`, 2重目を`j`で指定してください。省略可能で省略した場合はi, jが指定されます。perl, phpなどの言語で$i, $jなどとi, j以外の名前を指定しなければならないとき用のつもりです。
+- *[loop]* ループに関することを記述します
+    - **header** ループの最初に記述する内容。ループを回すための変数は`{loop_var}`, 回す回数は`{length}`を用いてください。
+    - **footer** ループの最後に記述する内容。C++, Javaでは閉じカッコになります。波括弧の場合は`}}`とエスケープする必要があることに注意してください。
+- *[type]* タイプ(int, float, string)のタイプについて記述します。例を参照してください。
+- *[default]* デフォルトの値について記述します。例を参照してください。
+- *[declare]* int, float, string, 1次元可変配列(以下`seq`), 2次元可変配列(以下`2d_seq`)の宣言方法について記述します。変数名は`{name}`を使ってください。可変配列のベースとなるタイプは`{type}`を使ってください。
+- *[allocate]* `seq`, `2d_seq`の確保の方法を記述します。ベースとなるタイプは`{type}`, 変数名は`{name}`, デフォルト値は`{default}`で指定します。タイプ、デフォルト値は上記で指定したものが入ります。長さについてはseqは`{length}`で、`2d_seq`は1番目の長さは`{length_i}`, 2番目の長さは`{length_j}`となります。順番を間違えると転置されるのでご注意ください。
+- *[declare_and_allocate]* `seq`, `2d_seq`について宣言と確保を同時に行う方法について記述します。フォーマットに使用されるものは`[allocate]`と同じです。
+- *[input]*
+
+- *[arg]* solve関数の引数の記述方法について指定します。`int`, `float`, `string`, `seq`, `2d_seq`について記述してください。`{name}`が変数名, `{type}`が`seq`, `2d_seq`についてベースとなる型です。
+- *[actual_arg]* `seq`, `2d_seq`についてsolve関数を呼び出す際の引数の渡し方について記述します。C++などでmoveをつかってメモリを節約したいときなどに指定できます。省略可能で、省略した場合はそのまま渡されます。
+
+- *[access]* 配列のアクセス方法について記述します。`seq`, `2d_seq`について指定してください。`{name}`で変数名, `{index_i}`, `{index_j}`でインデックス名を指定します。
+
+以下は入力コードの冗長性を下げる目的で指定するテーブルで省略可能なものです。指定方法についてはpythonの設定を参照してください。
+
+- *[input_func]* int, float, stringについて入力時に呼び出す関数を記述します。
+- *[allocate_and_input]* `seq`, `2d_seq`について確保と入力をまとめて行うことができる場合に記述します。省略した場合、上記で指定した確保と入力の方式を複合したものが挿入されます
+- *[declare_and_allocate_and_input]* `seq`, `2d_seq`について宣言・確保・入力をまとめて行うことができる場合に記述します。省略した場合、上記で指定した宣言と確保と入力の方式を複合したものが挿入されます
+
+例えばC++での設定方法は以下です。
+```toml
+base_indent = 1
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# ループ
+[loop]
+header = "for(int {loop_var} = 0 ; {loop_var} < {length} ; {loop_var}++){{"
+footer = "}}"
+
+# タイプ
+[type]
+int = "long long"
+float = "long double"
+string = "std::string"
+
+# デフォルト値
+[default]
+int = "0"
+float = "0.0"
+string = "\"\""
+
+# 宣言
+[declare]
+int = "long long {name};"
+float = "long double {name};"
+string = "std::string {name};"
+seq = "std::std::vector<{type}> {name};"
+2d_seq = "std::vector<std::vector<{type}>> {name};"
+
+# 確保
+[allocate]
+seq = "{name}.assign({length}, {default});"
+2d_seq = "{name}.assign({length_i}, std::vector<{type}>({length_j}));"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "std::vector<{type}> {name}({length});"
+2d_seq = "std::vector<std::vector<{type}>> {name}({length_i}, std::vector<{type}>({length_j}));"
+
+# 入力
+[input]
+#int = "std::cin >> {name};"
+int = "scanf(\"%lld\",&{name});"
+#float = "std::cin >> {name};"
+float = "scanf(\"%Lf\",&{name});"
+string = "std::cin >> {name};"
+
+# 引数
+[arg]
+int = "long long {name}"
+float = "double {name}"
+string = "std::string {name}"
+seq = "std::vector<{type}> {name}"
+2d_seq = "std::vector<std::vector<{type}>> {name}"
+
+# 引数への渡し方
+[actual_arg]
+seq = "std::move({name})"
+2d_seq = "std::move({name})"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index_i}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
+```
+
+例えばpythonでの設定方法は以下です。
+```toml
+base_indent = 1
+insert_space_around_operators = true
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# インデックス
+[index]
+i = "i"
+j = "j"
+
+# ループ
+[loop]
+header = "for {loop_var} in range({length}):"
+footer = ""
+
+# タイプ
+[type]
+int = "int"
+float = "float"
+string = "str"
+
+# デフォルト値
+[default]
+int = "int()"
+float = "float()"
+string = "str()"
+
+# 宣言
+[declare]
+int = ""
+float = ""
+string = ""
+seq = ""
+2d_seq = ""
+
+# 確保
+[allocate]
+seq = "{name} = [{default}] * ({length})"
+2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "{name} = [{default}] * ({length})  # type: \"List[{type}]\""
+self.declare_and_allocate_2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]  # type: \"List[List[{type}]]\""
+
+# 入力関数
+[input_func]
+int = "int(next(tokens))"
+float = "float(next(tokens))"
+string = "next(tokens)"
+
+# 入力
+[input]
+int = "{name} = int(next(tokens))"
+float = "{name} = float(next(tokens))"
+string = "{name} = next(tokens)"
+
+# 宣言と入力
+[declare_and_input]
+int = "{name} = int(next(tokens))  # type: int"
+float = "{name} = float(next(tokens))  # type: float"
+string = "{name} = next(tokens)  # type: str"
+
+# 確保と入力
+[allocate_and_input]
+seq = "{name} = [{input_func} for _ in range({length})]"
+2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]"
+
+# 宣言と確保と入力
+[declare_and_allocate_and_input]
+seq = "{name} = [{input_func} for _ in range({length})]  # type: \"List[{type}]\""
+2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]  # type: \"List[List[{type}]]\""
+
+# 引数
+[arg]
+int = "{name}: int"
+float = "{name}: float"
+string = "{name}: str"
+seq = "{name}: \"List[{type}]\""
+2d_seq = "{name}: \"List[List[{type}]]\""
+
+# 配列アクセス
+[access]
+seq = "{name}[{index_i}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
+```
+
 ## テンプレートの例
 `atcoder-tools gen`コマンドに対し`--template`でテンプレートソースコードを指定できます。
 テンプレートエンジンの仕様については[jinja2](http://jinja.pocoo.org/docs/2.10/) の公式ドキュメントを参照してください。

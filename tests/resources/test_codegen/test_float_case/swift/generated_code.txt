@@ -11,17 +11,17 @@ func main() {
     let L = readInt()
     let N = readInt()
     let M = readInt()
-    var K = [Double]()
-    for _ in 0..<L {
-        K.append(readDouble())
+    var K = [Double](repeating: 0.0, count: L)
+    for i in 0..<L {
+        K[i] = readDouble()
     }
-    var A = [Int]()
-    var S = [Double]()
-    for _ in 0..<N {
-        A.append(readInt())
-        S.append(readDouble())
+    var A = [Int](repeating: 0, count: N)
+    var S = [Double](repeating: 0.0, count: N)
+    for i in 0..<N {
+        A[i] = readInt()
+        S[i] = readDouble()
     }
-    solve(L, N, M, K, A, S)
+    _ = solve(L, N, M, K, A, S)
 }
 
 main()
