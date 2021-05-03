@@ -42,9 +42,9 @@ seq = "std::vector<{type}> {name}({length});"
 # 入力
 [input]
 #int = "std::cin >> {name};"
-int = "scanf(\"%lld\",&{name});"
+int = "scanf(\"%lld\", &{name});"
 #float = "std::cin >> {name};"
-float = "scanf(\"%Lf\",&{name});"
+float = "scanf(\"%Lf\", &{name});"
 string = "std::cin >> {name};"
 
 # 引数

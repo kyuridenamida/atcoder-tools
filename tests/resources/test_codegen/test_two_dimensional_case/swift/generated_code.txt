@@ -10,21 +10,19 @@ func main() {
     func readDouble() -> Double { 0 }
     let H = readInt()
     let W = readInt()
-    var c = [[Int]]()
+    var c = [[Int]](repeating: [Int](repeating: 0, count: 9+1), count: 9+1)
     for i in 0..<9+1 {
-        c.append([Int]())
-        for _ in 0..<9+1 {
-            c[i].append(readInt())
+        for j in 0..<9+1 {
+            c[i][j] = readInt()
         }
     }
-    var A = [[Int]]()
+    var A = [[Int]](repeating: [Int](repeating: 0, count: W), count: H)
     for i in 0..<H {
-        A.append([Int]())
-        for _ in 0..<W {
-            A[i].append(readInt())
+        for j in 0..<W {
+            A[i][j] = readInt()
         }
     }
-    solve(H, W, c, A)
+    _ = solve(H, W, c, A)
 }
 
 main()

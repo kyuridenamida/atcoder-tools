@@ -262,17 +262,6 @@ class UniversalCodeGenerator():
         else:
             raise NotImplementedError
 
-#    def _input_code(self, var: Variable) -> str:
-#        if var.dim_num() == 0:
-#            return self._input_code_for_var(var)
-#        elif var.dim_num() == 1:
-#            return self.info.input_seq.format(length=self._get_length(var.first_index),
-#                                              input=self._input_code_for_var(var))
-#        elif var.dim_num() == 2:
-#            return self.info.input_2d_seq.format(length_i=self._get_length(var.first_index),
-#                                                 length_j=self._get_length(var.second_index),
-#                                                 input=self._input_code_for_var(var))
-
     def _get_var_name(self, var: Variable):
         name = var.name
         if var.dim_num() == 0:

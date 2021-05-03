@@ -151,7 +151,8 @@ class TestCodeGenerator(unittest.TestCase):
                 load_text_file(_full_path("echo_test_format.txt")),
                 [Sample(load_text_file(_full_path("echo_test_input.txt")), None)]))
 
-        for lang in ALL_LANGUAGES:
+#        for lang in ALL_LANGUAGES:
+        for lang in [SWIFT]:
             expected_default_generated_code_file = _full_path(
                 os.path.join(lang.name, lang.source_code_name("expected_default_generated_code")))
 

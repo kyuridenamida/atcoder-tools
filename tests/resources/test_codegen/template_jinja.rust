@@ -16,6 +16,8 @@ fn solve({{ formal_arguments }}) {
 {% endif %}
 
 fn main() {
+    let con = read_string();
+    let mut scanner = Scanner::new(&con);
     {% if prediction_success %}
     {{input_part}}
     solve({{ actual_arguments }});

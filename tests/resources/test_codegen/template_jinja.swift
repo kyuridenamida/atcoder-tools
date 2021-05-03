@@ -38,7 +38,7 @@ func main() {
     func readInt() -> Int { Int(readString())! }
     func readDouble() -> Double { Double(readString())! }
     {{input_part}}
-    solve({{ actual_arguments }})
+    _ = solve({{ actual_arguments }})
     {% else %}
     // Failed to predict input format
     {% endif %}

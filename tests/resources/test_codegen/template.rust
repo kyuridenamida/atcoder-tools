@@ -5,6 +5,8 @@ fn solve(${formal_arguments}) {
 }
 
 fn main() {
+    let con = read_string();
+    let mut scanner = Scanner::new(&con);
     ${input_part}
     solve(${actual_arguments});
 }
