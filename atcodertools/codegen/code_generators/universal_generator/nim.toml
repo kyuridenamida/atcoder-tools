@@ -19,7 +19,7 @@ str = "string"
 [default]
 int = "0"
 float = "0.0"
-str = "\"\""
+str = '""'
 
 # 宣言
 [declare]
@@ -47,15 +47,15 @@ str = "nextString()"
 
 # 入力
 [input]
-int = "{name} = nextInt()"
-float = "{name} = nextFloat()"
-str = "{name} = nextString()"
+int = "{name} = {input_func}"
+float = "{name} = {input_func}"
+str = "{name} = {input_func}"
 
 # 宣言と入力
 [declare_and_input]
-int = "var {name} = nextInt()"
-float = "var {name} = nextFloat()"
-str = "var {name} = nextString()"
+int = "var {name} = {input_func}"
+float = "var {name} = {input_func}"
+str = "var {name} = {input_func}"
 
 # 確保と入力
 [allocate_and_input]
@@ -77,5 +77,5 @@ seq = "{name}:seq[{type}]"
 
 # 配列アクセス
 [access]
-seq = "{name}[{index_i}]"
+seq = "{name}[{index}]"
 2d_seq = "{name}[{index_i}][{index_j}]"

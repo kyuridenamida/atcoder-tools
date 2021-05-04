@@ -19,7 +19,25 @@ str = "std::string"
 [default]
 int = "0"
 float = "0.0"
-str = "\"\""
+str = '""'
+
+# 引数
+[arg]
+int = "long long {name}"
+float = "double {name}"
+str = "std::string {name}"
+seq = "std::vector<{type}> {name}"
+2d_seq = "std::vector<std::vector<{type}>> {name}"
+
+# 引数への渡し方
+[actual_arg]
+seq = "std::move({name})"
+2d_seq = "std::move({name})"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
 
 # 宣言
 [declare]
@@ -47,20 +65,4 @@ int = "scanf(\"%lld\", &{name});"
 float = "scanf(\"%Lf\", &{name});"
 str = "std::cin >> {name};"
 
-# 引数
-[arg]
-int = "long long {name}"
-float = "double {name}"
-str = "std::string {name}"
-seq = "std::vector<{type}> {name}"
-2d_seq = "std::vector<std::vector<{type}>> {name}"
 
-# 引数への渡し方
-[actual_arg]
-seq = "std::move({name})"
-2d_seq = "std::move({name})"
-
-# 配列アクセス
-[access]
-seq = "{name}[{index_i}]"
-2d_seq = "{name}[{index_i}][{index_j}]"

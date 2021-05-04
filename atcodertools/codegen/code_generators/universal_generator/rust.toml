@@ -22,6 +22,19 @@ int = "0i64"
 float = "0f64"
 str = "String::new()"
 
+# 引数
+[arg]
+int = "{name}: i64"
+float = "{name}: f64"
+str = "{name}: String"
+seq = "{name}: Vec<{type}>"
+2d_seq = "{name}: Vec<Vec<{type}>>"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
+
 # 宣言
 [declare]
 int = "let mut {name}: i64;"
@@ -46,15 +59,4 @@ int = "{name} = scanner.next();"
 float = "{name} = scanner.next();"
 str = "{name} = scanner.next();"
 
-# 引数
-[arg]
-int = "{name}: i64"
-float = "{name}: f64"
-str = "{name}: String"
-seq = "{name}: Vec<{type}>"
-2d_seq = "{name}: Vec<Vec<{type}>>"
 
-# 配列アクセス
-[access]
-seq = "{name}[{index_i}]"
-2d_seq = "{name}[{index_i}][{index_j}]"

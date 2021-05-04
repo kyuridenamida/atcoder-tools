@@ -45,15 +45,15 @@ str = "readString()"
 
 # 入力
 [input]
-int = "{name} = readInt()"
-float = "{name} = readDouble()"
-str = "{name} = readString()"
+int = "{name} = {input_func}"
+float = "{name} = {input_func}"
+str = "{name} = {input_func}"
 
 # 宣言と入力
 [declare_and_input]
-int = "let {name} = readInt()"
-float = "let {name} = readDouble()"
-str = "let {name} = readString()"
+int = "let {name} = {input_func}"
+float = "let {name} = {input_func}"
+str = "let {name} = {input_func}"
 
 # 引数
 [arg]
@@ -65,5 +65,5 @@ seq = "_ {name}:[{type}]"
 
 # 配列アクセス
 [access]
-seq = "{name}[{index_i}]"
+seq = "{name}[{index}]"
 2d_seq = "{name}[{index_i}][{index_j}]"

@@ -261,6 +261,7 @@ out_example_format="out_{}.txt"
 - *global_prefix* グローバル変数の宣言時に入れる接頭辞(Javaなどでstaticを指定したりできます)
 
 以下のようにテーブルを定義します。各項目はダブルコーテーションあるいはシングルコーテーションを用いた文字列で指定します。pythonのformatメソッドに渡されるため、波括弧等の文字を直に書きたい場合はエスケープする必要があります。
+テーブルのキーは整数(int), 浮動小数(float), 文字列(str), およびこれら3つを使った1次元配列(seq), 2次元配列(2d_seq)となっています。
 
 - *[index]* ループインデックスの名称を指定します。１重目を`i`, 2重目を`j`で指定してください。省略可能で省略した場合はi, jが指定されます。perl, phpなどの言語で$i, $jなどとi, j以外の名前を指定しなければならないとき用のつもりです。
 - *[loop]* ループに関することを記述します
@@ -268,19 +269,23 @@ out_example_format="out_{}.txt"
     - **footer** ループの最後に記述する内容。C++, Javaでは閉じカッコになります。波括弧の場合は`}}`とエスケープする必要があることに注意してください。
 - *[type]* タイプ(int, float, str)のタイプについて記述します。例を参照してください。
 - *[default]* デフォルトの値について記述します。例を参照してください。注意: TOMLの表記に癖があるようで、ダブルコーテーション2つ(空の文字列)を表記する際にはstr='""'とするとよいようです。"\"\""だとエラーになるようです。
-- *[declare]* int, float, str, 1次元可変配列(以下`seq`), 2次元可変配列(以下`2d_seq`)の宣言方法について記述します。変数名は`{name}`を使ってください。可変配列のベースとなるタイプは`{type}`を使ってください。
-- *[allocate]* `seq`, `2d_seq`の確保の方法を記述します。ベースとなるタイプは`{type}`, 変数名は`{name}`, デフォルト値は`{default}`で指定します。タイプ、デフォルト値は上記で指定したものが入ります。長さについてはseqは`{length}`で、`2d_seq`は1番目の長さは`{length_i}`, 2番目の長さは`{length_j}`となります。順番を間違えると転置されるのでご注意ください。
-- *[declare_and_allocate]* `seq`, `2d_seq`について宣言と確保を同時に行う方法について記述します。フォーマットに使用されるものは`[allocate]`と同じです。
-- *[input]* タイプint, float, strの入力方法について記述します。入力される変数名は`{name}`とし、これに入力する方法を記述してください。
-
+- *[input_func]* int, float, strについて入力時に呼び出す関数を記述します。
 - *[arg]* solve関数の引数の記述方法について指定します。`int`, `float`, `str`, `seq`, `2d_seq`について記述してください。`{name}`が変数名, `{type}`が`seq`, `2d_seq`についてベースとなる型です。
 - *[actual_arg]* `seq`, `2d_seq`についてsolve関数を呼び出す際の引数の渡し方について記述します。C++などでmoveをつかってメモリを節約したいときなどに指定できます。省略可能で、省略した場合はそのまま渡されます。
 
 - *[access]* 配列のアクセス方法について記述します。`seq`, `2d_seq`について指定してください。`{name}`で変数名, `{index_i}`, `{index_j}`でインデックス名を指定します。
 
+
+以下は宣言・確保・入力を行うためのコードを記述します。いくつかを同時に行う方法も指定できます。いずれも一行または複数行に渡る指定が可能でセミコロン等の終端子も(必要な言語では)記述してください。
+キーワードとして`{name}`, `{type}`はそれぞれ対象となる変数名、タイプ名で、上記で指定した`{default}`が使えます。また、指定していれば`{input_func}`も使えます。`seq`, `2d_seq`の場合は`{type}`はベースとなる型名になります(`vector<int>`における`int`)のでご注意ください。また、`seq`の長さは`{length}`, `2d_seq`の長さは`{length_i}`, `{length_j}`となっています。
+
+- *[declare]* int, float, str, seq, 2d_seqの宣言方法について記述します。
+- *[allocate]* `seq`, `2d_seq`の確保の方法を記述します。
+- *[declare_and_allocate]* `seq`, `2d_seq`について宣言と確保を同時に行う方法について記述します。
+- *[input]* int, float, strの入力方法について記述します。
+
 以下は入力コードの冗長性を下げる目的で指定するテーブルで省略可能なものです。指定方法についてはpythonの設定を参照してください。
 
-- *[input_func]* int, float, strについて入力時に呼び出す関数を記述します。
 - *[allocate_and_input]* `seq`, `2d_seq`について確保と入力をまとめて行うことができる場合に記述します。省略した場合、上記で指定した確保と入力の方式を複合したものが挿入されます
 - *[declare_and_allocate_and_input]* `seq`, `2d_seq`について宣言・確保・入力をまとめて行うことができる場合に記述します。省略した場合、上記で指定した宣言と確保と入力の方式を複合したものが挿入されます
 
@@ -307,7 +312,25 @@ str = "std::string"
 [default]
 int = "0"
 float = "0.0"
-str = "\"\""
+str = '""'
+
+# 引数
+[arg]
+int = "long long {name}"
+float = "double {name}"
+str = "std::string {name}"
+seq = "std::vector<{type}> {name}"
+2d_seq = "std::vector<std::vector<{type}>> {name}"
+
+# 引数への渡し方
+[actual_arg]
+seq = "std::move({name})"
+2d_seq = "std::move({name})"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
 
 # 宣言
 [declare]
@@ -330,28 +353,10 @@ seq = "std::vector<{type}> {name}({length});"
 # 入力
 [input]
 #int = "std::cin >> {name};"
-int = "scanf(\"%lld\",&{name});"
+int = "scanf(\"%lld\", &{name});"
 #float = "std::cin >> {name};"
-float = "scanf(\"%Lf\",&{name});"
+float = "scanf(\"%Lf\", &{name});"
 str = "std::cin >> {name};"
-
-# 引数
-[arg]
-int = "long long {name}"
-float = "double {name}"
-str = "std::string {name}"
-seq = "std::vector<{type}> {name}"
-2d_seq = "std::vector<std::vector<{type}>> {name}"
-
-# 引数への渡し方
-[actual_arg]
-seq = "std::move({name})"
-2d_seq = "std::move({name})"
-
-# 配列アクセス
-[access]
-seq = "{name}[{index_i}]"
-2d_seq = "{name}[{index_i}][{index_j}]"
 ```
 
 例えばpythonでの設定方法は以下です。
@@ -410,15 +415,15 @@ str = "next(tokens)"
 
 # 入力
 [input]
-int = "{name} = int(next(tokens))"
-float = "{name} = float(next(tokens))"
-str = "{name} = next(tokens)"
+int = "{name} = {input_func}"
+float = "{name} = {input_func}"
+str = "{name} = {input_func}"
 
 # 宣言と入力
 [declare_and_input]
-int = "{name} = int(next(tokens))  # type: int"
-float = "{name} = float(next(tokens))  # type: float"
-str = "{name} = next(tokens)  # type: str"
+int = "{name} = {input_func}  # type: int"
+float = "{name} = {input_func}  # type: float"
+str = "{name} = {input_func}  # type: str"
 
 # 確保と入力
 [allocate_and_input]
@@ -440,7 +445,7 @@ seq = "{name}: \"List[{type}]\""
 
 # 配列アクセス
 [access]
-seq = "{name}[{index_i}]"
+seq = "{name}[{index}]"
 2d_seq = "{name}[{index_i}][{index_j}]"
 ```
 

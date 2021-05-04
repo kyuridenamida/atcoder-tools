@@ -21,7 +21,20 @@ str = "string"
 [default]
 int = "0"
 float = "0.0"
-str = "\"\""
+str = '""'
+
+# 引数
+[arg]
+int = "long {name}"
+float = "double {name}"
+str = "string {name}"
+seq = "{type}[] {name}"
+2d_seq = "{type}[][] {name}"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
 
 # 宣言
 [declare]
@@ -46,15 +59,4 @@ int = "{name} = input.front.to!long;\ninput.popFront;"
 float = "{name} = input.front.to!double;\ninput.popFront;"
 str = "{name} = input.front.to!string;\ninput.popFront;"
 
-# 引数
-[arg]
-int = "long {name}"
-float = "double {name}"
-str = "string {name}"
-seq = "{type}[] {name}"
-2d_seq = "{type}[][] {name}"
 
-# 配列アクセス
-[access]
-seq = "{name}[{index_i}]"
-2d_seq = "{name}[{index_i}][{index_j}]"

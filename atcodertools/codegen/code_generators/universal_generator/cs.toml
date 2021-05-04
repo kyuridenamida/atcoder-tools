@@ -22,6 +22,25 @@ int = "long()"
 float = "double()"
 str = "string()"
 
+# 入力関数
+[input_func]
+int = "cin.ReadLong"
+float = "cin.ReadDouble"
+str = "cin.Read"
+
+# 引数
+[arg]
+int = "long {name}"
+float = "double {name}"
+str = "string {name}"
+seq = "{type}[] {name}"
+2d_seq = "{type}[,] {name}"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i},{index_j}]"
+
 # 宣言
 [declare]
 int = "long {name};"
@@ -40,27 +59,8 @@ seq = "{name} = new {type}[{length}];"
 seq = "{type}[] {name} = new {type}[{length}];"
 2d_seq = "{type}[,] {name} = new {type}[{length_i},{length_j}];"
 
-# 入力関数
-[input_func]
-int = "cin.ReadLong;"
-float = "cin.ReadDouble;"
-str = "cin.Read;"
-
 # 入力
 [input]
-int = "{name} = cin.ReadLong;"
-float = "{name} = cin.ReadDouble;"
-str = "{name} = cin.Read;"
-
-# 引数
-[arg]
-int = "long {name}"
-float = "double {name}"
-str = "string {name}"
-seq = "{type}[] {name}"
-2d_seq = "{type}[,] {name}"
-
-# 配列アクセス
-[access]
-seq = "{name}[{index_i}]"
-2d_seq = "{name}[{index_i},{index_j}]"
+int = "{name} = {input_func};"
+float = "{name} = {input_func};"
+str = "{name} = {input_func};"
