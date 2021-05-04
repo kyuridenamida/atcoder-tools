@@ -99,13 +99,34 @@ class UniversalCodeGenerator():
         return result
 
     def _convert_type(self, type_: Type) -> str:
-        return self.info["type"][type_.value]
+        if type_ == Type.int:
+            return self.info["type"]["int"]
+        elif type_ == Type.float:
+            return self.info["type"]["float"]
+        elif type_ == Type.str:
+            return self.info["type"]["str"]
+        else:
+            raise NotImplementedError
 
     def _default_val(self, type_: Type) -> str:
-        return self.info["default"][type_.value]
+        if type_ == Type.int:
+            return self.info["default"]["int"]
+        elif type_ == Type.float:
+            return self.info["default"]["float"]
+        elif type_ == Type.str:
+            return self.info["default"]["str"]
+        else:
+            raise NotImplementedError
 
     def _get_input_func(self, type_: Type) -> str:
-        return self.info["input_func"][type_.value]
+        if type_ == Type.int:
+            return self.info["input_func"]["int"]
+        elif type_ == Type.float:
+            return self.info["input_func"]["float"]
+        elif type_ == Type.str:
+            return self.info["input_func"]["str"]
+        else:
+            raise NotImplementedError
 
     def _get_format_keywords(self, var: Variable) -> dict:
         result = {"name": var.name, "type": self._convert_type(
@@ -186,7 +207,14 @@ class UniversalCodeGenerator():
         :return: Create declaration part E.g. array[1..n] -> std::vector<int> array = std::vector<int>(n-1+1);
         """
         if var.dim_num() == 0:  # ほとんどの言語ではint, float, stringは宣言したら確保もされるはず、そうでない言語だったらこれだとまずそう
-            return self.info["declare"][var.type.value].format(name=var.name)
+            if var.type == Type.int:
+                return self.info["declare"]["int"].format(name=var.name)
+            elif var.type == Type.float:
+                return self.info["declare"]["float"].format(name=var.name)
+            elif var.type == Type.str:
+                return self.info["declare"]["str"].format(name=var.name)
+            else:
+                raise NotImplementedError
         else:
             kwd = self._get_format_keywords(var)
             kind = self._get_variable_kind(var)
@@ -195,8 +223,14 @@ class UniversalCodeGenerator():
     def _input_code_for_var(self, var: Variable) -> str:
         kwd = self._get_format_keywords(var)
         kwd["name"] = self._get_var_name(var)
-        result = self.info["input"][var.type.value].format(**kwd)
-        return result
+        if var.type == Type.int:
+            return self.info["input"]["int"].format(**kwd)
+        elif var.type == Type.float:
+            return self.info["input"]["float"].format(**kwd)
+        elif var.type == Type.str:
+            return self.info["input"]["str"].format(**kwd)
+        else:
+            raise NotImplementedError
 
     def _get_var_name(self, var: Variable):
         name = var.name
@@ -233,8 +267,18 @@ class UniversalCodeGenerator():
         if not global_mode:
             if "declare_and_input" in self.info:
                 kwd = self._get_format_keywords(var)
-                self._append(
-                    lines, self.info["declare_and_input"][var.type.value].format(**kwd))
+                if var.type == Type.int:
+                    self._append(
+                        lines, self.info["declare_and_input"]["int"].format(**kwd))
+                elif var.type == Type.float:
+                    self._append(
+                        lines, self.info["declare_and_input"]["float"].format(**kwd))
+                elif var.type == Type.str:
+                    self._append(
+                        lines, self.info["declare_and_input"]["str"].format(**kwd))
+                else:
+                    raise NotImplementedError
+
                 return
         self._append_declaration_and_allocation(lines, pattern, global_mode)
         self._append(lines, self._input_code_for_var(var))
