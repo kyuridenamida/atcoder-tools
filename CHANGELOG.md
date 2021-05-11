@@ -1,4 +1,11 @@
 # Change Log
+## 2.3.0 / 2021-5-11
+Release version 2.3.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#228](https://github.com/kyuridenamida/atcoder-tools/pull/228)|Universal Code Generator to support new languages easily|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**<br/>![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[chaemon](https://github.com/chaemon)|
+|[#226](https://github.com/kyuridenamida/atcoder-tools/pull/226)|Support native Windows|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[firewood](https://github.com/firewood)|
+|[#211](https://github.com/kyuridenamida/atcoder-tools/pull/211)|Add Swift Support|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**<br/>![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[firewood](https://github.com/firewood)|
 ## 2.2.0 / 2021-4-22
 Release version 2.2.0. From this version on, you can't use Python 3.6 because f-string is used in the code. Please upgrade your Python to at least 3.6 when you encounter some error about syntax.
 |PR|Change Summary|Label|Author|
@@ -42,15 +49,15 @@ Release version 2.0.0. Python 3.5 is not supported anymore.
 |[#157](https://github.com/kyuridenamida/atcoder-tools/pull/157)|Reinforce unit tests & Support C# & error type on documentation page|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#156](https://github.com/kyuridenamida/atcoder-tools/pull/156)|Support decimal number judge|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
 |[#154](https://github.com/kyuridenamida/atcoder-tools/pull/154)|Make default code style configurable at language level|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
-|[#153](https://github.com/kyuridenamida/atcoder-tools/pull/153)|Support C#|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
+|[#153](https://github.com/kyuridenamida/atcoder-tools/pull/153)|Support C#|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**<br/>![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[chaemon](https://github.com/chaemon)|
 ## 1.1.5 / 2019-8-19
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
 |[#151](https://github.com/kyuridenamida/atcoder-tools/pull/151)|Fix nim to work with the default indent setting|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#150](https://github.com/kyuridenamida/atcoder-tools/pull/150)|Fix a bug flake8 in .travis.yml doesn't work|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kmyk](https://github.com/kmyk)|
 |[#148](https://github.com/kyuridenamida/atcoder-tools/pull/148)|Fix "codegen" error on Windows|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[penpenpng](https://github.com/penpenpng)|
-|[#146](https://github.com/kyuridenamida/atcoder-tools/pull/146)|Support NIM|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
-|[#145](https://github.com/kyuridenamida/atcoder-tools/pull/145)|Support DLang|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[penpenpng](https://github.com/penpenpng)|
+|[#146](https://github.com/kyuridenamida/atcoder-tools/pull/146)|Support NIM|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**<br/>![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[chaemon](https://github.com/chaemon)|
+|[#145](https://github.com/kyuridenamida/atcoder-tools/pull/145)|Support DLang|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**<br/>![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[penpenpng](https://github.com/penpenpng)|
 |[#144](https://github.com/kyuridenamida/atcoder-tools/pull/144)|Fix Python code generator to generate codes following PEP8|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[penpenpng](https://github.com/penpenpng)|
 |[#142](https://github.com/kyuridenamida/atcoder-tools/pull/142)|Stop using root logger|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://github.com/kmyk)|
 |[#141](https://github.com/kyuridenamida/atcoder-tools/pull/141)|Make example input / output names configurable from EtcConfig|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kitagawa-hr](https://github.com/kitagawa-hr)|
@@ -72,14 +79,14 @@ Release version 2.0.0. Python 3.5 is not supported anymore.
 |:---|:---|:---|:---:|
 |[#110](https://github.com/kyuridenamida/atcoder-tools/pull/110)|Store all quality results into /api/all.json in Doc|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#98](https://github.com/kyuridenamida/atcoder-tools/pull/98)| Add the "codegen" subcommand|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://github.com/kmyk)|
-|[#97](https://github.com/kyuridenamida/atcoder-tools/pull/97)|Add a code generator for Python 3|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kmyk](https://github.com/kmyk)|
+|[#97](https://github.com/kyuridenamida/atcoder-tools/pull/97)|Add a code generator for Python 3|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**<br/>![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[kmyk](https://github.com/kmyk)|
 ## 1.1.1 / 2019-2-14
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
 |[#92](https://github.com/kyuridenamida/atcoder-tools/pull/92)|Add local compile tests for default templates / code generators|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#91](https://github.com/kyuridenamida/atcoder-tools/pull/91)|Refactor codes around language|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://github.com/kyuridenamida)|
 |[#88](https://github.com/kyuridenamida/atcoder-tools/pull/88)|#87 fix bug you can't specify a code to submit by --code for submit command|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[kyuridenamida](https://github.com/kyuridenamida)|
-|[#86](https://github.com/kyuridenamida/atcoder-tools/pull/86)|generate rust code.|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[fukatani](https://github.com/fukatani)|
+|[#86](https://github.com/kyuridenamida/atcoder-tools/pull/86)|generate rust code.|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**<br/>![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[fukatani](https://github.com/fukatani)|
 |[#84](https://github.com/kyuridenamida/atcoder-tools/pull/84)|Output stdout even when getting RE or TLE|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[kyuridenamida](https://github.com/kyuridenamida)|
 ## 1.1.0 / 2019-1-17
 |PR|Change Summary|Label|Author|
