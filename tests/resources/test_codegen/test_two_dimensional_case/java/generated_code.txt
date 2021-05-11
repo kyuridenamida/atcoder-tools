@@ -10,15 +10,15 @@ class Main {
         W = sc.nextLong();
         long[][] c = new long[(int)(9+1)][(int)(9+1)];
         for(int i = 0 ; i < 9+1 ; i++){
-                for(int j = 0 ; j < 9+1 ; j++){
-                    c[i][j] = sc.nextLong();
-                }
+            for(int j = 0 ; j < 9+1 ; j++){
+                c[i][j] = sc.nextLong();
+            }
         }
         long[][] A = new long[(int)(H)][(int)(W)];
         for(int i = 0 ; i < H ; i++){
-                for(int j = 0 ; j < W ; j++){
-                    A[i][j] = sc.nextLong();
-                }
+            for(int j = 0 ; j < W ; j++){
+                A[i][j] = sc.nextLong();
+            }
         }
         solve(H, W, c, A);
     }

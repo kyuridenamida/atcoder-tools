@@ -1,0 +1,67 @@
+base_indent = 2
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = "static "
+#input_part_prefix = "final Scanner sc = new Scanner(System.in);"
+
+# ループ
+[loop]
+header = "for(int {loop_var} = 0 ; {loop_var} < {length} ; {loop_var}++){{"
+footer = "}}"
+
+# タイプ
+[type]
+int = "long"
+float = "double"
+str = "String"
+
+# デフォルト値
+[default]
+int = "0"
+float = "0.0"
+str = '""'
+
+# 引数
+[arg]
+int = "long {name}"
+float = "double {name}"
+str = "String {name}"
+seq = "{type}[] {name}"
+2d_seq = "{type}[][] {name}"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
+
+# 宣言
+[declare]
+int = "long {name};"
+float = "double {name};"
+str = "String {name};"
+seq = "{type} {name}[];"
+2d_seq = "{type} {name}[][];"
+
+# 確保
+[allocate]
+seq = "{name} = new {type}[{length}];"
+2d_seq = "{name} = new {type}[{length_i}][{length_j}];"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "{type}[] {name} = new {type}[(int)({length})];"
+2d_seq = "{type}[][] {name} = new {type}[(int)({length_i})][(int)({length_j})];"
+
+# 入力
+[input]
+int = "{name} = sc.nextLong();"
+float = "{name} = sc.nextDouble();"
+str = "{name} = sc.next();"
+seq = """for(int i = 0;i < {length};i++)
+    {input}"""
+2d_seq = """for(int i = 0;i <{length_i};i++)
+    for(int j = 0;j <{length_j};j++)
+        {input}"""
+
+

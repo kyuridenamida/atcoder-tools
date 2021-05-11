@@ -250,7 +250,205 @@ out_example_format="out_{}.txt"
 ### カスタムコードジェネレーター
 [標準のC++コードジェネレーター](https://github.com/kyuridenamida/atcoder-tools/blob/master/atcodertools/codegen/code_generators/cpp.py)に倣って、
 `(CogeGenArgs) -> str(ソースコード)`が型であるような`main`関数を定義した.pyファイルを`code_generator_file`で指定すると、コード生成時にカスタムコードジェネレーターを利用できます。
- 
+
+
+### ユニバーサルコードジェネレーター
+ユニバーサルコードジェネレーターはループ・配列アクセス方法等のいくつかの言語仕様を記述するだけでカスタムコードジェネレーターよりも簡単にコード生成することを意図して作成したジェネレーターです。設定ファイルの書き方は以下です。
+
+- *base_indent* 入力部分のインデント数
+- *insert_space_around_operators* 入力部分の変数や演算子の間にスペースを入れるかどうかをtrue/falseで指定
+- *newline_after_input* 入力部分で入力ごとに空行を入れるかどうかをtrue/falseで指定
+- *global_prefix* グローバル変数の宣言時に入れる接頭辞(Javaなどでstaticを指定したりできます)
+
+以下のようにテーブルを定義します。各項目はダブルコーテーションあるいはシングルコーテーションを用いた文字列で指定します。Pythonのformatメソッドに渡されるため、波括弧等の文字を直に書きたい場合はエスケープする必要があります。
+テーブルのキーは整数(int), 浮動小数(float), 文字列(str), およびこれら3つを使った1次元配列(seq), 2次元配列(2d_seq)となっています。
+
+- *[index]* ループインデックスの名称を指定します。１重目を`i`, 2重目を`j`で指定してください。省略可能で省略した場合はi, jが指定されます。Perl, PHPなどの言語で$i, $jなどとi, j以外の名前を指定しなければならないとき用のつもりです。
+- *[loop]* ループに関することを記述します
+    - **header** ループの最初に記述する内容。ループを回すための変数は`{loop_var}`, 回す回数は`{length}`を用いてください。
+    - **footer** ループの最後に記述する内容。C++, Javaでは閉じカッコになります。波括弧の場合は`}}`とエスケープする必要があることに注意してください。
+- *[type]* タイプ(int, float, str)のタイプについて記述します。例を参照してください。
+- *[default]* デフォルトの値について記述します。例を参照してください。注意: TOMLの表記に癖があるようで、ダブルコーテーション2つ(空の文字列)を表記する際にはstr='""'とするとよいようです。"\"\""だとエラーになるようです。
+- *[input_func]* int, float, strについて入力時に呼び出す関数を記述します。
+- *[arg]* solve関数の引数の記述方法について指定します。`int`, `float`, `str`, `seq`, `2d_seq`について記述してください。`{name}`が変数名, `{type}`が`seq`, `2d_seq`についてベースとなる型です。
+- *[actual_arg]* `seq`, `2d_seq`についてsolve関数を呼び出す際の引数の渡し方について記述します。C++などでmoveをつかってメモリを節約したいときなどに指定できます。省略可能で、省略した場合はそのまま渡されます。
+
+- *[access]* 配列のアクセス方法について記述します。`seq`, `2d_seq`について指定してください。`{name}`で変数名, `{index_i}`, `{index_j}`でインデックス名を指定します。
+
+
+以下は宣言・確保・入力を行うためのコードを記述します。いくつかを同時に行う方法も指定できます。いずれも一行または複数行に渡る指定が可能でセミコロン等の終端子も(必要な言語では)記述してください。
+キーワードとして`{name}`, `{type}`はそれぞれ対象となる変数名、タイプ名で、上記で指定した`{default}`が使えます。また、指定していれば`{input_func}`も使えます。`seq`, `2d_seq`の場合は`{type}`はベースとなる型名になります(`vector<int>`における`int`)のでご注意ください。また、`seq`の長さは`{length}`, `2d_seq`の長さは`{length_i}`, `{length_j}`となっています。
+
+- *[declare]* int, float, str, seq, 2d_seqの宣言方法について記述します。
+- *[allocate]* `seq`, `2d_seq`の確保の方法を記述します。
+- *[declare_and_allocate]* `seq`, `2d_seq`について宣言と確保を同時に行う方法について記述します。
+- *[input]* int, float, strの入力方法について記述します。
+
+以下は入力コードの冗長性を下げる目的で指定するテーブルで省略可能なものです。指定方法についてはPythonの設定を参照してください。
+
+- *[allocate_and_input]* `seq`, `2d_seq`について確保と入力をまとめて行うことができる場合に記述します。省略した場合、上記で指定した確保と入力の方式を複合したものが挿入されます
+- *[declare_and_allocate_and_input]* `seq`, `2d_seq`について宣言・確保・入力をまとめて行うことができる場合に記述します。省略した場合、上記で指定した宣言と確保と入力の方式を複合したものが挿入されます
+
+例えばC++での設定方法は以下です。
+```toml
+base_indent = 1
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# ループ
+[loop]
+header = "for(int {loop_var} = 0 ; {loop_var} < {length} ; {loop_var}++){{"
+footer = "}}"
+
+# タイプ
+[type]
+int = "long long"
+float = "long double"
+str = "std::string"
+
+# デフォルト値
+[default]
+int = "0"
+float = "0.0"
+str = '""'
+
+# 引数
+[arg]
+int = "long long {name}"
+float = "double {name}"
+str = "std::string {name}"
+seq = "std::vector<{type}> {name}"
+2d_seq = "std::vector<std::vector<{type}>> {name}"
+
+# 引数への渡し方
+[actual_arg]
+seq = "std::move({name})"
+2d_seq = "std::move({name})"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
+
+# 宣言
+[declare]
+int = "long long {name};"
+float = "long double {name};"
+str = "std::string {name};"
+seq = "std::std::vector<{type}> {name};"
+2d_seq = "std::vector<std::vector<{type}>> {name};"
+
+# 確保
+[allocate]
+seq = "{name}.assign({length}, {default});"
+2d_seq = "{name}.assign({length_i}, std::vector<{type}>({length_j}));"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "std::vector<{type}> {name}({length});"
+2d_seq = "std::vector<std::vector<{type}>> {name}({length_i}, std::vector<{type}>({length_j}));"
+
+# 入力
+[input]
+#int = "std::cin >> {name};"
+int = "scanf(\"%lld\", &{name});"
+#float = "std::cin >> {name};"
+float = "scanf(\"%Lf\", &{name});"
+str = "std::cin >> {name};"
+```
+
+例えばPythonでの設定方法は以下です。
+```toml
+base_indent = 1
+insert_space_around_operators = true
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# インデックス
+[index]
+i = "i"
+j = "j"
+
+# ループ
+[loop]
+header = "for {loop_var} in range({length}):"
+footer = ""
+
+# タイプ
+[type]
+int = "int"
+float = "float"
+str = "str"
+
+# デフォルト値
+[default]
+int = "int()"
+float = "float()"
+str = "str()"
+
+# 宣言
+[declare]
+int = ""
+float = ""
+str = ""
+seq = ""
+2d_seq = ""
+
+# 確保
+[allocate]
+seq = "{name} = [{default}] * ({length})"
+2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "{name} = [{default}] * ({length})  # type: \"List[{type}]\""
+self.declare_and_allocate_2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]  # type: \"List[List[{type}]]\""
+
+# 入力関数
+[input_func]
+int = "int(next(tokens))"
+float = "float(next(tokens))"
+str = "next(tokens)"
+
+# 入力
+[input]
+int = "{name} = {input_func}"
+float = "{name} = {input_func}"
+str = "{name} = {input_func}"
+
+# 宣言と入力
+[declare_and_input]
+int = "{name} = {input_func}  # type: int"
+float = "{name} = {input_func}  # type: float"
+str = "{name} = {input_func}  # type: str"
+
+# 確保と入力
+[allocate_and_input]
+seq = "{name} = [{input_func} for _ in range({length})]"
+2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]"
+
+# 宣言と確保と入力
+[declare_and_allocate_and_input]
+seq = "{name} = [{input_func} for _ in range({length})]  # type: \"List[{type}]\""
+2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]  # type: \"List[List[{type}]]\""
+
+# 引数
+[arg]
+int = "{name}: int"
+float = "{name}: float"
+str = "{name}: str"
+seq = "{name}: \"List[{type}]\""
+2d_seq = "{name}: \"List[List[{type}]]\""
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
+```
+
 ## テンプレートの例
 `atcoder-tools gen`コマンドに対し`--template`でテンプレートソースコードを指定できます。
 テンプレートエンジンの仕様については[jinja2](http://jinja.pocoo.org/docs/2.10/) の公式ドキュメントを参照してください。

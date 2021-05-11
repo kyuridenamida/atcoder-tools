@@ -1,0 +1,81 @@
+base_indent = 1
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# ループ
+[loop]
+header = "for {loop_var} in 0..<{length}:"
+footer = ""
+
+# タイプ
+[type]
+int = "int"
+float = "float"
+str = "string"
+
+# デフォルト値
+[default]
+int = "0"
+float = "0.0"
+str = '""'
+
+# 宣言
+[declare]
+int = "var {name}:int"
+float = "var {name}:float"
+str = "var {name}:string"
+seq = "var {name}:seq[{type}]"
+2d_seq = "var {name}:seq[seq[{type}]]"
+
+# 確保
+[allocate]
+seq = "{name} = newSeqWith({length}, {default})"
+2d_seq = "{name} = newSeqWith({length_i}, newSeqWith({length_j}, {default}))"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "var {name} = newSeqWith({length}, {default})"
+2d_seq = "var {name} = newSeqWith({length_i}, newSeqWith({length_j}, {default}))"
+
+# 入力関数
+[input_func]
+int = "nextInt()"
+float = "nextFloat()"
+str = "nextString()"
+
+# 入力
+[input]
+int = "{name} = {input_func}"
+float = "{name} = {input_func}"
+str = "{name} = {input_func}"
+
+# 宣言と入力
+[declare_and_input]
+int = "var {name} = {input_func}"
+float = "var {name} = {input_func}"
+str = "var {name} = {input_func}"
+
+# 確保と入力
+[allocate_and_input]
+seq = "{name} = newSeqWith({length}, {input_func})"
+2d_seq = "{name} = newSeqWith({length_i}, newSeqWith({length_j}, {input_func}))"
+
+# 宣言と確保と入力
+[declare_and_allocate_and_input]
+seq = "var {name} = newSeqWith({length}, {input_func})"
+2d_seq = "var {name} = newSeqWith({length_i}, newSeqWith({length_j}, {input_func}))"
+
+# 引数
+[arg]
+int = "{name}:int"
+float = "{name}:float"
+str = "{name}:string"
+seq = "{name}:seq[{type}]"
+2d_seq = "{name}:seq[seq[{type}]]"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"

@@ -22,7 +22,7 @@ func main() {
     func readDouble() -> Double { Double(readString())! }
     let A = readString()
     let B = readString()
-    solve(A, B)
+    _ = solve(A, B)
 }
 
 #if DEBUG

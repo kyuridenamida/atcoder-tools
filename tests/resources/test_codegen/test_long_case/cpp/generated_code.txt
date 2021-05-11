@@ -1,4 +1,22 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <set>
+#include <map>
+#include <algorithm>
+#include <functional>
+#include <utility>
+#include <bitset>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <cstdio>
+#include <cassert>
 using namespace std;
 
 void solve(long long H, long long W, long long K, long long sr, long long sc, std::vector<std::string> s, long long N, std::vector<long long> fr, std::vector<long long> fc, std::vector<long long> F, std::vector<long long> D){
@@ -7,30 +25,30 @@ void solve(long long H, long long W, long long K, long long sr, long long sc, st
 
 int main(){
     long long H;
-    scanf("%lld",&H);
+    scanf("%lld", &H);
     long long W;
-    scanf("%lld",&W);
+    scanf("%lld", &W);
     long long K;
-    scanf("%lld",&K);
+    scanf("%lld", &K);
     long long sr;
-    scanf("%lld",&sr);
+    scanf("%lld", &sr);
     long long sc;
-    scanf("%lld",&sc);
+    scanf("%lld", &sc);
     std::vector<std::string> s(H);
     for(int i = 0 ; i < H ; i++){
         std::cin >> s[i];
     }
     long long N;
-    scanf("%lld",&N);
+    scanf("%lld", &N);
     std::vector<long long> fr(N);
     std::vector<long long> fc(N);
     std::vector<long long> F(N);
     std::vector<long long> D(N);
     for(int i = 0 ; i < N ; i++){
-        scanf("%lld",&fr[i]);
-        scanf("%lld",&fc[i]);
-        scanf("%lld",&F[i]);
-        scanf("%lld",&D[i]);
+        scanf("%lld", &fr[i]);
+        scanf("%lld", &fc[i]);
+        scanf("%lld", &F[i]);
+        scanf("%lld", &D[i]);
     }
     solve(H, W, K, sr, sc, std::move(s), N, std::move(fr), std::move(fc), std::move(F), std::move(D));
     return 0;

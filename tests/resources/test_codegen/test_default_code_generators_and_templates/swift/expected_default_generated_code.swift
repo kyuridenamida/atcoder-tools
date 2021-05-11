@@ -24,25 +24,24 @@ func main() {
     func readDouble() -> Double { Double(readString())! }
     let N = readInt()
     let M = readInt()
-    var H = [[String]]()
+    var H = [[String]](repeating: [String](repeating: "", count: M-1-2+1), count: N-2+1)
     for i in 0..<N-2+1 {
-        H.append([String]())
-        for _ in 0..<M-1-2+1 {
-            H[i].append(readString())
+        for j in 0..<M-1-2+1 {
+            H[i][j] = readString()
         }
     }
-    var A = [Int]()
-    var B = [Double]()
-    for _ in 0..<N-2+1 {
-        A.append(readInt())
-        B.append(readDouble())
+    var A = [Int](repeating: 0, count: N-2+1)
+    var B = [Double](repeating: 0.0, count: N-2+1)
+    for i in 0..<N-2+1 {
+        A[i] = readInt()
+        B[i] = readDouble()
     }
     let Q = readInt()
-    var X = [Int]()
-    for _ in 0..<M+Q {
-        X.append(readInt())
+    var X = [Int](repeating: 0, count: M+Q)
+    for i in 0..<M+Q {
+        X[i] = readInt()
     }
-    solve(N, M, H, A, B, Q, X)
+    _ = solve(N, M, H, A, B, Q, X)
 }
 
 #if DEBUG

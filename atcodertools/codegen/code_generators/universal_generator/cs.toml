@@ -1,0 +1,66 @@
+base_indent = 2
+global_base_indent = 1
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# ループ
+[loop]
+header = "for(int {loop_var} = 0;{loop_var} < {length};{loop_var}++){{"
+footer = "}}"
+
+# タイプ
+[type]
+int = "long"
+float = "double"
+str = "string"
+
+# デフォルト値
+[default]
+int = "long()"
+float = "double()"
+str = "string()"
+
+# 入力関数
+[input_func]
+int = "cin.ReadLong"
+float = "cin.ReadDouble"
+str = "cin.Read"
+
+# 引数
+[arg]
+int = "long {name}"
+float = "double {name}"
+str = "string {name}"
+seq = "{type}[] {name}"
+2d_seq = "{type}[,] {name}"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i},{index_j}]"
+
+# 宣言
+[declare]
+int = "long {name};"
+float = "double {name};"
+str = "string {name};"
+seq = "{type}[] {name};"
+2d_seq = "{type}[,] {name};"
+
+# 確保
+[allocate]
+seq = "{name} = new {type}[{length}];"
+2d_seq = "{name} = new {type}[{length_i},{length_j}];"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "{type}[] {name} = new {type}[{length}];"
+2d_seq = "{type}[,] {name} = new {type}[{length_i},{length_j}];"
+
+# 入力
+[input]
+int = "{name} = {input_func};"
+float = "{name} = {input_func};"
+str = "{name} = {input_func};"

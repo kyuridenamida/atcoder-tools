@@ -1,0 +1,62 @@
+base_indent = 1
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+#input_part_prefix = "let con = read_string();\nlet mut scanner = Scanner::new(&con);"
+
+# ループ
+[loop]
+header = "for {loop_var} in 0..({length}) as usize {{"
+footer = "}}"
+
+# タイプ
+[type]
+int = "i64"
+float = "f64"
+str = "String"
+
+# デフォルト値
+[default]
+int = "0i64"
+float = "0f64"
+str = "String::new()"
+
+# 引数
+[arg]
+int = "{name}: i64"
+float = "{name}: f64"
+str = "{name}: String"
+seq = "{name}: Vec<{type}>"
+2d_seq = "{name}: Vec<Vec<{type}>>"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
+
+# 宣言
+[declare]
+int = "let mut {name}: i64;"
+float = "let mut {name}: f64;"
+str = "let mut {name}: String;"
+seq = "let mut {name}: Vec<{type}>;"
+2d_seq = "let mut {name}: Vec<Vec<{type}>>;"
+
+# 確保
+[allocate]
+seq = "{name} = vec![{default}; ({length}) as usize];"
+2d_seq = "{name} = vec![vec![{default}; ({length_j}) as usize]; ({length_j}) as usize];"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "let mut {name}: Vec<{type}> = vec![{default}; ({length}) as usize];"
+2d_seq = "let mut {name}: Vec<Vec<{type}>> = vec![vec![{default}; ({length_j}) as usize]; ({length_i}) as usize];"
+
+# 入力
+[input]
+int = "{name} = scanner.next();"
+float = "{name} = scanner.next();"
+str = "{name} = scanner.next();"
+
+

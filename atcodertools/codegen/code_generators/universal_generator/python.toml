@@ -1,0 +1,86 @@
+base_indent = 1
+insert_space_around_operators = true
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# インデックス
+[index]
+i = "i"
+j = "j"
+
+# ループ
+[loop]
+header = "for {loop_var} in range({length}):"
+footer = ""
+
+# タイプ
+[type]
+int = "int"
+float = "float"
+str = "str"
+
+# デフォルト値
+[default]
+int = "int()"
+float = "float()"
+str = "str()"
+
+# 宣言
+[declare]
+int = ""
+float = ""
+str = ""
+seq = ""
+2d_seq = ""
+
+# 確保
+[allocate]
+seq = "{name} = [{default}] * ({length})"
+2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "{name} = [{default}] * ({length})  # type: \"List[{type}]\""
+self.declare_and_allocate_2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]  # type: \"List[List[{type}]]\""
+
+# 入力関数
+[input_func]
+int = "int(next(tokens))"
+float = "float(next(tokens))"
+str = "next(tokens)"
+
+# 入力
+[input]
+int = "{name} = {input_func}"
+float = "{name} = {input_func}"
+str = "{name} = {input_func}"
+
+# 宣言と入力
+[declare_and_input]
+int = "{name} = {input_func}  # type: int"
+float = "{name} = {input_func}  # type: float"
+str = "{name} = {input_func}  # type: str"
+
+# 確保と入力
+[allocate_and_input]
+seq = "{name} = [{input_func} for _ in range({length})]"
+2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]"
+
+# 宣言と確保と入力
+[declare_and_allocate_and_input]
+seq = "{name} = [{input_func} for _ in range({length})]  # type: \"List[{type}]\""
+2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]  # type: \"List[List[{type}]]\""
+
+# 引数
+[arg]
+int = "{name}: int"
+float = "{name}: float"
+str = "{name}: str"
+seq = "{name}: \"List[{type}]\""
+2d_seq = "{name}: \"List[List[{type}]]\""
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
