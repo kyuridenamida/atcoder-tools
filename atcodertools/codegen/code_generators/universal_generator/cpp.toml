@@ -24,7 +24,7 @@ str = '""'
 # 引数
 [arg]
 int = "long long {name}"
-float = "double {name}"
+float = "long double {name}"
 str = "std::string {name}"
 seq = "std::vector<{type}> {name}"
 2d_seq = "std::vector<std::vector<{type}>> {name}"
