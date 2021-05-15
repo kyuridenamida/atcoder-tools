@@ -60,9 +60,9 @@ seq = "std::vector<{type}> {name}({length});"
 # 入力
 [input]
 #int = "std::cin >> {name};"
-int = "scanf(\"%lld\", &{name});"
+int = "std::scanf(\"%lld\", &{name});"
 #float = "std::cin >> {name};"
-float = "scanf(\"%Lf\", &{name});"
+float = "std::scanf(\"%Lf\", &{name});"
 str = "std::cin >> {name};"
 
 
