@@ -44,7 +44,7 @@ seq = "{name}[{index}]"
 int = "long long {name};"
 float = "long double {name};"
 str = "std::string {name};"
-seq = "std::std::vector<{type}> {name};"
+seq = "std::vector<{type}> {name};"
 2d_seq = "std::vector<std::vector<{type}>> {name};"
 
 # 確保
