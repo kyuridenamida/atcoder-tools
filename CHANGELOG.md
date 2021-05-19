@@ -1,4 +1,9 @@
 # Change Log
+## 2.3.1 / 2021-5-19
+Release version 2.3.1
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#230](https://github.com/kyuridenamida/atcoder-tools/pull/230)|Improvement in universal_generator/cpp.toml|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**<br/>![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[naskya](https://github.com/naskya)|
 ## 2.3.0 / 2021-5-11
 Release version 2.3.0
 |PR|Change Summary|Label|Author|
