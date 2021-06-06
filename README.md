@@ -224,8 +224,8 @@ optional arguments:
 - `skip_existing_problems=false` ディレクトリが既に存在する問題の処理をスキップする
 - `in_example_format="in_{}.txt"` テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
 - `out_example_format="out_{}.txt"` テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
-- `compile_before_testing` テスト前にコンパイルを実行するか否かをTrue/Falseで指定。何も指定しないとTrueとなります。
-- `compile_only_when_diff_detected` テスト前のコンパイルの際、元のソースに変更があった場合のみ実行するかをTrue/Falseで指定。何も指定しないとTrueとなります。
+- `compile_before_testing` テスト前にコンパイルを実行するか否かをTrue/Falseで指定。何も指定しないとFalseとなります。
+- `compile_only_when_diff_detected` テスト前のコンパイルの際、元のソースに変更があった場合のみ実行するかをTrue/Falseで指定。何も指定しないとFalseとなります。
 
 
 ```toml
