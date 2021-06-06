@@ -394,13 +394,6 @@ def main(prog, args) -> bool:
                         type=bool,
                         default=None)
 
-    parser.add_argument("--config",
-                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
-                            USER_CONFIG_PATH),
-                            "[Default (Secondary)] {}\n".format(
-                                get_default_config_path()))
-                        )
-
     args = parser.parse_args(args)
 
     metadata_file = os.path.join(args.dir, "metadata.json")
