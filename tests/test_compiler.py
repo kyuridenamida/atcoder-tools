@@ -99,47 +99,6 @@ class TestCodeGenerator(unittest.TestCase):
     def tearDown(self):
         self.test_data_controller.remove_dir()
 
-    def test_long_case(self):
-        response = self.runner.run('rco-contest-2017-qual-B')
-        for lang in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name, lang)
-
-    def test_two_dimensional_case(self):
-        response = self.runner.run('abc079-D')
-        for lang in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name, lang)
-
-    def test_float_case(self):
-        response = self.runner.run('tenka1-2014-qualb-E')
-        for lang in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name, lang)
-
-    def test_mod_case(self):
-        response = self.runner.run('agc019-E')
-        for lang in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name,
-                        lang, "jinja", ProblemConstantSet(mod=998244353))
-
-    def test_yes_no_case(self):
-        response = self.runner.run('agc021-C')
-        for lang in ALL_LANGUAGES:
-            self.verify(response, sys._getframe().f_code.co_name, lang, "jinja",
-                        ProblemConstantSet(yes_str="YES", no_str="NO"))
-
-    def test_nested_embeddings_on_template(self):
-        def _load_text_file(filename):
-            with open(os.path.join(RESOURCE_DIR, "test_nested_embeddings_on_template", filename), 'r') as f:
-                return f.read()
-
-        def _trim(text):
-            return "\n".join([lang.rstrip() for lang in text.split("\n")])
-
-        template = _load_text_file("template.txt")
-        self.assertEqual(_load_text_file("answer_x_0_y_2.txt"),
-                         _trim(render(template, x=0, y=2)))
-        self.assertEqual(_load_text_file("answer_x_none_y_2.txt"),
-                         _trim(render(template, x=None, y=2)))
-
     def test_default_code_generators_and_templates(self):
         def _full_path(filename):
             return os.path.join(RESOURCE_DIR, "test_default_code_generators_and_templates", filename)
@@ -154,6 +113,7 @@ class TestCodeGenerator(unittest.TestCase):
         for lang in ALL_LANGUAGES:
             expected_default_generated_code_file = _full_path(
                 os.path.join(lang.name, lang.source_code_name("expected_default_generated_code")))
+            print(lang)
 
             # 1. Compile test with default templates
 
@@ -283,35 +243,6 @@ class TestCodeGenerator(unittest.TestCase):
         has_diff = has_diff or len(a_list) != len(b_list)
         if has_diff:
             self.assertEqual(expected, output)
-
-    def verify(self,
-               response: Response,
-               py_test_name: str,
-               lang: Language,
-               template_type: str = "old",
-               constants: ProblemConstantSet = ProblemConstantSet()):
-        self.assertEqual(
-            load_intermediate_format(py_test_name),
-            str(response.simple_format))
-        self.assertEqual(
-            load_intermediate_types(py_test_name),
-            str(response.types))
-        self.assertEqual(
-            load_generated_code(py_test_name, lang),
-            self.lang_to_code_generator_func[lang](
-                CodeGenArgs(
-                    self.get_template(lang, template_type),
-                    response.original_result.format,
-                    constants,
-                    CodeStyleConfig(lang=lang.name))
-            ))
-
-    def get_template(self, lang: Language, template_type: str) -> str:
-        template_file = os.path.join(
-            RESOURCE_DIR,
-            self.lang_to_template_file[lang][template_type])
-        with open(template_file, 'r') as f:
-            return f.read()
 
 
 if __name__ == "__main__":
