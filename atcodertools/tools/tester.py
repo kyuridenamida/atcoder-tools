@@ -112,9 +112,9 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
-def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int,
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, 
                     judge_method: Judge = NormalJudge(), knock_out: bool = False,
-                    skip_io_on_success: bool = False) -> TestSummary:
+                    skip_io_on_success: bool = False, cwd="./") -> TestSummary:
     success_count = 0
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
@@ -122,7 +122,8 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
         print(exec_file)
         print(in_sample_file)
         exec_res = run_program(exec_file, in_sample_file,
-                               timeout_sec=timeout_sec)
+                               timeout_sec=timeout_sec,
+                               current_working_dir=cwd)
 
         # Output header
         with open(out_sample_file, 'r') as f:
@@ -182,7 +183,6 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
             return None
         raise IrregularSampleFileError(
             "Multiple samples are detected for given case num: {}".format(lst))
-
     in_sample_file = single_or_none(
         [name for name in in_sample_file_list if infer_case_num(name) == case_num])
     out_sample_file = single_or_none(
@@ -195,7 +195,7 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     validate_sample_pair(in_sample_file, out_sample_file)
 
     test_summary = run_for_samples(
-        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_method)
+        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_method, cwd=cwd)
 
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
@@ -215,7 +215,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         samples.append((in_sample_file, out_sample_file))
 
     test_summary = run_for_samples(
-        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success)
+        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success, cwd=cwd)
 
     if len(samples) == 0:
         print("No test cases")
@@ -344,13 +344,13 @@ def main(prog, args) -> bool:
                         help='compile source before testing [true, false]: '
                              ' [Default]: false',
                         type=bool,
-                        default=None)
+                        default=False)
 
     parser.add_argument('--compile-only-when-diff-detected',
                         help='compile only when diff detected [true, false]'
                              ' [Default]: true',
                         type=bool,
-                        default=None)
+                        default=False)
 
     parser.add_argument("--config",
                         help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(

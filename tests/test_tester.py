@@ -204,16 +204,10 @@ class TestTester(unittest.TestCase):
 
     def test_compiler_and_tester(self):
         test_dir = os.path.join(self.temp_dir, "test")
-        print("test_dir: ")
-        print(test_dir)
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
 
         for lang in ALL_LANGUAGES:
-            print("lang: ", lang.name)
-            if lang.extension == "java":
-                print("javajavajavajva")
-                continue
             metadata = Metadata.load_from(
                 os.path.join(test_dir, "metadata.json"))
             metadata.code_filename = "main.{}".format(lang.extension)

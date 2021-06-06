@@ -171,7 +171,7 @@ SWIFT = Language(
     submission_lang_pattern=re.compile("^Swift"),
     default_code_generator=swift.main,
     default_template_path=get_default_template_path('swift'),
-    compile_command="swiftc {filename}.cs -o {filename}",
+    compile_command="swiftc {filename}.swift -o {filename}",
     test_command="{exec_filename}",
     exec_filename="{filename}{exec_extension}"
 )

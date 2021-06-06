@@ -34,29 +34,11 @@ def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=
     compile_cmd = lang.get_compile_command('main')
     code_filename = lang.get_code_filename('main')
     exec_filename = lang.get_exec_filename('main')
-    print("cwd; ", cwd)
-    print("compile_cmd: ", compile_cmd)
-    print("code_filename: ", code_filename)
-    print("exec_filename: ", exec_filename)
 
     try:
         _compile(code_filename, exec_filename, compile_cmd, cwd, force_compile)
     except BadStatusCodeException as e:
         raise e
-
-#    if isinstance(metadata.judge_method, MultiSolutionJudge) or isinstance(metadata.judge_method, InteractiveJudge):
-#        print("[Judge Program]")
-#        # TODO: Use judge_lang instead of lang
-#        compile_cmd = lang.get_compile_command('judge')
-#        code_filename = lang.get_code_filename('judge')
-#        exec_filename = lang.get_exec_filename('judge')
-#
-#        try:
-#            _compile(code_filename, exec_filename,
-#                     compile_cmd, cwd, force_compile)
-#        except BadStatusCodeException as e:
-#            raise e
-
 
 def main(prog, args):
     parser = argparse.ArgumentParser(
