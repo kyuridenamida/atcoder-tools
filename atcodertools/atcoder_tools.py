@@ -9,6 +9,7 @@ from atcodertools.tools.envgen import main as envgen_main
 from atcodertools.tools.tester import main as tester_main
 from atcodertools.tools.submit import main as submit_main
 from atcodertools.tools.codegen import main as codegen_main
+from atcodertools.tools.compiler import main as compiler_main
 from atcodertools.release_management.version import __version__
 from colorama import Fore, Style
 
@@ -62,6 +63,9 @@ def main():
 
     if sys.argv[1] == "codegen":
         codegen_main(prog, args)
+
+    if sys.argv[1] == "compile":
+        compiler_main(prog, args)
 
     if sys.argv[1] == "version":
         print(__version__)
