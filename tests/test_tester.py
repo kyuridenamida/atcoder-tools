@@ -220,5 +220,6 @@ class TestTester(unittest.TestCase):
                 self.assertTrue(tester.main(
                     '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))
 
+
 if __name__ == '__main__':
     unittest.main()

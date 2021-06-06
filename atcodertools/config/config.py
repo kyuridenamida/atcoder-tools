@@ -72,12 +72,6 @@ def get_config(args: argparse.Namespace) -> Config:
     def _load(path: str) -> Config:
         logger.info("Going to load {} as config".format(path))
         with open(path, 'r') as f:
-#            program_args = ProgramArgs.load(args)
-#
-#            if language is not None:
-#                assert program_args.lang is None
-#                program_args.lang = language.name
-
             return Config.load(f)
 
     if args.config:

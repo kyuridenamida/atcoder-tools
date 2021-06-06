@@ -10,8 +10,6 @@ from typing import List, Tuple, Optional
 
 from colorama import Fore
 
-#from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, \
-#    Judge, DEFAULT_EPS
 from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, Judge
 
 from atcodertools.common.language import Language
@@ -109,10 +107,11 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     if exec_res.has_stderr():
         append(with_color("[Error]", Fore.LIGHTYELLOW_EX))
         append(exec_res.stderr, end='')
+
     return res
 
 
-def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int, 
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int,
                     judge_method: Judge = NormalJudge(), knock_out: bool = False,
                     skip_io_on_success: bool = False, cwd="./") -> TestSummary:
     success_count = 0
@@ -276,12 +275,6 @@ def _decide_judge_method(args: argparse.Namespace, metadata: Metadata, lang: Opt
             return NormalJudge()
         elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
             return _decide_decimal_judge()
-        elif args.judge_type == "multisolution":
-            assert lang is not None
-            return MultiSolutionJudge()
-        elif args.judge_type == "interactive":
-            assert lang is not None
-            return InteractiveJudge()
         else:
             logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
                 args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))

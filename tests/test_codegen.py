@@ -273,7 +273,6 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(exec_result.status.NORMAL, exec_result.status)
         return exec_result
 
-
     def compare_two_texts_ignoring_trailing_spaces(self, expected: str, output: str):
         a_list = expected.split()
         b_list = output.split()
