@@ -403,7 +403,7 @@ def main(prog, args) -> bool:
     # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
     # TODO: All information required to run tester should be from metadata.json except for etc config
     # TODO: https://github.com/kyuridenamida/atcoder-tools/issues/177
-    config = get_config(args, lang)
+    config = get_config(args)
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))

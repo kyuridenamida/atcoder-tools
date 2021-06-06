@@ -2,6 +2,10 @@ from argparse import Namespace
 from typing import TextIO, Dict, Any, Optional
 
 import toml
+import os
+from os.path import expanduser
+import argparse
+from atcodertools.common.logging import logger
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
@@ -57,3 +61,28 @@ class Config:
             postprocess_config=PostprocessConfig(**postprocess_config_dic),
             etc_config=EtcConfig(**etc_config_dic)
         )
+
+
+USER_CONFIG_PATH = os.path.join(
+    expanduser("~"), ".atcodertools.toml")
+
+
+def get_config(args: argparse.Namespace) -> Config:
+    def _load(path: str) -> Config:
+        logger.info("Going to load {} as config".format(path))
+        with open(path, 'r') as f:
+#            program_args = ProgramArgs.load(args)
+#
+#            if language is not None:
+#                assert program_args.lang is None
+#                program_args.lang = language.name
+
+            return Config.load(f)
+
+    if args.config:
+        return _load(args.config)
+
+    if os.path.exists(USER_CONFIG_PATH):
+        return _load(USER_CONFIG_PATH)
+
+    return _load(get_default_config_path())
