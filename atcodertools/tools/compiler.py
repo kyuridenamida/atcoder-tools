@@ -34,6 +34,10 @@ def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=
     compile_cmd = lang.get_compile_command('main')
     code_filename = lang.get_code_filename('main')
     exec_filename = lang.get_exec_filename('main')
+    print("cwd; ", cwd)
+    print("compile_cmd: ", compile_cmd)
+    print("code_filename: ", code_filename)
+    print("exec_filename: ", exec_filename)
 
     try:
         _compile(code_filename, exec_filename, compile_cmd, cwd, force_compile)

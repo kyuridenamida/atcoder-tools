@@ -1,5 +1,7 @@
 import os
 import unittest
+import shutil
+import tempfile
 
 from colorama import Fore
 from unittest.mock import patch, mock_open, MagicMock
@@ -8,6 +10,9 @@ from atcodertools.executils.run_program import ExecResult, ExecStatus
 from atcodertools.tools import tester
 from atcodertools.tools.tester import is_executable_file, TestSummary, build_details_str
 from atcodertools.tools.utils import with_color
+from atcodertools.common.language import ALL_LANGUAGES
+from atcodertools.tools.compiler import compile_main_and_judge_programs
+from atcodertools.tools.models.metadata import Metadata
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -15,6 +20,8 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 
 
 class TestTester(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
 
     def test_multiple_exec_files(self):
         all_ok = tester.main(
@@ -195,6 +202,29 @@ class TestTester(unittest.TestCase):
                 ExecStatus.RE, in_out, stderr), 'in.txt', 'out.txt')
             self.assertEqual(expected, result)
 
+    def test_compiler_and_tester(self):
+        test_dir = os.path.join(self.temp_dir, "test")
+        print("test_dir: ")
+        print(test_dir)
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
+
+        for lang in ALL_LANGUAGES:
+            print("lang: ", lang.name)
+            if lang.extension == "java":
+                print("javajavajavajva")
+                continue
+            metadata = Metadata.load_from(
+                os.path.join(test_dir, "metadata.json"))
+            metadata.code_filename = "main.{}".format(lang.extension)
+            metadata.lang = lang
+            metadata.save_to(os.path.join(test_dir, "metadata.json"))
+
+            compile_main_and_judge_programs(
+                metadata, force_compile=True, cwd=test_dir)
+            for i in [1, 2, 3, 4]:
+                self.assertTrue(tester.main(
+                    '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))
 
 if __name__ == '__main__':
     unittest.main()
