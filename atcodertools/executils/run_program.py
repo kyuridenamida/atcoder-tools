@@ -36,7 +36,7 @@ def run_program(exec_file: str, input_file: str, timeout_sec: int, args=None, cu
     try:
         elapsed_sec = -time.time()
         proc = subprocess.run(
-            [exec_file] + args, stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec,
+            exec_file.split(" ") + args, stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=current_working_dir

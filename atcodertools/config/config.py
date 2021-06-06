@@ -10,6 +10,7 @@ from atcodertools.common.logging import logger
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
+from atcodertools.tools import get_default_config_path
 
 
 def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):

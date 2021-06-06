@@ -20,6 +20,8 @@ from atcodertools.executils.run_program import ExecResult, ExecStatus, run_progr
 from atcodertools.tools.models.metadata import Metadata, DEFAULT_METADATA
 from atcodertools.tools.utils import with_color
 from atcodertools.tools.compiler import compile_main_and_judge_programs, BadStatusCodeException
+from atcodertools.config.config import get_config, USER_CONFIG_PATH
+from atcodertools.tools import get_default_config_path
 
 DEFAULT_EPS = 0.000000001
 
@@ -96,8 +98,6 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
 
     append(with_color("[Expected]", Fore.LIGHTMAGENTA_EX))
     append(expected_output, end='')
-    if exec_res.judge_message is not None and exec_res.judge_message != "":
-        append("judge message: " + exec_res.judge_message)
 
     append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
     append(exec_res.output, end='')
@@ -112,58 +112,23 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
-def run_for_samples(
-        exec_file: str,
-        sample_pair_list: List[Tuple[str, str]],
-        timeout_sec: int,
-        judge_method: Judge = NormalJudge(),
-        knock_out: bool = False,
-        skip_io_on_success: bool = False,
-        cwd: str = "./",
-        judge_program_language: Optional[Language] = None
-) -> TestSummary:
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int,
+                    judge_method: Judge = NormalJudge(), knock_out: bool = False,
+                    skip_io_on_success: bool = False) -> TestSummary:
     success_count = 0
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
-        if isinstance(judge_method, InteractiveJudge):
-            exec_res = run_interactive_program(exec_file,
-                                               judge_program_language.get_test_command(
-                                                   'judge', cwd),
-                                               in_sample_file, out_sample_file,
-                                               timeout_sec=timeout_sec,
-                                               current_working_dir=cwd
-                                               )
-            is_correct = exec_res.is_correct_output(judge_method=judge_method)
-        else:
-            # Run program
-            exec_res = run_program(exec_file, in_sample_file,
-                                   timeout_sec=timeout_sec, current_working_dir=cwd)
+        # Run program
+        print(exec_file)
+        print(in_sample_file)
+        exec_res = run_program(exec_file, in_sample_file,
+                               timeout_sec=timeout_sec)
 
-            if isinstance(judge_method, MultiSolutionJudge):
-                is_correct = exec_res.is_correct_output(
-                    sample_input_file=in_sample_file,
-                    sample_output_file=out_sample_file,
-                    cwd=cwd,
-                    judge_method=judge_method,
-                    judge_program_language=judge_program_language
-                )
-            else:
-                # Output header
-                with open(out_sample_file, 'r') as f:
-                    expected_answer_text = f.read()
+        # Output header
+        with open(out_sample_file, 'r') as f:
+            answer_text = f.read()
 
-                is_correct = exec_res.is_correct_output(
-                    expected_answer_text, judge_method)
-
-        if exec_res.output is None:
-            exec_res.output = ""
-        elif isinstance(exec_res.output, bytes):
-            exec_res.output = exec_res.output.decode()
-        if exec_res.stderr is None:
-            exec_res.stderr = ""
-        elif isinstance(exec_res.stderr, bytes):
-            exec_res.stderr = exec_res.stderr.decode()
-
+        is_correct = exec_res.is_correct_output(answer_text, judge_method)
         has_error_output = has_error_output or exec_res.has_stderr()
 
         if is_correct:
@@ -230,11 +195,7 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     validate_sample_pair(in_sample_file, out_sample_file)
 
     test_summary = run_for_samples(
-        exec_file, [(in_sample_file, out_sample_file)
-                    ], timeout_sec, judge_method,
-        cwd=cwd,
-        judge_program_language=judge_program_language
-    )
+        exec_file, [(in_sample_file, out_sample_file)], timeout_sec, judge_method)
 
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
@@ -254,10 +215,7 @@ def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_
         samples.append((in_sample_file, out_sample_file))
 
     test_summary = run_for_samples(
-        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success,
-        cwd=cwd,
-        judge_program_language=judge_program_language
-    )
+        exec_file, samples, timeout_sec, judge_method, knock_out, skip_stderr_on_success)
 
     if len(samples) == 0:
         print("No test cases")
@@ -290,7 +248,7 @@ def get_metadata(metadata_file: str) -> Metadata:
 
 
 USER_FACING_JUDGE_TYPE_LIST = [
-    "normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
+    "normal", "absolute", "relative", "absolute_or_relative"]
 
 
 def _decide_judge_method(args: argparse.Namespace, metadata: Metadata, lang: Optional[Language]):
@@ -393,6 +351,13 @@ def main(prog, args) -> bool:
                              ' [Default]: true',
                         type=bool,
                         default=None)
+
+    parser.add_argument("--config",
+                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
+                            USER_CONFIG_PATH),
+                            "[Default (Secondary)] {}\n".format(
+                                get_default_config_path()))
+                        )
 
     args = parser.parse_args(args)
 
