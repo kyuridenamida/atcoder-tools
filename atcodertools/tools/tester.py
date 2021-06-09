@@ -356,9 +356,14 @@ def main(prog, args) -> bool:
                             USER_CONFIG_PATH),
                             "[Default (Secondary)] {}\n".format(
                                 get_default_config_path())),
-                        default=USER_CONFIG_PATH)
+                        default=None)
 
     args = parser.parse_args(args)
+    if args.config is None:
+        if os.path.exists(USER_CONFIG_PATH):
+            args.config = USER_CONFIG_PATH
+        else:
+            args.config = get_default_config_path()
 
     metadata_file = os.path.join(args.dir, "metadata.json")
     metadata = get_metadata(metadata_file)
@@ -367,12 +372,13 @@ def main(prog, args) -> bool:
     # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
     # TODO: All information required to run tester should be from metadata.json except for etc config
     # TODO: https://github.com/kyuridenamida/atcoder-tools/issues/177
+
     with open(args.config, "r") as f:
         config = Config.load(f)
-        if args.compile_before_testing:
-            config.etc_config.compile_before_testing = True
-        if args.compile_only_when_diff_detected:
-            config.etc_config.compile_only_when_diff_detected = True
+    if args.compile_before_testing:
+        config.etc_config.compile_before_testing = True
+    if args.compile_only_when_diff_detected:
+        config.etc_config.compile_only_when_diff_detected = True
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))
