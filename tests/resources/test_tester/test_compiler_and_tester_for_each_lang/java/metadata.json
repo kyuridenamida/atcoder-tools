@@ -1,9 +1,9 @@
 {
- "code_filename": "main.cpp",
+ "code_filename": "main.java",
  "judge": {
   "judge_type": "normal"
  },
- "lang": "cpp",
+ "lang": "java",
  "problem": {
   "alphabet": "A",
   "contest": {

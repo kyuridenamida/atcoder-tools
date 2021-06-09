@@ -1,9 +1,9 @@
 {
- "code_filename": "main.cpp",
+ "code_filename": "main.swift",
  "judge": {
   "judge_type": "normal"
  },
- "lang": "cpp",
+ "lang": "swift",
  "problem": {
   "alphabet": "A",
   "contest": {

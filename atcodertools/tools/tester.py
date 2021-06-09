@@ -18,7 +18,7 @@ from atcodertools.executils.run_program import ExecResult, ExecStatus, run_progr
 from atcodertools.tools.models.metadata import Metadata, DEFAULT_METADATA
 from atcodertools.tools.utils import with_color
 from atcodertools.tools.compiler import compile_main_and_judge_programs, BadStatusCodeException
-from atcodertools.config.config import get_config, USER_CONFIG_PATH
+from atcodertools.config.config import Config, USER_CONFIG_PATH
 from atcodertools.tools import get_default_config_path
 
 DEFAULT_EPS = 0.000000001
@@ -118,8 +118,6 @@ def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], tim
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
         # Run program
-        print(exec_file)
-        print(in_sample_file)
         exec_res = run_program(exec_file, in_sample_file,
                                timeout_sec=timeout_sec,
                                current_working_dir=cwd)
@@ -333,24 +331,28 @@ def main(prog, args) -> bool:
                         type=float,
                         default=None)
 
-    parser.add_argument('--compile-before-testing', '-c',
-                        help='compile source before testing [true, false]: '
-                             ' [Default]: false',
-                        type=bool,
-                        default=False)
+    parser.add_argument('--compile-before-testing',
+                        help='compile source before testing: '
+                             ' [Default]: disable',
+                        action='store_true')
 
     parser.add_argument('--compile-only-when-diff-detected',
-                        help='compile only when diff detected [true, false]'
-                             ' [Default]: true',
-                        type=bool,
-                        default=False)
+                        help='compile only when diff detected'
+                             ' [Default]: disable',
+                        action='store_true')
+
+    parser.add_argument('--compile-command',
+                        help='set compile command'
+                             ' [Default]: None',
+                        type=str,
+                        default=None)
 
     parser.add_argument("--config",
                         help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
                             USER_CONFIG_PATH),
                             "[Default (Secondary)] {}\n".format(
-                                get_default_config_path()))
-                        )
+                                get_default_config_path())),
+                        default=USER_CONFIG_PATH)
 
     args = parser.parse_args(args)
 
@@ -361,7 +363,12 @@ def main(prog, args) -> bool:
     # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
     # TODO: All information required to run tester should be from metadata.json except for etc config
     # TODO: https://github.com/kyuridenamida/atcoder-tools/issues/177
-    config = get_config(args)
+    with open(args.config, "r") as f:
+        config = Config.load(f)
+        if args.compile_before_testing:
+            config.etc_config.compile_before_testing = True
+        if args.compile_only_when_diff_detected:
+            config.etc_config.compile_only_when_diff_detected = True
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))
@@ -378,11 +385,13 @@ def main(prog, args) -> bool:
         exec_file = args.exec
     elif config.etc_config.compile_before_testing:
         # Use atcoder-tools's functionality to compile source code
+        force_compile = not config.etc_config.compile_only_when_diff_detected
         try:
             compile_main_and_judge_programs(
-                metadata,
+                metadata.lang,
                 args.dir,
-                force_compile=not config.etc_config.compile_only_when_diff_detected
+                force_compile=force_compile,
+                compile_command=args.compile_command
             )
         except BadStatusCodeException as e:
             raise e

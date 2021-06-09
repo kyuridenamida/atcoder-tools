@@ -55,7 +55,9 @@ class Config:
                                                      download_without_login=args.without_login,
                                                      parallel_download=args.parallel,
                                                      save_no_session_cache=args.save_no_session_cache,
-                                                     skip_existing_problems=args.skip_existing_problems))
+                                                     skip_existing_problems=args.skip_existing_problems,
+                                                     compile_before_testing=args.compile_before_testing,
+                                                     compile_only_when_diff_detected=args.compile_only_when_diff_detected))
 
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
@@ -66,18 +68,3 @@ class Config:
 
 USER_CONFIG_PATH = os.path.join(
     expanduser("~"), ".atcodertools.toml")
-
-
-def get_config(args: argparse.Namespace) -> Config:
-    def _load(path: str) -> Config:
-        logger.info("Going to load {} as config".format(path))
-        with open(path, 'r') as f:
-            return Config.load(f)
-
-    if args.config:
-        return _load(args.config)
-
-    if os.path.exists(USER_CONFIG_PATH):
-        return _load(USER_CONFIG_PATH)
-
-    return _load(get_default_config_path())

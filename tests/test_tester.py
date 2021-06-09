@@ -203,22 +203,64 @@ class TestTester(unittest.TestCase):
             self.assertEqual(expected, result)
 
     def test_compiler_and_tester(self):
-        test_dir = os.path.join(self.temp_dir, "test")
+        test_dir = os.path.join(self.temp_dir, "test1")
+        print(test_dir)
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
+        for i in [1, 2, 3, 4]:
+            self.assertTrue(tester.main(
+                '', ['-d', test_dir, "-n", "{:d}".format(i), "--compile-before-testing",
+                     "-j", "normal",
+                     "--compile-command", "g++ main.cpp -o main && touch compile{}".format(i)]))
+        lst = os.listdir(test_dir)
+        self.assertTrue("compile1" in lst)
+        self.assertTrue("compile2" in lst)
+        self.assertTrue("compile3" in lst)
+        self.assertTrue("compile4" in lst)
+
+        test_dir = os.path.join(self.temp_dir, "test2")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
+        for i in [1, 2, 3, 4]:
+            self.assertTrue(tester.main(
+                '', ['-d', test_dir, "-n", "{:d}".format(i), "--compile-before-testing",
+                     "--compile-only-when-diff-detected", "-j", "normal",
+                     "--compile-command", "g++ main.cpp -o main && touch compile{}".format(i)]))
+        lst = os.listdir(test_dir)
+        self.assertTrue("compile1" in lst)
+        self.assertTrue("compile2" not in lst)
+        self.assertTrue("compile3" not in lst)
+        self.assertTrue("compile4" not in lst)
+
+        test_dir = os.path.join(self.temp_dir, "test3")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
+        for i in [1, 2, 3, 4]:
+            self.assertTrue(tester.main(
+                '', ['-d', test_dir, "-n", "{:d}".format(i), "--compile-before-testing",
+                     "--compile-only-when-diff-detected", "-j", "normal",
+                     "--compile-command", "g++ main.cpp -o main && touch compile{}".format(i)]))
+            os.chdir(test_dir)
+            os.system('echo // >> main.cpp')
+        lst = os.listdir(test_dir)
+        self.assertTrue("compile1" in lst)
+        self.assertTrue("compile2" in lst)
+        self.assertTrue("compile3" in lst)
+        self.assertTrue("compile4" in lst)
+
+    def test_compiler_and_tester_for_each_lang(self):
+        test_dir = os.path.join(self.temp_dir, "test")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_compiler_and_tester_for_each_lang"), test_dir)
 
         for lang in ALL_LANGUAGES:
-            metadata = Metadata.load_from(
-                os.path.join(test_dir, "metadata.json"))
-            metadata.code_filename = "main.{}".format(lang.extension)
-            metadata.lang = lang
-            metadata.save_to(os.path.join(test_dir, "metadata.json"))
+            lang_dir = os.path.join(test_dir, lang.name)
 
             compile_main_and_judge_programs(
-                metadata, force_compile=True, cwd=test_dir)
+                lang, force_compile=True, cwd=lang_dir)
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main(
-                    '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))
+                    '', ['-d', lang_dir, "-n", "{:d}".format(i), "--compile-before-testing", "-j", "normal"]))
 
 
 if __name__ == '__main__':

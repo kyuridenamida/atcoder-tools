@@ -1,9 +1,9 @@
 {
- "code_filename": "main.cpp",
+ "code_filename": "main.py",
  "judge": {
   "judge_type": "normal"
  },
- "lang": "cpp",
+ "lang": "python",
  "problem": {
   "alphabet": "A",
   "contest": {

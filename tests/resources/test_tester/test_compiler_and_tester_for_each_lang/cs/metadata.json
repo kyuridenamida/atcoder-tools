@@ -1,9 +1,9 @@
 {
- "code_filename": "main.cpp",
+ "code_filename": "main.cs",
  "judge": {
   "judge_type": "normal"
  },
- "lang": "cpp",
+ "lang": "cs",
  "problem": {
   "alphabet": "A",
   "contest": {

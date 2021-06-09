@@ -1,9 +1,9 @@
 {
- "code_filename": "main.cpp",
+ "code_filename": "main.nim",
  "judge": {
   "judge_type": "normal"
  },
- "lang": "cpp",
+ "lang": "nim",
  "problem": {
   "alphabet": "A",
   "contest": {
