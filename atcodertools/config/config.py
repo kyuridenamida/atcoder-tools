@@ -2,15 +2,10 @@ from argparse import Namespace
 from typing import TextIO, Dict, Any, Optional
 
 import toml
-import os
-from os.path import expanduser
-import argparse
-from atcodertools.common.logging import logger
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
-from atcodertools.tools import get_default_config_path
 
 
 def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
@@ -55,16 +50,10 @@ class Config:
                                                      download_without_login=args.without_login,
                                                      parallel_download=args.parallel,
                                                      save_no_session_cache=args.save_no_session_cache,
-                                                     skip_existing_problems=args.skip_existing_problems,
-                                                     compile_before_testing=args.compile_before_testing,
-                                                     compile_only_when_diff_detected=args.compile_only_when_diff_detected))
+                                                     skip_existing_problems=args.skip_existing_problems))
 
         return Config(
             code_style_config=CodeStyleConfig(**code_style_config_dic),
             postprocess_config=PostprocessConfig(**postprocess_config_dic),
             etc_config=EtcConfig(**etc_config_dic)
         )
-
-
-USER_CONFIG_PATH = os.path.join(
-    expanduser("~"), ".atcodertools.toml")

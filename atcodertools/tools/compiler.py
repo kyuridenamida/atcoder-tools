@@ -36,7 +36,8 @@ def compile_main_and_judge_programs(lang: Language, cwd="./", force_compile=Fals
     exec_filename = lang.get_exec_filename('main')
 
     try:
-        _compile(code_filename, exec_filename, compile_command, cwd, force_compile)
+        _compile(code_filename, exec_filename,
+                 compile_command, cwd, force_compile)
     except BadStatusCodeException as e:
         raise e
 

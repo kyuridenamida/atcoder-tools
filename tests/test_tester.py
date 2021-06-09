@@ -12,7 +12,6 @@ from atcodertools.tools.tester import is_executable_file, TestSummary, build_det
 from atcodertools.tools.utils import with_color
 from atcodertools.common.language import ALL_LANGUAGES
 from atcodertools.tools.compiler import compile_main_and_judge_programs
-from atcodertools.tools.models.metadata import Metadata
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
