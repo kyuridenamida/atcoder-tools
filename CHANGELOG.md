@@ -1,4 +1,9 @@
 # Change Log
+## 2.4.0 / 2021-6-13
+Release version 2.4.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#231](https://github.com/kyuridenamida/atcoder-tools/pull/231)|compilerの追加|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
 ## 2.3.1 / 2021-5-19
 Release version 2.3.1
 |PR|Change Summary|Label|Author|
