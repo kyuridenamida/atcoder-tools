@@ -2,7 +2,7 @@ import json
 
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.judgetype import NormalJudge, DecimalJudge, Judge
-from atcodertools.common.language import Language
+from atcodertools.common.language import Language, CPP
 
 
 class Metadata:
@@ -57,3 +57,17 @@ class Metadata:
         with open(filename, 'w') as f:
             json.dump(self.to_dict(), f, indent=1, sort_keys=True)
             f.write('\n')
+
+
+DEFAULT_IN_EXAMPLE_PATTERN = 'in_*.txt'
+DEFAULT_OUT_EXAMPLE_PATTERN = "out_*.txt"
+
+
+DEFAULT_METADATA = Metadata(
+    problem=None,
+    code_filename=None,
+    sample_in_pattern=DEFAULT_IN_EXAMPLE_PATTERN,
+    sample_out_pattern=DEFAULT_OUT_EXAMPLE_PATTERN,
+    lang=CPP,
+    judge_method=NormalJudge()
+)
