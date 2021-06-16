@@ -24,7 +24,8 @@ class TestConfig(unittest.TestCase):
         os.chdir(RESOURCE_DIR)
 
         with open(os.path.join(RESOURCE_DIR, "all_options.toml"), 'r') as f:
-            config = Config.load(f, {ConfigType.CODESTYLE, ConfigType.POSTPROCESS})
+            config = Config.load(
+                f, {ConfigType.CODESTYLE, ConfigType.POSTPROCESS})
 
         self.assertEqual(8, config.code_style_config.indent_width)
         self.assertEqual(INDENT_TYPE_TAB, config.code_style_config.indent_type)

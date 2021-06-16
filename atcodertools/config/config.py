@@ -9,6 +9,7 @@ from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
 from atcodertools.config.tester_config import TesterConfig
 
+
 class ConfigType(Enum):
     CODESTYLE = "codestyle"
     POSTPROCESS = "postprocess"
@@ -50,9 +51,8 @@ class Config:
         self.tester_config = tester_config
         self.etc_config = etc_config
 
-
     @classmethod
-    def load(cls, fp: TextIO, get_config_type: set[ConfigType], args: Optional[Namespace]=None, lang=None):
+    def load(cls, fp: TextIO, get_config_type: set[ConfigType], args: Optional[Namespace] = None, lang=None):
         """
         :param fp: .toml file's file pointer
         :param args: command line arguments
@@ -67,7 +67,8 @@ class Config:
                 lang = args.lang
 
         if ConfigType.CODESTYLE in get_config_type:
-            code_style_config_dic = get_config_dic(config_dic, ConfigType.CODESTYLE, lang)
+            code_style_config_dic = get_config_dic(
+                config_dic, ConfigType.CODESTYLE, lang)
             if args:
                 code_style_config_dic = _update_config_dict(code_style_config_dic,
                                                             dict(
@@ -76,12 +77,15 @@ class Config:
                                                                 lang=lang))
             result.code_style_config = CodeStyleConfig(**code_style_config_dic)
         if ConfigType.POSTPROCESS in get_config_type:
-            postprocess_config_dic = get_config_dic(config_dic, ConfigType.POSTPROCESS)
-            result.postprocess_config = PostprocessConfig(**postprocess_config_dic)
+            postprocess_config_dic = get_config_dic(
+                config_dic, ConfigType.POSTPROCESS)
+            result.postprocess_config = PostprocessConfig(
+                **postprocess_config_dic)
         if ConfigType.TESTER in get_config_type:
-            tester_config_dic = get_config_dic(config_dic, ConfigType.TESTER, lang)
+            tester_config_dic = get_config_dic(
+                config_dic, ConfigType.TESTER, lang)
             if args:
-                tester_config_dic = _update_config_dict(tester_config_dic, 
+                tester_config_dic = _update_config_dict(tester_config_dic,
                                                         dict(compile_before_testing=args.compile_before_testing,
                                                              compile_only_when_diff_detected=args.compile_only_when_diff_detected,
                                                              compile_command=args.compile_command))
@@ -91,10 +95,10 @@ class Config:
             if args:
                 etc_config_dic = _update_config_dict(etc_config_dic,
                                                      dict(
-                                                          download_without_login=args.without_login,
-                                                          parallel_download=args.parallel,
-                                                          save_no_session_cache=args.save_no_session_cache,
-                                                          skip_existing_problems=args.skip_existing_problems))
+                                                         download_without_login=args.without_login,
+                                                         parallel_download=args.parallel,
+                                                         save_no_session_cache=args.save_no_session_cache,
+                                                         skip_existing_problems=args.skip_existing_problems))
             result.etc_config = EtcConfig(**etc_config_dic)
 
         return result
