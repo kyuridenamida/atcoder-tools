@@ -32,6 +32,7 @@ def compile_main_and_judge_programs(lang: Language, cwd="./", force_compile=Fals
     print("[Main Program]")
     if compile_command is None:
         compile_command = lang.get_compile_command('main')
+    print("compile command: ", compile_command)
     code_filename = lang.get_code_filename('main')
     exec_filename = lang.get_exec_filename('main')
 

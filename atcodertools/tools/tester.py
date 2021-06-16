@@ -19,7 +19,7 @@ from atcodertools.executils.run_program import ExecResult, ExecStatus, run_progr
 from atcodertools.tools.models.metadata import Metadata, DEFAULT_METADATA
 from atcodertools.tools.utils import with_color
 from atcodertools.tools.compiler import compile_main_and_judge_programs, BadStatusCodeException
-from atcodertools.config.config import Config
+from atcodertools.config.config import Config, ConfigType
 from atcodertools.tools import get_default_config_path
 
 DEFAULT_EPS = 0.000000001
@@ -337,13 +337,15 @@ def main(prog, args) -> bool:
 
     parser.add_argument('--compile-before-testing',
                         help='compile source before testing: '
-                             ' [Default]: disable',
-                        action='store_true')
+                             ' [Default]: None',
+                        action='store_true',
+                        default=None)
 
     parser.add_argument('--compile-only-when-diff-detected',
                         help='compile only when diff detected'
-                             ' [Default]: disable',
-                        action='store_true')
+                             ' [Default]: None',
+                        action='store_true',
+                        default=None)
 
     parser.add_argument('--compile-command',
                         help='set compile command'
@@ -374,11 +376,7 @@ def main(prog, args) -> bool:
     # TODO: https://github.com/kyuridenamida/atcoder-tools/issues/177
 
     with open(args.config, "r") as f:
-        config = Config.load(f)
-    if args.compile_before_testing:
-        config.etc_config.compile_before_testing = True
-    if args.compile_only_when_diff_detected:
-        config.etc_config.compile_only_when_diff_detected = True
+        config = Config.load(f, {ConfigType.TESTER}, args, lang.name)
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))
@@ -393,15 +391,18 @@ def main(prog, args) -> bool:
 
     if args.exec is not None:
         exec_file = args.exec
-    elif config.etc_config.compile_before_testing:
+    elif config.tester_config.compile_before_testing:
         # Use atcoder-tools's functionality to compile source code
-        force_compile = not config.etc_config.compile_only_when_diff_detected
+        force_compile = not config.tester_config.compile_only_when_diff_detected
+        compile_command = config.tester_config.compile_command
+        if compile_command:
+            compile_command = lang.get_compile_command("main", compile_command)
         try:
             compile_main_and_judge_programs(
                 metadata.lang,
                 args.dir,
                 force_compile=force_compile,
-                compile_command=args.compile_command
+                compile_command=compile_command
             )
         except BadStatusCodeException as e:
             raise e

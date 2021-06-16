@@ -28,6 +28,7 @@ from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
+from atcodertools.config.config import ConfigType
 
 
 class BannedFileDetectedError(Exception):
@@ -225,7 +226,7 @@ def get_config(args: argparse.Namespace) -> Config:
     def _load(path: str) -> Config:
         logger.info("Going to load {} as config".format(path))
         with open(path, 'r') as f:
-            return Config.load(f, args)
+            return Config.load(f, {ConfigType.CODESTYLE, ConfigType.POSTPROCESS, ConfigType.ETC}, args)
 
     if args.config:
         return _load(args.config)

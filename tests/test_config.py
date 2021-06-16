@@ -3,7 +3,7 @@ import os
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, CodeStyleConfigInitError, \
     INDENT_TYPE_TAB
-from atcodertools.config.config import Config
+from atcodertools.config.config import Config, ConfigType
 from atcodertools.tools import get_default_config_path
 
 RESOURCE_DIR = os.path.join(
@@ -15,7 +15,7 @@ class TestConfig(unittest.TestCase):
 
     def test_load_code_style_config(self):
         with open(os.path.join(RESOURCE_DIR, "with_indent_width.toml"), 'r') as f:
-            config = Config.load(f).code_style_config
+            config = Config.load(f, {ConfigType.CODESTYLE}).code_style_config
 
         self.assertEqual(8, config.indent_width)
         self.assertEqual(INDENT_TYPE_SPACE, config.indent_type)
@@ -24,7 +24,7 @@ class TestConfig(unittest.TestCase):
         os.chdir(RESOURCE_DIR)
 
         with open(os.path.join(RESOURCE_DIR, "all_options.toml"), 'r') as f:
-            config = Config.load(f)
+            config = Config.load(f, {ConfigType.CODESTYLE, ConfigType.POSTPROCESS})
 
         self.assertEqual(8, config.code_style_config.indent_width)
         self.assertEqual(INDENT_TYPE_TAB, config.code_style_config.indent_type)
@@ -41,13 +41,13 @@ class TestConfig(unittest.TestCase):
     def test_load_config_fails_due_to_typo(self):
         try:
             with open(os.path.join(RESOURCE_DIR, "typo_in_postprocess.toml"), 'r') as f:
-                Config.load(f)
+                Config.load(f, {ConfigType.CODESTYLE})
         except TypeError:
             pass
 
     def test_load_default_config(self):
         with open(get_default_config_path(), 'r') as f:
-            Config.load(f)
+            Config.load(f, {ConfigType.CODESTYLE})
 
     def test_init_code_style_config_with_invalid_parameters(self):
         self._expect_error_when_init_config(
