@@ -62,9 +62,10 @@ class Config:
 
         result = Config()
         if not lang:
-            lang = config_dic.get("lang", None)
-            if args:
+            if args and args.lang:
                 lang = args.lang
+            elif "codestyle" in config_dic:
+                lang = config_dic["codestyle"].get("lang", None)
 
         if ConfigType.CODESTYLE in get_config_type:
             code_style_config_dic = get_config_dic(

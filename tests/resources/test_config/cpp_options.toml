@@ -1,0 +1,5 @@
+[codestyle]
+lang = 'cpp'
+indent_width = 3141
+[codestyle.cpp]
+indent_width = 4

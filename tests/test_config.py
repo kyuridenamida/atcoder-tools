@@ -39,6 +39,21 @@ class TestConfig(unittest.TestCase):
         with open(config.code_style_config.template_file, 'r') as f:
             self.assertEqual("this is custom_template.cpp", f.read())
 
+    def test_load_config_multi_lang(self):
+        os.chdir(RESOURCE_DIR)
+
+        with open(os.path.join(RESOURCE_DIR, "cpp_options.toml"), 'r') as f:
+            config = Config.load(
+                f, {ConfigType.CODESTYLE, ConfigType.POSTPROCESS})
+
+        self.assertEqual(4, config.code_style_config.indent_width)
+
+        with open(os.path.join(RESOURCE_DIR, "nim_options.toml"), 'r') as f:
+            config = Config.load(
+                f, {ConfigType.CODESTYLE, ConfigType.POSTPROCESS})
+
+        self.assertEqual(2, config.code_style_config.indent_width)
+
     def test_load_config_fails_due_to_typo(self):
         try:
             with open(os.path.join(RESOURCE_DIR, "typo_in_postprocess.toml"), 'r') as f:
