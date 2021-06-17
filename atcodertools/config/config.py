@@ -52,7 +52,7 @@ class Config:
         self.etc_config = etc_config
 
     @classmethod
-    def load(cls, fp: TextIO, get_config_type: set[ConfigType], args: Optional[Namespace] = None, lang=None):
+    def load(cls, fp: TextIO, get_config_type, args: Optional[Namespace] = None, lang=None):
         """
         :param fp: .toml file's file pointer
         :param args: command line arguments
