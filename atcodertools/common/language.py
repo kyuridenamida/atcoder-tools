@@ -51,8 +51,10 @@ class Language:
         # put extension to the name
         return "{}.{}".format(name_without_extension, self.extension)
 
-    def get_compile_command(self, filename: str):
-        return self.compile_command.format(filename=filename)
+    def get_compile_command(self, filename: str, base_command: str = None):
+        if base_command is None:
+            base_command = self.compile_command
+        return base_command.format(filename=filename)
 
     def get_code_filename(self, filename: str):
         return self.code_filename.format(filename=filename)

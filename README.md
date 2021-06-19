@@ -218,15 +218,18 @@ optional arguments:
 - `code_generator_file="~/custom_code_generator.py"` カスタムコードジェネレーター `~/custom_code_generator.py`を指定する
 - `exec_on_each_problem_dir='clang-format -i ./*.cpp'` `exec_on_contest_dir='touch CMakeLists.txt'`
     - 問題用ディレクトリ内で毎回`clang-format`を実行して、最後に`CMakeLists.txt`(空)をコンテスト用ディレクトリに生成する
+
+- `compile_before_testing` テスト前にコンパイルを実行するか否かをTrue/Falseで指定。何も指定しないとFalseとなります。
+- `compile_only_when_diff_detected` テスト前のコンパイルの際、元のソースに変更があった場合のみ実行するかをTrue/Falseで指定。何も指定しないとFalseとなります。
+
+なお、`compile_before_testing`, `compile_only_when_diff_detected`はいずれもtesterの引数で指定することも可能で、指定した場合はそちらが優先されます。
+
 - `download_without_login=false` AtCoderにログインせずにダウンロードを行う機能を使わない (公開コンテストに対してのみ可能)
 - `parallel_download=false` データの並列ダウンロードを無効にする
 - `save_no_session_cache=false` ログイン情報のクッキーを保存する
 - `skip_existing_problems=false` ディレクトリが既に存在する問題の処理をスキップする
 - `in_example_format="in_{}.txt"` テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
 - `out_example_format="out_{}.txt"` テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
-- `compile_before_testing` テスト前にコンパイルを実行するか否かをTrue/Falseで指定。何も指定しないとFalseとなります。
-- `compile_only_when_diff_detected` テスト前のコンパイルの際、元のソースに変更があった場合のみ実行するかをTrue/Falseで指定。何も指定しないとFalseとなります。
-
 
 ```toml
 [codestyle]
@@ -239,7 +242,9 @@ code_generator_file="~/custom_code_generator.py"
 [postprocess]
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
-
+[tester]
+compile_before_testing=true
+compile_only_when_diff_detected=true
 [etc]
 download_without_login=false
 parallel_download=false

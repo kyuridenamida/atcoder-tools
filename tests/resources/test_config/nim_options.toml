@@ -1,0 +1,5 @@
+[codestyle]
+lang = 'nim'
+indent_width = 3141
+[codestyle.nim]
+indent_width = 2
