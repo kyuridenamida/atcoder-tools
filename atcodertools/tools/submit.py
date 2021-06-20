@@ -11,8 +11,11 @@ from atcodertools.tools.utils import with_color
 from atcodertools.client.atcoder import AtCoderClient, LoginError
 from atcodertools.tools import tester
 from atcodertools.common.logging import logger
+from atcodertools.config.config import Config, ConfigType, USER_CONFIG_PATH
 
 from atcodertools.tools.models.metadata import Metadata
+from atcodertools.tools import get_default_config_path
+from atcodertools.executils.run_command import run_command
 
 
 def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> bool:
@@ -67,15 +70,49 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                         type=float,
                         default=None)
 
-    args = parser.parse_args(args)
+    parser.add_argument('--exec-before-submit',
+                        help='exec command before submit:'
+                             ' [Default] None',
+                        type=str,
+                        default=None)
 
+    parser.add_argument('--exec-after-submit',
+                        help='run command after submit:'
+                             ' [Default] None',
+                        type=str,
+                        default=None)
+
+    parser.add_argument('--submit-file-name',
+                        help='file for submit will changed to this name:'
+                             ' [Default] None',
+                        type=str,
+                        default=None)
+
+    parser.add_argument("--config",
+                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
+                            USER_CONFIG_PATH),
+                            "[Default (Secondary)] {}\n".format(
+                                get_default_config_path())),
+                        type=str,
+                        default=None)
+
+    args = parser.parse_args(args)
+    if args.config is None:
+        if os.path.exists(USER_CONFIG_PATH):
+            args.config = USER_CONFIG_PATH
+        else:
+            args.config = get_default_config_path()
     metadata_file = os.path.join(args.dir, "metadata.json")
+
     try:
         metadata = Metadata.load_from(metadata_file)
     except IOError:
         logger.error(
             "{0} is not found! You need {0} to use this submission functionality.".format(metadata_file))
         return False
+
+    with open(args.config, "r") as f:
+        config = Config.load(f, {ConfigType.SUBMIT}, args, metadata.lang.name)
 
     try:
         client = AtCoderClient()
@@ -110,6 +147,12 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                     return False
 
         code_path = args.code or os.path.join(args.dir, metadata.code_filename)
+
+        if config.submit_config.exec_before_submit:
+            run_command(config.submit_config.exec_before_submit, "./")
+            code_path = config.submit_config.submit_filename
+            print("changed to submitfile: ", code_path)
+
         for encoding in ['utf8', 'utf-8_sig', 'cp932']:
             try:
                 with open(code_path, 'r', encoding=encoding) as f:
@@ -124,6 +167,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
         logger.info("{} {}".format(
             with_color("Done!", Fore.LIGHTGREEN_EX),
             metadata.problem.contest.get_submissions_url(submission)))
+        if config.submit_config.exec_after_submit:
+            run_command(config.submit_config.exec_after_submit, "./")
 
 
 if __name__ == "__main__":
