@@ -107,7 +107,7 @@ class Config:
                 submit_config_dic = _update_config_dict(submit_config_dic,
                                                         dict(exec_before_submit=args.exec_before_submit,
                                                              exec_after_submit=args.exec_after_submit,
-                                                             submit_file_name=args.submit_file_name))
+                                                             submit_filename=args.submit_filename))
             result.submit_config = SubmitConfig(**submit_config_dic)
         if ConfigType.ETC in get_config_type:
             etc_config_dic = get_config_dic(config_dic, ConfigType.ETC)

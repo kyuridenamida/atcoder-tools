@@ -82,7 +82,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                         type=str,
                         default=None)
 
-    parser.add_argument('--submit-file-name',
+    parser.add_argument('--submit-filename',
                         help='file for submit will changed to this name:'
                              ' [Default] None',
                         type=str,
@@ -150,6 +150,9 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
 
         if config.submit_config.exec_before_submit:
             run_command(config.submit_config.exec_before_submit, "./")
+            if not config.submit_config.submit_filename:
+                print("submit_filename is not specified")
+                return False
             code_path = config.submit_config.submit_filename
             print("changed to submitfile: ", code_path)
 
