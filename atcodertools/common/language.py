@@ -1,9 +1,10 @@
 import re
 from typing import Pattern, Callable
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, swift
+from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, swift, go
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.tools.templates import get_default_template_path
+from atcodertools.codegen.code_style_config import INDENT_TYPE_TAB
 import platform
 
 
@@ -13,9 +14,11 @@ class LanguageNotFoundError(Exception):
 
 class CodeStyle:
     def __init__(self,
-                 indent_width=None
+                 indent_width=None,
+                 indent_type=None
                  ):
         self.indent_width = indent_width
+        self.indent_type = indent_type
 
 
 class Language:
@@ -178,6 +181,19 @@ SWIFT = Language(
     exec_filename="{filename}{exec_extension}"
 )
 
+GO = Language(
+    name="go",
+    display_name="Go",
+    extension="go",
+    submission_lang_pattern=re.compile(".*Go \\(1.*"),
+    default_code_generator=go.main,
+    default_template_path=get_default_template_path('go'),
+    default_code_style=CodeStyle(indent_type=INDENT_TYPE_TAB),
+    compile_command="go build -o {filename} {filename}.go",
+    test_command="{exec_filename}",
+    exec_filename="{filename}{exec_extension}"
+)
 
-ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP, SWIFT]
+
+ALL_LANGUAGES = [CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP, SWIFT, GO]
 ALL_LANGUAGE_NAMES = [lang.display_name for lang in ALL_LANGUAGES]

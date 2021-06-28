@@ -19,7 +19,7 @@ DEFAULT_WORKSPACE_DIR_PATH = os.path.join(expanduser("~"), "atcoder-workspace")
 class CodeStyleConfig:
 
     def __init__(self,
-                 indent_type: str = INDENT_TYPE_SPACE,
+                 indent_type: str = None,
                  indent_width: Optional[int] = None,
                  code_generator_file: Optional[str] = None,
                  template_file: Optional[str] = None,
@@ -37,7 +37,7 @@ class CodeStyleConfig:
             raise CodeStyleConfigInitError(
                 "language must be one of {}".format(ALL_LANGUAGE_NAMES))
 
-        if indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
+        if indent_type is not None and indent_type not in [INDENT_TYPE_SPACE, INDENT_TYPE_TAB]:
             raise CodeStyleConfigInitError(
                 "indent_type must be 'space' or 'tab'")
 
@@ -54,8 +54,12 @@ class CodeStyleConfig:
                 "The specified template file '{}' is not found".format(
                     template_file)
             )
-
-        self.indent_type = indent_type
+        if indent_type is not None:
+            self.indent_type = indent_type
+        elif lang.default_code_style is not None and lang.default_code_style.indent_type is not None:
+            self.indent_type = lang.default_code_style.indent_type
+        else:
+            self.indent_type = INDENT_TYPE_SPACE
 
         if indent_width is not None:
             self.indent_width = indent_width
@@ -84,4 +88,4 @@ class CodeStyleConfig:
     def indent(self, depth):
         if self.indent_type == INDENT_TYPE_SPACE:
             return " " * self.indent_width * depth
-        return "\t" * self.indent_width * depth
+        return "\t" * depth
