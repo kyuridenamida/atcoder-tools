@@ -103,7 +103,7 @@ optional arguments:
   --workspace WORKSPACE
                         Path to workspace's root directory. This script will create files in {WORKSPACE}/{contest_name}/{alphabet}/ e.g. ./your-workspace/arc001/A/
                         [Default] /home/kyuridenamida/atcoder-workspace
-  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs.
+  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs or julia.
                         [Default] cpp
   --template TEMPLATE   File path to your template code
                         [Default (C++)] /atcodertools/tools/templates/default_template.cpp

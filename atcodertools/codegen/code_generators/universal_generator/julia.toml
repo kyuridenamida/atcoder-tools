@@ -1,0 +1,75 @@
+base_indent = 1
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# インデックス
+[index]
+i = "i"
+j = "j"
+
+# ループ
+[loop]
+header = "for {loop_var} in 1:{length}"
+footer = "end"
+
+# タイプ
+[type]
+int = "Int"
+float = "Float64"
+str = "String"
+
+# デフォルト値
+[default]
+int = "int()"
+float = "float()"
+str = "str()"
+
+# 宣言
+[declare]
+int = ""
+float = ""
+str = ""
+seq = ""
+2d_seq = ""
+
+# 確保
+[allocate]
+seq = "{name} = similar(Vector{{{type}}}, {length})"
+2d_seq = "{name} = similar(Matrix{{{type}}}, {length_i}, {length_j})"
+
+[declare_and_allocate]
+seq = "{name} = similar(Vector{{{type}}}, {length})"
+2d_seq = "{name} = similar(Matrix{{{type}}}, {length_i}, {length_j})"
+
+# 入力関数
+[input_func]
+int = "parse(Int, take!(tokens))"
+float = "parse(Float64, take!(tokens))"
+str = "take!(tokens)"
+
+# 入力
+[input]
+int = "{name} = {input_func}"
+float = "{name} = {input_func}"
+str = "{name} = {input_func}"
+
+# 宣言と入力
+[declare_and_input]
+int = "{name} = {input_func}"
+float = "{name} = {input_func}"
+str = "{name} = {input_func}"
+
+# 引数
+[arg]
+int = "{name}::Int"
+float = "{name}::Float64"
+str = "{name}::String"
+seq = "{name}::Vector{{{type}}}"
+2d_seq = "{name}::Matrix{{{type}}}"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i},{index_j}]"
