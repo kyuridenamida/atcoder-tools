@@ -62,7 +62,13 @@ class CodeStyleConfig:
         elif lang.default_code_style is not None and lang.default_code_style.indent_width is not None:
             self.indent_width = lang.default_code_style.indent_width
         else:
-            self.indent_width = 4
+            if self.indent_type == INDENT_TYPE_SPACE:
+                self.indent_width = 4
+            elif self.indent_type == INDENT_TYPE_TAB:
+                self.indent_width = 1
+            else:
+                raise CodeStyleConfigInitError(
+                    "indent_type must be 'space' or 'tab'")
 
         if code_generator_file is not None:
             try:
@@ -84,4 +90,8 @@ class CodeStyleConfig:
     def indent(self, depth):
         if self.indent_type == INDENT_TYPE_SPACE:
             return " " * self.indent_width * depth
-        return "\t" * self.indent_width * depth
+        elif self.indent_type == INDENT_TYPE_TAB:
+            return "\t" * self.indent_width * depth
+        else:
+            raise CodeStyleConfigInitError(
+                "indent_type must be 'space' or 'tab'")
