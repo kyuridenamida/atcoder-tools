@@ -1,9 +1,0 @@
-class Kyuridenamida{
-	public static void main(String [] args){
-		int kyuridenamida = 0;
-		for(int i = 0;i <= N;i++){
-			System.out.println("kyuri de namida");
-		}
-
-	}
-}

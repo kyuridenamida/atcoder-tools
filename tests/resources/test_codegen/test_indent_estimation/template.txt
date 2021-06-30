@@ -1,5 +1,0 @@
-class Kyuridenamida{
-    public static void main(String [] args){
-        {{ input_part }}
-    }
-}
