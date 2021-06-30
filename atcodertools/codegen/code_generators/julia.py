@@ -9,6 +9,7 @@ def main(args: CodeGenArgs) -> str:
         args.format, args.config, get_builtin_code_generator_info_toml_path("julia")).generate_parameters()
     return render(
         args.template,
+        config=args.config,
         mod=args.constants.mod,
         yes_str=args.constants.yes_str,
         no_str=args.constants.no_str,

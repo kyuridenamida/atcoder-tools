@@ -15,7 +15,7 @@ from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format
 
 from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, swift, julia
-from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, INDENT_TYPE_TAB
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
@@ -144,6 +144,22 @@ class TestCodeGenerator(unittest.TestCase):
                          _trim(render(template, x=0, y=2)))
         self.assertEqual(_load_text_file("answer_x_none_y_2.txt"),
                          _trim(render(template, x=None, y=2)))
+
+    def test_indent_estimation(self):
+        def _load_text_file(filename):
+            with open(os.path.join(RESOURCE_DIR, "test_indent_estimation", filename), 'r') as f:
+                return f.read()
+
+        def _trim(text):
+            return "\n".join([lang.rstrip() for lang in text.split("\n")])
+
+        template = _load_text_file("template.txt")
+        self.assertEqual(_load_text_file("answer_space_2.txt"),
+                         _trim(render(template, config=CodeStyleConfig(indent_type=INDENT_TYPE_SPACE, indent_width=2), input_part=_load_text_file("indent_space_2.txt"))))
+        self.assertEqual(_load_text_file("answer_space_4.txt"),
+                         _trim(render(template, config=CodeStyleConfig(indent_type=INDENT_TYPE_SPACE, indent_width=4), input_part=_load_text_file("indent_space_4.txt"))))
+        self.assertEqual(_load_text_file("answer_tab.txt"),
+                         _trim(render(template, config=CodeStyleConfig(indent_type=INDENT_TYPE_TAB), input_part=_load_text_file("indent_tab.txt"))))
 
     def test_default_code_generators_and_templates(self):
         def _full_path(filename):
