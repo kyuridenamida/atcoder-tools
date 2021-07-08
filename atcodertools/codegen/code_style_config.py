@@ -56,7 +56,7 @@ class CodeStyleConfig:
 
         if code_generator_toml is not None and not os.path.exists(code_generator_toml):
             raise CodeStyleConfigInitError(
-                "Module file {} is not found".format(code_generator_toml))
+                "TOML for Code Generator {} is not found".format(code_generator_toml))
 
         if template_file is not None and not os.path.exists(template_file):
             raise CodeStyleConfigInitError(
@@ -74,6 +74,10 @@ class CodeStyleConfig:
             self.indent_width = 4
 
         if code_generator_toml is not None:
+            if code_generator_file is not None:
+                raise CodeStyleConfigInitError(
+                    "Both Code Generator File and Code Generator TOML is specified"
+                )
             self.code_generator = custom.main
         elif code_generator_file is not None:
             try:
