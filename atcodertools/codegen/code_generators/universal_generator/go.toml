@@ -1,0 +1,59 @@
+base_indent = 1
+insert_space_around_operators = false
+
+# global変数宣言時の接頭辞
+global_prefix = ""
+
+# ループ
+[loop]
+header = "for {loop_var} := int64(0); {loop_var} < {length}; {loop_var}++ {{"
+footer = "}}"
+
+# タイプ
+[type]
+int = "int64"
+float = "float64"
+str = "string"
+
+# デフォルト値
+[default]
+int = "0"
+float = "0.0"
+str = '""'
+
+# 引数
+[arg]
+int = "{name} int64"
+float = "{name} float64"
+str = "{name} string"
+seq = "{name} []{type}"
+2d_seq = "{name} [][]{type}"
+
+# 配列アクセス
+[access]
+seq = "{name}[{index}]"
+2d_seq = "{name}[{index_i}][{index_j}]"
+
+# 宣言
+[declare]
+int = "var {name} int64"
+float = "var {name} float64"
+str = "var {name} string"
+seq = "var {name} []{type}"
+2d_seq = "var {name} [][]{type}"
+
+# 確保
+[allocate]
+seq = "{name} = make([]{type}, {length})"
+2d_seq = "{name} = make([][]{type}, {length_i})\nfor i := int64(0); i < {length_i}; i++ {{\n\t{name}[i] = make([]{type}, {length_j})\n}}"
+
+# 宣言と確保
+[declare_and_allocate]
+seq = "{name} := make([]{type}, {length})"
+2d_seq = "{name} := make([][]{type}, {length_i})\nfor i := int64(0); i < {length_i}; i++ {{\n\t{name}[i] = make([]{type}, {length_j})\n}}"
+
+# 入力
+[input]
+int = "scanner.Scan()\n{name}, _ = strconv.ParseInt(scanner.Text(), 10, 64)"
+float = "scanner.Scan()\n{name}, _ = strconv.ParseFloat(scanner.Text(), 64)"
+str = "scanner.Scan()\n{name} = scanner.Text()"
