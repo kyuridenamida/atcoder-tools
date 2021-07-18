@@ -5,6 +5,7 @@ from typing import Optional
 
 from atcodertools.fileutils.normalize import normalize_path
 
+
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
 
@@ -22,13 +23,17 @@ class CodeStyleConfig:
                  indent_type: str = None,
                  indent_width: Optional[int] = None,
                  code_generator_file: Optional[str] = None,
+                 code_generator_toml: Optional[str] = None,
                  template_file: Optional[str] = None,
                  workspace_dir: Optional[str] = None,
                  lang: str = "cpp",
                  ):
         from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
+        from atcodertools.codegen.code_generators import custom
 
         code_generator_file = normalize_path(code_generator_file)
+        code_generator_toml = normalize_path(code_generator_toml)
+        self.code_generator_toml = code_generator_toml
         template_file = normalize_path(template_file)
 
         try:
@@ -48,6 +53,10 @@ class CodeStyleConfig:
         if code_generator_file is not None and not os.path.exists(code_generator_file):
             raise CodeStyleConfigInitError(
                 "Module file {} is not found".format(code_generator_file))
+
+        if code_generator_toml is not None and not os.path.exists(code_generator_toml):
+            raise CodeStyleConfigInitError(
+                "TOML for Code Generator {} is not found".format(code_generator_toml))
 
         if template_file is not None and not os.path.exists(template_file):
             raise CodeStyleConfigInitError(
@@ -74,7 +83,13 @@ class CodeStyleConfig:
                 raise CodeStyleConfigInitError(
                     "indent_type must be 'space' or 'tab'")
 
-        if code_generator_file is not None:
+        if code_generator_toml is not None:
+            if code_generator_file is not None:
+                raise CodeStyleConfigInitError(
+                    "Both Code Generator File and Code Generator TOML is specified"
+                )
+            self.code_generator = custom.main
+        elif code_generator_file is not None:
             try:
                 module = imm.SourceFileLoader(
                     'code_generator', code_generator_file).load_module()
