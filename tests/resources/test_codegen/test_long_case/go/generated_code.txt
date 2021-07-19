@@ -1,0 +1,57 @@
+package main
+
+import (
+	"bufio"
+	"os"
+	"strconv"
+)
+
+func solve(H int64, W int64, K int64, sr int64, sc int64, s []string, N int64, fr []int64, fc []int64, F []int64, D []int64) {
+
+}
+
+func main() {
+	scanner := bufio.NewScanner(os.Stdin)
+	const initialBufSize = 4096
+	const maxBufSize = 1000000
+	scanner.Buffer(make([]byte, initialBufSize), maxBufSize)
+	scanner.Split(bufio.ScanWords)
+	var H int64
+	scanner.Scan()
+	H, _ = strconv.ParseInt(scanner.Text(), 10, 64)
+	var W int64
+	scanner.Scan()
+	W, _ = strconv.ParseInt(scanner.Text(), 10, 64)
+	var K int64
+	scanner.Scan()
+	K, _ = strconv.ParseInt(scanner.Text(), 10, 64)
+	var sr int64
+	scanner.Scan()
+	sr, _ = strconv.ParseInt(scanner.Text(), 10, 64)
+	var sc int64
+	scanner.Scan()
+	sc, _ = strconv.ParseInt(scanner.Text(), 10, 64)
+	s := make([]string, H)
+	for i := int64(0); i < H; i++ {
+		scanner.Scan()
+		s[i] = scanner.Text()
+	}
+	var N int64
+	scanner.Scan()
+	N, _ = strconv.ParseInt(scanner.Text(), 10, 64)
+	fr := make([]int64, N)
+	fc := make([]int64, N)
+	F := make([]int64, N)
+	D := make([]int64, N)
+	for i := int64(0); i < N; i++ {
+		scanner.Scan()
+		fr[i], _ = strconv.ParseInt(scanner.Text(), 10, 64)
+		scanner.Scan()
+		fc[i], _ = strconv.ParseInt(scanner.Text(), 10, 64)
+		scanner.Scan()
+		F[i], _ = strconv.ParseInt(scanner.Text(), 10, 64)
+		scanner.Scan()
+		D[i], _ = strconv.ParseInt(scanner.Text(), 10, 64)
+	}
+	solve(H, W, K, sr, sc, s, N, fr, fc, F, D)
+}

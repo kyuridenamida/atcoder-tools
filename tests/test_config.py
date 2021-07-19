@@ -1,10 +1,16 @@
 import unittest
 import os
+import tempfile
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, CodeStyleConfigInitError, \
     INDENT_TYPE_TAB
 from atcodertools.config.config import Config, ConfigType
 from atcodertools.tools import get_default_config_path
+from atcodertools.common.language import NIM
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
+from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner
+from tests.utils.gzip_controller import make_tst_data_controller
+from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -12,6 +18,12 @@ RESOURCE_DIR = os.path.join(
 
 
 class TestConfig(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.test_data_controller = make_tst_data_controller(
+            tempfile.mkdtemp())
+        self.test_dir = self.test_data_controller.create_dir()
+        self.runner = FormatPredictionTestRunner(self.test_dir)
 
     def test_load_code_style_config(self):
         with open(os.path.join(RESOURCE_DIR, "with_indent_width.toml"), 'r') as f:
@@ -80,6 +92,33 @@ class TestConfig(unittest.TestCase):
         self._expect_error_when_init_config(
             template_file='not existing path'
         )
+
+    def test_custom_codegen_toml(self):
+        response = self.runner.run('abc079-D')
+        template_file = os.path.join(
+            RESOURCE_DIR,
+            "test_custom_codegen_toml/template.nim")
+        with open(template_file, 'r') as f:
+            template = f.read()
+        generated_code_file = os.path.join(
+            RESOURCE_DIR,
+            "test_custom_codegen_toml/generated_code.nim")
+        with open(generated_code_file, 'r') as f:
+            generated_code = f.read()
+        resource_path = os.path.join(
+            RESOURCE_DIR, "test_custom_codegen_toml/nim_custom.toml")
+        config = CodeStyleConfig(
+            lang=NIM.name, code_generator_toml=str(resource_path))
+
+        code = config.code_generator(
+            CodeGenArgs(
+                template,
+                response.original_result.format,
+                ProblemConstantSet(),
+                config)
+        )
+
+        self.assertEqual(generated_code, code)
 
     def _expect_error_when_init_config(self, **kwargs):
         try:
