@@ -2,14 +2,6 @@
 [![codecov](https://codecov.io/gh/kyuridenamida/atcoder-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/kyuridenamida/atcoder-tools)
 [![PyPI](https://img.shields.io/pypi/v/atcoder-tools.svg)](https://pypi.python.org/pypi/atcoder-tools)
 
-
-重要!
-===
-2020-05-17 02:57 に デフォルトのブランチがmasterからstableに変わりました。
-この変更の背景には、1.1.6以降の変更のverificationが終わっておわず、また完了するにも時間がかかることが見込まれるため、一時的なロールバックをしたかったというものがあります。
-現状masterは1.1.6以降のマージの一時退避場所になっていますが、それらの検証が終わった後のmasterの運用は未定です。デフォルトブランチについては今後もstableを使っていく予定です。つきましては、今後のマージリクエストはstable branchから派生し、stableブランチへのPull Requestを送って頂くようお願い申し上げます。
-送っていただいている既存のマージリクエストについては個別に対応いたします。
-
 AtCoder Tools
 ====
 Python 3.6 以降で動作する [AtCoder](https://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
