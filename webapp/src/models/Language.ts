@@ -1,6 +1,6 @@
 
-type Language = 'cpp' | 'rust' | 'java' | 'python' | 'd' | 'nim' | 'cs';
-export const ALL_LANGUAGES : Language[] = ['cpp', 'rust', 'java', 'python', 'd', 'nim', 'cs'];
+type Language = 'cpp' | 'rust' | 'java' | 'python' | 'd' | 'nim' | 'cs' | 'julia';
+export const ALL_LANGUAGES : Language[] = ['cpp', 'rust', 'java', 'python', 'd', 'nim', 'cs', 'julia'];
 
 export const langToDisplayName = (language: Language) => {
     switch (language){
@@ -11,6 +11,7 @@ export const langToDisplayName = (language: Language) => {
         case 'd': return 'D';
         case 'nim': return 'Nim';
         case 'cs': return 'C#';
+        case 'julia': return 'Julia';
     }
     throw Error(`no display name for ${language}`);
 };

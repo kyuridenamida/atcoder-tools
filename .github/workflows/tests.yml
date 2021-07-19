@@ -40,7 +40,7 @@ jobs:
       - name: Install other compilers
         run: |
           sudo apt-get update
-          sudo apt-get install nim mono-complete
+          sudo apt-get install nim mono-complete julia
 
       - name: Run Unit Tests and Integration Tests
         run: |

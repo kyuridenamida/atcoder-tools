@@ -6,7 +6,7 @@ from atcodertools.codegen.code_generators.universal_code_generator import Univer
 
 def main(args: CodeGenArgs) -> str:
     code_parameters = UniversalCodeGenerator(
-        args.format, args.config, get_builtin_code_generator_info_toml_path("rust")).generate_parameters()
+        args.format, args.config, get_builtin_code_generator_info_toml_path("julia")).generate_parameters()
     return render(
         args.template,
         config=args.config,

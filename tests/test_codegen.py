@@ -7,20 +7,21 @@ from typing import Tuple, List
 
 from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.client.models.sample import Sample
-from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP, SWIFT, GO
+from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP, SWIFT, GO, JULIA
 from atcodertools.executils.run_command import run_command
 from atcodertools.executils.run_program import run_program
 from atcodertools.fileutils.create_contest_file import create_code
 from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format
 
-from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, swift, go
-from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, swift, go, julia
+from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, INDENT_TYPE_TAB
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 from tests.utils.gzip_controller import make_tst_data_controller
+
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -87,6 +88,10 @@ class TestCodeGenerator(unittest.TestCase):
                 "old": "template.go",
                 "jinja": "template_jinja.go",
             },
+            JULIA: {
+                "old": "template.jl",
+                "jinja": "template_jinja.jl",
+            },
         }
         self.lang_to_code_generator_func = {
             CPP: cpp.main,
@@ -97,7 +102,8 @@ class TestCodeGenerator(unittest.TestCase):
             DLANG: d.main,
             CSHARP: cs.main,
             SWIFT: swift.main,
-            GO: go.main
+            GO: go.main,
+            JULIA: julia.main,
         }
         self.maxDiff = None
 
@@ -144,6 +150,22 @@ class TestCodeGenerator(unittest.TestCase):
                          _trim(render(template, x=0, y=2)))
         self.assertEqual(_load_text_file("answer_x_none_y_2.txt"),
                          _trim(render(template, x=None, y=2)))
+
+    def test_indent_estimation(self):
+        def _load_text_file(filename):
+            with open(os.path.join(RESOURCE_DIR, "test_indent_estimation", filename), 'r') as f:
+                return f.read()
+
+        def _trim(text):
+            return "\n".join([lang.rstrip() for lang in text.split("\n")])
+
+        template = _load_text_file("template.txt")
+        self.assertEqual(_load_text_file("answer_space_2.txt"),
+                         _trim(render(template, config=CodeStyleConfig(indent_type=INDENT_TYPE_SPACE, indent_width=2), input_part=_load_text_file("indent_space_2.txt"))))
+        self.assertEqual(_load_text_file("answer_space_4.txt"),
+                         _trim(render(template, config=CodeStyleConfig(indent_type=INDENT_TYPE_SPACE, indent_width=4), input_part=_load_text_file("indent_space_4.txt"))))
+        self.assertEqual(_load_text_file("answer_tab.txt"),
+                         _trim(render(template, config=CodeStyleConfig(indent_type=INDENT_TYPE_TAB), input_part=_load_text_file("indent_tab.txt"))))
 
     def test_default_code_generators_and_templates(self):
         def _full_path(filename):
@@ -203,6 +225,8 @@ class TestCodeGenerator(unittest.TestCase):
             return "swiftc {} -o main".format(code_file)
         elif lang == GO:
             return "go build -o main {}".format(code_file)
+        elif lang == JULIA:
+            return ""
         else:
             raise NotImplementedError()
 
@@ -225,6 +249,8 @@ class TestCodeGenerator(unittest.TestCase):
             return "./main", []
         elif lang == GO:
             return "./main", []
+        elif lang == JULIA:
+            return "julia", ["main.jl"]
         else:
             raise NotImplementedError()
 
@@ -247,6 +273,8 @@ class TestCodeGenerator(unittest.TestCase):
             os.remove(os.path.join(self.temp_dir, "main"))
         elif lang == GO:
             os.remove(os.path.join(self.temp_dir, "main"))
+        elif lang == JULIA:
+            return
         else:
             raise NotImplementedError()
 
