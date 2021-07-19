@@ -15,12 +15,13 @@ from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format
 
 from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs, swift, go, julia
-from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.code_style_config import CodeStyleConfig, INDENT_TYPE_SPACE, INDENT_TYPE_TAB
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 from tests.utils.gzip_controller import make_tst_data_controller
+
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
