@@ -1,4 +1,10 @@
 # Change Log
+## 2.6.0 / 2021-7-18
+Release version 2.6.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#237](https://github.com/kyuridenamida/atcoder-tools/pull/237)|Make universal codegenerator toml specifiable in atcodertools.toml|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
+|[#235](https://github.com/kyuridenamida/atcoder-tools/pull/235)|Support Go|![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[chaemon](https://github.com/chaemon)|
 ## 2.5.0 / 2021-6-19
 Release version 2.5.0
 |PR|Change Summary|Label|Author|
