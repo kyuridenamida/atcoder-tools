@@ -100,8 +100,10 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
     if args.config is None:
         if os.path.exists(USER_CONFIG_PATH):
             args.config = USER_CONFIG_PATH
+            logger.info(f"config is loaded from USER_CONFIG_PATH({USER_CONFIG_PATH})")
         else:
             args.config = get_default_config_path()
+            logger.info(f"No USER_CONFIG_PATH({USER_CONFIG_PATH}). Default config path({args.config}) is laoded. ")
     metadata_file = os.path.join(args.dir, "metadata.json")
 
     try:
