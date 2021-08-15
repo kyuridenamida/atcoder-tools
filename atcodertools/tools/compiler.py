@@ -61,9 +61,9 @@ def main(prog, args):
 
     parser.add_argument('--compile-only-when-diff-detected',
                         help='compile only when diff detected [true, false]'
-                             ' [Default]: true',
+                             ' [Default]: false',
                         type=bool,
-                        default=False)
+                        default=None)
 
     parser.add_argument("--config",
                         help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
