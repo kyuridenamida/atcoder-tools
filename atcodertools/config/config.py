@@ -105,11 +105,12 @@ class Config:
                                                          skip_existing_problems=args.skip_existing_problems))
             result.etc_config = EtcConfig(**etc_config_dic)
         if ConfigType.COMPILER in get_config_type:
-            compiler_config_dic = get_config_dic(config_dic, ConfigType.COMPILER)
+            compiler_config_dic = get_config_dic(
+                config_dic, ConfigType.COMPILER)
             if args:
-                compiler_config_dic = _update_config_dict(compiler_config_dic, dict(
-                                                         compile_only_when_diff_detected=args.compile_only_when_diff_detected,
-                                                         compile_command=args.compile_command))
+                compiler_config_dic = _update_config_dict(compiler_config_dic,
+                                                          dict(compile_only_when_diff_detected=args.compile_only_when_diff_detected,
+                                                               compile_command=args.compile_command))
             result.compiler_config = CompilerConfig(**compiler_config_dic)
 
         return result
