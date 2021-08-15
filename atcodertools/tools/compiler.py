@@ -1,11 +1,16 @@
 #!/usr/bin/python3
 import argparse
+from os.path import expanduser
 
 from atcodertools.executils.run_command import run_command_with_returncode
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.common.language import Language
 import os
 import pathlib
+from atcodertools.config.config import Config, ConfigType
+from atcodertools.tools import get_default_config_path
+
+USER_CONFIG_PATH = os.path.join(expanduser("~"), ".atcodertools.toml")
 
 
 class BadStatusCodeException(Exception):
@@ -60,9 +65,36 @@ def main(prog, args):
                         type=bool,
                         default=False)
 
+    parser.add_argument("--config",
+                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
+                            USER_CONFIG_PATH),
+                            "[Default (Secondary)] {}\n".format(
+                                get_default_config_path())),
+                        default=None)
+
     args = parser.parse_args(args)
+    if args.config is None:
+        if os.path.exists(USER_CONFIG_PATH):
+            args.config = USER_CONFIG_PATH
+        else:
+            args.config = get_default_config_path()
 
     metadata = Metadata.load_from("./metadata.json")
-    force_compile = not args.compile_only_when_diff_detected
+    lang = metadata.lang
+
+    with open(args.config, "r") as f:
+        config = Config.load(f, {ConfigType.COMPILER}, args, lang.name)
+
+    if args.compile_only_when_diff_detected:
+        force_compile = not args.compile_only_when_diff_detected
+    else:
+        force_compile = not config.compiler_config.compile_only_when_diff_detected
+
+    if args.compile_command:
+        compile_command = args.compile_command
+    else:
+        compile_command = config.compiler_config.compile_command
+    if compile_command:
+        compile_command = lang.get_compile_command("main", compile_command)
     compile_main_and_judge_programs(metadata.lang, force_compile=force_compile,
-                                    compile_command=args.compile_command)
+                                    compile_command=compile_command)
