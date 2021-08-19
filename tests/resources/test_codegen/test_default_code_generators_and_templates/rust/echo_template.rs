@@ -42,8 +42,6 @@ fn solve({{ formal_arguments }}) {
 {% endif %}
 
 fn main() {
-    let con = read_string();
-    let mut scanner = Scanner::new(&con);
     {% if prediction_success %}
     {{input_part}}
     // In order to avoid potential stack overflow, spawn a new thread.

@@ -13,7 +13,6 @@ class Main {
     {% endif %}
 
     public static void main(String[] args) throws Exception {
-        final Scanner sc = new Scanner(System.in);
         {% if prediction_success %}
         {{ input_part }}
         solve({{ actual_arguments }});
