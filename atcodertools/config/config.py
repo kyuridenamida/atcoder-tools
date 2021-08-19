@@ -8,6 +8,7 @@ from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
 from atcodertools.config.tester_config import TesterConfig
+from atcodertools.config.compiler_config import CompilerConfig
 
 
 class ConfigType(Enum):
@@ -15,6 +16,7 @@ class ConfigType(Enum):
     POSTPROCESS = "postprocess"
     TESTER = "tester"
     ETC = "etc"
+    COMPILER = "compiler"
 
 
 def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
@@ -44,7 +46,8 @@ class Config:
                  code_style_config: CodeStyleConfig = CodeStyleConfig(),
                  postprocess_config: PostprocessConfig = PostprocessConfig(),
                  tester_config: TesterConfig = TesterConfig(),
-                 etc_config: EtcConfig = EtcConfig()
+                 etc_config: EtcConfig = EtcConfig(),
+                 compiler_config: CompilerConfig = CompilerConfig()
                  ):
         self.code_style_config = code_style_config
         self.postprocess_config = postprocess_config
@@ -101,5 +104,13 @@ class Config:
                                                          save_no_session_cache=args.save_no_session_cache,
                                                          skip_existing_problems=args.skip_existing_problems))
             result.etc_config = EtcConfig(**etc_config_dic)
+        if ConfigType.COMPILER in get_config_type:
+            compiler_config_dic = get_config_dic(
+                config_dic, ConfigType.COMPILER)
+            if args:
+                compiler_config_dic = _update_config_dict(compiler_config_dic,
+                                                          dict(compile_only_when_diff_detected=args.compile_only_when_diff_detected,
+                                                               compile_command=args.compile_command))
+            result.compiler_config = CompilerConfig(**compiler_config_dic)
 
         return result

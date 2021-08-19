@@ -234,6 +234,9 @@ code_generator_file="~/custom_code_generator.py"
 [postprocess]
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
+[compiler]
+compile_command='g++ main.cpp -o main -std=c++17'
+compile_only_when_diff_detected=true
 [tester]
 compile_before_testing=true
 compile_only_when_diff_detected=true
