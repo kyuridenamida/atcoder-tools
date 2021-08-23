@@ -2,14 +2,6 @@
 [![codecov](https://codecov.io/gh/kyuridenamida/atcoder-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/kyuridenamida/atcoder-tools)
 [![PyPI](https://img.shields.io/pypi/v/atcoder-tools.svg)](https://pypi.python.org/pypi/atcoder-tools)
 
-
-重要!
-===
-2020-05-17 02:57 に デフォルトのブランチがmasterからstableに変わりました。
-この変更の背景には、1.1.6以降の変更のverificationが終わっておわず、また完了するにも時間がかかることが見込まれるため、一時的なロールバックをしたかったというものがあります。
-現状masterは1.1.6以降のマージの一時退避場所になっていますが、それらの検証が終わった後のmasterの運用は未定です。デフォルトブランチについては今後もstableを使っていく予定です。つきましては、今後のマージリクエストはstable branchから派生し、stableブランチへのPull Requestを送って頂くようお願い申し上げます。
-送っていただいている既存のマージリクエストについては個別に対応いたします。
-
 AtCoder Tools
 ====
 Python 3.6 以降で動作する [AtCoder](https://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
@@ -103,7 +95,7 @@ optional arguments:
   --workspace WORKSPACE
                         Path to workspace's root directory. This script will create files in {WORKSPACE}/{contest_name}/{alphabet}/ e.g. ./your-workspace/arc001/A/
                         [Default] /home/kyuridenamida/atcoder-workspace
-  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs.
+  --lang LANG           Programming language of your template code, cpp or java or rust or python or nim or d or cs or julia.
                         [Default] cpp
   --template TEMPLATE   File path to your template code
                         [Default (C++)] /atcodertools/tools/templates/default_template.cpp
@@ -242,6 +234,9 @@ code_generator_file="~/custom_code_generator.py"
 [postprocess]
 exec_on_each_problem_dir='clang-format -i ./*.cpp'
 exec_on_contest_dir='touch CMakeLists.txt'
+[compiler]
+compile_command='g++ main.cpp -o main -std=c++17'
+compile_only_when_diff_detected=true
 [tester]
 compile_before_testing=true
 compile_only_when_diff_detected=true

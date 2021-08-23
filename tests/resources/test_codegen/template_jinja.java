@@ -12,7 +12,6 @@ class Main {
     static final String NO = "{{ no_str }}";
     {% endif %}
     public static void main(String[] args) throws Exception {
-        final Scanner sc = new Scanner(System.in);
         {{ input_part }}
         solve({{ actual_arguments }});
     }

@@ -1,4 +1,10 @@
 # Change Log
+## 2.7.0 / 2021-8-19
+Release version 2.7.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#243](https://github.com/kyuridenamida/atcoder-tools/pull/243)|enable compiler config by toml| |[trickstar0301](https://github.com/trickstar0301)|
+|[#236](https://github.com/kyuridenamida/atcoder-tools/pull/236)|support julia|![#2C2318](https://via.placeholder.com/15/2C2318/000000?text=+) **language-support**|[chaemon](https://github.com/chaemon)|
 ## 2.6.0 / 2021-7-18
 Release version 2.6.0
 |PR|Change Summary|Label|Author|
@@ -9,7 +15,7 @@ Release version 2.6.0
 Release version 2.5.0
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
-|[#233](https://github.com/kyuridenamida/atcoder-tools/pull/233)|Add language-level config| |[chaemon](https://github.com/chaemon)|
+|[#233](https://github.com/kyuridenamida/atcoder-tools/pull/233)|Add language-level config|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
 ## 2.4.0 / 2021-6-13
 Release version 2.4.0
 |PR|Change Summary|Label|Author|
@@ -140,4 +146,4 @@ Release version 2.0.0. Python 3.5 is not supported anymore.
 ## 1.0.3 / 2018-12-27
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
-|[#41](https://github.com/kyuridenamida/atcoder-tools/pull/41)|Feature/cleaner input code|![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**<br/>![#b60205](https://via.placeholder.com/15/b60205/000000?text=+) **messy-changeset**|[kyuridenamida](https://github.com/kyuridenamida)|
+|[#41](https://github.com/kyuridenamida/atcoder-tools/pull/41)|Feature/cleaner input code|![#b60205](https://via.placeholder.com/15/b60205/000000?text=+) **messy-changeset**<br/>![#33E893](https://via.placeholder.com/15/33E893/000000?text=+) **dev-env-improvement**|[kyuridenamida](https://github.com/kyuridenamida)|

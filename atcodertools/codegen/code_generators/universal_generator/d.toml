@@ -3,7 +3,7 @@ insert_space_around_operators = false
 
 # global変数宣言時の接頭辞
 global_prefix = ""
-#input_part_prefix = "auto input = stdin.byLine.map!split.joiner;"
+input_part_prefix = "auto input = stdin.byLine.map!split.joiner;"
 newline_after_input = true
 
 # ループ

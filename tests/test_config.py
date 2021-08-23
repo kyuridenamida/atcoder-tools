@@ -127,6 +127,18 @@ class TestConfig(unittest.TestCase):
         except CodeStyleConfigInitError:
             pass
 
+    def test_load_config_compiler(self):
+        os.chdir(RESOURCE_DIR)
+
+        with open(os.path.join(RESOURCE_DIR, "compiler_options.toml"), 'r') as f:
+            config = Config.load(
+                f, {ConfigType.CODESTYLE, ConfigType.COMPILER})
+
+        self.assertEqual(
+            True, config.compiler_config.compile_only_when_diff_detected)
+        self.assertEqual('g++ main.cpp -o main -std=c++17',
+                         config.compiler_config.compile_command)
+
 
 if __name__ == "__main__":
     unittest.main()

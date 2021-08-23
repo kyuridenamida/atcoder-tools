@@ -34,6 +34,22 @@ def render(template, **kwargs):
         'url': 'https://github.com/kyuridenamida/atcoder-tools',
     }
 
+    # Fix the ident of template
+    # TODO: refactoring: this should not be here.
+    indent_template = estimate_indent(template)
+    if indent_template and 'config' in kwargs:
+        # Successfully estimated the indents of template
+        indent = kwargs['config'].indent(1)
+        if indent_template != indent:
+            # Align the indent of template with kwargs
+            def fixindent(line):
+                new_indent = ''
+                while line.startswith(indent_template):
+                    line = line[len(indent_template):]
+                    new_indent = new_indent + indent
+                return new_indent + line
+            template = '\n'.join(map(fixindent, template.split('\n')))
+
     if "${" in template:
         # If the template is old, render with the old engine.
         # This logic is for backward compatibility
@@ -58,3 +74,16 @@ def old_render(template, **kwargs):
 def render_by_jinja(template, **kwargs):
     return Environment(trim_blocks=True,
                        lstrip_blocks=True).from_string(template).render(**kwargs) + "\n"
+
+
+def estimate_indent(code):
+    indents = re.findall(r'^([ \t]+)(?=\S)', code, re.MULTILINE)
+    if not indents:
+        return ''
+    indents_concat = "".join(indents)
+    if ' ' in indents_concat and '\t' in indents_concat:
+        return ''
+    lens = set([len(indent) for indent in indents])
+    if not min(lens) * len(lens) == max(lens):
+        return ''
+    return indents[0][:min(lens)]
