@@ -1,0 +1,1 @@
+echo Kyuuridenamida > exec_before_submit_is_completed

@@ -1,0 +1,4 @@
+[submit]
+exec_before_submit='bash exec_before_submit.sh'
+submit_filename='exec_before_submit_is_completed'
+exec_after_submit='bash exec_after_submit.sh'

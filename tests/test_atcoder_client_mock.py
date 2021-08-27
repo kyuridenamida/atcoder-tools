@@ -7,6 +7,7 @@ from atcodertools.client.atcoder import AtCoderClient
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.language import CPP
+from atcodertools.tools import submit
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -118,6 +119,40 @@ class TestAtCoderClientMock(unittest.TestCase):
             {setting_url: fake_resp("before_login.html")}
         )
         self.assertFalse(self.client.check_logging_in())
+
+    def test_exec_on_submit(self):
+        global submitted_source_code
+        submitted_source_code = "hogehoge"
+
+        def create_fake_request_func_for_source(get_url_to_resp: Dict[str, MockResponse] = None,
+                                                post_url_to_resp: Dict[str, MockResponse] = None,
+                                                ):
+            global submitted_source_code
+
+            def func(url, method="GET", **kwargs):
+                global submitted_source_code
+                if method == "GET":
+                    return get_url_to_resp.get(url)
+                submitted_source_code = kwargs["data"]['sourceCode']
+                return post_url_to_resp.get(url)
+            return func
+
+        contest = Contest("abc215")
+
+        self.client._request = create_fake_request_func_for_source(
+            {contest.get_submit_url(): fake_resp("submit/after_get.html")},
+            {contest.get_submit_url(): fake_resp("submit/after_post.html")}
+        )
+
+        test_dir = os.path.join(RESOURCE_DIR, "exec_on_submit")
+        config_path = os.path.join(test_dir, "config.toml")
+
+        submit.main('', ["--dir", test_dir, "--config", config_path, "-f", "-u"], client=self.client)
+        self.assertTrue(os.path.exists(os.path.join(test_dir, "exec_before_submit_is_completed")))
+        self.assertEqual(submitted_source_code, "Kyuuridenamida\n")
+        self.assertTrue(os.path.exists(os.path.join(test_dir, "exec_after_submit_is_completed")))
+        print(submitted_source_code)
+
 
 
 if __name__ == "__main__":

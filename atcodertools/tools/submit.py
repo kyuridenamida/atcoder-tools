@@ -18,7 +18,7 @@ from atcodertools.tools import get_default_config_path
 from atcodertools.executils.run_command import run_command
 
 
-def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> bool:
+def main(prog, args, credential_supplier=None, use_local_session_cache=True, client=None) -> bool:
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
@@ -95,7 +95,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                                 get_default_config_path())),
                         type=str,
                         default=None)
-
+    
     args = parser.parse_args(args)
     if args.config is None:
         if os.path.exists(USER_CONFIG_PATH):
@@ -115,16 +115,16 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
 
     with open(args.config, "r") as f:
         config = Config.load(f, {ConfigType.SUBMIT}, args, metadata.lang.name)
-
-    try:
-        client = AtCoderClient()
-        client.login(save_session_cache=not args.save_no_session_cache,
-                     credential_supplier=credential_supplier,
-                     use_local_session_cache=use_local_session_cache,
-                     )
-    except LoginError:
-        logger.error("Login failed. Try again.")
-        return False
+    if client is None:
+        try:
+            client = AtCoderClient()
+            client.login(save_session_cache=not args.save_no_session_cache,
+                         credential_supplier=credential_supplier,
+                         use_local_session_cache=use_local_session_cache,
+                         )
+        except LoginError:
+            logger.error("Login failed. Try again.")
+            return False
 
     tester_args = []
     if args.exec:
@@ -139,8 +139,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
         tester_args += ["-v", str(args.error_value)]
 
     if args.force or tester.main("", tester_args):
-        submissions = client.download_submission_list(metadata.problem.contest)
         if not args.unlock_safety:
+            submissions = client.download_submission_list(metadata.problem.contest)
             for submission in submissions:
                 if submission.problem_id == metadata.problem.problem_id:
                     logger.error(with_color("Cancel submitting because you already sent some code to the problem. Please "
@@ -151,7 +151,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
         code_path = args.code or os.path.join(args.dir, metadata.code_filename)
 
         if config.submit_config.exec_before_submit:
-            run_command(config.submit_config.exec_before_submit, "./")
+            run_command(config.submit_config.exec_before_submit, args.dir)
             if not config.submit_config.submit_filename:
                 logger.error("submit_filename is not specified")
                 return False
@@ -160,20 +160,22 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
 
         for encoding in ['utf8', 'utf-8_sig', 'cp932']:
             try:
-                with open(code_path, 'r', encoding=encoding) as f:
+                with open(os.path.join(args.dir, code_path), 'r', encoding=encoding) as f:
                     source = f.read()
                 break
             except UnicodeDecodeError:
                 logger.warning("code wasn't recognized as {}".format(encoding))
         logger.info(
             "Submitting {} as {}".format(code_path, metadata.lang.name))
+        print("start of submission!!!!!!!!!!!!!!!!!!!!!!!!")
         submission = client.submit_source_code(
             metadata.problem.contest, metadata.problem, metadata.lang, source)
+        print("end of submission!!!!!!!!!!!!!!")
         logger.info("{} {}".format(
             with_color("Done!", Fore.LIGHTGREEN_EX),
             metadata.problem.contest.get_submissions_url(submission)))
         if config.submit_config.exec_after_submit:
-            run_command(config.submit_config.exec_after_submit, "./")
+            run_command(config.submit_config.exec_after_submit, args.dir)
 
 
 if __name__ == "__main__":

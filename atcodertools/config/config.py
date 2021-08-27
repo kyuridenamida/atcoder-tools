@@ -71,6 +71,7 @@ class Config:
         :return: Config instance
         """
         config_dic = toml.load(fp)
+        print(config_dic)
 
         result = Config()
         if not lang:
