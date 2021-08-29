@@ -120,12 +120,14 @@ class TestAtCoderClientMock(unittest.TestCase):
         )
         self.assertFalse(self.client.check_logging_in())
 
+    @restore_client_after_run
     def test_exec_on_submit(self):
         global submitted_source_code
-        submitted_source_code = "hogehoge"
+        submitted_source_code = None
 
         def create_fake_request_func_for_source(get_url_to_resp: Dict[str, MockResponse] = None,
-                                                post_url_to_resp: Dict[str, MockResponse] = None,
+                                                post_url_to_resp: Dict[str,
+                                                                       MockResponse] = None,
                                                 ):
             global submitted_source_code
 
@@ -147,12 +149,14 @@ class TestAtCoderClientMock(unittest.TestCase):
         test_dir = os.path.join(RESOURCE_DIR, "exec_on_submit")
         config_path = os.path.join(test_dir, "config.toml")
 
-        submit.main('', ["--dir", test_dir, "--config", config_path, "-f", "-u"], client=self.client)
-        self.assertTrue(os.path.exists(os.path.join(test_dir, "exec_before_submit_is_completed")))
+        submit.main('', ["--dir", test_dir, "--config",
+                    config_path, "-f", "-u"], client=self.client)
+        self.assertTrue(os.path.exists(os.path.join(
+            test_dir, "exec_before_submit_is_completed")))
         self.assertEqual(submitted_source_code, "Kyuuridenamida\n")
-        self.assertTrue(os.path.exists(os.path.join(test_dir, "exec_after_submit_is_completed")))
+        self.assertTrue(os.path.exists(os.path.join(
+            test_dir, "exec_after_submit_is_completed")))
         print(submitted_source_code)
-
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ import os
 from os.path import expanduser
 import toml
 
+from atcodertools.config.compiler_config import CompilerConfig
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
@@ -14,7 +15,6 @@ from atcodertools.config.submit_config import SubmitConfig
 
 
 USER_CONFIG_PATH = os.path.join(expanduser("~"), ".atcodertools.toml")
-from atcodertools.config.compiler_config import CompilerConfig
 
 
 class ConfigType(Enum):
@@ -55,7 +55,6 @@ class Config:
                  tester_config: TesterConfig = TesterConfig(),
                  submit_config: SubmitConfig = SubmitConfig(),
                  etc_config: EtcConfig = EtcConfig(),
-                 compiler_config: CompilerConfig = CompilerConfig()
                  ):
         self.code_style_config = code_style_config
         self.postprocess_config = postprocess_config
@@ -71,7 +70,6 @@ class Config:
         :return: Config instance
         """
         config_dic = toml.load(fp)
-        print(config_dic)
 
         result = Config()
         if not lang:

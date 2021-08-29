@@ -95,15 +95,17 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True, cli
                                 get_default_config_path())),
                         type=str,
                         default=None)
-    
+
     args = parser.parse_args(args)
     if args.config is None:
         if os.path.exists(USER_CONFIG_PATH):
             args.config = USER_CONFIG_PATH
-            logger.info(f"config is loaded from USER_CONFIG_PATH({USER_CONFIG_PATH})")
+            logger.info(
+                f"config is loaded from USER_CONFIG_PATH({USER_CONFIG_PATH})")
         else:
             args.config = get_default_config_path()
-            logger.info(f"No USER_CONFIG_PATH({USER_CONFIG_PATH}). Default config path({args.config}) is laoded. ")
+            logger.info(
+                f"No USER_CONFIG_PATH({USER_CONFIG_PATH}). Default config path({args.config}) is laoded. ")
     metadata_file = os.path.join(args.dir, "metadata.json")
 
     try:
@@ -140,7 +142,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True, cli
 
     if args.force or tester.main("", tester_args):
         if not args.unlock_safety:
-            submissions = client.download_submission_list(metadata.problem.contest)
+            submissions = client.download_submission_list(
+                metadata.problem.contest)
             for submission in submissions:
                 if submission.problem_id == metadata.problem.problem_id:
                     logger.error(with_color("Cancel submitting because you already sent some code to the problem. Please "
@@ -167,10 +170,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True, cli
                 logger.warning("code wasn't recognized as {}".format(encoding))
         logger.info(
             "Submitting {} as {}".format(code_path, metadata.lang.name))
-        print("start of submission!!!!!!!!!!!!!!!!!!!!!!!!")
         submission = client.submit_source_code(
             metadata.problem.contest, metadata.problem, metadata.lang, source)
-        print("end of submission!!!!!!!!!!!!!!")
         logger.info("{} {}".format(
             with_color("Done!", Fore.LIGHTGREEN_EX),
             metadata.problem.contest.get_submissions_url(submission)))
