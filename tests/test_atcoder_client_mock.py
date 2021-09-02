@@ -1,6 +1,7 @@
 import os
 import tempfile
 import unittest
+import shutil
 from typing import Dict
 
 from atcodertools.client.atcoder import AtCoderClient
@@ -146,7 +147,8 @@ class TestAtCoderClientMock(unittest.TestCase):
             {contest.get_submit_url(): fake_resp("submit/after_post.html")}
         )
 
-        test_dir = os.path.join(RESOURCE_DIR, "exec_on_submit")
+        test_dir = os.path.join(self.temp_dir, "exec_on_submit")
+        shutil.copytree(os.path.join(RESOURCE_DIR, "exec_on_submit"), test_dir)
         config_path = os.path.join(test_dir, "config.toml")
 
         submit.main('', ["--dir", test_dir, "--config",
@@ -156,7 +158,6 @@ class TestAtCoderClientMock(unittest.TestCase):
         self.assertEqual(submitted_source_code, "Kyuuridenamida\n")
         self.assertTrue(os.path.exists(os.path.join(
             test_dir, "exec_after_submit_is_completed")))
-        print(submitted_source_code)
 
 
 if __name__ == "__main__":
