@@ -208,6 +208,7 @@ optional arguments:
 - `workspace_dir='~/atcoder-workspace/'` ワークスペースのルートは `~/atcoder-workspace/`
 - `lang='cpp'` 言語設定は `cpp` (提出時もしくはデフォルトのコードジェネレーター生成時に使われます)
 - `code_generator_file="~/custom_code_generator.py"` カスタムコードジェネレーター `~/custom_code_generator.py`を指定する
+- `code_generator_toml="~/universal_code_generator.toml"` ユニバーサルコードジェネレーター `~/universal_code_generator.toml`を指定する
 - `exec_on_each_problem_dir='clang-format -i ./*.cpp'` `exec_on_contest_dir='touch CMakeLists.txt'`
     - 問題用ディレクトリ内で毎回`clang-format`を実行して、最後に`CMakeLists.txt`(空)をコンテスト用ディレクトリに生成する
 
@@ -256,7 +257,7 @@ out_example_format="out_{}.txt"
 
 
 ### ユニバーサルコードジェネレーター
-ユニバーサルコードジェネレーターはループ・配列アクセス方法等のいくつかの言語仕様を記述するだけでカスタムコードジェネレーターよりも簡単にコード生成することを意図して作成したジェネレーターです。設定ファイルの書き方は以下です。
+ユニバーサルコードジェネレーターはループ・配列アクセス方法等のいくつかの言語仕様を記述するだけでカスタムコードジェネレーターよりも簡単にコード生成することを意図して作成したジェネレーターです。設定ファイルの`code_generator_toml`で指定します。書き方は以下です。
 
 - *base_indent* 入力部分のインデント数
 - *insert_space_around_operators* 入力部分の変数や演算子の間にスペースを入れるかどうかをtrue/falseで指定
