@@ -125,6 +125,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
             with_color("Done!", Fore.LIGHTGREEN_EX),
             metadata.problem.contest.get_submissions_url(submission)))
 
+    return True
+
 
 if __name__ == "__main__":
     main(sys.argv[0], sys.argv[1:])
