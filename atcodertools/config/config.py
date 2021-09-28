@@ -37,6 +37,13 @@ def get_config_dic(config_dic, config_type: ConfigType, lang=None):
         else:
             result[k] = v
     result = _update_config_dict(result, lang_dic)
+
+    if config_type == ConfigType.TESTER:
+        compiler_dic = config_dic.get("compiler", {})
+        compile_command = compiler_dic.get("compile_command", None)
+        result = _update_config_dict(
+            result, {"compile_command": compile_command})
+
     return result
 
 

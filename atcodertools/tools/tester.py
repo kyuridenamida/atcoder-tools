@@ -394,7 +394,10 @@ def main(prog, args) -> bool:
     elif config.tester_config.compile_before_testing:
         # Use atcoder-tools's functionality to compile source code
         force_compile = not config.tester_config.compile_only_when_diff_detected
-        compile_command = config.tester_config.compile_command
+        if args.compile_command:
+            compile_command = args.compile_command
+        else:
+            compile_command = config.tester_config.compile_command
         if compile_command:
             compile_command = lang.get_compile_command("main", compile_command)
         try:
