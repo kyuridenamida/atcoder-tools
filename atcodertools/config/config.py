@@ -1,20 +1,27 @@
 from argparse import Namespace
-from typing import TextIO, Dict, Any, Optional
+from typing import TextIO, Dict, Any, Set, Optional
 from enum import Enum
 
+import os
+from os.path import expanduser
 import toml
 
+from atcodertools.config.compiler_config import CompilerConfig
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.config.postprocess_config import PostprocessConfig
 from atcodertools.config.tester_config import TesterConfig
-from atcodertools.config.compiler_config import CompilerConfig
+from atcodertools.config.submit_config import SubmitConfig
+
+
+USER_CONFIG_PATH = os.path.join(expanduser("~"), ".atcodertools.toml")
 
 
 class ConfigType(Enum):
     CODESTYLE = "codestyle"
     POSTPROCESS = "postprocess"
     TESTER = "tester"
+    SUBMIT = "submit"
     ETC = "etc"
     COMPILER = "compiler"
 
@@ -46,16 +53,17 @@ class Config:
                  code_style_config: CodeStyleConfig = CodeStyleConfig(),
                  postprocess_config: PostprocessConfig = PostprocessConfig(),
                  tester_config: TesterConfig = TesterConfig(),
+                 submit_config: SubmitConfig = SubmitConfig(),
                  etc_config: EtcConfig = EtcConfig(),
-                 compiler_config: CompilerConfig = CompilerConfig()
                  ):
         self.code_style_config = code_style_config
         self.postprocess_config = postprocess_config
         self.tester_config = tester_config
+        self.submit_config = submit_config
         self.etc_config = etc_config
 
     @classmethod
-    def load(cls, fp: TextIO, get_config_type, args: Optional[Namespace] = None, lang=None):
+    def load(cls, fp: TextIO, get_config_type: Set[ConfigType], args: Optional[Namespace] = None, lang=None):
         """
         :param fp: .toml file's file pointer
         :param args: command line arguments
@@ -94,6 +102,15 @@ class Config:
                                                              compile_only_when_diff_detected=args.compile_only_when_diff_detected,
                                                              compile_command=args.compile_command))
             result.tester_config = TesterConfig(**tester_config_dic)
+        if ConfigType.SUBMIT in get_config_type:
+            submit_config_dic = get_config_dic(
+                config_dic, ConfigType.SUBMIT, lang)
+            if args:
+                submit_config_dic = _update_config_dict(submit_config_dic,
+                                                        dict(exec_before_submit=args.exec_before_submit,
+                                                             exec_after_submit=args.exec_after_submit,
+                                                             submit_filename=args.submit_filename))
+            result.submit_config = SubmitConfig(**submit_config_dic)
         if ConfigType.ETC in get_config_type:
             etc_config_dic = get_config_dic(config_dic, ConfigType.ETC)
             if args:

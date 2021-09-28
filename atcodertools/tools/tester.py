@@ -7,7 +7,6 @@ import re
 import sys
 from pathlib import Path
 from typing import List, Tuple, Optional
-from os.path import expanduser
 
 from colorama import Fore
 
@@ -19,13 +18,10 @@ from atcodertools.executils.run_program import ExecResult, ExecStatus, run_progr
 from atcodertools.tools.models.metadata import Metadata, DEFAULT_METADATA
 from atcodertools.tools.utils import with_color
 from atcodertools.tools.compiler import compile_main_and_judge_programs, BadStatusCodeException
-from atcodertools.config.config import Config, ConfigType
+from atcodertools.config.config import Config, ConfigType, USER_CONFIG_PATH
 from atcodertools.tools import get_default_config_path
 
 DEFAULT_EPS = 0.000000001
-
-
-USER_CONFIG_PATH = os.path.join(expanduser("~"), ".atcodertools.toml")
 
 
 class NoExecutableFileError(Exception):
