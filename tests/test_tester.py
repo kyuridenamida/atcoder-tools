@@ -273,7 +273,7 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "--compile-before-testing",
                  "-j", "normal",
-                 "--config",  config_path]))
+                 "--config", config_path]))
         sys.stdout = sys.__stdout__
         stdouts = f.getvalue().split("\n")
         self.assertTrue(
