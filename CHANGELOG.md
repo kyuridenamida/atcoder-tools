@@ -1,4 +1,9 @@
 # Change Log
+## 2.8.0 / 2021-8-19
+Release version 2.8.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#242](https://github.com/kyuridenamida/atcoder-tools/pull/242)|use input_part_prefix to generate code properly| |[kotet](https://github.com/kotet)|
 ## 2.7.0 / 2021-8-19
 Release version 2.7.0
 |PR|Change Summary|Label|Author|

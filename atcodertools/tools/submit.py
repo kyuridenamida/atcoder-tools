@@ -178,6 +178,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True, cli
         if config.submit_config.exec_after_submit:
             run_command(config.submit_config.exec_after_submit, args.dir)
 
+    return True
+
 
 if __name__ == "__main__":
     main(sys.argv[0], sys.argv[1:])
