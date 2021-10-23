@@ -199,6 +199,7 @@ optional arguments:
 
 ## 設定ファイルの例
 `~/.atcodertools.toml`に以下の設定を保存すると、コードスタイルや、コード生成後に実行するコマンドを指定できます。
+設定ファイルはcodestyle, postprocess, tester, submit, etcのテーブルに分かれていて、codestyle.nimというようにテーブル名の後に.[言語名]で指定するとその言語のみに適用されます。
 
 以下は、次の挙動を期待する場合の`~/.atcodertools.toml`の例です。
 
@@ -224,6 +225,7 @@ optional arguments:
 - `in_example_format="in_{}.txt"` テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
 - `out_example_format="out_{}.txt"` テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
 
+
 ```toml
 [codestyle]
 indent_type='space' # 'tab' or 'space'
@@ -248,8 +250,22 @@ save_no_session_cache=false
 skip_existing_problems=false
 in_example_format="in_{}.txt"
 out_example_format="out_{}.txt"
-
 ```
+
+また、以下のように提出時にコマンドを実行してその結果を提出することが可能です。C++以外のAC-libraryを自動に展開するような用途で用いることができます。下記の例はNim言語でACLのexpanderを実行しその出力ファイルを提出し、その後ローカルの出力ファイルを削除するという設定です。
+なお、C++に関してはAC-libraryがatcoderのジャッジにも搭載されているためこのような設定は不要です。
+
+- `exec_before_submit` 提出前に実行するコマンド
+- `submit_filename` exec_before_submitを実行した結果提出するファイルが変わる場合に指定
+- `exec_after_submit` 提出後に行う処理
+
+```toml
+[submit.nim]
+exec_before_submit='rm ./combined.nim | python3 ~/git/Nim-ACL/expander.py main.nim --lib /home/chaemon/git/Nim-ACL/ -s'
+exec_after_submit='rm ./combined.nim'
+submit_filename='./combined.nim'
+```
+
 
 ### カスタムコードジェネレーター
 [標準のC++コードジェネレーター](https://github.com/kyuridenamida/atcoder-tools/blob/master/atcodertools/codegen/code_generators/cpp.py)に倣って、
