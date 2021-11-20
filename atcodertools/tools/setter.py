@@ -52,29 +52,30 @@ def main(prog, args) -> None:
     output_metadata = Metadata.load_from(
         os.path.join(args.dir, "metadata.json"))
 
+    old_metadata_judge_type = old_metadata.judge_method.judge_type.value
+
     if args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
         new_metadata_judge_type = "decimal"
-    else:
+        output_metadata.judge_method.error_type = ErrorType(args.judge_type)
+    elif args.judge_type is not None:
         new_metadata_judge_type = args.judge_type
-
-    old_metadata_judge_type = old_metadata.judge_method.judge_type.value
+    else:
+        new_metadata_judge_type = old_metadata_judge_type
 
     if new_metadata_judge_type is not None and new_metadata_judge_type != old_metadata_judge_type:
         if new_metadata_judge_type == JudgeType.Normal.value:
             output_metadata.judge_method = NormalJudge()
         elif new_metadata_judge_type == JudgeType.Decimal.value:
             output_metadata.judge_method = DecimalJudge()
+            if args.error_value is None:
+                logger.warn(
+                    "Error-value is not specified. DEFAULT_EPS is set")
+                output_metadata.judge_method.diff = DEFAULT_EPS
         else:
             raise NoJudgeTypeException()
 
-    if new_metadata_judge_type == JudgeType.Decimal.value:
-        if args.error_value is not None:
-            output_metadata.judge_method.diff = args.error_value
-        else:
-            logger.warn(
-                "Error-value is not specified. Default value will be set.")
-            output_metadata.judge_method.diff = DEFAULT_EPS
-        output_metadata.judge_method.error_type = ErrorType(args.judge_type)
+    if new_metadata_judge_type == JudgeType.Decimal.value and args.error_value is not None:
+        output_metadata.judge_method.diff = args.error_value
 
     if args.lang is not None:
         if args.lang != output_metadata.lang.name:

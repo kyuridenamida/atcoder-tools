@@ -1,0 +1,18 @@
+{
+ "code_filename": "main.cpp",
+ "judge": {
+  "diff": 0.001,
+  "error_type": "absolute_or_relative",
+  "judge_type": "decimal"
+ },
+ "lang": "cpp",
+ "problem": {
+  "alphabet": "A",
+  "contest": {
+   "contest_id": "abc117"
+  },
+  "problem_id": "abc117_a"
+ },
+ "sample_in_pattern": "in_*.txt",
+ "sample_out_pattern": "out_*.txt"
+}
