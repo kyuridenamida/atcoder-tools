@@ -44,6 +44,10 @@ def main(prog, args) -> None:
                         help="Target directory to test. [Default] Current directory",
                         default=".")
 
+    parser.add_argument("--without-login",
+                        action="store_true",
+                        help="Download data without login")
+
     args = parser.parse_args(args)
 
     old_metadata = Metadata.load_from(os.path.join(args.dir, "metadata.json"))
@@ -87,8 +91,10 @@ def main(prog, args) -> None:
             main_code_filename = os.path.join(
                 args.dir, output_metadata.code_filename)
             if not os.path.exists(main_code_filename):
-                codegen_main("", ["--lang", output_metadata.lang.name,
-                                  url], open(main_code_filename, 'w'))
+                a = ["--lang", output_metadata.lang.name, url]
+                if args.without_login:
+                    a.append("--without-login")
+                codegen_main("", a, open(main_code_filename, 'w'))
             else:
                 print("File exists: ", output_metadata.code_filename)
         else:

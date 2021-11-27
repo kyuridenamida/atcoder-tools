@@ -41,7 +41,8 @@ class TestSetter(unittest.TestCase):
         main(
             "",
             ["--lang", "java",
-             "--dir", test_dir]
+             "--dir", test_dir,
+             "--without-login"]
         )
         self.assertEqual(open(os.path.join(test_dir, "main.java")).read(),
                          open(os.path.join(RESOURCE_DIR, "ans", "main.java")).read())
