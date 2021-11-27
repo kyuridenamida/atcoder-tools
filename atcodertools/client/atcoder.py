@@ -103,7 +103,7 @@ class AtCoderClient(metaclass=Singleton):
             "csrf_token": token
         }, method='POST')
 
-        if resp.text.find("パスワードを忘れた方はこちら") != -1:
+        if resp.text.find("パスワードを忘れた方はこちら") != -1 or resp.text.find("Forgot your password") != -1:
             raise LoginError
 
         if use_local_session_cache and save_session_cache:
