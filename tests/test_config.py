@@ -139,6 +139,13 @@ class TestConfig(unittest.TestCase):
         self.assertEqual('g++ main.cpp -o main -std=c++17',
                          config.compiler_config.compile_command)
 
+        # check that config.tester_config has compile_command
+        with open(os.path.join(RESOURCE_DIR, "compiler_options.toml"), 'r') as f:
+            config = Config.load(
+                f, {ConfigType.TESTER})
+            self.assertEqual('g++ main.cpp -o main -std=c++17',
+                             config.tester_config.compile_command)
+
 
 if __name__ == "__main__":
     unittest.main()

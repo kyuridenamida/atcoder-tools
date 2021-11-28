@@ -2,6 +2,8 @@ import os
 import unittest
 import shutil
 import tempfile
+import io
+import sys
 
 from colorama import Fore
 from unittest.mock import patch, mock_open, MagicMock
@@ -259,6 +261,23 @@ class TestTester(unittest.TestCase):
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main(
                     '', ['-d', lang_dir, "-n", "{:d}".format(i), "--compile-before-testing", "-j", "normal"]))
+
+    def test_compiler_when_compiler_command_is_specified_in_option_file(self):
+        test_dir = os.path.join(self.temp_dir, "test")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_compiler_when_compiler_command_is_specified_in_option_file"), test_dir)
+        config_path = os.path.join(
+            RESOURCE_DIR, "test_compiler_when_compiler_command_is_specified_in_option_file", "tester_options.toml")
+        f = io.StringIO()
+        sys.stdout = f
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "--compile-before-testing",
+                 "-j", "normal",
+                 "--config", config_path]))
+        sys.stdout = sys.__stdout__
+        stdouts = f.getvalue().split("\n")
+        self.assertTrue(
+            True if "compile command:  g++ main.cpp -o main -std=c++17" in stdouts else False)
 
 
 if __name__ == '__main__':

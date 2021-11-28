@@ -1,0 +1,5 @@
+[codestyle]
+indent_width = 8
+[compiler]
+compile_command='g++ main.cpp -o main -std=c++17'
+compile_only_when_diff_detected=true
