@@ -1,4 +1,11 @@
 # Change Log
+## 2.10.0 / 2021-11-29
+Release version 2.10.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#247](https://github.com/kyuridenamida/atcoder-tools/pull/247)|READMEのexec on submitの部分を加筆| |[chaemon](https://github.com/chaemon)|
+|[#246](https://github.com/kyuridenamida/atcoder-tools/pull/246)|Changed to use compile_command in the toml file when test and submit|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[shibukazu](https://github.com/shibukazu)|
+|[#234](https://github.com/kyuridenamida/atcoder-tools/pull/234)|submitの際のコマンド実行を追加|![#84b6eb](https://via.placeholder.com/15/84b6eb/000000?text=+) **enhancement**|[chaemon](https://github.com/chaemon)|
 ## 2.9.0 / 2021-9-28
 Release version 2.9.0
 |PR|Change Summary|Label|Author|
