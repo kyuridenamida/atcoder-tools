@@ -163,7 +163,7 @@ def main(prog, args, output_file=sys.stdout):
     config = get_config(args)
 
     client = AtCoderClient()
-    if not config.etc_config.download_without_login:
+    if not args.without_login or not config.etc_config.download_without_login:
         try:
             client.login(
                 save_session_cache=not config.etc_config.save_no_session_cache)

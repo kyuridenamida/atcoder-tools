@@ -16,6 +16,13 @@ class ErrorType(Enum):
     AbsoluteOrRelative = "absolute_or_relative"
 
 
+DEFAULT_EPS = 1e-9
+
+
+class NoJudgeTypeException(Exception):
+    pass
+
+
 class Judge(metaclass=ABCMeta):
     @abstractmethod
     def verify(self, output, expected):
