@@ -40,7 +40,7 @@ class Metadata:
                 raise Exception("invalid judge type")
         else:
             judge_method = NormalJudge()
-        
+
         if "timeout" in dic:
             timeout = dic["timeout"]
         else:

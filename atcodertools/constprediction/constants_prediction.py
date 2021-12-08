@@ -38,7 +38,7 @@ class MultipleDecimalCandidatesError(Exception):
 
 MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
 DECIMAL_ANCHORS = ["誤差", " error "]
-LIMIT_ANCHORS = ["実行時間制限", "Time Limit"]
+LIMIT_ANCHORS = ["時間制限", "Time Limit"]
 
 MOD_STRATEGY_RE_LIST = [
     re.compile("([0-9]+).?.?.?で割った"),
@@ -225,7 +225,7 @@ def predict_constants(html: str) -> ProblemConstantSet:
         logger.warning("decimal prediction failed -- "
                        "two or more candidates {} are detected as decimal values".format(e.cands))
         judge = NormalJudge()
-    
+
     try:
         timeout = predict_limit(html)
     except MultipleLimitCandidatesError as e:

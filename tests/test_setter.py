@@ -68,7 +68,7 @@ class TestSetter(unittest.TestCase):
              "--dir", test_dir]
         )
         metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
-        self.assertTrue(abs(metadata.judge_method.diff - 1e-7) < 1e-11)
+        self.assertTrue(abs(metadata.judge_method.diff - 1e-7) < 1e-11)  # TODO: これでいいのか？
 
 
 if __name__ == '__main__':
