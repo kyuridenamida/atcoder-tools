@@ -8,7 +8,7 @@ from logging import getLogger
 from atcodertools.tools.setter import main
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.common.language import JAVA
-from atcodertools.common.judgetype import DecimalJudge, JudgeType, ErrorType
+from atcodertools.common.judgetype import ErrorType
 
 logger = getLogger(__name__)
 
@@ -68,7 +68,8 @@ class TestSetter(unittest.TestCase):
              "--dir", test_dir]
         )
         metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
-        self.assertTrue(abs(metadata.judge_method.diff - 1e-7) < 1e-11)  # TODO: これでいいのか？
+        self.assertTrue(abs(metadata.judge_method.diff - 1e-7)
+                        < 1e-11)  # TODO: これでいいのか？
 
 
 if __name__ == '__main__':

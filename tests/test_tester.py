@@ -279,6 +279,32 @@ class TestTester(unittest.TestCase):
         self.assertTrue(
             True if "compile command:  g++ main.cpp -o main -std=c++17" in stdouts else False)
 
+    def test_timeout(self):
+        test_dir = os.path.join(self.temp_dir, "test_timeout")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_timeout"), test_dir)
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "--compile-before-testing",
+                 "-j", "normal",
+                 "--compile-command", "g++ main.cpp -o main"]))
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "--compile-before-testing",
+                 "-j", "normal", "-t", "4",
+                 "--compile-command", "g++ main.cpp -o main"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "--compile-before-testing",
+                 "-j", "normal", "-t", "6",
+                 "--compile-command", "g++ main.cpp -o main"]))
+
+    def test_timeout_fail(self):
+        test_dir = os.path.join(self.temp_dir, "test_timeout_fail")
+        shutil.copytree(os.path.join(
+            RESOURCE_DIR, "test_timeout_fail"), test_dir)
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "--compile-before-testing",
+                 "-j", "normal",
+                 "--compile-command", "g++ main.cpp -o main"]))
+
 
 if __name__ == '__main__':
     unittest.main()
