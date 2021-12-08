@@ -7,6 +7,7 @@ from atcodertools.client.models.problem_content import ProblemContent, InputForm
 from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, Judge
 from atcodertools.common.logging import logger
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
+import math
 
 
 class YesNoPredictionFailedError(Exception):
@@ -14,6 +15,12 @@ class YesNoPredictionFailedError(Exception):
 
 
 class MultipleModCandidatesError(Exception):
+
+    def __init__(self, cands):
+        self.cands = cands
+
+
+class MultipleLimitCandidatesError(Exception):
 
     def __init__(self, cands):
         self.cands = cands
@@ -31,6 +38,7 @@ class MultipleDecimalCandidatesError(Exception):
 
 MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
 DECIMAL_ANCHORS = ["誤差", " error "]
+LIMIT_ANCHORS = ["実行時間制限", "Time Limit"]
 
 MOD_STRATEGY_RE_LIST = [
     re.compile("([0-9]+).?.?.?で割った"),
@@ -47,6 +55,10 @@ DECIMAL_STRATEGY_RE_LIST_VAL = [
     re.compile("1e(-[0-9]+)")
 ]
 
+LIMIT_STRATEGY_RE_LIST = [
+    re.compile("([0-9.]+)\s*sec")
+]
+
 
 def is_mod_context(sentence):
     for kw in MOD_ANCHORS:
@@ -57,6 +69,13 @@ def is_mod_context(sentence):
 
 def is_decimal_context(sentence):
     for kw in DECIMAL_ANCHORS:
+        if kw in sentence:
+            return True
+    return False
+
+
+def is_limit_context(sentence):
+    for kw in LIMIT_ANCHORS:
         if kw in sentence:
             return True
     return False
@@ -161,6 +180,32 @@ def predict_judge_method(html: str) -> Judge:
     return NormalJudge()
 
 
+def predict_limit(html: str) -> Optional[int]:
+    def normalize(sentence):
+        return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").lower().strip()
+
+    soup = BeautifulSoup(html, "html.parser")
+    sentences = soup.get_text().split("\n")
+    sentences = [normalize(s) for s in sentences if is_limit_context(s)]
+
+    limit_cands = set()
+
+    for s in sentences:
+        for regexp in LIMIT_STRATEGY_RE_LIST:
+            m = regexp.search(s)
+            if m is not None:
+                extracted_val = float(m.group(1))
+                limit_cands.add(extracted_val)
+
+    if len(limit_cands) == 0:
+        return None
+
+    if len(limit_cands) == 1:
+        return math.floor(list(limit_cands)[0] * 1000.0 + 0.5)
+
+    raise MultipleModCandidatesError(limit_cands)
+
+
 def predict_constants(html: str) -> ProblemConstantSet:
     try:
         yes_str, no_str = predict_yes_no(html)
@@ -180,5 +225,12 @@ def predict_constants(html: str) -> ProblemConstantSet:
         logger.warning("decimal prediction failed -- "
                        "two or more candidates {} are detected as decimal values".format(e.cands))
         judge = NormalJudge()
+    
+    try:
+        timeout = predict_limit(html)
+    except MultipleLimitCandidatesError as e:
+        logger.warning("limit prediction failed -- "
+                       "two or more candidates {} are detected as limit".format(e.cands))
+        timeout = None
 
-    return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str, judge_method=judge)
+    return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str, judge_method=judge, timeout=timeout)

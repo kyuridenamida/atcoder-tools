@@ -8,13 +8,14 @@ from atcodertools.common.language import Language, CPP
 class Metadata:
 
     def __init__(self, problem: Problem, code_filename: str, sample_in_pattern: str, sample_out_pattern: str,
-                 lang: Language, judge_method: Judge = NormalJudge()):
+                 lang: Language, judge_method: Judge = NormalJudge(), timeout: float = None):
         self.problem = problem
         self.code_filename = code_filename
         self.sample_in_pattern = sample_in_pattern
         self.sample_out_pattern = sample_out_pattern
         self.lang = lang
         self.judge_method = judge_method
+        self.timeout = timeout
 
     def to_dict(self):
         return {
@@ -24,6 +25,7 @@ class Metadata:
             "sample_out_pattern": self.sample_out_pattern,
             "lang": self.lang.name,
             "judge": self.judge_method.to_dict(),
+            "timeout": self.timeout,
         }
 
     @classmethod
@@ -38,6 +40,11 @@ class Metadata:
                 raise Exception("invalid judge type")
         else:
             judge_method = NormalJudge()
+        
+        if "timeout" in dic:
+            timeout = dic["timeout"]
+        else:
+            timeout = None
 
         return Metadata(
             problem=Problem.from_dict(dic["problem"]),
@@ -45,7 +52,8 @@ class Metadata:
             sample_in_pattern=dic["sample_in_pattern"],
             sample_out_pattern=dic["sample_out_pattern"],
             lang=Language.from_name(dic["lang"]),
-            judge_method=judge_method
+            judge_method=judge_method,
+            timeout=timeout
         )
 
     @classmethod

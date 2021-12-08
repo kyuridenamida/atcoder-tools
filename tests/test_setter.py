@@ -6,6 +6,9 @@ from os.path import relpath
 from logging import getLogger
 
 from atcodertools.tools.setter import main
+from atcodertools.tools.models.metadata import Metadata
+from atcodertools.common.language import JAVA
+from atcodertools.common.judgetype import DecimalJudge, JudgeType, ErrorType
 
 logger = getLogger(__name__)
 
@@ -46,8 +49,9 @@ class TestSetter(unittest.TestCase):
         )
         self.assertEqual(open(os.path.join(test_dir, "main.java")).read(),
                          open(os.path.join(RESOURCE_DIR, "ans", "main.java")).read())
-        self.assertEqual(open(os.path.join(test_dir, "metadata.json")).read(),
-                         open(os.path.join(RESOURCE_DIR, "ans", "metadata_java.json")).read())
+
+        metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
+        self.assertEqual(metadata.lang, JAVA)
 
         main(
             "",
@@ -55,17 +59,16 @@ class TestSetter(unittest.TestCase):
              "--dir", test_dir]
         )
 
-        self.assertEqual(open(os.path.join(test_dir, "metadata.json")).read(),
-                         open(os.path.join(RESOURCE_DIR, "ans", "metadata_change_to_relative.json")).read())
+        metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
+        self.assertEqual(metadata.judge_method.error_type, ErrorType.Relative)
 
         main(
             "",
             ["--error-value", "1e-7",
              "--dir", test_dir]
         )
-
-        self.assertEqual(open(os.path.join(test_dir, "metadata.json")).read(),
-                         open(os.path.join(RESOURCE_DIR, "ans", "metadata_change_error_value.json")).read())
+        metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
+        self.assertTrue(abs(metadata.judge_method.diff - 1e-7) < 1e-11)
 
 
 if __name__ == '__main__':
