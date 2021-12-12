@@ -16,9 +16,10 @@ class MultiplePredictionResultsError(Exception):
         self.cands = cands
 
 
-def predict_format(content: ProblemContent) -> FormatPredictionResult:
+def predict_format(content: ProblemContent) -> list[FormatPredictionResult]:
     input_format = content.get_input_format()
     samples = content.get_samples()
+    print("input_format: ", input_format)
 
     if len(samples) == 0:
         raise NoPredictionResultError
@@ -30,16 +31,18 @@ def predict_format(content: ProblemContent) -> FormatPredictionResult:
         raise NoPredictionResultError
 
     output_cands = []
-    for format in tokenized_possible_formats:
-        for to_1d_flag in [False, True]:
-            try:
-                simple_format = predict_simple_format(
-                    format.var_tokens, to_1d_flag)
-                output_cands.append(
-                    FormatPredictionResult.create_typed_format(simple_format, predict_types(simple_format, samples)))
-                break
-            except (TypePredictionFailedError, SimpleFormatPredictionFailedError):
-                pass
+    for to_1d_flag in [False, True]:
+        simple_format = []
+        try:
+            for a in tokenized_possible_formats:
+                for format in a:
+                    simple_format.append(predict_simple_format(format.var_tokens, to_1d_flag))
+            predict_types(simple_format, samples)
+            output_cands.append(
+                FormatPredictionResult.create_typed_format(simple_format[0], predict_types(simple_format, samples)))
+            break
+        except (TypePredictionFailedError, SimpleFormatPredictionFailedError):
+            pass
 
     if len(output_cands) > 1:
         raise MultiplePredictionResultsError(output_cands)

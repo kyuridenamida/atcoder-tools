@@ -141,21 +141,65 @@ def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
     return to_dict
 
 
-def predict_types(simple_format: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
+def predict_types(simple_format: list[Format[SimpleVariable]], samples: List[Sample]) -> Dict[str, Type]:
     res_type_dict = {}
-    for sample in samples:
-        token_manager = TokenManager(sample.get_input().split())
-        predictor = TypePredictor(simple_format)
-        try:
-            while not token_manager.is_terminal():
-                predictor.feed(token_manager.next())
-            predictor.ensure_terminal()
+    if len(simple_format) == 1:
+        for sample in samples:
+            token_manager = TokenManager(sample.get_input().split())
+            predictor = TypePredictor(simple_format[0])
+            try:
+                while not token_manager.is_terminal():
+                    predictor.feed(token_manager.next())
+                predictor.ensure_terminal()
+                res_type_dict = merge_type_dicts(
+                    res_type_dict,
+                    predictor.get_typing_result())
+            except (
+                    TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
+                    InvalidLoopIndexError, EvaluateError):
+                raise TypePredictionFailedError
+    else:
+        print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+        for sample in samples:
+            token_manager = TokenManager(sample.get_input().split())
+            predictor = TypePredictor(simple_format[0])
+            loop_length_var = "T"
+            loop_length = -1
+            while True:
+                try:
+                    var = predictor._fetch()
+                    s = token_manager.next()
+                    if var.name == loop_length_var:
+                        loop_length = int(s)
+                    print("found: ", var.name, s)
+                    predictor._refresh(var, _convert_to_proper_type(s))
+                except TooManyFetchesError:
+                    break
             res_type_dict = merge_type_dicts(
                 res_type_dict,
                 predictor.get_typing_result())
-        except (
-                TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
-                InvalidLoopIndexError, EvaluateError):
-            raise TypePredictionFailedError
+            assert loop_length >= 0
+            try:
+                for ct in range(loop_length):
+                    print("ct = ", ct)
+                    predictor = TypePredictor(simple_format[1])
+                    while True:
+                        try:
+                            var = predictor._fetch()
+                            s = token_manager.next()
+                            print("found: ", var.name, s)
+                            predictor._refresh(var, _convert_to_proper_type(s))
+                        except TooManyFetchesError:
+                            break
+                    #predictor.ensure_terminal()
+                    res_type_dict = merge_type_dicts(
+                        res_type_dict,
+                        predictor.get_typing_result())
+                print(res_type_dict)
+            except (
+                    TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
+                    InvalidLoopIndexError, EvaluateError):
+                raise TypePredictionFailedError
+
 
     return res_type_dict

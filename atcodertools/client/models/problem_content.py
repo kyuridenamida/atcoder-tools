@@ -34,6 +34,13 @@ class InputFormatDetectionError(Exception):
     pass
 
 
+class InputFormat:
+    def __init__(self, input_format: list[str]):
+        self.type = None
+        self.loop_length_var = None
+        self.input_format = input_format
+
+
 class ProblemContent:
 
     def __init__(self, input_format_text: Optional[str] = None,
@@ -91,12 +98,16 @@ class ProblemContent:
 
             if input_format_tag is None:
                 raise InputFormatDetectionError
-
-            input_format_text = normalize(input_format_tag.text)
+            
+            input_format_text = list(map(lambda x: normalize(x.text), input_format_tag))
+#            input_format_text = normalize(input_format_tag.text)
         except AttributeError:
             raise InputFormatDetectionError
 
-        return input_format_text, res
+        input_format = InputFormat(input_format_text)
+
+#        return input_format_text, res
+        return input_format, res
 
     @staticmethod
     def _primary_strategy(soup):
@@ -114,17 +125,18 @@ class ProblemContent:
             if section_title.startswith("入力例"):
                 input_tags.append(tag.find('pre'))
             elif section_title.startswith("入力"):
-                input_format_tag = tag.find('pre')
+                input_format_tag = tag.findAll('pre')
 
             if section_title.startswith("出力例"):
                 output_tags.append(tag.find('pre'))
         return input_format_tag, input_tags, output_tags
 
+    # TODO: こっちのタイプはmulti caseに未対応!!!
     @staticmethod
     def _secondary_strategy(soup):  # TODO: more descriptive name
         pre_tags = soup.select('pre')
         sample_tags = pre_tags[1:]
         input_tags = sample_tags[0::2]
         output_tags = sample_tags[1::2]
-        input_format_tag = pre_tags[0]
+        input_format_tag = [pre_tags[0]]
         return input_format_tag, input_tags, output_tags
