@@ -375,10 +375,12 @@ def main(prog, args) -> bool:
         config = Config.load(f, {ConfigType.TESTER}, args, lang.name)
 
     if args.timeout is None:
-        if metadata.timeout is None:
+        if metadata.timeout_ms is None:
+            logger.info(
+                "timeout_ms is not found in metadata. Default timeout (2.0 sec) is set. ")
             args.timeout = 2.0
         else:
-            args.timeout = float(metadata.timeout) / 1000.0
+            args.timeout = float(metadata.timeout_ms) / 1000.0
         args.timeout *= config.tester_config.timeout_adjust
 
     in_sample_file_list = sorted(

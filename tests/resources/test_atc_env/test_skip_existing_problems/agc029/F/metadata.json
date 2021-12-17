@@ -13,5 +13,5 @@
  },
  "sample_in_pattern": "input_*.txt",
  "sample_out_pattern": "output_*.txt",
- "timeout": 4000
+ "timeout_ms": 4000
 }
