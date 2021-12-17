@@ -14,6 +14,12 @@ def normalize(content: str) -> str:
     return content.strip().replace('\r', '') + "\n"
 
 
+def normalize_soup(content) -> str:
+    for a in content.findAll('var'):
+        a.replace_with(' ' + a.text + ' ')
+    return normalize(content.text)
+
+
 def is_japanese(ch):
     # Thank you!
     # http://minus9d.hatenablog.com/entry/2015/07/16/231608
@@ -39,6 +45,14 @@ class InputFormat:
         self.type = None
         self.loop_length_var = None
         self.input_format = input_format
+
+
+def _strip_case_vars(s):
+    result = []
+    for line in s.split("\n"):
+        if line.find("case") == -1 and line.find("Case") == -1:
+            result.append(line)
+    return "\n".join(result)
 
 
 class ProblemContent:
@@ -98,15 +112,15 @@ class ProblemContent:
 
             if input_format_tag is None:
                 raise InputFormatDetectionError
-            
-            input_format_text = list(map(lambda x: normalize(x.text), input_format_tag))
-#            input_format_text = normalize(input_format_tag.text)
+            input_format_text = list(map(lambda x: normalize_soup(x), input_format_tag))
         except AttributeError:
             raise InputFormatDetectionError
 
+        if len(input_format_text) == 2:
+            input_format_text[0] = _strip_case_vars(input_format_text[0])
+
         input_format = InputFormat(input_format_text)
 
-#        return input_format_text, res
         return input_format, res
 
     @staticmethod

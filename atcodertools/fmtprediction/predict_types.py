@@ -141,7 +141,7 @@ def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
     return to_dict
 
 
-def predict_types(simple_format: list[Format[SimpleVariable]], samples: List[Sample]) -> Dict[str, Type]:
+def predict_types(simple_format: list[Format[SimpleVariable]], samples: List[Sample], loop_length_var: str) -> Dict[str, Type]:
     res_type_dict = {}
     if len(simple_format) == 1:
         for sample in samples:
@@ -159,7 +159,6 @@ def predict_types(simple_format: list[Format[SimpleVariable]], samples: List[Sam
                     InvalidLoopIndexError, EvaluateError):
                 raise TypePredictionFailedError
     else:
-        print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
         for sample in samples:
             token_manager = TokenManager(sample.get_input().split())
             predictor = TypePredictor(simple_format[0])
@@ -171,7 +170,6 @@ def predict_types(simple_format: list[Format[SimpleVariable]], samples: List[Sam
                     s = token_manager.next()
                     if var.name == loop_length_var:
                         loop_length = int(s)
-                    print("found: ", var.name, s)
                     predictor._refresh(var, _convert_to_proper_type(s))
                 except TooManyFetchesError:
                     break
@@ -181,21 +179,17 @@ def predict_types(simple_format: list[Format[SimpleVariable]], samples: List[Sam
             assert loop_length >= 0
             try:
                 for ct in range(loop_length):
-                    print("ct = ", ct)
                     predictor = TypePredictor(simple_format[1])
                     while True:
                         try:
                             var = predictor._fetch()
                             s = token_manager.next()
-                            print("found: ", var.name, s)
                             predictor._refresh(var, _convert_to_proper_type(s))
                         except TooManyFetchesError:
                             break
-                    #predictor.ensure_terminal()
                     res_type_dict = merge_type_dicts(
                         res_type_dict,
                         predictor.get_typing_result())
-                print(res_type_dict)
             except (
                     TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
                     InvalidLoopIndexError, EvaluateError):
