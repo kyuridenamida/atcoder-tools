@@ -252,7 +252,8 @@ class TestTester(unittest.TestCase):
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_compiler_and_tester_for_each_lang"), test_dir)
-
+        config_path = os.path.join(
+            RESOURCE_DIR, "test_compiler_and_tester_for_each_lang", "config.toml")
         for lang in ALL_LANGUAGES:
             lang_dir = os.path.join(test_dir, lang.name)
 
@@ -260,7 +261,8 @@ class TestTester(unittest.TestCase):
                 lang, force_compile=True, cwd=lang_dir)
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main(
-                    '', ['-d', lang_dir, "-n", "{:d}".format(i), "--compile-before-testing", "-j", "normal"]))
+                    '', ['-d', lang_dir, "-n", "{:d}".format(i), "--compile-before-testing", "-j", "normal",
+                         "--config", config_path]))
 
     def test_compiler_when_compiler_command_is_specified_in_option_file(self):
         test_dir = os.path.join(self.temp_dir, "test")
@@ -283,6 +285,8 @@ class TestTester(unittest.TestCase):
         test_dir = os.path.join(self.temp_dir, "test_timeout")
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_timeout"), test_dir)
+        # main.cppは5秒間停止た後に正しい答えを返す
+        # timeoutは5.252秒になっている
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "--compile-before-testing",
                  "-j", "normal",
@@ -295,6 +299,12 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "--compile-before-testing",
                  "-j", "normal", "-t", "6",
                  "--compile-command", "g++ main.cpp -o main"]))
+        config_path = os.path.join(test_dir, "config_timeout_adjustment.toml")
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "--compile-before-testing",
+                 "-j", "normal",
+                 "--compile-command", "g++ main.cpp -o main",
+                 "--config", config_path]))
 
     def test_timeout_fail(self):
         test_dir = os.path.join(self.temp_dir, "test_timeout_fail")

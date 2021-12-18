@@ -381,7 +381,7 @@ def main(prog, args) -> bool:
             args.timeout = 2.0
         else:
             args.timeout = float(metadata.timeout_ms) / 1000.0
-        args.timeout *= config.tester_config.timeout_adjust
+        args.timeout *= config.tester_config.timeout_adjustment
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))

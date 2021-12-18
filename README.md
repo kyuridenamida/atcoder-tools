@@ -244,7 +244,7 @@ compile_only_when_diff_detected=true
 [tester]
 compile_before_testing=true
 compile_only_when_diff_detected=true
-timeout_adjust=1.2
+timeout_adjustment=1.2
 [etc]
 download_without_login=false
 parallel_download=false
