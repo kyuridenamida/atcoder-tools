@@ -62,19 +62,23 @@ class ProblemContent:
                  original_html: Optional[str] = None,
                  ):
         self.samples = samples
-        self.input_format_text = input_format_text
+        if type(input_format_text) is str:
+            self.input_format_text = [input_format_text]
+        else:
+            self.input_format_text = input_format_text
         self.original_html = original_html
+        self.input_format_data = InputFormat(self.input_format_text)
 
     @classmethod
     def from_html(cls, html: str):
         res = ProblemContent(original_html=html)
         soup = BeautifulSoup(html, "html.parser")
-        res.input_format_text, res.samples = res._extract_input_format_and_samples(
+        res.input_format_text, res.input_format_data, res.samples = res._extract_input_format_and_samples(
             soup)
         return res
 
-    def get_input_format(self) -> str:
-        return self.input_format_text
+    def get_input_format(self) -> list[str]:
+        return self.input_format_data
 
     def get_samples(self) -> List[Sample]:
         return self.samples
@@ -112,16 +116,17 @@ class ProblemContent:
 
             if input_format_tag is None:
                 raise InputFormatDetectionError
-            input_format_text = list(map(lambda x: normalize_soup(x), input_format_tag))
+            input_format_text = list(
+                map(lambda x: normalize_soup(x), input_format_tag))
         except AttributeError:
             raise InputFormatDetectionError
 
         if len(input_format_text) == 2:
             input_format_text[0] = _strip_case_vars(input_format_text[0])
 
-        input_format = InputFormat(input_format_text)
+        input_format_data = InputFormat(input_format_text)
 
-        return input_format, res
+        return input_format_text, input_format_data, res
 
     @staticmethod
     def _primary_strategy(soup):

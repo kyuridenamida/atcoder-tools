@@ -23,48 +23,65 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 class TestTester(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
+        self.common_config_path = os.path.join(
+            RESOURCE_DIR, "config_common.toml")
 
     def test_multiple_exec_files(self):
         all_ok = tester.main(
-            '', ['-d', os.path.join(RESOURCE_DIR, "test_multiple_exec_files")])
+            '', ['-d', os.path.join(RESOURCE_DIR, "test_multiple_exec_files"),
+                 "--config", self.common_config_path])
         self.assertTrue(all_ok)
 
     def test_run_single_test(self):
         test_dir = os.path.join(RESOURCE_DIR, "test_run_single_test")
-        self.assertTrue(tester.main('', ['-d', test_dir, "-n", "1"]))
-        self.assertFalse(tester.main('', ['-d', test_dir, "-n", "2"]))
+        self.assertTrue(tester.main(
+            '', ['-d', test_dir, "-n", "1", "--config", self.common_config_path]))
+        self.assertFalse(tester.main(
+            '', ['-d', test_dir, "-n", "2", "--config", self.common_config_path]))
 
     def test_run_single_test_decimal_addition(self):
         test_dir = os.path.join(
             RESOURCE_DIR, "test_run_single_test_decimal_addition")
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative",
+                 "--config", self.common_config_path]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "--judge-type", "absolute_or_relative"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "--judge-type", "absolute_or_relative",
+                 "--config", self.common_config_path]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute",
+                 "--config", self.common_config_path]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "absolute"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "absolute",
+                 "--config", self.common_config_path]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "relative"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "relative",
+                 "--config", self.common_config_path]))
         self.assertFalse(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative",
+                 "--config", self.common_config_path]))
 
     def test_run_single_test_decimal_multiplication(self):
         test_dir = os.path.join(
             RESOURCE_DIR, "test_run_single_test_decimal_multiplication")
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute_or_relative",
+                 "--config", self.common_config_path]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "--error-value", "0.01", "-j", "absolute_or_relative"]))
+            '', ['-d', test_dir, "-n", "2", "--error-value", "0.01", "-j", "absolute_or_relative",
+                 "--config", self.common_config_path]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "absolute",
+                 "--config", self.common_config_path]))
         self.assertFalse(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "absolute"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "absolute",
+                 "--config", self.common_config_path]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "relative"]))
+            '', ['-d', test_dir, "-n", "1", "-v", "0.01", "-j", "relative",
+                 "--config", self.common_config_path]))
         self.assertTrue(tester.main(
-            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
+            '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative",
+                 "--config", self.common_config_path]))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
@@ -211,7 +228,9 @@ class TestTester(unittest.TestCase):
             self.assertTrue(tester.main(
                 '', ['-d', test_dir, "-n", "{:d}".format(i), "--compile-before-testing",
                      "-j", "normal",
-                     "--compile-command", "g++ main.cpp -o main && touch compile{}".format(i)]))
+                     "--compile-command", "g++ main.cpp -o main && touch compile{}".format(
+                         i),
+                     "--config", self.common_config_path]))
         lst = os.listdir(test_dir)
         self.assertTrue("compile1" in lst)
         self.assertTrue("compile2" in lst)

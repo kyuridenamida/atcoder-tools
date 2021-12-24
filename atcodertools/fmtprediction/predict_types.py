@@ -195,5 +195,4 @@ def predict_types(simple_format: list[Format[SimpleVariable]], samples: List[Sam
                     InvalidLoopIndexError, EvaluateError):
                 raise TypePredictionFailedError
 
-
     return res_type_dict

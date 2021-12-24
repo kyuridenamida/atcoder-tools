@@ -1,1 +1,1 @@
-[(Singular: N),(Singular: M),(Singular: A),(Singular: B)]
+[[(Singular: N),(Singular: M),(Singular: A),(Singular: B)]]

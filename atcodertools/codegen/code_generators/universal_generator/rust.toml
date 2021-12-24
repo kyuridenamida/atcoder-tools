@@ -4,6 +4,7 @@ insert_space_around_operators = false
 # global変数宣言時の接頭辞
 global_prefix = ""
 input_part_prefix = "let con = read_string();\nlet mut scanner = Scanner::new(&con);"
+solve_function = "solve({actual_arguments});"
 
 # ループ
 [loop]

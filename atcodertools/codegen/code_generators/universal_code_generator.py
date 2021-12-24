@@ -62,18 +62,14 @@ class UniversalCodeGenerator():
         if self._format[0] is None:
             return dict(prediction_success=False)
 
-        x = self._input_part(global_mode=False)
-        if len(self._format) == 1:
-            y = x
-        else:
-            y = self._input_part_with_solve()
+        self._input_part_data = self._input_part(global_mode=False)
 
         return dict(formal_arguments=self._formal_arguments(),
                     actual_arguments=self._actual_arguments(),
-                    input_part=x,
+                    input_part=self._input_part_data,
                     global_declaration=self._global_declaration(),
                     global_input_part=self._input_part(global_mode=True),
-                    input_part_with_solve=y,
+                    input_part_with_solve_function=self._input_part_with_solve_function(),
                     prediction_success=True)
 
     def _input_part(self, global_mode):
@@ -109,24 +105,29 @@ class UniversalCodeGenerator():
             start = False
         return result
 
-    def _input_part_with_solve(self):
-        if len(self._format) == 1:
-            return None
-
+    def _input_part_with_solve_function(self):
         prefix = "{indent}".format(
             indent=self._indent(self.info["base_indent"]))
-
-        result = self._get_input_part(False, self._format[0]) + "\n" + prefix
-        result += self.info["loop"]["header"].format(
-            loop_var="case_index",
-            length="T"  # TODO
-        )
-        result += "\n"
-        t = (prefix + self._get_input_part(False, self._format[1])).split("\n")
-        t = list(map(lambda x: self._indent(1) + x, t))
-        t.append(prefix + self._indent(1) + "solve({})".format(self._actual_arguments()))
-        result += "\n".join(t)
-        result += self.info["loop"]["footer"]
+        result = self._get_input_part(False, self._format[0]) + "\n"
+        solve_function = self.info["solve_function"].format(
+            actual_arguments=self._actual_arguments())
+        if len(self._format) == 1:
+            result += prefix + solve_function
+        elif len(self._format) == 2:
+            result += prefix
+            result += self.info["loop"]["header"].format(
+                loop_var="case_index",
+                length="T"  # TODO
+            )
+            result += "\n"
+            t = (prefix + self._get_input_part(False,
+                 self._format[1])).split("\n")
+            t = list(map(lambda x: self._indent(1) + x, t))
+            t.append(prefix + self._indent(1) + solve_function)
+            result += "\n".join(t)
+            footer = self.info["loop"]["footer"].format()
+            if footer != '':
+                result += "\n" + prefix + footer
         return result
 
     def _convert_type(self, type_: Type) -> str:

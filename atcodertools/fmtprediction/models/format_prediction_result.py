@@ -32,7 +32,8 @@ class FormatPredictionResult:
     def create_typed_format(cls, simple_formats: list[Format[SimpleVariable]], var_to_type: Dict[str, Type]):
         result = []
         for simple_format in simple_formats:
-            result.append(cls._create_typed_format(cls, simple_format, var_to_type))
+            result.append(cls._create_typed_format(
+                cls, simple_format, var_to_type))
         return result
 
     @classmethod

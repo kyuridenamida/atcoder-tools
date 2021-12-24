@@ -5,6 +5,7 @@ insert_space_around_operators = false
 global_prefix = ""
 input_part_prefix = "auto input = stdin.byLine.map!split.joiner;"
 newline_after_input = true
+solve_function = "solve({actual_arguments});"
 
 # ループ
 [loop]

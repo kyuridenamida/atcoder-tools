@@ -111,7 +111,7 @@ def generate_code(atcoder_client: AtCoderClient,
     output_file.write(code_generator(
         CodeGenArgs(
             template,
-            prediction_result.format,
+            list(map(lambda x: x.format, prediction_result)),
             constants,
             config.code_style_config
         )))

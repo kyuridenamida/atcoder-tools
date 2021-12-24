@@ -14,9 +14,12 @@ class Response:
         self.status = status
         if result:
             self.original_result = result
-            self.simple_format = result.format
-            var_info = [(var.name, var.type)
-                        for var in result.format.all_vars()]
+            self.simple_format = list(map(lambda x: x.format, result))
+            var_info = []
+            for r in result:
+                var_info += [(var.name, var.type)
+                             for var in r.format.all_vars()]
+
             self.types = [(name, type.to_py_type()) for name, type in var_info]
 
 
@@ -35,10 +38,15 @@ class FormatPredictionTestRunner:
         case_dir = self._get_test_case_dir(case_name)
         format_file = os.path.join(case_dir, FORMAT_FILE_NAME)
         example_files = [os.path.join(case_dir, file)
-                         for file in os.listdir(case_dir) if file != FORMAT_FILE_NAME]
+                         for file in os.listdir(case_dir) if file.startswith("ex")]
 
         with open(format_file, 'r', encoding="utf-8") as f:
-            input_format = f.read()
+            input_format = [f.read()]
+
+        second_format_file = os.path.join(case_dir, "format_2.txt")
+        if os.path.exists(second_format_file):
+            with open(second_format_file, 'r', encoding="utf-8") as f:
+                input_format.append(f.read())
 
         examples = []
         for ex_file in example_files:

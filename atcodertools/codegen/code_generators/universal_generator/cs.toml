@@ -4,6 +4,7 @@ insert_space_around_operators = false
 
 # global変数宣言時の接頭辞
 global_prefix = ""
+solve_function = "new Program().Solve({actual_arguments});"
 
 # ループ
 [loop]

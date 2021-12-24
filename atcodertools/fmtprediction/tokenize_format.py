@@ -67,21 +67,18 @@ def _remove_spaces_in_curly_brackets(input_format):
 
 
 def _sanitized_tokens(input_format: str) -> List[str]:
-    print(input_format)
     input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
         "..", " ").replace("\\ ", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
     input_format = _remove_spaces_in_curly_brackets(input_format)
     input_format = _divide_consecutive_vars(input_format)
     input_format = _normalize_index(input_format)
     input_format = input_format.replace("{", "").replace("}", "")
-    print(input_format)
 
     tokens = [
         x for x in input_format.split(
         ) if x != "" and _is_ascii(
             x) and not _is_noise(
             x)]
-    print(tokens)
     return tokens
 
 
@@ -173,7 +170,6 @@ def search_formats_with_minimum_vars(input_format: InputFormat) -> List[Tokenize
             if result:
                 a.append(result)
                 break
-#                return result
         else:
             raise NoFormatFoundError
     return a

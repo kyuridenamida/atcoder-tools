@@ -29,21 +29,44 @@ def predict_format(content: ProblemContent) -> list[FormatPredictionResult]:
     except NoFormatFoundError:
         raise NoPredictionResultError
 
+    # tokenized_possible_formats = [input1, input2, ...]
     output_cands = []
-    for to_1d_flag in [False, True]:
-        try:
-            simple_format = []
-            for a in tokenized_possible_formats:
-                for format in a:
-                    simple_format.append(predict_simple_format(format.var_tokens, to_1d_flag))
-            output_cands.append(
-                FormatPredictionResult.create_typed_format(simple_format, predict_types(simple_format, samples, input_format.loop_length_var)))
-            break
-        except (TypePredictionFailedError, SimpleFormatPredictionFailedError):
-            pass
 
-    if len(output_cands) > 1:
-        raise MultiplePredictionResultsError(output_cands)
+    simple_formats = []
+    for tokenized_possible_format in tokenized_possible_formats:
+        simple_format = []
+        for to_1d_flag in [False, True]:
+            for format in tokenized_possible_format:
+                try:
+                    simple_format.append(predict_simple_format(
+                        format.var_tokens, to_1d_flag))
+                except (TypePredictionFailedError, SimpleFormatPredictionFailedError):
+                    pass
+        simple_formats.append(simple_format)
+
+    if len(simple_formats) == 1:
+        for a in simple_formats[0]:
+            simple_format = [a]
+            try:
+                output_cands.append(
+                    FormatPredictionResult.create_typed_format(simple_format, predict_types(simple_format, samples, input_format.loop_length_var)))
+                break
+            except (TypePredictionFailedError, SimpleFormatPredictionFailedError):
+                pass
+    elif len(simple_formats) == 2:
+        for a in simple_formats[0]:
+            for b in simple_formats[1]:
+                simple_format = [a, b]
+                try:
+                    output_cands.append(
+                        FormatPredictionResult.create_typed_format(simple_format, predict_types(simple_format, samples, input_format.loop_length_var)))
+                    break
+                except (TypePredictionFailedError, SimpleFormatPredictionFailedError):
+                    pass
+
+    # TODO: ここをコメントアウトしたが大丈夫か？
+    # if len(output_cands) > 1:
+    #    raise MultiplePredictionResultsError(output_cands)
     if len(output_cands) == 0:
         raise NoPredictionResultError
 
