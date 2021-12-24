@@ -111,7 +111,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
     return res
 
 
-def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: int,
+def run_for_samples(exec_file: str, sample_pair_list: List[Tuple[str, str]], timeout_sec: float,
                     judge_method: Judge = NormalJudge(), knock_out: bool = False,
                     skip_io_on_success: bool = False, cwd="./") -> TestSummary:
     success_count = 0
@@ -171,7 +171,7 @@ def validate_sample_pair(in_sample_file, out_sample_file):
         raise IrregularSampleFileError
 
 
-def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int,
+def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: float, case_num: int,
                     judge_method: Judge, cwd: str, judge_program_language: Language) -> bool:
     def single_or_none(lst: List):
         if len(lst) == 1:
@@ -197,7 +197,7 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
 
-def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
+def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: float, knock_out: bool,
                   skip_stderr_on_success: bool, judge_method: Judge, cwd: str,
                   judge_program_language: Language) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
@@ -303,9 +303,9 @@ def main(prog, args) -> bool:
                         default=".")
 
     parser.add_argument("--timeout", '-t',
-                        help="Timeout for each test cases (sec) [Default] 1",
-                        type=int,
-                        default=1)
+                        help="Timeout for each test cases (sec) [Default] auto",
+                        type=float,
+                        default=None)
 
     parser.add_argument("--knock-out", '-k',
                         help="Stop execution immediately after any example's failure [Default] False",
@@ -373,6 +373,15 @@ def main(prog, args) -> bool:
 
     with open(args.config, "r") as f:
         config = Config.load(f, {ConfigType.TESTER}, args, lang.name)
+
+    if args.timeout is None:
+        if metadata.timeout_ms is None:
+            logger.info(
+                "timeout_ms is not found in metadata. Default timeout (2.0 sec) is set. ")
+            args.timeout = 2.0
+        else:
+            args.timeout = float(metadata.timeout_ms) / 1000.0
+        args.timeout *= config.tester_config.timeout_adjustment
 
     in_sample_file_list = sorted(
         glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))

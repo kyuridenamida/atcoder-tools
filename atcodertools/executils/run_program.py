@@ -30,7 +30,7 @@ class ExecResult:
         return len(self.stderr) > 0
 
 
-def run_program(exec_file: str, input_file: str, timeout_sec: int, args=None, current_working_dir: str = None) -> ExecResult:
+def run_program(exec_file: str, input_file: str, timeout_sec: float, args=None, current_working_dir: str = None) -> ExecResult:
     if args is None:
         args = []
     try:

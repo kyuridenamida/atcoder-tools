@@ -12,5 +12,6 @@
   "problem_id": "agc029_b"
  },
  "sample_in_pattern": "input_*.txt",
- "sample_out_pattern": "output_*.txt"
+ "sample_out_pattern": "output_*.txt",
+ "timeout_ms": 2000
 }
