@@ -27,6 +27,8 @@ Python 3.6 以降で動作する [AtCoder](https://atcoder.jp/) からサンプ�
 |Nim|[@chaemon](https://github.com/chaemon/) (generator, template)||
 |C#|[@chaemon](https://github.com/chaemon/) (generator, template)||
 |Swift|[@firewood](https://github.com/firewood/) (generator, template)||
+|Go|[@nu50218](https://github.com/nu50218/) (generator, template)|[@chaemon](https://github.com/chaemon/) (generator, template)|
+|Julia|[@yatra9](https://github.com/yatra9/) (generator, template)|[@chaemon](https://github.com/chaemon/) (generator, template)|
 
 ## Demo
 <img src="https://user-images.githubusercontent.com/233559/52807100-f6e2d300-30cd-11e9-8906-82b9f9b2dff7.gif" width=70%>
