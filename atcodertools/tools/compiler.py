@@ -1,16 +1,13 @@
 #!/usr/bin/python3
 import argparse
-from os.path import expanduser
 
 from atcodertools.executils.run_command import run_command_with_returncode
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.common.language import Language
 import os
 import pathlib
-from atcodertools.config.config import Config, ConfigType
+from atcodertools.config.config import Config, ConfigType, USER_CONFIG_PATH
 from atcodertools.tools import get_default_config_path
-
-USER_CONFIG_PATH = os.path.join(expanduser("~"), ".atcodertools.toml")
 
 
 class BadStatusCodeException(Exception):
