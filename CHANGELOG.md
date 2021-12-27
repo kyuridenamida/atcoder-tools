@@ -1,4 +1,10 @@
 # Change Log
+## 2.12.0 / 2021-12-24
+Release version 2.12.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#254](https://github.com/kyuridenamida/atcoder-tools/pull/254)|実行時間制限を問題文から取得、ローカルテストに反映する機能を追加| |[chaemon](https://github.com/chaemon)|
+|[#252](https://github.com/kyuridenamida/atcoder-tools/pull/252)|chore: Update README(Go, Julia Support)| |[nixii](https://github.com/nixii)|
 ## 2.11.0 / 2021-11-29
 Release version 2.11.0
 |PR|Change Summary|Label|Author|
