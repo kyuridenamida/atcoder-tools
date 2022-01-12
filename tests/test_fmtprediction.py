@@ -42,6 +42,9 @@ class TestFormatPrediction(unittest.TestCase):
                                                             response.types)
             else:
                 output_text += "{:40} {}\n".format(case, response.status)
+        with open("answer_text.txt", "w") as f:
+            f.write(output_text)
+        f.close()
 
         with open(ANSWER_FILE, 'r') as f:
             answer = f.read()

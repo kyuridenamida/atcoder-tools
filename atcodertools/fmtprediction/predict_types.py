@@ -155,7 +155,7 @@ def predict_types(simple_format: Format[SimpleVariable], samples: List[Sample]) 
                 predictor.get_typing_result())
         except (
                 TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
-                InvalidLoopIndexError, EvaluateError):
+                InvalidLoopIndexError, EvaluateError) as e:
             raise TypePredictionFailedError
 
     return res_type_dict

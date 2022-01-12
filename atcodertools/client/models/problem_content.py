@@ -14,6 +14,12 @@ def normalize(content: str) -> str:
     return content.strip().replace('\r', '') + "\n"
 
 
+def normalize_soup(content) -> str:
+    # for a in content.findAll('var'):
+    #     a.replace_with(' ' + a.text + ' ')
+    return normalize(content.text)
+
+
 def is_japanese(ch):
     # Thank you!
     # http://minus9d.hatenablog.com/entry/2015/07/16/231608
@@ -92,7 +98,8 @@ class ProblemContent:
             if input_format_tag is None:
                 raise InputFormatDetectionError
 
-            input_format_text = normalize(input_format_tag.text)
+            # input_format_text = normalize(input_format_tag.text)
+            input_format_text = normalize_soup(input_format_tag)
         except AttributeError:
             raise InputFormatDetectionError
 

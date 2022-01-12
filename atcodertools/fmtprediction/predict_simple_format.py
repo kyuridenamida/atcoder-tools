@@ -62,10 +62,14 @@ def _predict_simple_format_main(var_tokens: List[VariableToken], to_1d_flag=Fals
 
         dim = var_token.dim_num()
 
-        if dim == 2 and to_1d_flag:
-            simple_var.first_index = simple_var.second_index
-            simple_var.second_index = None
-            dim = 1
+        if to_1d_flag:
+            if dim == 2:
+                # simple_var.first_index = simple_var.second_index
+                simple_var.second_index = None
+                dim = 1
+            # elif dim == 1:
+            #     simple_var.first_index = None
+            #     dim = 0
 
         if dim == 0:
             root.push_back(SingularPattern(simple_var))
