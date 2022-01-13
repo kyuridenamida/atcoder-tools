@@ -6,7 +6,7 @@ from logging import getLogger, DEBUG, Formatter, StreamHandler
 from atcodertools.common.judgetype import JudgeType, ErrorType
 from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, \
     predict_yes_no, YesNoPredictionFailedError, predict_judge_method, \
-    MultipleDecimalCandidatesError
+    MultipleDecimalCandidatesError, predict_limit
 from tests.utils.gzip_controller import make_html_data_controller
 
 ANSWER_FILE = os.path.join(
@@ -66,6 +66,12 @@ class TestConstantsPrediction(unittest.TestCase):
         yes_str, no_str = predict_yes_no(self._load("agc001-D.html"))
         self.assertEqual(None, yes_str)
         self.assertEqual("Impossible", no_str)
+
+    def test_predict_time_limit(self):
+        timeout = predict_limit(self._load("dwacon2017-prelims-A.html"))
+        self.assertEqual(timeout, 2525)
+        timeout = predict_limit(self._load("dwacon2017-prelims-E.html"))
+        self.assertEqual(timeout, 5252)
 
     @unittest.expectedFailure
     def test_tricky_mod_case_that_can_raise_multi_cands_error(self):

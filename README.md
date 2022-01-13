@@ -27,6 +27,8 @@ Python 3.6 以降で動作する [AtCoder](https://atcoder.jp/) からサンプ�
 |Nim|[@chaemon](https://github.com/chaemon/) (generator, template)||
 |C#|[@chaemon](https://github.com/chaemon/) (generator, template)||
 |Swift|[@firewood](https://github.com/firewood/) (generator, template)||
+|Go|[@nu50218](https://github.com/nu50218/) (generator, template)|[@chaemon](https://github.com/chaemon/) (generator, template)|
+|Julia|[@yatra9](https://github.com/yatra9/) (generator, template)|[@chaemon](https://github.com/chaemon/) (generator, template)|
 
 ## Demo
 <img src="https://user-images.githubusercontent.com/233559/52807100-f6e2d300-30cd-11e9-8906-82b9f9b2dff7.gif" width=70%>
@@ -215,6 +217,7 @@ optional arguments:
 
 - `compile_before_testing` テスト前にコンパイルを実行するか否かをTrue/Falseで指定。何も指定しないとFalseとなります。
 - `compile_only_when_diff_detected` テスト前のコンパイルの際、元のソースに変更があった場合のみ実行するかをTrue/Falseで指定。何も指定しないとFalseとなります。
+- `timeout_adjustment=1.2` 問題文に記載された実行時間制限にこの値をかけた秒数がローカルテストの際の実行時間制限になります。例えばatcoderで制限時間2秒の問題は2x1.2=2.4秒となります。atcoderとローカルの実行環境が異なる場合の調整に使用してください。
 
 なお、`compile_before_testing`, `compile_only_when_diff_detected`はいずれもtesterの引数で指定することも可能で、指定した場合はそちらが優先されます。
 
@@ -243,6 +246,7 @@ compile_only_when_diff_detected=true
 [tester]
 compile_before_testing=true
 compile_only_when_diff_detected=true
+timeout_adjustment=1.2
 [etc]
 download_without_login=false
 parallel_download=false
