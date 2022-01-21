@@ -314,7 +314,7 @@ abc075-C                                 OK                   [(Singular: N),(Si
 abc075-D                                 OK                   [(Singular: N),(Singular: K),(Parallel: x,y | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 abc076-A                                 OK                   [(Singular: R),(Singular: G)] [('R', <class 'int'>), ('G', <class 'int'>)]
 abc076-B                                 OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
-abc076-C                                 No result
+abc076-C                                 OK                   [(Singular: Sprime),(Singular: T)] [('Sprime', <class 'str'>), ('T', <class 'str'>)]
 abc076-D                                 OK                   [(Singular: N),(Parallel: t | 1 to N),(Parallel: v | 1 to N)] [('N', <class 'int'>), ('t', <class 'int'>), ('v', <class 'int'>)]
 abc077-A                                 OK                   [(Parallel: C | 1 to 2)] [('C', <class 'str'>)]
 abc077-B                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
@@ -556,7 +556,7 @@ agc014-D                                 OK                   [(Singular: N),(Pa
 agc014-E                                 OK                   [(Singular: N),(Parallel: a,b | 1 to N-1),(Parallel: c,d | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>), ('d', <class 'int'>)]
 agc014-F                                 OK                   [(Singular: N),(Parallel: p | 1 to N)] [('N', <class 'int'>), ('p', <class 'int'>)]
 agc015-A                                 OK                   [(Singular: N),(Singular: A),(Singular: B)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-agc015-B                                 No result
+agc015-B                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 agc015-C                                 No result
 agc015-D                                 OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
 agc015-E                                 OK                   [(Singular: N),(Parallel: X,V | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('V', <class 'int'>)]
@@ -688,8 +688,8 @@ arc006-C                                 OK                   [(Singular: N),(Pa
 arc006-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: c | 0 to H-1)] [('H', <class 'int'>), ('W', <class 'int'>), ('c', <class 'str'>)]
 arc007-A                                 OK                   [(Singular: X),(Singular: s)] [('X', <class 'str'>), ('s', <class 'str'>)]
 arc007-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: disk | 0 to M-1)] [('N', <class 'int'>), ('M', <class 'int'>), ('disk', <class 'int'>)]
-arc007-C                                 No result
-arc007-D                                 No result
+arc007-C                                 OK                   [(Singular: c)] [('c', <class 'str'>)]
+arc007-D                                 OK                   [(Singular: c)] [('c', <class 'str'>)]
 arc008-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 arc008-B                                 OK                   [(Singular: N),(Singular: M),(Singular: name),(Singular: kit)] [('N', <class 'int'>), ('M', <class 'int'>), ('name', <class 'str'>), ('kit', <class 'str'>)]
 arc008-C                                 OK                   [(Singular: N),(Parallel: x,y,t,r | 0 to N-1)] [('N', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('t', <class 'int'>), ('r', <class 'int'>)]
@@ -879,14 +879,14 @@ arc054-D                                 OK                   [(Singular: N),(Pa
 arc055-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 arc055-B                                 OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
 arc055-C                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
-arc055-D                                 No result
+arc055-D                                 OK                   [(Singular: d)] [('d', <class 'int'>)]
 arc056-A                                 OK                   [(Singular: A),(Singular: B),(Singular: K),(Singular: L)] [('A', <class 'int'>), ('B', <class 'int'>), ('K', <class 'int'>), ('L', <class 'int'>)]
 arc056-B                                 OK                   [(Singular: N),(Singular: M),(Singular: S),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 arc056-C                                 OK                   [(Singular: N),(Singular: K),(TwoDimensional: w)] [('N', <class 'int'>), ('K', <class 'int'>), ('w', <class 'int'>)]
 arc056-D                                 No result
 arc057-A                                 OK                   [(Singular: A),(Singular: K)] [('A', <class 'int'>), ('K', <class 'int'>)]
 arc057-B                                 OK                   [(Singular: N),(Singular: K),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('a', <class 'int'>)]
-arc057-C                                 No result
+arc057-C                                 OK                   [(Singular: a)] [('a', <class 'str'>)]
 arc057-D                                 OK                   [(Singular: N),(Parallel: A | 1 to N-1)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc058-C                                 OK                   [(Singular: N),(Singular: K),(Parallel: D | 1 to K)] [('N', <class 'int'>), ('K', <class 'int'>), ('D', <class 'int'>)]
 arc058-D                                 OK                   [(Singular: H),(Singular: W),(Singular: A),(Singular: B)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -1523,7 +1523,7 @@ ddcc2019-qual-B                          OK                   [(Singular: N)] [(
 ddcc2019-qual-C                          OK                   [(Singular: N)] [('N', <class 'int'>)]
 ddcc2019-qual-D                          OK                   [(Parallel: a | 2 to 30)] [('a', <class 'int'>)]
 digitalarts2012-A                        No result
-digitalarts2012-B                        No result
+digitalarts2012-B                        OK                   [(Singular: c)] [('c', <class 'str'>)]
 discovery2016-final-A                    OK                   [(Singular: N),(Parallel: Id | 1 to N)] [('N', <class 'int'>), ('Id', <class 'int'>)]
 discovery2016-final-B                    OK                   [(Singular: N),(Singular: X),(Parallel: T | 1 to N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>)]
 discovery2016-final-C                    OK                   [(Singular: S),(Singular: K)] [('S', <class 'str'>), ('K', <class 'int'>)]
@@ -2003,7 +2003,7 @@ tenka1-2012-qualA-B                      No result
 tenka1-2012-qualA-C                      OK                   [(Singular: N),(Singular: M),(Parallel: a,b | 1 to M),(Singular: s)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('s', <class 'str'>)]
 tenka1-2012-qualA-D                      OK                   [(Singular: N),(Parallel: c | 0 to N-1)] [('N', <class 'int'>), ('c', <class 'str'>)]
 tenka1-2012-qualB-A                      OK                   [(Singular: a),(Singular: b),(Singular: c)] [('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>)]
-tenka1-2012-qualB-B                      No result
+tenka1-2012-qualB-B                      OK                   [(Singular: c)] [('c', <class 'str'>)]
 tenka1-2012-qualB-C                      OK                   [(Singular: N),(Parallel: Ts,Te | 1 to N)] [('N', <class 'int'>), ('Ts', <class 'str'>), ('Te', <class 'str'>)]
 tenka1-2012-qualB-D                      No result
 tenka1-2012-qualC-A                      OK                   [(Singular: n)] [('n', <class 'int'>)]
