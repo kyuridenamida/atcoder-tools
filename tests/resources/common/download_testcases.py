@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import errno
 import os
+import time
 
 from atcodertools.client.atcoder import AtCoderClient
 from atcodertools.client.models.problem_content import SampleDetectionError, InputFormatDetectionError
@@ -24,7 +25,15 @@ def mkdirs(path):
 
 if __name__ == "__main__":
     for contest in atcoder.download_all_contests():
-        for problem in atcoder.download_problem_list(contest):
+        if contest.get_id().startswith("asprocon") or contest.get_id().startswith("future-meets-you-contest"):
+            continue
+        try:
+            d = atcoder.download_problem_list(contest)
+        except Exception:
+            print("download problem list error for {}".format(contest.get_id()))
+            time.sleep(120)
+            continue
+        for problem in d:
             path = "./test_data/{contest}-{problem_id}".format(contest=contest.get_id(),
                                                                problem_id=problem.get_alphabet())
             if os.path.exists(path) and len(os.listdir(path)) != 0:

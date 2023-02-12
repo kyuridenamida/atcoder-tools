@@ -160,14 +160,22 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True, cli
                 return False
             code_path = config.submit_config.submit_filename
             logger.info(f"changed to submitfile: {code_path}")
-
+        
+        recognized = False
         for encoding in ['utf8', 'utf-8_sig', 'cp932']:
             try:
                 with open(os.path.join(args.dir, code_path), 'r', encoding=encoding) as f:
                     source = f.read()
+                recognized = True
                 break
             except UnicodeDecodeError:
                 logger.warning("code wasn't recognized as {}".format(encoding))
+
+        if not recognized:
+            import urllib.parse
+            with open(os.path.join(args.dir, code_path), 'rb') as f:
+                source = urllib.parse.quote(f.read())
+
         logger.info(
             "Submitting {} as {}".format(code_path, metadata.lang.name))
         submission = client.submit_source_code(
