@@ -37,10 +37,16 @@ jobs:
         with:
           compiler: dmd-latest
 
+      - name: Install Jilia
+        uses: julia-actions/setup-julia@v1
+
+      - name: Install nim
+        uses: iffy/install-nim@v4
+
       - name: Install other compilers
         run: |
           sudo apt-get update
-          sudo apt-get install nim mono-complete julia
+          sudo apt-get install mono-complete
 
       - name: Run Unit Tests and Integration Tests
         run: |
