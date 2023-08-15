@@ -2,8 +2,8 @@ import unittest
 
 from atcodertools.common.language import CPP, JAVA, RUST, PYTHON, DLANG, NIM, CSHARP, SWIFT, GO, JULIA
 
-class TestTester(unittest.TestCase):
-    def test_languages(self):
+class TestLanguage(unittest.TestCase):
+    def test_compilers(self):
         language_compiler_map = {
             CPP: 'C++ 20 (gcc 12.2)',
             JAVA: 'Java (OpenJDK 17)',
