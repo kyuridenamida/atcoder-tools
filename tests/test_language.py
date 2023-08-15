@@ -19,5 +19,22 @@ class TestLanguage(unittest.TestCase):
         for language, compiler in language_compiler_map.items():
             self.assertRegex(compiler, language.submission_lang_pattern)
 
+    # TODO: 新ジャッジのみになったら消す
+    def test_previous_compilers(self):
+        language_compiler_map = {
+            CPP: 'C++ (GCC 9.2.1)',
+            JAVA: 'Java (OpenJDK 11.0.6)',
+            RUST: 'Rust (1.42.0)',
+            PYTHON: 'Python (3.8.2)',
+            DLANG: 'D (DMD 2.091.0)', 
+            NIM: 'Nim (1.0.6)',
+            CSHARP: 'C# (Mono-mcs 6.8.0.105)',
+            SWIFT: 'Swift (5.2.1)',
+            GO: 'Go (1.14.1)',
+            JULIA: 'Julia (1.4.0)',
+        }
+        for language, compiler in language_compiler_map.items():
+            self.assertRegex(compiler, language.submission_lang_pattern)
+
 if __name__ == '__main__':
     unittest.main()
