@@ -92,7 +92,7 @@
     "@types/react-syntax-highlighter": "^10.1.0",
     "@types/react-table": "^6.7.21",
     "gh-pages": "^2.0.1",
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "typescript": "^3.2.2"
   },
   "browserslist": [
