@@ -40,7 +40,7 @@
     "jest": "^24.1.0",
     "marked": "^4.0.10",
     "mini-css-extract-plugin": "0.4.3",
-    "npm": "^6.14.18",
+    "npm": "^9.8.1",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",
