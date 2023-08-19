@@ -12,10 +12,13 @@ def _is_ascii(s):
 
 
 DOTS_PATTERNS = ["ldots", "cdots", "vdots", "ddots", "dots"]
+SPACE_PATTERNS = ["hspace", "vspace"]
 
 
 def _is_noise(s):
     if any(pattern in s for pattern in DOTS_PATTERNS):
+        return True
+    if any(pattern in s for pattern in SPACE_PATTERNS):
         return True
 
     return s == ":" or s == "...." or s == "..." or s == ".." or s == "."
@@ -67,7 +70,8 @@ def _remove_spaces_in_curly_brackets(input_format):
 
 def _sanitized_tokens(input_format: str) -> List[str]:
     input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
-        "..", " ").replace("\\ ", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
+        "..", " ").replace("‥", " ").replace("\\ ", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
+    input_format = input_format.replace(" _ ", "_") # 空白の添字を削除
     input_format = _remove_spaces_in_curly_brackets(input_format)
     input_format = _divide_consecutive_vars(input_format)
     input_format = _normalize_index(input_format)

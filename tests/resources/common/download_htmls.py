@@ -25,7 +25,12 @@ if __name__ == "__main__":
     htmls_dir = "./problem_htmls/"
     mkdirs(htmls_dir)
     for contest in atcoder.download_all_contests():
-        for problem in atcoder.download_problem_list(contest):
+        try:
+            d = atcoder.download_problem_list(contest)
+        except Exception as e:
+            print("Failed to download problem list ")
+            continue
+        for problem in d:
             html_path = os.path.join(htmls_dir, "{contest}-{problem_id}.html".format(
                 contest=contest.get_id(), problem_id=problem.get_alphabet()))
 
