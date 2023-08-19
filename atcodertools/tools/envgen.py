@@ -122,7 +122,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         emit_info(
             with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
-        prediction_result = FormatPredictionResult.empty_result()
+        prediction_result = [FormatPredictionResult.empty_result()]
         if isinstance(e, NoPredictionResultError):
             msg = "No prediction -- Failed to understand the input format"
         else:
@@ -134,10 +134,12 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     with open(template_code_path, "r") as f:
         template = f.read()
 
+    prediction_result_format = list(map(lambda x: x.format, prediction_result))
+
     create_code(code_generator(
         CodeGenArgs(
             template,
-            prediction_result.format,
+            prediction_result_format,
             constants,
             config.code_style_config
         )),

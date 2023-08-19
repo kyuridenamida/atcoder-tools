@@ -113,7 +113,7 @@ class TestConfig(unittest.TestCase):
         code = config.code_generator(
             CodeGenArgs(
                 template,
-                response.original_result.format,
+                list(map(lambda x: x.format, response.original_result)),
                 ProblemConstantSet(),
                 config)
         )

@@ -5,6 +5,7 @@ from atcodertools.fmtprediction.models.calculator import CalcNode, CalcParseErro
 from atcodertools.fmtprediction.models.variable_token import VariableToken, TokenizedFormat
 
 from atcodertools.fmtprediction.token_manager import TokenManager
+from atcodertools.client.models.problem_content import InputFormat
 
 
 def _is_ascii(s):
@@ -155,18 +156,23 @@ class FormatSearcher:
         return [var_token for var_token in var_token_candidates if check_if_possible(var_token)]
 
 
-def search_formats_with_minimum_vars(input_format: str) -> List[TokenizedFormat]:
+def search_formats_with_minimum_vars(input_format: InputFormat) -> List[TokenizedFormat]:
     """
     Fast enough for realistic instances.
     This method returns possible formats with the smallest number of variables.
     """
-    tokens = _sanitized_tokens(input_format)
-    searcher = FormatSearcher(tokens)
-    for max_variable_length in range(1, 20):
-        result = searcher.search(max_variable_length)
-        if result:
-            return result
-    raise NoFormatFoundError
+    tokens = list(map(_sanitized_tokens, input_format.input_format))
+    a = []
+    for token in tokens:
+        searcher = FormatSearcher(token)
+        for max_variable_length in range(1, 20):
+            result = searcher.search(max_variable_length)
+            if result:
+                a.append(result)
+                break
+        else:
+            raise NoFormatFoundError
+    return a
 
 
 class NoFormatFoundError(Exception):

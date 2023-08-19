@@ -472,6 +472,7 @@ abc115-A                                 OK                   [(Singular: D)] [(
 abc115-B                                 OK                   [(Singular: N),(Parallel: p | 1 to N)] [('N', <class 'int'>), ('p', <class 'int'>)]
 abc115-C                                 OK                   [(Singular: N),(Singular: K),(Parallel: h | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('h', <class 'int'>)]
 abc115-D                                 OK                   [(Singular: N),(Singular: X)] [('N', <class 'int'>), ('X', <class 'int'>)]
+abc214-E                                 OK                   [(Singular: T)] [('T', <class 'int'>), ('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 agc001-A                                 OK                   [(Singular: N),(Parallel: L | 1 to 2*N)] [('N', <class 'int'>), ('L', <class 'int'>)]
 agc001-B                                 OK                   [(Singular: N),(Singular: X)] [('N', <class 'int'>), ('X', <class 'int'>)]
 agc001-C                                 OK                   [(Singular: N),(Singular: K),(Parallel: A,B | 1 to N-1)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]

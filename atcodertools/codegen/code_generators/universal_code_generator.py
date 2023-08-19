@@ -52,24 +52,31 @@ class UniversalCodeGenerator():
 
     def _global_declaration(self) -> str:
         lines = []
-        for pattern in self._format.sequence:
+        for pattern in self._format[0].sequence:
             for var in pattern.all_vars():
                 self._append(
                     lines, self.info["global_prefix"] + self._generate_declaration(var))
         return "\n".join(lines)
 
     def generate_parameters(self) -> Dict[str, Any]:
-        if self._format is None:
+        if self._format[0] is None:
             return dict(prediction_success=False)
+
+        self._input_part_data = self._input_part(global_mode=False)
 
         return dict(formal_arguments=self._formal_arguments(),
                     actual_arguments=self._actual_arguments(),
-                    input_part=self._input_part(global_mode=False),
+                    input_part=self._input_part_data,
                     global_declaration=self._global_declaration(),
                     global_input_part=self._input_part(global_mode=True),
+                    input_part_with_solve_function=self._input_part_with_solve_function(),
                     prediction_success=True)
 
     def _input_part(self, global_mode):
+        t = len(self._format) - 1
+        return self._get_input_part(global_mode, self._format[t])
+
+    def _get_input_part(self, global_mode, format):
         lines = []
         newline_after_input = False
         if "newline_after_input" in self.info and self.info["newline_after_input"]:
@@ -80,7 +87,7 @@ class UniversalCodeGenerator():
                 lines.append(line)
             if newline_after_input:
                 lines.append("")
-        for pattern in self._format.sequence:
+        for pattern in format.sequence:
             lines += self._render_pattern(pattern, global_mode)
             if newline_after_input:
                 lines.append("")
@@ -96,6 +103,31 @@ class UniversalCodeGenerator():
             if i < len(lines) - 1:
                 result += "\n"
             start = False
+        return result
+
+    def _input_part_with_solve_function(self):
+        prefix = "{indent}".format(
+            indent=self._indent(self.info["base_indent"]))
+        result = self._get_input_part(False, self._format[0]) + "\n"
+        solve_function = self.info["solve_function"].format(
+            actual_arguments=self._actual_arguments())
+        if len(self._format) == 1:
+            result += prefix + solve_function
+        elif len(self._format) == 2:
+            result += prefix
+            result += self.info["loop"]["header"].format(
+                loop_var="case_index",
+                length="T"  # TODO
+            )
+            result += "\n"
+            t = (prefix + self._get_input_part(False,
+                 self._format[1])).split("\n")
+            t = list(map(lambda x: self._indent(1) + x, t))
+            t.append(prefix + self._indent(1) + solve_function)
+            result += "\n".join(t)
+            footer = self.info["loop"]["footer"].format()
+            if footer != '':
+                result += "\n" + prefix + footer
         return result
 
     def _convert_type(self, type_: Type) -> str:
@@ -143,8 +175,9 @@ class UniversalCodeGenerator():
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
+        t = len(self._format) - 1
         ret = []
-        for v in self._format.all_vars():
+        for v in self._format[t].all_vars():
             if v.dim_num() == 0:
                 ret.append(v.name)
             else:
@@ -160,7 +193,8 @@ class UniversalCodeGenerator():
         """
             :return the string form of formal arguments e.g. "int N, int K, std::vector<int> a"
         """
-        return ", ".join([self._get_argument(v) for v in self._format.all_vars()])
+        t = len(self._format) - 1
+        return ", ".join([self._get_argument(v) for v in self._format[t].all_vars()])
 
     def _generate_declaration(self, var: Variable):
         """

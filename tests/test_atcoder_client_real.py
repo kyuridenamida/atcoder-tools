@@ -27,7 +27,8 @@ class TestAtCoderClientReal(unittest.TestCase):
     def test_download_problem_content(self):
         content = self.client.download_problem_content(
             Problem(Contest("arc002"), "C", "arc002_3"))
-        self.assertEqual("N\nc_{1}c_{2}...c_{N}\n", content.input_format_text)
+        self.assertEqual(["N \n c_{1}c_{2}...c_{N}\n"],
+                         content.input_format_text)
         self.assertEqual(3, len(content.samples))
 
     def test_login_failed(self):

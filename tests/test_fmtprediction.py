@@ -38,7 +38,9 @@ class TestFormatPrediction(unittest.TestCase):
             response = runner.run(case)
 
             if response.status == "OK":
-                output_text += "{:40} {:20} {} {}\n".format(case, response.status, response.simple_format,
+                # TODO: インデックス0しか見ていない。本当はansの方を配列に変える方が適切
+                first_format = response.simple_format[0]
+                output_text += "{:40} {:20} {} {}\n".format(case, response.status, first_format,
                                                             response.types)
             else:
                 output_text += "{:40} {}\n".format(case, response.status)

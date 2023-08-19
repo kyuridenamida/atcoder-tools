@@ -10,8 +10,7 @@ class FormatPredictionResult:
     def __init__(self, format_: Optional[Format[Variable]] = None):
         self.format = format_
 
-    @classmethod
-    def create_typed_format(cls, simple_format: Format[SimpleVariable], var_to_type: Dict[str, Type]):
+    def _create_typed_format(self, simple_format: Format[SimpleVariable], var_to_type: Dict[str, Type]):
         var_to_info = {}
         for var in simple_format.all_vars():
             assert var.name not in var_to_info
@@ -28,6 +27,14 @@ class FormatPredictionResult:
             fmt.push_back(pattern.with_replaced_vars(var_to_info))
 
         return FormatPredictionResult(fmt)
+
+    @classmethod
+    def create_typed_format(cls, simple_formats: list[Format[SimpleVariable]], var_to_type: Dict[str, Type]):
+        result = []
+        for simple_format in simple_formats:
+            result.append(cls._create_typed_format(
+                cls, simple_format, var_to_type))
+        return result
 
     @classmethod
     def empty_result(cls):

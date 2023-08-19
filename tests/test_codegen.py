@@ -35,12 +35,12 @@ def load_generated_code(py_test_name, lang):
 
 def load_intermediate_types(py_test_name):
     with open(os.path.join(RESOURCE_DIR, py_test_name, "intermediate_types.txt"), 'r') as f:
-        return f.read()
+        return f.read().strip()
 
 
 def load_intermediate_format(py_test_name):
     with open(os.path.join(RESOURCE_DIR, py_test_name, "intermediate_format.txt"), 'r') as f:
-        return f.read()
+        return f.read().strip()
 
 
 class TestCodeGenerator(unittest.TestCase):
@@ -55,42 +55,52 @@ class TestCodeGenerator(unittest.TestCase):
             CPP: {
                 "old": "template.cpp",
                 "jinja": "template_jinja.cpp",
+                "with_solve": "template_jinja_with_solve.cpp",
             },
             JAVA: {
                 "old": "template.java",
                 "jinja": "template_jinja.java",
+                "with_solve": "template_jinja_with_solve.java",
             },
             RUST: {
                 "old": "template.rust",
                 "jinja": "template_jinja.rust",
+                "with_solve": "template_jinja_with_solve.rust",
             },
             PYTHON: {
                 "old": "template.py",
                 "jinja": "template_jinja.py",
+                "with_solve": "template_jinja_with_solve.py",
             },
             NIM: {
                 "old": "template.nim",
                 "jinja": "template_jinja.nim",
+                "with_solve": "template_jinja_with_solve.nim",
             },
             DLANG: {
                 "old": "template.d",
                 "jinja": "template_jinja.d",
+                "with_solve": "template_jinja_with_solve.d",
             },
             CSHARP: {
                 "old": "template.cs",
                 "jinja": "template_jinja.cs",
+                "with_solve": "template_jinja_with_solve.cs",
             },
             SWIFT: {
                 "old": "template.swift",
                 "jinja": "template_jinja.swift",
+                "with_solve": "template_jinja_with_solve.swift",
             },
             GO: {
                 "old": "template.go",
                 "jinja": "template_jinja.go",
+                "with_solve": "template_jinja_with_solve.go",
             },
             JULIA: {
                 "old": "template.jl",
                 "jinja": "template_jinja.jl",
+                "with_solve": "template_jinja_with_solve.jl",
             },
         }
         self.lang_to_code_generator_func = {
@@ -186,7 +196,7 @@ class TestCodeGenerator(unittest.TestCase):
 
             self._compile_and_run(
                 lang,
-                pred_result.format,
+                list(map(lambda x: x.format, pred_result)),
                 lang.default_template_path,
                 expected_default_generated_code_file,
                 input_file
@@ -196,7 +206,7 @@ class TestCodeGenerator(unittest.TestCase):
 
             exec_result = self._compile_and_run(
                 lang,
-                pred_result.format,
+                list(map(lambda x: x.format, pred_result)),
                 _full_path(os.path.join(
                     lang.name, lang.source_code_name("echo_template"))),
                 _full_path(os.path.join(lang.name, lang.source_code_name(
@@ -205,6 +215,17 @@ class TestCodeGenerator(unittest.TestCase):
             )
             self.assertEqual(load_text_file(
                 expected_output_file), exec_result.output)
+
+    def test_with_solve_template(self):
+        # test_mod_caseがちゃんと展開されるか
+        response = self.runner.run('agc019-E')
+        for lang in ALL_LANGUAGES:
+            self.verify(response, "test_mod_case",
+                        lang, "with_solve", ProblemConstantSet(mod=998244353))
+        response = self.runner.run('abc214-E')
+        for lang in ALL_LANGUAGES:
+            self.verify(response, "test_multiple_testcases",
+                        lang, "with_solve", ProblemConstantSet())
 
     def _compile_command(self, lang: Language, code_file: str):
         if lang == CPP:
@@ -299,8 +320,9 @@ class TestCodeGenerator(unittest.TestCase):
             print(run_command(compile_cmd, self.temp_dir))
 
             print("Run program:", [exec_file] + exec_args)
+            # TODO: なぜかjuliaだけ時間がかかる。。。
             exec_result = run_program(
-                exec_file, input_file, 2, exec_args, self.temp_dir)
+                exec_file, input_file, 100, exec_args, self.temp_dir)
         finally:
             self._clean_up(lang)
 
@@ -328,18 +350,21 @@ class TestCodeGenerator(unittest.TestCase):
                lang: Language,
                template_type: str = "old",
                constants: ProblemConstantSet = ProblemConstantSet()):
+        response_simple_format = "[" + \
+            ",".join(list(map(str, response.simple_format))) + "]"
         self.assertEqual(
             load_intermediate_format(py_test_name),
-            str(response.simple_format))
+            response_simple_format)
         self.assertEqual(
             load_intermediate_types(py_test_name),
             str(response.types))
+
         self.assertEqual(
             load_generated_code(py_test_name, lang),
             self.lang_to_code_generator_func[lang](
                 CodeGenArgs(
                     self.get_template(lang, template_type),
-                    response.original_result.format,
+                    list(map(lambda x: x.format, response.original_result)),
                     constants,
                     CodeStyleConfig(lang=lang.name))
             ))
