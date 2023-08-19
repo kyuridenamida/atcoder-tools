@@ -85,7 +85,7 @@ class TestAtCoderClientMock(unittest.TestCase):
         )
 
         # test two patterns (str, Language object) for parameter lang
-        for lang in [CPP, "C++14 (GCC 5.4.1)"]:
+        for lang in [CPP, "C++ 20 (gcc 12.2)"]:
             submission = self.client.submit_source_code(
                 contest, problem, lang, "x")
             self.assertEqual(13269587, submission.submission_id)

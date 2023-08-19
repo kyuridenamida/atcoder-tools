@@ -208,7 +208,7 @@ class TestCodeGenerator(unittest.TestCase):
 
     def _compile_command(self, lang: Language, code_file: str):
         if lang == CPP:
-            return "g++ {} -o a.out -std=c++14".format(code_file)
+            return "g++ {} -o a.out -std=c++20".format(code_file)
         elif lang == JAVA:
             return "javac {}".format(code_file)
         elif lang == RUST:
