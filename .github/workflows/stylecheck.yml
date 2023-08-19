@@ -13,14 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.6
+      - name: Set up Python 3.11
         uses: actions/setup-python@v2
         with:
-          python-version: 3.6
+          python-version: 3.11
 
       - name: Install Poetry
         run: |
-          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+          curl -sSL https://install.python-poetry.org | python3 -
 
       - name: Add path for Poetry
         run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
