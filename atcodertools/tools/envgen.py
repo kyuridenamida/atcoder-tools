@@ -5,7 +5,6 @@ import shutil
 import sys
 import traceback
 from multiprocessing import Pool, cpu_count
-from os.path import expanduser
 import time
 from typing import Tuple
 
@@ -28,7 +27,7 @@ from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
-from atcodertools.config.config import ConfigType
+from atcodertools.config.config import ConfigType, USER_CONFIG_PATH
 
 
 class BannedFileDetectedError(Exception):
@@ -217,10 +216,6 @@ def prepare_contest(atcoder_client: AtCoderClient,
                                           config.postprocess_config.exec_cmd_on_contest_dir))
         config.postprocess_config.execute_on_contest_dir(
             contest_dir_path)
-
-
-USER_CONFIG_PATH = os.path.join(
-    expanduser("~"), ".atcodertools.toml")
 
 
 def get_config(args: argparse.Namespace) -> Config:
