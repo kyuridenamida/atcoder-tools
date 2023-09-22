@@ -19,7 +19,8 @@ AtCoderToolsへのコントリビューションに興味を持って頂きあ�
 
 ### 2. Poetryを通じたパッケージにインストール
 依存ライブラリのインストールはpoetryを通じて行います。
-poetryのインストールはhttps://cocoatomo.github.io/poetry-ja/ を参照してください。
+poetryのインストールはhttps://python-poetry.org/docs/ を参照してください。
+
 
 プロジェクトのルートディレクトリで以下のコマンドを実行することで環境がインストールできます。
 ```
