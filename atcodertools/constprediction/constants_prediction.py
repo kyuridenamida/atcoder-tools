@@ -36,6 +36,11 @@ class MultipleDecimalCandidatesError(Exception):
         self.cands = cands
 
 
+class FailingToKnowFormatAnalysisAllowedByRuleError(Exception):
+    def __init__(self, reason):
+        self.reason = reason
+
+
 MOD_ANCHORS = ["余り", "あまり", "mod", "割っ", "modulo"]
 DECIMAL_ANCHORS = ["誤差", " error "]
 LIMIT_ANCHORS = ["時間制限", "Time Limit"]
@@ -206,6 +211,25 @@ def predict_limit(html: str) -> Optional[int]:
     raise MultipleModCandidatesError(limit_cands)
 
 
+def predict_is_format_analysis_allowed_by_rule(html: str) -> bool:
+    soup = BeautifulSoup(html, "html.parser")
+    url_meta_tag = soup.find("meta", property="og:url")
+    if url_meta_tag is None:
+        raise FailingToKnowFormatAnalysisAllowedByRuleError(
+            "No meta tag detected, which is important as a clue to know if the input analysis is allowed.")
+
+    # ABC is the target of "No LLM rules" by AtCoder (See https://info.atcoder.jp/entry/llm-abc-rules-ja or https://info.atcoder.jp/entry/llm-abc-rules-en)
+    is_target_contest_of_no_llm_rule = "/contests/abc" in url_meta_tag["content"]
+
+    # If there is no virtual standings link, assume it's ongoing.
+    is_ongoing_contest = len([tag for tag in soup.find_all("a") if "/standings/virtual" in tag.get("href", "")]) == 0
+
+    if is_target_contest_of_no_llm_rule and is_ongoing_contest:
+        return False
+
+    return True
+
+
 def predict_constants(html: str) -> ProblemConstantSet:
     try:
         yes_str, no_str = predict_yes_no(html)
@@ -233,4 +257,17 @@ def predict_constants(html: str) -> ProblemConstantSet:
                        "two or more candidates {} are detected as limit".format(e.cands))
         timeout = None
 
-    return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str, judge_method=judge, timeout=timeout)
+    try:
+        is_format_analysis_allowed_by_rule = predict_is_format_analysis_allowed_by_rule(html)
+    except FailingToKnowFormatAnalysisAllowedByRuleError as e:
+        logger.warning("Failed to know whether format analysis is allowed by the contest rules -- ", e.reason)
+        is_format_analysis_allowed_by_rule = None
+
+    return ProblemConstantSet(
+        mod=mod,
+        yes_str=yes_str,
+        no_str=no_str,
+        judge_method=judge,
+        timeout=timeout,
+        is_format_analysis_allowed_by_rule=is_format_analysis_allowed_by_rule,
+    )

@@ -6,7 +6,8 @@ from logging import getLogger, DEBUG, Formatter, StreamHandler
 from atcodertools.common.judgetype import JudgeType, ErrorType
 from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, \
     predict_yes_no, YesNoPredictionFailedError, predict_judge_method, \
-    MultipleDecimalCandidatesError, predict_limit
+    MultipleDecimalCandidatesError, predict_limit, \
+    predict_is_format_analysis_allowed_by_rule
 from tests.utils.gzip_controller import make_html_data_controller
 
 ANSWER_FILE = os.path.join(
@@ -176,6 +177,61 @@ class TestConstantsPrediction(unittest.TestCase):
             </div>""")
         self.assertEqual(JudgeType.Normal.value,
                          judge_method.to_dict()["judge_type"])
+
+    def test_predict_format_analysis_allowed_by_rule_with_finished_abc(self):
+        is_format_analysis_allowed_by_rule = predict_is_format_analysis_allowed_by_rule(
+            """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta property="og:url" content="https://atcoder.jp/contests/abc352/tasks/abc352_d" />
+            </head>
+            <div class="row">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="/contests/abc352/tasks"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> 問題</a></li>
+                    <li><a href="/contests/abc352/standings/virtual"><span class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span> バーチャル順位表</a></li>
+                </ul>
+            </div>
+            </body>
+            </html>
+            """)
+        self.assertEqual(True, is_format_analysis_allowed_by_rule)
+
+    def test_predict_format_analysis_allowed_by_rule_with_ongoing_abc(self):
+        is_format_analysis_allowed_by_rule = predict_is_format_analysis_allowed_by_rule(
+            """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta property="og:url" content="https://atcoder.jp/contests/abc352/tasks/abc352_d" />
+            </head>
+            <div class="row">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="/contests/abc352/tasks"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> 問題</a></li>
+                </ul>
+            </div>
+            </body>
+            </html>
+            """)
+        self.assertEqual(False, is_format_analysis_allowed_by_rule)
+
+    def test_predict_format_analysis_allowed_by_rule_with_ongoing_arc(self):
+        is_format_analysis_allowed_by_rule = predict_is_format_analysis_allowed_by_rule(
+            """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta property="og:url" content="https://atcoder.jp/contests/arc352/tasks/arc352_a" />
+            </head>
+            <div class="row">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="/contests/arc352/tasks"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> 問題</a></li>
+                </ul>
+            </div>
+            </body>
+            </html>
+            """)
+        self.assertEqual(True, is_format_analysis_allowed_by_rule)
 
     def _load(self, html_path):
         with open(os.path.join(self.test_dir, html_path), 'r') as f:

@@ -141,7 +141,7 @@ def predict_format(result: QualityResult):
         return
 
     try:
-        pred = predict(result.problem_content)
+        pred = predict(result.problem_content, True)
         result.prediction_result = pred
     except Exception as e:
         result.format_prediction_error = e

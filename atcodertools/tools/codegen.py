@@ -19,7 +19,7 @@ from atcodertools.common.logging import logger
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
-from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, NoPredictionResultError, predict_format
+from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, NoPredictionResultError, PredictionNotAllowedError, predict_format
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.envgen import USER_CONFIG_PATH, get_config, output_splitter
 from atcodertools.tools.utils import with_color
@@ -89,19 +89,22 @@ def generate_code(atcoder_client: AtCoderClient,
         emit_error("Failed to download samples.")
         raise e
 
+    constants = predict_constants(content.original_html)
+
     try:
-        prediction_result = predict_format(content)
+        prediction_result = predict_format(content, constants.is_format_analysis_allowed_by_rule or False)
         emit_info(
             with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
-    except (NoPredictionResultError, MultiplePredictionResultsError) as e:
+    except (NoPredictionResultError, MultiplePredictionResultsError, PredictionNotAllowedError) as e:
         prediction_result = FormatPredictionResult.empty_result()
         if isinstance(e, NoPredictionResultError):
             msg = "No prediction -- Failed to understand the input format"
-        else:
+        elif isinstance(e, MultiplePredictionResultsError):
             msg = "Too many prediction -- Failed to understand the input format"
+        elif isinstance(e, PredictionNotAllowedError):
+            msg = "Format prediction is skipped because it's not allowed by AtCoder rules (At least not allowed in ongoing ABC contests) -- See https://info.atcoder.jp/entry/llm-abc-rules-en"
         emit_warning(with_color(msg, Fore.LIGHTRED_EX))
 
-    constants = predict_constants(content.original_html)
     code_generator = config.code_style_config.code_generator
     with open(template_code_path, "r") as f:
         template = f.read()
