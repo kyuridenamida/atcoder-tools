@@ -43,7 +43,8 @@ def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "compile", "set", "version"):
         print("Usage:")
         print("{} gen -- to generate workspace".format(sys.argv[0]))
-        print("{} codegen -- to generate code for one problem".format(sys.argv[0]))
+        print(
+            "{} codegen -- to generate code for one problem".format(sys.argv[0]))
         print(
             "{} compile -- to compile codes in your workspace".format(sys.argv[0]))
         print("{} test -- to test codes in your workspace".format(sys.argv[0]))

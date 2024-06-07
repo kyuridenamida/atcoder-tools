@@ -120,7 +120,8 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     constants = predict_constants(content.original_html)
 
     try:
-        prediction_result = predict_format(content, constants.is_format_analysis_allowed_by_rule or False)
+        prediction_result = predict_format(
+            content, constants.is_format_analysis_allowed_by_rule or False)
         emit_info(
             with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
     except (NoPredictionResultError, MultiplePredictionResultsError, PredictionNotAllowedError) as e:

@@ -123,7 +123,8 @@ PYTHON = Language(
     name="python",
     display_name="Python",
     extension="py",
-    submission_lang_pattern=re.compile(".*Python \\(3.*|.*Python \\(CPython 3.*"),
+    submission_lang_pattern=re.compile(
+        ".*Python \\(3.*|.*Python \\(CPython 3.*"),
     default_code_generator=python.main,
     default_template_path=get_default_template_path('py'),
     compile_command="python3 -mpy_compile {filename}.py",

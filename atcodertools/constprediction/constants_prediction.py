@@ -222,7 +222,8 @@ def predict_is_format_analysis_allowed_by_rule(html: str) -> bool:
     is_target_contest_of_no_llm_rule = "/contests/abc" in url_meta_tag["content"]
 
     # If there is no virtual standings link, assume it's ongoing.
-    is_ongoing_contest = len([tag for tag in soup.find_all("a") if "/standings/virtual" in tag.get("href", "")]) == 0
+    is_ongoing_contest = len([tag for tag in soup.find_all(
+        "a") if "/standings/virtual" in tag.get("href", "")]) == 0
 
     if is_target_contest_of_no_llm_rule and is_ongoing_contest:
         return False
@@ -258,9 +259,11 @@ def predict_constants(html: str) -> ProblemConstantSet:
         timeout = None
 
     try:
-        is_format_analysis_allowed_by_rule = predict_is_format_analysis_allowed_by_rule(html)
+        is_format_analysis_allowed_by_rule = predict_is_format_analysis_allowed_by_rule(
+            html)
     except FailingToKnowFormatAnalysisAllowedByRuleError as e:
-        logger.warning("Failed to know whether format analysis is allowed by the contest rules -- ", e.reason)
+        logger.warning(
+            "Failed to know whether format analysis is allowed by the contest rules -- ", e.reason)
         is_format_analysis_allowed_by_rule = None
 
     return ProblemConstantSet(
