@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.2.5",
+    "@openapitools/openapi-generator-cli": "^2.13.4",
     "@types/node": "^12.12.54",
     "@types/node-fetch": "^2.5.10",
     "@types/semver": "^7.3.4",
