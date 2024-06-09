@@ -5,7 +5,6 @@ import shutil
 import sys
 import traceback
 from multiprocessing import Pool, cpu_count
-import time
 from typing import Tuple
 
 from colorama import Fore
