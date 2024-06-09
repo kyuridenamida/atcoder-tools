@@ -5,7 +5,6 @@ import shutil
 import sys
 import traceback
 from multiprocessing import Pool, cpu_count
-import time
 from typing import Tuple
 
 from colorama import Fore
@@ -175,24 +174,12 @@ def func(argv: Tuple[AtCoderClient, Problem, Config]):
 
 def prepare_contest(atcoder_client: AtCoderClient,
                     contest_id: str,
-                    config: Config,
-                    retry_delay_secs: float = 1.5,
-                    retry_max_delay_secs: float = 60,
-                    retry_max_tries: int = 10):
-    attempt_count = 1
-    while True:
-        try:
-            problem_list = atcoder_client.download_problem_list(
-                Contest(contest_id=contest_id))
-            break
-        except PageNotFoundError:
-            if 0 < retry_max_tries < attempt_count:
-                raise EnvironmentInitializationError
-            logger.warning(
-                "Failed to fetch. Will retry in {} seconds. (Attempt {})".format(retry_delay_secs, attempt_count))
-            time.sleep(retry_delay_secs)
-            retry_delay_secs = min(retry_delay_secs * 2, retry_max_delay_secs)
-            attempt_count += 1
+                    config: Config):
+    try:
+        problem_list = atcoder_client.download_problem_list(
+            Contest(contest_id=contest_id))
+    except PageNotFoundError:
+        raise EnvironmentInitializationError
 
     tasks = [(atcoder_client,
               problem,

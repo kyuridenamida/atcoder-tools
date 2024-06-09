@@ -121,9 +121,9 @@ class TestEnvGen(unittest.TestCase):
 
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
-    @mock.patch('time.sleep')
-    def test_prepare_contest_aborts_after_max_retry_attempts(self, mock_sleep):
+    def test_prepare_contest_aborts_after_max_retry_attempts(self):
         mock_client = mock.Mock(spec=AtCoderClient)
+        # PageNotFoundError is thrown when requests.exceptions.RetryError occurs
         mock_client.download_problem_list.side_effect = PageNotFoundError
         self.assertRaises(
             EnvironmentInitializationError,
@@ -141,17 +141,6 @@ class TestEnvGen(unittest.TestCase):
                     out_example_format="output_{}.txt"
                 ))
         )
-        self.assertEqual(mock_sleep.call_count, 10)
-        mock_sleep.assert_has_calls([mock.call(1.5),
-                                     mock.call(3.0),
-                                     mock.call(6.0),
-                                     mock.call(12.0),
-                                     mock.call(24.0),
-                                     mock.call(48.0),
-                                     mock.call(60.0),
-                                     mock.call(60.0),
-                                     mock.call(60.0),
-                                     mock.call(60.0)])
 
     def assertDirectoriesEqual(self, expected_dir_path, dir_path):
         files1 = get_all_rel_file_paths(expected_dir_path)
