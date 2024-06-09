@@ -4,6 +4,7 @@ import re
 import warnings
 from http.cookiejar import LWPCookieJar
 from typing import List, Optional, Tuple, Union
+from urllib3.util.retry import Retry
 
 import requests
 from bs4 import BeautifulSoup
@@ -66,7 +67,12 @@ def default_credential_supplier() -> Tuple[str, str]:
 class AtCoderClient(metaclass=Singleton):
 
     def __init__(self):
-        self._session = requests.Session()
+        session = requests.Session()
+        retries = Retry(total=3,
+                        backoff_factor=0.5,
+                        status_forcelist=[status for status in range(400, 600)])
+        session.mount("https://", requests.adapters.HTTPAdapter(max_retries=retries))
+        self._session = session
 
     def check_logging_in(self):
         private_url = "https://atcoder.jp/home"
@@ -110,10 +116,11 @@ class AtCoderClient(metaclass=Singleton):
             save_cookie(self._session)
 
     def download_problem_list(self, contest: Contest) -> List[Problem]:
-        resp = self._request(contest.get_problem_list_url())
-        soup = BeautifulSoup(resp.text, "html.parser")
-        if resp.status_code == 404:
+        try:
+            resp = self._request(contest.get_problem_list_url())
+        except requests.exceptions.RetryError:
             raise PageNotFoundError
+        soup = BeautifulSoup(resp.text, "html.parser")
         res = []
         for tag in soup.find('table').select('tr')[1::]:
             tag = tag.find("a")
