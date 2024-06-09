@@ -71,7 +71,8 @@ class AtCoderClient(metaclass=Singleton):
         retries = Retry(total=3,
                         backoff_factor=0.5,
                         status_forcelist=[status for status in range(400, 600)])
-        session.mount("https://", requests.adapters.HTTPAdapter(max_retries=retries))
+        session.mount("https://",
+                      requests.adapters.HTTPAdapter(max_retries=retries))
         self._session = session
 
     def check_logging_in(self):
