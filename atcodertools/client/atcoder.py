@@ -15,7 +15,6 @@ from atcodertools.client.models.submission import Submission
 from atcodertools.common.language import Language
 from atcodertools.common.logging import logger
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
-from atcodertools.release_management.version import __version__
 
 
 class LoginError(Exception):
@@ -68,9 +67,6 @@ class AtCoderClient(metaclass=Singleton):
 
     def __init__(self):
         self._session = requests.Session()
-        self._session.headers.update({
-            'User-Agent': f'atcoder-tools/{__version__} (https://github.com/kyuridenamida/atcoder-tools/)'
-        })
 
     def check_logging_in(self):
         private_url = "https://atcoder.jp/home"
