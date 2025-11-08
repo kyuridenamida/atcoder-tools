@@ -118,7 +118,7 @@ const fetchPRsByMilestoneId = async () => {
 }
 
 const fetchReleaseByTag = async () => {
-    const allReleases = await githubFetch<Release[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/releases");
+    const allReleases = await githubFetch<Release[]>("https://api.github.com/repos/kyuridenamida/atcoder-tools/releases?per_page=100");
     const releaseByTag: { [tagName: string]: Release } = {};
     allReleases.forEach(release => releaseByTag[release.tag_name] = release);
     return releaseByTag;
