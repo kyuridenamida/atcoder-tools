@@ -18,7 +18,7 @@ beautifulsoup4 = "^4.9.3"
 requests = "^2.25.1"
 colorama = "^0.4.4"
 toml = "^0.10.2"
-Jinja2 = "^2.11.3"
+Jinja2 = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
