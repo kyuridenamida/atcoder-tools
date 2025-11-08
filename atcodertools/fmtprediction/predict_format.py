@@ -16,14 +16,7 @@ class MultiplePredictionResultsError(Exception):
         self.cands = cands
 
 
-class PredictionNotAllowedError(Exception):
-    pass
-
-
-def predict_format(content: ProblemContent, is_format_analysis_allowed_by_rule: bool) -> FormatPredictionResult:
-    if not is_format_analysis_allowed_by_rule:
-        raise PredictionNotAllowedError
-
+def predict_format(content: ProblemContent) -> FormatPredictionResult:
     input_format = content.get_input_format()
     samples = content.get_samples()
 

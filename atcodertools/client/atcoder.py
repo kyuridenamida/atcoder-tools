@@ -143,7 +143,7 @@ class AtCoderClient(metaclass=Singleton):
                 r'"/contests/([A-Za-z0-9\'~+\-_]+)"')
             contest_list = url_re.findall(text)
             contest_list = set(contest_list)
-            contest_list.remove("archive")
+            contest_list.discard("archive")
             contest_list = sorted(list(contest_list))
 
             if previous_list == contest_list:

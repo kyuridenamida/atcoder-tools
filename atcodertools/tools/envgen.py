@@ -23,7 +23,7 @@ from atcodertools.fileutils.create_contest_file import create_examples, \
     create_code
 from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
 from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
-    MultiplePredictionResultsError, PredictionNotAllowedError, predict_format
+    MultiplePredictionResultsError, predict_format
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools.utils import with_color
@@ -119,18 +119,15 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     constants = predict_constants(content.original_html)
 
     try:
-        prediction_result = predict_format(
-            content, constants.is_format_analysis_allowed_by_rule or False)
+        prediction_result = predict_format(content)
         emit_info(
             with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
-    except (NoPredictionResultError, MultiplePredictionResultsError, PredictionNotAllowedError) as e:
+    except (NoPredictionResultError, MultiplePredictionResultsError) as e:
         prediction_result = FormatPredictionResult.empty_result()
         if isinstance(e, NoPredictionResultError):
             msg = "No prediction -- Failed to understand the input format"
         elif isinstance(e, MultiplePredictionResultsError):
             msg = "Too many prediction -- Failed to understand the input format"
-        elif isinstance(e, PredictionNotAllowedError):
-            msg = "Format prediction is skipped because it's not allowed by AtCoder rules (At least not allowed in ongoing ABC contests) -- See https://info.atcoder.jp/entry/llm-abc-rules-en"
         emit_warning(with_color(msg, Fore.LIGHTRED_EX))
 
     code_generator = config.code_style_config.code_generator

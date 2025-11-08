@@ -16,6 +16,20 @@
     <meta name="google-site-verification" content="nXGC_JxO0yoP1qBzMnYD_xgufO6leSLw1kyNo2HZltM" />
 
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RC512FD18N"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('set', 'user_properties', {
+
+            'login_status': 'logged_in',
+
+        });
+        gtag('config', 'G-RC512FD18N');
+    </script>
+
+
     <meta name="description" content="プログラミング初級者から上級者まで楽しめる、競技プログラミングコンテストサイト「AtCoder」。オンラインで毎週開催プログラミングコンテストを開催しています。競技プログラミングを用いて、客観的に自分のスキルを計ることのできるサービスです。">
     <meta name="author" content="AtCoder Inc.">
 
@@ -32,25 +46,25 @@
     <meta property="twitter:title" content="提出 - AtCoder Regular Contest 001" />
 
     <link href="//fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="/public/css/bootstrap.min.css?v=202005132348">
-    <link rel="stylesheet" type="text/css" href="/public/css/base.css?v=202005132348">
+    <link rel="stylesheet" type="text/css" href="//img.atcoder.jp/public/20e0d71/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//img.atcoder.jp/public/20e0d71/css/base.css">
     <link rel="shortcut icon" type="image/png" href="//img.atcoder.jp/assets/favicon.png">
     <link rel="apple-touch-icon" href="//img.atcoder.jp/assets/atcoder.png">
-    <script src="/public/js/lib/jquery-1.9.1.min.js?v=202005132348"></script>
-    <script src="/public/js/lib/bootstrap.min.js?v=202005132348"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ja.js"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/lib/jquery-1.9.1.min.js"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/lib/bootstrap.min.js"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/cdn/js.cookie.min.js"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/cdn/moment.min.js"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/cdn/moment_js-ja.js"></script>
     <script>
         var LANG = "ja";
         var userScreenName = "kyuridenamida";
-        var csrfToken = "2TfLiM/mkOoZRM9OnbCFUYWuq1gqpC5lhkAlhRNZ3as="
+        var csrfToken = "s7aDUI13R8FHa5mglSOQJptstVbvnjYhaiX0gYK2LS0="
     </script>
-    <script src="/public/js/utils.js?v=202005132348"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/utils.js"></script>
 
 
-    <script src="/public/js/contest.js?v=202005132348"></script>
-    <link href="/public/css/contest.css?v=202005132348" rel="stylesheet" />
+    <script src="//img.atcoder.jp/public/20e0d71/js/contest.js"></script>
+    <link href="//img.atcoder.jp/public/20e0d71/css/contest.css" rel="stylesheet" />
     <script>
         var contestScreenName = "arc001";
         var remainingText = "残り時間";
@@ -61,15 +75,13 @@
     <style></style>
 
 
+    <link href="//img.atcoder.jp/public/20e0d71/css/cdn/select2.min.css" rel="stylesheet" />
+    <link href="//img.atcoder.jp/public/20e0d71/css/cdn/select2-bootstrap.min.css" rel="stylesheet" />
+    <script src="//img.atcoder.jp/public/20e0d71/js/lib/select2.min.js"></script>
 
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" rel="stylesheet" />
-    <script src="/public/js/lib/select2.min.js?v=202005132348"></script>
 
-
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/codemirror.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.38.0/codemirror.min.js"></script>
-    <script src="/public/js/codeMirror/merged.js?v=202005132348"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/ace/ace.js"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/ace/ext-language_tools.js"></script>
 
 
 
@@ -81,8 +93,7 @@
 
 
 
-    <script src="/public/js/base.js?v=202005132348"></script>
-    <script src="/public/js/ga.js?v=202005132348"></script>
+    <script src="//img.atcoder.jp/public/20e0d71/js/base.js"></script>
 </head>
 
 <body>
@@ -183,10 +194,11 @@
     </nav>
 
     <form method="POST" name="form_logout" action="/logout?continue=https%3A%2F%2Fatcoder.jp%2Fcontests%2Farc001%2Fsubmit">
-        <input type="hidden" name="csrf_token" value="2TfLiM/mkOoZRM9OnbCFUYWuq1gqpC5lhkAlhRNZ3as=" />
+        <input type="hidden" name="csrf_token" value="s7aDUI13R8FHa5mglSOQJptstVbvnjYhaiX0gYK2LS0=" />
     </form>
     <div id="main-container" class="container"
          style="padding-top:50px;">
+
 
 
         <div class="row">
@@ -208,7 +220,7 @@
 
 
 
-                    <li><a href="/contests/arc001/clarifications"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> 質問 <span id="clar-badge" class="badge"></span></a></li>
+                    <li><a href="/contests/arc001/clarifications"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> 質問 <span id="clar-badge" class="badge" ></span></a></li>
 
 
 
@@ -222,8 +234,11 @@
                             <li><a href="/contests/arc001/submissions"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> すべての提出</a></li>
 
                             <li><a href="/contests/arc001/submissions/me"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> 自分の提出</a></li>
+
+
                             <li class="divider"></li>
                             <li><a href="/contests/arc001/score"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 自分の得点状況</a></li>
+
 
                         </ul>
                     </li>
@@ -246,11 +261,7 @@
 
 
 
-
-
-                    <li><a href="http://www.slideshare.net/chokudai/arc001" target="_blank"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> 解説</a></li>
-
-
+                    <li><a href="/contests/arc001/editorial"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> 解説</a></li>
 
 
 
@@ -264,7 +275,7 @@
                 <form class="form-horizontal form-code-submit" action="/contests/arc001/submit" method="POST">
 
                     <div class="form-group ">
-                        <label class="control-label col-sm-2" for="select-task">問題</label>
+                        <label class="control-label col-sm-3 col-md-2" for="select-task">問題</label>
                         <div class="col-sm-5">
                             <select class="form-control" id="select-task" name="data.TaskScreenName">
 
@@ -283,124 +294,192 @@
 
 
                     <div class="form-group ">
-                        <label class="control-label col-sm-2" for="select-lang">言語</label>
+                        <label class="control-label col-sm-3 col-md-2" for="select-lang">言語</label>
                         <div id="select-lang" class="col-sm-5" data-name="data.LanguageId" style="display:none;">
 
                             <div id="select-lang-arc001_1">
                                 <select class="form-control" data-placeholder="-" style="width:300px;">
                                     <option></option>
 
-                                    <option value="3003" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; 20 (gcc 12.2)</option>
+                                    <option value="5001" data-ace-mode="c_cpp">C&#43;&#43; 20 (gcc 12.2)</option>
 
-                                    <option value="3001" data-mime="text/x-sh">Bash (GNU bash v4.3.11)</option>
+                                    <option value="5002" data-ace-mode="golang">Go (go 1.20.6)</option>
 
-                                    <option value="3002" data-mime="text/x-csrc">C (GCC 5.4.1)</option>
+                                    <option value="5003" data-ace-mode="csharp">C# 11.0 (.NET 7.0.7)</option>
 
-                                    <option value="3004" data-mime="text/x-csrc">C (Clang 3.8.0)</option>
+                                    <option value="5004" data-ace-mode="kotlin">Kotlin (Kotlin/JVM 1.8.20)</option>
 
-                                    <option value="3005" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (Clang 3.8.0)</option>
+                                    <option value="5005" data-ace-mode="java">Java (OpenJDK 17)</option>
 
-                                    <option value="3006" data-mime="text/x-csharp">C# (Mono 4.6.2.0)</option>
+                                    <option value="5006" data-ace-mode="nim">Nim (Nim 1.6.14)</option>
 
-                                    <option value="3007" data-mime="text/x-clojure">Clojure (1.8.0)</option>
+                                    <option value="5007" data-ace-mode="text">V (V 0.4)</option>
 
-                                    <option value="3008" data-mime="text/x-common-lisp">Common Lisp (SBCL 1.1.14)</option>
+                                    <option value="5008" data-ace-mode="text">Zig (Zig 0.10.1)</option>
 
-                                    <option value="3009" data-mime="text/x-d">D (DMD64 v2.070.1)</option>
+                                    <option value="5009" data-ace-mode="javascript">JavaScript (Node.js 18.16.1)</option>
 
-                                    <option value="3010" data-mime="text/x-d">D (LDC 0.17.0)</option>
+                                    <option value="5010" data-ace-mode="javascript">JavaScript (Deno 1.35.1)</option>
 
-                                    <option value="3011" data-mime="text/x-d">D (GDC 4.9.4)</option>
+                                    <option value="5011" data-ace-mode="r">R (GNU R 4.2.1)</option>
 
-                                    <option value="3012" data-mime="text/x-fortran">Fortran (gfortran v4.8.4)</option>
+                                    <option value="5012" data-ace-mode="d">D (DMD 2.104.0)</option>
 
-                                    <option value="3013" data-mime="text/x-go">Go (1.6)</option>
+                                    <option value="5013" data-ace-mode="d">D (LDC 1.32.2)</option>
 
-                                    <option value="3014" data-mime="text/x-haskell">Haskell (GHC 7.10.3)</option>
+                                    <option value="5014" data-ace-mode="swift">Swift (swift 5.8.1)</option>
 
-                                    <option value="3015" data-mime="text/x-java">Java7 (OpenJDK 1.7.0)</option>
+                                    <option value="5015" data-ace-mode="dart">Dart (Dart 3.0.5)</option>
 
-                                    <option value="3016" data-mime="text/x-java">Java8 (OpenJDK 1.8.0)</option>
+                                    <option value="5016" data-ace-mode="php">PHP (php 8.2.8)</option>
 
-                                    <option value="3017" data-mime="text/javascript">JavaScript (node.js v5.12)</option>
+                                    <option value="5017" data-ace-mode="c_cpp">C (gcc 12.2.0)</option>
 
-                                    <option value="3018" data-mime="text/x-ocaml">OCaml (4.02.3)</option>
+                                    <option value="5018" data-ace-mode="ruby">Ruby (ruby 3.2.2)</option>
 
-                                    <option value="3019" data-mime="text/x-pascal">Pascal (FPC 2.6.2)</option>
+                                    <option value="5019" data-ace-mode="crystal">Crystal (Crystal 1.9.1)</option>
 
-                                    <option value="3020" data-mime="text/x-perl">Perl (v5.18.2)</option>
+                                    <option value="5020" data-ace-mode="text">Brainfuck (bf 20041219)</option>
 
-                                    <option value="3021" data-mime="text/x-php">PHP (5.6.30)</option>
+                                    <option value="5021" data-ace-mode="fsharp">F# 7.0 (.NET 7.0.7)</option>
 
-                                    <option value="3022" data-mime="text/x-python">Python2 (2.7.6)</option>
+                                    <option value="5022" data-ace-mode="julia">Julia (Julia 1.9.2)</option>
 
-                                    <option value="3023" data-mime="text/x-python">Python3 (3.4.3)</option>
+                                    <option value="5023" data-ace-mode="sh">Bash (bash 5.2.2)</option>
 
-                                    <option value="3024" data-mime="text/x-ruby">Ruby (2.3.3)</option>
+                                    <option value="5024" data-ace-mode="text">Text (cat 8.32)</option>
 
-                                    <option value="3025" data-mime="text/x-scala">Scala (2.11.7)</option>
+                                    <option value="5025" data-ace-mode="haskell">Haskell (GHC 9.4.5)</option>
 
-                                    <option value="3026" data-mime="text/x-scheme">Scheme (Gauche 0.9.3.3)</option>
+                                    <option value="5026" data-ace-mode="fortran">Fortran (gfortran 12.2)</option>
 
-                                    <option value="3027" data-mime="text/plain">Text (cat)</option>
+                                    <option value="5027" data-ace-mode="lua">Lua (LuaJIT 2.1.0-beta3)</option>
 
-                                    <option value="3028" data-mime="text/x-vb">Visual Basic (Mono 4.0.1)</option>
+                                    <option value="5028" data-ace-mode="c_cpp">C&#43;&#43; 23 (gcc 12.2)</option>
 
-                                    <option value="3029" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (GCC 5.4.1)</option>
+                                    <option value="5029" data-ace-mode="lisp">Common Lisp (SBCL 2.3.6)</option>
 
-                                    <option value="3030" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (Clang 3.8.0)</option>
+                                    <option value="5030" data-ace-mode="cobol">COBOL (Free) (GnuCOBOL 3.1.2)</option>
 
-                                    <option value="3501" data-mime="text/x-objectivec">Objective-C (GCC 5.3.0)</option>
+                                    <option value="5031" data-ace-mode="c_cpp">C&#43;&#43; 23 (Clang 16.0.6)</option>
 
-                                    <option value="3502" data-mime="text/x-objectivec">Objective-C (Clang3.8.0)</option>
+                                    <option value="5032" data-ace-mode="sh">Zsh (Zsh 5.9)</option>
 
-                                    <option value="3503" data-mime="text/x-swift">Swift (swift-2.2-RELEASE)</option>
+                                    <option value="5033" data-ace-mode="python">SageMath (SageMath 9.5)</option>
 
-                                    <option value="3504" data-mime="text/x-rust">Rust (1.15.1)</option>
+                                    <option value="5034" data-ace-mode="sh">Sed (GNU sed 4.8)</option>
 
-                                    <option value="3505" data-mime="text/x-sh">Sed (GNU sed 4.2.2)</option>
+                                    <option value="5035" data-ace-mode="text">bc (bc 1.07.1)</option>
 
-                                    <option value="3506" data-mime="text/x-sh">Awk (mawk 1.3.3)</option>
+                                    <option value="5036" data-ace-mode="text">dc (dc 1.07.1)</option>
 
-                                    <option value="3507" data-mime="text/x-brainfuck">Brainfuck (bf 20041219)</option>
+                                    <option value="5037" data-ace-mode="perl">Perl (perl  5.34)</option>
 
-                                    <option value="3508" data-mime="text/x-sml">Standard ML (MLton 20100608)</option>
+                                    <option value="5038" data-ace-mode="sh">AWK (GNU Awk 5.0.1)</option>
 
-                                    <option value="3509" data-mime="text/x-python">PyPy2 (5.6.0)</option>
+                                    <option value="5039" data-ace-mode="text">なでしこ (cnako3 3.4.20)</option>
 
-                                    <option value="3510" data-mime="text/x-python">PyPy3 (2.4.0)</option>
+                                    <option value="5040" data-ace-mode="text">Assembly x64 (NASM 2.15.05)</option>
 
-                                    <option value="3511" data-mime="text/x-crystal">Crystal (0.20.5)</option>
+                                    <option value="5041" data-ace-mode="pascal">Pascal (fpc 3.2.2)</option>
 
-                                    <option value="3512" data-mime="text/x-fsharp">F# (Mono 4.0)</option>
+                                    <option value="5042" data-ace-mode="csharp">C# 11.0 AOT (.NET 7.0.7)</option>
 
-                                    <option value="3513" data-mime="text/x-unlambda">Unlambda (0.1.3)</option>
+                                    <option value="5043" data-ace-mode="lua">Lua (Lua 5.4.6)</option>
 
-                                    <option value="3514" data-mime="text/x-lua">Lua (5.3.2)</option>
+                                    <option value="5044" data-ace-mode="prolog">Prolog (SWI-Prolog 9.0.4)</option>
 
-                                    <option value="3515" data-mime="text/x-lua">LuaJIT (2.0.4)</option>
+                                    <option value="5045" data-ace-mode="sh">PowerShell (PowerShell 7.3.1)</option>
 
-                                    <option value="3516" data-mime="text/x-moonscript">MoonScript (0.5.0)</option>
+                                    <option value="5046" data-ace-mode="scheme">Scheme (Gauche 0.9.12)</option>
 
-                                    <option value="3517" data-mime="text/x-ceylon">Ceylon (1.2.1)</option>
+                                    <option value="5047" data-ace-mode="scala">Scala 3.3.0 (Scala Native 0.4.14)</option>
 
-                                    <option value="3518" data-mime="text/x-julia">Julia (0.5.0)</option>
+                                    <option value="5048" data-ace-mode="vbscript">Visual Basic 16.9 (.NET 7.0.7)</option>
 
-                                    <option value="3519" data-mime="text/x-octave">Octave (4.0.2)</option>
+                                    <option value="5049" data-ace-mode="text">Forth (gforth 0.7.3)</option>
 
-                                    <option value="3520" data-mime="text/x-nim">Nim (0.13.0)</option>
+                                    <option value="5050" data-ace-mode="clojure">Clojure (babashka 1.3.181)</option>
 
-                                    <option value="3521" data-mime="text/typescript">TypeScript (2.1.6)</option>
+                                    <option value="5051" data-ace-mode="erlang">Erlang (Erlang 26.0.2)</option>
 
-                                    <option value="3522" data-mime="text/x-perl">Perl6 (rakudo-star 2016.01)</option>
+                                    <option value="5052" data-ace-mode="typescript">TypeScript 5.1 (Deno 1.35.1)</option>
 
-                                    <option value="3523" data-mime="text/x-kotlin">Kotlin (1.0.0)</option>
+                                    <option value="5053" data-ace-mode="c_cpp">C&#43;&#43; 17 (gcc 12.2)</option>
 
-                                    <option value="3524" data-mime="text/x-php">PHP7 (7.0.15)</option>
+                                    <option value="5054" data-ace-mode="rust">Rust (rustc 1.70.0)</option>
 
-                                    <option value="3525" data-mime="text/x-cobol">COBOL - Fixed (OpenCOBOL 1.1.0)</option>
+                                    <option value="5055" data-ace-mode="python">Python (CPython 3.11.4)</option>
 
-                                    <option value="3526" data-mime="text/x-cobol">COBOL - Free (OpenCOBOL 1.1.0)</option>
+                                    <option value="5056" data-ace-mode="scala">Scala (Dotty 3.3.0)</option>
+
+                                    <option value="5057" data-ace-mode="text">Koka (koka 2.4.0)</option>
+
+                                    <option value="5058" data-ace-mode="typescript">TypeScript 5.1 (Node.js 18.16.1)</option>
+
+                                    <option value="5059" data-ace-mode="ocaml">OCaml (ocamlopt 5.0.0)</option>
+
+                                    <option value="5060" data-ace-mode="raku">Raku (Rakudo 2023.06)</option>
+
+                                    <option value="5061" data-ace-mode="text">Vim (vim 9.0.0242)</option>
+
+                                    <option value="5062" data-ace-mode="lisp">Emacs Lisp (Native Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5063" data-ace-mode="python">Python (Mambaforge / CPython 3.10.10)</option>
+
+                                    <option value="5064" data-ace-mode="clojure">Clojure (clojure 1.11.1)</option>
+
+                                    <option value="5065" data-ace-mode="text">プロデル (mono版プロデル 1.9.1182)</option>
+
+                                    <option value="5066" data-ace-mode="text">ECLiPSe (ECLiPSe 7.1_13)</option>
+
+                                    <option value="5067" data-ace-mode="text">Nibbles (literate form) (nibbles 1.01)</option>
+
+                                    <option value="5068" data-ace-mode="ada">Ada (GNAT 12.2)</option>
+
+                                    <option value="5069" data-ace-mode="text">jq (jq 1.6)</option>
+
+                                    <option value="5070" data-ace-mode="text">Cyber (Cyber v0.2-Latest)</option>
+
+                                    <option value="5071" data-ace-mode="clojure">Carp (Carp 0.5.5)</option>
+
+                                    <option value="5072" data-ace-mode="c_cpp">C&#43;&#43; 17 (Clang 16.0.6)</option>
+
+                                    <option value="5073" data-ace-mode="c_cpp">C&#43;&#43; 20 (Clang 16.0.6)</option>
+
+                                    <option value="5074" data-ace-mode="text">LLVM IR (Clang 16.0.6)</option>
+
+                                    <option value="5075" data-ace-mode="lisp">Emacs Lisp (Byte Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5076" data-ace-mode="text">Factor (Factor 0.98)</option>
+
+                                    <option value="5077" data-ace-mode="d">D (GDC 12.2)</option>
+
+                                    <option value="5078" data-ace-mode="python">Python (PyPy 3.10-v7.3.12)</option>
+
+                                    <option value="5079" data-ace-mode="text">Whitespace (whitespacers 1.0.0)</option>
+
+                                    <option value="5080" data-ace-mode="text">&gt;&lt;&gt; (fishr 0.1.0)</option>
+
+                                    <option value="5081" data-ace-mode="ocaml">ReasonML (reason 3.9.0)</option>
+
+                                    <option value="5082" data-ace-mode="python">Python (Cython 0.29.34)</option>
+
+                                    <option value="5083" data-ace-mode="matlab">Octave (GNU Octave 8.2.0)</option>
+
+                                    <option value="5084" data-ace-mode="haxe">Haxe (JVM) (Haxe 4.3.1)</option>
+
+                                    <option value="5085" data-ace-mode="elixir">Elixir (Elixir 1.15.2)</option>
+
+                                    <option value="5086" data-ace-mode="text">Mercury (Mercury 22.01.6)</option>
+
+                                    <option value="5087" data-ace-mode="text">Seed7 (Seed7 3.2.1)</option>
+
+                                    <option value="5088" data-ace-mode="lisp">Emacs Lisp (No Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5089" data-ace-mode="text">Unison (Unison M5b)</option>
+
+                                    <option value="5090" data-ace-mode="cobol">COBOL (GnuCOBOL(Fixed) 3.1.2)</option>
 
                                 </select>
                             </div>
@@ -409,117 +488,185 @@
                                 <select class="form-control" data-placeholder="-" style="width:300px;">
                                     <option></option>
 
-                                    <option value="3003" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; 20 (gcc 12.2)</option>
+                                    <option value="5001" data-ace-mode="c_cpp">C&#43;&#43; 20 (gcc 12.2)</option>
 
-                                    <option value="3001" data-mime="text/x-sh">Bash (GNU bash v4.3.11)</option>
+                                    <option value="5002" data-ace-mode="golang">Go (go 1.20.6)</option>
 
-                                    <option value="3002" data-mime="text/x-csrc">C (GCC 5.4.1)</option>
+                                    <option value="5003" data-ace-mode="csharp">C# 11.0 (.NET 7.0.7)</option>
 
-                                    <option value="3004" data-mime="text/x-csrc">C (Clang 3.8.0)</option>
+                                    <option value="5004" data-ace-mode="kotlin">Kotlin (Kotlin/JVM 1.8.20)</option>
 
-                                    <option value="3005" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (Clang 3.8.0)</option>
+                                    <option value="5005" data-ace-mode="java">Java (OpenJDK 17)</option>
 
-                                    <option value="3006" data-mime="text/x-csharp">C# (Mono 4.6.2.0)</option>
+                                    <option value="5006" data-ace-mode="nim">Nim (Nim 1.6.14)</option>
 
-                                    <option value="3007" data-mime="text/x-clojure">Clojure (1.8.0)</option>
+                                    <option value="5007" data-ace-mode="text">V (V 0.4)</option>
 
-                                    <option value="3008" data-mime="text/x-common-lisp">Common Lisp (SBCL 1.1.14)</option>
+                                    <option value="5008" data-ace-mode="text">Zig (Zig 0.10.1)</option>
 
-                                    <option value="3009" data-mime="text/x-d">D (DMD64 v2.070.1)</option>
+                                    <option value="5009" data-ace-mode="javascript">JavaScript (Node.js 18.16.1)</option>
 
-                                    <option value="3010" data-mime="text/x-d">D (LDC 0.17.0)</option>
+                                    <option value="5010" data-ace-mode="javascript">JavaScript (Deno 1.35.1)</option>
 
-                                    <option value="3011" data-mime="text/x-d">D (GDC 4.9.4)</option>
+                                    <option value="5011" data-ace-mode="r">R (GNU R 4.2.1)</option>
 
-                                    <option value="3012" data-mime="text/x-fortran">Fortran (gfortran v4.8.4)</option>
+                                    <option value="5012" data-ace-mode="d">D (DMD 2.104.0)</option>
 
-                                    <option value="3013" data-mime="text/x-go">Go (1.6)</option>
+                                    <option value="5013" data-ace-mode="d">D (LDC 1.32.2)</option>
 
-                                    <option value="3014" data-mime="text/x-haskell">Haskell (GHC 7.10.3)</option>
+                                    <option value="5014" data-ace-mode="swift">Swift (swift 5.8.1)</option>
 
-                                    <option value="3015" data-mime="text/x-java">Java7 (OpenJDK 1.7.0)</option>
+                                    <option value="5015" data-ace-mode="dart">Dart (Dart 3.0.5)</option>
 
-                                    <option value="3016" data-mime="text/x-java">Java8 (OpenJDK 1.8.0)</option>
+                                    <option value="5016" data-ace-mode="php">PHP (php 8.2.8)</option>
 
-                                    <option value="3017" data-mime="text/javascript">JavaScript (node.js v5.12)</option>
+                                    <option value="5017" data-ace-mode="c_cpp">C (gcc 12.2.0)</option>
 
-                                    <option value="3018" data-mime="text/x-ocaml">OCaml (4.02.3)</option>
+                                    <option value="5018" data-ace-mode="ruby">Ruby (ruby 3.2.2)</option>
 
-                                    <option value="3019" data-mime="text/x-pascal">Pascal (FPC 2.6.2)</option>
+                                    <option value="5019" data-ace-mode="crystal">Crystal (Crystal 1.9.1)</option>
 
-                                    <option value="3020" data-mime="text/x-perl">Perl (v5.18.2)</option>
+                                    <option value="5020" data-ace-mode="text">Brainfuck (bf 20041219)</option>
 
-                                    <option value="3021" data-mime="text/x-php">PHP (5.6.30)</option>
+                                    <option value="5021" data-ace-mode="fsharp">F# 7.0 (.NET 7.0.7)</option>
 
-                                    <option value="3022" data-mime="text/x-python">Python2 (2.7.6)</option>
+                                    <option value="5022" data-ace-mode="julia">Julia (Julia 1.9.2)</option>
 
-                                    <option value="3023" data-mime="text/x-python">Python3 (3.4.3)</option>
+                                    <option value="5023" data-ace-mode="sh">Bash (bash 5.2.2)</option>
 
-                                    <option value="3024" data-mime="text/x-ruby">Ruby (2.3.3)</option>
+                                    <option value="5024" data-ace-mode="text">Text (cat 8.32)</option>
 
-                                    <option value="3025" data-mime="text/x-scala">Scala (2.11.7)</option>
+                                    <option value="5025" data-ace-mode="haskell">Haskell (GHC 9.4.5)</option>
 
-                                    <option value="3026" data-mime="text/x-scheme">Scheme (Gauche 0.9.3.3)</option>
+                                    <option value="5026" data-ace-mode="fortran">Fortran (gfortran 12.2)</option>
 
-                                    <option value="3027" data-mime="text/plain">Text (cat)</option>
+                                    <option value="5027" data-ace-mode="lua">Lua (LuaJIT 2.1.0-beta3)</option>
 
-                                    <option value="3028" data-mime="text/x-vb">Visual Basic (Mono 4.0.1)</option>
+                                    <option value="5028" data-ace-mode="c_cpp">C&#43;&#43; 23 (gcc 12.2)</option>
 
-                                    <option value="3029" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (GCC 5.4.1)</option>
+                                    <option value="5029" data-ace-mode="lisp">Common Lisp (SBCL 2.3.6)</option>
 
-                                    <option value="3030" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (Clang 3.8.0)</option>
+                                    <option value="5030" data-ace-mode="cobol">COBOL (Free) (GnuCOBOL 3.1.2)</option>
 
-                                    <option value="3501" data-mime="text/x-objectivec">Objective-C (GCC 5.3.0)</option>
+                                    <option value="5031" data-ace-mode="c_cpp">C&#43;&#43; 23 (Clang 16.0.6)</option>
 
-                                    <option value="3502" data-mime="text/x-objectivec">Objective-C (Clang3.8.0)</option>
+                                    <option value="5032" data-ace-mode="sh">Zsh (Zsh 5.9)</option>
 
-                                    <option value="3503" data-mime="text/x-swift">Swift (swift-2.2-RELEASE)</option>
+                                    <option value="5033" data-ace-mode="python">SageMath (SageMath 9.5)</option>
 
-                                    <option value="3504" data-mime="text/x-rust">Rust (1.15.1)</option>
+                                    <option value="5034" data-ace-mode="sh">Sed (GNU sed 4.8)</option>
 
-                                    <option value="3505" data-mime="text/x-sh">Sed (GNU sed 4.2.2)</option>
+                                    <option value="5035" data-ace-mode="text">bc (bc 1.07.1)</option>
 
-                                    <option value="3506" data-mime="text/x-sh">Awk (mawk 1.3.3)</option>
+                                    <option value="5036" data-ace-mode="text">dc (dc 1.07.1)</option>
 
-                                    <option value="3507" data-mime="text/x-brainfuck">Brainfuck (bf 20041219)</option>
+                                    <option value="5037" data-ace-mode="perl">Perl (perl  5.34)</option>
 
-                                    <option value="3508" data-mime="text/x-sml">Standard ML (MLton 20100608)</option>
+                                    <option value="5038" data-ace-mode="sh">AWK (GNU Awk 5.0.1)</option>
 
-                                    <option value="3509" data-mime="text/x-python">PyPy2 (5.6.0)</option>
+                                    <option value="5039" data-ace-mode="text">なでしこ (cnako3 3.4.20)</option>
 
-                                    <option value="3510" data-mime="text/x-python">PyPy3 (2.4.0)</option>
+                                    <option value="5040" data-ace-mode="text">Assembly x64 (NASM 2.15.05)</option>
 
-                                    <option value="3511" data-mime="text/x-crystal">Crystal (0.20.5)</option>
+                                    <option value="5041" data-ace-mode="pascal">Pascal (fpc 3.2.2)</option>
 
-                                    <option value="3512" data-mime="text/x-fsharp">F# (Mono 4.0)</option>
+                                    <option value="5042" data-ace-mode="csharp">C# 11.0 AOT (.NET 7.0.7)</option>
 
-                                    <option value="3513" data-mime="text/x-unlambda">Unlambda (0.1.3)</option>
+                                    <option value="5043" data-ace-mode="lua">Lua (Lua 5.4.6)</option>
 
-                                    <option value="3514" data-mime="text/x-lua">Lua (5.3.2)</option>
+                                    <option value="5044" data-ace-mode="prolog">Prolog (SWI-Prolog 9.0.4)</option>
 
-                                    <option value="3515" data-mime="text/x-lua">LuaJIT (2.0.4)</option>
+                                    <option value="5045" data-ace-mode="sh">PowerShell (PowerShell 7.3.1)</option>
 
-                                    <option value="3516" data-mime="text/x-moonscript">MoonScript (0.5.0)</option>
+                                    <option value="5046" data-ace-mode="scheme">Scheme (Gauche 0.9.12)</option>
 
-                                    <option value="3517" data-mime="text/x-ceylon">Ceylon (1.2.1)</option>
+                                    <option value="5047" data-ace-mode="scala">Scala 3.3.0 (Scala Native 0.4.14)</option>
 
-                                    <option value="3518" data-mime="text/x-julia">Julia (0.5.0)</option>
+                                    <option value="5048" data-ace-mode="vbscript">Visual Basic 16.9 (.NET 7.0.7)</option>
 
-                                    <option value="3519" data-mime="text/x-octave">Octave (4.0.2)</option>
+                                    <option value="5049" data-ace-mode="text">Forth (gforth 0.7.3)</option>
 
-                                    <option value="3520" data-mime="text/x-nim">Nim (0.13.0)</option>
+                                    <option value="5050" data-ace-mode="clojure">Clojure (babashka 1.3.181)</option>
 
-                                    <option value="3521" data-mime="text/typescript">TypeScript (2.1.6)</option>
+                                    <option value="5051" data-ace-mode="erlang">Erlang (Erlang 26.0.2)</option>
 
-                                    <option value="3522" data-mime="text/x-perl">Perl6 (rakudo-star 2016.01)</option>
+                                    <option value="5052" data-ace-mode="typescript">TypeScript 5.1 (Deno 1.35.1)</option>
 
-                                    <option value="3523" data-mime="text/x-kotlin">Kotlin (1.0.0)</option>
+                                    <option value="5053" data-ace-mode="c_cpp">C&#43;&#43; 17 (gcc 12.2)</option>
 
-                                    <option value="3524" data-mime="text/x-php">PHP7 (7.0.15)</option>
+                                    <option value="5054" data-ace-mode="rust">Rust (rustc 1.70.0)</option>
 
-                                    <option value="3525" data-mime="text/x-cobol">COBOL - Fixed (OpenCOBOL 1.1.0)</option>
+                                    <option value="5055" data-ace-mode="python">Python (CPython 3.11.4)</option>
 
-                                    <option value="3526" data-mime="text/x-cobol">COBOL - Free (OpenCOBOL 1.1.0)</option>
+                                    <option value="5056" data-ace-mode="scala">Scala (Dotty 3.3.0)</option>
+
+                                    <option value="5057" data-ace-mode="text">Koka (koka 2.4.0)</option>
+
+                                    <option value="5058" data-ace-mode="typescript">TypeScript 5.1 (Node.js 18.16.1)</option>
+
+                                    <option value="5059" data-ace-mode="ocaml">OCaml (ocamlopt 5.0.0)</option>
+
+                                    <option value="5060" data-ace-mode="raku">Raku (Rakudo 2023.06)</option>
+
+                                    <option value="5061" data-ace-mode="text">Vim (vim 9.0.0242)</option>
+
+                                    <option value="5062" data-ace-mode="lisp">Emacs Lisp (Native Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5063" data-ace-mode="python">Python (Mambaforge / CPython 3.10.10)</option>
+
+                                    <option value="5064" data-ace-mode="clojure">Clojure (clojure 1.11.1)</option>
+
+                                    <option value="5065" data-ace-mode="text">プロデル (mono版プロデル 1.9.1182)</option>
+
+                                    <option value="5066" data-ace-mode="text">ECLiPSe (ECLiPSe 7.1_13)</option>
+
+                                    <option value="5067" data-ace-mode="text">Nibbles (literate form) (nibbles 1.01)</option>
+
+                                    <option value="5068" data-ace-mode="ada">Ada (GNAT 12.2)</option>
+
+                                    <option value="5069" data-ace-mode="text">jq (jq 1.6)</option>
+
+                                    <option value="5070" data-ace-mode="text">Cyber (Cyber v0.2-Latest)</option>
+
+                                    <option value="5071" data-ace-mode="clojure">Carp (Carp 0.5.5)</option>
+
+                                    <option value="5072" data-ace-mode="c_cpp">C&#43;&#43; 17 (Clang 16.0.6)</option>
+
+                                    <option value="5073" data-ace-mode="c_cpp">C&#43;&#43; 20 (Clang 16.0.6)</option>
+
+                                    <option value="5074" data-ace-mode="text">LLVM IR (Clang 16.0.6)</option>
+
+                                    <option value="5075" data-ace-mode="lisp">Emacs Lisp (Byte Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5076" data-ace-mode="text">Factor (Factor 0.98)</option>
+
+                                    <option value="5077" data-ace-mode="d">D (GDC 12.2)</option>
+
+                                    <option value="5078" data-ace-mode="python">Python (PyPy 3.10-v7.3.12)</option>
+
+                                    <option value="5079" data-ace-mode="text">Whitespace (whitespacers 1.0.0)</option>
+
+                                    <option value="5080" data-ace-mode="text">&gt;&lt;&gt; (fishr 0.1.0)</option>
+
+                                    <option value="5081" data-ace-mode="ocaml">ReasonML (reason 3.9.0)</option>
+
+                                    <option value="5082" data-ace-mode="python">Python (Cython 0.29.34)</option>
+
+                                    <option value="5083" data-ace-mode="matlab">Octave (GNU Octave 8.2.0)</option>
+
+                                    <option value="5084" data-ace-mode="haxe">Haxe (JVM) (Haxe 4.3.1)</option>
+
+                                    <option value="5085" data-ace-mode="elixir">Elixir (Elixir 1.15.2)</option>
+
+                                    <option value="5086" data-ace-mode="text">Mercury (Mercury 22.01.6)</option>
+
+                                    <option value="5087" data-ace-mode="text">Seed7 (Seed7 3.2.1)</option>
+
+                                    <option value="5088" data-ace-mode="lisp">Emacs Lisp (No Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5089" data-ace-mode="text">Unison (Unison M5b)</option>
+
+                                    <option value="5090" data-ace-mode="cobol">COBOL (GnuCOBOL(Fixed) 3.1.2)</option>
 
                                 </select>
                             </div>
@@ -528,117 +675,185 @@
                                 <select class="form-control" data-placeholder="-" style="width:300px;">
                                     <option></option>
 
-                                    <option value="3003" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; 20 (gcc 12.2)</option>
+                                    <option value="5001" data-ace-mode="c_cpp">C&#43;&#43; 20 (gcc 12.2)</option>
 
-                                    <option value="3001" data-mime="text/x-sh">Bash (GNU bash v4.3.11)</option>
+                                    <option value="5002" data-ace-mode="golang">Go (go 1.20.6)</option>
 
-                                    <option value="3002" data-mime="text/x-csrc">C (GCC 5.4.1)</option>
+                                    <option value="5003" data-ace-mode="csharp">C# 11.0 (.NET 7.0.7)</option>
 
-                                    <option value="3004" data-mime="text/x-csrc">C (Clang 3.8.0)</option>
+                                    <option value="5004" data-ace-mode="kotlin">Kotlin (Kotlin/JVM 1.8.20)</option>
 
-                                    <option value="3005" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (Clang 3.8.0)</option>
+                                    <option value="5005" data-ace-mode="java">Java (OpenJDK 17)</option>
 
-                                    <option value="3006" data-mime="text/x-csharp">C# (Mono 4.6.2.0)</option>
+                                    <option value="5006" data-ace-mode="nim">Nim (Nim 1.6.14)</option>
 
-                                    <option value="3007" data-mime="text/x-clojure">Clojure (1.8.0)</option>
+                                    <option value="5007" data-ace-mode="text">V (V 0.4)</option>
 
-                                    <option value="3008" data-mime="text/x-common-lisp">Common Lisp (SBCL 1.1.14)</option>
+                                    <option value="5008" data-ace-mode="text">Zig (Zig 0.10.1)</option>
 
-                                    <option value="3009" data-mime="text/x-d">D (DMD64 v2.070.1)</option>
+                                    <option value="5009" data-ace-mode="javascript">JavaScript (Node.js 18.16.1)</option>
 
-                                    <option value="3010" data-mime="text/x-d">D (LDC 0.17.0)</option>
+                                    <option value="5010" data-ace-mode="javascript">JavaScript (Deno 1.35.1)</option>
 
-                                    <option value="3011" data-mime="text/x-d">D (GDC 4.9.4)</option>
+                                    <option value="5011" data-ace-mode="r">R (GNU R 4.2.1)</option>
 
-                                    <option value="3012" data-mime="text/x-fortran">Fortran (gfortran v4.8.4)</option>
+                                    <option value="5012" data-ace-mode="d">D (DMD 2.104.0)</option>
 
-                                    <option value="3013" data-mime="text/x-go">Go (1.6)</option>
+                                    <option value="5013" data-ace-mode="d">D (LDC 1.32.2)</option>
 
-                                    <option value="3014" data-mime="text/x-haskell">Haskell (GHC 7.10.3)</option>
+                                    <option value="5014" data-ace-mode="swift">Swift (swift 5.8.1)</option>
 
-                                    <option value="3015" data-mime="text/x-java">Java7 (OpenJDK 1.7.0)</option>
+                                    <option value="5015" data-ace-mode="dart">Dart (Dart 3.0.5)</option>
 
-                                    <option value="3016" data-mime="text/x-java">Java8 (OpenJDK 1.8.0)</option>
+                                    <option value="5016" data-ace-mode="php">PHP (php 8.2.8)</option>
 
-                                    <option value="3017" data-mime="text/javascript">JavaScript (node.js v5.12)</option>
+                                    <option value="5017" data-ace-mode="c_cpp">C (gcc 12.2.0)</option>
 
-                                    <option value="3018" data-mime="text/x-ocaml">OCaml (4.02.3)</option>
+                                    <option value="5018" data-ace-mode="ruby">Ruby (ruby 3.2.2)</option>
 
-                                    <option value="3019" data-mime="text/x-pascal">Pascal (FPC 2.6.2)</option>
+                                    <option value="5019" data-ace-mode="crystal">Crystal (Crystal 1.9.1)</option>
 
-                                    <option value="3020" data-mime="text/x-perl">Perl (v5.18.2)</option>
+                                    <option value="5020" data-ace-mode="text">Brainfuck (bf 20041219)</option>
 
-                                    <option value="3021" data-mime="text/x-php">PHP (5.6.30)</option>
+                                    <option value="5021" data-ace-mode="fsharp">F# 7.0 (.NET 7.0.7)</option>
 
-                                    <option value="3022" data-mime="text/x-python">Python2 (2.7.6)</option>
+                                    <option value="5022" data-ace-mode="julia">Julia (Julia 1.9.2)</option>
 
-                                    <option value="3023" data-mime="text/x-python">Python3 (3.4.3)</option>
+                                    <option value="5023" data-ace-mode="sh">Bash (bash 5.2.2)</option>
 
-                                    <option value="3024" data-mime="text/x-ruby">Ruby (2.3.3)</option>
+                                    <option value="5024" data-ace-mode="text">Text (cat 8.32)</option>
 
-                                    <option value="3025" data-mime="text/x-scala">Scala (2.11.7)</option>
+                                    <option value="5025" data-ace-mode="haskell">Haskell (GHC 9.4.5)</option>
 
-                                    <option value="3026" data-mime="text/x-scheme">Scheme (Gauche 0.9.3.3)</option>
+                                    <option value="5026" data-ace-mode="fortran">Fortran (gfortran 12.2)</option>
 
-                                    <option value="3027" data-mime="text/plain">Text (cat)</option>
+                                    <option value="5027" data-ace-mode="lua">Lua (LuaJIT 2.1.0-beta3)</option>
 
-                                    <option value="3028" data-mime="text/x-vb">Visual Basic (Mono 4.0.1)</option>
+                                    <option value="5028" data-ace-mode="c_cpp">C&#43;&#43; 23 (gcc 12.2)</option>
 
-                                    <option value="3029" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (GCC 5.4.1)</option>
+                                    <option value="5029" data-ace-mode="lisp">Common Lisp (SBCL 2.3.6)</option>
 
-                                    <option value="3030" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (Clang 3.8.0)</option>
+                                    <option value="5030" data-ace-mode="cobol">COBOL (Free) (GnuCOBOL 3.1.2)</option>
 
-                                    <option value="3501" data-mime="text/x-objectivec">Objective-C (GCC 5.3.0)</option>
+                                    <option value="5031" data-ace-mode="c_cpp">C&#43;&#43; 23 (Clang 16.0.6)</option>
 
-                                    <option value="3502" data-mime="text/x-objectivec">Objective-C (Clang3.8.0)</option>
+                                    <option value="5032" data-ace-mode="sh">Zsh (Zsh 5.9)</option>
 
-                                    <option value="3503" data-mime="text/x-swift">Swift (swift-2.2-RELEASE)</option>
+                                    <option value="5033" data-ace-mode="python">SageMath (SageMath 9.5)</option>
 
-                                    <option value="3504" data-mime="text/x-rust">Rust (1.15.1)</option>
+                                    <option value="5034" data-ace-mode="sh">Sed (GNU sed 4.8)</option>
 
-                                    <option value="3505" data-mime="text/x-sh">Sed (GNU sed 4.2.2)</option>
+                                    <option value="5035" data-ace-mode="text">bc (bc 1.07.1)</option>
 
-                                    <option value="3506" data-mime="text/x-sh">Awk (mawk 1.3.3)</option>
+                                    <option value="5036" data-ace-mode="text">dc (dc 1.07.1)</option>
 
-                                    <option value="3507" data-mime="text/x-brainfuck">Brainfuck (bf 20041219)</option>
+                                    <option value="5037" data-ace-mode="perl">Perl (perl  5.34)</option>
 
-                                    <option value="3508" data-mime="text/x-sml">Standard ML (MLton 20100608)</option>
+                                    <option value="5038" data-ace-mode="sh">AWK (GNU Awk 5.0.1)</option>
 
-                                    <option value="3509" data-mime="text/x-python">PyPy2 (5.6.0)</option>
+                                    <option value="5039" data-ace-mode="text">なでしこ (cnako3 3.4.20)</option>
 
-                                    <option value="3510" data-mime="text/x-python">PyPy3 (2.4.0)</option>
+                                    <option value="5040" data-ace-mode="text">Assembly x64 (NASM 2.15.05)</option>
 
-                                    <option value="3511" data-mime="text/x-crystal">Crystal (0.20.5)</option>
+                                    <option value="5041" data-ace-mode="pascal">Pascal (fpc 3.2.2)</option>
 
-                                    <option value="3512" data-mime="text/x-fsharp">F# (Mono 4.0)</option>
+                                    <option value="5042" data-ace-mode="csharp">C# 11.0 AOT (.NET 7.0.7)</option>
 
-                                    <option value="3513" data-mime="text/x-unlambda">Unlambda (0.1.3)</option>
+                                    <option value="5043" data-ace-mode="lua">Lua (Lua 5.4.6)</option>
 
-                                    <option value="3514" data-mime="text/x-lua">Lua (5.3.2)</option>
+                                    <option value="5044" data-ace-mode="prolog">Prolog (SWI-Prolog 9.0.4)</option>
 
-                                    <option value="3515" data-mime="text/x-lua">LuaJIT (2.0.4)</option>
+                                    <option value="5045" data-ace-mode="sh">PowerShell (PowerShell 7.3.1)</option>
 
-                                    <option value="3516" data-mime="text/x-moonscript">MoonScript (0.5.0)</option>
+                                    <option value="5046" data-ace-mode="scheme">Scheme (Gauche 0.9.12)</option>
 
-                                    <option value="3517" data-mime="text/x-ceylon">Ceylon (1.2.1)</option>
+                                    <option value="5047" data-ace-mode="scala">Scala 3.3.0 (Scala Native 0.4.14)</option>
 
-                                    <option value="3518" data-mime="text/x-julia">Julia (0.5.0)</option>
+                                    <option value="5048" data-ace-mode="vbscript">Visual Basic 16.9 (.NET 7.0.7)</option>
 
-                                    <option value="3519" data-mime="text/x-octave">Octave (4.0.2)</option>
+                                    <option value="5049" data-ace-mode="text">Forth (gforth 0.7.3)</option>
 
-                                    <option value="3520" data-mime="text/x-nim">Nim (0.13.0)</option>
+                                    <option value="5050" data-ace-mode="clojure">Clojure (babashka 1.3.181)</option>
 
-                                    <option value="3521" data-mime="text/typescript">TypeScript (2.1.6)</option>
+                                    <option value="5051" data-ace-mode="erlang">Erlang (Erlang 26.0.2)</option>
 
-                                    <option value="3522" data-mime="text/x-perl">Perl6 (rakudo-star 2016.01)</option>
+                                    <option value="5052" data-ace-mode="typescript">TypeScript 5.1 (Deno 1.35.1)</option>
 
-                                    <option value="3523" data-mime="text/x-kotlin">Kotlin (1.0.0)</option>
+                                    <option value="5053" data-ace-mode="c_cpp">C&#43;&#43; 17 (gcc 12.2)</option>
 
-                                    <option value="3524" data-mime="text/x-php">PHP7 (7.0.15)</option>
+                                    <option value="5054" data-ace-mode="rust">Rust (rustc 1.70.0)</option>
 
-                                    <option value="3525" data-mime="text/x-cobol">COBOL - Fixed (OpenCOBOL 1.1.0)</option>
+                                    <option value="5055" data-ace-mode="python">Python (CPython 3.11.4)</option>
 
-                                    <option value="3526" data-mime="text/x-cobol">COBOL - Free (OpenCOBOL 1.1.0)</option>
+                                    <option value="5056" data-ace-mode="scala">Scala (Dotty 3.3.0)</option>
+
+                                    <option value="5057" data-ace-mode="text">Koka (koka 2.4.0)</option>
+
+                                    <option value="5058" data-ace-mode="typescript">TypeScript 5.1 (Node.js 18.16.1)</option>
+
+                                    <option value="5059" data-ace-mode="ocaml">OCaml (ocamlopt 5.0.0)</option>
+
+                                    <option value="5060" data-ace-mode="raku">Raku (Rakudo 2023.06)</option>
+
+                                    <option value="5061" data-ace-mode="text">Vim (vim 9.0.0242)</option>
+
+                                    <option value="5062" data-ace-mode="lisp">Emacs Lisp (Native Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5063" data-ace-mode="python">Python (Mambaforge / CPython 3.10.10)</option>
+
+                                    <option value="5064" data-ace-mode="clojure">Clojure (clojure 1.11.1)</option>
+
+                                    <option value="5065" data-ace-mode="text">プロデル (mono版プロデル 1.9.1182)</option>
+
+                                    <option value="5066" data-ace-mode="text">ECLiPSe (ECLiPSe 7.1_13)</option>
+
+                                    <option value="5067" data-ace-mode="text">Nibbles (literate form) (nibbles 1.01)</option>
+
+                                    <option value="5068" data-ace-mode="ada">Ada (GNAT 12.2)</option>
+
+                                    <option value="5069" data-ace-mode="text">jq (jq 1.6)</option>
+
+                                    <option value="5070" data-ace-mode="text">Cyber (Cyber v0.2-Latest)</option>
+
+                                    <option value="5071" data-ace-mode="clojure">Carp (Carp 0.5.5)</option>
+
+                                    <option value="5072" data-ace-mode="c_cpp">C&#43;&#43; 17 (Clang 16.0.6)</option>
+
+                                    <option value="5073" data-ace-mode="c_cpp">C&#43;&#43; 20 (Clang 16.0.6)</option>
+
+                                    <option value="5074" data-ace-mode="text">LLVM IR (Clang 16.0.6)</option>
+
+                                    <option value="5075" data-ace-mode="lisp">Emacs Lisp (Byte Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5076" data-ace-mode="text">Factor (Factor 0.98)</option>
+
+                                    <option value="5077" data-ace-mode="d">D (GDC 12.2)</option>
+
+                                    <option value="5078" data-ace-mode="python">Python (PyPy 3.10-v7.3.12)</option>
+
+                                    <option value="5079" data-ace-mode="text">Whitespace (whitespacers 1.0.0)</option>
+
+                                    <option value="5080" data-ace-mode="text">&gt;&lt;&gt; (fishr 0.1.0)</option>
+
+                                    <option value="5081" data-ace-mode="ocaml">ReasonML (reason 3.9.0)</option>
+
+                                    <option value="5082" data-ace-mode="python">Python (Cython 0.29.34)</option>
+
+                                    <option value="5083" data-ace-mode="matlab">Octave (GNU Octave 8.2.0)</option>
+
+                                    <option value="5084" data-ace-mode="haxe">Haxe (JVM) (Haxe 4.3.1)</option>
+
+                                    <option value="5085" data-ace-mode="elixir">Elixir (Elixir 1.15.2)</option>
+
+                                    <option value="5086" data-ace-mode="text">Mercury (Mercury 22.01.6)</option>
+
+                                    <option value="5087" data-ace-mode="text">Seed7 (Seed7 3.2.1)</option>
+
+                                    <option value="5088" data-ace-mode="lisp">Emacs Lisp (No Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5089" data-ace-mode="text">Unison (Unison M5b)</option>
+
+                                    <option value="5090" data-ace-mode="cobol">COBOL (GnuCOBOL(Fixed) 3.1.2)</option>
 
                                 </select>
                             </div>
@@ -647,117 +862,185 @@
                                 <select class="form-control" data-placeholder="-" style="width:300px;">
                                     <option></option>
 
-                                    <option value="3003" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; 20 (gcc 12.2)</option>
+                                    <option value="5001" data-ace-mode="c_cpp">C&#43;&#43; 20 (gcc 12.2)</option>
 
-                                    <option value="3001" data-mime="text/x-sh">Bash (GNU bash v4.3.11)</option>
+                                    <option value="5002" data-ace-mode="golang">Go (go 1.20.6)</option>
 
-                                    <option value="3002" data-mime="text/x-csrc">C (GCC 5.4.1)</option>
+                                    <option value="5003" data-ace-mode="csharp">C# 11.0 (.NET 7.0.7)</option>
 
-                                    <option value="3004" data-mime="text/x-csrc">C (Clang 3.8.0)</option>
+                                    <option value="5004" data-ace-mode="kotlin">Kotlin (Kotlin/JVM 1.8.20)</option>
 
-                                    <option value="3005" data-mime="text/x-c&#43;&#43;src">C&#43;&#43;14 (Clang 3.8.0)</option>
+                                    <option value="5005" data-ace-mode="java">Java (OpenJDK 17)</option>
 
-                                    <option value="3006" data-mime="text/x-csharp">C# (Mono 4.6.2.0)</option>
+                                    <option value="5006" data-ace-mode="nim">Nim (Nim 1.6.14)</option>
 
-                                    <option value="3007" data-mime="text/x-clojure">Clojure (1.8.0)</option>
+                                    <option value="5007" data-ace-mode="text">V (V 0.4)</option>
 
-                                    <option value="3008" data-mime="text/x-common-lisp">Common Lisp (SBCL 1.1.14)</option>
+                                    <option value="5008" data-ace-mode="text">Zig (Zig 0.10.1)</option>
 
-                                    <option value="3009" data-mime="text/x-d">D (DMD64 v2.070.1)</option>
+                                    <option value="5009" data-ace-mode="javascript">JavaScript (Node.js 18.16.1)</option>
 
-                                    <option value="3010" data-mime="text/x-d">D (LDC 0.17.0)</option>
+                                    <option value="5010" data-ace-mode="javascript">JavaScript (Deno 1.35.1)</option>
 
-                                    <option value="3011" data-mime="text/x-d">D (GDC 4.9.4)</option>
+                                    <option value="5011" data-ace-mode="r">R (GNU R 4.2.1)</option>
 
-                                    <option value="3012" data-mime="text/x-fortran">Fortran (gfortran v4.8.4)</option>
+                                    <option value="5012" data-ace-mode="d">D (DMD 2.104.0)</option>
 
-                                    <option value="3013" data-mime="text/x-go">Go (1.6)</option>
+                                    <option value="5013" data-ace-mode="d">D (LDC 1.32.2)</option>
 
-                                    <option value="3014" data-mime="text/x-haskell">Haskell (GHC 7.10.3)</option>
+                                    <option value="5014" data-ace-mode="swift">Swift (swift 5.8.1)</option>
 
-                                    <option value="3015" data-mime="text/x-java">Java7 (OpenJDK 1.7.0)</option>
+                                    <option value="5015" data-ace-mode="dart">Dart (Dart 3.0.5)</option>
 
-                                    <option value="3016" data-mime="text/x-java">Java8 (OpenJDK 1.8.0)</option>
+                                    <option value="5016" data-ace-mode="php">PHP (php 8.2.8)</option>
 
-                                    <option value="3017" data-mime="text/javascript">JavaScript (node.js v5.12)</option>
+                                    <option value="5017" data-ace-mode="c_cpp">C (gcc 12.2.0)</option>
 
-                                    <option value="3018" data-mime="text/x-ocaml">OCaml (4.02.3)</option>
+                                    <option value="5018" data-ace-mode="ruby">Ruby (ruby 3.2.2)</option>
 
-                                    <option value="3019" data-mime="text/x-pascal">Pascal (FPC 2.6.2)</option>
+                                    <option value="5019" data-ace-mode="crystal">Crystal (Crystal 1.9.1)</option>
 
-                                    <option value="3020" data-mime="text/x-perl">Perl (v5.18.2)</option>
+                                    <option value="5020" data-ace-mode="text">Brainfuck (bf 20041219)</option>
 
-                                    <option value="3021" data-mime="text/x-php">PHP (5.6.30)</option>
+                                    <option value="5021" data-ace-mode="fsharp">F# 7.0 (.NET 7.0.7)</option>
 
-                                    <option value="3022" data-mime="text/x-python">Python2 (2.7.6)</option>
+                                    <option value="5022" data-ace-mode="julia">Julia (Julia 1.9.2)</option>
 
-                                    <option value="3023" data-mime="text/x-python">Python3 (3.4.3)</option>
+                                    <option value="5023" data-ace-mode="sh">Bash (bash 5.2.2)</option>
 
-                                    <option value="3024" data-mime="text/x-ruby">Ruby (2.3.3)</option>
+                                    <option value="5024" data-ace-mode="text">Text (cat 8.32)</option>
 
-                                    <option value="3025" data-mime="text/x-scala">Scala (2.11.7)</option>
+                                    <option value="5025" data-ace-mode="haskell">Haskell (GHC 9.4.5)</option>
 
-                                    <option value="3026" data-mime="text/x-scheme">Scheme (Gauche 0.9.3.3)</option>
+                                    <option value="5026" data-ace-mode="fortran">Fortran (gfortran 12.2)</option>
 
-                                    <option value="3027" data-mime="text/plain">Text (cat)</option>
+                                    <option value="5027" data-ace-mode="lua">Lua (LuaJIT 2.1.0-beta3)</option>
 
-                                    <option value="3028" data-mime="text/x-vb">Visual Basic (Mono 4.0.1)</option>
+                                    <option value="5028" data-ace-mode="c_cpp">C&#43;&#43; 23 (gcc 12.2)</option>
 
-                                    <option value="3029" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (GCC 5.4.1)</option>
+                                    <option value="5029" data-ace-mode="lisp">Common Lisp (SBCL 2.3.6)</option>
 
-                                    <option value="3030" data-mime="text/x-c&#43;&#43;src">C&#43;&#43; (Clang 3.8.0)</option>
+                                    <option value="5030" data-ace-mode="cobol">COBOL (Free) (GnuCOBOL 3.1.2)</option>
 
-                                    <option value="3501" data-mime="text/x-objectivec">Objective-C (GCC 5.3.0)</option>
+                                    <option value="5031" data-ace-mode="c_cpp">C&#43;&#43; 23 (Clang 16.0.6)</option>
 
-                                    <option value="3502" data-mime="text/x-objectivec">Objective-C (Clang3.8.0)</option>
+                                    <option value="5032" data-ace-mode="sh">Zsh (Zsh 5.9)</option>
 
-                                    <option value="3503" data-mime="text/x-swift">Swift (swift-2.2-RELEASE)</option>
+                                    <option value="5033" data-ace-mode="python">SageMath (SageMath 9.5)</option>
 
-                                    <option value="3504" data-mime="text/x-rust">Rust (1.15.1)</option>
+                                    <option value="5034" data-ace-mode="sh">Sed (GNU sed 4.8)</option>
 
-                                    <option value="3505" data-mime="text/x-sh">Sed (GNU sed 4.2.2)</option>
+                                    <option value="5035" data-ace-mode="text">bc (bc 1.07.1)</option>
 
-                                    <option value="3506" data-mime="text/x-sh">Awk (mawk 1.3.3)</option>
+                                    <option value="5036" data-ace-mode="text">dc (dc 1.07.1)</option>
 
-                                    <option value="3507" data-mime="text/x-brainfuck">Brainfuck (bf 20041219)</option>
+                                    <option value="5037" data-ace-mode="perl">Perl (perl  5.34)</option>
 
-                                    <option value="3508" data-mime="text/x-sml">Standard ML (MLton 20100608)</option>
+                                    <option value="5038" data-ace-mode="sh">AWK (GNU Awk 5.0.1)</option>
 
-                                    <option value="3509" data-mime="text/x-python">PyPy2 (5.6.0)</option>
+                                    <option value="5039" data-ace-mode="text">なでしこ (cnako3 3.4.20)</option>
 
-                                    <option value="3510" data-mime="text/x-python">PyPy3 (2.4.0)</option>
+                                    <option value="5040" data-ace-mode="text">Assembly x64 (NASM 2.15.05)</option>
 
-                                    <option value="3511" data-mime="text/x-crystal">Crystal (0.20.5)</option>
+                                    <option value="5041" data-ace-mode="pascal">Pascal (fpc 3.2.2)</option>
 
-                                    <option value="3512" data-mime="text/x-fsharp">F# (Mono 4.0)</option>
+                                    <option value="5042" data-ace-mode="csharp">C# 11.0 AOT (.NET 7.0.7)</option>
 
-                                    <option value="3513" data-mime="text/x-unlambda">Unlambda (0.1.3)</option>
+                                    <option value="5043" data-ace-mode="lua">Lua (Lua 5.4.6)</option>
 
-                                    <option value="3514" data-mime="text/x-lua">Lua (5.3.2)</option>
+                                    <option value="5044" data-ace-mode="prolog">Prolog (SWI-Prolog 9.0.4)</option>
 
-                                    <option value="3515" data-mime="text/x-lua">LuaJIT (2.0.4)</option>
+                                    <option value="5045" data-ace-mode="sh">PowerShell (PowerShell 7.3.1)</option>
 
-                                    <option value="3516" data-mime="text/x-moonscript">MoonScript (0.5.0)</option>
+                                    <option value="5046" data-ace-mode="scheme">Scheme (Gauche 0.9.12)</option>
 
-                                    <option value="3517" data-mime="text/x-ceylon">Ceylon (1.2.1)</option>
+                                    <option value="5047" data-ace-mode="scala">Scala 3.3.0 (Scala Native 0.4.14)</option>
 
-                                    <option value="3518" data-mime="text/x-julia">Julia (0.5.0)</option>
+                                    <option value="5048" data-ace-mode="vbscript">Visual Basic 16.9 (.NET 7.0.7)</option>
 
-                                    <option value="3519" data-mime="text/x-octave">Octave (4.0.2)</option>
+                                    <option value="5049" data-ace-mode="text">Forth (gforth 0.7.3)</option>
 
-                                    <option value="3520" data-mime="text/x-nim">Nim (0.13.0)</option>
+                                    <option value="5050" data-ace-mode="clojure">Clojure (babashka 1.3.181)</option>
 
-                                    <option value="3521" data-mime="text/typescript">TypeScript (2.1.6)</option>
+                                    <option value="5051" data-ace-mode="erlang">Erlang (Erlang 26.0.2)</option>
 
-                                    <option value="3522" data-mime="text/x-perl">Perl6 (rakudo-star 2016.01)</option>
+                                    <option value="5052" data-ace-mode="typescript">TypeScript 5.1 (Deno 1.35.1)</option>
 
-                                    <option value="3523" data-mime="text/x-kotlin">Kotlin (1.0.0)</option>
+                                    <option value="5053" data-ace-mode="c_cpp">C&#43;&#43; 17 (gcc 12.2)</option>
 
-                                    <option value="3524" data-mime="text/x-php">PHP7 (7.0.15)</option>
+                                    <option value="5054" data-ace-mode="rust">Rust (rustc 1.70.0)</option>
 
-                                    <option value="3525" data-mime="text/x-cobol">COBOL - Fixed (OpenCOBOL 1.1.0)</option>
+                                    <option value="5055" data-ace-mode="python">Python (CPython 3.11.4)</option>
 
-                                    <option value="3526" data-mime="text/x-cobol">COBOL - Free (OpenCOBOL 1.1.0)</option>
+                                    <option value="5056" data-ace-mode="scala">Scala (Dotty 3.3.0)</option>
+
+                                    <option value="5057" data-ace-mode="text">Koka (koka 2.4.0)</option>
+
+                                    <option value="5058" data-ace-mode="typescript">TypeScript 5.1 (Node.js 18.16.1)</option>
+
+                                    <option value="5059" data-ace-mode="ocaml">OCaml (ocamlopt 5.0.0)</option>
+
+                                    <option value="5060" data-ace-mode="raku">Raku (Rakudo 2023.06)</option>
+
+                                    <option value="5061" data-ace-mode="text">Vim (vim 9.0.0242)</option>
+
+                                    <option value="5062" data-ace-mode="lisp">Emacs Lisp (Native Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5063" data-ace-mode="python">Python (Mambaforge / CPython 3.10.10)</option>
+
+                                    <option value="5064" data-ace-mode="clojure">Clojure (clojure 1.11.1)</option>
+
+                                    <option value="5065" data-ace-mode="text">プロデル (mono版プロデル 1.9.1182)</option>
+
+                                    <option value="5066" data-ace-mode="text">ECLiPSe (ECLiPSe 7.1_13)</option>
+
+                                    <option value="5067" data-ace-mode="text">Nibbles (literate form) (nibbles 1.01)</option>
+
+                                    <option value="5068" data-ace-mode="ada">Ada (GNAT 12.2)</option>
+
+                                    <option value="5069" data-ace-mode="text">jq (jq 1.6)</option>
+
+                                    <option value="5070" data-ace-mode="text">Cyber (Cyber v0.2-Latest)</option>
+
+                                    <option value="5071" data-ace-mode="clojure">Carp (Carp 0.5.5)</option>
+
+                                    <option value="5072" data-ace-mode="c_cpp">C&#43;&#43; 17 (Clang 16.0.6)</option>
+
+                                    <option value="5073" data-ace-mode="c_cpp">C&#43;&#43; 20 (Clang 16.0.6)</option>
+
+                                    <option value="5074" data-ace-mode="text">LLVM IR (Clang 16.0.6)</option>
+
+                                    <option value="5075" data-ace-mode="lisp">Emacs Lisp (Byte Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5076" data-ace-mode="text">Factor (Factor 0.98)</option>
+
+                                    <option value="5077" data-ace-mode="d">D (GDC 12.2)</option>
+
+                                    <option value="5078" data-ace-mode="python">Python (PyPy 3.10-v7.3.12)</option>
+
+                                    <option value="5079" data-ace-mode="text">Whitespace (whitespacers 1.0.0)</option>
+
+                                    <option value="5080" data-ace-mode="text">&gt;&lt;&gt; (fishr 0.1.0)</option>
+
+                                    <option value="5081" data-ace-mode="ocaml">ReasonML (reason 3.9.0)</option>
+
+                                    <option value="5082" data-ace-mode="python">Python (Cython 0.29.34)</option>
+
+                                    <option value="5083" data-ace-mode="matlab">Octave (GNU Octave 8.2.0)</option>
+
+                                    <option value="5084" data-ace-mode="haxe">Haxe (JVM) (Haxe 4.3.1)</option>
+
+                                    <option value="5085" data-ace-mode="elixir">Elixir (Elixir 1.15.2)</option>
+
+                                    <option value="5086" data-ace-mode="text">Mercury (Mercury 22.01.6)</option>
+
+                                    <option value="5087" data-ace-mode="text">Seed7 (Seed7 3.2.1)</option>
+
+                                    <option value="5088" data-ace-mode="lisp">Emacs Lisp (No Compile) (GNU Emacs 28.2)</option>
+
+                                    <option value="5089" data-ace-mode="text">Unison (Unison M5b)</option>
+
+                                    <option value="5090" data-ace-mode="cobol">COBOL (GnuCOBOL(Fixed) 3.1.2)</option>
 
                                 </select>
                             </div>
@@ -769,35 +1052,44 @@
 
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="sourceCode">ソースコード</label>
-                        <div class="col-sm-7" id="sourceCode">
-                            <div class="div-editor">
-                                <textarea class="form-control editor" name="sourceCode"></textarea>
+                        <div class="col-sm-3 col-md-2 editor-label">
+                            <label class="control-label" for="sourceCode">ソースコード</label>
+                            <div class="editor-buttons">
+                                <button id="btn-open-file" type="button" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; ファイルを開く
+                                </button>
+                                <button id="btn-customize" type="button" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> &nbsp; カスタマイズ
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm btn-toggle-editor" data-toggle="button" autocomplete="off">
+                                    エディタ切り替え
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm btn-auto-height" data-toggle="button" autocomplete="off">
+                                    高さ自動調節
+                                </button>
                             </div>
-                            <textarea class="form-control plain-textarea" style="display:none;"></textarea>
+                        </div>
+                        <div class="col-sm-9 col-md-10" id="sourceCode">
+                            <div id="editor"></div>
+                            <textarea id="plain-textarea" class="form-control" style="display:none;" name="sourceCode"></textarea>
                             <p>
                                 <span class="gray">※ 512 KiB まで</span><br>
-                                <span class="gray">※ ソースコードは「Main.<i>拡張子</i>」で保存されます</span>
                             </p>
-                        </div>
-                        <div class="col-sm-3 editor-buttons">
-                            <p><button id="btn-open-file" type="button" class="btn btn-default btn-sm">
-                                <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; ファイルを開く
-                            </button></p>
-                            <p><button type="button" class="btn btn-default btn-sm btn-toggle-editor" data-toggle="button" aria-pressed="false" autocomplete="off">
-                                エディタ切り替え
-                            </button></p>
-                            <p><button type="button" class="btn btn-default btn-sm btn-auto-height" data-toggle="button" aria-pressed="false" autocomplete="off">
-                                高さ自動調節
-                            </button></p>
                         </div>
                         <input id="input-open-file" type="file" style="display:none;">
                     </div>
 
-                    <input type="hidden" name="csrf_token" value="2TfLiM/mkOoZRM9OnbCFUYWuq1gqpC5lhkAlhRNZ3as=" />
+
+                    <input type="hidden" name="csrf_token" value="s7aDUI13R8FHa5mglSOQJptstVbvnjYhaiX0gYK2LS0=" />
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="submit"></label>
+                        <label class="control-label col-sm-3 col-md-2"></label>
                         <div class="col-sm-5">
+
+                            <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+                            <div class="cf-challenge" data-sitekey="0x4AAAAAAA6HJUmmLP7mLxx0" data-theme="light"></div>
+
+
                             <button id="submit" type="submit" class="btn btn-primary">提出</button>
                         </div>
                     </div>
@@ -858,4 +1150,5 @@
 
 </body>
 </html>
+
 
