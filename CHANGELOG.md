@@ -1,4 +1,15 @@
 # Change Log
+## 2.15.0 / 2025-11-8
+Release version 2.15.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#309](https://github.com/kyuridenamida/atcoder-tools/pull/309)|Always allow codegen again| |[kyuridenamida](https://github.com/kyuridenamida)|
+|[#307](https://github.com/kyuridenamida/atcoder-tools/pull/307)|Update Python version|![#fc2929](https://via.placeholder.com/15/fc2929/000000?text=+) **bug**|[firewood](https://github.com/firewood)|
+|[#306](https://github.com/kyuridenamida/atcoder-tools/pull/306)|2025/10のジャッジアップデートに追従| |[firewood](https://github.com/firewood)|
+|[#301](https://github.com/kyuridenamida/atcoder-tools/pull/301)|feat: fix markupsafe| |[0num4](https://github.com/0num4)|
+|[#281](https://github.com/kyuridenamida/atcoder-tools/pull/281)|Bump urllib3 from 1.26.4 to 1.26.18|![#0366d6](https://via.placeholder.com/15/0366d6/000000?text=+) **dependencies**<br/>![#2b67c6](https://via.placeholder.com/15/2b67c6/000000?text=+) **python**|[dependabot[bot]](https://github.com/apps/dependabot)|
+|[#278](https://github.com/kyuridenamida/atcoder-tools/pull/278)|update poetry | |[mo124121](https://github.com/mo124121)|
+|[#257](https://github.com/kyuridenamida/atcoder-tools/pull/257)|Refactor user config path setting| |[pogin503](https://github.com/pogin503)|
 ## 2.14.0 / 2024-6-7
 Release version 2.14.0
 |PR|Change Summary|Label|Author|
