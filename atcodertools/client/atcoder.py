@@ -15,6 +15,7 @@ from atcodertools.client.models.submission import Submission
 from atcodertools.common.language import Language
 from atcodertools.common.logging import logger
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
+from atcodertools.release_management.version import __version__
 
 
 class LoginError(Exception):
@@ -67,6 +68,9 @@ class AtCoderClient(metaclass=Singleton):
 
     def __init__(self):
         self._session = requests.Session()
+        self._session.headers.update({
+            'User-Agent': f'atcoder-tools/{__version__} (https://github.com/kyuridenamida/atcoder-tools/)'
+        })
 
     def check_logging_in(self):
         private_url = "https://atcoder.jp/home"
@@ -143,7 +147,7 @@ class AtCoderClient(metaclass=Singleton):
                 r'"/contests/([A-Za-z0-9\'~+\-_]+)"')
             contest_list = url_re.findall(text)
             contest_list = set(contest_list)
-            contest_list.remove("archive")
+            contest_list.discard("archive")
             contest_list = sorted(list(contest_list))
 
             if previous_list == contest_list:
