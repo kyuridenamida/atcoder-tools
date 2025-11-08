@@ -177,7 +177,6 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(JudgeType.Normal.value,
                          judge_method.to_dict()["judge_type"])
 
-
     def _load(self, html_path):
         with open(os.path.join(self.test_dir, html_path), 'r') as f:
             return f.read()
