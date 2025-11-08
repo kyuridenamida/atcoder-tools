@@ -19,6 +19,7 @@ requests = "^2.25.1"
 colorama = "^0.4.4"
 toml = "^0.10.2"
 Jinja2 = "^2.11.3"
+markupsafe = "2.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
