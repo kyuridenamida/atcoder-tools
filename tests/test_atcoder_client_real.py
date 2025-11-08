@@ -32,7 +32,6 @@ class TestAtCoderClientReal(unittest.TestCase):
         # Wait 3 seconds before each test to reduce the traffic
         time.sleep(3)
 
-
     @retry_once_on_failure
     def test_submit_source_code(self):
         problem_list = self.client.download_problem_list(Contest("arc002"))
