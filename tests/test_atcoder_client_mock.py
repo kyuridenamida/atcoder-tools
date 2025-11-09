@@ -110,9 +110,7 @@ class TestAtCoderClientMock(unittest.TestCase):
     @restore_client_after_run
     def test_login_success(self):
         self.client._request = create_fake_request_func(
-            post_url_to_resp={
-                "https://atcoder.jp/login": fake_resp("after_login.html")
-            }
+            {"https://atcoder.jp/home": fake_resp("after_login.html")},
         )
 
         def fake_cookie_supplier():
