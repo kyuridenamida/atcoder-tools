@@ -97,7 +97,8 @@ class TestAtCoderClientMock(unittest.TestCase):
         problem = Problem(contest, "A", "arc001_1")
 
         self.client._request = create_fake_request_func(
-            {contest.get_submit_url(): fake_resp("submit/after_get_with_captcha.html")}
+            {contest.get_submit_url(): fake_resp(
+                "submit/after_get_with_captcha.html")}
         )
 
         with self.assertRaises(CaptchaError) as context:

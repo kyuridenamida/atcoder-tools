@@ -172,7 +172,8 @@ class AtCoderClient(metaclass=Singleton):
         resp = self._request(contest.get_submit_url())
 
         if "https://challenges.cloudflare.com" in resp.text:
-            raise CaptchaError("CAPTCHA detected. Cannot submit automatically. Please submit manually through the web interface.")
+            raise CaptchaError(
+                "CAPTCHA detected. Cannot submit automatically. Please submit manually through the web interface.")
 
         soup = BeautifulSoup(resp.text, "html.parser")
         session_id = soup.find("input", attrs={"type": "hidden"}).get("value")
