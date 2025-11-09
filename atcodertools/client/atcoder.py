@@ -25,6 +25,10 @@ class PageNotFoundError(Exception):
     pass
 
 
+class CaptchaError(Exception):
+    pass
+
+
 default_cookie_path = get_cache_file_path('cookie.txt')
 
 
@@ -166,6 +170,9 @@ class AtCoderClient(metaclass=Singleton):
             lang_option_pattern = lang.submission_lang_pattern
 
         resp = self._request(contest.get_submit_url())
+
+        if "https://challenges.cloudflare.com" in resp.text:
+            raise CaptchaError("CAPTCHA detected. Cannot submit automatically. Please submit manually through the web interface.")
 
         soup = BeautifulSoup(resp.text, "html.parser")
         session_id = soup.find("input", attrs={"type": "hidden"}).get("value")

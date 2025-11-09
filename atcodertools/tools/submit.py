@@ -8,7 +8,7 @@ from colorama import Fore
 from atcodertools.tools.tester import USER_FACING_JUDGE_TYPE_LIST, DEFAULT_EPS
 from atcodertools.tools.utils import with_color
 
-from atcodertools.client.atcoder import AtCoderClient, LoginError
+from atcodertools.client.atcoder import AtCoderClient, LoginError, CaptchaError
 from atcodertools.tools import tester
 from atcodertools.common.logging import logger
 from atcodertools.config.config import Config, ConfigType, USER_CONFIG_PATH
@@ -170,11 +170,15 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True, cli
                 logger.warning("code wasn't recognized as {}".format(encoding))
         logger.info(
             "Submitting {} as {}".format(code_path, metadata.lang.name))
-        submission = client.submit_source_code(
-            metadata.problem.contest, metadata.problem, metadata.lang, source)
-        logger.info("{} {}".format(
-            with_color("Done!", Fore.LIGHTGREEN_EX),
-            metadata.problem.contest.get_submissions_url(submission)))
+        try:
+            submission = client.submit_source_code(
+                metadata.problem.contest, metadata.problem, metadata.lang, source)
+            logger.info("{} {}".format(
+                with_color("Done!", Fore.LIGHTGREEN_EX),
+                metadata.problem.contest.get_submissions_url(submission)))
+        except CaptchaError as e:
+            logger.error(with_color(str(e), Fore.LIGHTRED_EX))
+            return False
         if config.submit_config.exec_after_submit:
             run_command(config.submit_config.exec_after_submit, args.dir)
 

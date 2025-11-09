@@ -4,7 +4,7 @@ import unittest
 import shutil
 from typing import Dict
 
-from atcodertools.client.atcoder import AtCoderClient
+from atcodertools.client.atcoder import AtCoderClient, CaptchaError
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.language import CPP
@@ -90,6 +90,21 @@ class TestAtCoderClientMock(unittest.TestCase):
                 contest, problem, lang, "x")
             self.assertEqual(13269587, submission.submission_id)
             self.assertEqual("arc001_1", submission.problem_id)
+
+    @restore_client_after_run
+    def test_submit_source_code_with_captcha_html_file(self):
+        contest = Contest("arc001")
+        problem = Problem(contest, "A", "arc001_1")
+
+        self.client._request = create_fake_request_func(
+            {contest.get_submit_url(): fake_resp("submit/after_get_with_captcha.html")}
+        )
+
+        with self.assertRaises(CaptchaError) as context:
+            self.client.submit_source_code(contest, problem, CPP, "x")
+
+        self.assertIn("CAPTCHA detected", str(context.exception))
+        self.assertIn("Cannot submit automatically", str(context.exception))
 
     @restore_client_after_run
     def test_login_success(self):
