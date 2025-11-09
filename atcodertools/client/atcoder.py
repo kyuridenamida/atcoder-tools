@@ -151,7 +151,8 @@ class AtCoderClient(metaclass=Singleton):
 
         # Verify the cookie is valid
         if not self.check_logging_in():
-            raise LoginError("Login attempt failed. REVEL_SESSION cookie could be invalid or expired.")
+            raise LoginError(
+                "Login attempt failed. REVEL_SESSION cookie could be invalid or expired.")
         else:
             logger.info("Successfully logged in using REVEL_SESSION cookie.")
 
