@@ -1,9 +1,9 @@
-import getpass
 import os
 import re
 import warnings
 from http.cookiejar import LWPCookieJar
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Union
+from http.cookiejar import Cookie
 
 import requests
 from bs4 import BeautifulSoup
@@ -61,10 +61,62 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-def default_credential_supplier() -> Tuple[str, str]:
-    username = input('AtCoder username: ')
-    password = getpass.getpass('AtCoder password: ')
-    return username, password
+def show_cookie_instructions():
+    """Show instructions for obtaining REVEL_SESSION cookie"""
+    print("\n[English]")
+    print("=== How to get AtCoder REVEL_SESSION cookie ===")
+    print("1. Log in to AtCoder using your browser")
+    print("   https://atcoder.jp/login")
+    print()
+    print("2. Open Developer Tools by pressing F12")
+    print()
+    print("3. Follow these steps to get the REVEL_SESSION cookie:")
+    print("   - Click the 'Application' tab (or 'Storage' tab in Firefox)")
+    print("   - Select 'Cookies' → 'https://atcoder.jp' from the left sidebar")
+    print("   - Find 'REVEL_SESSION' and copy its 'Value'")
+    print()
+    print("4. Paste the REVEL_SESSION value below")
+    print("=" * 48)
+    print()
+    print("[日本語/Japanese]")
+    print("=== AtCoder REVEL_SESSION クッキーの取得方法 ===")
+    print("1. ブラウザでAtCoderにログインしてください")
+    print("   https://atcoder.jp/login")
+    print()
+    print("2. F12キーを押して開発者ツールを開いてください")
+    print()
+    print("3. 以下の手順でREVEL_SESSIONクッキーを取得してください:")
+    print("   - 「Application」タブ（Firefoxの場合は「Storage」タブ）をクリック")
+    print("   - 左側から「Cookies」→「https://atcoder.jp」を選択")
+    print("   - 「REVEL_SESSION」の「Value」列の値をコピー")
+    print()
+    print("4. 下記にREVEL_SESSIONの値を貼り付けてください")
+    print("=" * 48)
+
+
+def default_cookie_supplier() -> Cookie:
+    """Get REVEL_SESSION cookie from user input and return Cookie object"""
+    show_cookie_instructions()
+    cookie_value = input('\nREVEL_SESSION cookie value: ').strip()
+    return Cookie(
+        version=0,
+        name='REVEL_SESSION',
+        value=cookie_value,
+        port=None,
+        port_specified=False,
+        domain='atcoder.jp',
+        domain_specified=True,
+        domain_initial_dot=False,
+        path='/',
+        path_specified=True,
+        secure=True,
+        expires=None,
+        discard=True,
+        comment=None,
+        comment_url=None,
+        rest={},
+        rfc2109=False
+    )
 
 
 class AtCoderClient(metaclass=Singleton):
@@ -78,12 +130,9 @@ class AtCoderClient(metaclass=Singleton):
         return resp.text.find("Sign In") == -1
 
     def login(self,
-              credential_supplier=None,
+              cookie_supplier=None,
               use_local_session_cache=True,
               save_session_cache=True):
-
-        if credential_supplier is None:
-            credential_supplier = default_credential_supplier
 
         if use_local_session_cache:
             load_cookie_to(self._session)
@@ -92,23 +141,19 @@ class AtCoderClient(metaclass=Singleton):
                     "Successfully Logged in using the previous session cache.")
                 logger.info(
                     "If you'd like to invalidate the cache, delete {}.".format(default_cookie_path))
-
                 return
 
-        username, password = credential_supplier()
+        if cookie_supplier is None:
+            cookie_supplier = default_cookie_supplier
 
-        soup = BeautifulSoup(self._session.get(
-            "https://atcoder.jp/login").text, "html.parser")
-        token = soup.find_all("form")[1].find(
-            "input", type="hidden").get("value")
-        resp = self._request("https://atcoder.jp/login", data={
-            'username': username,
-            "password": password,
-            "csrf_token": token
-        }, method='POST')
+        cookie = cookie_supplier()
+        self._session.cookies.set_cookie(cookie)
 
-        if resp.text.find("パスワードを忘れた方はこちら") != -1 or resp.text.find("Forgot your password") != -1:
-            raise LoginError
+        # Verify the cookie is valid
+        if not self.check_logging_in():
+            raise LoginError("Login attempt failed. REVEL_SESSION cookie could be invalid or expired.")
+        else:
+            logger.info("Successfully logged in using REVEL_SESSION cookie.")
 
         if use_local_session_cache and save_session_cache:
             save_cookie(self._session)
@@ -159,7 +204,8 @@ class AtCoderClient(metaclass=Singleton):
         contest_ids = sorted(contest_ids)
         return [Contest(contest_id) for contest_id in contest_ids]
 
-    def submit_source_code(self, contest: Contest, problem: Problem, lang: Union[str, Language], source: str) -> Submission:
+    def submit_source_code(self, contest: Contest, problem: Problem, lang: Union[str, Language],
+                           source: str) -> Submission:
         if isinstance(lang, str):
             warnings.warn(
                 "Parameter lang as a str object is deprecated. "

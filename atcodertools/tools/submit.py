@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import argparse
-import sys
 import os
+import sys
 
 from colorama import Fore
 
@@ -18,7 +18,7 @@ from atcodertools.tools import get_default_config_path
 from atcodertools.executils.run_command import run_command
 
 
-def main(prog, args, credential_supplier=None, use_local_session_cache=True, client=None) -> bool:
+def main(prog, args, cookie_supplier=None, use_local_session_cache=True, client=None) -> bool:
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
@@ -121,11 +121,11 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True, cli
         try:
             client = AtCoderClient()
             client.login(save_session_cache=not args.save_no_session_cache,
-                         credential_supplier=credential_supplier,
+                         cookie_supplier=cookie_supplier,
                          use_local_session_cache=use_local_session_cache,
                          )
-        except LoginError:
-            logger.error("Login failed. Try again.")
+        except LoginError as e:
+            logger.error(e)
             return False
 
     tester_args = []
