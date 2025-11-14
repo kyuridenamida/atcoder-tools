@@ -127,7 +127,8 @@ class AtCoderClient(metaclass=Singleton):
     def check_logging_in(self):
         private_url = "https://atcoder.jp/home"
         resp = self._request(private_url)
-        return resp.text.find("Sign In") == -1
+        # consider logged in if settings link exists (only shown when logged in)
+        return 'href="/settings"' in resp.text
 
     def login(self,
               cookie_supplier=None,
@@ -135,13 +136,16 @@ class AtCoderClient(metaclass=Singleton):
               save_session_cache=True):
 
         if use_local_session_cache:
-            load_cookie_to(self._session)
-            if self.check_logging_in():
-                logger.info(
-                    "Successfully Logged in using the previous session cache.")
-                logger.info(
-                    "If you'd like to invalidate the cache, delete {}.".format(default_cookie_path))
-                return
+            session_cache_exists = load_cookie_to(self._session)
+            if session_cache_exists:
+                if self.check_logging_in():
+                    logger.info(
+                        "Successfully Logged in using the previous session cache.")
+                    logger.info(
+                        "If you'd like to invalidate the cache, delete {}.".format(default_cookie_path))
+                    return
+                else:
+                    logger.warn("Failed to login with the session cache. The session cache is invalid, or has been expired. Trying to login without cache.")
 
         if cookie_supplier is None:
             cookie_supplier = default_cookie_supplier
