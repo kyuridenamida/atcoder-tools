@@ -317,9 +317,8 @@ def main(prog, args):
             client.login(
                 save_session_cache=not config.etc_config.save_no_session_cache)
             logger.info("Login successful.")
-        except LoginError:
-            logger.error(
-                "Failed to login (maybe due to wrong username/password combination?)")
+        except LoginError as e:
+            logger.error(e)
             sys.exit(-1)
     else:
         logger.info("Downloading data without login.")

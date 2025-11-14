@@ -110,15 +110,32 @@ class TestAtCoderClientMock(unittest.TestCase):
     @restore_client_after_run
     def test_login_success(self):
         self.client._request = create_fake_request_func(
-            post_url_to_resp={
-                "https://atcoder.jp/login": fake_resp("after_login.html")
-            }
+            {"https://atcoder.jp/home": fake_resp("after_login.html")},
         )
 
-        def fake_supplier():
-            return "@@@ invalid user name @@@", "@@@ password @@@"
+        def fake_cookie_supplier():
+            from http.cookiejar import Cookie
+            return Cookie(
+                version=0,
+                name='REVEL_SESSION',
+                value="@@@ invalid cookie @@@",
+                port=None,
+                port_specified=False,
+                domain='atcoder.jp',
+                domain_specified=True,
+                domain_initial_dot=False,
+                path='/',
+                path_specified=True,
+                secure=True,
+                expires=None,
+                discard=True,
+                comment=None,
+                comment_url=None,
+                rest={},
+                rfc2109=False
+            )
 
-        self.client.login(credential_supplier=fake_supplier,
+        self.client.login(cookie_supplier=fake_cookie_supplier,
                           use_local_session_cache=False)
 
     @restore_client_after_run
