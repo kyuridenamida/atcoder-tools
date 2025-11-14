@@ -1,4 +1,10 @@
 # Change Log
+## 2.16.0 / 2025-11-14
+Release version 2.16.0
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#311](https://github.com/kyuridenamida/atcoder-tools/pull/311)|feat: add CAPTCHA detection for submissions| |[kyuridenamida](https://github.com/kyuridenamida)|
+|[#310](https://github.com/kyuridenamida/atcoder-tools/pull/310)|Replace username/password login with REVEL_SESSION cookie-based authentication to handle AtCoder CAPTCHA| |[kyuridenamida](https://github.com/kyuridenamida)|
 ## 2.15.0 / 2025-11-8
 Release version 2.15.0
 |PR|Change Summary|Label|Author|
