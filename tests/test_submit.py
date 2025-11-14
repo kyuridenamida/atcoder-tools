@@ -29,6 +29,7 @@ def fake_cookie_supplier():
         rfc2109=False
     )
 
+
 class TestTester(unittest.TestCase):
 
     def test_submit_fail_when_metadata_not_found(self):
