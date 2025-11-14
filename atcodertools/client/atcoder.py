@@ -145,7 +145,8 @@ class AtCoderClient(metaclass=Singleton):
                         "If you'd like to invalidate the cache, delete {}.".format(default_cookie_path))
                     return
                 else:
-                    logger.warn("Failed to login with the session cache. The session cache is invalid, or has been expired. Trying to login without cache.")
+                    logger.warn(
+                        "Failed to login with the session cache. The session cache is invalid, or has been expired. Trying to login without cache.")
 
         if cookie_supplier is None:
             cookie_supplier = default_cookie_supplier
