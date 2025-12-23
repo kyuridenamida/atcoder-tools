@@ -113,7 +113,7 @@ class ProblemContent:
 
             if section_title.startswith("入力例"):
                 input_tags.append(tag.find('pre'))
-            elif section_title.startswith("入力"):
+            elif section_title == "入力":
                 input_format_tag = tag.find('pre')
 
             if section_title.startswith("出力例"):
