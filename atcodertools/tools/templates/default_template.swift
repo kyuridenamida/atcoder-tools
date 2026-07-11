@@ -37,8 +37,12 @@ func main() {
     }
     func readInt() -> Int { Int(readString())! }
     func readDouble() -> Double { Double(readString())! }
+{% if multi_case %}
+    {{ input_part_with_solve_function }}
+{% else %}
     {{input_part}}
     _ = solve({{ actual_arguments }})
+{% endif %}
     {% else %}
     // Failed to predict input format
     {% endif %}

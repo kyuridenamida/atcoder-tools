@@ -31,8 +31,12 @@ function main()
         end
         close(tokens)
     end |> schedule
+{% if multi_case %}
+    {{ input_part_with_solve_function }}
+{% else %}
     {{ input_part }}
     solve({{ actual_arguments }})
+{% endif %}
     {% else %}
     # Failed to predict input format
     {% endif %}

@@ -1,0 +1,277 @@
+{
+  "cases": [
+    {
+      "expected_count_variable": "T",
+      "expected_layout": "split",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "T\n",
+        "N\nL_1 R_1\nL_2 R_2\n\\vdots\nL_N R_N\n"
+      ],
+      "input_format_context_text": "入力 入力は標準入力から与えられる。入力の 1 行目は次の形式である。 T その後、 T 個のテストケースが続く。各テストケースは以下の形式で与えられる。 N L_1 R_1 L_2 R_2 \\vdots L_N R_N",
+      "input_format_text": "T\n",
+      "sample_inputs": [
+        "5\n3\n53 98\n8 43\n12 53\n10\n4 7\n5 7\n3 7\n4 5\n5 8\n6 9\n4 8\n5 10\n1 9\n5 10\n2\n58 98\n11 29\n6\n79 83\n44 83\n38 74\n49 88\n18 45\n64 99\n1\n5 9\n"
+      ],
+      "source_html_sha256": "00fa9415fc04bc01dec00cdef5f92d09f717cbc6fc57b85453ebea54b225fe2f",
+      "source_url": "https://atcoder.jp/contests/abc206/tasks/abc206_f",
+      "statement_evidence_text": "入力 入力は標準入力から与えられる。入力の 1 行目は次の形式である。 T その後、 T 個のテストケースが続く。各テストケースは以下の形式で与えられる。 N L_1 R_1 L_2 R_2 \\vdots L_N R_N F - Interval Gam",
+      "task_id": "abc206_f"
+    },
+    {
+      "expected_count_variable": "T",
+      "expected_layout": "split",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "T\n",
+        "N\nL_1 R_1\nL_2 R_2\n\\dots\nL_N R_N\n"
+      ],
+      "input_format_context_text": "入力 入力は標準入力から与えられる。入力の 1 行目は以下の形式である。 T その後、 T 個のテストケースが続く。各テストケースは以下の形式で与えられる。 N L_1 R_1 L_2 R_2 \\dots L_N R_N",
+      "input_format_text": "T\n",
+      "sample_inputs": [
+        "2\n3\n1 2\n2 3\n3 3\n5\n1 2\n2 3\n3 3\n1 3\n999999999 1000000000\n"
+      ],
+      "source_html_sha256": "504889e21dd8a20ff4f27c3a09c66a6db1c2e607b00dfe190bc9e97cb798c8e8",
+      "source_url": "https://atcoder.jp/contests/abc214/tasks/abc214_e",
+      "statement_evidence_text": "入力 入力は標準入力から与えられる。入力の 1 行目は以下の形式である。 T その後、 T 個のテストケースが続く。各テストケースは以下の形式で与えられる。 N L_1 R_1 L_2 R_2 \\dots L_N R_N E - Packing Under",
+      "task_id": "abc214_e"
+    },
+    {
+      "expected_count_variable": "T",
+      "expected_layout": "split",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "T\n",
+        "N A B\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。入力の 1 行目は以下のとおりである。 T そして、 T 個のテストケースが続く。これらはそれぞれ以下の形式で与えられる。 N A B",
+      "input_format_text": "T\n",
+      "sample_inputs": [
+        "3\n3 1 2\n4 2 2\n331895368 154715807 13941326\n"
+      ],
+      "source_html_sha256": "1d16b8f83e7a92a38eeacf328bc8479f58744a79c65f411e8e7f7de5bca6a689",
+      "source_url": "https://atcoder.jp/contests/hhkb2020/tasks/hhkb2020_d",
+      "statement_evidence_text": "入力 入力は以下の形式で標準入力から与えられる。入力の 1 行目は以下のとおりである。 T そして、 T 個のテストケースが続く。これらはそれぞれ以下の形式で与えられる。 N A B D - Squares × コンテスト開始 HHKB プログラミングコンテスト 202",
+      "task_id": "hhkb2020_d"
+    },
+    {
+      "expected_count_variable": "T",
+      "expected_layout": "split",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "T\n",
+        "S\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる． 入力の 1 行目は以下のとおりである． T そして， T 個のテストケースが続く． これらはそれぞれ以下の形式で与えられる． S",
+      "input_format_text": "T\n",
+      "sample_inputs": [
+        "3\natcodeer\ncodeforces\naaa\n"
+      ],
+      "source_html_sha256": "66b645d296aa24325bbf537fe29b2e29b109b264d1ff25a83c3f53d8a3c589af",
+      "source_url": "https://atcoder.jp/contests/agc048/tasks/agc048_a",
+      "statement_evidence_text": "入力 入力は以下の形式で標準入力から与えられる． 入力の 1 行目は以下のとおりである． T そして， T 個のテストケースが続く． これらはそれぞれ以下の形式で与えられる． S A - atcoder < S × コンテスト開始 AtCoder Grand Contes",
+      "task_id": "agc048_a"
+    },
+    {
+      "expected_count_variable": "T",
+      "expected_layout": "wrapper",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "T\n\\text{test}_1\n\\text{test}_2\n\\vdots\n\\text{test}_T\n",
+        "N\nA_1 A_2 \\dots A_N\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。ここで \\text{test}_i は i 番目のテストケースを意味する。 T \\text{test}_1 \\text{test}_2 \\vdots \\text{test}_T 各テストケースは以下の形式で与えられる。 N A_1 A_2 \\dots A_N",
+      "input_format_text": "T\n\\text{test}_1\n\\text{test}_2\n\\vdots\n\\text{test}_T\n",
+      "sample_inputs": [
+        "4\n3\n1 2 3\n2\n20 23\n10\n6 10 4 1 5 9 8 6 5 1\n1\n1000000000\n"
+      ],
+      "source_html_sha256": "d33b4b9c3f61f7cb505b3541ac0b70f19462486c74e8baba07afcba35d333fee",
+      "source_url": "https://atcoder.jp/contests/abc284/tasks/abc284_b",
+      "statement_evidence_text": "t Cases 解説 / 実行時間制限: 2 sec / メモリ制限: 1024 MiB 配点 : 200 点 問題文 この問題は 1 つの入力ファイルに複数のテストケースが含まれる問題です。 はじめに整数 T が与えられます。 T 個のテストケースについて次の問題を解いてください。 N 個の正整数 A_1, A_2,",
+      "task_id": "abc284_b"
+    },
+    {
+      "expected_count_variable": "T",
+      "expected_layout": "wrapper",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "T\n\\rm{case}_{1}\n\\rm{case}_{2}\n\\vdots\n\\rm{case}_{\\it{T}}\n",
+        "S L R\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 \\rm{case}_i は i 個目のテストケースを表す。 T \\rm{case}_{1} \\rm{case}_{2} \\vdots \\rm{case}_{\\it{T}} 各テストケースは以下の形式である。 S L R",
+      "input_format_text": "T\n\\rm{case}_{1}\n\\rm{case}_{2}\n\\vdots\n\\rm{case}_{\\it{T}}\n",
+      "sample_inputs": [
+        "6\n22 23 234\n0295 295 295\n0 1 9999999999999999\n2718 998244353 9982443530000000\n869120 1234567890123456 2345678901234567\n2023032520230325 1 9999999999999999\n"
+      ],
+      "source_html_sha256": "869a64acc9868c21f47b7d75adba7863887ad3ef898277961d7a9934e702a310",
+      "source_url": "https://atcoder.jp/contests/abc295/tasks/abc295_f",
+      "statement_evidence_text": "入力 入力は以下の形式で標準入力から与えられる。 \\rm{case}_i は i 個目のテストケースを表す。 T \\rm{case}_{1} \\rm{case}_{2} \\vdots \\rm{case}_{\\it{T}",
+      "task_id": "abc295_f"
+    },
+    {
+      "expected_count_variable": "T",
+      "expected_layout": "wrapper",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "T\n\\text{test}_1\n\\text{test}_2\n\\vdots\n\\text{test}_T\n",
+        "N M\nU_1 V_1\nU_2 V_2\n\\vdots\nU_M V_M\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 ここで \\text{test}_i は i 番目のテストケースを意味する。 T \\text{test}_1 \\text{test}_2 \\vdots \\text{test}_T 各テストケースは以下の形式で与えられる。 N M U_1 V_1 U_2 V_2 \\vdots U_M V_M",
+      "input_format_text": "T\n\\text{test}_1\n\\text{test}_2\n\\vdots\n\\text{test}_T\n",
+      "sample_inputs": [
+        "4\n2 2\n1 2\n2 1\n3 3\n1 2\n2 3\n3 1\n7 10\n1 6\n6 3\n1 4\n5 1\n7 1\n4 5\n2 1\n4 7\n2 7\n4 3\n7 11\n1 6\n6 3\n1 4\n5 1\n7 1\n4 5\n2 1\n4 7\n2 7\n4 3\n3 7\n"
+      ],
+      "source_html_sha256": "e75fd02be14cef4f67d8c54ff431c470b497b3cee68ced129d8b9024ec172db3",
+      "source_url": "https://atcoder.jp/contests/abc306/tasks/abc306_g",
+      "statement_evidence_text": "繰り返して頂点 1 に戻ってくることが可能かどうか判定してください。 今いる頂点から伸びている辺を 1 つ選び、その辺が伸びている先の頂点に移動する。 T 個のテストケースが与えられるので、それぞれについて解いてください。 制約 入力は全て整数 1\\leq T \\leq 2\\times 10^5 2\\leq N \\le",
+      "task_id": "abc306_g"
+    },
+    {
+      "expected_count_variable": "T",
+      "expected_layout": "wrapper",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "T\n\\text{case}_1\n\\text{case}_2\n\\vdots\n\\text{case}_T\n",
+        "X Y K\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 T \\text{case}_1 \\text{case}_2 \\vdots \\text{case}_T i 番目 (1\\le i\\le T) のテストケース \\text{case}_i は以下の形式で与えられる。 X Y K",
+      "input_format_text": "T\n\\text{case}_1\n\\text{case}_2\n\\vdots\n\\text{case}_T\n",
+      "sample_inputs": [
+        "4\n11 9 3\n0 0 2\n842 180 7\n1948706013487601 48019760148910476 89014537\n"
+      ],
+      "source_html_sha256": "e3c097367c3c5bc0f655d162c7b4b36f5584623695fe98518aaf48aca4fcb09c",
+      "source_url": "https://atcoder.jp/contests/abc465/tasks/abc465_d",
+      "statement_evidence_text": "入力 入力は以下の形式で標準入力から与えられる。 T \\text{case}_1 \\text{case}_2 \\vdots \\text{case}_T i 番目 (1\\le i\\le T) のテストケース \\text{case",
+      "task_id": "abc465_d"
+    },
+    {
+      "expected_count_variable": "Q",
+      "expected_layout": "single_block_indexed",
+      "expected_multi": true,
+      "input_format_blocks": [
+        "Q\nH_1 W_1 K_1\nH_2 W_2 K_2\n\\vdots\nH_Q W_Q K_Q\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 Q H_1 W_1 K_1 H_2 W_2 K_2 \\vdots H_Q W_Q K_Q",
+      "input_format_text": "Q\nH_1 W_1 K_1\nH_2 W_2 K_2\n\\vdots\nH_Q W_Q K_Q\n",
+      "sample_inputs": [
+        "3\n3 4 3\n2 2 3\n1000 800 3000\n"
+      ],
+      "source_html_sha256": "3ab7292d70156605e9a0ad246bd3b7793813003a954c7ea7616d0d28148978e8",
+      "source_url": "https://atcoder.jp/contests/pakencamp-2023-day1/tasks/pakencamp_2023_day1_n",
+      "statement_evidence_text": "面積が K \\mathrm{cm}^2 以上でなければならない。 Alice が先手で、操作ができなくなったほうが負けです。勝つのはどちらでしょうか。 Q 個のテストケースに対して答えてください。 制約 1 \\le Q \\le 2\\times 10^5 1 \\leq H,W \\leq 10^9 1 \\le K \\le",
+      "task_id": "pakencamp_2023_day1_n"
+    },
+    {
+      "expected_count_variable": null,
+      "expected_layout": null,
+      "expected_multi": false,
+      "input_format_blocks": [
+        "a b\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 a b",
+      "input_format_text": "a b\n",
+      "sample_inputs": [
+        "3 4\n",
+        "1 21\n"
+      ],
+      "source_html_sha256": "9d875695065302a1f6b2ef79f6fad97abc2381e7eda217d0b533d385579a76c9",
+      "source_url": "https://atcoder.jp/contests/abc086/tasks/abc086_a",
+      "statement_evidence_text": "",
+      "task_id": "abc086_a"
+    },
+    {
+      "expected_count_variable": null,
+      "expected_layout": null,
+      "expected_multi": false,
+      "input_format_blocks": [
+        "A B\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる. A B",
+      "input_format_text": "A B\n",
+      "sample_inputs": [
+        "5 4\n",
+        "8 8\n",
+        "11 4\n"
+      ],
+      "source_html_sha256": "63814cfd455d5b4fe6729e829c6e92a0be972b1833510b9f79ffd403d9bc4b3e",
+      "source_url": "https://atcoder.jp/contests/abc100/tasks/abc100_a",
+      "statement_evidence_text": "",
+      "task_id": "abc100_a"
+    },
+    {
+      "expected_count_variable": null,
+      "expected_layout": null,
+      "expected_multi": false,
+      "input_format_blocks": [
+        "N\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 N",
+      "input_format_text": "N\n",
+      "sample_inputs": [
+        "2021\n",
+        "200\n"
+      ],
+      "source_html_sha256": "c27ab3b8d8d876ed0cc837fcac7959f84fa1582907c78fd69349942104c6dbd9",
+      "source_url": "https://atcoder.jp/contests/abc200/tasks/abc200_a",
+      "statement_evidence_text": "",
+      "task_id": "abc200_a"
+    },
+    {
+      "expected_count_variable": null,
+      "expected_layout": null,
+      "expected_multi": false,
+      "input_format_blocks": [
+        "N A B\nC_1 C_2 \\dots C_N\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 N A B C_1 C_2 \\dots C_N",
+      "input_format_text": "N A B\nC_1 C_2 \\dots C_N\n",
+      "sample_inputs": [
+        "3 125 175\n200 300 400\n",
+        "1 1 1\n2\n",
+        "5 123 456\n135 246 357 468 579\n"
+      ],
+      "source_html_sha256": "efbbef4557f7eba3483638f378e87caac46a210b64a500f854e6e6d8a5568d8f",
+      "source_url": "https://atcoder.jp/contests/abc300/tasks/abc300_a",
+      "statement_evidence_text": "",
+      "task_id": "abc300_a"
+    },
+    {
+      "expected_count_variable": null,
+      "expected_layout": null,
+      "expected_multi": false,
+      "input_format_blocks": [
+        "N\nA_1 A_2 \\dots A_N\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 N A_1 A_2 \\dots A_N",
+      "input_format_text": "N\nA_1 A_2 \\dots A_N\n",
+      "sample_inputs": [
+        "3\n3 4 6\n",
+        "5\n22 75 26 45 72\n"
+      ],
+      "source_html_sha256": "69cd0f29be07689c2f62e543b077d306ad698bdab77b07f5cd3c210b12a3babd",
+      "source_url": "https://atcoder.jp/contests/abc346/tasks/abc346_a",
+      "statement_evidence_text": "",
+      "task_id": "abc346_a"
+    },
+    {
+      "expected_count_variable": null,
+      "expected_layout": null,
+      "expected_multi": false,
+      "input_format_blocks": [
+        "N\n"
+      ],
+      "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 N",
+      "input_format_text": "N\n",
+      "sample_inputs": [
+        "379\n",
+        "919\n"
+      ],
+      "source_html_sha256": "9efda214d0516c639c4866cc6908b0d518880cd7522f47216ba4bbedb6ac27f5",
+      "source_url": "https://atcoder.jp/contests/abc379/tasks/abc379_a",
+      "statement_evidence_text": "",
+      "task_id": "abc379_a"
+    }
+  ],
+  "description": "Normalized structural fixtures derived from official AtCoder statements. Full statement HTML is not stored.",
+  "schema": "atcoder_tools_multi_case_official_layouts_v1"
+}

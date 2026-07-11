@@ -33,8 +33,12 @@ func main() {
 	const maxBufSize = 1000000
 	scanner.Buffer(make([]byte, initialBufSize), maxBufSize)
 	scanner.Split(bufio.ScanWords)
+{% if multi_case %}
+	{{ input_part_with_solve_function }}
+{% else %}
 	{{ input_part }}
 	solve({{ actual_arguments }})
+{% endif %}
 	{% else %}
     // Failed to predict input format
 	{% endif %}

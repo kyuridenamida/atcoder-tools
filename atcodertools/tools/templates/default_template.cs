@@ -21,8 +21,12 @@ public class Program{
     public static void Main(string[] args){
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
         {% if prediction_success %}
+{% if multi_case %}
+        {{ input_part_with_solve_function }}
+{% else %}
         {{ input_part }}
         new Program().Solve({{ actual_arguments }});
+{% endif %}
         {% else %}
         // Failed to predict input format
         {% endif %}

@@ -32,8 +32,12 @@ proc solve({{ formal_arguments }}):void =
 
 proc main():void =
 {% if prediction_success %}
+{% if multi_case %}
+  {{ input_part_with_solve_function }}
+{% else %}
   {{input_part}}
   solve({{ actual_arguments }})
+{% endif %}
 {% else %}
 # Failed to predict input format
 {% endif %}

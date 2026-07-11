@@ -3,8 +3,14 @@ from typing import Dict, Any, Optional
 import re
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
-from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern, \
-    Format
+from atcodertools.fmtprediction.models.format import (
+    Format,
+    ParallelPattern,
+    Pattern,
+    RepeatedCaseFormat,
+    SingularPattern,
+    TwoDimensionalPattern,
+)
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 from pathlib import Path
@@ -12,16 +18,36 @@ import toml
 
 
 class UniversalCodeGenerator():
-    def __init__(self,
-                 format_: Optional[Format[Variable]],
-                 config: CodeStyleConfig,
-                 path):
+    def __init__(
+        self,
+        format_: Optional[Format[Variable]],
+        config: CodeStyleConfig,
+        path,
+    ):
         super(UniversalCodeGenerator, self).__init__()
+
         self._format = format_
         self._config = config
         self.info = toml.load(path)
+
         if "index" not in self.info:
-            self.info["index"] = {"i": "i", "j": "j"}
+            self.info["index"] = {
+                "i": "i",
+                "j": "j",
+            }
+
+        self._prefix_format = format_
+        self._solve_format = format_
+        self._case_count_var = None
+        self._case_loop_var = None
+
+        if isinstance(format_, RepeatedCaseFormat):
+            self._prefix_format = format_.prefix_format
+            self._solve_format = format_.case_format
+            self._case_count_var = format_.case_count_var
+            self._case_loop_var = (
+                self._choose_case_loop_var()
+            )
 
     def _get_length(self, index) -> str:
         return self._insert_space_around_operators(str(index.get_length()))
@@ -52,50 +78,258 @@ class UniversalCodeGenerator():
 
     def _global_declaration(self) -> str:
         lines = []
-        for pattern in self._format.sequence:
+
+        for pattern in self._solve_format.sequence:
             for var in pattern.all_vars():
                 self._append(
-                    lines, self.info["global_prefix"] + self._generate_declaration(var))
+                    lines,
+                    (
+                        self.info["global_prefix"]
+                        + self._generate_declaration(var)
+                    ),
+                )
+
         return "\n".join(lines)
 
     def generate_parameters(self) -> Dict[str, Any]:
         if self._format is None:
             return dict(prediction_success=False)
 
-        return dict(formal_arguments=self._formal_arguments(),
-                    actual_arguments=self._actual_arguments(),
-                    input_part=self._input_part(global_mode=False),
-                    global_declaration=self._global_declaration(),
-                    global_input_part=self._input_part(global_mode=True),
-                    prediction_success=True)
+        input_part = self._input_part(
+            global_mode=False
+        )
+
+        parameters = dict(
+            formal_arguments=self._formal_arguments(),
+            actual_arguments=self._actual_arguments(),
+            input_part=input_part,
+            prefix_input_part=self._get_input_part(
+                global_mode=False,
+                format_=self._prefix_format,
+                include_prefix=True,
+            ),
+            case_input_part=self._get_input_part(
+                global_mode=False,
+                format_=self._solve_format,
+                include_prefix=(
+                    self._case_count_var is None
+                ),
+            ),
+            global_declaration=self._global_declaration(),
+            global_input_part=self._get_input_part(
+                global_mode=True,
+                format_=self._solve_format,
+                include_prefix=True,
+            ),
+            multi_case=(
+                self._case_count_var is not None
+            ),
+            case_count_var=self._case_count_var,
+            case_loop_var=self._case_loop_var,
+            prediction_success=True,
+        )
+
+        if "solve_function" in self.info:
+            combined_input_part = (
+                self._input_part_with_solve_function()
+            )
+
+            parameters[
+                "input_part_with_solve_function"
+            ] = combined_input_part
+
+            # Rust places the generated input loop one level deeper,
+            # inside its stack-sized worker thread. The first line gets
+            # indentation from the template; continuation lines need one
+            # additional configured indentation level.
+            parameters[
+                "input_part_with_solve_function_nested"
+            ] = combined_input_part.replace(
+                "\n",
+                "\n" + self._indent(1),
+            )
+        else:
+            # Preserve custom configurations which do not define a
+            # solve-function call yet.
+            parameters[
+                "input_part_with_solve_function"
+            ] = input_part
+
+        return parameters
 
     def _input_part(self, global_mode):
+        return self._get_input_part(
+            global_mode=global_mode,
+            format_=self._solve_format,
+            include_prefix=True,
+        )
+
+    def _get_input_part(
+        self,
+        global_mode,
+        format_,
+        include_prefix=True,
+    ):
         lines = []
-        newline_after_input = False
-        if "newline_after_input" in self.info and self.info["newline_after_input"]:
-            newline_after_input = True
-        if "input_part_prefix" in self.info:
-            s = self.info["input_part_prefix"].split("\n")
-            for line in s:
-                lines.append(line)
+
+        newline_after_input = (
+            "newline_after_input" in self.info
+            and self.info["newline_after_input"]
+        )
+
+        if (
+            include_prefix
+            and "input_part_prefix" in self.info
+        ):
+            lines.extend(
+                self.info["input_part_prefix"].split(
+                    "\n"
+                )
+            )
+
+        if newline_after_input:
+            lines.append("")
+
+        for pattern in format_.sequence:
+            lines += self._render_pattern(
+                pattern,
+                global_mode,
+            )
+
+            # Preserve the existing language-specific layout contract.
+            # D, for example, requests a blank line after each input
+            # declaration-and-read pattern.
             if newline_after_input:
                 lines.append("")
-        for pattern in self._format.sequence:
-            lines += self._render_pattern(pattern, global_mode)
-            if newline_after_input:
-                lines.append("")
+
         result = ""
-        prefix = "{indent}".format(
-            indent=self._indent(self.info["base_indent"]))
+        prefix = self._indent(
+            self.info["base_indent"]
+        )
         start = True
-        for i, line in enumerate(lines):
+
+        for index, line in enumerate(lines):
             if len(line) > 0:
                 if not start:
                     result += prefix
+
                 result += line
-            if i < len(lines) - 1:
+
+            if index < len(lines) - 1:
                 result += "\n"
+
             start = False
+
+        return result
+
+    def _choose_case_loop_var(self):
+        used_names = set()
+
+        for format_ in (
+            self._prefix_format,
+            self._solve_format,
+        ):
+            if format_ is None:
+                continue
+
+            used_names.update(
+                variable.name
+                for variable in format_.all_vars()
+            )
+
+        used_names.update(
+            self.info.get(
+                "index",
+                {},
+            ).values()
+        )
+
+        candidate = "case_index"
+
+        while candidate in used_names:
+            candidate = "_" + candidate
+
+        return candidate
+
+    def _solve_function_call(self):
+        return self.info["solve_function"].format(
+            actual_arguments=self._actual_arguments(),
+        )
+
+    def _input_part_with_solve_function(self):
+        solve_call = self._solve_function_call()
+        base_indent = self._indent(
+            self.info["base_indent"]
+        )
+
+        if self._case_count_var is None:
+            result = self._get_input_part(
+                global_mode=False,
+                format_=self._solve_format,
+                include_prefix=True,
+            )
+
+            if result != "":
+                result += "\n" + base_indent
+
+            return result + solve_call
+
+        result = self._get_input_part(
+            global_mode=False,
+            format_=self._prefix_format,
+            include_prefix=True,
+        )
+
+        loop_header = self.info["loop"][
+            "header"
+        ].format(
+            loop_var=self._case_loop_var,
+            length=self._case_count_var,
+        )
+
+        if result != "":
+            result += "\n" + base_indent
+
+        result += loop_header
+
+        case_input = self._get_input_part(
+            global_mode=False,
+            format_=self._solve_format,
+            include_prefix=False,
+        )
+
+        if case_input != "":
+            # _get_input_part already indents continuation lines by one
+            # base indentation level. Prefix once, then nest the entire
+            # block by one additional loop level.
+            case_block = base_indent + case_input
+            nested_case_block = "\n".join(
+                self._indent(1) + line
+                for line in case_block.split("\n")
+            )
+
+            result += "\n" + nested_case_block
+
+        result += (
+            "\n"
+            + base_indent
+            + self._indent(1)
+            + solve_call
+        )
+
+        loop_footer = self.info["loop"][
+            "footer"
+        ].format(
+            loop_var=self._case_loop_var,
+        )
+
+        if loop_footer != "":
+            result += (
+                "\n"
+                + base_indent
+                + loop_footer
+            )
+
         return result
 
     def _convert_type(self, type_: Type) -> str:
@@ -141,26 +375,40 @@ class UniversalCodeGenerator():
 
     def _actual_arguments(self) -> str:
         """
-            :return the string form of actual arguments e.g. "N, K, a"
+        Return actual solve-function arguments, e.g. ``N, K, a``.
         """
-        ret = []
-        for v in self._format.all_vars():
-            if v.dim_num() == 0:
-                ret.append(v.name)
+        result = []
+
+        for variable in self._solve_format.all_vars():
+            if variable.dim_num() == 0:
+                result.append(variable.name)
             else:
-                kind = self._get_variable_kind(v)
+                kind = self._get_variable_kind(
+                    variable
+                )
+
                 if "actual_arg" in self.info:
-                    ret.append(
-                        self.info["actual_arg"][kind].format(name=v.name))
+                    result.append(
+                        self.info["actual_arg"][
+                            kind
+                        ].format(
+                            name=variable.name
+                        )
+                    )
                 else:
-                    ret.append(v.name)
-        return ", ".join(ret)
+                    result.append(variable.name)
+
+        return ", ".join(result)
 
     def _formal_arguments(self):
         """
-            :return the string form of formal arguments e.g. "int N, int K, std::vector<int> a"
+        Return formal solve-function arguments.
         """
-        return ", ".join([self._get_argument(v) for v in self._format.all_vars()])
+        return ", ".join(
+            self._get_argument(variable)
+            for variable
+            in self._solve_format.all_vars()
+        )
 
     def _generate_declaration(self, var: Variable):
         """
