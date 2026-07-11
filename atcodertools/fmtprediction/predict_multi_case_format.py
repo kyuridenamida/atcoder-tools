@@ -463,6 +463,7 @@ def _context_supports_count_variable(
         for pattern in patterns
     )
 
+
 def _candidate_layouts(
     content: ProblemContent,
 ):
