@@ -5,7 +5,7 @@ from atcodertools.client.models.problem_content import (
 )
 from atcodertools.client.models.sample import Sample
 from atcodertools.fmtprediction.models.type import Type
-from atcodertools.fmtprediction.predict_multi_case_format import (
+from atcodertools.fmtprediction.predict_format import (
     NoMultiCaseFormatFoundError,
     predict_multi_case_format,
 )

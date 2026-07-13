@@ -13,7 +13,7 @@ from atcodertools.fmtprediction.models.format import (
 from atcodertools.fmtprediction.predict_format import (
     predict_format,
 )
-from atcodertools.fmtprediction.predict_multi_case_format import (
+from atcodertools.fmtprediction.predict_format import (
     NoMultiCaseFormatFoundError,
     predict_multi_case_format,
 )
