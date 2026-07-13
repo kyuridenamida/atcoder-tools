@@ -38,7 +38,11 @@ func main() {
     func readInt() -> Int { Int(readString())! }
     func readDouble() -> Double { Double(readString())! }
 {% if multi_case %}
-    {{ input_part_with_solve_function }}
+    {{ prefix_input_part }}
+    for {{ case_loop_var }} in 0..<{{ case_count_var }} {
+        {{ case_input_part | replace('\n', '\n' ~ "    ") }}
+        _ = solve({{ actual_arguments }})
+    }
 {% else %}
     {{input_part}}
     _ = solve({{ actual_arguments }})

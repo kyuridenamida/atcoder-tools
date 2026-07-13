@@ -24,7 +24,11 @@ fn main() {
     let stack_size = 104_857_600; // 100 MB
     let thd = std::thread::Builder::new().stack_size(stack_size);
     thd.spawn(move || {
-        {{ input_part_with_solve_function_nested }}
+        {{ prefix_input_part | replace('\n', '\n' ~ "    ") }}
+        for {{ case_loop_var }} in 0..({{ case_count_var }}) as usize {
+            {{ case_input_part | replace('\n', '\n' ~ "        ") }}
+            solve({{ actual_arguments }});
+        }
     }).unwrap().join().unwrap();
 {% else %}
     {{input_part}}

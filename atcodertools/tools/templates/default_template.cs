@@ -22,7 +22,11 @@ public class Program{
         ConsoleInput cin = new ConsoleInput(Console.In, ' ');
         {% if prediction_success %}
 {% if multi_case %}
-        {{ input_part_with_solve_function }}
+        {{ prefix_input_part }}
+        for(int {{ case_loop_var }} = 0;{{ case_loop_var }} < {{ case_count_var }};{{ case_loop_var }}++){
+            {{ case_input_part | replace('\n', '\n' ~ "    ") }}
+            new Program().Solve({{ actual_arguments }});
+        }
 {% else %}
         {{ input_part }}
         new Program().Solve({{ actual_arguments }});

@@ -5,7 +5,6 @@ import sys
 import tempfile
 import unittest
 
-import toml
 
 from atcodertools.client.models.problem_content import (
     ProblemContent,
@@ -130,6 +129,18 @@ class TestMultiCasePredictionBridge(unittest.TestCase):
         )
 
 
+EXPECTED_SOLVE_FUNCTIONS = {'cpp': 'solve({actual_arguments});',
+                            'cs': 'new Program().Solve({actual_arguments});',
+                            'd': 'solve({actual_arguments});',
+                            'go': 'solve({actual_arguments})',
+                            'java': 'solve({actual_arguments});',
+                            'julia': 'solve({actual_arguments})',
+                            'nim': 'solve({actual_arguments})',
+                            'python': 'solve({actual_arguments})',
+                            'rust': 'solve({actual_arguments});',
+                            'swift': '_ = solve({actual_arguments})'}
+
+
 class TestMultiCaseUniversalCodeGenerator(unittest.TestCase):
     def setUp(self):
         self.prediction_result = predict_format(
@@ -140,34 +151,33 @@ class TestMultiCaseUniversalCodeGenerator(unittest.TestCase):
         config = CodeStyleConfig(
             lang=language.name
         )
-        toml_path = (
-            get_builtin_code_generator_info_toml_path(
-                language.name
-            )
-        )
         generator = UniversalCodeGenerator(
             self.prediction_result.format,
             config,
-            toml_path,
+            get_builtin_code_generator_info_toml_path(
+                language.name
+            ),
         )
 
         return (
             generator,
             generator.generate_parameters(),
-            toml.load(toml_path),
+            generator.info,
             config,
         )
 
-    def test_all_builtin_languages_generate_loop_and_solve_call(
+    def test_all_builtin_languages_expose_material_contract(
         self,
     ):
+        self.assertEqual(10, len(ALL_LANGUAGES))
+
         for language in ALL_LANGUAGES:
             with self.subTest(language=language.name):
                 (
-                    generator,
+                    _,
                     parameters,
-                    info,
-                    config,
+                    information,
+                    _,
                 ) = self._generator_and_parameters(
                     language
                 )
@@ -191,70 +201,41 @@ class TestMultiCaseUniversalCodeGenerator(unittest.TestCase):
                     parameters["formal_arguments"],
                 )
 
-                loop_header = info["loop"][
-                    "header"
-                ].format(
-                    loop_var=parameters[
-                        "case_loop_var"
-                    ],
-                    length="Q",
-                )
-                solve_call = info[
-                    "solve_function"
-                ].format(
-                    actual_arguments="X, Y",
-                )
-
-                combined = parameters[
-                    "input_part_with_solve_function"
-                ]
-
-                self.assertIn(
-                    loop_header,
-                    combined,
-                )
-                self.assertIn(
-                    solve_call,
-                    combined,
-                )
-                self.assertLess(
-                    combined.index(loop_header),
-                    combined.index(solve_call),
-                )
-
-                generated = (
-                    language.default_code_generator(
-                        CodeGenArgs(
-                            template=(
-                                "{{ "
-                                "input_part_with_solve_function"
-                                " }}"
-                            ),
-                            format_=(
-                                self.prediction_result.format
-                            ),
-                            constants=ProblemConstantSet(),
-                            config=config,
-                        )
+                for name in (
+                    "prefix_input_part",
+                    "case_input_part",
+                    "case_count_var",
+                    "case_loop_var",
+                    "multi_case",
+                ):
+                    self.assertIn(
+                        name,
+                        parameters,
                     )
+
+                self.assertNotIn(
+                    "input_part_with_solve_function",
+                    parameters,
+                )
+                self.assertNotIn(
+                    "input_part_with_solve_function_nested",
+                    parameters,
+                )
+                self.assertNotIn(
+                    "solve_function",
+                    information,
                 )
 
-                self.assertIn(
-                    loop_header,
-                    generated,
-                )
-                self.assertIn(
-                    solve_call,
-                    generated,
-                )
+                if language.name == "d":
+                    self.assertFalse(
+                        parameters[
+                            "case_input_part"
+                        ].startswith("\n")
+                    )
 
     def test_case_loop_variable_avoids_input_collision(
         self,
     ):
-        # Construct the typed format directly. The input-format tokenizer
-        # intentionally splits consecutive alphabetic characters, so a
-        # source-format string such as "case_index" is not suitable for
-        # testing the generator's independent name-collision guard.
         prefix_format = Format()
         prefix_format.push_back(
             SingularPattern(
@@ -292,7 +273,6 @@ class TestMultiCaseUniversalCodeGenerator(unittest.TestCase):
                 "python"
             ),
         )
-
         parameters = generator.generate_parameters()
 
         self.assertEqual(
@@ -304,7 +284,7 @@ class TestMultiCaseUniversalCodeGenerator(unittest.TestCase):
             parameters["actual_arguments"],
         )
 
-    def test_single_case_combined_parameter_calls_solve_once(
+    def test_single_case_parameters_remain_material_only(
         self,
     ):
         result = predict_format(
@@ -319,103 +299,93 @@ class TestMultiCaseUniversalCodeGenerator(unittest.TestCase):
             )
         )
 
-        path = (
-            get_builtin_code_generator_info_toml_path(
-                "python"
-            )
-        )
         generator = UniversalCodeGenerator(
             result.format,
             CodeStyleConfig(lang="python"),
-            path,
+            get_builtin_code_generator_info_toml_path(
+                "python"
+            ),
         )
+        parameters = generator.generate_parameters()
 
-        combined = generator.generate_parameters()[
-            "input_part_with_solve_function"
-        ]
-
+        self.assertFalse(
+            parameters["multi_case"]
+        )
         self.assertIn(
             "X = int(next(tokens))",
-            combined,
+            parameters["input_part"],
         )
         self.assertIn(
             "Y = next(tokens)",
-            combined,
+            parameters["input_part"],
         )
-        self.assertEqual(
-            1,
-            combined.count("solve(X, Y)"),
+        self.assertNotIn(
+            "input_part_with_solve_function",
+            parameters,
         )
 
     def test_all_default_templates_route_multi_case(
         self,
     ):
         for language in ALL_LANGUAGES:
-            with self.subTest(
-                language=language.name
-            ):
+            with self.subTest(language=language.name):
                 template = Path(
                     language.default_template_path
                 ).read_text(
                     encoding="utf-8"
                 )
 
-                self.assertIn(
+                for name in (
+                    "multi_case",
+                    "prefix_input_part",
+                    "case_input_part",
+                    "case_count_var",
+                    "case_loop_var",
+                ):
+                    self.assertIn(
+                        name,
+                        template,
+                    )
+
+                self.assertNotIn(
                     "input_part_with_solve_function",
                     template,
                 )
-                self.assertIn(
-                    "multi_case",
-                    template,
-                )
 
-                config = CodeStyleConfig(
-                    lang=language.name
-                )
-
-                toml_path = (
-                    get_builtin_code_generator_info_toml_path(
-                        language.name
-                    )
-                )
-
-                generator = UniversalCodeGenerator(
-                    self.prediction_result.format,
+                (
+                    _,
+                    parameters,
+                    information,
                     config,
-                    toml_path,
+                ) = self._generator_and_parameters(
+                    language
                 )
 
-                parameters = (
-                    generator.generate_parameters()
-                )
-                info = toml.load(toml_path)
-
-                code = (
-                    language.default_code_generator(
-                        CodeGenArgs(
-                            template=template,
-                            format_=(
-                                self.prediction_result.format
-                            ),
-                            constants=ProblemConstantSet(),
-                            config=config,
-                        )
+                code = language.default_code_generator(
+                    CodeGenArgs(
+                        template=template,
+                        format_=(
+                            self.prediction_result.format
+                        ),
+                        constants=ProblemConstantSet(),
+                        config=config,
                     )
                 )
 
-                loop_header = info["loop"][
-                    "header"
-                ].format(
+                loop_header = information[
+                    "loop"
+                ]["header"].format(
                     loop_var=parameters[
                         "case_loop_var"
                     ],
                     length="Q",
                 )
-
-                solve_call = info[
-                    "solve_function"
-                ].format(
-                    actual_arguments="X, Y",
+                solve_call = (
+                    EXPECTED_SOLVE_FUNCTIONS[
+                        language.name
+                    ].format(
+                        actual_arguments="X, Y"
+                    )
                 )
 
                 self.assertIn(
@@ -484,38 +454,42 @@ class TestMultiCaseUniversalCodeGenerator(unittest.TestCase):
     def test_generated_python_executes_all_cases(
         self,
     ):
-        template = """#!/usr/bin/env python3
+        template = r"""#!/usr/bin/env python3
 import sys
-
 
 def solve(X: int, Y: str):
     print("{}:{}".format(X, Y))
-
 
 def main():
     def iterate_tokens():
         for line in sys.stdin:
             for word in line.split():
                 yield word
-
     tokens = iterate_tokens()
-    {{ input_part_with_solve_function }}
-
+    {% if prediction_success %}
+    {% if multi_case %}
+    {{ prefix_input_part }}
+    for {{ case_loop_var }} in range({{ case_count_var }}):
+        {{ case_input_part | replace('\n', '\n' ~ "    ") }}
+        solve({{ actual_arguments }})
+    {% else %}
+    {{ input_part }}
+    solve({{ actual_arguments }})
+    {% endif %}
+    {% endif %}
 
 if __name__ == "__main__":
     main()
 """
-
-        config = CodeStyleConfig(
-            lang=PYTHON.name
-        )
 
         code = PYTHON.default_code_generator(
             CodeGenArgs(
                 template=template,
                 format_=self.prediction_result.format,
                 constants=ProblemConstantSet(),
-                config=config,
+                config=CodeStyleConfig(
+                    lang=PYTHON.name
+                ),
             )
         )
 
@@ -525,7 +499,11 @@ if __name__ == "__main__":
                 "main.py",
             )
 
-            with open(path, "w") as file:
+            with open(
+                path,
+                "w",
+                encoding="utf-8",
+            ) as file:
                 file.write(code)
 
             compile_result = subprocess.run(
@@ -573,6 +551,78 @@ if __name__ == "__main__":
                 ),
                 run_result.stdout,
             )
+
+    def test_old_custom_template_fails_explicitly_for_multi_case(
+        self,
+    ):
+        template = """{% if prediction_success %}
+{{ input_part }}
+{% else %}
+FAILED_TO_PREDICT
+{% endif %}
+"""
+
+        code = PYTHON.default_code_generator(
+            CodeGenArgs(
+                template=template,
+                format_=self.prediction_result.format,
+                constants=ProblemConstantSet(),
+                config=CodeStyleConfig(
+                    lang=PYTHON.name
+                ),
+            )
+        )
+
+        self.assertIn(
+            "FAILED_TO_PREDICT",
+            code,
+        )
+        self.assertNotIn(
+            "X = int(next(tokens))",
+            code,
+        )
+
+    def test_single_case_custom_template_remains_supported(
+        self,
+    ):
+        result = predict_format(
+            ProblemContent(
+                input_format_text="X Y\n",
+                samples=[
+                    Sample(
+                        "1 alpha\n",
+                        "",
+                    )
+                ],
+            )
+        )
+
+        template = """{% if prediction_success %}
+{{ input_part }}
+{% else %}
+FAILED_TO_PREDICT
+{% endif %}
+"""
+
+        code = PYTHON.default_code_generator(
+            CodeGenArgs(
+                template=template,
+                format_=result.format,
+                constants=ProblemConstantSet(),
+                config=CodeStyleConfig(
+                    lang=PYTHON.name
+                ),
+            )
+        )
+
+        self.assertIn(
+            "X = int(next(tokens))",
+            code,
+        )
+        self.assertNotIn(
+            "FAILED_TO_PREDICT",
+            code,
+        )
 
 
 if __name__ == "__main__":

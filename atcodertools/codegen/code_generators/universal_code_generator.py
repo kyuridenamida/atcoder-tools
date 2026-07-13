@@ -129,32 +129,6 @@ class UniversalCodeGenerator():
             prediction_success=True,
         )
 
-        if "solve_function" in self.info:
-            combined_input_part = (
-                self._input_part_with_solve_function()
-            )
-
-            parameters[
-                "input_part_with_solve_function"
-            ] = combined_input_part
-
-            # Rust places the generated input loop one level deeper,
-            # inside its stack-sized worker thread. The first line gets
-            # indentation from the template; continuation lines need one
-            # additional configured indentation level.
-            parameters[
-                "input_part_with_solve_function_nested"
-            ] = combined_input_part.replace(
-                "\n",
-                "\n" + self._indent(1),
-            )
-        else:
-            # Preserve custom configurations which do not define a
-            # solve-function call yet.
-            parameters[
-                "input_part_with_solve_function"
-            ] = input_part
-
         return parameters
 
     def _input_part(self, global_mode):
@@ -187,7 +161,7 @@ class UniversalCodeGenerator():
                 )
             )
 
-        if newline_after_input:
+        if newline_after_input and lines:
             lines.append("")
 
         for pattern in format_.sequence:
@@ -250,87 +224,6 @@ class UniversalCodeGenerator():
             candidate = "_" + candidate
 
         return candidate
-
-    def _solve_function_call(self):
-        return self.info["solve_function"].format(
-            actual_arguments=self._actual_arguments(),
-        )
-
-    def _input_part_with_solve_function(self):
-        solve_call = self._solve_function_call()
-        base_indent = self._indent(
-            self.info["base_indent"]
-        )
-
-        if self._case_count_var is None:
-            result = self._get_input_part(
-                global_mode=False,
-                format_=self._solve_format,
-                include_prefix=True,
-            )
-
-            if result != "":
-                result += "\n" + base_indent
-
-            return result + solve_call
-
-        result = self._get_input_part(
-            global_mode=False,
-            format_=self._prefix_format,
-            include_prefix=True,
-        )
-
-        loop_header = self.info["loop"][
-            "header"
-        ].format(
-            loop_var=self._case_loop_var,
-            length=self._case_count_var,
-        )
-
-        if result != "":
-            result += "\n" + base_indent
-
-        result += loop_header
-
-        case_input = self._get_input_part(
-            global_mode=False,
-            format_=self._solve_format,
-            include_prefix=False,
-        )
-
-        if case_input != "":
-            # _get_input_part already indents continuation lines by one
-            # base indentation level. Prefix once, then nest the entire
-            # block by one additional loop level.
-            case_block = base_indent + case_input
-            nested_case_block = "\n".join(
-                self._indent(1) + line
-                for line in case_block.split("\n")
-            )
-
-            result += "\n" + nested_case_block
-
-        result += (
-            "\n"
-            + base_indent
-            + self._indent(1)
-            + solve_call
-        )
-
-        loop_footer = self.info["loop"][
-            "footer"
-        ].format(
-            loop_var=self._case_loop_var,
-        )
-
-        if loop_footer != "":
-            result += (
-                "\n"
-                + base_indent
-                + loop_footer
-            )
-
-        return result
 
     def _convert_type(self, type_: Type) -> str:
         return self.info["type"][type_.value]

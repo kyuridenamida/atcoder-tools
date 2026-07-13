@@ -32,7 +32,11 @@ function main()
         close(tokens)
     end |> schedule
 {% if multi_case %}
-    {{ input_part_with_solve_function }}
+    {{ prefix_input_part }}
+    for {{ case_loop_var }} in 1:{{ case_count_var }}
+        {{ case_input_part | replace('\n', '\n' ~ "    ") }}
+        solve({{ actual_arguments }})
+    end
 {% else %}
     {{ input_part }}
     solve({{ actual_arguments }})

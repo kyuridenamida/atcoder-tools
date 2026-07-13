@@ -39,7 +39,11 @@ void solve({{ formal_arguments }}){
 int main(){
     {% if prediction_success %}
 {% if multi_case %}
-    {{ input_part_with_solve_function }}
+    {{ prefix_input_part }}
+    for(int {{ case_loop_var }} = 0 ; {{ case_loop_var }} < {{ case_count_var }} ; {{ case_loop_var }}++){
+        {{ case_input_part | replace('\n', '\n' ~ "    ") }}
+        solve({{ actual_arguments }});
+    }
 {% else %}
     {{input_part}}
     solve({{ actual_arguments }});
