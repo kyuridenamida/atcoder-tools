@@ -1,8 +1,15 @@
 import copy
+from itertools import combinations
 from typing import List, Dict
 
-from atcodertools.fmtprediction.models.calculator import CalcNode, CalcParseError
-from atcodertools.fmtprediction.models.variable_token import VariableToken, TokenizedFormat
+from atcodertools.fmtprediction.models.calculator import (
+    CalcNode,
+    CalcParseError,
+)
+from atcodertools.fmtprediction.models.variable_token import (
+    VariableToken,
+    TokenizedFormat,
+)
 
 from atcodertools.fmtprediction.token_manager import TokenManager
 
@@ -66,8 +73,16 @@ def _remove_spaces_in_curly_brackets(input_format):
 
 
 def _sanitized_tokens(input_format: str) -> List[str]:
-    input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
-        "..", " ").replace("\\ ", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
+    input_format = (
+        input_format.replace("\n", " ")
+        .replace("…", " ")
+        .replace("...", " ")
+        .replace("..", " ")
+        .replace("\\ ", " ")
+        .replace("}", "} ")
+        .replace("　", " ")
+        .replace(", ", ",")
+    )
     input_format = _remove_spaces_in_curly_brackets(input_format)
     input_format = _divide_consecutive_vars(input_format)
     input_format = _normalize_index(input_format)
@@ -102,7 +117,10 @@ class FormatSearcher:
             self._answers.append(TokenizedFormat(copy.deepcopy(var_token_seq)))
             return
 
-        for var_token in self._possible_var_tokens(self._token_manager.peek(), var_to_dim_num):
+        for var_token in self._possible_var_tokens(
+            self._token_manager.peek(),
+            var_to_dim_num,
+        ):
             next_var_to_dim_num = copy.deepcopy(var_to_dim_num)
             next_var_to_dim_num[var_token.var_name] = var_token.dim_num()
             try:
@@ -114,48 +132,143 @@ class FormatSearcher:
                 var_token_seq.pop()
 
     @staticmethod
-    def _possible_var_tokens(token: str, current_var_to_dim_num: Dict[str, int]) -> List[VariableToken]:
+    def _possible_var_tokens(
+        token: str,
+        current_var_to_dim_num: Dict[str, int],
+    ) -> List[VariableToken]:
         """
-        Only considers to divide the given token into at most 3 pieces (that is, to assume at most 2 dimensional indexes).
-        :param token: e.g. "N", "abc_1_2" or "a_1 ... a_N"
-        :param current_var_to_dim_num: utilized to detect unknown variables (for pruning purpose)
-        """
-        var_token_candidates = [VariableToken(token, None, None)]
-        var_token_candidates += [VariableToken(
-            token[:i],
-            token[i:],
-            None) for i in range(1, len(token))]
-        for i in range(1, len(token)):
-            for j in range(i + 1, len(token)):
-                var_token_candidates += [
-                    VariableToken(token[:i], token[i:j], token[j:])]
+        Divide a token into a variable name and up to
+        three index expressions.
 
-        def check_if_possible(var_token: VariableToken):
-            # check syntax error
+        Examples include ``N``, ``a_1``,
+        ``a_1,2`` and ``a_1,2,3``.
+        """
+        candidates = [
+            VariableToken(
+                token,
+                None,
+                None,
+                None,
+            )
+        ]
+
+        for first_split in range(
+            1,
+            len(token),
+        ):
+            candidates.append(
+                VariableToken(
+                    token[:first_split],
+                    token[first_split:],
+                    None,
+                    None,
+                )
+            )
+
+        for first_split in range(
+            1,
+            len(token),
+        ):
+            for second_split in range(
+                first_split + 1,
+                len(token),
+            ):
+                candidates.append(
+                    VariableToken(
+                        token[:first_split],
+                        token[
+                            first_split:second_split
+                        ],
+                        token[second_split:],
+                        None,
+                    )
+                )
+
+        three_dimensional_splits = sorted(
+            {
+                boundary
+                for position, character in enumerate(
+                    token
+                )
+                if character in ("_", ",")
+                for boundary in (
+                    position,
+                    position + 1,
+                )
+                if 0 < boundary < len(token)
+            }
+        )
+
+        for (
+            first_split,
+            second_split,
+            third_split,
+        ) in combinations(
+            three_dimensional_splits,
+            3,
+        ):
+            candidates.append(
+                VariableToken(
+                    token[:first_split],
+                    token[
+                        first_split:second_split
+                    ],
+                    token[
+                        second_split:third_split
+                    ],
+                    token[third_split:],
+                )
+            )
+
+        def check_if_possible(var_token):
             if not var_token.is_valid():
                 return False
 
-            # check kind of synonym error using current_var_to_dim_num
-            for index in [var_token.first_index, var_token.second_index]:
+            for index in (
+                var_token.first_index,
+                var_token.second_index,
+                var_token.third_index,
+            ):
                 if index is None:
                     continue
 
                 try:
-                    for sub_var in CalcNode.parse(index).get_all_variables():
-                        if sub_var not in current_var_to_dim_num:
-                            return False
+                    variables = (
+                        CalcNode.parse(index)
+                        .get_all_variables()
+                    )
                 except CalcParseError:
                     return False
 
-            if var_token.var_name in current_var_to_dim_num \
-                    and current_var_to_dim_num[var_token.var_name] != var_token.dim_num():
+                for sub_var in variables:
+                    if (
+                        sub_var
+                        not in current_var_to_dim_num
+                    ):
+                        return False
+
+            if (
+                var_token.var_name
+                in current_var_to_dim_num
+                and current_var_to_dim_num[
+                    var_token.var_name
+                ]
+                != var_token.dim_num()
+            ):
                 return False
+
             return True
 
-        return [var_token for var_token in var_token_candidates if check_if_possible(var_token)]
+        return [
+            candidate
+            for candidate in candidates
+            if check_if_possible(candidate)
+        ]
 
 
-def search_formats_with_minimum_vars(input_format: str) -> List[TokenizedFormat]:
+def search_formats_with_minimum_vars(
+    input_format: str,
+) -> List[TokenizedFormat]:
     """
     Fast enough for realistic instances.
     This method returns possible formats with the smallest number of variables.

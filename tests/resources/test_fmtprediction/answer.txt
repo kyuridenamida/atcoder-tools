@@ -359,7 +359,7 @@ abc079-C                                 OK                   [(Singular: ABCD)]
 abc079-D                                 OK                   [(Singular: H),(Singular: W),(TwoDimensional: c),(TwoDimensional: A)] [('H', <class 'int'>), ('W', <class 'int'>), ('c', <class 'int'>), ('A', <class 'int'>)]
 abc080-A                                 OK                   [(Singular: N),(Singular: A),(Singular: B)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc080-B                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
-abc080-C                                 No result
+abc080-C                                 OK                   [(Singular: N),(ThreeDimensional: F),(TwoDimensional: P)] [('N', <class 'int'>), ('F', <class 'int'>), ('P', <class 'int'>)]
 abc080-D                                 OK                   [(Singular: N),(Singular: C),(Parallel: s,t,c | 1 to N)] [('N', <class 'int'>), ('C', <class 'int'>), ('s', <class 'int'>), ('t', <class 'int'>), ('c', <class 'int'>)]
 abc081-A                                 No result
 abc081-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
