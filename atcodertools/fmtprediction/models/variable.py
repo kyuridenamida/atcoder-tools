@@ -5,16 +5,21 @@ from atcodertools.fmtprediction.models.type import Type
 
 
 class SimpleVariable:
-
-    def __init__(self,
-                 name: str,
-                 first_index: Optional[Index],
-                 second_index: Optional[Index]):
+    def __init__(
+        self,
+        name: str,
+        first_index: Optional[Index],
+        second_index: Optional[Index],
+        third_index: Optional[Index] = None,
+    ):
         self.name = name
         self.first_index = first_index
         self.second_index = second_index
+        self.third_index = third_index
 
     def dim_num(self):
+        if self.third_index:
+            return 3
         if self.second_index:
             return 2
         if self.first_index:
@@ -23,29 +28,42 @@ class SimpleVariable:
 
     @classmethod
     def create(cls, name: str, dim_num: int):
-        assert dim_num <= 2
+        assert dim_num <= 3
 
         first_index = None
         second_index = None
+        third_index = None
 
+        if dim_num >= 3:
+            third_index = Index()
         if dim_num >= 2:
             second_index = Index()
         if dim_num >= 1:
             first_index = Index()
 
-        return SimpleVariable(name, first_index, second_index)
+        return SimpleVariable(
+            name,
+            first_index,
+            second_index,
+            third_index,
+        )
 
 
 class Variable(SimpleVariable):
+    """SimpleVariable + type information."""
 
-    """
-        SimpleVariable + type information
-    """
-
-    def __init__(self,
-                 name: str,
-                 first_index: Optional[Index],
-                 second_index: Optional[Index],
-                 type_: Type):
-        super().__init__(name, first_index, second_index)
+    def __init__(
+        self,
+        name: str,
+        first_index: Optional[Index],
+        second_index: Optional[Index],
+        type_: Type,
+        third_index: Optional[Index] = None,
+    ):
+        super().__init__(
+            name,
+            first_index,
+            second_index,
+            third_index,
+        )
         self.type = type_

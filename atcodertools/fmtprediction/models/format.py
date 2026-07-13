@@ -114,6 +114,30 @@ class TwoDimensionalPattern(Pattern):
         return TwoDimensionalPattern(name_to_var[self.var.name])
 
 
+class ThreeDimensionalPattern(Pattern):
+    """A three-dimensional dense array."""
+
+    def __init__(self, var: T):
+        self.var = var
+
+    def __str__(self):
+        return (
+            "(ThreeDimensional: {})"
+            .format(self.var.name)
+        )
+
+    def all_vars(self):
+        return [self.var]
+
+    def with_replaced_vars(
+        self,
+        name_to_var: Dict[str, Variable],
+    ):
+        return ThreeDimensionalPattern(
+            name_to_var[self.var.name]
+        )
+
+
 class ParallelPattern(Pattern):
 
     """
