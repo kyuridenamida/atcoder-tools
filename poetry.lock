@@ -627,14 +627,14 @@ files = [
 
 [[package]]
 name = "pynose"
-version = "1.4.8"
+version = "1.5.5"
 description = "pynose fixes nose to extend unittest and make testing easier"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 groups = ["dev"]
 files = [
-    {file = "pynose-1.4.8-py3-none-any.whl", hash = "sha256:caecaa293c3be2047786331c10e29649b47fade9244293207e20db00cf156843"},
-    {file = "pynose-1.4.8.tar.gz", hash = "sha256:c8c1d500f5b64693432520438124c0fd016bfe30826cc3d34848e83e11dd0d02"},
+    {file = "pynose-1.5.5-py3-none-any.whl", hash = "sha256:673751d53fcfc79b1e48c14f36c7a24779ad43676eeb85736934de6a2b3d8ec8"},
+    {file = "pynose-1.5.5.tar.gz", hash = "sha256:81da4e26473f98dd37497248eef4352d3221d1d56edf874a00c6bdda6daf7f49"},
 ]
 
 [[package]]
@@ -914,4 +914,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=4.6)", "pytest-black (
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<3.15"
-content-hash = "6ece38a0902d09f6ed1a5cfa24d11083ec04dd07488530ec065bc48406e26a2f"
+content-hash = "1cf0eaef571600537391bd25b4f41ce4ea996b19fbc8c5a74e4126c9976ba985"
