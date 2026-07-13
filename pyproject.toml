@@ -4,7 +4,15 @@ packages = [
     {include = "atcodertools"}
 ]
 version = "2.16.0"
-description = "Convenient modules & tools for AtCoder users, written in Python 3.6"
+description = "Convenient modules & tools for AtCoder users, supporting Python 3.10 through 3.14"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
 authors = ["kyuridenamida <tyotyo3@gmail.com>"]
 license = "MIT"
 repository="https://github.com/kyuridenamida/atcoder-tools"
@@ -13,7 +21,7 @@ readme="README.md"
 include = ["atcodertools/tools/templates/*", "atcodertools/tools/atcodertools-default.toml"]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = ">=3.10,<3.15"
 beautifulsoup4 = "^4.9.3"
 requests = "^2.25.1"
 colorama = "^0.4.4"
@@ -27,7 +35,7 @@ twine = "^3.4.1"
 flake8 = "^3.9.1"
 autopep8 = "^1.5.6"
 codecov = "^2.1.11"
-pynose = "^1.4.8"
+pynose = "^1.5.5"
 
 [tool.poetry.scripts]
 atcoder-tools = 'atcodertools.atcoder_tools:main'

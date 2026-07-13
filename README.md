@@ -12,7 +12,7 @@
 
 AtCoder Tools
 ====
-Python 3.9 以降で動作する [AtCoder](https://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
+Python 3.10 から 3.14 で動作する [AtCoder](https://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
 
 このツールには次のような機能があります。
 - AtCoderへのログイン，入出力例データなどの抽出
