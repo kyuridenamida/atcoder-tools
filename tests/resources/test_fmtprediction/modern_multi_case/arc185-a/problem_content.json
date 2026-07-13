@@ -1,0 +1,22 @@
+{
+  "input_format_blocks": [
+    "T\n\\mathrm{case}_1\n\\mathrm{case}_2\n\\vdots\n\\mathrm{case}_T\n",
+    "N M\n"
+  ],
+  "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。ここで \\mathrm{case}_i は i 番目のテストケースを意味する。 T \\mathrm{case}_1 \\mathrm{case}_2 \\vdots \\mathrm{case}_T 各テストケースは以下の形式で与えられる。 N M",
+  "input_format_text": "T\n\\mathrm{case}_1\n\\mathrm{case}_2\n\\vdots\n\\mathrm{case}_T\n",
+  "samples": [
+    {
+      "input": "8\n2 3\n3 6\n5 9\n45 58\n39 94\n36 54\n74 80\n61 95\n",
+      "output": "Alice\nAlice\nBob\nBob\nAlice\nBob\nBob\nAlice\n"
+    }
+  ],
+  "schema_version": 1,
+  "source": {
+    "contest_id": "arc185",
+    "expected_case_count_var": "T",
+    "html_sha256": "92bb605af7bd4cf467f798b190854ab942d1970dc31321392516827b3e5049f5",
+    "task_id": "arc185_a",
+    "url": "https://atcoder.jp/contests/arc185/tasks/arc185_a?lang=en"
+  }
+}

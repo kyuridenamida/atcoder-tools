@@ -1,0 +1,26 @@
+{
+  "input_format_blocks": [
+    "T\n\\mathrm{case}_1\n\\mathrm{case}_2\n\\vdots\n\\mathrm{case}_T\n",
+    "N\nA_1 A_2 \\cdots A_N\n"
+  ],
+  "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。 T \\mathrm{case}_1 \\mathrm{case}_2 \\vdots \\mathrm{case}_T ここで \\mathrm{case_i} は i 番目のケースの入力を意味する。各ケースは以下の形式で与えられる。 N A_1 A_2 \\cdots A_N",
+  "input_format_text": "T\n\\mathrm{case}_1\n\\mathrm{case}_2\n\\vdots\n\\mathrm{case}_T\n",
+  "samples": [
+    {
+      "input": "1\n5\n2 1 4 5 3\n",
+      "output": "4\n1 2 3 4\n"
+    },
+    {
+      "input": "2\n6\n2 5 3 4 3 4\n5\n10000 1000 100 1 10\n",
+      "output": "5\n1 3 4 5 6\n2\n4 5\n"
+    }
+  ],
+  "schema_version": 1,
+  "source": {
+    "contest_id": "abc354",
+    "expected_case_count_var": "T",
+    "html_sha256": "3114a58ee455bc4a59f5dd43cd2024d0d8075feb3cbf58c607f157eb7e269470",
+    "task_id": "abc354_f",
+    "url": "https://atcoder.jp/contests/abc354/tasks/abc354_f?lang=en"
+  }
+}
