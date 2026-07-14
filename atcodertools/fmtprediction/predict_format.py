@@ -1,3 +1,4 @@
+import re
 from typing import Dict, List
 
 from atcodertools.client.models.problem_content import (
@@ -34,6 +35,10 @@ from atcodertools.fmtprediction.token_manager import TokenManager
 from atcodertools.fmtprediction.tokenize_format import (
     NoFormatFoundError,
     search_formats_with_minimum_vars,
+)
+
+from atcodertools.fmtprediction.tokenize_format import (
+    collapse_string_runs,
 )
 
 
@@ -74,7 +79,7 @@ class MultiCaseFormatPrediction:
         self.layout = layout
 
 
-def _predict_simple_format_candidate_groups(
+def _predict_simple_format_candidate_groups_without_string_collapse(
     input_format_text: str,
 ) -> List[List[Format]]:
     """
@@ -120,6 +125,32 @@ def _predict_simple_format_candidate_groups(
             groups.append(group)
 
     return groups
+
+
+def _predict_simple_format_candidate_groups(
+    input_format_text: str,
+):
+    candidate_groups = list(
+        _predict_simple_format_candidate_groups_without_string_collapse(
+            input_format_text
+        )
+    )
+
+    if candidate_groups:
+        return candidate_groups
+
+    collapsed_input_format = collapse_string_runs(
+        input_format_text
+    )
+
+    if collapsed_input_format == input_format_text:
+        return []
+
+    return list(
+        _predict_simple_format_candidate_groups_without_string_collapse(
+            collapsed_input_format
+        )
+    )
 
 
 def _predict_simple_format_candidates(
@@ -238,15 +269,14 @@ def _validate_candidate_on_samples(
     return merged_types
 
 
-def _predict_single_case(
-    content: ProblemContent,
-) -> FormatPredictionResult:
-    input_format = content.get_input_format()
-    samples = content.get_samples()
+def _collect_single_case_candidates(
+    input_format: str,
+    samples,
+):
     output_candidates = []
 
     for candidate_group in (
-        _predict_simple_format_candidate_groups(
+        _predict_simple_format_candidate_groups_without_string_collapse(
             input_format
         )
     ):
@@ -266,10 +296,476 @@ def _predict_single_case(
                 )
             )
 
-            # Preserve the historical behavior: once one variant of a
-            # tokenized candidate passes type prediction, do not try its
-            # one-dimensional fallback.
             break
+
+    return output_candidates
+
+
+def _deduplicate_candidates(
+    candidates,
+):
+    deduplicated = []
+    seen = set()
+
+    for candidate in candidates:
+        signature = str(
+            candidate.format
+        )
+
+        if signature in seen:
+            continue
+
+        seen.add(signature)
+        deduplicated.append(
+            candidate
+        )
+
+    return deduplicated
+
+
+def _candidate_string_dimensions(
+    candidate,
+):
+    dimensions = {}
+
+    for variable in (
+        candidate.format.all_vars()
+    ):
+        if str(variable.type) != "Type.str":
+            continue
+
+        dimensions[variable.name] = (
+            variable.dim_num()
+        )
+
+    return dimensions
+
+
+def _contains_two_index_variable(
+    input_format,
+    variable_name,
+):
+    escaped_name = re.escape(
+        variable_name
+    )
+
+    pattern = (
+        escaped_name
+        + r"_\{[^{}\n]*,[^{}\n]*\}"
+    )
+
+    return (
+        re.search(
+            pattern,
+            input_format,
+        )
+        is not None
+    )
+
+
+def _contains_one_index_variable(
+    input_format,
+    variable_name,
+):
+    escaped_name = re.escape(
+        variable_name
+    )
+
+    pattern = (
+        escaped_name
+        + r"_\{[^{},\n]+\}"
+    )
+
+    return (
+        re.search(
+            pattern,
+            input_format,
+        )
+        is not None
+    )
+
+
+def _samples_are_single_token_rows(
+    samples,
+):
+    found_body = False
+
+    for sample in samples:
+        lines = (
+            sample.get_input()
+            .splitlines()
+        )
+
+        if len(lines) < 2:
+            return False
+
+        body_lines = [
+            line
+            for line in lines[1:]
+            if line != ""
+        ]
+
+        if not body_lines:
+            return False
+
+        if any(
+            len(line.split()) != 1
+            for line in body_lines
+        ):
+            return False
+
+        found_body = True
+
+    return found_body
+
+
+def _is_structural_string_grid_collapse(
+    original_candidate,
+    collapsed_candidate,
+    input_format,
+    collapsed_input_format,
+    samples,
+):
+    if not _samples_are_single_token_rows(
+        samples
+    ):
+        return False
+
+    original_dimensions = (
+        _candidate_string_dimensions(
+            original_candidate
+        )
+    )
+    collapsed_dimensions = (
+        _candidate_string_dimensions(
+            collapsed_candidate
+        )
+    )
+
+    shared_names = (
+        set(original_dimensions)
+        & set(collapsed_dimensions)
+    )
+
+    matching_names = []
+
+    for name in shared_names:
+        if (
+            collapsed_dimensions[name] != 1
+        ):
+            continue
+
+        if (
+            original_dimensions[name]
+            not in (1, 2)
+        ):
+            continue
+
+        if not _contains_two_index_variable(
+            input_format,
+            name,
+        ):
+            continue
+
+        if not _contains_one_index_variable(
+            collapsed_input_format,
+            name,
+        ):
+            continue
+
+        matching_names.append(name)
+
+    return len(matching_names) == 1
+
+
+def _collapse_spaced_grid_row(
+    line,
+):
+    tokens = line.split()
+
+    if len(tokens) < 3:
+        return line
+
+    references = []
+
+    for token in tokens:
+        match = re.fullmatch(
+            (
+                r"(?P<name>"
+                r"[A-Za-z][A-Za-z0-9_]*"
+                r")_\{\s*"
+                r"(?P<outer>[^,{}]+?)"
+                r"\s*,\s*"
+                r"(?P<inner>[^{}]+?)"
+                r"\s*\}"
+            ),
+            token,
+        )
+
+        if match is None:
+            return line
+
+        references.append(
+            (
+                match.group("name"),
+                match.group("outer"),
+                match.group("inner"),
+            )
+        )
+
+    names = {
+        name
+        for name, _, _
+        in references
+    }
+
+    outer_indices = {
+        outer
+        for _, outer, _
+        in references
+    }
+
+    inner_indices = {
+        inner
+        for _, _, inner
+        in references
+    }
+
+    if (
+        len(names) != 1
+        or len(outer_indices) != 1
+        or len(inner_indices) < 2
+    ):
+        return line
+
+    name = references[0][0]
+    outer = references[0][1]
+
+    return "{}_{{{}}}".format(
+        name,
+        outer,
+    )
+
+
+def _collapse_spaced_grid_rows(
+    input_format,
+):
+    return "\n".join(
+        _collapse_spaced_grid_row(
+            line
+        )
+        for line in input_format.split(
+            "\n"
+        )
+    )
+
+
+def _collapse_compact_digit_grid_row(
+    line,
+):
+    references = list(
+        re.finditer(
+            (
+                r"(?P<name>"
+                r"[A-Za-z][A-Za-z0-9_]*"
+                r")_\{"
+                r"(?P<combined>"
+                r"[A-Za-z0-9+\-]+"
+                r")\}"
+            ),
+            line,
+        )
+    )
+
+    if len(references) < 3:
+        return line
+
+    names = {
+        match.group("name")
+        for match in references
+    }
+
+    if len(names) != 1:
+        return line
+
+    combined_indices = [
+        match.group("combined")
+        for match in references
+    ]
+
+    if any(
+        len(index) < 2
+        for index in combined_indices
+    ):
+        return line
+
+    outer_indices = {
+        index[:-1]
+        for index in combined_indices
+    }
+
+    inner_indices = {
+        index[-1]
+        for index in combined_indices
+    }
+
+    if (
+        len(outer_indices) != 1
+        or len(inner_indices) < 2
+    ):
+        return line
+
+    reference_span = line[
+        references[0].start():
+        references[-1].end()
+    ]
+
+    if any(
+        character.isspace()
+        for character in reference_span
+    ):
+        return line
+
+    if not (
+        "..." in reference_span
+        or "…" in reference_span
+        or "‥" in reference_span
+    ):
+        return line
+
+    name = references[0].group(
+        "name"
+    )
+    outer = next(
+        iter(outer_indices)
+    )
+
+    return "{}_{{{}}}".format(
+        name,
+        outer,
+    )
+
+
+def _collapse_compact_digit_grid_rows(
+    input_format,
+):
+    return "\n".join(
+        _collapse_compact_digit_grid_row(
+            line
+        )
+        for line in input_format.split(
+            "\n"
+        )
+    )
+
+
+def _predict_single_case(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    input_format = content.get_input_format()
+    samples = content.get_samples()
+
+    original_candidates = (
+        _deduplicate_candidates(
+            _collect_single_case_candidates(
+                input_format,
+                samples,
+            )
+        )
+    )
+
+    collapsed_input_format = (
+        collapse_string_runs(
+            input_format
+        )
+    )
+
+    collapsed_candidates = []
+
+    if collapsed_input_format != input_format:
+        collapsed_candidates = (
+            _deduplicate_candidates(
+                _collect_single_case_candidates(
+                    collapsed_input_format,
+                    samples,
+                )
+            )
+        )
+
+    spaced_grid_candidates = []
+
+    if (
+        not original_candidates
+        and not collapsed_candidates
+    ):
+        spaced_grid_input_format = (
+            _collapse_spaced_grid_rows(
+                input_format
+            )
+        )
+
+        if spaced_grid_input_format != input_format:
+            spaced_grid_candidates = (
+                _deduplicate_candidates(
+                    _collect_single_case_candidates(
+                        spaced_grid_input_format,
+                        samples,
+                    )
+                )
+            )
+
+    compact_digit_grid_candidates = []
+
+    if (
+        not original_candidates
+        and not collapsed_candidates
+        and not spaced_grid_candidates
+    ):
+        compact_digit_grid_input_format = (
+            _collapse_compact_digit_grid_rows(
+                input_format
+            )
+        )
+
+        if (
+            compact_digit_grid_input_format
+            != input_format
+        ):
+            compact_digit_grid_candidates = (
+                _deduplicate_candidates(
+                    _collect_single_case_candidates(
+                        compact_digit_grid_input_format,
+                        samples,
+                    )
+                )
+            )
+
+    if (
+        len(original_candidates) == 1
+        and len(collapsed_candidates) == 1
+        and _is_structural_string_grid_collapse(
+            original_candidates[0],
+            collapsed_candidates[0],
+            input_format,
+            collapsed_input_format,
+            samples,
+        )
+    ):
+        output_candidates = collapsed_candidates
+
+    elif original_candidates:
+        output_candidates = original_candidates
+
+    elif collapsed_candidates:
+        output_candidates = collapsed_candidates
+
+    elif spaced_grid_candidates:
+        output_candidates = spaced_grid_candidates
+
+    else:
+        output_candidates = (
+            compact_digit_grid_candidates
+        )
 
     if len(output_candidates) > 1:
         raise MultiplePredictionResultsError(
