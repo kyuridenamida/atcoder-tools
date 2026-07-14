@@ -94,10 +94,47 @@ class TestThreeDimensionalCodeGenerator(unittest.TestCase):
             parameters["formal_arguments"],
         )
 
-        combined = parameters[
-            "input_part_with_solve_function"
-        ]
+        for key in (
+            "multi_case",
+            "input_part",
+            "prefix_input_part",
+            "case_input_part",
+            "case_count_var",
+            "case_loop_var",
+        ):
+            self.assertIn(
+                key,
+                parameters,
+            )
 
+        self.assertFalse(
+            parameters["multi_case"]
+        )
+        self.assertIsNone(
+            parameters["case_count_var"]
+        )
+        self.assertIsNone(
+            parameters["case_loop_var"]
+        )
+        self.assertNotIn(
+            "input_part_with_solve_function",
+            parameters,
+        )
+        self.assertNotIn(
+            "input_part_with_solve_function_nested",
+            parameters,
+        )
+
+        combined = parameters["input_part"]
+
+        self.assertEqual(
+            combined,
+            parameters["prefix_input_part"],
+        )
+        self.assertEqual(
+            combined,
+            parameters["case_input_part"],
+        )
         self.assertIn(
             "range(D)",
             combined,
@@ -110,8 +147,8 @@ class TestThreeDimensionalCodeGenerator(unittest.TestCase):
             "range(W)",
             combined,
         )
-        self.assertIn(
-            "solve(D, H, W, A)",
+        self.assertNotIn(
+            "solve(",
             combined,
         )
 
@@ -144,7 +181,16 @@ class TestThreeDimensionalCodeGenerator(unittest.TestCase):
                 "                yield word",
                 "",
                 "    tokens = iterate_tokens()",
-                "    {{ input_part_with_solve_function }}",
+                "    {% if multi_case %}",
+                (
+                    "    raise AssertionError("
+                    "'unexpected multi-case format'"
+                    ")"
+                ),
+                "    {% else %}",
+                "    {{ input_part }}",
+                "    solve({{ actual_arguments }})",
+                "    {% endif %}",
                 "",
                 "",
                 "if __name__ == '__main__':",
