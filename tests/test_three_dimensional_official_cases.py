@@ -56,7 +56,7 @@ class TestThreeDimensionalOfficialCases(unittest.TestCase):
             self.fixture["schema"],
         )
         self.assertEqual(
-            3,
+            4,
             len(self.fixture["cases"]),
         )
         self.assertEqual(
@@ -64,6 +64,7 @@ class TestThreeDimensionalOfficialCases(unittest.TestCase):
                 "abc080_c",
                 "abc322_d",
                 "abc366_d",
+                "code_festival_2015_okinawa_c",
             },
             {
                 case["task_id"]

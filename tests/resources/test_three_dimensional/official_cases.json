@@ -91,6 +91,37 @@
           "dim_num": 0
         }
       }
+    },
+    {
+      "task_id": "code_festival_2015_okinawa_c",
+      "legacy_case_ids": [
+        "code-festival-2015-okinawa-open-C"
+      ],
+      "source_url": "https://atcoder.jp/contests/code-festival-2015-okinawa-open/tasks/code_festival_2015_okinawa_c",
+      "source_html_sha256": "e4aeb4096aaba6e46a0333100e90c42458256ee37a5a6c7a4ab9a5c9604fc8b0",
+      "input_format_text": "N\nc_{1, 1, 1}c_{1, 1, 2}c_{1, 1, 3}\nc_{1, 2, 1}c_{1, 2, 2}c_{1, 2, 3}\nc_{1, 3, 1}c_{1, 3, 2}c_{1, 3, 3}\nc_{2, 1, 1}c_{2, 1, 2}c_{2, 1, 3}\nc_{2, 2, 1}c_{2, 2, 2}c_{2, 2, 3}\nc_{2, 3, 1}c_{2, 3, 2}c_{2, 3, 3}\n:\nc_{N, 1, 1}c_{N, 1, 2}c_{N, 1, 3}\nc_{N, 2, 1}c_{N, 2, 2}c_{N, 2, 3}\nc_{N, 3, 1}c_{N, 3, 2}c_{N, 3, 3}\n",
+      "input_format_blocks": [
+        "N\nc_{1, 1, 1}c_{1, 1, 2}c_{1, 1, 3}\nc_{1, 2, 1}c_{1, 2, 2}c_{1, 2, 3}\nc_{1, 3, 1}c_{1, 3, 2}c_{1, 3, 3}\nc_{2, 1, 1}c_{2, 1, 2}c_{2, 1, 3}\nc_{2, 2, 1}c_{2, 2, 2}c_{2, 2, 3}\nc_{2, 3, 1}c_{2, 3, 2}c_{2, 3, 3}\n:\nc_{N, 1, 1}c_{N, 1, 2}c_{N, 1, 3}\nc_{N, 2, 1}c_{N, 2, 2}c_{N, 2, 3}\nc_{N, 3, 1}c_{N, 3, 2}c_{N, 3, 3}\n"
+      ],
+      "input_format_context_text": "",
+      "sample_inputs": [
+        "2\n#.#\n#.#\n#.#\n###\n###\n...\n",
+        "4\n###\n###\n###\n...\n###\n###\n##.\n##.\n##.\n###\n###\n###\n",
+        "4\n###\n###\n###\n...\n###\n###\n.#.\n.#.\n.#.\n###\n###\n###\n"
+      ],
+      "expected_patterns": {
+        "c": "TwoDimensionalPattern"
+      },
+      "expected_variables": {
+        "N": {
+          "type": "Type.int",
+          "dim_num": 0
+        },
+        "c": {
+          "type": "Type.str",
+          "dim_num": 2
+        }
+      }
     }
   ]
 }
