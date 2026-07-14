@@ -12,9 +12,9 @@ from atcodertools.fmtprediction.models.format_prediction_result import (
 )
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.multi_case_layout import (
-    _candidate_layouts,
-    _context_supports_count_variable,
-    _multi_case_evidence_context,
+    candidate_layouts,
+    context_supports_count_variable,
+    multi_case_evidence_context,
 )
 from atcodertools.fmtprediction.predict_simple_format import (
     SimpleFormatPredictionFailedError,
@@ -297,7 +297,7 @@ def predict_multi_case_format(
         raise NoMultiCaseFormatFoundError
 
     evidence_context = (
-        _multi_case_evidence_context(
+        multi_case_evidence_context(
             content
         )
     )
@@ -309,7 +309,7 @@ def predict_multi_case_format(
         prefix_text,
         case_text,
         structural_evidence,
-    ) in _candidate_layouts(content):
+    ) in candidate_layouts(content):
         prefix_candidates = _unique_formats(
             _predict_simple_format_candidates(
                 prefix_text
@@ -333,7 +333,7 @@ def predict_multi_case_format(
             ):
                 if (
                     not structural_evidence
-                    and not _context_supports_count_variable(
+                    and not context_supports_count_variable(
                         evidence_context,
                         case_count_var,
                     )

@@ -275,7 +275,7 @@ def _extract_single_block_indexed_layout(
     return prefix_text, case_text
 
 
-def _multi_case_evidence_context(
+def multi_case_evidence_context(
     content: ProblemContent,
 ) -> str:
     """
@@ -320,7 +320,7 @@ def _multi_case_evidence_context(
     )
 
 
-def _context_supports_count_variable(
+def context_supports_count_variable(
     context: str,
     variable_name: str,
 ) -> bool:
@@ -376,7 +376,7 @@ def _context_supports_count_variable(
     )
 
 
-def _candidate_layouts(
+def candidate_layouts(
     content: ProblemContent,
 ):
     blocks = content.get_input_format_blocks()
