@@ -1325,7 +1325,7 @@ code-festival-2015-morning-middle-C      OK                   [(Singular: N),(Pa
 code-festival-2015-morning-middle-D      OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 code-festival-2015-okinawa-open-A        OK                   [(Singular: H),(Singular: W),(Singular: K)] [('H', <class 'int'>), ('W', <class 'int'>), ('K', <class 'int'>)]
 code-festival-2015-okinawa-open-B        OK                   [(Singular: N),(Singular: X),(Singular: Y),(Parallel: a,b | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
-code-festival-2015-okinawa-open-C        No result
+code-festival-2015-okinawa-open-C        OK                   [(Singular: N),(TwoDimensional: c)] [('N', <class 'int'>), ('c', <class 'str'>)]
 code-festival-2015-okinawa-open-D        OK                   [(Singular: N),(Singular: M),(Parallel: p,q | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('p', <class 'int'>), ('q', <class 'int'>)]
 code-festival-2015-okinawa-open-E        OK                   [(Singular: H),(Singular: W)] [('H', <class 'int'>), ('W', <class 'int'>)]
 code-festival-2015-okinawa-open-F        OK                   [(Singular: N),(Parallel: x,y | 1 to N),(Singular: x_a),(Singular: y_a),(Singular: x_b),(Singular: y_b),(Singular: x_c),(Singular: y_c)] [('N', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('x_a', <class 'int'>), ('y_a', <class 'int'>), ('x_b', <class 'int'>), ('y_b', <class 'int'>), ('x_c', <class 'int'>), ('y_c', <class 'int'>)]
