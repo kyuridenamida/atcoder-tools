@@ -94,6 +94,13 @@ def _predict_simple_format_main(
             simple_var.second_index = None
             dim = 1
 
+        elif dim == 3 and to_1d_flag:
+            # A compact character row represents the innermost
+            # dimension as one string token. Preserve the outer two
+            # indices and collapse only the third dimension.
+            simple_var.third_index = None
+            dim = 2
+
         if dim == 0:
             root.push_back(
                 SingularPattern(simple_var)
