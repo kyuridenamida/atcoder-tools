@@ -318,6 +318,9 @@ submit_filename='./combined.nim'
 - *[arg]* solve関数の引数の記述方法について指定します。`int`, `float`, `str`, `seq`, `2d_seq`について記述してください。`{name}`が変数名, `{type}`が`seq`, `2d_seq`についてベースとなる型です。
 - *[actual_arg]* `seq`, `2d_seq`についてsolve関数を呼び出す際の引数の渡し方について記述します。C++などでmoveをつかってメモリを節約したいときなどに指定できます。省略可能で、省略した場合はそのまま渡されます。
 
+複数テストケースの外側ループと`solve`関数の呼び出しは、ユニバーサルコードジェネレーターのTOMLではなくテンプレート側に記述します。
+トップレベルの`solve_function`設定は使用しません。`[loop]`は引き続き、配列入力など入力コード内部で生成するループの構文を指定します。
+
 - *[access]* 配列のアクセス方法について記述します。`seq`, `2d_seq`について指定してください。`{name}`で変数名, `{index_i}`, `{index_j}`でインデックス名を指定します。
 
 
@@ -495,20 +498,38 @@ seq = "{name}[{index}]"
 ```
 
 ## テンプレートの例
+
 `atcoder-tools gen`コマンドに対し`--template`でテンプレートソースコードを指定できます。
 テンプレートエンジンの仕様については[jinja2](http://jinja.pocoo.org/docs/2.10/) の公式ドキュメントを参照してください。
 
-テンプレートに渡される変数は以下の通りです。
+### テンプレートに渡される変数
 
-
-- **prediction_success** 入力形式の推論に成功したとき `True`、 失敗したとき `False`が格納されている。この値が`True`のとき次の3種類の変数も存在することが保証される。
-    - **input_part** input用のコード
-    - **formal_arguments** 型つき引数列
-    - **actual_arguments** 型なし引数列
-
+- **prediction_success** 入力形式の推論に成功したとき`True`、失敗したとき`False`
+- **multi_case** 複数テストケース形式が検出されたとき`True`
+- **input_part** 単一テストケース用の入力コード
+- **prefix_input_part** 複数テストケースのループ前に一度だけ実行する入力コード。テストケース数の入力などを含む
+- **case_input_part** 各テストケースで実行する入力コード
+- **case_count_var** テストケース数を保持する変数名。単一テストケースでは`None`
+- **case_loop_var** テストケースのループ変数名。入力変数と衝突しない名前が選ばれる。単一テストケースでは`None`
+- **formal_arguments** `solve`関数の型つき引数列。複数テストケースでは1ケース分の引数列
+- **actual_arguments** `solve`関数を呼び出す際の型なし引数列。複数テストケースでは1ケース分の引数列
+- **global_declaration** グローバル変数の宣言コード
+- **global_input_part** グローバル変数へ入力するコード
 - **mod** 問題文中に存在するmodの整数値
-- **yes_str** 問題文中に存在する yes や possible などの真を表しそうな文字列値
-- **no_str** 問題文中に存在する no や impossible などの偽を表しそうな文字列値
+- **yes_str** 問題文中に存在するyesやpossibleなど、真を表しそうな文字列値
+- **no_str** 問題文中に存在するnoやimpossibleなど、偽を表しそうな文字列値
+
+`prediction_success`が`True`のとき、入力形式に関する上記の変数がテンプレートへ渡されます。
+単一テストケースでは`input_part`を使用し、複数テストケースでは`prefix_input_part`と`case_input_part`を用いて、外側ループと`solve`関数の呼び出しをテンプレートに記述してください。
+
+### 既存のカスタムテンプレートとの互換性
+
+複数テストケース形式が検出されたにもかかわらず、カスタムテンプレートが`multi_case`を参照していない場合、`prediction_success`は`False`として扱われます。
+これは古いテンプレートが先頭の1ケースだけを読み込み、誤ったコードを静かに生成することを防ぐためです。
+複数テストケースに対応する場合は、Jinja2テンプレートでは`multi_case`を条件分岐に使用してください。旧形式の`${...}`テンプレートでも`multi_case`を明示的に参照する必要があります。
+単一テストケースの生成動作は従来どおりです。
+
+### C++テンプレート例
 
 ```c++
 #include <bits/stdc++.h>
@@ -525,22 +546,31 @@ const string NO = "{{ no_str }}";
 {% endif %}
 
 {% if prediction_success %}
-void solve({{ formal_arguments }}){
+void solve({{ formal_arguments }}) {
 
 }
 {% endif %}
 
-int main(){
+int main() {
     {% if prediction_success %}
-    {{input_part}}
+    {% if multi_case %}
+    {{ prefix_input_part }}
+    for (int {{ case_loop_var }} = 0;
+         {{ case_loop_var }} < {{ case_count_var }};
+         ++{{ case_loop_var }}) {
+        {{ case_input_part | replace('\n', '\n        ') }}
+        solve({{ actual_arguments }});
+    }
+    {% else %}
+    {{ input_part }}
     solve({{ actual_arguments }});
+    {% endif %}
     {% else %}
     // Failed to predict input format
     {% endif %}
     return 0;
 }
 ```
-
 
 ## Contribution
 

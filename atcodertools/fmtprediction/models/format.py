@@ -41,6 +41,39 @@ class Format(Generic[T]):
         return res
 
 
+class RepeatedCaseFormat(Format[T]):
+    """
+    A validated prefix followed by repeated instances of one case format.
+
+    The inherited sequence remains the prefix sequence, preserving the
+    ordinary Format interface for code that is unaware of repeated cases.
+    Code generators that support repeated cases should use case_format and
+    case_count_var explicitly.
+    """
+
+    def __init__(
+        self,
+        prefix_format: Format[T],
+        case_format: Format[T],
+        case_count_var: str,
+    ):
+        super().__init__()
+        self.sequence = list(prefix_format.sequence)
+        self.prefix_format = prefix_format
+        self.case_format = case_format
+        self.case_count_var = case_count_var
+
+    def __str__(self):
+        return (
+            "[RepeatedCase: prefix={}, count={}, case={}]"
+            .format(
+                self.prefix_format,
+                self.case_count_var,
+                self.case_format,
+            )
+        )
+
+
 class SingularPattern(Pattern):
 
     """

@@ -79,6 +79,27 @@ class TypePredictor:
     def get_typing_result(self):
         return self._var_to_type
 
+    def get_actual_value(self, variable_name: str):
+        return self._var_to_actual_value[variable_name]
+
+    def consume(self, token_manager: TokenManager):
+        """
+        Consume exactly one instance of this predictor's format.
+
+        Tokens belonging to a following format are left untouched.
+        Truncated input raises TooLessFetchesError.
+        """
+        while not token_manager.is_terminal():
+            sample_token = token_manager.next()
+
+            try:
+                self.feed(sample_token)
+            except TooManyFetchesError:
+                token_manager.go_back()
+                return
+
+        self.ensure_terminal()
+
     def ensure_terminal(self):
         if next(self._fetch_generator_instance) is None:
             return

@@ -1,0 +1,22 @@
+{
+  "input_format_blocks": [
+    "T\n\\mathrm{case}_1\n\\mathrm{case}_2\n\\vdots\n\\mathrm{case}_T\n",
+    "A_1 A_2 A_3 B_1 B_2 B_3\n"
+  ],
+  "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられます． T \\mathrm{case}_1 \\mathrm{case}_2 \\vdots \\mathrm{case}_T 各テストケースは以下の形式で与えられます． A_1 A_2 A_3 B_1 B_2 B_3",
+  "input_format_text": "T\n\\mathrm{case}_1\n\\mathrm{case}_2\n\\vdots\n\\mathrm{case}_T\n",
+  "samples": [
+    {
+      "input": "6\n2 3 4 2 3 4\n2 3 4 5 3 1\n2 3 4 1 6 2\n2 3 4 4 3 2\n1 0 0 0 0 1\n0 0 0 0 0 0\n",
+      "output": "0\n1\n2\n-1\n-1\n0\n"
+    }
+  ],
+  "schema_version": 1,
+  "source": {
+    "contest_id": "arc222",
+    "expected_case_count_var": "T",
+    "html_sha256": "66547703076b962c099df83b00be63d2dd55c1df59083769b11e3e3e6e36bd4f",
+    "task_id": "arc222_f",
+    "url": "https://atcoder.jp/contests/arc222/tasks/arc222_f?lang=en"
+  }
+}

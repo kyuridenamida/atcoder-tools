@@ -32,8 +32,15 @@ proc solve({{ formal_arguments }}):void =
 
 proc main():void =
 {% if prediction_success %}
+{% if multi_case %}
+  {{ prefix_input_part }}
+  for {{ case_loop_var }} in 0..<{{ case_count_var }}:
+    {{ case_input_part | replace('\n', '\n' ~ "  ") }}
+    solve({{ actual_arguments }})
+{% else %}
   {{input_part}}
   solve({{ actual_arguments }})
+{% endif %}
 {% else %}
 # Failed to predict input format
 {% endif %}

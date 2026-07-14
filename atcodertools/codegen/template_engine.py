@@ -2,7 +2,7 @@ import re
 import string
 import warnings
 
-from jinja2 import Environment
+from jinja2 import Environment, meta
 
 from atcodertools.release_management.version import __version__
 
@@ -49,6 +49,23 @@ def render(template, **kwargs):
                     new_indent = new_indent + indent
                 return new_indent + line
             template = '\n'.join(map(fixindent, template.split('\n')))
+
+    if kwargs.get("multi_case"):
+        if "${" in template:
+            supports_multi_case = re.search(
+                r"\$(?:\{multi_case\}|multi_case\b)",
+                template,
+            )
+
+            if supports_multi_case is None:
+                kwargs["prediction_success"] = False
+        else:
+            variables = meta.find_undeclared_variables(
+                Environment().parse(template)
+            )
+
+            if "multi_case" not in variables:
+                kwargs["prediction_success"] = False
 
     if "${" in template:
         # If the template is old, render with the old engine.

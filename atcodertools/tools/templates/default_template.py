@@ -30,8 +30,15 @@ def main():
             for word in line.split():
                 yield word
     tokens = iterate_tokens()
+{% if multi_case %}
+    {{ prefix_input_part }}
+    for {{ case_loop_var }} in range({{ case_count_var }}):
+        {{ case_input_part | replace('\n', '\n' ~ "    ") }}
+        solve({{ actual_arguments }})
+{% else %}
     {{ input_part }}
     solve({{ actual_arguments }})
+{% endif %}
     {% else %}
     # Failed to predict input format
     pass
