@@ -3,7 +3,7 @@ name = "atcoder-tools"
 packages = [
     {include = "atcodertools"}
 ]
-version = "3.0.0"
+version = "3.0.1"
 description = "Convenient modules & tools for AtCoder users, supporting Python 3.10 through 3.14"
 classifiers = [
     "Programming Language :: Python :: 3",
