@@ -7,17 +7,17 @@ DEGwer2023-F                             OK                   [(Singular: N),(Si
 DEGwer2023-G                             OK                   [(Singular: N),(Parallel: x,y,c | 1 to N)] [('N', <class 'int'>), ('x', <class 'float'>), ('y', <class 'float'>), ('c', <class 'int'>)]
 DEGwer2023-H                             OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 DEGwer2023-I                             OK                   [(Singular: N),(Parallel: X,Y,P | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('P', <class 'int'>)]
-DEGwer2023-J                             No result
+DEGwer2023-J                             OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: X),(Singular: M)]] [('T', <class 'int'>)]
 DEGwer2023-K                             OK                   [(Singular: W),(Singular: H),(Singular: N),(Parallel: X,Y | 1 to N)] [('W', <class 'int'>), ('H', <class 'int'>), ('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 JAG2013Spring-A                          No result
 JAG2013Spring-C                          OK                   [(Parallel: x | 1 to 12),(Parallel: y | 1 to 6)] [('x', <class 'int'>), ('y', <class 'int'>)]
 JAG2013Spring-E                          OK                   [(Singular: n),(Singular: m),(Parallel: a,b,w | 1 to m)] [('n', <class 'int'>), ('m', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('w', <class 'int'>)]
 JAG2013Spring-H                          No result
 JAG2013Spring-J                          OK                   [(Singular: N),(Singular: M),(Parallel: s,t | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('s', <class 'int'>), ('t', <class 'int'>)]
-KeioPC2025-A                             No result
+KeioPC2025-A                             OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 KeioPC2025-B                             OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
-KeioPC2025-C                             No result
-KeioPC2025-D                             No result
+KeioPC2025-C                             OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Singular: K),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
+KeioPC2025-D                             OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Singular: D),(TwoDimensional: x)]] [('T', <class 'int'>)]
 KeioPC2025-E                             OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 KeioPC2025-F                             OK                   [(Singular: N)] [('N', <class 'int'>)]
 KeioPC2025-G                             OK                   [(Singular: N),(Parallel: X | 1 to N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -1287,7 +1287,7 @@ abc240-C                                 OK                   [(Singular: N),(Si
 abc240-D                                 OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 abc240-E                                 OK                   [(Singular: N),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 abc240-Ex                                OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
-abc240-F                                 No result
+abc240-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: x,y | 1 to N)]] [('T', <class 'int'>)]
 abc240-G                                 OK                   [(Singular: N),(Singular: X),(Singular: Y),(Singular: Z)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('Z', <class 'int'>)]
 abc241-A                                 OK                   [(Parallel: a | 0 to 9)] [('a', <class 'int'>)]
 abc241-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -1685,7 +1685,7 @@ abc290-D                                 OK                   [RepeatedCase: pre
 abc290-E                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc290-Ex                                OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc290-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
-abc290-G                                 No result
+abc290-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: D),(Singular: K),(Singular: X)]] [('T', <class 'int'>)]
 abc291-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc291-B                                 OK                   [(Singular: N),(Parallel: X | 1 to 5*N)] [('N', <class 'int'>), ('X', <class 'int'>)]
 abc291-C                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
@@ -2346,7 +2346,7 @@ abc382-C                                 OK                   [(Singular: N),(Si
 abc382-D                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 abc382-E                                 OK                   [(Singular: N),(Singular: X),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('P', <class 'int'>)]
 abc382-F                                 OK                   [(Singular: H),(Singular: W),(Singular: N),(Parallel: R,C,L | 1 to N)] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('R', <class 'int'>), ('C', <class 'int'>), ('L', <class 'int'>)]
-abc382-G                                 No result
+abc382-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: K),(Singular: S_x),(Singular: S_y),(Singular: T_x),(Singular: T_y)]] [('T', <class 'int'>)]
 abc383-A                                 OK                   [(Singular: N),(Parallel: T,V | 1 to N)] [('N', <class 'int'>), ('T', <class 'int'>), ('V', <class 'int'>)]
 abc383-B                                 No result
 abc383-C                                 No result
@@ -2748,7 +2748,7 @@ abc439-F                                 OK                   [(Singular: N),(Pa
 abc439-G                                 OK                   [(Singular: N),(Singular: M),(Singular: L),(Parallel: A | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('A', <class 'int'>)]
 abc440-A                                 OK                   [(Singular: X),(Singular: Y)] [('X', <class 'int'>), ('Y', <class 'int'>)]
 abc440-B                                 OK                   [(Singular: N),(Parallel: T | 1 to N)] [('N', <class 'int'>), ('T', <class 'int'>)]
-abc440-C                                 No result
+abc440-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: W),(Parallel: C | 1 to N)]] [('T', <class 'int'>)]
 abc440-D                                 OK                   [(Singular: N),(Singular: Q),(Parallel: A | 1 to N),(Parallel: X,Y | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc440-E                                 OK                   [(Singular: N),(Singular: K),(Singular: X),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>)]
 abc440-F                                 OK                   [(Singular: N),(Singular: Q),(Parallel: A,B | 1 to N),(Parallel: W,X,Y | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('W', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
@@ -3276,12 +3276,12 @@ agc056-C                                 OK                   [(Singular: N),(Si
 agc056-D                                 OK                   [(Singular: N),(Singular: L),(Singular: R),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('A', <class 'int'>)]
 agc056-E                                 OK                   [(Singular: N),(Parallel: A | 0 to N-1)] [('N', <class 'int'>), ('A', <class 'int'>)]
 agc056-F                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
-agc057-A                                 No result
+agc057-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: L),(Singular: R)]] [('T', <class 'int'>)]
 agc057-B                                 OK                   [(Singular: N),(Singular: X),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>)]
 agc057-C                                 No result
-agc057-D                                 No result
+agc057-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S),(Singular: K)]] [('T', <class 'int'>)]
 agc057-E                                 OK                   [(Singular: H),(Singular: W),(TwoDimensional: B)] [('H', <class 'int'>), ('W', <class 'int'>), ('B', <class 'int'>)]
-agc057-F                                 No result
+agc057-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: a),(Singular: b),(Singular: c)]] [('T', <class 'int'>)]
 agc058-A                                 OK                   [(Singular: N),(Parallel: P | 1 to 2*N)] [('N', <class 'int'>), ('P', <class 'int'>)]
 agc058-B                                 OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
 agc058-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
@@ -3306,7 +3306,7 @@ agc061-C                                 OK                   [(Singular: N),(Pa
 agc061-D                                 OK                   [(Singular: N),(Singular: M),(TwoDimensional: A)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 agc061-E                                 OK                   [(Singular: N),(Singular: S),(Singular: T),(Singular: A),(Parallel: Y,C | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>), ('Y', <class 'int'>), ('C', <class 'int'>)]
 agc061-F                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
-agc062-A                                 No result
+agc062-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S)]] [('T', <class 'int'>)]
 agc062-B                                 OK                   [(Singular: N),(Singular: K),(Parallel: C | 1 to K),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('C', <class 'int'>), ('P', <class 'int'>)]
 agc062-C                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 agc062-D                                 OK                   [(Singular: N),(Parallel: D | 1 to N)] [('N', <class 'int'>), ('D', <class 'int'>)]
@@ -3317,25 +3317,25 @@ agc063-B                                 OK                   [(Singular: N),(Pa
 agc063-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 agc063-D                                 OK                   [(Singular: N),(Singular: a),(Singular: b),(Singular: c),(Singular: d)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>), ('d', <class 'int'>)]
 agc063-E                                 OK                   [(Singular: N),(Parallel: P | 2 to N),(Singular: r),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('r', <class 'int'>), ('A', <class 'int'>)]
-agc063-F                                 No result
+agc063-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Parallel: a | 1 to 2),(Parallel: b | 1 to 2)]] [('T', <class 'int'>)]
 agc064-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 agc064-B                                 No result
-agc064-C                                 No result
+agc064-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: l,r | 1 to N)]] [('T', <class 'int'>)]
 agc064-D                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
-agc064-E                                 No result
+agc064-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: a | 1 to N),(Parallel: b | 1 to N)]] [('T', <class 'int'>)]
 agc064-F                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 agc065-A                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 agc065-B                                 OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
-agc065-C                                 No result
+agc065-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 agc065-D                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 agc065-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)]] [('T', <class 'int'>)]
 agc065-F                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 agc066-A                                 OK                   [(Singular: N),(Singular: d),(TwoDimensional: A)] [('N', <class 'int'>), ('d', <class 'int'>), ('A', <class 'int'>)]
 agc066-B                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
-agc066-C                                 No result
-agc066-D                                 No result
-agc066-E                                 No result
-agc066-F                                 No result
+agc066-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S)]] [('T', <class 'int'>)]
+agc066-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S),(Parallel: x | 1 to N-1)]] [('T', <class 'int'>)]
+agc066-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: u,v | 1 to N-1)]] [('T', <class 'int'>)]
+agc066-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S)]] [('T', <class 'int'>)]
 agc067-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)]] [('T', <class 'int'>)]
 agc067-B                                 OK                   [(Singular: N),(Singular: M),(Singular: C),(Parallel: L,R | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('C', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 agc067-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
@@ -3347,7 +3347,7 @@ agc068-C                                 OK                   [RepeatedCase: pre
 agc068-D                                 OK                   [(Singular: N),(Singular: B),(Parallel: P | 2 to N)] [('N', <class 'int'>), ('B', <class 'int'>), ('P', <class 'int'>)]
 agc068-E                                 OK                   [(Singular: N),(Singular: M),(TwoDimensional: A)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 agc069-A                                 No result
-agc069-B                                 No result
+agc069-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: S | 1 to N)]] [('T', <class 'int'>)]
 agc069-C                                 OK                   [(Singular: N),(Singular: S),(Singular: T)] [('N', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
 agc069-D                                 OK                   [(Singular: N),(Singular: P)] [('N', <class 'int'>), ('P', <class 'int'>)]
 agc069-E                                 OK                   [(Singular: N),(Singular: M),(Singular: X),(Singular: Y)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
@@ -3357,8 +3357,8 @@ agc070-D                                 No result
 agc070-E                                 OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
 agc071-A                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 agc071-B                                 OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
-agc071-C                                 No result
-agc071-D                                 No result
+agc071-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)]] [('T', <class 'int'>)]
+agc071-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 agc071-E                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 agc072-A                                 OK                   [RepeatedCase: prefix=[(Singular: TESTCASES)], count=TESTCASES, case=[(Singular: N),(Singular: D),(Parallel: T,X | 1 to N)]] [('TESTCASES', <class 'int'>)]
 agc072-B                                 OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
@@ -3424,8 +3424,8 @@ aising2020-A                             OK                   [(Singular: L),(Si
 aising2020-B                             OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 aising2020-C                             OK                   [(Singular: N)] [('N', <class 'int'>)]
 aising2020-D                             OK                   [(Singular: N),(Singular: X)] [('N', <class 'int'>), ('X', <class 'str'>)]
-aising2020-E                             No result
-aising2020-F                             No result
+aising2020-E                             OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: K,L,R | 1 to N)]] [('T', <class 'int'>)]
+aising2020-F                             OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 ajo2024-final-A                          OK                   [(Singular: N),(Singular: T),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 ajo2024-final-B                          OK                   [(Singular: N),(Parallel: L,R | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 ajo2024-final-C                          OK                   [(Singular: N)] [('N', <class 'int'>)]
@@ -3871,8 +3871,8 @@ arc104-F                                 OK                   [(Singular: N),(Pa
 arc105-A                                 OK                   [(Singular: A),(Singular: B),(Singular: C),(Singular: D)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 arc105-B                                 OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 arc105-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: w | 1 to N),(Parallel: l,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('w', <class 'int'>), ('l', <class 'int'>), ('v', <class 'int'>)]
-arc105-D                                 No result
-arc105-E                                 No result
+arc105-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: a | 1 to N)]] [('T', <class 'int'>)]
+arc105-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: a,b | 1 to M)]] [('T', <class 'int'>)]
 arc105-F                                 OK                   [(Singular: N),(Singular: M),(Parallel: a,b | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 arc106-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 arc106-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: a | 1 to N),(Parallel: b | 1 to N),(Parallel: c,d | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>), ('d', <class 'int'>)]
@@ -3895,7 +3895,7 @@ arc108-F                                 OK                   [(Singular: N),(Pa
 arc109-A                                 OK                   [(Singular: a),(Singular: b),(Singular: x),(Singular: y)] [('a', <class 'int'>), ('b', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 arc109-B                                 OK                   [(Singular: n)] [('n', <class 'int'>)]
 arc109-C                                 OK                   [(Singular: n),(Singular: k),(Singular: s)] [('n', <class 'int'>), ('k', <class 'int'>), ('s', <class 'str'>)]
-arc109-D                                 No result
+arc109-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: ax),(Singular: ay),(Singular: bx),(Singular: by),(Singular: cx),(Singular: cy)]] [('T', <class 'int'>)]
 arc109-E                                 OK                   [(Singular: n)] [('n', <class 'int'>)]
 arc109-F                                 OK                   [(Singular: n),(Singular: s),(Singular: t)] [('n', <class 'int'>), ('s', <class 'str'>), ('t', <class 'str'>)]
 arc110-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
@@ -3910,7 +3910,7 @@ arc111-C                                 OK                   [(Singular: N),(Pa
 arc111-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: a,b | 1 to M),(Parallel: c | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>)]
 arc111-E                                 OK                   [(Singular: T),(Parallel: A,B,C,D | 1 to T)] [('T', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 arc111-F                                 OK                   [(Singular: N),(Singular: M),(Singular: Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>)]
-arc112-A                                 No result
+arc112-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: L),(Singular: R)]] [('T', <class 'int'>)]
 arc112-B                                 OK                   [(Singular: B),(Singular: C)] [('B', <class 'int'>), ('C', <class 'int'>)]
 arc112-C                                 OK                   [(Singular: n),(Parallel: p | 2 to n)] [('n', <class 'int'>), ('p', <class 'int'>)]
 arc112-D                                 No result
@@ -3934,7 +3934,7 @@ arc115-C                                 OK                   [(Singular: N)] [(
 arc115-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc115-E                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc115-F                                 OK                   [(Singular: N),(Parallel: h | 1 to N),(Parallel: u,v | 1 to N-1),(Singular: K),(Parallel: s,t | 1 to K)] [('N', <class 'int'>), ('h', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('K', <class 'int'>), ('s', <class 'int'>), ('t', <class 'int'>)]
-arc116-A                                 OK                   [(Singular: T),(Parallel: case | 1 to T)] [('T', <class 'int'>), ('case', <class 'int'>)]
+arc116-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 arc116-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc116-C                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 arc116-D                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
@@ -3967,7 +3967,7 @@ arc120-F                                 OK                   [(Singular: N),(Si
 arc120-F2                                OK                   [(Singular: N),(Singular: K),(Singular: D),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('D', <class 'int'>), ('A', <class 'int'>)]
 arc121-A                                 OK                   [(Singular: N),(Parallel: x,y | 1 to N)] [('N', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 arc121-B                                 OK                   [(Singular: N),(Parallel: a,c | 1 to 2*N)] [('N', <class 'int'>), ('a', <class 'int'>), ('c', <class 'str'>)]
-arc121-C                                 No result
+arc121-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: p | 1 to N)]] [('T', <class 'int'>)]
 arc121-D                                 OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 arc121-E                                 OK                   [(Singular: N),(Parallel: p | 2 to N)] [('N', <class 'int'>), ('p', <class 'int'>)]
 arc121-F                                 OK                   [(Singular: N),(Parallel: a,b | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
@@ -4053,7 +4053,7 @@ arc135-A                                 OK                   [(Singular: X)] [(
 arc135-B                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>)]
 arc135-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc135-D                                 OK                   [(Singular: H),(Singular: W),(TwoDimensional: A)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'int'>)]
-arc135-E                                 No result
+arc135-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: X)]] [('T', <class 'int'>)]
 arc135-F                                 OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
 arc136-A                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 arc136-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -4085,7 +4085,7 @@ arc140-C                                 OK                   [(Singular: N),(Si
 arc140-D                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc140-E                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 arc140-F                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
-arc141-A                                 No result
+arc141-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 arc141-B                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 arc141-C                                 OK                   [(Singular: N),(Parallel: P | 1 to 2*N),(Parallel: Q | 1 to 2*N)] [('N', <class 'int'>), ('P', <class 'int'>), ('Q', <class 'int'>)]
 arc141-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
@@ -4139,7 +4139,7 @@ arc149-C                                 OK                   [(Singular: N)] [(
 arc149-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: X | 1 to N),(Parallel: D | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('D', <class 'int'>)]
 arc149-E                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: B | 0 to N-1)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('B', <class 'int'>)]
 arc149-F                                 OK                   [(Singular: p),(Singular: q),(Singular: N),(Singular: L),(Singular: R)] [('p', <class 'int'>), ('q', <class 'int'>), ('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
-arc150-A                                 No result
+arc150-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Singular: S)]] [('T', <class 'int'>)]
 arc150-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: A),(Singular: B)]] [('T', <class 'int'>)]
 arc150-C                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: U,V | 1 to M),(Parallel: A | 1 to N),(Parallel: B | 1 to K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc150-D                                 OK                   [(Singular: N),(Parallel: p | 2 to N)] [('N', <class 'int'>), ('p', <class 'int'>)]
@@ -4169,13 +4169,13 @@ arc154-C                                 OK                   [RepeatedCase: pre
 arc154-D                                 No result
 arc154-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('P', <class 'int'>)]
 arc154-F                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
-arc155-A                                 No result
+arc155-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Singular: S)]] [('T', <class 'int'>)]
 arc155-B                                 OK                   [(Singular: Q),(Singular: A),(Singular: B),(Parallel: t,a,b | 1 to Q)] [('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('t', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 arc155-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc155-D                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc155-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'str'>)]
 arc155-F                                 OK                   [(Singular: N),(Parallel: D | 1 to N)] [('N', <class 'int'>), ('D', <class 'int'>)]
-arc156-A                                 No result
+arc156-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S)]] [('T', <class 'int'>)]
 arc156-B                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 arc156-C                                 OK                   [(Singular: N),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 arc156-D                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
@@ -4187,10 +4187,10 @@ arc157-C                                 OK                   [(Singular: H),(Si
 arc157-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 arc157-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: A),(Singular: B),(Singular: C),(Parallel: P | 2 to N)]] [('T', <class 'int'>)]
 arc157-F                                 OK                   [(Singular: N),(Singular: S),(Singular: T)] [('N', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
-arc158-A                                 No result
+arc158-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Parallel: x | 1 to 3)]] [('T', <class 'int'>)]
 arc158-B                                 OK                   [(Singular: N),(Parallel: x | 1 to N)] [('N', <class 'int'>), ('x', <class 'int'>)]
 arc158-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-arc158-D                                 No result
+arc158-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: n),(Singular: p)]] [('T', <class 'int'>)]
 arc158-E                                 OK                   [(Singular: N),(TwoDimensional: x)] [('N', <class 'int'>), ('x', <class 'int'>)]
 arc158-F                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc159-A                                 OK                   [(Singular: N),(Singular: K),(TwoDimensional: a),(Singular: Q),(Parallel: s,t | 1 to Q)] [('N', <class 'int'>), ('K', <class 'int'>), ('a', <class 'int'>), ('Q', <class 'int'>), ('s', <class 'int'>), ('t', <class 'int'>)]
@@ -4211,9 +4211,9 @@ arc161-C                                 OK                   [RepeatedCase: pre
 arc161-D                                 OK                   [(Singular: N),(Singular: D)] [('N', <class 'int'>), ('D', <class 'int'>)]
 arc161-E                                 No result
 arc161-F                                 No result
-arc162-A                                 No result
+arc162-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: P | 1 to N)]] [('T', <class 'int'>)]
 arc162-B                                 OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
-arc162-C                                 No result
+arc162-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Parallel: P | 2 to N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 arc162-D                                 OK                   [(Singular: N),(Parallel: d | 1 to N)] [('N', <class 'int'>), ('d', <class 'int'>)]
 arc162-E                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc162-F                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
@@ -4229,18 +4229,18 @@ arc164-C                                 OK                   [(Singular: N),(Pa
 arc164-D                                 OK                   [(Singular: N),(Singular: T)] [('N', <class 'int'>), ('T', <class 'str'>)]
 arc164-E                                 OK                   [(Singular: N),(Singular: Q),(Parallel: L,R | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 arc164-F                                 OK                   [(Singular: N),(Parallel: p | 2 to N)] [('N', <class 'int'>), ('p', <class 'int'>)]
-arc165-A                                 No result
+arc165-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 arc165-B                                 OK                   [(Singular: N),(Singular: K),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('P', <class 'int'>)]
 arc165-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B,W | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('W', <class 'int'>)]
 arc165-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B,C,D | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 arc165-E                                 OK                   [(Singular: N),(Singular: K),(Parallel: A,B | 1 to N-1)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc165-F                                 OK                   [(Singular: N),(Parallel: A | 1 to 2*N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-arc166-A                                 No result
+arc166-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: X),(Singular: Y)]] [('T', <class 'int'>)]
 arc166-B                                 OK                   [(Singular: N),(Singular: a),(Singular: b),(Singular: c),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>), ('A', <class 'int'>)]
-arc166-C                                 No result
+arc166-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W)]] [('T', <class 'int'>)]
 arc166-D                                 OK                   [(Singular: N),(Parallel: x | 1 to N),(Parallel: y | 1 to N)] [('N', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
-arc166-E                                 No result
-arc166-F                                 No result
+arc166-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: n),(Singular: a),(Singular: b)]] [('T', <class 'int'>)]
+arc166-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: p),(Singular: a),(Singular: b)]] [('T', <class 'int'>)]
 arc167-A                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 arc167-B                                 OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
 arc167-C                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
@@ -4262,9 +4262,9 @@ arc169-F                                 OK                   [(Singular: N),(Pa
 arc170-A                                 OK                   [(Singular: N),(Singular: S),(Singular: T)] [('N', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
 arc170-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc170-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'int'>)]
-arc170-D                                 No result
-arc170-E                                 No result
-arc170-F                                 No result
+arc170-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)]] [('T', <class 'int'>)]
+arc170-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: P)]] [('T', <class 'int'>)]
+arc170-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: u,v | 1 to N-1)]] [('T', <class 'int'>)]
 arc171-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: A),(Singular: B)]] [('T', <class 'int'>)]
 arc171-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc171-C                                 OK                   [(Singular: N),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
@@ -4277,7 +4277,7 @@ arc172-C                                 No result
 arc172-D                                 No result
 arc172-E                                 OK                   [RepeatedCase: prefix=[(Singular: Q)], count=Q, case=[(Singular: X)]] [('Q', <class 'int'>)]
 arc172-F                                 No result
-arc173-A                                 No result
+arc173-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: K)]] [('T', <class 'int'>)]
 arc173-B                                 OK                   [(Singular: N),(Parallel: x,y | 1 to N)] [('N', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 arc173-C                                 OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
 arc173-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: u,v,c | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('c', <class 'str'>)]
@@ -4325,8 +4325,8 @@ arc180-C                                 OK                   [(Singular: N),(Pa
 arc180-D                                 OK                   [(Singular: N),(Singular: Q),(Parallel: A | 1 to N),(Parallel: L,R | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 arc180-E                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc180-F                                 OK                   [(Singular: N),(Singular: A)] [('N', <class 'int'>), ('A', <class 'int'>)]
-arc181-A                                 No result
-arc181-B                                 No result
+arc181-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: P | 1 to N)]] [('T', <class 'int'>)]
+arc181-B                                 OK                   [RepeatedCase: prefix=[(Singular: t)], count=t, case=[(Singular: S),(Singular: X),(Singular: Y)]] [('t', <class 'int'>)]
 arc181-C                                 OK                   [(Singular: N),(Parallel: P | 1 to N),(Parallel: Q | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('Q', <class 'int'>)]
 arc181-D                                 OK                   [(Singular: N),(Parallel: P | 1 to N),(Singular: M),(Parallel: A | 1 to M)] [('N', <class 'int'>), ('P', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 arc181-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -4405,11 +4405,11 @@ arc196-A                                 OK                   [(Singular: N),(Pa
 arc196-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Parallel: S | 0 to H-1)]] [('T', <class 'int'>)]
 arc196-C                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 arc196-D                                 OK                   [(Singular: N),(Singular: M),(Singular: Q),(Parallel: S,T | 1 to M),(Parallel: L,R | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
-arc197-A                                 No result
-arc197-B                                 No result
+arc197-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Singular: S)]] [('T', <class 'int'>)]
+arc197-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 arc197-C                                 OK                   [(Singular: Q),(Parallel: A,B | 1 to Q)] [('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-arc197-D                                 No result
-arc197-E                                 No result
+arc197-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(TwoDimensional: A)]] [('T', <class 'int'>)]
+arc197-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: H),(Singular: W)]] [('T', <class 'int'>)]
 arc198-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 arc198-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: X),(Singular: Y),(Singular: Z)]] [('T', <class 'int'>)]
 arc198-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -4451,8 +4451,8 @@ arc205-E                                 OK                   [(Singular: N),(Pa
 arc206-A                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc206-B                                 OK                   [(Singular: N),(Parallel: P | 1 to N),(Parallel: C | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('C', <class 'int'>)]
 arc206-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-arc206-D                                 No result
-arc206-E                                 No result
+arc206-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K)]] [('T', <class 'int'>)]
+arc206-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: U | 1 to N-2),(Parallel: D | 1 to N-2),(Parallel: L | 1 to N-2),(Parallel: R | 1 to N-2)]] [('T', <class 'int'>)]
 arc207-A                                 OK                   [(Singular: N),(Singular: X),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('a', <class 'int'>)]
 arc207-B                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 arc207-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
@@ -4546,10 +4546,10 @@ arc223-C                                 OK                   [RepeatedCase: pre
 arc223-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: A),(Singular: B),(Singular: K)]] [('T', <class 'int'>)]
 arc223-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)]] [('T', <class 'int'>)]
 arc223-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: X),(Parallel: Q | 1 to N)]] [('T', <class 'int'>)]
-arc224-A                                 No result
+arc224-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: K)]] [('T', <class 'int'>)]
 arc224-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 arc224-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: U,V | 1 to M)]] [('T', <class 'int'>)]
-arc224-D                                 No result
+arc224-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K)]] [('T', <class 'int'>)]
 arc224-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S)]] [('T', <class 'int'>)]
 arc224-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 asprocon7-A                              No result
@@ -5249,7 +5249,7 @@ dwango2016-prelims-B                     OK                   [(Singular: N),(Pa
 dwango2016-prelims-C                     No result
 dwango2016-prelims-D                     OK                   [(Singular: H),(Singular: W),(TwoDimensional: B)] [('H', <class 'int'>), ('W', <class 'int'>), ('B', <class 'int'>)]
 dwango2016-prelims-E                     OK                   [(Singular: N),(Singular: L),(Parallel: t,P | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('t', <class 'int'>), ('P', <class 'int'>)]
-editor-update-test-A                     No result
+editor-update-test-A                     OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: A),(Singular: B),(Singular: C)]] [('T', <class 'int'>)]
 editor-update-test-B                     OK                   [(Singular: N),(Parallel: P | 2 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
 exawizards2019-A                         OK                   [(Singular: A),(Singular: B),(Singular: C)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 exawizards2019-B                         OK                   [(Singular: N),(Singular: s)] [('N', <class 'int'>), ('s', <class 'str'>)]
@@ -6190,7 +6190,7 @@ oupc2023-day1-L                          OK                   [(Singular: T)] [(
 oupc2023-day1-M                          OK                   [(Singular: N),(Singular: C),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('C', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 oupc2023-day1-N                          OK                   [(Singular: N),(Singular: L),(Parallel: A,B,C | 1 to N),(Singular: Q),(Parallel: M | 1 to Q)] [('N', <class 'int'>), ('L', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('Q', <class 'int'>), ('M', <class 'int'>)]
 oupc2023-day1-O                          OK                   [(Singular: N),(Singular: P),(Singular: a),(Singular: K),(Parallel: A,B,C,D | 1 to K),(Singular: Q),(Parallel: E,F | 1 to Q)] [('N', <class 'int'>), ('P', <class 'int'>), ('a', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>), ('Q', <class 'int'>), ('E', <class 'int'>), ('F', <class 'int'>)]
-oupc2023-day1-P                          No result
+oupc2023-day1-P                          OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 oupc2023-day1-Q                          No result
 pakencamp-2018-day2-A                    OK                   [(Singular: N)] [('N', <class 'int'>)]
 pakencamp-2018-day2-B                    OK                   [(Singular: N),(Singular: D),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('D', <class 'int'>), ('A', <class 'int'>)]
@@ -7280,7 +7280,7 @@ tupc2023-H                               OK                   [(Singular: N),(Pa
 tupc2023-I                               OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 tupc2023-J                               No result
 tupc2023-K                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Singular: R)]] [('T', <class 'int'>)]
-tupc2023-L                               No result
+tupc2023-L                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M)]] [('T', <class 'int'>)]
 tupc2023-M                               OK                   [(Singular: N),(Parallel: r,g,b | 1 to N)] [('N', <class 'int'>), ('r', <class 'int'>), ('g', <class 'int'>), ('b', <class 'int'>)]
 tupc2023-N                               OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 tupc2023-O                               OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
@@ -7293,16 +7293,16 @@ tupc2024-E                               OK                   [RepeatedCase: pre
 tupc2024-F                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: L),(Singular: R),(Singular: X)]] [('T', <class 'int'>)]
 tupc2024-G                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: a,b,c | 1 to N)]] [('T', <class 'int'>)]
 tupc2024-H                               OK                   [(Singular: N),(Singular: M),(Parallel: t,i,j,d | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('t', <class 'int'>), ('i', <class 'int'>), ('j', <class 'int'>), ('d', <class 'int'>)]
-tupc2024-I                               No result
+tupc2024-I                               OK                   [RepeatedCase: prefix=[(Singular: Q)], count=Q, case=[(Singular: N),(Singular: K),(Parallel: A,B | 1 to N-1)]] [('Q', <class 'int'>)]
 tupc2024-J                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: P | 1 to N)]] [('T', <class 'int'>)]
 tupc2024-K                               OK                   [(Singular: N),(Parallel: A | 1 to 2*N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 tupc2024-L                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: s),(Singular: t)]] [('T', <class 'int'>)]
-tupc2024-M                               No result
+tupc2024-M                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Singular: K),(Singular: S)]] [('T', <class 'int'>)]
 tupc2024-N                               OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 tupc2024-O                               OK                   [(Singular: N)] [('N', <class 'int'>)]
 tupc2024-P                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 tupc2024-Q                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: L,R | 1 to N)]] [('T', <class 'int'>)]
-tupc2024-R                               No result
+tupc2024-R                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S)]] [('T', <class 'int'>)]
 utpc2011-D                               No result
 utpc2012-C                               No result
 utpc2012-D                               OK                   [(Singular: n),(TwoDimensional: x),(TwoDimensional: y)] [('n', <class 'int'>), ('x', <class 'float'>), ('y', <class 'float'>)]
@@ -7346,12 +7346,12 @@ utpc2020-F                               OK                   [(Singular: N),(Si
 utpc2020-G                               OK                   [(Singular: N),(TwoDimensional: A)] [('N', <class 'int'>), ('A', <class 'int'>)]
 utpc2020-H                               OK                   [(Singular: H),(Singular: W),(TwoDimensional: S)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 utpc2020-I                               OK                   [(Singular: N),(Singular: M),(Parallel: A,B,C | 1 to M),(Singular: Q),(Parallel: X | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>)]
-utpc2020-J                               No result
+utpc2020-J                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)]] [('T', <class 'int'>)]
 utpc2020-K                               OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A | 1 to N),(Parallel: B | 1 to N),(Parallel: L,R | 1 to K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 utpc2020-L                               OK                   [(Singular: N),(Singular: Z),(Parallel: x,y | 1 to N)] [('N', <class 'int'>), ('Z', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 utpc2020-M                               OK                   [(Singular: N),(Parallel: A,X,Y | 1 to N)] [('N', <class 'int'>), ('A', <class 'str'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 utpc2021-A                               OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
-utpc2021-B                               No result
+utpc2021-B                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)]] [('T', <class 'int'>)]
 utpc2021-C                               OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N),(Parallel: C | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 utpc2021-D                               OK                   [(Singular: N),(Parallel: A,B | 1 to N-1)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 utpc2021-E                               OK                   [(Singular: N),(Singular: K),(Parallel: x,y,c | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('c', <class 'int'>)]
@@ -7364,7 +7364,7 @@ utpc2021-K                               OK                   [(Singular: N),(Si
 utpc2021-L                               No result
 utpc2021-M                               OK                   [(Singular: N),(Singular: K),(Parallel: p | 1 to N),(Parallel: q | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('p', <class 'int'>), ('q', <class 'int'>)]
 utpc2021-N                               OK                   [(Singular: N),(Singular: M),(Parallel: P | 1 to N),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('P', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-utpc2022-A                               No result
+utpc2022-A                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: K)]] [('T', <class 'int'>)]
 utpc2022-B                               OK                   [(Singular: N),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 utpc2022-C                               OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 utpc2022-D                               No result
@@ -7372,7 +7372,7 @@ utpc2022-E                               OK                   [(Singular: N),(Si
 utpc2022-F                               OK                   [(Singular: N),(Singular: K),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('P', <class 'int'>)]
 utpc2022-G                               OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 utpc2022-H                               OK                   [(Singular: N)] [('N', <class 'int'>)]
-utpc2022-I                               No result
+utpc2022-I                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S),(Parallel: L,R | 1 to 2*N)]] [('T', <class 'int'>)]
 utpc2022-J                               OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
 utpc2022-K                               OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: X,Y | 1 to K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 utpc2022-L                               OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
@@ -7398,7 +7398,7 @@ utpc2023-P                               OK                   [(Singular: N),(Si
 utpc2023-Q                               OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 utpc2024-A                               OK                   [(Singular: N),(Singular: Q),(Parallel: A | 1 to N),(TwoDimensional: L),(TwoDimensional: R)] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 utpc2024-B                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Parallel: A | 1 to 2*K)]] [('T', <class 'int'>)]
-utpc2024-C                               No result
+utpc2024-C                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: K),(Singular: M)]] [('T', <class 'int'>)]
 utpc2024-D                               No result
 utpc2024-E                               OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
 utpc2024-F                               No result
