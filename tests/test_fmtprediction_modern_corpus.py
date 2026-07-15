@@ -156,6 +156,7 @@ class TestProblemContentFixture(unittest.TestCase):
                 "abc354-f",
                 "arc185-a",
                 "arc222-f",
+                "arc224-a",
             ],
             case_names,
         )

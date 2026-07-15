@@ -1,0 +1,22 @@
+{
+  "input_format_blocks": [
+    "T\n\\mathrm{case}_1\n\\vdots\n\\mathrm{case}_T\n",
+    "K\n"
+  ],
+  "input_format_context_text": "入力 入力は以下の形式で標準入力から与えられる。ここで \\mathrm{case}_i は i 個目のテストケースを意味する。 T \\mathrm{case}_1 \\vdots \\mathrm{case}_T 各テストケースは以下の形式で与えられる。 K",
+  "input_format_text": "T\n\\mathrm{case}_1\n\\vdots\n\\mathrm{case}_T\n",
+  "samples": [
+    {
+      "input": "3\n17\n6801\n998244353\n",
+      "output": "1003\n34005\n16970154001\n"
+    }
+  ],
+  "schema_version": 1,
+  "source": {
+    "contest_id": "arc224",
+    "expected_case_count_var": "T",
+    "html_sha256": "939486a70f691b3508d17d86d47d46921d8cf8c4fa7837cc8d297cd43b724d84",
+    "task_id": "arc224_a",
+    "url": "https://atcoder.jp/contests/arc224/tasks/arc224_a?lang=ja"
+  }
+}
