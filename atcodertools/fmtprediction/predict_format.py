@@ -1048,6 +1048,39 @@ def predict_multi_case_format(
     return valid_predictions[0]
 
 
+def _predict_same_line_ragged_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    from atcodertools.fmtprediction import (
+        ragged_row,
+    )
+
+    try:
+        prediction = (
+            ragged_row
+            .predict_same_line_ragged_rows(
+                content
+            )
+        )
+    except (
+        ragged_row
+        .NoRaggedRowPredictionError,
+        ragged_row
+        .MultipleRaggedRowPredictionsError,
+    ):
+        raise NoPredictionResultError from None
+
+    return (
+        FormatPredictionResult
+        .create_ragged_row_typed_format(
+            prediction.prefix_format,
+            prediction.schema,
+            prediction.var_to_type,
+            prediction.suffix_format,
+        )
+    )
+
+
 def predict_format(
     content: ProblemContent,
 ) -> FormatPredictionResult:
@@ -1061,7 +1094,16 @@ def predict_format(
             content
         )
     except NoMultiCaseFormatFoundError:
-        return _predict_single_case(content)
+        try:
+            return _predict_single_case(
+                content
+            )
+        except NoPredictionResultError:
+            return (
+                _predict_same_line_ragged_format(
+                    content
+                )
+            )
     except MultipleMultiCaseFormatsError as error:
         raise MultiplePredictionResultsError(
             error.candidates

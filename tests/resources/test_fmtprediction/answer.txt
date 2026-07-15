@@ -1528,7 +1528,7 @@ abc270-Ex                                OK                   [(Singular: N),(Pa
 abc270-F                                 OK                   [(Singular: N),(Singular: M),(Parallel: X | 1 to N),(Parallel: Y | 1 to N),(Parallel: A,B,Z | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('Z', <class 'int'>)]
 abc270-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: P),(Singular: A),(Singular: B),(Singular: S),(Singular: G)]] [('T', <class 'int'>)]
 abc271-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
-abc271-B                                 No result
+abc271-B                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: Q)], rows=[RaggedRowPattern: count=N, prefix=L, length_pos=0, values=a], suffix=[(Parallel: s,t | 1 to Q)]] [('N', <class 'int'>), ('Q', <class 'int'>), ('L', <class 'int'>), ('a', <class 'int'>), ('s', <class 'int'>), ('t', <class 'int'>)]
 abc271-C                                 OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 abc271-D                                 OK                   [(Singular: N),(Singular: S),(Parallel: a,b | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 abc271-E                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A,B,C | 1 to M),(Parallel: E | 1 to K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('E', <class 'int'>)]
@@ -1880,7 +1880,7 @@ abc315-A                                 OK                   [(Singular: S)] [(
 abc315-B                                 OK                   [(Singular: M),(Parallel: D | 1 to M)] [('M', <class 'int'>), ('D', <class 'int'>)]
 abc315-C                                 OK                   [(Singular: N),(Parallel: F,S | 1 to N)] [('N', <class 'int'>), ('F', <class 'int'>), ('S', <class 'int'>)]
 abc315-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: c | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('c', <class 'str'>)]
-abc315-E                                 No result
+abc315-E                                 OK                   [RaggedRowFormat: prefix=[(Singular: N)], rows=[RaggedRowPattern: count=N, prefix=C, length_pos=0, values=P], suffix=[]] [('N', <class 'int'>), ('C', <class 'int'>), ('P', <class 'int'>)]
 abc315-Ex                                OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc315-F                                 OK                   [(Singular: N),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc315-G                                 OK                   [(Singular: N),(Singular: A),(Singular: B),(Singular: C),(Singular: X)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('X', <class 'int'>)]
@@ -2497,7 +2497,7 @@ abc403-G                                 OK                   [(Singular: Q),(Pa
 abc404-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc404-B                                 OK                   [(Singular: N),(Parallel: S | 1 to N),(Parallel: T | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
 abc404-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-abc404-D                                 No result
+abc404-D                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: M),(Parallel: C | 1 to N)], rows=[RaggedRowPattern: count=M, prefix=K, length_pos=0, values=A], suffix=[]] [('N', <class 'int'>), ('M', <class 'int'>), ('C', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 abc404-E                                 OK                   [(Singular: N),(Parallel: C | 1 to N-1),(Parallel: A | 1 to N-1)] [('N', <class 'int'>), ('C', <class 'int'>), ('A', <class 'int'>)]
 abc404-F                                 OK                   [(Singular: N),(Singular: T),(Singular: M),(Singular: K)] [('N', <class 'int'>), ('T', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>)]
 abc404-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: L,R,S | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('S', <class 'int'>)]
@@ -3673,7 +3673,7 @@ arc055-D                                 OK                   [(Singular: d)] [(
 arc056-A                                 OK                   [(Singular: A),(Singular: B),(Singular: K),(Singular: L)] [('A', <class 'int'>), ('B', <class 'int'>), ('K', <class 'int'>), ('L', <class 'int'>)]
 arc056-B                                 OK                   [(Singular: N),(Singular: M),(Singular: S),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 arc056-C                                 OK                   [(Singular: N),(Singular: K),(TwoDimensional: w)] [('N', <class 'int'>), ('K', <class 'int'>), ('w', <class 'int'>)]
-arc056-D                                 No result
+arc056-D                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Parallel: w | 1 to N)], rows=[RaggedRowPattern: count=N, prefix=M, length_pos=0, values=t], suffix=[]] [('N', <class 'int'>), ('w', <class 'int'>), ('M', <class 'int'>), ('t', <class 'int'>)]
 arc057-A                                 OK                   [(Singular: A),(Singular: K)] [('A', <class 'int'>), ('K', <class 'int'>)]
 arc057-B                                 OK                   [(Singular: N),(Singular: K),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('a', <class 'int'>)]
 arc057-C                                 OK                   [(Singular: a)] [('a', <class 'str'>)]
@@ -5345,7 +5345,7 @@ hitachi2020-D                            OK                   [(Singular: N),(Si
 hitachi2020-E                            OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 hitachi2020-F                            OK                   [(Singular: N),(Parallel: a,b | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 hokudai-hitachi2017-1-A                  No result
-hokudai-hitachi2018-A                    No result
+hokudai-hitachi2018-A                    OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: K)], rows=[RaggedRowPattern: count=K, prefix=d,c, length_pos=0, values=v], suffix=[]] [('N', <class 'int'>), ('K', <class 'int'>), ('d', <class 'int'>), ('c', <class 'int'>), ('v', <class 'int'>)]
 hokudai-hitachi2019-1-A                  No result
 hokudai-hitachi2019-1-B                  No result
 hokudai-hitachi2021-B                    No result
@@ -6028,7 +6028,7 @@ nadafes2022_day1-F                       OK                   [(Singular: N),(Si
 nadafes2022_day1-G                       OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 nadafes2022_day1-H                       No result
 nadafes2022_day1-I                       OK                   [(Singular: N),(Singular: K),(Parallel: x,y,c | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('c', <class 'int'>)]
-nadafes2022_day1-J                       No result
+nadafes2022_day1-J                       OK                   [RaggedRowFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], rows=[RaggedRowPattern: count=Q, prefix=K, length_pos=0, values=p], suffix=[]] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>), ('K', <class 'int'>), ('p', <class 'int'>)]
 nadafes2022_day1-K                       OK                   [(Singular: N),(Singular: A),(Singular: B)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 nadafes2022_day1-L                       OK                   [(Singular: N),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 nadafes2022_day1-M                       OK                   [(Singular: N),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -7311,7 +7311,7 @@ utpc2012-F                               No result
 utpc2012-G                               OK                   [(Singular: n),(Singular: k),(Singular: s)] [('n', <class 'int'>), ('k', <class 'int'>), ('s', <class 'str'>)]
 utpc2012-H                               OK                   [(Singular: N),(Singular: Q),(Parallel: IL,IR | 1 to N),(Parallel: QL,QR | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('IL', <class 'int'>), ('IR', <class 'int'>), ('QL', <class 'int'>), ('QR', <class 'int'>)]
 utpc2012-I                               OK                   [(Singular: W),(Singular: H),(Singular: Q),(TwoDimensional: A),(Parallel: SX,SY,TX,TY | 1 to Q)] [('W', <class 'int'>), ('H', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('SX', <class 'int'>), ('SY', <class 'int'>), ('TX', <class 'int'>), ('TY', <class 'int'>)]
-utpc2012-J                               No result
+utpc2012-J                               OK                   [RaggedRowFormat: prefix=[(Singular: n),(Singular: m),(Singular: d)], rows=[RaggedRowPattern: count=m, prefix=c,s,k, length_pos=2, values=a], suffix=[(Parallel: b | 1 to d)]] [('n', <class 'int'>), ('m', <class 'int'>), ('d', <class 'int'>), ('c', <class 'int'>), ('s', <class 'int'>), ('k', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 utpc2012-K                               OK                   [(Singular: a),(Singular: b)] [('a', <class 'int'>), ('b', <class 'int'>)]
 utpc2012-L                               No result
 utpc2013-A                               OK                   [(Singular: s)] [('s', <class 'str'>)]
