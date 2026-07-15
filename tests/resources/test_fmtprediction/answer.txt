@@ -782,7 +782,7 @@ abc165-D                                 OK                   [(Singular: A),(Si
 abc165-E                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 abc165-F                                 OK                   [(Singular: N),(Parallel: a | 1 to N),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 abc166-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
-abc166-B                                 No result
+abc166-B                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: K)], rows=[RaggedRowPattern: count=K, prefix=d, length_pos=0, values=A], suffix=[]] [('N', <class 'int'>), ('K', <class 'int'>), ('d', <class 'int'>), ('A', <class 'int'>)]
 abc166-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: H | 1 to N),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('H', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc166-D                                 OK                   [(Singular: X)] [('X', <class 'int'>)]
 abc166-E                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]

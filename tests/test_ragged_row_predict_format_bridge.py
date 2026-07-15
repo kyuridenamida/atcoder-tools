@@ -10,7 +10,6 @@ from atcodertools.fmtprediction.models.ragged_format import (
     RaggedRowFormat,
 )
 from atcodertools.fmtprediction.predict_format import (
-    NoPredictionResultError,
     predict_format,
 )
 
@@ -135,15 +134,31 @@ class TestRaggedRowPredictFormatBridge(
             RaggedRowFormat,
         )
 
-    def test_two_line_ragged_remains_followup(
+    def test_two_line_ragged_uses_fallback(
         self,
     ):
-        with self.assertRaises(
-            NoPredictionResultError
-        ):
-            predict_format(
-                two_line_content()
-            )
+        result = predict_format(
+            two_line_content()
+        )
+
+        self.assertIsInstance(
+            result.format,
+            RaggedRowFormat,
+        )
+
+        self.assertEqual(
+            [
+                "N",
+                "K",
+                "d",
+                "A",
+            ],
+            [
+                variable.name
+                for variable
+                in result.format.all_vars()
+            ],
+        )
 
 
 if __name__ == "__main__":

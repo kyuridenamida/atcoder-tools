@@ -1053,6 +1053,7 @@ def _predict_same_line_ragged_format(
 ) -> FormatPredictionResult:
     from atcodertools.fmtprediction import (
         ragged_row,
+        two_line_ragged_row,
     )
 
     try:
@@ -1068,7 +1069,20 @@ def _predict_same_line_ragged_format(
         ragged_row
         .MultipleRaggedRowPredictionsError,
     ):
-        raise NoPredictionResultError from None
+        try:
+            prediction = (
+                two_line_ragged_row
+                .predict_two_line_ragged_rows(
+                    content
+                )
+            )
+        except (
+            two_line_ragged_row
+            .NoTwoLineRaggedRowPredictionError,
+            two_line_ragged_row
+            .MultipleTwoLineRaggedRowPredictionsError,
+        ):
+            raise NoPredictionResultError from None
 
     return (
         FormatPredictionResult
