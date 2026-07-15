@@ -1,9 +1,15 @@
 # Change Log
+## 3.0.1 / 2026-7-15
+Release version 3.0.1
+|PR|Change Summary|Label|Author|
+|:---|:---|:---|:---:|
+|[#321](https://github.com/kyuridenamida/atcoder-tools/pull/321)|wrapper認識でcase_2省略の短縮形を許容| |[kyuridenamida](https://github.com/kyuridenamida)|
+|[#320](https://github.com/kyuridenamida/atcoder-tools/pull/320)|corpusを7,668問に拡充しmulti-case検出を全量検証、client不具合も修正| |[kyuridenamida](https://github.com/kyuridenamida)|
+|[#319](https://github.com/kyuridenamida/atcoder-tools/pull/319)|入力形式予測の決定的カバレッジを改善（#314・#258補完）| |[chaemon](https://github.com/chaemon)|
 ## 3.0.0 / 2026-7-15
 Release version 3.0.0
 |PR|Change Summary|Label|Author|
 |:---|:---|:---|:---:|
-|[#320](https://github.com/kyuridenamida/atcoder-tools/pull/320)|corpusを7,668問に拡充しmulti-case検出を全量検証、client不具合も修正| |[kyuridenamida](https://github.com/kyuridenamida)|
 |[#317](https://github.com/kyuridenamida/atcoder-tools/pull/317)|multi_case_layoutの公開API名を整理| |[kyuridenamida](https://github.com/kyuridenamida)|
 |[#316](https://github.com/kyuridenamida/atcoder-tools/pull/316)|Python 3.10〜3.14に対応| |[chaemon](https://github.com/chaemon)|
 |[#315](https://github.com/kyuridenamida/atcoder-tools/pull/315)|複数テストケース形式の入力に対応| |[chaemon](https://github.com/chaemon)|
