@@ -10,6 +10,7 @@ i = "i"
 j = "j"
 
 # ループ
+k = "k"
 [loop]
 header = "for {loop_var} in range({length}):"
 footer = ""
@@ -35,16 +36,19 @@ seq = ""
 2d_seq = ""
 
 # 確保
+3d_seq = ""
 [allocate]
 seq = "{name} = [{default}] * ({length})"
 2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]"
 
 # 宣言と確保
+3d_seq = "{name} = [[[{default}] * ({length_k}) for _ in range({length_j})] for _ in range({length_i})]"
 [declare_and_allocate]
 seq = "{name} = [{default}] * ({length})  # type: \"List[{type}]\""
 self.declare_and_allocate_2d_seq = "{name} = [[{default}] * ({length_j}) for _ in {length_i}]  # type: \"List[List[{type}]]\""
 
 # 入力関数
+3d_seq = "{name} = [[[{default}] * ({length_k}) for _ in range({length_j})] for _ in range({length_i})] # type: \"List[List[List[{type}]]]\""
 [input_func]
 int = "int(next(tokens))"
 float = "float(next(tokens))"
@@ -68,11 +72,13 @@ seq = "{name} = [{input_func} for _ in range({length})]"
 2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]"
 
 # 宣言と確保と入力
+3d_seq = "{name} = [[[{input_func} for _ in range({length_k})] for _ in range({length_j})] for _ in range({length_i})]"
 [declare_and_allocate_and_input]
 seq = "{name} = [{input_func} for _ in range({length})]  # type: \"List[{type}]\""
 2d_seq = "{name} = [[{input_func} for _ in range({length_j})] for _ in range({length_i})]  # type: \"List[List[{type}]]\""
 
 # 引数
+3d_seq = "{name} = [[[{input_func} for _ in range({length_k})] for _ in range({length_j})] for _ in range({length_i})] # type: \"List[List[List[{type}]]]\""
 [arg]
 int = "{name}: int"
 float = "{name}: float"
@@ -81,6 +87,8 @@ seq = "{name}: \"List[{type}]\""
 2d_seq = "{name}: \"List[List[{type}]]\""
 
 # 配列アクセス
+3d_seq = "{name}: \"List[List[List[{type}]]]\""
 [access]
 seq = "{name}[{index}]"
 2d_seq = "{name}[{index_i}][{index_j}]"
+3d_seq = "{name}[{index_i}][{index_j}][{index_k}]"

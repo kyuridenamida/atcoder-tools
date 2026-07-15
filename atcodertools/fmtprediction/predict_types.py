@@ -6,8 +6,13 @@ from atcodertools.fmtprediction.models.type import Type
 from atcodertools.client.models.sample import Sample
 from atcodertools.fmtprediction.models.variable import SimpleVariable
 from atcodertools.fmtprediction.models.index import Index
-from atcodertools.fmtprediction.models.format import Format, SingularPattern, TwoDimensionalPattern, \
-    ParallelPattern
+from atcodertools.fmtprediction.models.format import (
+    Format,
+    ParallelPattern,
+    SingularPattern,
+    ThreeDimensionalPattern,
+    TwoDimensionalPattern,
+)
 from atcodertools.fmtprediction.token_manager import TokenManager
 
 
@@ -139,16 +144,61 @@ class TypePredictor:
 
     def _fetch_generator(self):
         for pattern in self._fmt.sequence:
-            if isinstance(pattern, SingularPattern):
+            if isinstance(
+                pattern,
+                SingularPattern,
+            ):
                 yield pattern.var
-            elif isinstance(pattern, TwoDimensionalPattern):
-                for _ in range(self._loop_size(pattern.var.first_index)):
-                    for _ in range(self._loop_size(pattern.var.second_index)):
+
+            elif isinstance(
+                pattern,
+                TwoDimensionalPattern,
+            ):
+                for _ in range(
+                    self._loop_size(
+                        pattern.var.first_index
+                    )
+                ):
+                    for _ in range(
+                        self._loop_size(
+                            pattern.var.second_index
+                        )
+                    ):
                         yield pattern.var
-            elif isinstance(pattern, ParallelPattern):
-                for _ in range(self._loop_size(pattern.loop_index)):
-                    for v in pattern.vars:
-                        yield v
+
+            elif isinstance(
+                pattern,
+                ThreeDimensionalPattern,
+            ):
+                for _ in range(
+                    self._loop_size(
+                        pattern.var.first_index
+                    )
+                ):
+                    for _ in range(
+                        self._loop_size(
+                            pattern.var.second_index
+                        )
+                    ):
+                        for _ in range(
+                            self._loop_size(
+                                pattern.var.third_index
+                            )
+                        ):
+                            yield pattern.var
+
+            elif isinstance(
+                pattern,
+                ParallelPattern,
+            ):
+                for _ in range(
+                    self._loop_size(
+                        pattern.loop_index
+                    )
+                ):
+                    for var in pattern.vars:
+                        yield var
+
         yield None
         raise TooManyFetchesError()
 
@@ -162,7 +212,10 @@ def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
     return to_dict
 
 
-def predict_types(simple_format: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
+def predict_types(
+    simple_format: Format[SimpleVariable],
+    samples: List[Sample],
+) -> Dict[str, Type]:
     res_type_dict = {}
     for sample in samples:
         token_manager = TokenManager(sample.get_input().split())
@@ -175,8 +228,13 @@ def predict_types(simple_format: Format[SimpleVariable], samples: List[Sample]) 
                 res_type_dict,
                 predictor.get_typing_result())
         except (
-                TooLessFetchesError, TooManyFetchesError, KeyError, InvalidLoopSizeError,
-                InvalidLoopIndexError, EvaluateError):
+                TooLessFetchesError,
+                TooManyFetchesError,
+                KeyError,
+                InvalidLoopSizeError,
+                InvalidLoopIndexError,
+                EvaluateError,
+        ):
             raise TypePredictionFailedError
 
     return res_type_dict

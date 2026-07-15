@@ -33,13 +33,16 @@ class FormatPredictionResult:
                 var.first_index,
                 var.second_index,
                 var_to_type[var.name],
+                third_index=var.third_index,
             )
 
         typed_format = Format()
 
         for pattern in simple_format.sequence:
             typed_format.push_back(
-                pattern.with_replaced_vars(var_to_info)
+                pattern.with_replaced_vars(
+                    var_to_info
+                )
             )
 
         return typed_format

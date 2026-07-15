@@ -1,10 +1,330 @@
 import copy
+from itertools import combinations
 from typing import List, Dict
 
-from atcodertools.fmtprediction.models.calculator import CalcNode, CalcParseError
-from atcodertools.fmtprediction.models.variable_token import VariableToken, TokenizedFormat
+from atcodertools.fmtprediction.models.calculator import (
+    CalcNode,
+    CalcParseError,
+)
+from atcodertools.fmtprediction.models.variable_token import (
+    VariableToken,
+    TokenizedFormat,
+)
 
 from atcodertools.fmtprediction.token_manager import TokenManager
+
+import re
+
+
+_REF = re.compile(r'([A-Za-z]+)(_\{[^{}]*\}|_\([^()]*\)|_[A-Za-z0-9])?')
+
+_DOTS = re.compile(
+    r'[ \t]*(?:\.\.\.\.|\.\.\.|\.\.|…|‥‥|‥|．．．|・・・・|・・・|ldots|cdots|dots)[ \t]*')
+
+_SPACES = re.compile(r'[ \t]+')
+
+_LATEX_DOTS = ["\\ldots", "\\cdots", "\\dots", "\\vdots", "\\ddots"]
+
+_LATEX_SPACES = ["\\,", "\\;", "\\:", "\\!", "\\quad", "\\qquad"]
+
+
+def _normalize_separators(text: str) -> str:
+    """Canonicalize the various ways a separator can be written so that the
+    rest of the pipeline only has to deal with plain spaces (and ``…`` for
+    the sequence indicator)."""
+    for cmd in _LATEX_DOTS:
+        text = text.replace(cmd, "…")
+    for cmd in _LATEX_SPACES:
+        text = text.replace(cmd, " ")
+    # Remaining backslashes are LaTeX line breaks ("\\") / spacing ("\ ") and
+    # carry no information for parsing.
+    text = text.replace("\\", " ")
+    # Full-width space is a regular separator.
+    text = text.replace("　", " ")
+    return text
+
+
+def _strip_last_coord(name: str, idx) -> str:
+    """Drop the trailing coordinate of a variable reference's index.
+
+    c_{1,1} -> c_{1},  c_{11} -> c_{1},  s_{1} -> s,  c_{(0,1)} -> c_{0}
+    """
+    if idx is None:
+        return name
+    body = idx[1:]  # remove leading "_"
+    if ((body.startswith('{') and body.endswith('}'))
+            or (body.startswith('(') and body.endswith(')'))):
+        inner = body[1:-1]
+    else:
+        inner = body
+    if inner.startswith('(') and inner.endswith(')'):
+        inner = inner[1:-1]
+
+    if ',' in inner:
+        coords = inner.split(',')[:-1]
+        if not coords:
+            return name
+        return name + '_{' + ','.join(coords) + '}'
+    if len(inner) <= 1:
+        return name
+    return name + '_{' + inner[:-1] + '}'
+
+
+def _try_collapse_run(line: str, start: int):
+    """Try to match a collapsible run of the same variable starting at start.
+
+    A run is two or more references to the same variable name that are either
+    glued together (no separator) or separated only by dots (a sequence
+    indicator). Returns (collapsed_token, end_index) or None.
+    """
+    m = _REF.match(line, start)
+    if not m or not m.group(1):
+        return None
+    name = m.group(1)
+    first_idx = m.group(2)
+    j = m.end()
+    refs = 1
+    glued = True
+    saw_dots = False
+    while True:
+        k = j
+        sep_has_dots = False
+        sep_has_space = False
+        progressed = True
+        while progressed:
+            progressed = False
+            dm = _DOTS.match(line, k)
+            if dm:
+                sep_has_dots = True
+                k = dm.end()
+                progressed = True
+                continue
+            sm = _SPACES.match(line, k)
+            if sm:
+                sep_has_space = True
+                k = sm.end()
+                progressed = True
+        m2 = _REF.match(line, k)
+        if m2 and m2.group(0) and m2.group(1) == name:
+            if sep_has_space:
+                glued = False
+            if sep_has_dots:
+                saw_dots = True
+            refs += 1
+            j = m2.end()
+        else:
+            break
+
+    if refs >= 2 and (glued or saw_dots):
+        return _strip_last_coord(name, first_idx), j
+    return None
+
+
+_BARE_HEAD = re.compile(r'([A-Za-z])([0-9]+)')
+
+
+def _try_bare_run(line: str, start: int):
+    m = _BARE_HEAD.match(line, start)
+    if not m:
+        return None
+    letter = m.group(1)
+    j = m.end()
+    refs = 1
+    glued = True
+    saw_dots = False
+    esc = re.escape(letter)
+    tail = re.compile(r'(?:' + esc + r'[0-9]+|' + esc + r'[A-Za-z])')
+    while True:
+        k = j
+        sep_has_dots = False
+        sep_has_space = False
+        progressed = True
+        while progressed:
+            progressed = False
+            dm = _DOTS.match(line, k)
+            if dm:
+                sep_has_dots = True
+                k = dm.end()
+                progressed = True
+                continue
+            sm = _SPACES.match(line, k)
+            if sm:
+                sep_has_space = True
+                k = sm.end()
+                progressed = True
+        m2 = tail.match(line, k)
+        if m2:
+            if sep_has_space:
+                glued = False
+            if sep_has_dots:
+                saw_dots = True
+            refs += 1
+            j = m2.end()
+        else:
+            break
+    if refs >= 2 and (glued or saw_dots):
+        return letter, j
+    return None
+
+
+_BARE2D_HEAD = re.compile(
+    r'([A-Za-z])(\([^()]*\)|(?:[0-9]+|[A-Za-z])(?:,(?:[0-9]+|[A-Za-z]))+)')
+
+_BARE2D_TAIL_BODY = \
+    r'(?:\([^()]*\)|(?:[0-9]+|[A-Za-z])(?:,(?:[0-9]+|[A-Za-z]))+)'
+
+
+def _try_bare_2d_run(line: str, start: int):
+    m = _BARE2D_HEAD.match(line, start)
+    if not m:
+        return None
+    letter = m.group(1)
+    first_index = m.group(2)
+    j = m.end()
+    refs = 1
+    glued = True
+    saw_dots = False
+    tail = re.compile(re.escape(letter) + _BARE2D_TAIL_BODY)
+    while True:
+        k = j
+        sep_has_dots = False
+        sep_has_space = False
+        progressed = True
+        while progressed:
+            progressed = False
+            dm = _DOTS.match(line, k)
+            if dm:
+                sep_has_dots = True
+                k = dm.end()
+                progressed = True
+                continue
+            sm = _SPACES.match(line, k)
+            if sm:
+                sep_has_space = True
+                k = sm.end()
+                progressed = True
+        m2 = tail.match(line, k)
+        if m2:
+            if sep_has_space:
+                glued = False
+            if sep_has_dots:
+                saw_dots = True
+            refs += 1
+            j = m2.end()
+        else:
+            break
+    if refs >= 2 and (glued or saw_dots):
+        return _strip_last_coord(letter, '_' + first_index), j
+    return None
+
+
+def _collapse_line(line: str) -> str:
+    out = []
+    i = 0
+    n = len(line)
+    while i < n:
+        collapsed = (_try_collapse_run(line, i)
+                     or _try_bare_2d_run(line, i)
+                     or _try_bare_run(line, i))
+        if collapsed:
+            out.append(collapsed[0])
+            i = collapsed[1]
+        else:
+            out.append(line[i])
+            i += 1
+    return ''.join(out)
+
+
+_ABSTRACT_REF = re.compile(r'[A-Za-z]+_(?:\{([a-z])\}|([a-z]))$')
+
+
+def _abstract_row_indices(line: str):
+    tokens = line.split()
+
+    if not tokens:
+        return None
+
+    indices = []
+
+    for token in tokens:
+        match = _ABSTRACT_REF.fullmatch(
+            token
+        )
+
+        if match is None:
+            return None
+
+        index = (
+            match.group(1)
+            or match.group(2)
+        )
+
+        indices.append(index)
+
+    return indices
+
+
+def _is_abstract_row(
+    line: str,
+    header_variables,
+) -> bool:
+    """Detect a purely illustrative generic row.
+
+    Rows such as ``S_{i}`` are omitted when ``i`` is merely a
+    generic loop index.  A lowercase index declared in the first
+    input-format row, such as ``m`` in ``c_m p_m`` or ``r`` in
+    ``C_r``, is an actual endpoint and must be preserved.
+    """
+    indices = _abstract_row_indices(
+        line
+    )
+
+    if indices is None:
+        return False
+
+    return all(
+        index not in header_variables
+        for index in indices
+    )
+
+
+def collapse_string_runs(
+    input_format: str,
+) -> str:
+    """Collapse character runs while retaining declared endpoints."""
+    input_format = _normalize_separators(
+        input_format
+    )
+
+    source_lines = input_format.split(
+        "\n"
+    )
+
+    header_variables = set()
+
+    if source_lines:
+        header_variables = set(
+            re.findall(
+                r"[A-Za-z][A-Za-z0-9_]*",
+                source_lines[0],
+            )
+        )
+
+    lines = [
+        _collapse_line(line)
+        for line in source_lines
+    ]
+
+    lines = [
+        line
+        for line in lines
+        if not _is_abstract_row(
+            line,
+            header_variables,
+        )
+    ]
+
+    return "\n".join(lines)
 
 
 def _is_ascii(s):
@@ -66,8 +386,26 @@ def _remove_spaces_in_curly_brackets(input_format):
 
 
 def _sanitized_tokens(input_format: str) -> List[str]:
-    input_format = input_format.replace("\n", " ").replace("…", " ").replace("...", " ").replace(
-        "..", " ").replace("\\ ", " ").replace("}", "} ").replace("　", " ").replace(", ", ",")
+    input_format = re.sub(
+        r"(?<=[A-Za-z])'(?=\s|$)",
+        "prime",
+        input_format,
+    )
+    input_format = (
+        input_format
+        .replace("‥‥", "...")
+        .replace("‥", "...")
+    )
+    input_format = (
+        input_format.replace("\n", " ")
+        .replace("…", " ")
+        .replace("...", " ")
+        .replace("..", " ")
+        .replace("\\ ", " ")
+        .replace("}", "} ")
+        .replace("　", " ")
+        .replace(", ", ",")
+    )
     input_format = _remove_spaces_in_curly_brackets(input_format)
     input_format = _divide_consecutive_vars(input_format)
     input_format = _normalize_index(input_format)
@@ -102,7 +440,10 @@ class FormatSearcher:
             self._answers.append(TokenizedFormat(copy.deepcopy(var_token_seq)))
             return
 
-        for var_token in self._possible_var_tokens(self._token_manager.peek(), var_to_dim_num):
+        for var_token in self._possible_var_tokens(
+            self._token_manager.peek(),
+            var_to_dim_num,
+        ):
             next_var_to_dim_num = copy.deepcopy(var_to_dim_num)
             next_var_to_dim_num[var_token.var_name] = var_token.dim_num()
             try:
@@ -114,48 +455,143 @@ class FormatSearcher:
                 var_token_seq.pop()
 
     @staticmethod
-    def _possible_var_tokens(token: str, current_var_to_dim_num: Dict[str, int]) -> List[VariableToken]:
+    def _possible_var_tokens(
+        token: str,
+        current_var_to_dim_num: Dict[str, int],
+    ) -> List[VariableToken]:
         """
-        Only considers to divide the given token into at most 3 pieces (that is, to assume at most 2 dimensional indexes).
-        :param token: e.g. "N", "abc_1_2" or "a_1 ... a_N"
-        :param current_var_to_dim_num: utilized to detect unknown variables (for pruning purpose)
-        """
-        var_token_candidates = [VariableToken(token, None, None)]
-        var_token_candidates += [VariableToken(
-            token[:i],
-            token[i:],
-            None) for i in range(1, len(token))]
-        for i in range(1, len(token)):
-            for j in range(i + 1, len(token)):
-                var_token_candidates += [
-                    VariableToken(token[:i], token[i:j], token[j:])]
+        Divide a token into a variable name and up to
+        three index expressions.
 
-        def check_if_possible(var_token: VariableToken):
-            # check syntax error
+        Examples include ``N``, ``a_1``,
+        ``a_1,2`` and ``a_1,2,3``.
+        """
+        candidates = [
+            VariableToken(
+                token,
+                None,
+                None,
+                None,
+            )
+        ]
+
+        for first_split in range(
+            1,
+            len(token),
+        ):
+            candidates.append(
+                VariableToken(
+                    token[:first_split],
+                    token[first_split:],
+                    None,
+                    None,
+                )
+            )
+
+        for first_split in range(
+            1,
+            len(token),
+        ):
+            for second_split in range(
+                first_split + 1,
+                len(token),
+            ):
+                candidates.append(
+                    VariableToken(
+                        token[:first_split],
+                        token[
+                            first_split:second_split
+                        ],
+                        token[second_split:],
+                        None,
+                    )
+                )
+
+        three_dimensional_splits = sorted(
+            {
+                boundary
+                for position, character in enumerate(
+                    token
+                )
+                if character in ("_", ",")
+                for boundary in (
+                    position,
+                    position + 1,
+                )
+                if 0 < boundary < len(token)
+            }
+        )
+
+        for (
+            first_split,
+            second_split,
+            third_split,
+        ) in combinations(
+            three_dimensional_splits,
+            3,
+        ):
+            candidates.append(
+                VariableToken(
+                    token[:first_split],
+                    token[
+                        first_split:second_split
+                    ],
+                    token[
+                        second_split:third_split
+                    ],
+                    token[third_split:],
+                )
+            )
+
+        def check_if_possible(var_token):
             if not var_token.is_valid():
                 return False
 
-            # check kind of synonym error using current_var_to_dim_num
-            for index in [var_token.first_index, var_token.second_index]:
+            for index in (
+                var_token.first_index,
+                var_token.second_index,
+                var_token.third_index,
+            ):
                 if index is None:
                     continue
 
                 try:
-                    for sub_var in CalcNode.parse(index).get_all_variables():
-                        if sub_var not in current_var_to_dim_num:
-                            return False
+                    variables = (
+                        CalcNode.parse(index)
+                        .get_all_variables()
+                    )
                 except CalcParseError:
                     return False
 
-            if var_token.var_name in current_var_to_dim_num \
-                    and current_var_to_dim_num[var_token.var_name] != var_token.dim_num():
+                for sub_var in variables:
+                    if (
+                        sub_var
+                        not in current_var_to_dim_num
+                    ):
+                        return False
+
+            if (
+                var_token.var_name
+                in current_var_to_dim_num
+                and current_var_to_dim_num[
+                    var_token.var_name
+                ]
+                != var_token.dim_num()
+            ):
                 return False
+
             return True
 
-        return [var_token for var_token in var_token_candidates if check_if_possible(var_token)]
+        return [
+            candidate
+            for candidate in candidates
+            if check_if_possible(candidate)
+        ]
 
 
-def search_formats_with_minimum_vars(input_format: str) -> List[TokenizedFormat]:
+def search_formats_with_minimum_vars(
+    input_format: str,
+) -> List[TokenizedFormat]:
     """
     Fast enough for realistic instances.
     This method returns possible formats with the smallest number of variables.

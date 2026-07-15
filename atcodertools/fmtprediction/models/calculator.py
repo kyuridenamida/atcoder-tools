@@ -43,6 +43,13 @@ def div(a, b):
         raise EvaluateError(e)
 
 
+def power(a, b):
+    try:
+        return a ** b
+    except TypeError as e:
+        raise EvaluateError(e)
+
+
 def _operator_to_string(operator):
     if operator == add:
         return "+"
@@ -52,6 +59,8 @@ def _operator_to_string(operator):
         return "*"
     elif operator == div:
         return "/"
+    elif operator == power:
+        return "^"
     else:
         raise UnknownOperatorError
 
@@ -187,13 +196,26 @@ def _expr(formula, pos):
 
 
 def _term(formula, pos):
-    res, pos = _factor(formula, pos)
+    res, pos = _power(formula, pos)
     while formula[pos] == '*' or formula[pos] == '/':
         tmp = CalcNode()
         tmp.operator = mul if formula[pos] == '*' else div
         pos += 1
         tmp.lch = res
-        tmp.rch, pos = _factor(formula, pos)
+        tmp.rch, pos = _power(formula, pos)
+        res = tmp
+    return res, pos
+
+
+def _power(formula, pos):
+    res, pos = _factor(formula, pos)
+    if formula[pos] == '^':
+        tmp = CalcNode()
+        tmp.operator = power
+        pos += 1
+        tmp.lch = res
+        # exponentiation is right-associative (e.g. 2^N)
+        tmp.rch, pos = _power(formula, pos)
         res = tmp
     return res, pos
 
