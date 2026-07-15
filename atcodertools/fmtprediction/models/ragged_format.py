@@ -1,6 +1,9 @@
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Dict, Tuple
 
+from atcodertools.fmtprediction.models.format import (
+    Format,
+)
 from atcodertools.fmtprediction.models.type import (
     Type,
 )
@@ -49,10 +52,7 @@ class RaggedRowPattern:
                 "invalid ragged length field position"
             )
 
-        if (
-            self.length_field.type.value
-            != "int"
-        ):
+        if self.length_field.type.value != "int":
             raise ValueError(
                 "ragged length field must be int"
             )
@@ -108,3 +108,97 @@ class RaggedRowPattern:
             self.length_field_position,
             self.values_field.name,
         )
+
+
+@dataclass(frozen=True)
+class RaggedFieldVariable:
+    name: str
+    type: Type
+    dimension: int
+
+    first_index = None
+    second_index = None
+    third_index = None
+
+    def dim_num(self):
+        return self.dimension
+
+
+class RaggedRowFormat(Format):
+    def __init__(
+        self,
+        prefix_format,
+        ragged_pattern,
+    ):
+        super().__init__()
+
+        self.prefix_format = prefix_format
+        self.ragged_pattern = ragged_pattern
+        self.sequence = list(
+            prefix_format.sequence
+        )
+
+        self.ragged_variables = tuple(
+            [
+                RaggedFieldVariable(
+                    field.name,
+                    field.type,
+                    1,
+                )
+                for field
+                in ragged_pattern.prefix_fields
+            ]
+            + [
+                RaggedFieldVariable(
+                    ragged_pattern.values_field.name,
+                    ragged_pattern.values_field.type,
+                    2,
+                )
+            ]
+        )
+
+    def all_vars(self):
+        return (
+            self.prefix_format.all_vars()
+            + list(self.ragged_variables)
+        )
+
+    def __str__(self):
+        return (
+            "[RaggedRowFormat: prefix={}, rows={}]"
+        ).format(
+            self.prefix_format,
+            self.ragged_pattern,
+        )
+
+
+def create_typed_ragged_row_pattern(
+    schema,
+    var_to_type: Dict[str, Type],
+) -> RaggedRowPattern:
+    prefix_fields = tuple(
+        TypedRaggedField(
+            name=name,
+            type=var_to_type[name],
+        )
+        for name in schema.prefix_fields
+    )
+
+    values_field = TypedRaggedField(
+        name=schema.values_name,
+        type=var_to_type[
+            schema.values_name
+        ],
+    )
+
+    return RaggedRowPattern(
+        row_count_var=schema.row_count_var,
+        prefix_fields=prefix_fields,
+        length_field_position=(
+            schema.length_field_position
+        ),
+        values_field=values_field,
+        value_start_index=(
+            schema.value_start_index
+        ),
+    )

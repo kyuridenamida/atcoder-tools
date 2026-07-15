@@ -3,6 +3,12 @@ from typing import Dict, Any, Optional
 import re
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
+from atcodertools.codegen.ragged_row_contract import (
+    RaggedCodegenContract,
+)
+from atcodertools.fmtprediction.models.ragged_format import (
+    RaggedRowFormat,
+)
 from atcodertools.fmtprediction.models.format import (
     Format,
     ParallelPattern,
@@ -45,8 +51,16 @@ class UniversalCodeGenerator():
         self._solve_format = format_
         self._case_count_var = None
         self._case_loop_var = None
+        self._ragged_format = None
 
-        if isinstance(format_, RepeatedCaseFormat):
+        if isinstance(format_, RaggedRowFormat):
+            self._ragged_format = format_
+            self._prefix_format = (
+                format_.prefix_format
+            )
+            self._solve_format = format_
+
+        elif isinstance(format_, RepeatedCaseFormat):
             self._prefix_format = format_.prefix_format
             self._solve_format = format_.case_format
             self._case_count_var = format_.case_count_var
@@ -107,6 +121,9 @@ class UniversalCodeGenerator():
     def generate_parameters(self) -> Dict[str, Any]:
         if self._format is None:
             return dict(prediction_success=False)
+
+        if self._ragged_format is not None:
+            return self._generate_ragged_parameters()
 
         input_part = self._input_part(
             global_mode=False
@@ -673,6 +690,569 @@ class UniversalCodeGenerator():
             raise NotImplementedError
 
         return lines
+
+    def _ragged_field_keywords(
+        self,
+        field,
+        *,
+        name=None,
+        length=None,
+    ):
+        result = {
+            "name": name or field.name,
+            "type": self._convert_type(
+                field.type
+            ),
+            "default": self._default_val(
+                field.type
+            ),
+        }
+
+        if length is not None:
+            result["length"] = length
+
+        if "input_func" in self.info:
+            result["input_func"] = (
+                self._get_input_func(
+                    field.type
+                )
+            )
+
+        return result
+
+    def _ragged_contract_values(
+        self,
+        field,
+        *,
+        length_j,
+    ):
+        pattern = (
+            self._ragged_format
+            .ragged_pattern
+        )
+
+        return {
+            "name": field.name,
+            "type_": self._convert_type(
+                field.type
+            ),
+            "default": self._default_val(
+                field.type
+            ),
+            "length_i": (
+                pattern.row_count_var
+            ),
+            "length_j": length_j,
+            "index_i": (
+                self.info["index"]["i"]
+            ),
+            "index_j": (
+                self.info["index"]["j"]
+            ),
+        }
+
+    def _ragged_seq_access(
+        self,
+        field,
+    ):
+        return self.info["access"]["seq"].format(
+            name=field.name,
+            index=self.info["index"]["i"],
+        )
+
+    def _ragged_input_for_field(
+        self,
+        field,
+        name,
+    ):
+        keywords = (
+            self._ragged_field_keywords(
+                field,
+                name=name,
+            )
+        )
+
+        return self.info["input"][
+            field.type.value
+        ].format(**keywords)
+
+    def _ragged_prefix_formal_arg(
+        self,
+        field,
+    ):
+        keywords = (
+            self._ragged_field_keywords(
+                field,
+                length=(
+                    self._ragged_format
+                    .ragged_pattern
+                    .row_count_var
+                ),
+            )
+        )
+
+        return self.info["arg"]["seq"].format(
+            **keywords
+        )
+
+    def _ragged_prefix_actual_arg(
+        self,
+        field,
+    ):
+        if (
+            "actual_arg" in self.info
+            and "seq" in self.info[
+                "actual_arg"
+            ]
+        ):
+            return self.info[
+                "actual_arg"
+            ]["seq"].format(
+                name=field.name
+            )
+
+        return field.name
+
+    def _ragged_prefix_declaration(
+        self,
+        field,
+        *,
+        global_mode,
+    ):
+        keywords = (
+            self._ragged_field_keywords(
+                field,
+                length=(
+                    self._ragged_format
+                    .ragged_pattern
+                    .row_count_var
+                ),
+            )
+        )
+
+        if global_mode:
+            declaration = self.info[
+                "declare"
+            ]["seq"].format(
+                **keywords
+            )
+
+            if not declaration:
+                return ""
+
+            return (
+                self.info["global_prefix"]
+                + declaration
+            )
+
+        return self.info[
+            "declare_and_allocate"
+        ]["seq"].format(
+            **keywords
+        )
+
+    def _ragged_prefix_allocation(
+        self,
+        field,
+    ):
+        keywords = (
+            self._ragged_field_keywords(
+                field,
+                length=(
+                    self._ragged_format
+                    .ragged_pattern
+                    .row_count_var
+                ),
+            )
+        )
+
+        return self.info["allocate"][
+            "seq"
+        ].format(**keywords)
+
+    def _render_input_lines(
+        self,
+        lines,
+    ):
+        result = ""
+        prefix = self._indent(
+            self.info["base_indent"]
+        )
+        start = True
+
+        for line in lines:
+            if not line:
+                continue
+
+            if not start:
+                result += "\n"
+
+            result += prefix + line
+            start = False
+
+        return result
+
+    def _ragged_row_input_part(
+        self,
+        *,
+        global_mode,
+    ):
+        pattern = (
+            self._ragged_format
+            .ragged_pattern
+        )
+
+        contract = (
+            RaggedCodegenContract
+            .from_mapping(self.info)
+        )
+
+        lines = []
+
+        for field in pattern.prefix_fields:
+            if global_mode:
+                self._append(
+                    lines,
+                    self._ragged_prefix_allocation(
+                        field
+                    ),
+                )
+            else:
+                self._append(
+                    lines,
+                    (
+                        self
+                        ._ragged_prefix_declaration(
+                            field,
+                            global_mode=False,
+                        )
+                    ),
+                )
+
+        values_kwargs = (
+            self._ragged_contract_values(
+                pattern.values_field,
+                length_j="0",
+            )
+        )
+
+        if global_mode:
+            self._append(
+                lines,
+                contract.render_allocate_outer(
+                    **values_kwargs
+                ),
+            )
+        else:
+            self._append(
+                lines,
+                (
+                    contract
+                    .render_declare_and_allocate_outer(
+                        **values_kwargs
+                    )
+                ),
+            )
+
+        outer_index = self.info["index"]["i"]
+        inner_index = self.info["index"]["j"]
+
+        self._append(
+            lines,
+            self.info["loop"]["header"].format(
+                loop_var=outer_index,
+                length=pattern.row_count_var,
+            ),
+        )
+
+        for field in pattern.prefix_fields:
+            self._append(
+                lines,
+                self._ragged_input_for_field(
+                    field,
+                    self._ragged_seq_access(
+                        field
+                    ),
+                ),
+                1,
+            )
+
+        length_access = (
+            self._ragged_seq_access(
+                pattern.length_field
+            )
+        )
+
+        values_kwargs = (
+            self._ragged_contract_values(
+                pattern.values_field,
+                length_j=length_access,
+            )
+        )
+
+        self._append(
+            lines,
+            contract.render_allocate_inner(
+                **values_kwargs
+            ),
+            1,
+        )
+
+        self._append(
+            lines,
+            self.info["loop"]["header"].format(
+                loop_var=inner_index,
+                length=length_access,
+            ),
+            1,
+        )
+
+        value_access = (
+            contract.render_access(
+                **values_kwargs
+            )
+        )
+
+        self._append(
+            lines,
+            self._ragged_input_for_field(
+                pattern.values_field,
+                value_access,
+            ),
+            2,
+        )
+
+        self._append(
+            lines,
+            self.info["loop"]["footer"].format(
+                loop_var=inner_index
+            ),
+            1,
+        )
+
+        self._append(
+            lines,
+            self.info["loop"]["footer"].format(
+                loop_var=outer_index
+            ),
+        )
+
+        prefix_input = self._get_input_part(
+            global_mode=global_mode,
+            format_=(
+                self._ragged_format
+                .prefix_format
+            ),
+            include_prefix=True,
+        )
+
+        ragged_input = (
+            self._render_input_lines(lines)
+        )
+
+        return "\n".join(
+            part
+            for part in (
+                prefix_input,
+                ragged_input,
+            )
+            if part
+        )
+
+    def _ragged_formal_arguments(self):
+        pattern = (
+            self._ragged_format
+            .ragged_pattern
+        )
+
+        arguments = [
+            self._get_argument(variable)
+            for variable in (
+                self._ragged_format
+                .prefix_format
+                .all_vars()
+            )
+        ]
+
+        arguments.extend(
+            self._ragged_prefix_formal_arg(
+                field
+            )
+            for field
+            in pattern.prefix_fields
+        )
+
+        contract = (
+            RaggedCodegenContract
+            .from_mapping(self.info)
+        )
+
+        arguments.append(
+            contract.render_formal_arg(
+                **self._ragged_contract_values(
+                    pattern.values_field,
+                    length_j="0",
+                )
+            )
+        )
+
+        return ", ".join(arguments)
+
+    def _ragged_actual_arguments(self):
+        pattern = (
+            self._ragged_format
+            .ragged_pattern
+        )
+
+        arguments = []
+
+        for variable in (
+            self._ragged_format
+            .prefix_format
+            .all_vars()
+        ):
+            if variable.dim_num() == 0:
+                arguments.append(
+                    variable.name
+                )
+            else:
+                kind = (
+                    self._get_variable_kind(
+                        variable
+                    )
+                )
+
+                if (
+                    "actual_arg" in self.info
+                    and kind in self.info[
+                        "actual_arg"
+                    ]
+                ):
+                    arguments.append(
+                        self.info[
+                            "actual_arg"
+                        ][kind].format(
+                            name=variable.name
+                        )
+                    )
+                else:
+                    arguments.append(
+                        variable.name
+                    )
+
+        arguments.extend(
+            self._ragged_prefix_actual_arg(
+                field
+            )
+            for field
+            in pattern.prefix_fields
+        )
+
+        contract = (
+            RaggedCodegenContract
+            .from_mapping(self.info)
+        )
+
+        arguments.append(
+            contract.render_actual_arg(
+                **self._ragged_contract_values(
+                    pattern.values_field,
+                    length_j="0",
+                )
+            )
+        )
+
+        return ", ".join(arguments)
+
+    def _ragged_global_declaration(self):
+        lines = []
+
+        for pattern in (
+            self._ragged_format
+            .prefix_format
+            .sequence
+        ):
+            for variable in pattern.all_vars():
+                self._append(
+                    lines,
+                    (
+                        self.info["global_prefix"]
+                        + self._generate_declaration(
+                            variable
+                        )
+                    ),
+                )
+
+        ragged_pattern = (
+            self._ragged_format
+            .ragged_pattern
+        )
+
+        for field in (
+            ragged_pattern.prefix_fields
+        ):
+            self._append(
+                lines,
+                self._ragged_prefix_declaration(
+                    field,
+                    global_mode=True,
+                ),
+            )
+
+        contract = (
+            RaggedCodegenContract
+            .from_mapping(self.info)
+        )
+
+        declaration = contract.render_declare(
+            **self._ragged_contract_values(
+                ragged_pattern.values_field,
+                length_j="0",
+            )
+        )
+
+        if declaration:
+            self._append(
+                lines,
+                (
+                    self.info["global_prefix"]
+                    + declaration
+                ),
+            )
+
+        return "\n".join(lines)
+
+    def _generate_ragged_parameters(self):
+        local_input = (
+            self._ragged_row_input_part(
+                global_mode=False
+            )
+        )
+
+        return dict(
+            formal_arguments=(
+                self._ragged_formal_arguments()
+            ),
+            actual_arguments=(
+                self._ragged_actual_arguments()
+            ),
+            input_part=local_input,
+            prefix_input_part=local_input,
+            case_input_part="",
+            global_declaration=(
+                self._ragged_global_declaration()
+            ),
+            global_input_part=(
+                self._ragged_row_input_part(
+                    global_mode=True
+                )
+            ),
+            multi_case=False,
+            case_count_var=None,
+            case_loop_var=None,
+            ragged_row=True,
+            prediction_success=True,
+        )
 
     def _indent(self, depth):
         return self._config.indent(depth)
