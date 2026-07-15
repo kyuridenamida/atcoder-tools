@@ -198,6 +198,41 @@ class TestMultiCaseFormatPrediction(unittest.TestCase):
         self.assertEqual("T", result.case_count_var)
         self.assertEqual(Type.str, result.var_to_type["S"])
 
+    def test_wrapper_shorthand_without_case_two(self):
+        # ARC224 A のように \vdots による省略で case_2 が
+        # 書かれない wrapper も受理する。
+        content = ProblemContent(
+            input_format_text=(
+                "T\n"
+                "\\mathrm{case}_1\n"
+                "\\vdots\n"
+                "\\mathrm{case}_T\n"
+            ),
+            input_format_blocks=[
+                (
+                    "T\n"
+                    "\\mathrm{case}_1\n"
+                    "\\vdots\n"
+                    "\\mathrm{case}_T\n"
+                ),
+                "K\n",
+            ],
+            samples=[
+                Sample(
+                    "2\n3\n7\n",
+                    "",
+                )
+            ],
+        )
+
+        result = predict_multi_case_format(
+            content
+        )
+
+        self.assertEqual("wrapper", result.layout)
+        self.assertEqual("T", result.case_count_var)
+        self.assertEqual(Type.int, result.var_to_type["K"])
+
     def test_single_block_indexed_layout(self):
         content = ProblemContent(
             input_format_text=(

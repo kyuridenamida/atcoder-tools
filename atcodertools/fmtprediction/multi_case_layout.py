@@ -94,11 +94,18 @@ def _extract_wrapper_prefix(
         ...
         test_T
 
+    A shorthand variant that omits test_2 is also accepted:
+
+        T
+        case_1
+        ...
+        case_T
+
     The actual per-case format must be supplied by a second block.
     """
     lines = _nonempty_lines(text)
 
-    if len(lines) < 5:
+    if len(lines) < 4:
         return None
 
     count_var = _simple_variable_name(
@@ -141,9 +148,9 @@ def _extract_wrapper_prefix(
     if not saw_ellipsis:
         return None
 
+    # case_2 は \vdots による省略で書かれないことがあるため要求しない。
     required_indices = {
         "1",
-        "2",
         count_var,
     }
 
