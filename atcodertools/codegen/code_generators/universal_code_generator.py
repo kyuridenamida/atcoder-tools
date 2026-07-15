@@ -1105,11 +1105,35 @@ class UniversalCodeGenerator():
             self._render_input_lines(lines)
         )
 
+        suffix_input = self._get_input_part(
+            global_mode=global_mode,
+            format_=(
+                self._ragged_format
+                .suffix_format
+            ),
+            include_prefix=False,
+        )
+
+        # _get_input_part() returns a template
+        # fragment whose first line is intentionally
+        # unindented. Here the suffix is appended
+        # after prefix and ragged fragments, so its
+        # first line is a continuation line and needs
+        # the normal base indentation.
+        if suffix_input:
+            suffix_input = (
+                self._indent(
+                    self.info["base_indent"]
+                )
+                + suffix_input
+            )
+
         return "\n".join(
             part
             for part in (
                 prefix_input,
                 ragged_input,
+                suffix_input,
             )
             if part
         )
@@ -1148,6 +1172,15 @@ class UniversalCodeGenerator():
                     pattern.values_field,
                     length_j="0",
                 )
+            )
+        )
+
+        arguments.extend(
+            self._get_argument(variable)
+            for variable in (
+                self._ragged_format
+                .suffix_format
+                .all_vars()
             )
         )
 
@@ -1217,6 +1250,39 @@ class UniversalCodeGenerator():
             )
         )
 
+        for variable in (
+            self._ragged_format
+            .suffix_format
+            .all_vars()
+        ):
+            if variable.dim_num() == 0:
+                arguments.append(
+                    variable.name
+                )
+                continue
+
+            kind = self._get_variable_kind(
+                variable
+            )
+
+            if (
+                "actual_arg" in self.info
+                and kind in self.info[
+                    "actual_arg"
+                ]
+            ):
+                arguments.append(
+                    self.info[
+                        "actual_arg"
+                    ][kind].format(
+                        name=variable.name
+                    )
+                )
+            else:
+                arguments.append(
+                    variable.name
+                )
+
         return ", ".join(arguments)
 
     def _ragged_global_declaration(self):
@@ -1274,6 +1340,24 @@ class UniversalCodeGenerator():
                     + declaration
                 ),
             )
+
+        for suffix_pattern in (
+            self._ragged_format
+            .suffix_format
+            .sequence
+        ):
+            for variable in (
+                suffix_pattern.all_vars()
+            ):
+                self._append(
+                    lines,
+                    (
+                        self.info["global_prefix"]
+                        + self._generate_declaration(
+                            variable
+                        )
+                    ),
+                )
 
         return "\n".join(lines)
 

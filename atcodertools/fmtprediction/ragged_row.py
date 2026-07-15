@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import re
 from typing import Dict, List, Tuple
 
@@ -75,6 +75,7 @@ class SameLineRaggedRowPrediction:
     schema: SameLineRaggedRowSchema
     var_to_type: Dict[str, Type]
     sample_row_counts: Tuple[int, ...]
+    suffix_format: Format = field(default_factory=Format)
 
     def __str__(self):
         return (
@@ -684,6 +685,228 @@ def _validate_prediction(
     )
 
 
+def _format_from_sequence(
+    sequence,
+) -> Format:
+    result = Format()
+    result.sequence = list(sequence)
+    return result
+
+
+def _pattern_signatures(
+    format_: Format,
+):
+    return tuple(
+        str(pattern)
+        for pattern in format_.sequence
+    )
+
+
+def _predict_suffix_format(
+    prefix_format,
+    schema,
+    samples,
+    main_lines,
+):
+    prefix_text = "\n".join(
+        line.raw_text
+        for line in main_lines[
+            :schema.first_format_line - 1
+        ]
+    )
+
+    suffix_text = "\n".join(
+        line.raw_text
+        for line in main_lines[
+            max(
+                schema.evidence_line_numbers
+            ):
+        ]
+    )
+
+    non_ragged_text = "\n".join(
+        part
+        for part in (
+            prefix_text,
+            suffix_text,
+        )
+        if part.strip()
+    )
+
+    prefix_signatures = (
+        _pattern_signatures(
+            prefix_format
+        )
+    )
+
+    prefix_count = len(
+        prefix_signatures
+    )
+
+    valid_candidates = []
+    seen = set()
+
+    for candidate in (
+        _simple_format_candidates(
+            non_ragged_text
+        )
+    ):
+        candidate_signatures = (
+            _pattern_signatures(
+                candidate
+            )
+        )
+
+        if (
+            candidate_signatures[
+                :prefix_count
+            ]
+            != prefix_signatures
+        ):
+            continue
+
+        merged_types = {}
+        valid = True
+
+        for sample in samples:
+            lines = _sample_lines(sample)
+
+            flattened_tokens = [
+                token
+                for line in lines
+                for token in line
+            ]
+
+            try:
+                prefix_manager = TokenManager(
+                    flattened_tokens
+                )
+
+                prefix_predictor = (
+                    TypePredictor(
+                        prefix_format
+                    )
+                )
+
+                prefix_predictor.consume(
+                    prefix_manager
+                )
+
+                row_count = (
+                    prefix_predictor
+                    .get_actual_value(
+                        schema.row_count_var
+                    )
+                )
+
+                if (
+                    type(row_count) is not int
+                    or row_count <= 0
+                ):
+                    raise (
+                        NoRaggedRowPredictionError
+                    )
+
+                boundary = (
+                    _line_boundary_for_token_count(
+                        lines,
+                        prefix_manager._pos,
+                    )
+                )
+
+                if boundary is None:
+                    raise (
+                        NoRaggedRowPredictionError
+                    )
+
+                if (
+                    boundary + row_count
+                    > len(lines)
+                ):
+                    raise (
+                        NoRaggedRowPredictionError
+                    )
+
+                non_ragged_lines = (
+                    lines[:boundary]
+                    + lines[
+                        boundary + row_count:
+                    ]
+                )
+
+                non_ragged_tokens = [
+                    token
+                    for line in non_ragged_lines
+                    for token in line
+                ]
+
+                manager = TokenManager(
+                    non_ragged_tokens
+                )
+
+                predictor = TypePredictor(
+                    candidate
+                )
+
+                predictor.consume(manager)
+
+                if (
+                    manager._pos
+                    != len(non_ragged_tokens)
+                ):
+                    raise (
+                        NoRaggedRowPredictionError
+                    )
+
+                merged_types = merge_type_dicts(
+                    merged_types,
+                    predictor.get_typing_result(),
+                )
+
+            except (
+                AssertionError,
+                EvaluateError,
+                InvalidLoopIndexError,
+                InvalidLoopSizeError,
+                KeyError,
+                NoRaggedRowPredictionError,
+                StopIteration,
+                TooLessFetchesError,
+                TooManyFetchesError,
+                ValueError,
+            ):
+                valid = False
+                break
+
+        if not valid:
+            continue
+
+        suffix_format = _format_from_sequence(
+            candidate.sequence[
+                prefix_count:
+            ]
+        )
+
+        signature = str(suffix_format)
+
+        if signature in seen:
+            continue
+
+        seen.add(signature)
+
+        valid_candidates.append(
+            (
+                suffix_format,
+                merged_types,
+            )
+        )
+
+    if len(valid_candidates) != 1:
+        raise NoRaggedRowPredictionError
+
+    return valid_candidates[0]
+
+
 def predict_same_line_ragged_rows(
     content: ProblemContent,
 ) -> SameLineRaggedRowPrediction:
@@ -760,9 +983,40 @@ def predict_same_line_ragged_rows(
             ):
                 continue
 
+            try:
+                (
+                    suffix_format,
+                    suffix_var_to_type,
+                ) = _predict_suffix_format(
+                    prefix_format,
+                    schema,
+                    samples,
+                    main_lines,
+                )
+
+                var_to_type = merge_type_dicts(
+                    var_to_type,
+                    suffix_var_to_type,
+                )
+
+            except (
+                AssertionError,
+                EvaluateError,
+                InvalidLoopIndexError,
+                InvalidLoopSizeError,
+                KeyError,
+                NoRaggedRowPredictionError,
+                StopIteration,
+                TooLessFetchesError,
+                TooManyFetchesError,
+                ValueError,
+            ):
+                continue
+
             signature = (
                 str(prefix_format),
                 str(schema),
+                str(suffix_format),
             )
 
             if signature in seen:
@@ -773,6 +1027,7 @@ def predict_same_line_ragged_rows(
             predictions.append(
                 SameLineRaggedRowPrediction(
                     prefix_format=prefix_format,
+                    suffix_format=suffix_format,
                     schema=schema,
                     var_to_type=var_to_type,
                     sample_row_counts=(

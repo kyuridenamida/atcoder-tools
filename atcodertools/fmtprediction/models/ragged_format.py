@@ -129,13 +129,20 @@ class RaggedRowFormat(Format):
         self,
         prefix_format,
         ragged_pattern,
+        suffix_format=None,
     ):
         super().__init__()
 
+        if suffix_format is None:
+            suffix_format = Format()
+
         self.prefix_format = prefix_format
         self.ragged_pattern = ragged_pattern
-        self.sequence = list(
-            prefix_format.sequence
+        self.suffix_format = suffix_format
+
+        self.sequence = (
+            list(prefix_format.sequence)
+            + list(suffix_format.sequence)
         )
 
         self.ragged_variables = tuple(
@@ -161,14 +168,17 @@ class RaggedRowFormat(Format):
         return (
             self.prefix_format.all_vars()
             + list(self.ragged_variables)
+            + self.suffix_format.all_vars()
         )
 
     def __str__(self):
         return (
-            "[RaggedRowFormat: prefix={}, rows={}]"
+            "[RaggedRowFormat: prefix={}, "
+            "rows={}, suffix={}]"
         ).format(
             self.prefix_format,
             self.ragged_pattern,
+            self.suffix_format,
         )
 
 

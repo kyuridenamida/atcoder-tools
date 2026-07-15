@@ -72,9 +72,18 @@ class FormatPredictionResult:
         prefix_format,
         schema,
         var_to_type,
+        suffix_format=None,
     ):
         typed_prefix = cls._create_typed_format(
             prefix_format,
+            var_to_type,
+        )
+
+        if suffix_format is None:
+            suffix_format = Format()
+
+        typed_suffix = cls._create_typed_format(
+            suffix_format,
             var_to_type,
         )
 
@@ -89,6 +98,7 @@ class FormatPredictionResult:
             RaggedRowFormat(
                 typed_prefix,
                 ragged_pattern,
+                typed_suffix,
             )
         )
 
