@@ -27,6 +27,8 @@ _REQUIRED_KEYS = (
     "declare_and_allocate_outer",
     "allocate_inner",
     "access",
+    "formal_arg",
+    "actual_arg",
 )
 
 
@@ -38,6 +40,8 @@ class RaggedCodegenContract:
     declare_and_allocate_outer_template: str
     allocate_inner_template: str
     access_template: str
+    formal_arg_template: str
+    actual_arg_template: str
 
     @classmethod
     def from_mapping(
@@ -89,6 +93,12 @@ class RaggedCodegenContract:
             ),
             access_template=str(
                 ragged["access"]
+            ),
+            formal_arg_template=str(
+                ragged["formal_arg"]
+            ),
+            actual_arg_template=str(
+                ragged["actual_arg"]
             ),
         )
 
@@ -190,6 +200,24 @@ class RaggedCodegenContract:
     ) -> str:
         return self._render(
             self.allocate_inner_template,
+            self._values(**kwargs),
+        )
+
+    def render_formal_arg(
+        self,
+        **kwargs,
+    ) -> str:
+        return self._render(
+            self.formal_arg_template,
+            self._values(**kwargs),
+        )
+
+    def render_actual_arg(
+        self,
+        **kwargs,
+    ) -> str:
+        return self._render(
+            self.actual_arg_template,
             self._values(**kwargs),
         )
 
