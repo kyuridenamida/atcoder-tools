@@ -46,7 +46,11 @@ interface Release {
 // Utils
 
 const githubFetch = async <T>(url: string): Promise<T> => {
-    const response = await fetch(url, {headers: {Authorization: "Basic a3l1cmlkZW5hbWlkYTpCYW5uYmFzMTI="}})
+    const headers: { [name: string]: string } = {};
+    if (process.env.GITHUB_TOKEN) {
+        headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+    }
+    const response = await fetch(url, {headers})
         .then(response => response.json() as unknown as GithubResponse<T>) ;
     if (response.message !== undefined) {
         throw Error(`${response.message} ${response.documentation_url}`);
