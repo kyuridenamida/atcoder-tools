@@ -1,5 +1,6 @@
 import os
 import re
+import time
 import warnings
 from http.cookiejar import LWPCookieJar
 from typing import List, Optional, Union
@@ -186,29 +187,44 @@ class AtCoderClient(metaclass=Singleton):
             raise e
 
     def download_all_contests(self) -> List[Contest]:
-        contest_ids = []
-        previous_list = []
-        page_num = 1
-        while True:
-            resp = self._request(
-                "https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
-            soup = BeautifulSoup(resp.text, "html.parser")
-            text = str(soup)
-            url_re = re.compile(
-                r'"/contests/([A-Za-z0-9\'~+\-_]+)"')
-            contest_list = url_re.findall(text)
-            contest_list = set(contest_list)
-            contest_list.discard("archive")
-            contest_list = sorted(list(contest_list))
+        # アーカイブのページャから最終ページ番号を読み取り、全ページを
+        # 決定的に走査する。従来の「前ページと同一なら終了」という判定は
+        # 応答の揺らぎで早期終了することがあった。
+        # コンテストへのリンクはアーカイブの table 内のみから抽出する。
+        url_re = re.compile(r'"/contests/([A-Za-z0-9\'~+\-_]+)"')
+        contest_ids = set()
 
-            if previous_list == contest_list:
-                break
+        def scan_page(page_num: int) -> int:
+            # 連続リクエストは 429 (Too Many Requests) を返すことがある。
+            for attempt in range(5):
+                resp = self._request(
+                    "https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
+                if resp.status_code == 429:
+                    retry_after = resp.headers.get("Retry-After", "")
+                    seconds = int(retry_after) if retry_after.isdigit() \
+                        else 2 ** attempt
+                    time.sleep(seconds)
+                    continue
+                soup = BeautifulSoup(resp.text, "html.parser")
+                table = soup.find("table")
+                if table is None:
+                    raise PageNotFoundError(
+                        "contest archive page {} has no table".format(
+                            page_num))
+                page_ids = set(url_re.findall(str(table)))
+                page_ids.discard("archive")
+                contest_ids.update(page_ids)
+                page_numbers = [int(tag.text) for tag
+                                in soup.select("ul.pagination a")
+                                if tag.text.strip().isdigit()]
+                return max(page_numbers) if page_numbers else page_num
+            raise PageNotFoundError(
+                "contest archive page {} kept returning 429".format(page_num))
 
-            previous_list = contest_list
-            contest_ids += contest_list
-            page_num += 1
-        contest_ids = sorted(contest_ids)
-        return [Contest(contest_id) for contest_id in contest_ids]
+        last_page = scan_page(1)
+        for page_num in range(2, last_page + 1):
+            scan_page(page_num)
+        return [Contest(contest_id) for contest_id in sorted(contest_ids)]
 
     def submit_source_code(self, contest: Contest, problem: Problem, lang: Union[str, Language],
                            source: str) -> Submission:
