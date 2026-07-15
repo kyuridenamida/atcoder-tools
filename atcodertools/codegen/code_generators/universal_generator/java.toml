@@ -63,5 +63,10 @@ seq = """for(int i = 0;i < {length};i++)
 2d_seq = """for(int i = 0;i <{length_i};i++)
     for(int j = 0;j <{length_j};j++)
         {input}"""
-
-
+[ragged]
+container_type = "{type}[][]"
+declare = "{container_type} {name};"
+allocate_outer = "{name} = new {type}[(int)({length_i})][];"
+declare_and_allocate_outer = "{container_type} {name} = new {type}[(int)({length_i})][];"
+allocate_inner = "{name}[{index_i}] = new {type}[(int)({length_j})];"
+access = "{name}[{index_i}][{index_j}]"

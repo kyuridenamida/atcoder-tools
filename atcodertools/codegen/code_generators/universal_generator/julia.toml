@@ -73,3 +73,10 @@ seq = "{name}::Vector{{{type}}}"
 [access]
 seq = "{name}[{index}]"
 2d_seq = "{name}[{index_i},{index_j}]"
+[ragged]
+container_type = "Vector{{Vector{{{type}}}}}"
+declare = ""
+allocate_outer = "{name} = Vector{{Vector{{{type}}}}}(undef, {length_i})"
+declare_and_allocate_outer = "{name} = Vector{{Vector{{{type}}}}}(undef, {length_i})"
+allocate_inner = "{name}[{index_i}] = Vector{{{type}}}(undef, {length_j})"
+access = "{name}[{index_i}][{index_j}]"
