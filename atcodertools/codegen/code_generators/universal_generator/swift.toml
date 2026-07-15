@@ -67,3 +67,10 @@ seq = "_ {name}:[{type}]"
 [access]
 seq = "{name}[{index}]"
 2d_seq = "{name}[{index_i}][{index_j}]"
+[ragged]
+container_type = "[[{type}]]"
+declare = "var {name}: {container_type}"
+allocate_outer = "{name} = [[{type}]](repeating: [], count: {length_i})"
+declare_and_allocate_outer = "var {name} = [[{type}]](repeating: [], count: {length_i})"
+allocate_inner = "{name}[{index_i}] = [{type}](repeating: {default}, count: {length_j})"
+access = "{name}[{index_i}][{index_j}]"

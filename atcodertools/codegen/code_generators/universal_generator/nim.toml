@@ -79,3 +79,10 @@ seq = "{name}:seq[{type}]"
 [access]
 seq = "{name}[{index}]"
 2d_seq = "{name}[{index_i}][{index_j}]"
+[ragged]
+container_type = "seq[seq[{type}]]"
+declare = "var {name}:{container_type}"
+allocate_outer = "{name} = newSeq[seq[{type}]]({length_i})"
+declare_and_allocate_outer = "var {name} = newSeq[seq[{type}]]({length_i})"
+allocate_inner = "{name}[{index_i}] = newSeqWith({length_j}, {default})"
+access = "{name}[{index_i}][{index_j}]"
