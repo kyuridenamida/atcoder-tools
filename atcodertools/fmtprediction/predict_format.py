@@ -205,6 +205,148 @@ def _format_variable_names(format_: Format):
     }
 
 
+
+def _normalized_wrapper_placeholder_name(
+    variable_name,
+):
+    normalized = variable_name.lower()
+
+    prefixes = (
+        "mathrm",
+        "text",
+        "rm",
+        "it",
+    )
+
+    changed = True
+
+    while changed:
+        changed = False
+
+        for prefix in prefixes:
+            if normalized.startswith(prefix):
+                normalized = normalized[
+                    len(prefix):
+                ]
+                changed = True
+                break
+
+    return normalized
+
+
+def _is_wrapper_placeholder_split_candidate(
+    candidate,
+    wrapper,
+):
+    if candidate.layout != "split":
+        return False
+
+    if wrapper.layout != "wrapper":
+        return False
+
+    if (
+        candidate.case_count_var
+        != wrapper.case_count_var
+    ):
+        return False
+
+    if (
+        str(candidate.case_format)
+        != str(wrapper.case_format)
+    ):
+        return False
+
+    wrapper_names = (
+        _format_variable_names(
+            wrapper.prefix_format
+        )
+    )
+
+    candidate_variables = (
+        candidate.prefix_format.all_vars()
+    )
+
+    candidate_names = {
+        variable.name
+        for variable in candidate_variables
+    }
+
+    if not wrapper_names.issubset(
+        candidate_names
+    ):
+        return False
+
+    if candidate_names == wrapper_names:
+        return False
+
+    extra_variables = [
+        variable
+        for variable in candidate_variables
+        if variable.name
+        not in wrapper_names
+    ]
+
+    if not extra_variables:
+        return False
+
+    prefix_text = str(
+        candidate.prefix_format
+    )
+
+    for variable in extra_variables:
+        if variable.dim_num() != 1:
+            return False
+
+        placeholder_name = (
+            _normalized_wrapper_placeholder_name(
+                variable.name
+            )
+        )
+
+        if placeholder_name not in {
+            "case",
+            "test",
+        }:
+            return False
+
+        expected_pattern = (
+            "(Parallel: {} | 1 to {})"
+            .format(
+                variable.name,
+                candidate.case_count_var,
+            )
+        )
+
+        if expected_pattern not in prefix_text:
+            return False
+
+    return True
+
+
+def _prefer_explicit_wrapper_candidates(
+    candidates,
+):
+    wrapper_candidates = [
+        candidate
+        for candidate in candidates
+        if candidate.layout == "wrapper"
+    ]
+
+    if not wrapper_candidates:
+        return candidates
+
+    return [
+        candidate
+        for candidate in candidates
+        if not any(
+            _is_wrapper_placeholder_split_candidate(
+                candidate,
+                wrapper,
+            )
+            for wrapper in wrapper_candidates
+        )
+    ]
+
 def _validate_candidate_on_samples(
     prefix_format: Format,
     case_format: Format,
@@ -888,6 +1030,13 @@ def predict_multi_case_format(
                             layout,
                         )
                     )
+
+
+    valid_predictions = (
+        _prefer_explicit_wrapper_candidates(
+            valid_predictions
+        )
+    )
 
     if not valid_predictions:
         raise NoMultiCaseFormatFoundError
