@@ -10,13 +10,15 @@ class Contest:
         return self.contest_id
 
     def get_url(self):
-        return "https://{}.contest.atcoder.jp/".format(self.contest_id)
+        # 旧ドメイン({id}.contest.atcoder.jp)は underscore を含む
+        # contest id で SSL 証明書不一致になるため新ドメインを使う。
+        return self.get_new_url()
 
     def get_new_url(self):
         return "https://atcoder.jp/contests/{}/".format(self.contest_id)
 
     def get_problem_list_url(self):
-        return "{}assignments".format(self.get_url())
+        return "{}tasks".format(self.get_url())
 
     def get_submit_url(self):
         return "{}submit".format(self.get_new_url())
