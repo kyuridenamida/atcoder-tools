@@ -205,7 +205,6 @@ def _format_variable_names(format_: Format):
     }
 
 
-
 def _normalized_wrapper_placeholder_name(
     variable_name,
 ):
@@ -346,6 +345,7 @@ def _prefer_explicit_wrapper_candidates(
             for wrapper in wrapper_candidates
         )
     ]
+
 
 def _validate_candidate_on_samples(
     prefix_format: Format,
@@ -1030,7 +1030,6 @@ def predict_multi_case_format(
                             layout,
                         )
                     )
-
 
     valid_predictions = (
         _prefer_explicit_wrapper_candidates(
