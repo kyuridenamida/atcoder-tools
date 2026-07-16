@@ -63,6 +63,9 @@ class TaggedQueryFormat:
                 "tagged query tags must be unique"
             )
 
+    def all_vars(self):
+        return self.prefix_format.all_vars()
+
     @property
     def variants_by_tag(
         self,

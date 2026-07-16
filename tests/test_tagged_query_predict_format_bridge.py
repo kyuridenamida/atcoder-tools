@@ -180,6 +180,18 @@ class TestTaggedQueryPredictFormatBridge(
             ],
         )
 
+        self.assertEqual(
+            [
+                "N",
+                "Q",
+            ],
+            [
+                variable.name
+                for variable
+                in result.format.all_vars()
+            ],
+        )
+
     def test_zero_length_prefix_array_merges_types(
         self,
     ):
