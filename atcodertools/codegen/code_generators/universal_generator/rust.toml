@@ -58,5 +58,12 @@ seq = "let mut {name}: Vec<{type}> = vec![{default}; ({length}) as usize];"
 int = "{name} = scanner.next();"
 float = "{name} = scanner.next();"
 str = "{name} = scanner.next();"
-
-
+[ragged]
+container_type = "Vec<Vec<{type}>>"
+declare = "let mut {name}: {container_type};"
+allocate_outer = "{name} = vec![Vec::new(); ({length_i}) as usize];"
+declare_and_allocate_outer = "let mut {name}: {container_type} = vec![Vec::new(); ({length_i}) as usize];"
+allocate_inner = "{name}[{index_i}] = vec![{default}; ({length_j}) as usize];"
+access = "{name}[{index_i}][{index_j}]"
+formal_arg = "mut {name}: {container_type}"
+actual_arg = "{name}"

@@ -11,6 +11,15 @@ from atcodertools.fmtprediction.models.variable import (
 )
 
 
+from atcodertools.fmtprediction.models.ragged_format import (
+    RaggedRowFormat,
+    create_typed_ragged_row_pattern,
+)
+from atcodertools.fmtprediction.models.tagged_query_format import (
+    TaggedQueryFormat,
+)
+
+
 class FormatPredictionResult:
     def __init__(
         self,
@@ -57,6 +66,62 @@ class FormatPredictionResult:
             cls._create_typed_format(
                 simple_format,
                 var_to_type,
+            )
+        )
+
+    @classmethod
+    def create_ragged_row_typed_format(
+        cls,
+        prefix_format,
+        schema,
+        var_to_type,
+        suffix_format=None,
+    ):
+        typed_prefix = cls._create_typed_format(
+            prefix_format,
+            var_to_type,
+        )
+
+        if suffix_format is None:
+            suffix_format = Format()
+
+        typed_suffix = cls._create_typed_format(
+            suffix_format,
+            var_to_type,
+        )
+
+        ragged_pattern = (
+            create_typed_ragged_row_pattern(
+                schema,
+                var_to_type,
+            )
+        )
+
+        return FormatPredictionResult(
+            RaggedRowFormat(
+                typed_prefix,
+                ragged_pattern,
+                typed_suffix,
+            )
+        )
+
+    @classmethod
+    def create_tagged_query_typed_format(
+        cls,
+        format_,
+        var_to_type,
+    ):
+        typed_prefix = cls._create_typed_format(
+            format_.prefix_format,
+            var_to_type,
+        )
+
+        return FormatPredictionResult(
+            TaggedQueryFormat(
+                typed_prefix,
+                format_.query_count_var,
+                format_.variants,
+                format_.query_collection_name,
             )
         )
 

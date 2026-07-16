@@ -1048,6 +1048,84 @@ def predict_multi_case_format(
     return valid_predictions[0]
 
 
+def _predict_same_line_ragged_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    from atcodertools.fmtprediction import (
+        ragged_row,
+        two_line_ragged_row,
+    )
+
+    try:
+        prediction = (
+            ragged_row
+            .predict_same_line_ragged_rows(
+                content
+            )
+        )
+    except (
+        ragged_row
+        .NoRaggedRowPredictionError,
+        ragged_row
+        .MultipleRaggedRowPredictionsError,
+    ):
+        try:
+            prediction = (
+                two_line_ragged_row
+                .predict_two_line_ragged_rows(
+                    content
+                )
+            )
+        except (
+            two_line_ragged_row
+            .NoTwoLineRaggedRowPredictionError,
+            two_line_ragged_row
+            .MultipleTwoLineRaggedRowPredictionsError,
+        ):
+            raise NoPredictionResultError from None
+
+    return (
+        FormatPredictionResult
+        .create_ragged_row_typed_format(
+            prediction.prefix_format,
+            prediction.schema,
+            prediction.var_to_type,
+            prediction.suffix_format,
+        )
+    )
+
+
+def _predict_tagged_query_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    from atcodertools.fmtprediction import (
+        tagged_query,
+    )
+
+    try:
+        prediction = (
+            tagged_query
+            .predict_tagged_queries(
+                content
+            )
+        )
+    except (
+        tagged_query
+        .NoTaggedQueryPredictionError,
+        tagged_query
+        .MultipleTaggedQueryPredictionsError,
+    ):
+        raise NoPredictionResultError from None
+
+    return (
+        FormatPredictionResult
+        .create_tagged_query_typed_format(
+            prediction.format,
+            prediction.var_to_type,
+        )
+    )
+
+
 def predict_format(
     content: ProblemContent,
 ) -> FormatPredictionResult:
@@ -1061,7 +1139,23 @@ def predict_format(
             content
         )
     except NoMultiCaseFormatFoundError:
-        return _predict_single_case(content)
+        try:
+            return _predict_single_case(
+                content
+            )
+        except NoPredictionResultError:
+            try:
+                return (
+                    _predict_same_line_ragged_format(
+                        content
+                    )
+                )
+            except NoPredictionResultError:
+                return (
+                    _predict_tagged_query_format(
+                        content
+                    )
+                )
     except MultipleMultiCaseFormatsError as error:
         raise MultiplePredictionResultsError(
             error.candidates
