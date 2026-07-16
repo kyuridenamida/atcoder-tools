@@ -1095,6 +1095,37 @@ def _predict_same_line_ragged_format(
     )
 
 
+def _predict_tagged_query_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    from atcodertools.fmtprediction import (
+        tagged_query,
+    )
+
+    try:
+        prediction = (
+            tagged_query
+            .predict_tagged_queries(
+                content
+            )
+        )
+    except (
+        tagged_query
+        .NoTaggedQueryPredictionError,
+        tagged_query
+        .MultipleTaggedQueryPredictionsError,
+    ):
+        raise NoPredictionResultError from None
+
+    return (
+        FormatPredictionResult
+        .create_tagged_query_typed_format(
+            prediction.format,
+            prediction.var_to_type,
+        )
+    )
+
+
 def predict_format(
     content: ProblemContent,
 ) -> FormatPredictionResult:
@@ -1113,11 +1144,18 @@ def predict_format(
                 content
             )
         except NoPredictionResultError:
-            return (
-                _predict_same_line_ragged_format(
-                    content
+            try:
+                return (
+                    _predict_same_line_ragged_format(
+                        content
+                    )
                 )
-            )
+            except NoPredictionResultError:
+                return (
+                    _predict_tagged_query_format(
+                        content
+                    )
+                )
     except MultipleMultiCaseFormatsError as error:
         raise MultiplePredictionResultsError(
             error.candidates

@@ -15,6 +15,9 @@ from atcodertools.fmtprediction.models.ragged_format import (
     RaggedRowFormat,
     create_typed_ragged_row_pattern,
 )
+from atcodertools.fmtprediction.models.tagged_query_format import (
+    TaggedQueryFormat,
+)
 
 
 class FormatPredictionResult:
@@ -99,6 +102,26 @@ class FormatPredictionResult:
                 typed_prefix,
                 ragged_pattern,
                 typed_suffix,
+            )
+        )
+
+    @classmethod
+    def create_tagged_query_typed_format(
+        cls,
+        format_,
+        var_to_type,
+    ):
+        typed_prefix = cls._create_typed_format(
+            format_.prefix_format,
+            var_to_type,
+        )
+
+        return FormatPredictionResult(
+            TaggedQueryFormat(
+                typed_prefix,
+                format_.query_count_var,
+                format_.variants,
+                format_.query_collection_name,
             )
         )
 

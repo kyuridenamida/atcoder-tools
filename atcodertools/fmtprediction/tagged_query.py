@@ -16,10 +16,12 @@ from atcodertools.fmtprediction.models.tagged_query_format import (
     TaggedQueryValueType,
     TaggedQueryVariant,
 )
+from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.predict_types import (
     TypePredictor,
     is_float,
     is_int,
+    merge_type_dicts,
 )
 from atcodertools.fmtprediction.ragged_row import (
     _line_boundary_for_token_count,
@@ -42,6 +44,7 @@ class MultipleTaggedQueryPredictionsError(Exception):
 @dataclass(frozen=True)
 class TaggedQueryPrediction:
     format: TaggedQueryFormat
+    var_to_type: Dict[str, Type]
     sample_query_counts: Tuple[int, ...]
 
 
@@ -460,6 +463,7 @@ def _create_prediction(
 
     observed_tags = set()
     sample_query_counts = []
+    prefix_typings = []
 
     for sample in samples:
         lines = _sample_lines(sample)
@@ -479,6 +483,10 @@ def _create_prediction(
         )
 
         predictor.consume(manager)
+
+        prefix_typings.append(
+            predictor.get_typing_result()
+        )
 
         boundary = (
             _line_boundary_for_token_count(
@@ -551,6 +559,26 @@ def _create_prediction(
     ):
         raise NoTaggedQueryPredictionError
 
+    if not prefix_typings:
+        raise NoTaggedQueryPredictionError
+
+    var_to_type = {}
+
+    for typing in prefix_typings:
+        merge_type_dicts(
+            var_to_type,
+            typing,
+        )
+
+    expected_prefix_names = {
+        variable.name
+        for variable
+        in prefix_format.all_vars()
+    }
+
+    if set(var_to_type) != expected_prefix_names:
+        raise NoTaggedQueryPredictionError
+
     variants = []
 
     for definition in definitions:
@@ -604,6 +632,7 @@ def _create_prediction(
             query_count_var=query_count_var,
             variants=tuple(variants),
         ),
+        var_to_type=var_to_type,
         sample_query_counts=tuple(
             sample_query_counts
         ),
