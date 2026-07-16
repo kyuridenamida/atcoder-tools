@@ -1126,6 +1126,37 @@ def _predict_tagged_query_format(
     )
 
 
+def _predict_homogeneous_query_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    from atcodertools.fmtprediction import (
+        homogeneous_query,
+    )
+
+    try:
+        prediction = (
+            homogeneous_query
+            .predict_homogeneous_queries(
+                content
+            )
+        )
+    except (
+        homogeneous_query
+        .NoHomogeneousQueryPredictionError,
+        homogeneous_query
+        .MultipleHomogeneousQueryPredictionsError,
+    ):
+        raise NoPredictionResultError from None
+
+    return (
+        FormatPredictionResult
+        .create_homogeneous_query_typed_format(
+            prediction.format,
+            prediction.var_to_type,
+        )
+    )
+
+
 def predict_format(
     content: ProblemContent,
 ) -> FormatPredictionResult:
@@ -1151,11 +1182,18 @@ def predict_format(
                     )
                 )
             except NoPredictionResultError:
-                return (
-                    _predict_tagged_query_format(
-                        content
+                try:
+                    return (
+                        _predict_tagged_query_format(
+                            content
+                        )
                     )
-                )
+                except NoPredictionResultError:
+                    return (
+                        _predict_homogeneous_query_format(
+                            content
+                        )
+                    )
     except MultipleMultiCaseFormatsError as error:
         raise MultiplePredictionResultsError(
             error.candidates

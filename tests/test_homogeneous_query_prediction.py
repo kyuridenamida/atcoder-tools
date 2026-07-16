@@ -10,8 +10,14 @@ from atcodertools.fmtprediction.homogeneous_query import (
     NoHomogeneousQueryPredictionError,
     predict_homogeneous_queries,
 )
+from atcodertools.fmtprediction.models.homogeneous_query_format import (
+    HomogeneousQueryFormat,
+)
 from atcodertools.fmtprediction.models.tagged_query_format import (
     TaggedQueryValueType,
+)
+from atcodertools.fmtprediction.predict_format import (
+    predict_format,
 )
 
 
@@ -102,6 +108,27 @@ class TestHomogeneousQueryPrediction(
         self.assertEqual(
             (2, 1),
             prediction.sample_query_counts,
+        )
+
+    def test_public_fallback_returns_model(
+        self,
+    ):
+        result = predict_format(
+            make_content()
+        )
+
+        self.assertIsInstance(
+            result.format,
+            HomogeneousQueryFormat,
+        )
+
+        self.assertEqual(
+            ["N", "Q"],
+            [
+                variable.name
+                for variable
+                in result.format.all_vars()
+            ],
         )
 
     def test_rejects_extra_definition_block(

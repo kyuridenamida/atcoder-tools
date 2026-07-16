@@ -22,6 +22,9 @@ from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 from pathlib import Path
 import toml
+from atcodertools.fmtprediction.models.homogeneous_query_format import (
+    HomogeneousQueryFormat,
+)
 from atcodertools.fmtprediction.models.tagged_query_format import (
     TaggedQueryFormat,
 )
@@ -127,8 +130,16 @@ class UniversalCodeGenerator():
 
         if isinstance(
             self._format,
-            TaggedQueryFormat,
+            (
+                TaggedQueryFormat,
+                HomogeneousQueryFormat,
+            ),
         ):
+            is_tagged = isinstance(
+                self._format,
+                TaggedQueryFormat,
+            )
+
             return dict(
                 formal_arguments="",
                 actual_arguments="",
@@ -140,7 +151,10 @@ class UniversalCodeGenerator():
                 multi_case=False,
                 case_count_var=None,
                 case_loop_var=None,
-                tagged_query=True,
+                tagged_query=is_tagged,
+                homogeneous_query=(
+                    not is_tagged
+                ),
                 prediction_success=False,
             )
 
