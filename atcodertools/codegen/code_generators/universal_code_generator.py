@@ -22,6 +22,9 @@ from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 from pathlib import Path
 import toml
+from atcodertools.fmtprediction.models.tagged_query_format import (
+    TaggedQueryFormat,
+)
 
 
 class UniversalCodeGenerator():
@@ -121,6 +124,25 @@ class UniversalCodeGenerator():
     def generate_parameters(self) -> Dict[str, Any]:
         if self._format is None:
             return dict(prediction_success=False)
+
+        if isinstance(
+            self._format,
+            TaggedQueryFormat,
+        ):
+            return dict(
+                formal_arguments="",
+                actual_arguments="",
+                input_part="",
+                prefix_input_part="",
+                case_input_part="",
+                global_declaration="",
+                global_input_part="",
+                multi_case=False,
+                case_count_var=None,
+                case_loop_var=None,
+                tagged_query=True,
+                prediction_success=False,
+            )
 
         if self._ragged_format is not None:
             return self._generate_ragged_parameters()
