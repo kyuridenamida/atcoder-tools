@@ -79,6 +79,21 @@ class MultiCaseFormatPrediction:
         self.layout = layout
 
 
+_LAYOUT_HSPACE_PATTERN = re.compile(
+    r"\\hspace\*?\s*\{[^{}]*\}"
+)
+
+
+def _remove_layout_hspace_commands(
+    input_format_text: str,
+) -> str:
+    """Remove TeX horizontal spacing commands before format tokenization."""
+    return _LAYOUT_HSPACE_PATTERN.sub(
+        "",
+        input_format_text,
+    )
+
+
 def _predict_simple_format_candidate_groups_without_string_collapse(
     input_format_text: str,
 ) -> List[List[Format]]:
@@ -92,7 +107,9 @@ def _predict_simple_format_candidate_groups_without_string_collapse(
     try:
         tokenized_candidates = (
             search_formats_with_minimum_vars(
-                input_format_text
+                _remove_layout_hspace_commands(
+                    input_format_text
+                )
             )
         )
     except NoFormatFoundError:
