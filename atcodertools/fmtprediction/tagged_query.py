@@ -669,8 +669,7 @@ def predict_tagged_queries(
         _query_count_candidates(content)
     )
 
-    if not query_count_candidates:
-        raise NoTaggedQueryPredictionError
+    use_scalar_fallback = not query_count_candidates
 
     specification = (
         InputSpecification
@@ -709,9 +708,13 @@ def predict_tagged_queries(
                 )
             )
 
-            for query_count_var in sorted(
+            candidate_names = (
                 scalar_names
-                & query_count_candidates
+                if use_scalar_fallback
+                else scalar_names & query_count_candidates
+            )
+            for query_count_var in sorted(
+                candidate_names
             ):
                 try:
                     prediction = (
