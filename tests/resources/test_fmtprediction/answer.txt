@@ -31,7 +31,7 @@ KeioPC2025-N                             OK                   [(Singular: N)] [(
 KeioPC2025-O                             OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Singular: X),(Singular: Y),(Singular: Z)]] [('T', <class 'int'>)]
 KeioPC2025-P                             OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 KeioPC2025-Q                             No result
-KeioPC2025-R                             No result
+KeioPC2025-R                             OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Singular: S)], count=Q, variants=1:['int', 'int', 'int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'str'>)]
 NYC2015-A                                OK                   [(Singular: N)] [('N', <class 'int'>)]
 NYC2015-B                                OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 NYC2015-C                                OK                   [(Singular: s),(Singular: t)] [('s', <class 'str'>), ('t', <class 'str'>)]
@@ -731,12 +731,12 @@ abc157-A                                 OK                   [(Singular: N)] [(
 abc157-B                                 OK                   [(TwoDimensional: A),(Singular: N),(Parallel: b | 1 to N)] [('A', <class 'int'>), ('N', <class 'int'>), ('b', <class 'int'>)]
 abc157-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: s,c | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('s', <class 'int'>), ('c', <class 'int'>)]
 abc157-D                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A,B | 1 to M),(Parallel: C,D | 1 to K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
-abc157-E                                 No result
+abc157-E                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: S),(Singular: Q)], count=Q, variants=1:['int', 'str'],2:['int', 'int']] [('N', <class 'int'>), ('S', <class 'str'>), ('Q', <class 'int'>)]
 abc157-F                                 OK                   [(Singular: N),(Singular: K),(Parallel: x,y,c | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('c', <class 'int'>)]
 abc158-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc158-B                                 OK                   [(Singular: N),(Singular: A),(Singular: B)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc158-C                                 OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
-abc158-D                                 No result
+abc158-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: S),(Singular: Q)], count=Q, variants=1:[],2:['int', 'str']] [('S', <class 'str'>), ('Q', <class 'int'>)]
 abc158-E                                 OK                   [(Singular: N),(Singular: P),(Singular: S)] [('N', <class 'int'>), ('P', <class 'int'>), ('S', <class 'str'>)]
 abc158-F                                 OK                   [(Singular: N),(Parallel: X,D | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('D', <class 'int'>)]
 abc159-A                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
@@ -782,7 +782,7 @@ abc165-D                                 OK                   [(Singular: A),(Si
 abc165-E                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 abc165-F                                 OK                   [(Singular: N),(Parallel: a | 1 to N),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 abc166-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
-abc166-B                                 No result
+abc166-B                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: K)], rows=[RaggedRowPattern: count=K, prefix=d, length_pos=0, values=A], suffix=[]] [('N', <class 'int'>), ('K', <class 'int'>), ('d', <class 'int'>), ('A', <class 'int'>)]
 abc166-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: H | 1 to N),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('H', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc166-D                                 OK                   [(Singular: X)] [('X', <class 'int'>)]
 abc166-E                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
@@ -958,7 +958,7 @@ abc194-F                                 OK                   [(Singular: N),(Si
 abc195-A                                 OK                   [(Singular: M),(Singular: H)] [('M', <class 'int'>), ('H', <class 'int'>)]
 abc195-B                                 OK                   [(Singular: A),(Singular: B),(Singular: W)] [('A', <class 'int'>), ('B', <class 'int'>), ('W', <class 'int'>)]
 abc195-C                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
-abc195-D                                 No result
+abc195-D                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: M),(Singular: Q),(Parallel: W,V | 1 to N),(Parallel: X | 1 to M)], count=Q, arguments=L:int,R:int] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>), ('W', <class 'int'>), ('V', <class 'int'>), ('X', <class 'int'>)]
 abc195-E                                 OK                   [(Singular: N),(Singular: S),(Singular: X)] [('N', <class 'int'>), ('S', <class 'int'>), ('X', <class 'str'>)]
 abc195-F                                 OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
 abc196-A                                 OK                   [(Singular: a),(Singular: b),(Singular: c),(Singular: d)] [('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>), ('d', <class 'int'>)]
@@ -1060,7 +1060,7 @@ abc211-F                                 No result
 abc212-A                                 OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
 abc212-B                                 OK                   [(Singular: X)] [('X', <class 'str'>)]
 abc212-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-abc212-D                                 No result
+abc212-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:['int'],3:[]] [('Q', <class 'int'>)]
 abc212-E                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: U,V | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>)]
 abc212-F                                 No result
 abc212-G                                 OK                   [(Singular: P)] [('P', <class 'int'>)]
@@ -1164,7 +1164,7 @@ abc224-H                                 OK                   [(Singular: L),(Si
 abc225-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc225-B                                 OK                   [(Singular: N),(Parallel: a,b | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 abc225-C                                 No result
-abc225-D                                 No result
+abc225-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int', 'int'],3:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc225-E                                 No result
 abc225-F                                 OK                   [(Singular: N),(Singular: K),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
 abc225-G                                 No result
@@ -1292,7 +1292,7 @@ abc240-G                                 OK                   [(Singular: N),(Si
 abc241-A                                 OK                   [(Parallel: a | 0 to 9)] [('a', <class 'int'>)]
 abc241-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc241-C                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
-abc241-D                                 No result
+abc241-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:['int', 'int'],3:['int', 'int']] [('Q', <class 'int'>)]
 abc241-E                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 0 to N-1)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 abc241-Ex                                OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc241-F                                 OK                   [(Singular: H),(Singular: W),(Singular: N),(Singular: s_x),(Singular: s_y),(Singular: g_x),(Singular: g_y),(Parallel: X,Y | 1 to N)] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('s_x', <class 'int'>), ('s_y', <class 'int'>), ('g_x', <class 'int'>), ('g_y', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
@@ -1304,7 +1304,7 @@ abc242-D                                 No result
 abc242-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S)]] [('T', <class 'int'>)]
 abc242-Ex                                No result
 abc242-F                                 OK                   [(Singular: N),(Singular: M),(Singular: B),(Singular: W)] [('N', <class 'int'>), ('M', <class 'int'>), ('B', <class 'int'>), ('W', <class 'int'>)]
-abc242-G                                 No result
+abc242-G                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], count=Q, arguments=l:int,r:int] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 abc243-A                                 OK                   [(Singular: V),(Singular: A),(Singular: B),(Singular: C)] [('V', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc243-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc243-C                                 OK                   [(Singular: N),(Parallel: X,Y | 1 to N),(Singular: S)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('S', <class 'str'>)]
@@ -1347,7 +1347,7 @@ abc247-G                                 OK                   [(Singular: N),(Pa
 abc248-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc248-B                                 OK                   [(Singular: A),(Singular: B),(Singular: K)] [('A', <class 'int'>), ('B', <class 'int'>), ('K', <class 'int'>)]
 abc248-C                                 OK                   [(Singular: N),(Singular: M),(Singular: K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>)]
-abc248-D                                 No result
+abc248-D                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], count=Q, arguments=L:int,R:int,X:int] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 abc248-E                                 OK                   [(Singular: N),(Singular: K),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc248-Ex                                OK                   [(Singular: N),(Singular: K),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('P', <class 'int'>)]
 abc248-F                                 OK                   [(Singular: N),(Singular: P)] [('N', <class 'int'>), ('P', <class 'int'>)]
@@ -1386,11 +1386,11 @@ abc252-F                                 OK                   [(Singular: N),(Si
 abc252-G                                 OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
 abc253-A                                 OK                   [(Singular: a),(Singular: b),(Singular: c)] [('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>)]
 abc253-B                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
-abc253-C                                 No result
+abc253-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:['int', 'int'],3:[]] [('Q', <class 'int'>)]
 abc253-D                                 OK                   [(Singular: N),(Singular: A),(Singular: B)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc253-E                                 OK                   [(Singular: N),(Singular: M),(Singular: K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>)]
 abc253-Ex                                OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
-abc253-F                                 No result
+abc253-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: M),(Singular: Q)], count=Q, variants=1:['int', 'int', 'int'],2:['int', 'int'],3:['int', 'int']] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>)]
 abc253-G                                 OK                   [(Singular: N),(Singular: L),(Singular: R)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 abc254-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc254-B                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
@@ -1398,8 +1398,8 @@ abc254-C                                 OK                   [(Singular: N),(Si
 abc254-D                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc254-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: a,b | 1 to M),(Singular: Q),(Parallel: x,k | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('Q', <class 'int'>), ('x', <class 'int'>), ('k', <class 'int'>)]
 abc254-Ex                                OK                   [(Singular: N),(Parallel: a | 1 to N),(Parallel: b | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
-abc254-F                                 No result
-abc254-G                                 No result
+abc254-F                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N),(Parallel: B | 1 to N)], count=Q, arguments=h_1:int,h_2:int,w_1:int,w_2:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
+abc254-G                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: M),(Singular: Q),(Parallel: A,B,C | 1 to M)], count=Q, arguments=X_i:int,Y_i:int,Z_i:int,W_i:int] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc255-A                                 OK                   [(Singular: R),(Singular: C),(TwoDimensional: A)] [('R', <class 'int'>), ('C', <class 'int'>), ('A', <class 'int'>)]
 abc255-B                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to K),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc255-C                                 OK                   [(Singular: X),(Singular: A),(Singular: D),(Singular: N)] [('X', <class 'int'>), ('A', <class 'str'>), ('D', <class 'int'>), ('N', <class 'int'>)]
@@ -1413,7 +1413,7 @@ abc256-B                                 OK                   [(Singular: N),(Pa
 abc256-C                                 OK                   [(Parallel: h | 1 to 3),(Parallel: w | 1 to 3)] [('h', <class 'int'>), ('w', <class 'int'>)]
 abc256-D                                 OK                   [(Singular: N),(Parallel: L,R | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 abc256-E                                 OK                   [(Singular: N),(Parallel: X | 1 to N),(Parallel: C | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('C', <class 'int'>)]
-abc256-Ex                                No result
+abc256-Ex                                OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: a | 1 to N)], count=Q, variants=1:['int', 'int', 'int'],2:['int', 'int', 'int'],3:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('a', <class 'int'>)]
 abc256-F                                 No result
 abc256-G                                 OK                   [(Singular: N),(Singular: D)] [('N', <class 'int'>), ('D', <class 'int'>)]
 abc257-A                                 OK                   [(Singular: N),(Singular: X)] [('N', <class 'int'>), ('X', <class 'int'>)]
@@ -1426,7 +1426,7 @@ abc257-F                                 OK                   [(Singular: N),(Si
 abc257-G                                 OK                   [(Singular: S),(Singular: T)] [('S', <class 'str'>), ('T', <class 'str'>)]
 abc258-A                                 OK                   [(Singular: K)] [('K', <class 'int'>)]
 abc258-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc258-C                                 No result
+abc258-C                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Singular: S)], count=Q, arguments=t:int,x:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'str'>)]
 abc258-D                                 OK                   [(Singular: N),(Singular: X),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc258-E                                 OK                   [(Singular: N),(Singular: Q),(Singular: X),(Parallel: W | 0 to N-1),(Parallel: K | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>), ('W', <class 'int'>), ('K', <class 'int'>)]
 abc258-Ex                                OK                   [(Singular: N),(Singular: S),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>), ('A', <class 'int'>)]
@@ -1528,7 +1528,7 @@ abc270-Ex                                OK                   [(Singular: N),(Pa
 abc270-F                                 OK                   [(Singular: N),(Singular: M),(Parallel: X | 1 to N),(Parallel: Y | 1 to N),(Parallel: A,B,Z | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('Z', <class 'int'>)]
 abc270-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: P),(Singular: A),(Singular: B),(Singular: S),(Singular: G)]] [('T', <class 'int'>)]
 abc271-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
-abc271-B                                 No result
+abc271-B                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: Q)], rows=[RaggedRowPattern: count=N, prefix=L, length_pos=0, values=a], suffix=[(Parallel: s,t | 1 to Q)]] [('N', <class 'int'>), ('Q', <class 'int'>), ('L', <class 'int'>), ('a', <class 'int'>), ('s', <class 'int'>), ('t', <class 'int'>)]
 abc271-C                                 OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 abc271-D                                 OK                   [(Singular: N),(Singular: S),(Parallel: a,b | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 abc271-E                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A,B,C | 1 to M),(Parallel: E | 1 to K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('E', <class 'int'>)]
@@ -1556,7 +1556,7 @@ abc274-B                                 OK                   [(Singular: H),(Si
 abc274-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc274-D                                 OK                   [(Singular: N),(Singular: x),(Singular: y),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('A', <class 'int'>)]
 abc274-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: X,Y | 1 to N),(Parallel: P,Q | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('P', <class 'int'>), ('Q', <class 'int'>)]
-abc274-Ex                                No result
+abc274-Ex                                OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, arguments=a:int,b:int,c:int,d:int,e:int,f:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 abc274-F                                 OK                   [(Singular: N),(Singular: A),(Parallel: W,X,V | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('W', <class 'int'>), ('X', <class 'int'>), ('V', <class 'int'>)]
 abc274-G                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 abc275-A                                 OK                   [(Singular: N),(Parallel: H | 1 to N)] [('N', <class 'int'>), ('H', <class 'int'>)]
@@ -1725,7 +1725,7 @@ abc295-D                                 OK                   [(Singular: S)] [(
 abc295-E                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 abc295-Ex                                OK                   [(Singular: N),(Singular: M),(Parallel: X | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'str'>)]
 abc295-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S),(Singular: L),(Singular: R)]] [('T', <class 'int'>)]
-abc295-G                                 No result
+abc295-G                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Parallel: p | 1 to N-1),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int']] [('N', <class 'int'>), ('p', <class 'int'>), ('Q', <class 'int'>)]
 abc296-A                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc296-B                                 OK                   [(Parallel: S | 1 to 8)] [('S', <class 'str'>)]
 abc296-C                                 OK                   [(Singular: N),(Singular: X),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>)]
@@ -1744,8 +1744,8 @@ abc297-F                                 OK                   [(Singular: H),(Si
 abc297-G                                 OK                   [(Singular: N),(Singular: L),(Singular: R),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('A', <class 'int'>)]
 abc298-A                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc298-B                                 OK                   [(Singular: N),(TwoDimensional: A),(TwoDimensional: B)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-abc298-C                                 No result
-abc298-D                                 No result
+abc298-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int'],3:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
+abc298-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:[],3:[]] [('Q', <class 'int'>)]
 abc298-E                                 OK                   [(Singular: N),(Singular: A),(Singular: B),(Singular: P),(Singular: Q)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('P', <class 'int'>), ('Q', <class 'int'>)]
 abc298-Ex                                OK                   [(Singular: N),(Parallel: A,B | 1 to N-1),(Singular: Q),(Parallel: L,R | 1 to Q)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('Q', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 abc298-F                                 OK                   [(Singular: N),(Parallel: r,c,x | 1 to N)] [('N', <class 'int'>), ('r', <class 'int'>), ('c', <class 'int'>), ('x', <class 'int'>)]
@@ -1828,7 +1828,7 @@ abc308-D                                 OK                   [(Singular: H),(Si
 abc308-E                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Singular: S)] [('N', <class 'int'>), ('A', <class 'int'>), ('S', <class 'str'>)]
 abc308-Ex                                OK                   [(Singular: N),(Singular: M),(Parallel: A,B,C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc308-F                                 OK                   [(Singular: N),(Singular: M),(Parallel: P | 1 to N),(Parallel: L | 1 to M),(Parallel: D | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('P', <class 'int'>), ('L', <class 'int'>), ('D', <class 'int'>)]
-abc308-G                                 No result
+abc308-G                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:['int'],3:[]] [('Q', <class 'int'>)]
 abc309-A                                 OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
 abc309-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'str'>)]
 abc309-C                                 OK                   [(Singular: N),(Singular: K),(Parallel: a,b | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
@@ -1880,7 +1880,7 @@ abc315-A                                 OK                   [(Singular: S)] [(
 abc315-B                                 OK                   [(Singular: M),(Parallel: D | 1 to M)] [('M', <class 'int'>), ('D', <class 'int'>)]
 abc315-C                                 OK                   [(Singular: N),(Parallel: F,S | 1 to N)] [('N', <class 'int'>), ('F', <class 'int'>), ('S', <class 'int'>)]
 abc315-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: c | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('c', <class 'str'>)]
-abc315-E                                 No result
+abc315-E                                 OK                   [RaggedRowFormat: prefix=[(Singular: N)], rows=[RaggedRowPattern: count=N, prefix=C, length_pos=0, values=P], suffix=[]] [('N', <class 'int'>), ('C', <class 'int'>), ('P', <class 'int'>)]
 abc315-Ex                                OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc315-F                                 OK                   [(Singular: N),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc315-G                                 OK                   [(Singular: N),(Singular: A),(Singular: B),(Singular: C),(Singular: X)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('X', <class 'int'>)]
@@ -1926,7 +1926,7 @@ abc322-B                                 OK                   [(Singular: N),(Si
 abc322-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 abc322-D                                 OK                   [(TwoDimensional: P)] [('P', <class 'str'>)]
 abc322-E                                 No result
-abc322-F                                 No result
+abc322-F                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Singular: S)], count=Q, arguments=c:int,L:int,R:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'int'>)]
 abc322-G                                 OK                   [(Singular: N),(Singular: X)] [('N', <class 'int'>), ('X', <class 'int'>)]
 abc323-A                                 OK                   [(Singular: S)] [('S', <class 'int'>)]
 abc323-B                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
@@ -1975,7 +1975,7 @@ abc329-B                                 OK                   [(Singular: N),(Pa
 abc329-C                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc329-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 abc329-E                                 OK                   [(Singular: N),(Singular: M),(Singular: S),(Singular: T)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
-abc329-F                                 No result
+abc329-F                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: C | 1 to N)], count=Q, arguments=a:int,b:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('C', <class 'int'>)]
 abc329-G                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: P | 1 to N-1),(Parallel: S,T | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('P', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>)]
 abc330-A                                 OK                   [(Singular: N),(Singular: L),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('A', <class 'int'>)]
 abc330-B                                 OK                   [(Singular: N),(Singular: L),(Singular: R),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('A', <class 'int'>)]
@@ -1989,7 +1989,7 @@ abc331-B                                 OK                   [(Singular: N),(Si
 abc331-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc331-D                                 No result
 abc331-E                                 OK                   [(Singular: N),(Singular: M),(Singular: L),(Parallel: a | 1 to N),(Parallel: b | 1 to M),(Parallel: c,d | 1 to L)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>), ('d', <class 'int'>)]
-abc331-F                                 No result
+abc331-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Singular: S)], count=Q, variants=1:['int', 'str'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'str'>)]
 abc331-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('C', <class 'int'>)]
 abc332-A                                 OK                   [(Singular: N),(Singular: S),(Singular: K),(Parallel: P,Q | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>), ('K', <class 'int'>), ('P', <class 'int'>), ('Q', <class 'int'>)]
 abc332-B                                 OK                   [(Singular: K),(Singular: G),(Singular: M)] [('K', <class 'int'>), ('G', <class 'int'>), ('M', <class 'int'>)]
@@ -2008,13 +2008,13 @@ abc333-G                                 OK                   [(Singular: r),(Si
 abc334-A                                 OK                   [(Singular: B),(Singular: G)] [('B', <class 'int'>), ('G', <class 'int'>)]
 abc334-B                                 OK                   [(Singular: A),(Singular: M),(Singular: L),(Singular: R)] [('A', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 abc334-C                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to K)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
-abc334-D                                 No result
+abc334-D                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: R | 1 to N)], count=Q, arguments=X:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('R', <class 'int'>)]
 abc334-E                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 abc334-F                                 OK                   [(Singular: N),(Singular: K),(Singular: S_X),(Singular: S_Y),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('S_X', <class 'int'>), ('S_Y', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc334-G                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 abc335-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc335-B                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
-abc335-C                                 No result
+abc335-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['str'],2:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc335-D                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc335-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: U,V | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>)]
 abc335-F                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
@@ -2048,7 +2048,7 @@ abc339-E                                 OK                   [(Singular: N),(Si
 abc339-F                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'str'>)]
 abc339-G                                 No result
 abc340-A                                 OK                   [(Singular: A),(Singular: B),(Singular: D)] [('A', <class 'int'>), ('B', <class 'int'>), ('D', <class 'int'>)]
-abc340-B                                 No result
+abc340-B                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:['int']] [('Q', <class 'int'>)]
 abc340-C                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc340-D                                 OK                   [(Singular: N),(Parallel: A,B,X | 1 to N-1)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('X', <class 'int'>)]
 abc340-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 0 to N-1),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -2058,7 +2058,7 @@ abc341-A                                 OK                   [(Singular: N)] [(
 abc341-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: S,T | 1 to N-1)] [('N', <class 'int'>), ('A', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>)]
 abc341-C                                 OK                   [(Singular: H),(Singular: W),(Singular: N),(Singular: T),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('T', <class 'str'>), ('S', <class 'str'>)]
 abc341-D                                 OK                   [(Singular: N),(Singular: M),(Singular: K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>)]
-abc341-E                                 No result
+abc341-E                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Singular: S)], count=Q, variants=1:['int', 'int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'int'>)]
 abc341-F                                 OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M),(Parallel: W | 1 to N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('W', <class 'int'>), ('A', <class 'int'>)]
 abc341-G                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc342-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
@@ -2073,13 +2073,13 @@ abc343-B                                 OK                   [(Singular: N),(Tw
 abc343-C                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc343-D                                 OK                   [(Singular: N),(Singular: T),(Parallel: A,B | 1 to T)] [('N', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc343-E                                 OK                   [(Parallel: V | 1 to 3)] [('V', <class 'int'>)]
-abc343-F                                 No result
+abc343-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, variants=1:['int', 'int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 abc343-G                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc344-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc344-B                                 No result
 abc344-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Singular: M),(Parallel: B | 1 to M),(Singular: L),(Parallel: C | 1 to L),(Singular: Q),(Parallel: X | 1 to Q)] [('N', <class 'int'>), ('A', <class 'int'>), ('M', <class 'int'>), ('B', <class 'int'>), ('L', <class 'int'>), ('C', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>)]
 abc344-D                                 No result
-abc344-E                                 No result
+abc344-E                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int']] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 abc344-F                                 OK                   [(Singular: N),(TwoDimensional: P),(TwoDimensional: R),(TwoDimensional: D)] [('N', <class 'int'>), ('P', <class 'int'>), ('R', <class 'int'>), ('D', <class 'int'>)]
 abc344-G                                 OK                   [(Singular: N),(Parallel: X,Y | 1 to N),(Singular: Q),(Parallel: G | 0 to 0),(Singular: R_a),(Singular: R_b)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('Q', <class 'int'>), ('G', <class 'int'>), ('R_a', <class 'int'>), ('R_b', <class 'int'>)]
 abc345-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
@@ -2130,7 +2130,7 @@ abc351-C                                 OK                   [(Singular: N),(Pa
 abc351-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 abc351-E                                 OK                   [(Singular: N),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc351-F                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc351-G                                 No result
+abc351-G                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: p | 2 to N),(Parallel: A | 1 to N)], count=Q, arguments=v:int,x:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('p', <class 'int'>), ('A', <class 'int'>)]
 abc352-A                                 OK                   [(Singular: N),(Singular: X),(Singular: Y),(Singular: Z)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('Z', <class 'int'>)]
 abc352-B                                 OK                   [(Singular: S),(Singular: T)] [('S', <class 'str'>), ('T', <class 'str'>)]
 abc352-C                                 OK                   [(Singular: N),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -2163,14 +2163,14 @@ abc356-B                                 OK                   [(Singular: N),(Si
 abc356-C                                 No result
 abc356-D                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 abc356-E                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc356-F                                 No result
+abc356-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q),(Singular: K)], count=Q, variants=1:['int'],2:['int']] [('Q', <class 'int'>), ('K', <class 'int'>)]
 abc356-G                                 OK                   [(Singular: N),(Parallel: A,B | 1 to N),(Singular: Q),(Parallel: C,D | 1 to Q)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('Q', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 abc357-A                                 OK                   [(Singular: N),(Singular: M),(Parallel: H | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('H', <class 'int'>)]
 abc357-B                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc357-C                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc357-D                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc357-E                                 OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
-abc357-F                                 No result
+abc357-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N),(Parallel: B | 1 to N)], count=Q, variants=1:['int', 'int', 'int'],2:['int', 'int', 'int'],3:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc357-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: a,b | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 abc358-A                                 OK                   [(Singular: S),(Singular: T)] [('S', <class 'str'>), ('T', <class 'str'>)]
 abc358-B                                 OK                   [(Singular: N),(Singular: A),(Parallel: T | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('T', <class 'int'>)]
@@ -2213,7 +2213,7 @@ abc363-C                                 OK                   [(Singular: N),(Si
 abc363-D                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc363-E                                 OK                   [(Singular: H),(Singular: W),(Singular: Y),(TwoDimensional: A)] [('H', <class 'int'>), ('W', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>)]
 abc363-F                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
-abc363-G                                 No result
+abc363-G                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: D | 1 to N),(Parallel: P | 1 to N)], count=Q, arguments=c:int,x:int,y:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('D', <class 'int'>), ('P', <class 'int'>)]
 abc364-A                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc364-B                                 No result
 abc364-C                                 OK                   [(Singular: N),(Singular: X),(Singular: Y),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -2230,7 +2230,7 @@ abc365-F                                 No result
 abc365-G                                 No result
 abc366-A                                 OK                   [(Singular: N),(Singular: T),(Singular: A)] [('N', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>)]
 abc366-B                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
-abc366-C                                 No result
+abc366-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:['int'],3:[]] [('Q', <class 'int'>)]
 abc366-D                                 OK                   [(Singular: N),(ThreeDimensional: A),(Singular: Q),(Parallel: Lx,Rx,Ly,Ry,Lz,Rz | 1 to Q)] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>), ('Lx', <class 'int'>), ('Rx', <class 'int'>), ('Ly', <class 'int'>), ('Ry', <class 'int'>), ('Lz', <class 'int'>), ('Rz', <class 'int'>)]
 abc366-E                                 OK                   [(Singular: N),(Singular: D),(Parallel: x,y | 1 to N)] [('N', <class 'int'>), ('D', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 abc366-F                                 OK                   [(Singular: N),(Singular: K),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -2248,7 +2248,7 @@ abc368-C                                 OK                   [(Singular: N),(Pa
 abc368-D                                 OK                   [(Singular: N),(Singular: K),(Parallel: A,B | 1 to N-1),(Parallel: V | 1 to K)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('V', <class 'int'>)]
 abc368-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: X | 1 to 1),(Parallel: A,B,S,T | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>)]
 abc368-F                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc368-G                                 No result
+abc368-G                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int', 'int'],3:['int', 'int']] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('Q', <class 'int'>)]
 abc369-A                                 OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
 abc369-B                                 OK                   [(Singular: N),(Parallel: A,S | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('S', <class 'str'>)]
 abc369-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
@@ -2274,7 +2274,7 @@ abc372-A                                 OK                   [(Singular: S)] [(
 abc372-B                                 OK                   [(Singular: M)] [('M', <class 'int'>)]
 abc372-C                                 OK                   [(Singular: N),(Singular: Q),(Singular: S),(Parallel: X,C | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'str'>), ('X', <class 'int'>), ('C', <class 'str'>)]
 abc372-D                                 OK                   [(Singular: N),(Parallel: H | 1 to N)] [('N', <class 'int'>), ('H', <class 'int'>)]
-abc372-E                                 No result
+abc372-E                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc372-F                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: X,Y | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc372-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A,B,C | 1 to N)]] [('T', <class 'int'>)]
 abc373-A                                 OK                   [(Parallel: S | 1 to 12)] [('S', <class 'str'>)]
@@ -2296,7 +2296,7 @@ abc375-B                                 OK                   [(Singular: N),(Pa
 abc375-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'str'>)]
 abc375-D                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc375-E                                 OK                   [(Singular: N),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-abc375-F                                 No result
+abc375-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: M),(Singular: Q),(Parallel: A,B,C | 1 to M)], count=Q, variants=1:['int'],2:['int', 'int']] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc375-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B,C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc376-A                                 OK                   [(Singular: N),(Singular: C),(Parallel: T | 1 to N)] [('N', <class 'int'>), ('C', <class 'int'>), ('T', <class 'int'>)]
 abc376-B                                 OK                   [(Singular: N),(Singular: Q),(Parallel: H,T | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('H', <class 'str'>), ('T', <class 'int'>)]
@@ -2322,7 +2322,7 @@ abc378-G                                 OK                   [(Singular: A),(Si
 abc379-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc379-B                                 OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
 abc379-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: X | 1 to M),(Parallel: A | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>)]
-abc379-D                                 No result
+abc379-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:[],2:['int'],3:['int']] [('Q', <class 'int'>)]
 abc379-E                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc379-F                                 OK                   [(Singular: N),(Singular: Q),(Parallel: H | 1 to N),(Parallel: l,r | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('H', <class 'int'>), ('l', <class 'int'>), ('r', <class 'int'>)]
 abc379-G                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
@@ -2330,14 +2330,14 @@ abc380-A                                 OK                   [(Singular: N)] [(
 abc380-B                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc380-C                                 OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
 abc380-D                                 OK                   [(Singular: S),(Singular: Q),(Parallel: K | 1 to Q)] [('S', <class 'str'>), ('Q', <class 'int'>), ('K', <class 'int'>)]
-abc380-E                                 No result
+abc380-E                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc380-F                                 OK                   [(Singular: N),(Singular: M),(Singular: L),(Parallel: A | 1 to N),(Parallel: B | 1 to M),(Parallel: C | 1 to L)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc380-G                                 OK                   [(Singular: N),(Singular: K),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('P', <class 'int'>)]
 abc381-A                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc381-B                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc381-C                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc381-D                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc381-E                                 No result
+abc381-E                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Singular: S)], count=Q, arguments=L:int,R:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'str'>)]
 abc381-F                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc381-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: x),(Singular: y)]] [('T', <class 'int'>)]
 abc382-A                                 OK                   [(Singular: N),(Singular: D),(Singular: S)] [('N', <class 'int'>), ('D', <class 'int'>), ('S', <class 'str'>)]
@@ -2391,10 +2391,10 @@ abc388-F                                 OK                   [(Singular: N),(Si
 abc388-G                                 No result
 abc389-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc389-B                                 OK                   [(Singular: X)] [('X', <class 'int'>)]
-abc389-C                                 No result
+abc389-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:[],3:['int']] [('Q', <class 'int'>)]
 abc389-D                                 OK                   [(Singular: R)] [('R', <class 'int'>)]
 abc389-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('P', <class 'int'>)]
-abc389-F                                 No result
+abc389-F                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: L,R | 1 to N),(Singular: Q)], count=Q, arguments=X:int] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('Q', <class 'int'>)]
 abc389-G                                 OK                   [(Singular: N),(Singular: P)] [('N', <class 'int'>), ('P', <class 'int'>)]
 abc390-A                                 OK                   [(Parallel: A | 1 to 5)] [('A', <class 'int'>)]
 abc390-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
@@ -2405,7 +2405,7 @@ abc390-F                                 OK                   [(Singular: N),(Pa
 abc390-G                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc391-A                                 OK                   [(Singular: D)] [('D', <class 'str'>)]
 abc391-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: S | 1 to N),(Parallel: T | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
-abc391-C                                 No result
+abc391-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:[]] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc391-D                                 OK                   [(Singular: N),(Singular: W),(Parallel: X,Y | 1 to N),(Singular: Q),(Parallel: T,A | 1 to Q)] [('N', <class 'int'>), ('W', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('Q', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>)]
 abc391-E                                 OK                   [(Singular: N),(Singular: A)] [('N', <class 'int'>), ('A', <class 'str'>)]
 abc391-F                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N),(Parallel: B | 1 to N),(Parallel: C | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
@@ -2439,7 +2439,7 @@ abc395-E                                 No result
 abc395-F                                 No result
 abc395-G                                 OK                   [(Singular: N),(Singular: K),(TwoDimensional: C),(Singular: Q),(Parallel: s,t | 1 to Q)] [('N', <class 'int'>), ('K', <class 'int'>), ('C', <class 'int'>), ('Q', <class 'int'>), ('s', <class 'int'>), ('t', <class 'int'>)]
 abc396-A                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc396-B                                 No result
+abc396-B                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:[]] [('Q', <class 'int'>)]
 abc396-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: B | 1 to N),(Parallel: W | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('B', <class 'int'>), ('W', <class 'int'>)]
 abc396-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: u,v,w | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('w', <class 'int'>)]
 abc396-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: X,Y,Z | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('Z', <class 'int'>)]
@@ -2470,7 +2470,7 @@ abc400-A                                 OK                   [(Singular: A)] [(
 abc400-B                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 abc400-C                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc400-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H),(Singular: A),(Singular: B),(Singular: C),(Singular: D)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
-abc400-E                                 No result
+abc400-E                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: Q)], count=Q, arguments=A:int] [('Q', <class 'int'>)]
 abc400-F                                 OK                   [(Singular: N),(Parallel: C | 1 to N),(Parallel: X | 1 to N)] [('N', <class 'int'>), ('C', <class 'int'>), ('X', <class 'int'>)]
 abc400-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Parallel: X,Y,Z | 1 to N)]] [('T', <class 'int'>)]
 abc401-A                                 OK                   [(Singular: S)] [('S', <class 'int'>)]
@@ -2481,7 +2481,7 @@ abc401-E                                 No result
 abc401-F                                 No result
 abc401-G                                 No result
 abc402-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
-abc402-B                                 No result
+abc402-B                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:[]] [('Q', <class 'int'>)]
 abc402-C                                 No result
 abc402-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc402-E                                 OK                   [(Singular: N),(Singular: X),(Parallel: S,C,P | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('S', <class 'int'>), ('C', <class 'int'>), ('P', <class 'int'>)]
@@ -2489,7 +2489,7 @@ abc402-F                                 OK                   [(Singular: N),(Si
 abc402-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Singular: A),(Parallel: B | 1 to 2)]] [('T', <class 'int'>)]
 abc403-A                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc403-B                                 OK                   [(Singular: T),(Singular: U)] [('T', <class 'str'>), ('U', <class 'str'>)]
-abc403-C                                 No result
+abc403-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: M),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int'],3:['int', 'int']] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>)]
 abc403-D                                 OK                   [(Singular: N),(Singular: D),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('D', <class 'int'>), ('A', <class 'int'>)]
 abc403-E                                 OK                   [(Singular: Q),(Parallel: T,S | 1 to Q)] [('Q', <class 'int'>), ('T', <class 'int'>), ('S', <class 'str'>)]
 abc403-F                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
@@ -2497,7 +2497,7 @@ abc403-G                                 OK                   [(Singular: Q),(Pa
 abc404-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc404-B                                 OK                   [(Singular: N),(Parallel: S | 1 to N),(Parallel: T | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
 abc404-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-abc404-D                                 No result
+abc404-D                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: M),(Parallel: C | 1 to N)], rows=[RaggedRowPattern: count=M, prefix=K, length_pos=0, values=A], suffix=[]] [('N', <class 'int'>), ('M', <class 'int'>), ('C', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 abc404-E                                 OK                   [(Singular: N),(Parallel: C | 1 to N-1),(Parallel: A | 1 to N-1)] [('N', <class 'int'>), ('C', <class 'int'>), ('A', <class 'int'>)]
 abc404-F                                 OK                   [(Singular: N),(Singular: T),(Singular: M),(Singular: K)] [('N', <class 'int'>), ('T', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>)]
 abc404-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: L,R,S | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('S', <class 'int'>)]
@@ -2507,13 +2507,13 @@ abc405-C                                 OK                   [(Singular: N),(Pa
 abc405-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 abc405-E                                 OK                   [(Singular: A),(Singular: B),(Singular: C),(Singular: D)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 abc405-F                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M),(Singular: Q),(Parallel: C,D | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('Q', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
-abc405-G                                 No result
+abc405-G                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, arguments=L:int,R:int,X:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 abc406-A                                 OK                   [(Singular: A),(Singular: B),(Singular: C),(Singular: D)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 abc406-B                                 OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 abc406-C                                 OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
-abc406-D                                 No result
+abc406-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: H),(Singular: W),(Singular: N),(Parallel: X,Y | 1 to N),(Singular: Q)], count=Q, variants=1:['int'],2:['int']] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('Q', <class 'int'>)]
 abc406-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K)]] [('T', <class 'int'>)]
-abc406-F                                 No result
+abc406-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Parallel: U,V | 1 to N-1),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int']] [('N', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>), ('Q', <class 'int'>)]
 abc406-G                                 OK                   [(Singular: N),(Singular: C),(Singular: D),(Parallel: X | 1 to N)] [('N', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>), ('X', <class 'int'>)]
 abc407-A                                 OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
 abc407-B                                 OK                   [(Singular: X),(Singular: Y)] [('X', <class 'int'>), ('Y', <class 'int'>)]
@@ -2534,11 +2534,11 @@ abc409-B                                 OK                   [(Singular: N),(Pa
 abc409-C                                 OK                   [(Singular: N),(Singular: L),(Parallel: d | 1 to N-1)] [('N', <class 'int'>), ('L', <class 'int'>), ('d', <class 'int'>)]
 abc409-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S)]] [('T', <class 'int'>)]
 abc409-E                                 OK                   [(Singular: N),(Parallel: x | 1 to N),(Parallel: u,v,w | 1 to N-1)] [('N', <class 'int'>), ('x', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('w', <class 'int'>)]
-abc409-F                                 No result
+abc409-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: x,y | 1 to N)], count=Q, variants=1:['int', 'int'],2:[],3:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 abc409-G                                 OK                   [(Singular: N),(Singular: P)] [('N', <class 'int'>), ('P', <class 'int'>)]
 abc410-A                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Singular: K)] [('N', <class 'int'>), ('A', <class 'int'>), ('K', <class 'int'>)]
 abc410-B                                 OK                   [(Singular: N),(Singular: Q),(Parallel: X | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>)]
-abc410-C                                 No result
+abc410-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int'],3:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc410-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B,W | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('W', <class 'int'>)]
 abc410-E                                 OK                   [(Singular: N),(Singular: H),(Singular: M),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('H', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc410-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Parallel: S | 1 to H)]] [('T', <class 'int'>)]
@@ -2546,7 +2546,7 @@ abc410-G                                 OK                   [(Singular: N),(Pa
 abc411-A                                 OK                   [(Singular: P),(Singular: L)] [('P', <class 'str'>), ('L', <class 'int'>)]
 abc411-B                                 OK                   [(Singular: N),(Parallel: D | 1 to N-1)] [('N', <class 'int'>), ('D', <class 'int'>)]
 abc411-C                                 OK                   [(Singular: N),(Singular: Q),(Parallel: A | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
-abc411-D                                 No result
+abc411-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int'],2:['int', 'str'],3:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc411-E                                 OK                   [(Singular: N),(TwoDimensional: A)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc411-F                                 OK                   [(Singular: N),(Singular: M),(Parallel: U,V | 1 to M),(Singular: Q),(Parallel: X | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>)]
 abc411-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: U,V | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>)]
@@ -2559,7 +2559,7 @@ abc412-F                                 OK                   [(Singular: N),(Si
 abc412-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 abc413-A                                 No result
 abc413-B                                 No result
-abc413-C                                 No result
+abc413-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int']] [('Q', <class 'int'>)]
 abc413-D                                 No result
 abc413-E                                 No result
 abc413-F                                 OK                   [(Singular: H),(Singular: W),(Singular: K),(Parallel: R,C | 1 to K)] [('H', <class 'int'>), ('W', <class 'int'>), ('K', <class 'int'>), ('R', <class 'int'>), ('C', <class 'int'>)]
@@ -2576,7 +2576,7 @@ abc415-B                                 OK                   [(Singular: S)] [(
 abc415-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S)]] [('T', <class 'int'>)]
 abc415-D                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc415-E                                 OK                   [(Singular: H),(Singular: W),(TwoDimensional: A),(Parallel: P | 1 to H+W-1)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'int'>), ('P', <class 'int'>)]
-abc415-F                                 No result
+abc415-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Singular: S)], count=Q, variants=1:['int', 'str'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'str'>)]
 abc415-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc416-A                                 OK                   [(Singular: N),(Singular: L),(Singular: R),(Singular: S)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('S', <class 'str'>)]
 abc416-B                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
@@ -2600,7 +2600,7 @@ abc418-E                                 OK                   [(Singular: N),(Pa
 abc418-F                                 OK                   [(Singular: N),(Singular: Q),(Parallel: X,Y | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc418-G                                 OK                   [(Singular: N),(Singular: T)] [('N', <class 'int'>), ('T', <class 'str'>)]
 abc419-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
-abc419-B                                 No result
+abc419-B                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:[]] [('Q', <class 'int'>)]
 abc419-C                                 OK                   [(Singular: N),(Parallel: R,C | 1 to N)] [('N', <class 'int'>), ('R', <class 'int'>), ('C', <class 'int'>)]
 abc419-D                                 OK                   [(Singular: N),(Singular: M),(Singular: S),(Singular: T),(Parallel: L,R | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 abc419-E                                 OK                   [(Singular: N),(Singular: M),(Singular: L),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('A', <class 'int'>)]
@@ -2610,7 +2610,7 @@ abc420-A                                 OK                   [(Singular: X),(Si
 abc420-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>)]
 abc420-C                                 OK                   [(Singular: N),(Singular: Q),(Parallel: A | 1 to N),(Parallel: B | 1 to N),(Parallel: c,X,V | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('c', <class 'str'>), ('X', <class 'int'>), ('V', <class 'int'>)]
 abc420-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: A | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'str'>)]
-abc420-E                                 No result
+abc420-E                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int'],3:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc420-F                                 OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
 abc420-G                                 OK                   [(Singular: X)] [('X', <class 'int'>)]
 abc421-A                                 OK                   [(Singular: N),(Parallel: S | 1 to N),(Singular: X),(Singular: Y)] [('N', <class 'int'>), ('S', <class 'str'>), ('X', <class 'int'>), ('Y', <class 'str'>)]
@@ -2618,7 +2618,7 @@ abc421-B                                 OK                   [(Singular: X),(Si
 abc421-C                                 OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc421-D                                 No result
 abc421-E                                 OK                   [(Parallel: A | 1 to 6)] [('A', <class 'int'>)]
-abc421-F                                 No result
+abc421-F                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:['int', 'int']] [('Q', <class 'int'>)]
 abc421-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: L,R | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 abc422-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc422-B                                 No result
@@ -2643,7 +2643,7 @@ abc424-F                                 OK                   [(Singular: N),(Si
 abc424-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B,C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc425-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc425-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc425-C                                 No result
+abc425-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, variants=1:['int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 abc425-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 abc425-E                                 No result
 abc425-F                                 OK                   [(Singular: N),(Singular: T)] [('N', <class 'int'>), ('T', <class 'str'>)]
@@ -2664,7 +2664,7 @@ abc427-F                                 No result
 abc427-G                                 No result
 abc428-A                                 OK                   [(Singular: S),(Singular: A),(Singular: B),(Singular: X)] [('S', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('X', <class 'int'>)]
 abc428-B                                 OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
-abc428-C                                 No result
+abc428-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['str'],2:[]] [('Q', <class 'int'>)]
 abc428-D                                 No result
 abc428-E                                 OK                   [(Singular: N),(Parallel: A,B | 1 to N-1)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc428-F                                 No result
@@ -2674,7 +2674,7 @@ abc429-B                                 OK                   [(Singular: N),(Si
 abc429-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc429-D                                 OK                   [(Singular: N),(Singular: M),(Singular: C),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('C', <class 'int'>), ('A', <class 'int'>)]
 abc429-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: U,V | 1 to M),(Singular: S)] [('N', <class 'int'>), ('M', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>), ('S', <class 'str'>)]
-abc429-F                                 No result
+abc429-F                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: S | 1 to N),(Singular: Q)], count=Q, arguments=r:int,c:int] [('N', <class 'int'>), ('S', <class 'str'>), ('Q', <class 'int'>)]
 abc429-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Singular: A),(Singular: B),(Singular: X),(Singular: R)]] [('T', <class 'int'>)]
 abc430-A                                 OK                   [(Singular: A),(Singular: B),(Singular: C),(Singular: D)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 abc430-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>)]
@@ -2682,19 +2682,19 @@ abc430-C                                 OK                   [(Singular: N),(Si
 abc430-D                                 OK                   [(Singular: N),(Parallel: X | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>)]
 abc430-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: A),(Singular: B)]] [('T', <class 'int'>)]
 abc430-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S)]] [('T', <class 'int'>)]
-abc430-G                                 No result
+abc430-G                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int', 'int'],2:['int', 'int', 'int'],3:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc431-A                                 OK                   [(Singular: H),(Singular: B)] [('H', <class 'int'>), ('B', <class 'int'>)]
 abc431-B                                 No result
 abc431-C                                 No result
 abc431-D                                 No result
 abc431-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Parallel: S | 1 to H)]] [('T', <class 'int'>)]
 abc431-F                                 OK                   [(Singular: N),(Singular: D),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('D', <class 'int'>), ('A', <class 'int'>)]
-abc431-G                                 No result
+abc431-G                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, arguments=k:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 abc432-A                                 OK                   [(Singular: A),(Singular: B),(Singular: C)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc432-B                                 OK                   [(Singular: X)] [('X', <class 'int'>)]
 abc432-C                                 OK                   [(Singular: N),(Singular: X),(Singular: Y),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>)]
 abc432-D                                 OK                   [(Singular: N),(Singular: X),(Singular: Y),(Parallel: C,A,B | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('C', <class 'str'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-abc432-E                                 No result
+abc432-E                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, variants=1:['int', 'int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 abc432-F                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc432-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc433-A                                 OK                   [(Singular: X),(Singular: Y),(Singular: Z)] [('X', <class 'int'>), ('Y', <class 'int'>), ('Z', <class 'int'>)]
@@ -2714,7 +2714,7 @@ abc434-G                                 No result
 abc435-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc435-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc435-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc435-D                                 No result
+abc435-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: M),(Parallel: X,Y | 1 to M),(Singular: Q)], count=Q, variants=1:['int'],2:['int']] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('Q', <class 'int'>)]
 abc435-E                                 OK                   [(Singular: N),(Singular: Q),(Parallel: L,R | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 abc435-F                                 OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
 abc435-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: L,R | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
@@ -2763,7 +2763,7 @@ abc441-G                                 No result
 abc442-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc442-B                                 OK                   [(Singular: Q),(Parallel: A | 1 to Q)] [('Q', <class 'int'>), ('A', <class 'int'>)]
 abc442-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-abc442-D                                 No result
+abc442-D                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, variants=1:['int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 abc442-E                                 OK                   [(Singular: N),(Singular: Q),(Parallel: X,Y | 1 to N),(Parallel: A,B | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc442-F                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
 abc442-G                                 OK                   [(Singular: N),(Singular: C),(Parallel: W,V,K | 1 to N)] [('N', <class 'int'>), ('C', <class 'int'>), ('W', <class 'int'>), ('V', <class 'int'>), ('K', <class 'int'>)]
@@ -2810,7 +2810,7 @@ abc448-E                                 OK                   [(Singular: K),(Si
 abc448-F                                 OK                   [(Singular: N),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 abc448-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(TwoDimensional: X)]] [('T', <class 'int'>)]
 abc449-A                                 OK                   [(Singular: D)] [('D', <class 'int'>)]
-abc449-B                                 No result
+abc449-B                                 OK                   [TaggedQueryFormat: prefix=[(Singular: H),(Singular: W),(Singular: Q)], count=Q, variants=1:['int'],2:['int']] [('H', <class 'int'>), ('W', <class 'int'>), ('Q', <class 'int'>)]
 abc449-C                                 OK                   [(Singular: N),(Singular: L),(Singular: R),(Singular: S)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('S', <class 'str'>)]
 abc449-D                                 OK                   [(Singular: L),(Singular: R),(Singular: D),(Singular: U)] [('L', <class 'int'>), ('R', <class 'int'>), ('D', <class 'int'>), ('U', <class 'int'>)]
 abc449-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Singular: Q),(Parallel: X | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>)]
@@ -2825,7 +2825,7 @@ abc450-F                                 OK                   [(Singular: N),(Si
 abc450-G                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc451-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc451-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-abc451-C                                 No result
+abc451-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['int'],2:['int']] [('Q', <class 'int'>)]
 abc451-D                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc451-E                                 No result
 abc451-F                                 OK                   [(Singular: N),(Singular: Q),(Parallel: u,v | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
@@ -2881,7 +2881,7 @@ abc458-F                                 OK                   [(Singular: N),(Si
 abc458-G                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A,B,C | 1 to N)]] [('T', <class 'int'>)]
 abc459-A                                 OK                   [(Singular: X)] [('X', <class 'int'>)]
 abc459-B                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
-abc459-C                                 No result
+abc459-C                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int'],2:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc459-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S)]] [('T', <class 'int'>)]
 abc459-E                                 OK                   [(Singular: N),(Parallel: P | 2 to N),(Parallel: C | 1 to N),(Parallel: D | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 abc459-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
@@ -2891,13 +2891,13 @@ abc460-B                                 OK                   [RepeatedCase: pre
 abc460-C                                 OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc460-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 abc460-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M)]] [('T', <class 'int'>)]
-abc460-F                                 No result
-abc460-G                                 No result
+abc460-F                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: U,V | 1 to N-1),(Singular: Q)], count=Q, arguments=x:int] [('N', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>), ('Q', <class 'int'>)]
+abc460-G                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: W | 1 to N),(Parallel: C | 1 to N),(Parallel: a,b | 1 to N-1)], count=Q, variants=1:['int'],2:['int', 'int'],3:['int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('W', <class 'int'>), ('C', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 abc461-A                                 OK                   [(Singular: A),(Singular: D)] [('A', <class 'int'>), ('D', <class 'int'>)]
 abc461-B                                 OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc461-C                                 OK                   [(Singular: N),(Singular: K),(Singular: M),(Parallel: C,V | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('M', <class 'int'>), ('C', <class 'int'>), ('V', <class 'int'>)]
 abc461-D                                 OK                   [(Singular: H),(Singular: W),(Singular: K),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
-abc461-E                                 No result
+abc461-E                                 OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int'],2:['int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 abc461-F                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc461-G                                 OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 abc462-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
@@ -3353,7 +3353,7 @@ agc069-D                                 OK                   [(Singular: N),(Si
 agc069-E                                 OK                   [(Singular: N),(Singular: M),(Singular: X),(Singular: Y)] [('N', <class 'int'>), ('M', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 agc070-B                                 OK                   [(Singular: N),(Parallel: p | 2 to N)] [('N', <class 'int'>), ('p', <class 'int'>)]
 agc070-C                                 OK                   [(Singular: N),(Singular: A),(Singular: B)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-agc070-D                                 No result
+agc070-D                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: K),(Singular: Q),(Parallel: A | 1 to N+K),(Parallel: B | 1 to N+K)], count=Q, arguments=X:int,Y:int] [('N', <class 'int'>), ('K', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 agc070-E                                 OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
 agc071-A                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 agc071-B                                 OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
@@ -3373,7 +3373,7 @@ agc074-A                                 OK                   [RepeatedCase: pre
 agc074-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)]] [('T', <class 'int'>)]
 agc074-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 agc074-D                                 No result
-agc074-E                                 No result
+agc074-E                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: S),(Singular: Q)], count=Q, arguments=l:int,r:int] [('S', <class 'str'>), ('Q', <class 'int'>)]
 agc075-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 agc075-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: P),(Singular: X),(Singular: Y),(Parallel: A | 1 to N),(Parallel: C | 1 to N)]] [('T', <class 'int'>)]
 agc075-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)]] [('T', <class 'int'>)]
@@ -3673,7 +3673,7 @@ arc055-D                                 OK                   [(Singular: d)] [(
 arc056-A                                 OK                   [(Singular: A),(Singular: B),(Singular: K),(Singular: L)] [('A', <class 'int'>), ('B', <class 'int'>), ('K', <class 'int'>), ('L', <class 'int'>)]
 arc056-B                                 OK                   [(Singular: N),(Singular: M),(Singular: S),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 arc056-C                                 OK                   [(Singular: N),(Singular: K),(TwoDimensional: w)] [('N', <class 'int'>), ('K', <class 'int'>), ('w', <class 'int'>)]
-arc056-D                                 No result
+arc056-D                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Parallel: w | 1 to N)], rows=[RaggedRowPattern: count=N, prefix=M, length_pos=0, values=t], suffix=[]] [('N', <class 'int'>), ('w', <class 'int'>), ('M', <class 'int'>), ('t', <class 'int'>)]
 arc057-A                                 OK                   [(Singular: A),(Singular: K)] [('A', <class 'int'>), ('K', <class 'int'>)]
 arc057-B                                 OK                   [(Singular: N),(Singular: K),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('a', <class 'int'>)]
 arc057-C                                 OK                   [(Singular: a)] [('a', <class 'str'>)]
@@ -4441,7 +4441,7 @@ arc203-D                                 OK                   [(Singular: N),(Pa
 arc203-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Singular: L),(Singular: N),(Singular: M),(Singular: r),(Singular: c)]] [('T', <class 'int'>)]
 arc204-A                                 OK                   [(Singular: N),(Singular: L),(Singular: R),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc204-B                                 No result
-arc204-C                                 No result
+arc204-C                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: P | 1 to N),(Singular: Q)], count=Q, arguments=A_0:int,A_1:int,A_2:int] [('N', <class 'int'>), ('P', <class 'int'>), ('Q', <class 'int'>)]
 arc204-D                                 OK                   [(Singular: N),(Singular: L),(Singular: R)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 arc205-A                                 OK                   [(Singular: N),(Singular: Q),(Parallel: S | 1 to N),(Parallel: U,D,L,R | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'str'>), ('U', <class 'int'>), ('D', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 arc205-B                                 OK                   [(Singular: N),(Singular: M),(Parallel: U,V | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>)]
@@ -4465,7 +4465,7 @@ arc208-D                                 OK                   [RepeatedCase: pre
 arc208-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: X),(Singular: Y),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 arc209-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S),(Singular: K)]] [('T', <class 'int'>)]
 arc209-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S)]] [('T', <class 'int'>)]
-arc209-C                                 No result
+arc209-C                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: X),(Singular: Q),(Parallel: S | 1 to N),(Parallel: P | 1 to N)], count=Q, arguments=l:int,r:int] [('N', <class 'int'>), ('X', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'int'>), ('P', <class 'int'>)]
 arc209-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 arc209-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K)]] [('T', <class 'int'>)]
 arc210-A                                 OK                   [(Singular: N),(Singular: Q),(Parallel: i,x | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('i', <class 'int'>), ('x', <class 'int'>)]
@@ -4502,7 +4502,7 @@ arc215-D                                 OK                   [(Singular: N),(Si
 arc215-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: A),(Singular: B),(Singular: M),(Parallel: x,y | 1 to M)]] [('T', <class 'int'>)]
 arc215-F                                 OK                   [(Singular: N),(Parallel: A,B | 1 to N-1)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc216-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: A),(Singular: B)]] [('T', <class 'int'>)]
-arc216-B                                 No result
+arc216-B                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, arguments=l:int,r:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 arc216-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 arc216-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: B),(Singular: C),(Singular: D)]] [('T', <class 'int'>)]
 arc216-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: P | 1 to N),(Parallel: x,y | 1 to M)]] [('T', <class 'int'>)]
@@ -4513,10 +4513,10 @@ arc217-D                                 OK                   [RepeatedCase: pre
 arc217-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Parallel: u,v | 1 to N-1)]] [('T', <class 'int'>)]
 arc218-A                                 OK                   [(Singular: N),(Singular: M),(TwoDimensional: A)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 arc218-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
-arc218-D                                 No result
-arc218-E                                 No result
-arc218-F                                 No result
-arc218-F2                                No result
+arc218-D                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: P | 1 to N)], count=Q, arguments=l:int,r:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('P', <class 'int'>)]
+arc218-E                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: P | 1 to N)], count=Q, arguments=x:int,K:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('P', <class 'int'>)]
+arc218-F                                 OK                   [HomogeneousQueryFormat: prefix=[(Singular: M),(Singular: Q),(TwoDimensional: X)], count=Q, arguments=i:int,j:int,Y:int] [('M', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>)]
+arc218-F2                                OK                   [HomogeneousQueryFormat: prefix=[(Singular: M),(Singular: Q),(TwoDimensional: X)], count=Q, arguments=i:int,j:int,Y:int] [('M', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>)]
 arc219-A                                 OK                   [(Singular: N),(Singular: M),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>)]
 arc219-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: P | 1 to N)]] [('T', <class 'int'>)]
 arc219-C                                 OK                   [(Singular: H),(Singular: W),(Singular: N),(Parallel: A,B | 1 to N)] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -5345,7 +5345,7 @@ hitachi2020-D                            OK                   [(Singular: N),(Si
 hitachi2020-E                            OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 hitachi2020-F                            OK                   [(Singular: N),(Parallel: a,b | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 hokudai-hitachi2017-1-A                  No result
-hokudai-hitachi2018-A                    No result
+hokudai-hitachi2018-A                    OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: K)], rows=[RaggedRowPattern: count=K, prefix=d,c, length_pos=0, values=v], suffix=[]] [('N', <class 'int'>), ('K', <class 'int'>), ('d', <class 'int'>), ('c', <class 'int'>), ('v', <class 'int'>)]
 hokudai-hitachi2019-1-A                  No result
 hokudai-hitachi2019-1-B                  No result
 hokudai-hitachi2021-B                    No result
@@ -6028,7 +6028,7 @@ nadafes2022_day1-F                       OK                   [(Singular: N),(Si
 nadafes2022_day1-G                       OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 nadafes2022_day1-H                       No result
 nadafes2022_day1-I                       OK                   [(Singular: N),(Singular: K),(Parallel: x,y,c | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('c', <class 'int'>)]
-nadafes2022_day1-J                       No result
+nadafes2022_day1-J                       OK                   [RaggedRowFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], rows=[RaggedRowPattern: count=Q, prefix=K, length_pos=0, values=p], suffix=[]] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>), ('K', <class 'int'>), ('p', <class 'int'>)]
 nadafes2022_day1-K                       OK                   [(Singular: N),(Singular: A),(Singular: B)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 nadafes2022_day1-L                       OK                   [(Singular: N),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 nadafes2022_day1-M                       OK                   [(Singular: N),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -6054,16 +6054,16 @@ ndpc-A                                   OK                   [(Singular: N)] [(
 ndpc-B                                   OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)]] [('T', <class 'int'>)]
 ndpc-C                                   OK                   [(Singular: N),(Parallel: S | 1 to 3)] [('N', <class 'int'>), ('S', <class 'str'>)]
 ndpc-D                                   OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
-ndpc-E                                   No result
+ndpc-E                                   OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: M),(Singular: Q),(Parallel: A,B | 1 to M)], count=Q, arguments=L:int,R:int] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 ndpc-F                                   OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: P | 1 to N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
-ndpc-G                                   No result
+ndpc-G                                   OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, arguments=i:int,v:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 ndpc-H                                   OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
 ndpc-I                                   OK                   [(Singular: N),(Singular: L),(Singular: R),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('A', <class 'int'>)]
 ndpc-J                                   OK                   [(Singular: N),(Singular: S),(Singular: T),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>)]
 ndpc-K                                   OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 ndpc-L                                   OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 ndpc-M                                   OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'int'>)]
-ndpc-N                                   No result
+ndpc-N                                   OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: v | 1 to N)], count=Q, arguments=W:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('v', <class 'int'>)]
 ndpc-O                                   No result
 ndpc-P                                   OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 ndpc-Q                                   OK                   [(Singular: N),(Singular: M),(Parallel: L,R | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
@@ -6075,7 +6075,7 @@ newjudge-2308-algorithm-B                OK                   [(Singular: X),(Si
 newjudge-2308-algorithm-D                OK                   [(Parallel: N | 1 to 2),(Singular: M),(Parallel: a,b | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 newjudge-2308-algorithm-E                OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M),(Singular: K),(Parallel: x,y | 1 to K),(Singular: Q),(Parallel: p,q | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('K', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('Q', <class 'int'>), ('p', <class 'int'>), ('q', <class 'int'>)]
 newjudge-2308-algorithm-F                OK                   [(Singular: S),(Singular: T),(Singular: M),(Parallel: u,v | 1 to M)] [('S', <class 'int'>), ('T', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
-newjudge-2308-algorithm-G                No result
+newjudge-2308-algorithm-G                OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: M),(Singular: Q),(Parallel: A,B,C | 1 to M)], count=Q, arguments=X_i:int,Y_i:int,Z_i:int,W_i:int] [('N', <class 'int'>), ('M', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 newjudge-2308-algorithm-H                OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 newjudge-2308-heuristic-A                No result
 nikkei2019-2-final-A                     OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
@@ -6147,9 +6147,9 @@ npcapc_2024-P                            OK                   [RepeatedCase: pre
 nupc2024-A                               OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 nupc2024-B                               OK                   [(Singular: N),(Singular: M),(Parallel: C | 1 to N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('C', <class 'int'>), ('A', <class 'int'>)]
 nupc2024-C                               OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
-nupc2024-D                               No result
+nupc2024-D                               OK                   [TaggedQueryFormat: prefix=[(Singular: H),(Singular: W),(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int', 'int'],2:['int', 'int', 'int'],3:['int', 'int', 'int']] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('Q', <class 'int'>)]
 nupc2024-E                               OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
-nupc2024-F                               No result
+nupc2024-F                               OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Parallel: u,v | 1 to N-1),(Parallel: A | 1 to N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int']] [('N', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 nupc2024-G                               OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 nupc2024-H                               OK                   [(Singular: N),(Singular: M),(Singular: S),(Singular: T),(Singular: Q),(Parallel: k | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>), ('Q', <class 'int'>), ('k', <class 'int'>)]
 nupc2024-I                               OK                   [(Singular: H),(Singular: K)] [('H', <class 'int'>), ('K', <class 'int'>)]
@@ -6159,7 +6159,7 @@ nupc2024-L                               OK                   [(Singular: N),(Pa
 nupc2024-M                               OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 nupc2024-N                               OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N),(Parallel: u,v | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 nupc2024-O                               OK                   [(Singular: N),(Singular: M),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>)]
-nupc2024-P                               No result
+nupc2024-P                               OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 nupc2024-Q                               OK                   [(Singular: N)] [('N', <class 'int'>)]
 oidashi-A                                OK                   [(Singular: H),(Singular: W),(Parallel: line | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('line', <class 'str'>)]
 oidashi-B                                No result
@@ -6319,7 +6319,7 @@ pakencamp-2023-day1-K                    OK                   [(Singular: N),(Si
 pakencamp-2023-day1-L                    OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 pakencamp-2023-day1-M                    OK                   [(Singular: N)] [('N', <class 'int'>)]
 pakencamp-2023-day1-N                    OK                   [(Singular: Q),(Parallel: H,W,K | 1 to Q)] [('Q', <class 'int'>), ('H', <class 'int'>), ('W', <class 'int'>), ('K', <class 'int'>)]
-pakencamp-2023-day1-O                    No result
+pakencamp-2023-day1-O                    OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Parallel: A,B | 1 to N-1),(Parallel: C | 1 to N),(Singular: Q)], count=Q, variants=1:['int', 'str'],2:['int'],3:['int', 'int']] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'str'>), ('Q', <class 'int'>)]
 pakencamp-2023-day1-P                    OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 pakencamp-2023-day2-A                    OK                   [(Singular: N)] [('N', <class 'int'>)]
 pakencamp-2023-day2-B                    OK                   [(Singular: N),(Singular: M),(Singular: S),(Parallel: A,B | 1 to N-1),(Parallel: X | 1 to M),(Parallel: Y | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
@@ -6336,7 +6336,7 @@ pakencamp-2023-day3-D                    No result
 pakencamp-2023-day3-E                    OK                   [(Singular: N),(Singular: M),(Singular: K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>)]
 pakencamp-2023-day3-F                    OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 pakencamp-2023-day3-G                    OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: M),(Singular: K),(Parallel: R | 1 to N),(Parallel: P,Q | 1 to K)]] [('T', <class 'int'>)]
-pakencamp-2023-day3-H                    No result
+pakencamp-2023-day3-H                    OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: S),(Singular: T),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int', 'int', 'str']] [('N', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>), ('Q', <class 'int'>)]
 pakencamp-2023-day3-I                    OK                   [(Singular: N),(Parallel: P | 2 to N),(Parallel: V | 1 to N),(Parallel: C | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('V', <class 'int'>), ('C', <class 'int'>)]
 pakencamp-2023-day3-J                    OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: L),(Singular: R)]] [('T', <class 'int'>)]
 pakencamp-2024-day1-A                    OK                   [(Singular: N)] [('N', <class 'int'>)]
@@ -6362,7 +6362,7 @@ pakencamp-2024-day2-B                    OK                   [(Singular: N),(Si
 pakencamp-2024-day2-C                    OK                   [(Singular: N),(Parallel: A,B | 1 to N-1),(Parallel: C | 1 to N),(Singular: M),(Parallel: U,V,L,R | 1 to M),(Singular: Q),(Parallel: S,T | 1 to Q)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('M', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>)]
 pakencamp-2024-day2-D                    OK                   [(Singular: N),(Singular: Q),(Parallel: W | 1 to N),(Parallel: L,R | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('W', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 pakencamp-2024-day2-E                    OK                   [(Singular: N),(Parallel: P | 2 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
-pakencamp-2024-day2-F                    No result
+pakencamp-2024-day2-F                    OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: K),(Parallel: D | 1 to N),(Singular: Q)], count=Q, variants=1:['int', 'int', 'int'],2:['int', 'int'],3:['int', 'int']] [('N', <class 'int'>), ('K', <class 'int'>), ('D', <class 'int'>), ('Q', <class 'int'>)]
 pakencamp-2024-day2-H                    OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: R | 1 to N),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('R', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 pakencamp-2024-day3-1-A                  OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 pakencamp-2024-day3-1-B                  OK                   [(Singular: N),(Singular: K),(Parallel: C | 1 to N),(Parallel: W | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('C', <class 'int'>), ('W', <class 'int'>)]
@@ -6405,7 +6405,7 @@ pakencamp-2025-day1-H                    OK                   [(Singular: N),(Si
 pakencamp-2025-day1-I                    OK                   [(Singular: N),(Singular: M),(TwoDimensional: A)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 pakencamp-2025-day1-J                    OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 pakencamp-2025-day1-K                    No result
-pakencamp-2025-day1-L                    No result
+pakencamp-2025-day1-L                    OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N),(Parallel: B | 1 to N)], count=Q, variants=1:['int', 'int'],2:['int', 'int'],3:['int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 pakencamp-2025-day1-M                    No result
 pakencamp-2025-day1-N                    OK                   [(Singular: N),(Singular: X),(Singular: Y)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 pakencamp-2025-day1-O                    OK                   [(Singular: H),(Singular: W),(Parallel: A | 1 to H),(Parallel: B | 1 to H),(Parallel: C | 1 to W)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
@@ -6423,7 +6423,7 @@ pakencamp-2025-day3-A                    OK                   [(Singular: N),(Si
 pakencamp-2025-day3-B                    OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: W),(Singular: S)]] [('T', <class 'int'>)]
 pakencamp-2025-day3-C                    OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: X,Y | 1 to N)]] [('T', <class 'int'>)]
 pakencamp-2025-day3-D                    OK                   [(Singular: N),(Singular: X),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>)]
-pakencamp-2025-day3-E                    No result
+pakencamp-2025-day3-E                    OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], count=Q, arguments=L:int,R:int] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 pakencamp-2025-day3-F                    OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 pakencamp-2025-day3-G                    OK                   [(Singular: N),(Parallel: A | 0 to N-2),(Parallel: B | 0 to N-1)] [('N', <class 'int'>), ('A', <class 'str'>), ('B', <class 'str'>)]
 pakencamp-2025-day3-H                    OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
@@ -6468,7 +6468,7 @@ past16-open-H                            OK                   [(Singular: N),(Si
 past16-open-I                            OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 past16-open-J                            OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to K)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 past16-open-K                            OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
-past16-open-L                            No result
+past16-open-L                            OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, variants=1:['int'],2:[]] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 past16-open-M                            OK                   [(Parallel: a,b,c,d | 1 to 2)] [('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>), ('d', <class 'int'>)]
 past16-open-N                            No result
 past16-open-O                            No result
@@ -6486,7 +6486,7 @@ past17-open-K                            OK                   [(Singular: N),(Si
 past17-open-L                            No result
 past17-open-M                            OK                   [(Parallel: P,Q,R,S,U,V | 1 to 2)] [('P', <class 'int'>), ('Q', <class 'int'>), ('R', <class 'int'>), ('S', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>)]
 past17-open-N                            OK                   [(Singular: N),(Parallel: T | 1 to N)] [('N', <class 'int'>), ('T', <class 'int'>)]
-past17-open-O                            No result
+past17-open-O                            OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int']] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 past18-open-A                            OK                   [(Singular: X),(Singular: Y),(Singular: Z),(Singular: S)] [('X', <class 'int'>), ('Y', <class 'int'>), ('Z', <class 'int'>), ('S', <class 'int'>)]
 past18-open-B                            OK                   [(Singular: R),(Singular: P)] [('R', <class 'int'>), ('P', <class 'int'>)]
 past18-open-C                            OK                   [(Parallel: B,R | 1 to 2),(Singular: T)] [('B', <class 'int'>), ('R', <class 'int'>), ('T', <class 'int'>)]
@@ -6501,7 +6501,7 @@ past18-open-K                            OK                   [(Singular: N),(Pa
 past18-open-L                            OK                   [(Singular: N),(Singular: Q),(Parallel: s,p | 1 to N),(Parallel: q | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('s', <class 'str'>), ('p', <class 'int'>), ('q', <class 'int'>)]
 past18-open-M                            OK                   [(Singular: N),(Singular: M),(Singular: S),(Parallel: A | 1 to N),(Parallel: X,Y | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'int'>), ('A', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 past18-open-N                            OK                   [(Singular: T_x),(Singular: T_y),(Singular: V_T),(Singular: A_x),(Singular: A_y),(Singular: V_A)] [('T_x', <class 'int'>), ('T_y', <class 'int'>), ('V_T', <class 'int'>), ('A_x', <class 'int'>), ('A_y', <class 'int'>), ('V_A', <class 'int'>)]
-past18-open-O                            No result
+past18-open-O                            OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: X,D | 1 to N)], count=Q, variants=1:['int', 'str'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>), ('D', <class 'str'>)]
 past19-open-A                            OK                   [(Singular: X),(Singular: H),(Singular: M)] [('X', <class 'int'>), ('H', <class 'int'>), ('M', <class 'int'>)]
 past19-open-B                            OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 past19-open-C                            OK                   [(Singular: N)] [('N', <class 'int'>)]
@@ -6553,7 +6553,7 @@ past202004-open-C                        OK                   [(Singular: N),(Pa
 past202004-open-D                        OK                   [(Singular: S)] [('S', <class 'str'>)]
 past202004-open-E                        OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 past202004-open-F                        OK                   [(Singular: N),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-past202004-open-G                        No result
+past202004-open-G                        OK                   [TaggedQueryFormat: prefix=[(Singular: Q)], count=Q, variants=1:['str', 'int'],2:['int']] [('Q', <class 'int'>)]
 past202004-open-H                        OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'str'>)]
 past202004-open-I                        OK                   [(Singular: N),(Parallel: A | 1 to 2^N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 past202004-open-J                        OK                   [(Singular: S)] [('S', <class 'str'>)]
@@ -6588,7 +6588,7 @@ past202010-open-H                        OK                   [(Singular: N),(Si
 past202010-open-I                        OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 past202010-open-J                        No result
 past202010-open-K                        No result
-past202010-open-L                        No result
+past202010-open-L                        OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: h | 1 to N)], count=Q, variants=1:['int'],2:['int'],3:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('h', <class 'int'>)]
 past202010-open-M                        OK                   [(Singular: N),(Singular: Q),(Parallel: a,b | 1 to N-1),(Parallel: u,v,c | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('c', <class 'int'>)]
 past202010-open-N                        OK                   [(Parallel: s | 1 to 18)] [('s', <class 'str'>)]
 past202010-open-O                        No result
@@ -6619,7 +6619,7 @@ past202104-open-I                        OK                   [(Singular: H),(Si
 past202104-open-J                        OK                   [(Singular: N),(Singular: C),(Parallel: X,Y | 1 to N)] [('N', <class 'int'>), ('C', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
 past202104-open-K                        OK                   [(Singular: N),(Parallel: P,U | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('U', <class 'int'>)]
 past202104-open-L                        No result
-past202104-open-M                        No result
+past202104-open-M                        OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], count=Q, arguments=l:int,r:int,x:int] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 past202104-open-N                        OK                   [(Singular: N),(Singular: H),(Parallel: a,b | 1 to N)] [('N', <class 'int'>), ('H', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 past202104-open-O                        OK                   [(Singular: N),(Singular: M),(Parallel: a,b | 1 to M),(Singular: Q),(Parallel: u,v | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('Q', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 past202107-open-A                        OK                   [(Singular: S)] [('S', <class 'int'>)]
@@ -6658,7 +6658,7 @@ past202112-open-C                        OK                   [(Singular: N),(Pa
 past202112-open-D                        OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 past202112-open-E                        OK                   [(Singular: N)] [('N', <class 'str'>)]
 past202112-open-F                        OK                   [(Singular: A),(Singular: B),(Parallel: S | 1 to 3)] [('A', <class 'int'>), ('B', <class 'int'>), ('S', <class 'str'>)]
-past202112-open-G                        No result
+past202112-open-G                        OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int', 'int'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 past202112-open-H                        OK                   [(Singular: S),(Singular: T)] [('S', <class 'str'>), ('T', <class 'str'>)]
 past202112-open-I                        OK                   [(Singular: N),(Singular: M),(Parallel: A,B,C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 past202112-open-J                        No result
@@ -6679,7 +6679,7 @@ past202203-open-I                        OK                   [(Singular: N),(Pa
 past202203-open-J                        OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 past202203-open-K                        No result
 past202203-open-L                        OK                   [(Singular: K),(Singular: M),(Parallel: C,D | 1 to K)] [('K', <class 'int'>), ('M', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
-past202203-open-M                        No result
+past202203-open-M                        OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: P | 1 to N)], count=Q, variants=1:['int', 'int'],2:['int'],3:['int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('P', <class 'int'>)]
 past202203-open-N                        OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 past202203-open-O                        OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 past202206-open-A                        OK                   [(Singular: X),(Singular: A),(Singular: B),(Singular: C)] [('X', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
@@ -6725,7 +6725,7 @@ past202212-open-J                        OK                   [(Singular: N),(Si
 past202212-open-K                        OK                   [(Singular: A),(Singular: B),(Singular: X)] [('A', <class 'int'>), ('B', <class 'int'>), ('X', <class 'int'>)]
 past202212-open-L                        OK                   [(Singular: N),(Parallel: L,R | 1 to N)] [('N', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 past202212-open-M                        OK                   [(Singular: N),(Parallel: U,V | 1 to N-1)] [('N', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>)]
-past202212-open-N                        No result
+past202212-open-N                        OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Parallel: A | 1 to N),(Singular: Q)], count=Q, arguments=l:int,r:int] [('N', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 past202212-open-O                        No result
 past202303-open-A                        OK                   [(Singular: N),(Singular: S),(Singular: T)] [('N', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>)]
 past202303-open-B                        OK                   [(Singular: D),(Singular: A),(Singular: B)] [('D', <class 'int'>), ('A', <class 'float'>), ('B', <class 'float'>)]
@@ -6741,7 +6741,7 @@ past202303-open-K                        OK                   [(Singular: N),(Si
 past202303-open-L                        OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 past202303-open-M                        OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N),(Parallel: B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 past202303-open-N                        OK                   [(Singular: N),(Singular: C),(Singular: D),(Parallel: d,a | 1 to N)] [('N', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>), ('d', <class 'int'>), ('a', <class 'int'>)]
-past202303-open-O                        No result
+past202303-open-O                        OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, arguments=C:int,L:int,R:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 past21-open-A                            OK                   [(Singular: X)] [('X', <class 'int'>)]
 past21-open-B                            OK                   [(Singular: S)] [('S', <class 'str'>)]
 past21-open-C                            OK                   [(Singular: N),(Singular: K),(Parallel: S,T | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>)]
@@ -6755,7 +6755,7 @@ past21-open-J                            No result
 past21-open-K                            OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N),(Parallel: C | 1 to N),(Parallel: D | 1 to N),(Parallel: E | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>), ('E', <class 'int'>)]
 past21-open-L                            OK                   [(Singular: N),(Parallel: X,Y | 1 to N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('P', <class 'int'>)]
 past21-open-M                            OK                   [(Singular: N),(Singular: M),(Parallel: S | 1 to N),(Parallel: D | 1 to M-1)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'int'>), ('D', <class 'int'>)]
-past21-open-N                            No result
+past21-open-N                            OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: K),(Parallel: A | 1 to N),(Singular: Q)], count=Q, arguments=i:int,x:int] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('Q', <class 'int'>)]
 past21-open-O                            OK                   [(Singular: N),(Singular: M),(Singular: P),(Parallel: a,b,d | 1 to N),(Parallel: u,v,e | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('P', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('d', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('e', <class 'int'>)]
 past22-open-A                            OK                   [(Singular: N)] [('N', <class 'int'>)]
 past22-open-B                            OK                   [(Singular: W),(Singular: R)] [('W', <class 'int'>), ('R', <class 'int'>)]
@@ -6771,7 +6771,7 @@ past22-open-K                            OK                   [(Singular: N),(Pa
 past22-open-L                            OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
 past22-open-M                            OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 past22-open-N                            OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
-past22-open-O                            No result
+past22-open-O                            OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N),(Parallel: B | 1 to N)], count=Q, variants=1:['int', 'int'],2:['int', 'int'],3:['int', 'int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 past23-open-A                            OK                   [(Singular: A),(Singular: B),(Singular: C),(Singular: D)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 past23-open-B                            OK                   [(Singular: A),(Singular: B),(Singular: C)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 past23-open-C                            OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
@@ -6782,7 +6782,7 @@ past23-open-G                            OK                   [(Singular: N),(Si
 past23-open-H                            OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 past23-open-I                            OK                   [(Singular: N),(Singular: Y),(Parallel: S,X | 1 to N)] [('N', <class 'int'>), ('Y', <class 'int'>), ('S', <class 'str'>), ('X', <class 'int'>)]
 past23-open-J                            OK                   [(Singular: N),(Parallel: S,T | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>), ('T', <class 'int'>)]
-past23-open-K                            No result
+past23-open-K                            OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Singular: S)], count=Q, variants=1:['int', 'str'],2:['int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('S', <class 'str'>)]
 past23-open-L                            OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 past23-open-M                            OK                   [(Singular: N),(Singular: M),(Singular: K),(Singular: T),(Parallel: X,Y,C | 1 to M),(Parallel: A | 1 to K)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('T', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('C', <class 'int'>), ('A', <class 'int'>)]
 past23-open-N                            OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
@@ -6862,7 +6862,7 @@ s8pc-6-F                                 OK                   [(Singular: N),(Si
 s8pc-6-G                                 OK                   [(Singular: N),(Singular: P),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('A', <class 'int'>)]
 s8pc-6-H                                 OK                   [(Singular: Q),(Parallel: K | 1 to Q)] [('Q', <class 'int'>), ('K', <class 'int'>)]
 s8pc-6-I                                 OK                   [(Singular: H),(Singular: W),(TwoDimensional: A)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'int'>)]
-scpc2026-div1-A                          No result
+scpc2026-div1-A                          OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int'],2:['int', 'int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 scpc2026-div1-B                          OK                   [(Singular: N),(Singular: M),(Singular: S),(Singular: T)] [('N', <class 'int'>), ('M', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
 scpc2026-div1-C                          OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
 scpc2026-div1-D                          OK                   [(Singular: N),(Singular: M),(Parallel: w | 1 to N),(Parallel: p | 2 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('w', <class 'int'>), ('p', <class 'int'>)]
@@ -6870,7 +6870,7 @@ scpc2026-div1-E                          OK                   [(Singular: N),(Pa
 scpc2026-div1-F                          OK                   [(Singular: N),(Singular: M),(Singular: T)] [('N', <class 'int'>), ('M', <class 'int'>), ('T', <class 'str'>)]
 scpc2026-div1-G                          OK                   [(Singular: N),(Singular: M),(TwoDimensional: A)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 scpc2026-div1-H                          OK                   [(Singular: N),(Parallel: S,C | 1 to N)] [('N', <class 'int'>), ('S', <class 'int'>), ('C', <class 'int'>)]
-scpc2026-div1-I                          No result
+scpc2026-div1-I                          OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: V | 1 to N),(Parallel: u,v | 1 to N-1)], count=Q, variants=1:['int', 'int'],2:['int']] [('N', <class 'int'>), ('Q', <class 'int'>), ('V', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 scpc2026-div1-J                          OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
 scpc2026-div1-K                          OK                   [(Singular: L),(Singular: K),(Parallel: V | 1 to L)] [('L', <class 'int'>), ('K', <class 'int'>), ('V', <class 'int'>)]
 scpc2026-div1-L                          No result
@@ -6881,7 +6881,7 @@ scpc2026-div2-D                          OK                   [(Singular: N),(Si
 scpc2026-div2-E                          OK                   [(Singular: N),(Parallel: M | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>)]
 scpc2026-div2-F                          OK                   [(Singular: N),(Singular: K),(Singular: M),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>)]
 scpc2026-div2-G                          OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S)]] [('T', <class 'int'>)]
-scpc2026-div2-H                          No result
+scpc2026-div2-H                          OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int'],2:['int', 'int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 scpc2026-div2-I                          OK                   [(Singular: T),(Parallel: A,B,C,D,P | 1 to T)] [('T', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>), ('P', <class 'int'>)]
 scpc2026-div2-J                          OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: S)]] [('T', <class 'int'>)]
 scpc2026-div2-K                          OK                   [(Singular: N),(Parallel: P | 1 to N),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('P', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
@@ -6894,7 +6894,7 @@ scpc2026-div3-E                          OK                   [RepeatedCase: pre
 scpc2026-div3-F                          OK                   [(Singular: Q),(Parallel: x | 1 to Q)] [('Q', <class 'int'>), ('x', <class 'int'>)]
 scpc2026-div3-G                          OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: S)]] [('T', <class 'int'>)]
 scpc2026-div3-H                          OK                   [(Singular: N),(Singular: T),(Singular: A),(Singular: B),(Parallel: u,v | 1 to N-1)] [('N', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
-scpc2026-div3-I                          No result
+scpc2026-div3-I                          OK                   [TaggedQueryFormat: prefix=[(Singular: N),(Singular: Q)], count=Q, variants=1:['int'],2:['int', 'int', 'int']] [('N', <class 'int'>), ('Q', <class 'int'>)]
 scpc2026-div3-J                          OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
 soundhound2018-A                         OK                   [(Singular: X),(Singular: Y)] [('X', <class 'str'>), ('Y', <class 'str'>)]
 soundhound2018-B                         OK                   [(Singular: n),(Singular: L),(Singular: R),(Parallel: a | 1 to n)] [('n', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>), ('a', <class 'int'>)]
@@ -7141,7 +7141,7 @@ tkppc6-2-F                               OK                   [(Singular: N),(Si
 tkppc6-2-G                               OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 tkppc6-2-H                               OK                   [(Singular: N),(Parallel: B,W | 1 to N),(Singular: Q),(Parallel: L,R | 1 to Q)] [('N', <class 'int'>), ('B', <class 'int'>), ('W', <class 'int'>), ('Q', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
 tkppc6-2-I                               No result
-tkppc6-2-J                               No result
+tkppc6-2-J                               OK                   [HomogeneousQueryFormat: prefix=[(Singular: N),(Singular: Q),(Parallel: A | 1 to N)], count=Q, arguments=S:int,T:int] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>)]
 tkppc6-2-K                               OK                   [(Singular: N),(Singular: M),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 tkppc6-2-L                               OK                   [(Singular: N),(Singular: M),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 tkppc6-2-M                               No result
@@ -7311,7 +7311,7 @@ utpc2012-F                               No result
 utpc2012-G                               OK                   [(Singular: n),(Singular: k),(Singular: s)] [('n', <class 'int'>), ('k', <class 'int'>), ('s', <class 'str'>)]
 utpc2012-H                               OK                   [(Singular: N),(Singular: Q),(Parallel: IL,IR | 1 to N),(Parallel: QL,QR | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('IL', <class 'int'>), ('IR', <class 'int'>), ('QL', <class 'int'>), ('QR', <class 'int'>)]
 utpc2012-I                               OK                   [(Singular: W),(Singular: H),(Singular: Q),(TwoDimensional: A),(Parallel: SX,SY,TX,TY | 1 to Q)] [('W', <class 'int'>), ('H', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('SX', <class 'int'>), ('SY', <class 'int'>), ('TX', <class 'int'>), ('TY', <class 'int'>)]
-utpc2012-J                               No result
+utpc2012-J                               OK                   [RaggedRowFormat: prefix=[(Singular: n),(Singular: m),(Singular: d)], rows=[RaggedRowPattern: count=m, prefix=c,s,k, length_pos=2, values=a], suffix=[(Parallel: b | 1 to d)]] [('n', <class 'int'>), ('m', <class 'int'>), ('d', <class 'int'>), ('c', <class 'int'>), ('s', <class 'int'>), ('k', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 utpc2012-K                               OK                   [(Singular: a),(Singular: b)] [('a', <class 'int'>), ('b', <class 'int'>)]
 utpc2012-L                               No result
 utpc2013-A                               OK                   [(Singular: s)] [('s', <class 'str'>)]
