@@ -18,6 +18,54 @@ from pathlib import Path
 import toml
 
 
+_POWER_OF_TWO_RE = re.compile(
+    r"(?<![A-Za-z0-9_])"
+    r"2\^"
+    r"(?P<exponent>[A-Za-z_][A-Za-z0-9_]*)"
+)
+
+_POWER_OF_TWO_SHIFT_TEMPLATES = {
+    "cpp": "(1LL << ({exponent}))",
+    "cs": "(1 << (int)({exponent}))",
+    "d": "(1L << ({exponent}))",
+    "go": "(1 << ({exponent}))",
+    "java": "(1 << (int)({exponent}))",
+    "julia": "(1 << ({exponent}))",
+    "nim": "(1 shl ({exponent}))",
+    "python": "(1 << ({exponent}))",
+    "rust": "(1usize << (({exponent}) as usize))",
+    "swift": "(1 << ({exponent}))",
+}
+
+
+def _render_power_of_two_length(
+    code: str,
+    language: str,
+) -> str:
+    """
+    Render powers of two as integer shifts in generated source.
+
+    The format-expression syntax uses ``^`` for exponentiation, while
+    most target languages interpret it as bitwise XOR.
+    """
+    language_name = getattr(language, "name", language)
+    language_name = str(language_name).lower()
+
+    template = _POWER_OF_TWO_SHIFT_TEMPLATES.get(
+        language_name
+    )
+
+    if template is None:
+        return code
+
+    return _POWER_OF_TWO_RE.sub(
+        lambda match: template.format(
+            exponent=match.group("exponent")
+        ),
+        code,
+    )
+
+
 class UniversalCodeGenerator():
     def __init__(
         self,
@@ -55,7 +103,14 @@ class UniversalCodeGenerator():
             )
 
     def _get_length(self, index) -> str:
-        return self._insert_space_around_operators(str(index.get_length()))
+        code = str(index.get_length())
+        code = _render_power_of_two_length(
+            code,
+            self._config.lang,
+        )
+        return self._insert_space_around_operators(
+            code
+        )
 
     def _loop_header(
         self,
