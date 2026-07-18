@@ -106,29 +106,24 @@ def _word_tokens(line):
 def _candidate_from_pair(
     length_line,
     value_line,
-    length_line_number,
+    length_line_number: int,
 ):
-    length_words = _word_tokens(
-        length_line
-    )
+    length_tokens = _word_tokens(length_line)
 
-    if len(length_words) != 1:
+    if len(length_tokens) != 1:
         return None
 
-    length_reference = (
-        _parse_indexed_word(
-            length_words[0]
-            .normalized_text
-        )
+    length_reference = _parse_indexed_word(
+        length_tokens[0].normalized_text
     )
 
     if (
         length_reference is None
-        or len(
-            length_reference.indices
-        ) != 1
+        or len(length_reference.indices) != 1
     ):
         return None
+
+    outer_index = length_reference.indices[0]
 
     ellipsis_positions = [
         index
@@ -138,98 +133,116 @@ def _candidate_from_pair(
         == InputTokenKind.ELLIPSIS
     ]
 
-    for ellipsis_position in (
-        ellipsis_positions
+    if len(ellipsis_positions) != 1:
+        return None
+
+    ellipsis_position = ellipsis_positions[0]
+
+    word_positions = [
+        (index, token)
+        for index, token
+        in enumerate(value_line.tokens)
+        if token.kind == InputTokenKind.WORD
+    ]
+
+    right_words = [
+        (index, token)
+        for index, token in word_positions
+        if index > ellipsis_position
+    ]
+
+    if len(right_words) != 1:
+        return None
+
+    terminal = _parse_indexed_word(
+        right_words[0][1].normalized_text
+    )
+
+    if (
+        terminal is None
+        or len(terminal.indices) != 2
+        or terminal.indices[0] != outer_index
     ):
-        left = None
-        right = None
+        return None
 
-        for index in range(
-            ellipsis_position - 1,
-            -1,
-            -1,
-        ):
-            token = value_line.tokens[index]
+    terminal_length = _parse_indexed_word(
+        terminal.indices[1]
+    )
 
-            if token.kind == InputTokenKind.WORD:
-                left = _parse_indexed_word(
-                    token.normalized_text
-                )
-                break
+    if (
+        terminal_length is None
+        or len(terminal_length.indices) != 1
+        or terminal_length.indices[0]
+        != outer_index
+        or terminal_length.base
+        != length_reference.base
+    ):
+        return None
 
-        for index in range(
-            ellipsis_position + 1,
-            len(value_line.tokens),
-        ):
-            token = value_line.tokens[index]
+    explicit_values = []
 
-            if token.kind == InputTokenKind.WORD:
-                right = _parse_indexed_word(
-                    token.normalized_text
-                )
-                break
-
-        if left is None or right is None:
+    for position, token in word_positions:
+        if position >= ellipsis_position:
             continue
 
-        if (
-            left.base != right.base
-            or len(left.indices) != 2
-            or len(right.indices) != 2
-        ):
-            continue
-
-        outer_index = left.indices[0]
-
-        if right.indices[0] != outer_index:
-            continue
-
-        if left.indices[1] not in {
-            "0",
-            "1",
-        }:
-            continue
-
-        right_length = _parse_indexed_word(
-            right.indices[1]
+        reference = _parse_indexed_word(
+            token.normalized_text
         )
 
         if (
-            right_length is None
-            or len(
-                right_length.indices
-            ) != 1
-        ):
-            continue
-
-        if (
-            length_reference.base
-            != right_length.base
-            or length_reference.indices[0]
-            != outer_index
-            or right_length.indices[0]
+            reference is None
+            or reference.base != terminal.base
+            or len(reference.indices) != 2
+            or reference.indices[0]
             != outer_index
         ):
-            continue
+            return None
 
-        return _PairCandidate(
-            length_line_number=(
-                length_line_number
-            ),
-            value_line_number=(
-                length_line_number + 1
-            ),
-            outer_index=outer_index,
-            length_base=(
-                length_reference.base
-            ),
-            values_name=left.base,
-            value_start_index=int(
-                left.indices[1]
-            ),
+        try:
+            explicit_index = int(
+                reference.indices[1]
+            )
+        except ValueError:
+            return None
+
+        explicit_values.append(
+            explicit_index
         )
 
-    return None
+    if not explicit_values:
+        return None
+
+    value_start_index = explicit_values[0]
+
+    if value_start_index not in {
+        0,
+        1,
+    }:
+        return None
+
+    expected_indices = list(
+        range(
+            value_start_index,
+            value_start_index
+            + len(explicit_values),
+        )
+    )
+
+    if explicit_values != expected_indices:
+        return None
+
+    return _PairCandidate(
+        length_line_number=(
+            length_line_number
+        ),
+        value_line_number=(
+            length_line_number + 1
+        ),
+        outer_index=outer_index,
+        length_base=length_reference.base,
+        values_name=terminal.base,
+        value_start_index=value_start_index,
+    )
 
 
 def detect_two_line_ragged_row_schemas(
