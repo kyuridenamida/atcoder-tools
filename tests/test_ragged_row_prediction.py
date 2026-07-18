@@ -91,6 +91,146 @@ class TestSameLineRaggedRowSynthetic(
             prediction.sample_row_counts,
         )
 
+    def test_accepts_consecutive_explicit_value_prefix(
+        self,
+    ):
+        content = ProblemContent(
+            input_format_text=(
+                "N\n"
+                "L_1 A_{1,1} A_{1,2} "
+                "\\ldots A_{1,L_1}\n"
+                "L_2 A_{2,1} A_{2,2} "
+                "\\ldots A_{2,L_2}\n"
+                "\\vdots\n"
+                "L_N A_{N,1} A_{N,2} "
+                "\\ldots A_{N,L_N}\n"
+                "X Y\n"
+            ),
+            samples=[
+                Sample(
+                    (
+                        "3\n"
+                        "3 10 20 30\n"
+                        "1 7\n"
+                        "4 5 6 7 8\n"
+                        "3 4\n"
+                    ),
+                    "",
+                ),
+            ],
+        )
+
+        prediction = (
+            predict_same_line_ragged_rows(
+                content
+            )
+        )
+
+        self.assertEqual(
+            "N",
+            prediction.schema.row_count_var,
+        )
+        self.assertEqual(
+            ("L",),
+            prediction.schema.prefix_fields,
+        )
+        self.assertEqual(
+            0,
+            prediction.schema.length_field_position,
+        )
+        self.assertEqual(
+            "A",
+            prediction.schema.values_name,
+        )
+        self.assertEqual(
+            1,
+            prediction.schema.value_start_index,
+        )
+        self.assertEqual(
+            ["X", "Y"],
+            [
+                variable.name
+                for variable
+                in prediction.suffix_format.all_vars()
+            ],
+        )
+
+    def test_rejects_nonconsecutive_explicit_value_prefix(
+        self,
+    ):
+        content = ProblemContent(
+            input_format_text=(
+                "N\n"
+                "L_1 A_{1,1} A_{1,3} "
+                "\\ldots A_{1,L_1}\n"
+                "\\vdots\n"
+                "L_N A_{N,1} A_{N,3} "
+                "\\ldots A_{N,L_N}\n"
+            ),
+            samples=[
+                Sample(
+                    (
+                        "2\n"
+                        "3 10 20 30\n"
+                        "3 40 50 60\n"
+                    ),
+                    "",
+                ),
+            ],
+        )
+
+        self.assertEqual(
+            [],
+            detect_same_line_ragged_row_schemas(
+                content
+            ),
+        )
+
+        with self.assertRaises(
+            NoRaggedRowPredictionError
+        ):
+            predict_same_line_ragged_rows(
+                content
+            )
+
+    def test_rejects_explicit_value_prefix_starting_at_two(
+        self,
+    ):
+        content = ProblemContent(
+            input_format_text=(
+                "N\n"
+                "L_1 A_{1,2} "
+                "\\ldots A_{1,L_1}\n"
+                "\\vdots\n"
+                "L_N A_{N,2} "
+                "\\ldots A_{N,L_N}\n"
+            ),
+            samples=[
+                Sample(
+                    (
+                        "2\n"
+                        "3 10 20 30\n"
+                        "3 40 50 60\n"
+                    ),
+                    "",
+                ),
+            ],
+        )
+
+        self.assertEqual(
+            [],
+            detect_same_line_ragged_row_schemas(
+                content
+            ),
+        )
+
+        with self.assertRaises(
+            NoRaggedRowPredictionError
+        ):
+            predict_same_line_ragged_rows(
+                content
+            )
+
     def test_rejects_rectangular_array(
         self,
     ):

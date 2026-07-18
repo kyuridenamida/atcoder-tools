@@ -178,30 +178,15 @@ def _candidate_from_line(
 ):
     ellipsis_positions = [
         index
-        for index, token
-        in enumerate(line.tokens)
-        if token.kind
-        == InputTokenKind.ELLIPSIS
+        for index, token in enumerate(line.tokens)
+        if token.kind == InputTokenKind.ELLIPSIS
     ]
+    word_positions = _word_positions(line)
 
     for ellipsis_position in (
         ellipsis_positions
     ):
-        left_position = None
-        left_token = None
         right_token = None
-
-        for index in range(
-            ellipsis_position - 1,
-            -1,
-            -1,
-        ):
-            token = line.tokens[index]
-
-            if token.kind == InputTokenKind.WORD:
-                left_position = index
-                left_token = token
-                break
 
         for index in range(
             ellipsis_position + 1,
@@ -213,43 +198,20 @@ def _candidate_from_line(
                 right_token = token
                 break
 
-        if (
-            left_position is None
-            or left_token is None
-            or right_token is None
-        ):
+        if right_token is None:
             continue
-
-        left = _parse_indexed_word(
-            left_token.normalized_text
-        )
 
         right = _parse_indexed_word(
             right_token.normalized_text
         )
 
-        if left is None or right is None:
-            continue
-
-        if left.base != right.base:
-            continue
-
         if (
-            len(left.indices) != 2
+            right is None
             or len(right.indices) != 2
         ):
             continue
 
-        outer_index = left.indices[0]
-
-        if right.indices[0] != outer_index:
-            continue
-
-        if left.indices[1] not in {
-            "0",
-            "1",
-        }:
-            continue
+        outer_index = right.indices[0]
 
         length_reference = (
             _parse_indexed_word(
@@ -269,10 +231,85 @@ def _candidate_from_line(
         ):
             continue
 
+        explicit_values = []
+
+        for position, token in reversed(
+            word_positions
+        ):
+            if position >= ellipsis_position:
+                continue
+
+            reference = _parse_indexed_word(
+                token.normalized_text
+            )
+
+            if (
+                reference is None
+                or reference.base != right.base
+                or len(reference.indices) != 2
+                or reference.indices[0]
+                != outer_index
+            ):
+                break
+
+            try:
+                explicit_index = int(
+                    reference.indices[1]
+                )
+            except ValueError:
+                break
+
+            explicit_values.append(
+                (
+                    position,
+                    reference,
+                    explicit_index,
+                )
+            )
+
+        explicit_values.reverse()
+
+        if not explicit_values:
+            continue
+
+        explicit_indices = [
+            explicit_index
+            for (
+                _,
+                _,
+                explicit_index,
+            ) in explicit_values
+        ]
+
+        value_start_index = (
+            explicit_indices[0]
+        )
+
+        if value_start_index not in {
+            0,
+            1,
+        }:
+            continue
+
+        expected_indices = list(
+            range(
+                value_start_index,
+                value_start_index
+                + len(explicit_indices),
+            )
+        )
+
+        if explicit_indices != expected_indices:
+            continue
+
+        value_start_position = (
+            explicit_values[0][0]
+        )
+
         prefix_tokens = [
             token
-            for _, token in _word_positions(line)
-            if _ < left_position
+            for position, token in word_positions
+            if position < value_start_position
         ]
 
         if not prefix_tokens:
@@ -327,9 +364,9 @@ def _candidate_from_line(
             length_base=(
                 length_reference.base
             ),
-            values_name=left.base,
-            value_start_index=int(
-                left.indices[1]
+            values_name=right.base,
+            value_start_index=(
+                value_start_index
             ),
         )
 
