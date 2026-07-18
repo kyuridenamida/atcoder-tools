@@ -120,7 +120,7 @@ class UniversalCodeGenerator():
         code = str(index.get_length())
         code = _render_power_of_two_length(
             code,
-            self._config.lang,
+            getattr(self._config, "lang", None),
         )
         return self._insert_space_around_operators(
             code
