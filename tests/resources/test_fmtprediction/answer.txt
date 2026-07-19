@@ -2478,7 +2478,7 @@ abc401-B                                 OK                   [(Singular: N),(Pa
 abc401-C                                 OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
 abc401-D                                 OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
 abc401-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
-abc401-F                                 No result
+abc401-F                                 OK                   [(Singular: Nfixedone),(Parallel: ufixedone,vfixedone | 1 to Nfixedone-1),(Singular: Nfixedtwo),(Parallel: ufixedtwo,vfixedtwo | 1 to Nfixedtwo-1)] [('Nfixedone', <class 'int'>), ('ufixedone', <class 'int'>), ('vfixedone', <class 'int'>), ('Nfixedtwo', <class 'int'>), ('ufixedtwo', <class 'int'>), ('vfixedtwo', <class 'int'>)]
 abc401-G                                 No result
 abc402-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc402-B                                 No result
