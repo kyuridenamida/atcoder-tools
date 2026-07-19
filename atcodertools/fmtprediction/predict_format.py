@@ -218,6 +218,373 @@ def _normalize_spaced_variable_indices(
     return current
 
 
+_FIXED_INDEX_SCALAR_PATTERN = re.compile(
+    r"(?P<base>[A-Za-z][A-Za-z0-9_]*)_"
+    r"(?:\{(?P<braced>[0-9]+)\}|"
+    r"(?P<plain>[0-9]+))"
+)
+
+_FIXED_PREFIX_REFERENCE_PATTERN = re.compile(
+    r"(?P<base>[A-Za-z][A-Za-z0-9_]*)_"
+    r"\{\s*(?P<fixed>[0-9]+)\s*,\s*"
+    r"(?P<varying>[^{}\n]+?)\s*\}"
+)
+
+_INDEX_BODY_PATTERN = re.compile(
+    r"_\{(?P<body>[^{}\n]+)\}"
+)
+
+_IDENTIFIER_WORD_PATTERN = re.compile(
+    r"[A-Za-z][A-Za-z0-9_]*"
+)
+
+_DIGIT_WORDS = {
+    "0": "zero",
+    "1": "one",
+    "2": "two",
+    "3": "three",
+    "4": "four",
+    "5": "five",
+    "6": "six",
+    "7": "seven",
+    "8": "eight",
+    "9": "nine",
+}
+
+
+def _fixed_index_alias(
+    base,
+    literal,
+):
+    suffix = "".join(
+        _DIGIT_WORDS[digit]
+        for digit in literal
+    )
+
+    return "{}fixed{}".format(
+        base,
+        suffix,
+    )
+
+
+def _fixed_index_atom_pattern(
+    base,
+    literal,
+):
+    return re.compile(
+        r"(?<![A-Za-z0-9_])"
+        + re.escape(base)
+        + r"_(?:\{"
+        + re.escape(literal)
+        + r"\}|"
+        + re.escape(literal)
+        + r")(?![A-Za-z0-9_])"
+    )
+
+
+def _declared_fixed_index_scalars(
+    input_format_text,
+):
+    declarations = set()
+
+    for line in input_format_text.splitlines():
+        tokens = [
+            token.rstrip(",")
+            for token in line.split()
+        ]
+
+        if not tokens:
+            continue
+
+        matches = [
+            _FIXED_INDEX_SCALAR_PATTERN.fullmatch(
+                token
+            )
+            for token in tokens
+        ]
+
+        if any(
+            match is None
+            for match in matches
+        ):
+            continue
+
+        for match in matches:
+            declarations.add(
+                (
+                    match.group("base"),
+                    (
+                        match.group("braced")
+                        or match.group("plain")
+                    ),
+                )
+            )
+
+    return declarations
+
+
+def _contains_identifier(
+    expression,
+    identifier,
+):
+    pattern = re.compile(
+        r"(?<![A-Za-z0-9_])"
+        + re.escape(identifier)
+        + r"(?![A-Za-z0-9_])"
+    )
+
+    return (
+        pattern.search(expression)
+        is not None
+    )
+
+
+def _normalize_indexed_identifier_aliases(
+    input_format_text,
+):
+    """
+    Build a recognition-only view for independent fixed-index segments.
+
+    A source such as ``N_1`` and ``u_{1,j}`` is normalized only when:
+
+    - the fixed-index scalar is declared as an input field,
+    - that scalar is later used as an index bound,
+    - the same sequence base has at least two literal first coordinates,
+    - each literal coordinate is tied to a matching fixed-index scalar,
+    - all generated aliases are collision-free.
+
+    Ordinary arrays and dense multidimensional grids remain unchanged.
+    """
+    index_bodies = [
+        match.group("body")
+        for match in _INDEX_BODY_PATTERN.finditer(
+            input_format_text
+        )
+    ]
+
+    reserved_names = set(
+        _IDENTIFIER_WORD_PATTERN.findall(
+            input_format_text
+        )
+    )
+
+    scalar_aliases = {}
+
+    for base, literal in sorted(
+        _declared_fixed_index_scalars(
+            input_format_text
+        )
+    ):
+        atom_pattern = (
+            _fixed_index_atom_pattern(
+                base,
+                literal,
+            )
+        )
+
+        if not any(
+            atom_pattern.search(body)
+            is not None
+            for body in index_bodies
+        ):
+            continue
+
+        alias = _fixed_index_alias(
+            base,
+            literal,
+        )
+
+        if alias in reserved_names:
+            continue
+
+        scalar_aliases[
+            (base, literal)
+        ] = alias
+
+        reserved_names.add(alias)
+
+    if not scalar_aliases:
+        return input_format_text
+
+    temporary = input_format_text
+
+    for (
+        base,
+        literal,
+    ), alias in scalar_aliases.items():
+        temporary = (
+            _fixed_index_atom_pattern(
+                base,
+                literal,
+            ).sub(
+                alias,
+                temporary,
+            )
+        )
+
+    aliases_by_literal = {}
+
+    for (
+        _,
+        literal,
+    ), alias in scalar_aliases.items():
+        aliases_by_literal.setdefault(
+            literal,
+            set(),
+        ).add(alias)
+
+    references_by_base = {}
+
+    for match in (
+        _FIXED_PREFIX_REFERENCE_PATTERN
+        .finditer(temporary)
+    ):
+        references_by_base.setdefault(
+            match.group("base"),
+            [],
+        ).append(
+            (
+                match.group("fixed"),
+                match.group("varying").strip(),
+            )
+        )
+
+    sequence_aliases = {}
+    used_scalar_aliases = set()
+
+    for base, references in (
+        references_by_base.items()
+    ):
+        all_base_occurrences = re.findall(
+            (
+                r"(?<![A-Za-z0-9_])"
+                + re.escape(base)
+                + r"_"
+            ),
+            temporary,
+        )
+
+        if (
+            len(all_base_occurrences)
+            != len(references)
+        ):
+            continue
+
+        fixed_values = {
+            fixed
+            for fixed, _
+            in references
+        }
+
+        if len(fixed_values) < 2:
+            continue
+
+        base_aliases = {}
+        base_used_scalars = set()
+        valid = True
+
+        for fixed in fixed_values:
+            scalar_candidates = (
+                aliases_by_literal.get(
+                    fixed,
+                    set(),
+                )
+            )
+
+            matching_scalars = {
+                alias
+                for current_fixed, varying
+                in references
+                if current_fixed == fixed
+                for alias in scalar_candidates
+                if _contains_identifier(
+                    varying,
+                    alias,
+                )
+            }
+
+            if not matching_scalars:
+                valid = False
+                break
+
+            alias = _fixed_index_alias(
+                base,
+                fixed,
+            )
+
+            if alias in reserved_names:
+                valid = False
+                break
+
+            base_aliases[
+                (base, fixed)
+            ] = alias
+
+            base_used_scalars.update(
+                matching_scalars
+            )
+
+        if not valid:
+            continue
+
+        sequence_aliases.update(
+            base_aliases
+        )
+
+        used_scalar_aliases.update(
+            base_used_scalars
+        )
+
+        reserved_names.update(
+            base_aliases.values()
+        )
+
+    if not sequence_aliases:
+        return input_format_text
+
+    normalized = input_format_text
+
+    for (
+        base,
+        literal,
+    ), alias in scalar_aliases.items():
+        if alias not in used_scalar_aliases:
+            continue
+
+        normalized = (
+            _fixed_index_atom_pattern(
+                base,
+                literal,
+            ).sub(
+                alias,
+                normalized,
+            )
+        )
+
+    def replace_reference(match):
+        key = (
+            match.group("base"),
+            match.group("fixed"),
+        )
+
+        alias = sequence_aliases.get(key)
+
+        if alias is None:
+            return match.group(0)
+
+        return "{}_{{{}}}".format(
+            alias,
+            match.group("varying").strip(),
+        )
+
+    return (
+        _FIXED_PREFIX_REFERENCE_PATTERN.sub(
+            replace_reference,
+            normalized,
+        )
+    )
+
+
 def _normalize_layout_tex_commands(
     input_format_text: str,
 ) -> str:
@@ -232,6 +599,11 @@ def _normalize_layout_tex_commands(
     )
     normalized = _normalize_spaced_variable_indices(
         normalized
+    )
+    normalized = (
+        _normalize_indexed_identifier_aliases(
+            normalized
+        )
     )
     return normalized
 
