@@ -5209,7 +5209,7 @@ dwacon5th-prelims-A                      OK                   [(Singular: N),(Pa
 dwacon5th-prelims-B                      OK                   [(Singular: N),(Singular: K),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('a', <class 'int'>)]
 dwacon5th-prelims-C                      OK                   [(Singular: N),(Singular: S),(Singular: Q),(Parallel: k | 0 to Q-1)] [('N', <class 'int'>), ('S', <class 'str'>), ('Q', <class 'int'>), ('k', <class 'int'>)]
 dwacon5th-prelims-D                      OK                   [(Singular: N),(Singular: D),(Parallel: x,y | 1 to N)] [('N', <class 'int'>), ('D', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
-dwacon5th-prelims-E                      No result
+dwacon5th-prelims-E                      OK                   [(Singular: N),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>)]
 dwacon6th-final-A                        OK                   [(Singular: H),(Singular: W)] [('H', <class 'int'>), ('W', <class 'int'>)]
 dwacon6th-final-B                        OK                   [(Singular: N),(Singular: M),(Singular: K),(Singular: D),(Parallel: a | 0 to K-1),(Parallel: x,y,d | 0 to M-1)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('D', <class 'int'>), ('a', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>), ('d', <class 'int'>)]
 dwacon6th-final-C                        OK                   [(Singular: N),(Parallel: a,b | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
@@ -5390,10 +5390,10 @@ iroha2019-day1-G                         OK                   [(Singular: N),(Si
 iroha2019-day1-H                         OK                   [(Singular: N)] [('N', <class 'int'>)]
 iroha2019-day1-I                         OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: A,B,C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 iroha2019-day1-J                         OK                   [(Singular: Q),(Parallel: N,K | 1 to Q)] [('Q', <class 'int'>), ('N', <class 'int'>), ('K', <class 'int'>)]
-iroha2019-day1-K                         No result
+iroha2019-day1-K                         OK                   [RaggedRowFormat: prefix=[(Singular: N)], rows=[RaggedRowPattern: count=N, prefix=M, length_pos=0, values=A], suffix=[]] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 iroha2019-day1-L                         OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
 iroha2019-day2-A                         OK                   [(Singular: S),(Singular: T)] [('S', <class 'str'>), ('T', <class 'str'>)]
-iroha2019-day2-B                         No result
+iroha2019-day2-B                         OK                   [(Singular: X),(Singular: Y),(Singular: A),(Singular: B),(Singular: Sx),(Singular: Sy),(Singular: Tx),(Singular: Ty)] [('X', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('Sx', <class 'int'>), ('Sy', <class 'int'>), ('Tx', <class 'int'>), ('Ty', <class 'int'>)]
 iroha2019-day2-C                         OK                   [(Singular: N),(Parallel: H | 1 to N)] [('N', <class 'int'>), ('H', <class 'int'>)]
 iroha2019-day2-D                         OK                   [(Singular: N),(Singular: M),(Parallel: A,B,C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 iroha2019-day2-E                         OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
@@ -5414,9 +5414,9 @@ iroha2019-day3-H                         OK                   [(Singular: Q),(Pa
 iroha2019-day3-I                         No result
 iroha2019-day3-K                         No result
 iroha2019-day4-A                         OK                   [(Singular: N),(Singular: A),(Singular: B),(Singular: C),(Singular: D),(Parallel: a | 1 to A),(Parallel: b | 1 to B),(Parallel: c | 1 to C),(Parallel: d | 1 to D)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>), ('d', <class 'int'>)]
-iroha2019-day4-B                         No result
+iroha2019-day4-B                         OK                   [(Singular: N),(Singular: M),(Singular: L),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('L', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 iroha2019-day4-C                         OK                   [(Singular: S),(Singular: M),(Parallel: x,s | 1 to M)] [('S', <class 'str'>), ('M', <class 'int'>), ('x', <class 'int'>), ('s', <class 'str'>)]
-iroha2019-day4-D                         No result
+iroha2019-day4-D                         OK                   [(Singular: T),(Parallel: L,A | 1 to T)] [('T', <class 'int'>), ('L', <class 'int'>), ('A', <class 'int'>)]
 iroha2019-day4-E                         OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
 iroha2019-day4-F                         OK                   [(Singular: N),(Singular: F),(Parallel: A,B,C | 1 to N)] [('N', <class 'int'>), ('F', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 iroha2019-day4-G                         OK                   [(Singular: N),(Singular: K),(Parallel: a,b | 1 to K)] [('N', <class 'int'>), ('K', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
@@ -6226,26 +6226,26 @@ pakencamp-2019-day4-F                    OK                   [(Singular: N),(Si
 pakencamp-2019-day4-G                    OK                   [(Singular: n),(Singular: a),(Singular: m),(Singular: p),(Singular: t),(Singular: K),(Singular: s)] [('n', <class 'int'>), ('a', <class 'int'>), ('m', <class 'int'>), ('p', <class 'int'>), ('t', <class 'int'>), ('K', <class 'int'>), ('s', <class 'str'>)]
 pakencamp-2020-day1-A                    No result
 pakencamp-2020-day1-B                    OK                   [(Singular: X)] [('X', <class 'int'>)]
-pakencamp-2020-day1-C                    No result
-pakencamp-2020-day1-D                    No result
-pakencamp-2020-day1-E                    No result
+pakencamp-2020-day1-C                    OK                   [RaggedRowFormat: prefix=[(Singular: N)], rows=[RaggedRowPattern: count=N, prefix=k, length_pos=0, values=S], suffix=[]] [('N', <class 'int'>), ('k', <class 'int'>), ('S', <class 'str'>)]
+pakencamp-2020-day1-D                    OK                   [(Singular: N),(Singular: K)] [('N', <class 'int'>), ('K', <class 'int'>)]
+pakencamp-2020-day1-E                    OK                   [(Singular: X),(Singular: Y)] [('X', <class 'int'>), ('Y', <class 'int'>)]
 pakencamp-2020-day1-F                    OK                   [(Singular: P)] [('P', <class 'int'>)]
-pakencamp-2020-day1-G                    No result
-pakencamp-2020-day1-H                    No result
-pakencamp-2020-day1-I                    No result
+pakencamp-2020-day1-G                    OK                   [(Singular: N),(Singular: M),(Parallel: l,r,x | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('l', <class 'int'>), ('r', <class 'int'>), ('x', <class 'int'>)]
+pakencamp-2020-day1-H                    OK                   [(Singular: T),(Parallel: A,B,C | 1 to T)] [('T', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
+pakencamp-2020-day1-I                    OK                   [(Singular: H),(Singular: W),(Singular: sx),(Singular: sy),(Singular: gx),(Singular: gy),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('sx', <class 'int'>), ('sy', <class 'int'>), ('gx', <class 'int'>), ('gy', <class 'int'>), ('S', <class 'str'>)]
 pakencamp-2020-day1-J                    No result
-pakencamp-2020-day1-K                    No result
-pakencamp-2020-day1-L                    No result
-pakencamp-2020-day1-M                    No result
-pakencamp-2020-day1-N                    No result
+pakencamp-2020-day1-K                    OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
+pakencamp-2020-day1-L                    OK                   [(Singular: Q),(Singular: x),(Parallel: A | 1 to Q)] [('Q', <class 'int'>), ('x', <class 'int'>), ('A', <class 'int'>)]
+pakencamp-2020-day1-M                    OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
+pakencamp-2020-day1-N                    OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 pakencamp-2020-day1-O                    No result
-pakencamp-2020-day2-A                    No result
+pakencamp-2020-day2-A                    OK                   [(Singular: A),(Singular: B)] [('A', <class 'int'>), ('B', <class 'int'>)]
 pakencamp-2020-day2-B                    OK                   [(Singular: H),(Singular: W),(Parallel: C | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('C', <class 'str'>)]
 pakencamp-2020-day2-C                    No result
 pakencamp-2020-day2-D                    No result
-pakencamp-2020-day2-E                    No result
+pakencamp-2020-day2-E                    OK                   [(Singular: N),(Singular: M),(Parallel: a,b | 1 to N),(Parallel: x,y | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 pakencamp-2020-day2-F                    OK                   [(Singular: N),(Singular: E),(Parallel: A | 1 to N),(Parallel: L,R | 1 to N)] [('N', <class 'int'>), ('E', <class 'int'>), ('A', <class 'int'>), ('L', <class 'int'>), ('R', <class 'int'>)]
-pakencamp-2020-day2-G                    No result
+pakencamp-2020-day2-G                    OK                   [(Singular: N),(Singular: Q),(Parallel: u,v,w | 1 to N-1),(Parallel: r,k | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('w', <class 'int'>), ('r', <class 'int'>), ('k', <class 'int'>)]
 pakencamp-2020-day2-H                    No result
 pakencamp-2021-day2-A                    No result
 pakencamp-2021-day2-B                    OK                   [(Singular: a),(Singular: b)] [('a', <class 'int'>), ('b', <class 'int'>)]
@@ -6807,10 +6807,10 @@ qupc2018-I                               OK                   [(Singular: N),(Si
 qupc2018-J                               OK                   [(Singular: S),(Singular: Q),(Parallel: T | 1 to Q)] [('S', <class 'str'>), ('Q', <class 'int'>), ('T', <class 'str'>)]
 rcl-contest-2020-final-B                 OK                   [(Singular: N),(Singular: P),(Singular: M),(Parallel: row | 0 to N-1),(Parallel: sheets | 0 to N-1)] [('N', <class 'int'>), ('P', <class 'int'>), ('M', <class 'int'>), ('row', <class 'str'>), ('sheets', <class 'str'>)]
 rcl-contest-2020-final-open-B            OK                   [(Singular: N),(Singular: P),(Singular: M),(Parallel: row | 0 to N-1),(Parallel: sheets | 0 to N-1)] [('N', <class 'int'>), ('P', <class 'int'>), ('M', <class 'int'>), ('row', <class 'str'>), ('sheets', <class 'str'>)]
-rcl-contest-2020-qual-A                  No result
+rcl-contest-2020-qual-A                  OK                   [(Singular: N),(Singular: W),(Singular: K),(Singular: V),(Parallel: c,v | 0 to N-1)] [('N', <class 'int'>), ('W', <class 'int'>), ('K', <class 'int'>), ('V', <class 'int'>), ('c', <class 'int'>), ('v', <class 'int'>)]
 rcl-contest-2020-qual-B                  No result
 rcl-contest-2021-A                       No result
-rcl-contest-2021-long-A                  No result
+rcl-contest-2021-long-A                  OK                   [(Singular: N),(Singular: M),(Singular: T),(Parallel: R,C,S,E,V | 0 to M-1)] [('N', <class 'int'>), ('M', <class 'int'>), ('T', <class 'int'>), ('R', <class 'int'>), ('C', <class 'int'>), ('S', <class 'int'>), ('E', <class 'int'>), ('V', <class 'int'>)]
 rco-contest-2017-final-A                 No result
 rco-contest-2017-final-B                 OK                   [(Singular: H),(Singular: W),(Singular: K),(Singular: T),(Parallel: A,B,C,D | 1 to K)] [('H', <class 'int'>), ('W', <class 'int'>), ('K', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('D', <class 'int'>)]
 rco-contest-2017-final-open-A            No result
@@ -6827,7 +6827,7 @@ rco-contest-2019-final-A                 No result
 rco-contest-2019-final-B                 OK                   [(Singular: N),(Singular: M),(TwoDimensional: c)] [('N', <class 'int'>), ('M', <class 'int'>), ('c', <class 'int'>)]
 rco-contest-2019-final-open-A            No result
 rco-contest-2019-final-open-B            OK                   [(Singular: N),(Singular: M),(TwoDimensional: c)] [('N', <class 'int'>), ('M', <class 'int'>), ('c', <class 'int'>)]
-rco-contest-2019-qual-A                  No result
+rco-contest-2019-qual-A                  OK                   [(Singular: N),(Parallel: x,y | 0 to N-1)] [('N', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 rco-contest-2019-qual-B                  No result
 s8pc-1-A                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 s8pc-1-B                                 OK                   [(Singular: H),(Singular: W),(Singular: N),(Parallel: X,Y | 1 to N)] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
@@ -7477,16 +7477,16 @@ wupc2012-closed-C                        No result
 wupc2012-closed-D                        No result
 wupc2012-closed-E                        No result
 wupc2012-closed-F                        OK                   [(Singular: N),(Parallel: x,y | 1 to N)] [('N', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
-wupc2019-A                               No result
-wupc2019-B                               No result
-wupc2019-C                               No result
-wupc2019-D                               No result
-wupc2019-E                               No result
-wupc2019-F                               No result
-wupc2019-G                               No result
+wupc2019-A                               OK                   [(Singular: s)] [('s', <class 'str'>)]
+wupc2019-B                               OK                   [(Singular: H),(Singular: W),(TwoDimensional: A)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'int'>)]
+wupc2019-C                               OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
+wupc2019-D                               OK                   [(Singular: N),(Singular: M),(Parallel: a,b | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
+wupc2019-E                               OK                   [(Singular: M),(Singular: N),(TwoDimensional: a)] [('M', <class 'int'>), ('N', <class 'int'>), ('a', <class 'str'>)]
+wupc2019-F                               OK                   [(Singular: N),(Singular: M),(Parallel: c | 2 to N-1),(Parallel: a,b | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('c', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
+wupc2019-G                               OK                   [(Singular: N),(Singular: M),(Parallel: A | 0 to M-1)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>)]
 wupc2019-H                               No result
-wupc2019-I                               No result
-wupc2019-J                               No result
+wupc2019-I                               OK                   [(Singular: N),(Parallel: o,c,d,x | 1 to N)] [('N', <class 'int'>), ('o', <class 'int'>), ('c', <class 'int'>), ('d', <class 'int'>), ('x', <class 'int'>)]
+wupc2019-J                               OK                   [(Singular: N),(Singular: M),(Parallel: a | 1 to N)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>)]
 wupc2nd-A                                OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 wupc2nd-D                                OK                   [(Parallel: N | 1 to 5)] [('N', <class 'int'>)]
 wupc2nd-E                                OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: f,t,c | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('f', <class 'int'>), ('t', <class 'int'>), ('c', <class 'int'>)]
