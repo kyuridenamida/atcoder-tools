@@ -585,12 +585,140 @@ def _normalize_indexed_identifier_aliases(
     )
 
 
+def _remove_inline_math_delimiters(
+    input_format_text,
+):
+    """
+    Remove TeX inline-math wrappers from a recognition-only view.
+    """
+    if input_format_text is None:
+        return None
+
+    return (
+        str(input_format_text)
+        .replace(r"\(", "")
+        .replace(r"\)", "")
+    )
+
+
+class _InlineMathDelimiterContentView:
+    """
+    Non-mutating recognition view of ProblemContent.
+    """
+
+    def __init__(self, content):
+        self._content = content
+
+    def get_input_format(self):
+        return _remove_inline_math_delimiters(
+            self._content.get_input_format()
+        )
+
+    def get_input_format_text(self):
+        return self.get_input_format()
+
+    @property
+    def input_format_text(self):
+        return self.get_input_format()
+
+    def get_input_format_blocks(self):
+        blocks = (
+            self._content
+            .get_input_format_blocks()
+            or []
+        )
+
+        return [
+            _remove_inline_math_delimiters(
+                block
+            )
+            for block in blocks
+        ]
+
+    @property
+    def input_format_blocks(self):
+        return self.get_input_format_blocks()
+
+    def get_input_format_context(self):
+        getter = getattr(
+            self._content,
+            "get_input_format_context",
+            None,
+        )
+
+        if getter is None:
+            return self.get_input_format()
+
+        context = getter()
+
+        if context is None:
+            return self.get_input_format()
+
+        return _remove_inline_math_delimiters(
+            context
+        )
+
+    @property
+    def input_format_context_text(self):
+        return self.get_input_format_context()
+
+    def __getattr__(self, name):
+        return getattr(
+            self._content,
+            name,
+        )
+
+
+def _inline_math_delimiter_content_view(
+    content,
+):
+    """
+    Normalize all input-format representations without mutation.
+    """
+    if isinstance(
+        content,
+        _InlineMathDelimiterContentView,
+    ):
+        return content
+
+    input_format = content.get_input_format()
+    blocks = (
+        content.get_input_format_blocks()
+        or []
+    )
+
+    has_delimiter = (
+        (
+            input_format is not None
+            and (
+                r"\(" in str(input_format)
+                or r"\)" in str(input_format)
+            )
+        )
+        or any(
+            r"\(" in str(block)
+            or r"\)" in str(block)
+            for block in blocks
+        )
+    )
+
+    if not has_delimiter:
+        return content
+
+    return _InlineMathDelimiterContentView(
+        content
+    )
+
+
 def _normalize_layout_tex_commands(
     input_format_text: str,
 ) -> str:
     """
     Build a recognition-only view without mutating raw text.
     """
+    input_format_text = _remove_inline_math_delimiters(
+        input_format_text
+    )
     normalized = _remove_layout_hspace_commands(
         input_format_text
     )
@@ -1629,6 +1757,9 @@ def _predict_same_line_ragged_format(
 def predict_format(
     content: ProblemContent,
 ) -> FormatPredictionResult:
+    content = _inline_math_delimiter_content_view(
+        content
+    )
     samples = content.get_samples()
 
     if not samples:
