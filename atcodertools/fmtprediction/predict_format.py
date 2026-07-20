@@ -79,6 +79,795 @@ class MultiCaseFormatPrediction:
         self.layout = layout
 
 
+_LAYOUT_HSPACE_PATTERN = re.compile(
+    r"\\hspace\*?\s*\{[^{}]*\}"
+)
+
+_BRACED_LAYOUT_STYLE_PATTERN = re.compile(
+    r"""
+    \\
+    (?:
+        text
+        |mathrm
+        |rm
+        |it
+    )
+    \s*
+    \{
+        (?P<body>[^{}]*)
+    \}
+    """,
+    re.VERBOSE,
+)
+
+_RESERVED_PLACEHOLDER_PATTERN = re.compile(
+    r"^(?:query|operation|op|case|test|testcase)$",
+    re.IGNORECASE,
+)
+
+_BRACED_SPACED_INDEX_PATTERN = re.compile(
+    r"""
+    (?P<base>\b[A-Za-z][A-Za-z0-9]*)
+    \s*
+    _
+    \s*
+    \{
+        \s*
+        (?P<index>[^{}\n]+?)
+        \s*
+    \}
+    """,
+    re.VERBOSE,
+)
+
+_UNBRACED_SPACED_INDEX_PATTERN = re.compile(
+    r"""
+    (?P<base>\b[A-Za-z][A-Za-z0-9]*)
+    \s*
+    _
+    \s*
+    (?P<index>[A-Za-z0-9]+)
+    """,
+    re.VERBOSE,
+)
+
+
+def _remove_layout_hspace_commands(
+    input_format_text: str,
+) -> str:
+    """Remove TeX horizontal spacing commands."""
+    return _LAYOUT_HSPACE_PATTERN.sub(
+        "",
+        input_format_text,
+    )
+
+
+def _unwrap_layout_style_commands(
+    input_format_text: str,
+) -> str:
+    """
+    Remove presentation-only TeX wrappers.
+
+    Query, operation and test-case placeholders are
+    intentionally preserved for their dedicated
+    recognizers.
+    """
+
+    def replace(match):
+        body = match.group("body").strip()
+
+        if _RESERVED_PLACEHOLDER_PATTERN.fullmatch(
+            body
+        ):
+            return match.group(0)
+
+        return body
+
+    current = input_format_text
+
+    for _ in range(8):
+        updated = _BRACED_LAYOUT_STYLE_PATTERN.sub(
+            replace,
+            current,
+        )
+
+        if updated == current:
+            break
+
+        current = updated
+
+    return current
+
+
+def _normalize_spaced_variable_indices(
+    input_format_text: str,
+) -> str:
+    """
+    Normalize spaces only inside variable index atoms.
+
+    Ordinary separators such as ``N M`` are preserved.
+    """
+    current = input_format_text
+
+    for _ in range(8):
+        updated = _BRACED_SPACED_INDEX_PATTERN.sub(
+            lambda match: "{}_{{{}}}".format(
+                match.group("base"),
+                re.sub(
+                    r"\s+",
+                    "",
+                    match.group("index"),
+                ),
+            ),
+            current,
+        )
+
+        updated = _UNBRACED_SPACED_INDEX_PATTERN.sub(
+            lambda match: "{}_{}".format(
+                match.group("base"),
+                match.group("index"),
+            ),
+            updated,
+        )
+
+        if updated == current:
+            break
+
+        current = updated
+
+    return current
+
+
+_FIXED_INDEX_SCALAR_PATTERN = re.compile(
+    r"(?P<base>[A-Za-z][A-Za-z0-9_]*)_"
+    r"(?:\{(?P<braced>[0-9]+)\}|"
+    r"(?P<plain>[0-9]+))"
+)
+
+_FIXED_PREFIX_REFERENCE_PATTERN = re.compile(
+    r"(?P<base>[A-Za-z][A-Za-z0-9_]*)_"
+    r"\{\s*(?P<fixed>[0-9]+)\s*,\s*"
+    r"(?P<varying>[^{}\n]+?)\s*\}"
+)
+
+_INDEX_BODY_PATTERN = re.compile(
+    r"_\{(?P<body>[^{}\n]+)\}"
+)
+
+_IDENTIFIER_WORD_PATTERN = re.compile(
+    r"[A-Za-z][A-Za-z0-9_]*"
+)
+
+_DIGIT_WORDS = {
+    "0": "zero",
+    "1": "one",
+    "2": "two",
+    "3": "three",
+    "4": "four",
+    "5": "five",
+    "6": "six",
+    "7": "seven",
+    "8": "eight",
+    "9": "nine",
+}
+
+
+def _fixed_index_alias(
+    base,
+    literal,
+):
+    suffix = "".join(
+        _DIGIT_WORDS[digit]
+        for digit in literal
+    )
+
+    return "{}fixed{}".format(
+        base,
+        suffix,
+    )
+
+
+def _fixed_index_atom_pattern(
+    base,
+    literal,
+):
+    return re.compile(
+        r"(?<![A-Za-z0-9_])"
+        + re.escape(base)
+        + r"_(?:\{"
+        + re.escape(literal)
+        + r"\}|"
+        + re.escape(literal)
+        + r")(?![A-Za-z0-9_])"
+    )
+
+
+def _declared_fixed_index_scalars(
+    input_format_text,
+):
+    declarations = set()
+
+    for line in input_format_text.splitlines():
+        tokens = [
+            token.rstrip(",")
+            for token in line.split()
+        ]
+
+        if not tokens:
+            continue
+
+        matches = [
+            _FIXED_INDEX_SCALAR_PATTERN.fullmatch(
+                token
+            )
+            for token in tokens
+        ]
+
+        if any(
+            match is None
+            for match in matches
+        ):
+            continue
+
+        for match in matches:
+            declarations.add(
+                (
+                    match.group("base"),
+                    (
+                        match.group("braced")
+                        or match.group("plain")
+                    ),
+                )
+            )
+
+    return declarations
+
+
+def _contains_identifier(
+    expression,
+    identifier,
+):
+    pattern = re.compile(
+        r"(?<![A-Za-z0-9_])"
+        + re.escape(identifier)
+        + r"(?![A-Za-z0-9_])"
+    )
+
+    return (
+        pattern.search(expression)
+        is not None
+    )
+
+
+def _normalize_indexed_identifier_aliases(
+    input_format_text,
+):
+    """
+    Build a recognition-only view for independent fixed-index segments.
+
+    A source such as ``N_1`` and ``u_{1,j}`` is normalized only when:
+
+    - the fixed-index scalar is declared as an input field,
+    - that scalar is later used as an index bound,
+    - the same sequence base has at least two literal first coordinates,
+    - each literal coordinate is tied to a matching fixed-index scalar,
+    - all generated aliases are collision-free.
+
+    Ordinary arrays and dense multidimensional grids remain unchanged.
+    """
+    index_bodies = [
+        match.group("body")
+        for match in _INDEX_BODY_PATTERN.finditer(
+            input_format_text
+        )
+    ]
+
+    reserved_names = set(
+        _IDENTIFIER_WORD_PATTERN.findall(
+            input_format_text
+        )
+    )
+
+    scalar_aliases = {}
+
+    for base, literal in sorted(
+        _declared_fixed_index_scalars(
+            input_format_text
+        )
+    ):
+        atom_pattern = (
+            _fixed_index_atom_pattern(
+                base,
+                literal,
+            )
+        )
+
+        if not any(
+            atom_pattern.search(body)
+            is not None
+            for body in index_bodies
+        ):
+            continue
+
+        alias = _fixed_index_alias(
+            base,
+            literal,
+        )
+
+        if alias in reserved_names:
+            continue
+
+        scalar_aliases[
+            (base, literal)
+        ] = alias
+
+        reserved_names.add(alias)
+
+    if not scalar_aliases:
+        return input_format_text
+
+    temporary = input_format_text
+
+    for (
+        base,
+        literal,
+    ), alias in scalar_aliases.items():
+        temporary = (
+            _fixed_index_atom_pattern(
+                base,
+                literal,
+            ).sub(
+                alias,
+                temporary,
+            )
+        )
+
+    aliases_by_literal = {}
+
+    for (
+        _,
+        literal,
+    ), alias in scalar_aliases.items():
+        aliases_by_literal.setdefault(
+            literal,
+            set(),
+        ).add(alias)
+
+    references_by_base = {}
+
+    for match in (
+        _FIXED_PREFIX_REFERENCE_PATTERN
+        .finditer(temporary)
+    ):
+        references_by_base.setdefault(
+            match.group("base"),
+            [],
+        ).append(
+            (
+                match.group("fixed"),
+                match.group("varying").strip(),
+            )
+        )
+
+    sequence_aliases = {}
+    used_scalar_aliases = set()
+
+    for base, references in (
+        references_by_base.items()
+    ):
+        all_base_occurrences = re.findall(
+            (
+                r"(?<![A-Za-z0-9_])"
+                + re.escape(base)
+                + r"_"
+            ),
+            temporary,
+        )
+
+        if (
+            len(all_base_occurrences)
+            != len(references)
+        ):
+            continue
+
+        fixed_values = {
+            fixed
+            for fixed, _
+            in references
+        }
+
+        if len(fixed_values) < 2:
+            continue
+
+        base_aliases = {}
+        base_used_scalars = set()
+        valid = True
+
+        for fixed in fixed_values:
+            scalar_candidates = (
+                aliases_by_literal.get(
+                    fixed,
+                    set(),
+                )
+            )
+
+            matching_scalars = {
+                alias
+                for current_fixed, varying
+                in references
+                if current_fixed == fixed
+                for alias in scalar_candidates
+                if _contains_identifier(
+                    varying,
+                    alias,
+                )
+            }
+
+            if not matching_scalars:
+                valid = False
+                break
+
+            alias = _fixed_index_alias(
+                base,
+                fixed,
+            )
+
+            if alias in reserved_names:
+                valid = False
+                break
+
+            base_aliases[
+                (base, fixed)
+            ] = alias
+
+            base_used_scalars.update(
+                matching_scalars
+            )
+
+        if not valid:
+            continue
+
+        sequence_aliases.update(
+            base_aliases
+        )
+
+        used_scalar_aliases.update(
+            base_used_scalars
+        )
+
+        reserved_names.update(
+            base_aliases.values()
+        )
+
+    if not sequence_aliases:
+        return input_format_text
+
+    normalized = input_format_text
+
+    for (
+        base,
+        literal,
+    ), alias in scalar_aliases.items():
+        if alias not in used_scalar_aliases:
+            continue
+
+        normalized = (
+            _fixed_index_atom_pattern(
+                base,
+                literal,
+            ).sub(
+                alias,
+                normalized,
+            )
+        )
+
+    def replace_reference(match):
+        key = (
+            match.group("base"),
+            match.group("fixed"),
+        )
+
+        alias = sequence_aliases.get(key)
+
+        if alias is None:
+            return match.group(0)
+
+        return "{}_{{{}}}".format(
+            alias,
+            match.group("varying").strip(),
+        )
+
+    return (
+        _FIXED_PREFIX_REFERENCE_PATTERN.sub(
+            replace_reference,
+            normalized,
+        )
+    )
+
+
+def _remove_inline_math_delimiters(
+    input_format_text,
+):
+    """
+    Remove TeX inline-math wrappers from a recognition-only view.
+    """
+    if input_format_text is None:
+        return None
+
+    return (
+        str(input_format_text)
+        .replace(r"\(", "")
+        .replace(r"\)", "")
+    )
+
+
+_MATHIT_IDENTIFIER_PATTERN = re.compile(
+    r"\\mathit\s*\{"
+    r"(?P<identifier>[A-Za-z][A-Za-z0-9_]*)"
+    r"\}"
+)
+
+_CONCATENATED_LAYOUT_COMMAND_IDENTIFIER_PATTERN = re.compile(
+    r"\\(?P<command>vdots|ldots|cdots|dots)"
+    r"(?![bcimo](?:\b|_))"
+    r"(?P<identifier>[A-Za-z][A-Za-z0-9]*_)"
+)
+
+
+def _unwrap_mathit_identifiers(
+    input_format_text,
+):
+    """
+    Unwrap only simple identifier atoms inside ``\\mathit{...}``.
+
+    Expressions such as ``\\mathit{x+y}`` remain untouched.
+    """
+    return _MATHIT_IDENTIFIER_PATTERN.sub(
+        lambda match: match.group(
+            "identifier"
+        ),
+        input_format_text,
+    )
+
+
+def _split_concatenated_layout_command_identifiers(
+    input_format_text,
+):
+    """
+    Restore a missing boundary after a TeX layout command.
+
+    This targets extracted text such as ``\\ldotsA_`` while preserving
+    valid command names such as ``\\dotsb`` and ``\\dotsc``.
+    """
+    return (
+        _CONCATENATED_LAYOUT_COMMAND_IDENTIFIER_PATTERN
+        .sub(
+            lambda match: (
+                "\\"
+                + match.group("command")
+                + " "
+                + match.group("identifier")
+            ),
+            input_format_text,
+        )
+    )
+
+
+def _normalize_tex_recognition_text(
+    input_format_text,
+):
+    """
+    Build a non-mutating TeX lexical recognition view.
+    """
+    normalized = _remove_inline_math_delimiters(
+        input_format_text
+    )
+    normalized = _unwrap_mathit_identifiers(
+        normalized
+    )
+    normalized = (
+        _split_concatenated_layout_command_identifiers(
+            normalized
+        )
+    )
+    return normalized
+
+
+class _InlineMathDelimiterContentView:
+    """
+    Non-mutating recognition view of ProblemContent.
+    """
+
+    def __init__(self, content):
+        self._content = content
+
+    def get_input_format(self):
+        return _remove_inline_math_delimiters(
+            self._content.get_input_format()
+        )
+
+    def get_input_format_text(self):
+        return self.get_input_format()
+
+    @property
+    def input_format_text(self):
+        return self.get_input_format()
+
+    def get_input_format_blocks(self):
+        blocks = (
+            self._content
+            .get_input_format_blocks()
+            or []
+        )
+
+        return [
+            _remove_inline_math_delimiters(
+                block
+            )
+            for block in blocks
+        ]
+
+    @property
+    def input_format_blocks(self):
+        return self.get_input_format_blocks()
+
+    def get_input_format_context(self):
+        getter = getattr(
+            self._content,
+            "get_input_format_context",
+            None,
+        )
+
+        if getter is None:
+            return self.get_input_format()
+
+        context = getter()
+
+        if context is None:
+            return self.get_input_format()
+
+        return _remove_inline_math_delimiters(
+            context
+        )
+
+    @property
+    def input_format_context_text(self):
+        return self.get_input_format_context()
+
+    def __getattr__(self, name):
+        return getattr(
+            self._content,
+            name,
+        )
+
+
+class _TexLexicalNormalizationContentView(
+    _InlineMathDelimiterContentView
+):
+    """
+    Recognition view used only after the primary prediction fails.
+    """
+
+    def get_input_format(self):
+        return _normalize_tex_recognition_text(
+            self._content.get_input_format()
+        )
+
+    def get_input_format_blocks(self):
+        blocks = (
+            self._content
+            .get_input_format_blocks()
+            or []
+        )
+
+        return [
+            _normalize_tex_recognition_text(
+                block
+            )
+            for block in blocks
+        ]
+
+    def get_input_format_context(self):
+        getter = getattr(
+            self._content,
+            "get_input_format_context",
+            None,
+        )
+
+        if getter is None:
+            return self.get_input_format()
+
+        context = getter()
+
+        if context is None:
+            return self.get_input_format()
+
+        return _normalize_tex_recognition_text(
+            context
+        )
+
+
+def _inline_math_delimiter_content_view(
+    content,
+):
+    """
+    Normalize all input-format representations without mutation.
+    """
+    if isinstance(
+        content,
+        _InlineMathDelimiterContentView,
+    ):
+        return content
+
+    input_format = content.get_input_format()
+    blocks = (
+        content.get_input_format_blocks()
+        or []
+    )
+
+    has_delimiter = (
+        (
+            input_format is not None
+            and (
+                r"\(" in str(input_format)
+                or r"\)" in str(input_format)
+            )
+        )
+        or any(
+            r"\(" in str(block)
+            or r"\)" in str(block)
+            for block in blocks
+        )
+    )
+
+    if not has_delimiter:
+        return content
+
+    return _InlineMathDelimiterContentView(
+        content
+    )
+
+
+def _tex_lexical_normalization_content_view(
+    content,
+):
+    if isinstance(
+        content,
+        _TexLexicalNormalizationContentView,
+    ):
+        return content
+
+    return _TexLexicalNormalizationContentView(
+        content
+    )
+
+
+def _normalize_layout_tex_commands(
+    input_format_text: str,
+) -> str:
+    """
+    Build a recognition-only view without mutating raw text.
+    """
+    input_format_text = _remove_inline_math_delimiters(
+        input_format_text
+    )
+    normalized = _remove_layout_hspace_commands(
+        input_format_text
+    )
+    normalized = _unwrap_layout_style_commands(
+        normalized
+    )
+    normalized = _normalize_spaced_variable_indices(
+        normalized
+    )
+    normalized = (
+        _normalize_indexed_identifier_aliases(
+            normalized
+        )
+    )
+    return normalized
+
+
 def _predict_simple_format_candidate_groups_without_string_collapse(
     input_format_text: str,
 ) -> List[List[Format]]:
@@ -92,7 +881,9 @@ def _predict_simple_format_candidate_groups_without_string_collapse(
     try:
         tokenized_candidates = (
             search_formats_with_minimum_vars(
-                input_format_text
+                _normalize_layout_tex_commands(
+                    input_format_text
+                )
             )
         )
     except NoFormatFoundError:
@@ -1048,7 +1839,54 @@ def predict_multi_case_format(
     return valid_predictions[0]
 
 
-def predict_format(
+def _predict_same_line_ragged_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    from atcodertools.fmtprediction import (
+        ragged_row,
+        two_line_ragged_row,
+    )
+
+    try:
+        prediction = (
+            ragged_row
+            .predict_same_line_ragged_rows(
+                content
+            )
+        )
+    except (
+        ragged_row
+        .NoRaggedRowPredictionError,
+        ragged_row
+        .MultipleRaggedRowPredictionsError,
+    ):
+        try:
+            prediction = (
+                two_line_ragged_row
+                .predict_two_line_ragged_rows(
+                    content
+                )
+            )
+        except (
+            two_line_ragged_row
+            .NoTwoLineRaggedRowPredictionError,
+            two_line_ragged_row
+            .MultipleTwoLineRaggedRowPredictionsError,
+        ):
+            raise NoPredictionResultError from None
+
+    return (
+        FormatPredictionResult
+        .create_ragged_row_typed_format(
+            prediction.prefix_format,
+            prediction.schema,
+            prediction.var_to_type,
+            prediction.suffix_format,
+        )
+    )
+
+
+def _predict_format_from_content(
     content: ProblemContent,
 ) -> FormatPredictionResult:
     samples = content.get_samples()
@@ -1061,7 +1899,16 @@ def predict_format(
             content
         )
     except NoMultiCaseFormatFoundError:
-        return _predict_single_case(content)
+        try:
+            return _predict_single_case(
+                content
+            )
+        except NoPredictionResultError:
+            return (
+                _predict_same_line_ragged_format(
+                    content
+                )
+            )
     except MultipleMultiCaseFormatsError as error:
         raise MultiplePredictionResultsError(
             error.candidates
@@ -1076,3 +1923,28 @@ def predict_format(
             multi_case.var_to_type,
         )
     )
+
+
+def predict_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    primary_content = (
+        _inline_math_delimiter_content_view(
+            content
+        )
+    )
+
+    try:
+        return _predict_format_from_content(
+            primary_content
+        )
+    except NoPredictionResultError:
+        fallback_content = (
+            _tex_lexical_normalization_content_view(
+                primary_content
+            )
+        )
+
+        return _predict_format_from_content(
+            fallback_content
+        )
