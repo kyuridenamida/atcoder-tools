@@ -601,16 +601,49 @@ def _remove_inline_math_delimiters(
     )
 
 
+_TEX_LEXICAL_IDENTIFIER_PATTERN = re.compile(
+    r"\\mathit\s*\{(?P<mathit>[A-Za-z][A-Za-z0-9_]*)\}"
+    r"|\\(?P<command>vdots|ldots|cdots|dots)"
+    r"(?![bcimo](?:\b|_))"
+    r"(?P<identifier>[A-Za-z][A-Za-z0-9]*_)"
+)
+
+
+def _normalize_tex_recognition_text(
+    input_format_text,
+):
+    def replace(match):
+        mathit = match.group("mathit")
+
+        if mathit is not None:
+            return mathit
+
+        return "\\{} {}".format(
+            match.group("command"),
+            match.group("identifier"),
+        )
+
+    return _TEX_LEXICAL_IDENTIFIER_PATTERN.sub(
+        replace,
+        input_format_text,
+    )
+
+
 class _InlineMathDelimiterContentView:
     """
     Non-mutating recognition view of ProblemContent.
     """
 
-    def __init__(self, content):
+    def __init__(
+        self,
+        content,
+        normalizer=_remove_inline_math_delimiters,
+    ):
         self._content = content
+        self._normalizer = normalizer
 
     def get_input_format(self):
-        return _remove_inline_math_delimiters(
+        return self._normalizer(
             self._content.get_input_format()
         )
 
@@ -629,7 +662,7 @@ class _InlineMathDelimiterContentView:
         )
 
         return [
-            _remove_inline_math_delimiters(
+            self._normalizer(
                 block
             )
             for block in blocks
@@ -654,7 +687,7 @@ class _InlineMathDelimiterContentView:
         if context is None:
             return self.get_input_format()
 
-        return _remove_inline_math_delimiters(
+        return self._normalizer(
             context
         )
 
@@ -1754,12 +1787,9 @@ def _predict_same_line_ragged_format(
     )
 
 
-def predict_format(
+def _predict_format_once(
     content: ProblemContent,
 ) -> FormatPredictionResult:
-    content = _inline_math_delimiter_content_view(
-        content
-    )
     samples = content.get_samples()
 
     if not samples:
@@ -1794,3 +1824,20 @@ def predict_format(
             multi_case.var_to_type,
         )
     )
+
+
+def predict_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    primary_content = _inline_math_delimiter_content_view(
+        content
+    )
+
+    try:
+        return _predict_format_once(primary_content)
+    except NoPredictionResultError:
+        fallback_content = _InlineMathDelimiterContentView(
+            primary_content,
+            _normalize_tex_recognition_text,
+        )
+        return _predict_format_once(fallback_content)
