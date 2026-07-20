@@ -601,6 +601,78 @@ def _remove_inline_math_delimiters(
     )
 
 
+_MATHIT_IDENTIFIER_PATTERN = re.compile(
+    r"\\mathit\s*\{"
+    r"(?P<identifier>[A-Za-z][A-Za-z0-9_]*)"
+    r"\}"
+)
+
+_CONCATENATED_LAYOUT_COMMAND_IDENTIFIER_PATTERN = re.compile(
+    r"\\(?P<command>vdots|ldots|cdots|dots)"
+    r"(?![bcimo](?:\b|_))"
+    r"(?P<identifier>[A-Za-z][A-Za-z0-9]*_)"
+)
+
+
+def _unwrap_mathit_identifiers(
+    input_format_text,
+):
+    """
+    Unwrap only simple identifier atoms inside ``\\mathit{...}``.
+
+    Expressions such as ``\\mathit{x+y}`` remain untouched.
+    """
+    return _MATHIT_IDENTIFIER_PATTERN.sub(
+        lambda match: match.group(
+            "identifier"
+        ),
+        input_format_text,
+    )
+
+
+def _split_concatenated_layout_command_identifiers(
+    input_format_text,
+):
+    """
+    Restore a missing boundary after a TeX layout command.
+
+    This targets extracted text such as ``\\ldotsA_`` while preserving
+    valid command names such as ``\\dotsb`` and ``\\dotsc``.
+    """
+    return (
+        _CONCATENATED_LAYOUT_COMMAND_IDENTIFIER_PATTERN
+        .sub(
+            lambda match: (
+                "\\"
+                + match.group("command")
+                + " "
+                + match.group("identifier")
+            ),
+            input_format_text,
+        )
+    )
+
+
+def _normalize_tex_recognition_text(
+    input_format_text,
+):
+    """
+    Build a non-mutating TeX lexical recognition view.
+    """
+    normalized = _remove_inline_math_delimiters(
+        input_format_text
+    )
+    normalized = _unwrap_mathit_identifiers(
+        normalized
+    )
+    normalized = (
+        _split_concatenated_layout_command_identifiers(
+            normalized
+        )
+    )
+    return normalized
+
+
 class _InlineMathDelimiterContentView:
     """
     Non-mutating recognition view of ProblemContent.
@@ -669,6 +741,52 @@ class _InlineMathDelimiterContentView:
         )
 
 
+class _TexLexicalNormalizationContentView(
+    _InlineMathDelimiterContentView
+):
+    """
+    Recognition view used only after the primary prediction fails.
+    """
+
+    def get_input_format(self):
+        return _normalize_tex_recognition_text(
+            self._content.get_input_format()
+        )
+
+    def get_input_format_blocks(self):
+        blocks = (
+            self._content
+            .get_input_format_blocks()
+            or []
+        )
+
+        return [
+            _normalize_tex_recognition_text(
+                block
+            )
+            for block in blocks
+        ]
+
+    def get_input_format_context(self):
+        getter = getattr(
+            self._content,
+            "get_input_format_context",
+            None,
+        )
+
+        if getter is None:
+            return self.get_input_format()
+
+        context = getter()
+
+        if context is None:
+            return self.get_input_format()
+
+        return _normalize_tex_recognition_text(
+            context
+        )
+
+
 def _inline_math_delimiter_content_view(
     content,
 ):
@@ -706,6 +824,20 @@ def _inline_math_delimiter_content_view(
         return content
 
     return _InlineMathDelimiterContentView(
+        content
+    )
+
+
+def _tex_lexical_normalization_content_view(
+    content,
+):
+    if isinstance(
+        content,
+        _TexLexicalNormalizationContentView,
+    ):
+        return content
+
+    return _TexLexicalNormalizationContentView(
         content
     )
 
@@ -1754,12 +1886,9 @@ def _predict_same_line_ragged_format(
     )
 
 
-def predict_format(
+def _predict_format_from_content(
     content: ProblemContent,
 ) -> FormatPredictionResult:
-    content = _inline_math_delimiter_content_view(
-        content
-    )
     samples = content.get_samples()
 
     if not samples:
@@ -1794,3 +1923,28 @@ def predict_format(
             multi_case.var_to_type,
         )
     )
+
+
+def predict_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    primary_content = (
+        _inline_math_delimiter_content_view(
+            content
+        )
+    )
+
+    try:
+        return _predict_format_from_content(
+            primary_content
+        )
+    except NoPredictionResultError:
+        fallback_content = (
+            _tex_lexical_normalization_content_view(
+                primary_content
+            )
+        )
+
+        return _predict_format_from_content(
+            fallback_content
+        )

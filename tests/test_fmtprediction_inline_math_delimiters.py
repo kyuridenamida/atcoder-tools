@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import importlib
+
 import unittest
+from unittest import mock
 
 from atcodertools.client.models.problem_content import (
     ProblemContent,
@@ -12,6 +15,11 @@ from atcodertools.fmtprediction.predict_format import (
     _inline_math_delimiter_content_view,
     _normalize_layout_tex_commands,
     predict_format,
+)
+
+
+predict_format_module = importlib.import_module(
+    "atcodertools.fmtprediction.predict_format"
 )
 
 
@@ -151,6 +159,280 @@ class TestInlineMathDelimiterNormalization(
                 "(Parallel: A | 1 to N)]"
             ),
             str(prediction.format),
+        )
+
+    def test_unwraps_simple_mathit_identifiers(self):
+        source = (
+            "N\n"
+            r"\mathit{sx} _ 1 "
+            r"\mathit{sy} _ 1"
+            "\n"
+        )
+
+        normalized = (
+            predict_format_module
+            ._normalize_tex_recognition_text(
+                source
+            )
+        )
+
+        self.assertIn(
+            "sx _ 1 sy _ 1",
+            normalized,
+        )
+        self.assertNotIn(
+            r"\mathit",
+            normalized,
+        )
+
+    def test_preserves_non_identifier_mathit_expression(self):
+        source = (
+            r"\mathit{x+y}"
+            "\n"
+        )
+
+        normalized = (
+            predict_format_module
+            ._normalize_tex_recognition_text(
+                source
+            )
+        )
+
+        self.assertIn(
+            r"\mathit{x+y}",
+            normalized,
+        )
+
+    def test_restores_layout_command_identifier_boundary(self):
+        source = (
+            "N\n"
+            r"A_{N,1}\ldotsA_{N,N-1}"
+            "\n"
+            r"\vdotst_1"
+            "\n"
+        )
+
+        normalized = (
+            predict_format_module
+            ._normalize_tex_recognition_text(
+                source
+            )
+        )
+
+        self.assertIn(
+            r"\ldots A_{N,N-1}",
+            normalized,
+        )
+        self.assertIn(
+            r"\vdots t_1",
+            normalized,
+        )
+
+    def test_preserves_dots_family_command_names(self):
+        source = (
+            r"\dotsb_1 "
+            r"\dotsc_1 "
+            r"\dotsi_1 "
+            r"\dotsm_1 "
+            r"\dotso_1"
+            "\n"
+        )
+
+        normalized = (
+            predict_format_module
+            ._normalize_tex_recognition_text(
+                source
+            )
+        )
+
+        self.assertEqual(
+            source,
+            normalized,
+        )
+
+    def test_fallback_content_view_applies_tex_lexical_normalization(
+        self,
+    ):
+        raw = (
+            r"\(\mathit{sx} _ 1\)"
+            "\n"
+            r"A_{N,1}\ldotsA_{N,N-1}"
+            "\n"
+        )
+
+        content = FakeProblemContent(
+            raw,
+            [raw],
+            "context "
+            + r"\mathit{gx}",
+        )
+
+        primary_view = (
+            _inline_math_delimiter_content_view(
+                content
+            )
+        )
+
+        fallback_view = (
+            predict_format_module
+            ._tex_lexical_normalization_content_view(
+                primary_view
+            )
+        )
+
+        self.assertIn(
+            "sx _ 1",
+            fallback_view.get_input_format(),
+        )
+        self.assertIn(
+            r"\ldots A_",
+            fallback_view
+            .get_input_format_blocks()[0],
+        )
+        self.assertIn(
+            "gx",
+            fallback_view
+            .get_input_format_context(),
+        )
+
+        self.assertIn(
+            r"\mathit{sx}",
+            primary_view.get_input_format(),
+        )
+        self.assertIn(
+            r"\ldotsA_",
+            primary_view
+            .get_input_format_blocks()[0],
+        )
+
+        self.assertEqual(
+            raw,
+            content.get_input_format(),
+        )
+        self.assertEqual(
+            [raw],
+            content.get_input_format_blocks(),
+        )
+
+    def test_successful_primary_prediction_skips_lexical_fallback(
+        self,
+    ):
+        sentinel = object()
+
+        content = FakeProblemContent(
+            r"\(\mathit{sx}\)" + "\n",
+            [r"\(\mathit{sx}\)" + "\n"],
+            r"\(\mathit{sx}\)",
+        )
+
+        with mock.patch.object(
+            predict_format_module,
+            "_predict_format_from_content",
+            return_value=sentinel,
+        ) as predictor:
+            result = (
+                predict_format_module
+                .predict_format(content)
+            )
+
+        self.assertIs(
+            sentinel,
+            result,
+        )
+        self.assertEqual(
+            1,
+            predictor.call_count,
+        )
+
+        primary_content = (
+            predictor.call_args.args[0]
+        )
+
+        self.assertIn(
+            r"\mathit{sx}",
+            primary_content.get_input_format(),
+        )
+        self.assertNotIn(
+            r"\(",
+            primary_content.get_input_format(),
+        )
+
+    def test_lexical_fallback_runs_only_after_no_result(
+        self,
+    ):
+        sentinel = object()
+
+        content = FakeProblemContent(
+            r"\(\mathit{sx}\)" + "\n",
+            [r"\(\mathit{sx}\)" + "\n"],
+            r"\(\mathit{sx}\)",
+        )
+
+        with mock.patch.object(
+            predict_format_module,
+            "_predict_format_from_content",
+            side_effect=[
+                predict_format_module
+                .NoPredictionResultError,
+                sentinel,
+            ],
+        ) as predictor:
+            result = (
+                predict_format_module
+                .predict_format(content)
+            )
+
+        self.assertIs(
+            sentinel,
+            result,
+        )
+        self.assertEqual(
+            2,
+            predictor.call_count,
+        )
+
+        primary_content = (
+            predictor.call_args_list[0]
+            .args[0]
+        )
+
+        fallback_content = (
+            predictor.call_args_list[1]
+            .args[0]
+        )
+
+        self.assertIn(
+            r"\mathit{sx}",
+            primary_content.get_input_format(),
+        )
+        self.assertEqual(
+            "sx\n",
+            fallback_content.get_input_format(),
+        )
+
+    def test_primary_layout_normalizer_preserves_fallback_tokens(
+        self,
+    ):
+        source = (
+            r"\mathit{sx}"
+            "\n"
+            r"A_{N,1}\ldotsA_{N,N-1}"
+            "\n"
+        )
+
+        normalized = (
+            _normalize_layout_tex_commands(
+                source
+            )
+        )
+
+        self.assertIn(
+            r"\mathit{sx}",
+            normalized,
+        )
+        self.assertIn(
+            r"\ldotsA_",
+            normalized,
         )
 
 
