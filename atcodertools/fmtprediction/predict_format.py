@@ -79,6 +79,163 @@ class MultiCaseFormatPrediction:
         self.layout = layout
 
 
+_LAYOUT_HSPACE_PATTERN = re.compile(
+    r"\\hspace\*?\s*\{[^{}]*\}"
+)
+
+_BRACED_LAYOUT_STYLE_PATTERN = re.compile(
+    r"""
+    \\
+    (?:
+        text
+        |mathrm
+        |rm
+        |it
+    )
+    \s*
+    \{
+        (?P<body>[^{}]*)
+    \}
+    """,
+    re.VERBOSE,
+)
+
+_RESERVED_PLACEHOLDER_PATTERN = re.compile(
+    r"^(?:query|operation|op|case|test|testcase)$",
+    re.IGNORECASE,
+)
+
+_BRACED_SPACED_INDEX_PATTERN = re.compile(
+    r"""
+    (?P<base>\b[A-Za-z][A-Za-z0-9]*)
+    \s*
+    _
+    \s*
+    \{
+        \s*
+        (?P<index>[^{}\n]+?)
+        \s*
+    \}
+    """,
+    re.VERBOSE,
+)
+
+_UNBRACED_SPACED_INDEX_PATTERN = re.compile(
+    r"""
+    (?P<base>\b[A-Za-z][A-Za-z0-9]*)
+    \s*
+    _
+    \s*
+    (?P<index>[A-Za-z0-9]+)
+    """,
+    re.VERBOSE,
+)
+
+
+def _remove_layout_hspace_commands(
+    input_format_text: str,
+) -> str:
+    """Remove TeX horizontal spacing commands."""
+    return _LAYOUT_HSPACE_PATTERN.sub(
+        "",
+        input_format_text,
+    )
+
+
+def _unwrap_layout_style_commands(
+    input_format_text: str,
+) -> str:
+    """
+    Remove presentation-only TeX wrappers.
+
+    Query, operation and test-case placeholders are
+    intentionally preserved for their dedicated
+    recognizers.
+    """
+
+    def replace(match):
+        body = match.group("body").strip()
+
+        if _RESERVED_PLACEHOLDER_PATTERN.fullmatch(
+            body
+        ):
+            return match.group(0)
+
+        return body
+
+    current = input_format_text
+
+    for _ in range(8):
+        updated = _BRACED_LAYOUT_STYLE_PATTERN.sub(
+            replace,
+            current,
+        )
+
+        if updated == current:
+            break
+
+        current = updated
+
+    return current
+
+
+def _normalize_spaced_variable_indices(
+    input_format_text: str,
+) -> str:
+    """
+    Normalize spaces only inside variable index atoms.
+
+    Ordinary separators such as ``N M`` are preserved.
+    """
+    current = input_format_text
+
+    for _ in range(8):
+        updated = _BRACED_SPACED_INDEX_PATTERN.sub(
+            lambda match: "{}_{{{}}}".format(
+                match.group("base"),
+                re.sub(
+                    r"\s+",
+                    "",
+                    match.group("index"),
+                ),
+            ),
+            current,
+        )
+
+        updated = _UNBRACED_SPACED_INDEX_PATTERN.sub(
+            lambda match: "{}_{}".format(
+                match.group("base"),
+                match.group("index"),
+            ),
+            updated,
+        )
+
+        if updated == current:
+            break
+
+        current = updated
+
+    return current
+
+
+def _normalize_layout_tex_commands(
+    input_format_text: str,
+) -> str:
+    """
+    Build a recognition-only view without mutating raw text.
+    """
+    normalized = _remove_layout_hspace_commands(
+        input_format_text
+    )
+    normalized = _unwrap_layout_style_commands(
+        normalized
+    )
+    normalized = _normalize_spaced_variable_indices(
+        normalized
+    )
+    return normalized
+
+
 def _predict_simple_format_candidate_groups_without_string_collapse(
     input_format_text: str,
 ) -> List[List[Format]]:
@@ -92,7 +249,9 @@ def _predict_simple_format_candidate_groups_without_string_collapse(
     try:
         tokenized_candidates = (
             search_formats_with_minimum_vars(
-                input_format_text
+                _normalize_layout_tex_commands(
+                    input_format_text
+                )
             )
         )
     except NoFormatFoundError:
