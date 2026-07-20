@@ -58,5 +58,12 @@ seq = "{type}[] {name} = new {type}[](cast(size_t) ({length}));"
 int = "{name} = input.front.to!long;\ninput.popFront;"
 float = "{name} = input.front.to!double;\ninput.popFront;"
 str = "{name} = input.front.to!string;\ninput.popFront;"
-
-
+[ragged]
+container_type = "{type}[][]"
+declare = "{container_type} {name};"
+allocate_outer = "{name} = new {type}[][](cast(size_t) ({length_i}));"
+declare_and_allocate_outer = "{container_type} {name} = new {type}[][](cast(size_t) ({length_i}));"
+allocate_inner = "{name}[{index_i}] = new {type}[](cast(size_t) ({length_j}));"
+access = "{name}[{index_i}][{index_j}]"
+formal_arg = "{container_type} {name}"
+actual_arg = "{name}"

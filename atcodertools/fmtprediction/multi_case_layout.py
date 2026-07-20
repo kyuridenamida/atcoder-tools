@@ -16,6 +16,14 @@ _INDEXED_NAME_RE = re.compile(
 )
 
 
+_LAYOUT_COMMAND_RE = re.compile(
+    r"\\hspace\*?\s*\{[^{}]*\}"
+)
+_UNBRACED_STYLE_COMMAND_RE = re.compile(
+    r"\\(?:rm|it)\b\s*"
+)
+
+
 def _nonempty_lines(text: str) -> List[str]:
     return [
         line.strip()
@@ -26,6 +34,14 @@ def _nonempty_lines(text: str) -> List[str]:
 
 def _normalize_tex_atom(value: str) -> str:
     value = value.strip()
+    value = _LAYOUT_COMMAND_RE.sub(
+        "",
+        value,
+    )
+    value = _UNBRACED_STYLE_COMMAND_RE.sub(
+        "",
+        value,
+    )
 
     command_pattern = re.compile(
         r"\\(?:text|rm|it|mathrm)\{([^{}]*)\}"
@@ -45,6 +61,11 @@ def _normalize_tex_atom(value: str) -> str:
     value = value.replace("\\", "")
     value = value.replace(" ", "")
 
+    value = re.sub(
+        r"\s*_\s*",
+        "_",
+        value,
+    )
     return value
 
 
@@ -52,7 +73,7 @@ def _is_ellipsis_line(line: str) -> bool:
     normalized = _normalize_tex_atom(line).lower()
 
     return (
-        normalized in ("vdots", "dots", "cdots", "...")
+        normalized in ("vdots", "ldots", "dots", "cdots", "...")
         or "..." in normalized
     )
 
@@ -123,7 +144,13 @@ def _extract_wrapper_prefix(
             saw_ellipsis = True
             continue
 
-        tokens = line.split()
+        normalized_line = _normalize_tex_atom(line)
+        normalized_line = re.sub(
+            r"\s*_\s*",
+            "_",
+            normalized_line,
+        )
+        tokens = normalized_line.split()
 
         if len(tokens) != 1:
             return None
@@ -140,7 +167,9 @@ def _extract_wrapper_prefix(
         if base.lower() not in (
             "test",
             "case",
+            "testcase",
         ):
+
             return None
 
         indices.append(index)
