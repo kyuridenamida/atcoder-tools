@@ -2479,7 +2479,7 @@ abc401-C                                 OK                   [(Singular: N),(Si
 abc401-D                                 OK                   [(Singular: N),(Singular: K),(Singular: S)] [('N', <class 'int'>), ('K', <class 'int'>), ('S', <class 'str'>)]
 abc401-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: u,v | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>)]
 abc401-F                                 OK                   [(Singular: Nfixedone),(Parallel: ufixedone,vfixedone | 1 to Nfixedone-1),(Singular: Nfixedtwo),(Parallel: ufixedtwo,vfixedtwo | 1 to Nfixedtwo-1)] [('Nfixedone', <class 'int'>), ('ufixedone', <class 'int'>), ('vfixedone', <class 'int'>), ('Nfixedtwo', <class 'int'>), ('ufixedtwo', <class 'int'>), ('vfixedtwo', <class 'int'>)]
-abc401-G                                 No result
+abc401-G                                 OK                   [(Singular: N),(Parallel: sx,sy | 1 to N),(Parallel: gx,gy | 1 to N)] [('N', <class 'int'>), ('sx', <class 'int'>), ('sy', <class 'int'>), ('gx', <class 'int'>), ('gy', <class 'int'>)]
 abc402-A                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc402-B                                 No result
 abc402-C                                 OK                   [RaggedRowFormat: prefix=[(Singular: N),(Singular: M)], rows=[RaggedRowPattern: count=M, prefix=K, length_pos=0, values=A], suffix=[(Parallel: B | 1 to N)]] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -5964,7 +5964,7 @@ m-solutions2019-B                        OK                   [(Singular: S)] [(
 m-solutions2019-C                        OK                   [(Singular: N),(Singular: A),(Singular: B),(Singular: C)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 m-solutions2019-D                        OK                   [(Singular: N),(Parallel: a,b | 1 to N-1),(Parallel: c | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>)]
 m-solutions2019-E                        OK                   [(Singular: Q),(Parallel: x,d,n | 1 to Q)] [('Q', <class 'int'>), ('x', <class 'int'>), ('d', <class 'int'>), ('n', <class 'int'>)]
-m-solutions2019-F                        No result
+m-solutions2019-F                        OK                   [(Singular: N),(Parallel: A | 1 to N-1)] [('N', <class 'int'>), ('A', <class 'int'>)]
 m-solutions2020-A                        OK                   [(Singular: X)] [('X', <class 'int'>)]
 m-solutions2020-B                        OK                   [(Singular: A),(Singular: B),(Singular: C),(Singular: K)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('K', <class 'int'>)]
 m-solutions2020-C                        OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
