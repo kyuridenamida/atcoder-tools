@@ -57,45 +57,34 @@ def args_for(
 class TestTaggedQueryPythonCodegenDispatch(
     unittest.TestCase
 ):
-    def test_universal_generator_fails_closed(
+    def test_universal_generator_supports_all_languages(
         self,
     ):
         result = predict_format(
             tagged_query_content()
         )
-
         toml_paths = sorted(
             TOML_ROOT.glob("*.toml")
         )
-
-        self.assertEqual(
-            10,
-            len(toml_paths),
-        )
-
+        self.assertEqual(10, len(toml_paths))
         for path in toml_paths:
-            with self.subTest(
-                language=path.stem
-            ):
-                parameters = (
-                    UniversalCodeGenerator(
-                        result.format,
-                        Config(),
-                        path,
-                    )
-                    .generate_parameters()
-                )
-
-                self.assertFalse(
-                    parameters[
-                        "prediction_success"
-                    ]
-                )
-
+            with self.subTest(language=path.stem):
+                parameters = UniversalCodeGenerator(
+                    result.format,
+                    Config(),
+                    path,
+                ).generate_parameters()
                 self.assertTrue(
-                    parameters[
-                        "tagged_query"
-                    ]
+                    parameters["prediction_success"]
+                )
+                self.assertTrue(
+                    parameters["tagged_query"]
+                )
+                self.assertFalse(
+                    parameters["homogeneous_query"]
+                )
+                self.assertTrue(
+                    parameters["query_dispatch_skeleton"]
                 )
 
     def test_python_codegen_entry_executes(

@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from atcodertools.codegen.universal_query_codegen import (
+    UniversalQueryCodeGenerator,
+)
 from typing import Dict, Any, Optional
 import re
 
@@ -41,6 +44,7 @@ class UniversalCodeGenerator():
 
         self._format = format_
         self._config = config
+        self._generator_path = Path(path)
         self.info = toml.load(path)
 
         if "index" not in self.info:
@@ -135,28 +139,9 @@ class UniversalCodeGenerator():
                 HomogeneousQueryFormat,
             ),
         ):
-            is_tagged = isinstance(
-                self._format,
-                TaggedQueryFormat,
-            )
-
-            return dict(
-                formal_arguments="",
-                actual_arguments="",
-                input_part="",
-                prefix_input_part="",
-                case_input_part="",
-                global_declaration="",
-                global_input_part="",
-                multi_case=False,
-                case_count_var=None,
-                case_loop_var=None,
-                tagged_query=is_tagged,
-                homogeneous_query=(
-                    not is_tagged
-                ),
-                prediction_success=False,
-            )
+            return UniversalQueryCodeGenerator(
+                self
+            ).generate_parameters()
 
         if self._ragged_format is not None:
             return self._generate_ragged_parameters()

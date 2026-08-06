@@ -1,3 +1,4 @@
+from typing import Union
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, Tuple
@@ -21,7 +22,7 @@ class TaggedQueryArgument:
 
 @dataclass(frozen=True)
 class TaggedQueryVariant:
-    tag: int
+    tag: Union[int, str]
     arguments: Tuple[
         TaggedQueryArgument,
         ...,
@@ -53,6 +54,19 @@ class TaggedQueryFormat:
             for variant in self.variants
         ]
 
+        if not all(
+            type(tag) in {int, str}
+            for tag in tags
+        ):
+            raise ValueError(
+                "tagged query tags must be int or str"
+            )
+
+        if len({type(tag) for tag in tags}) != 1:
+            raise ValueError(
+                "tagged query tags must have one type"
+            )
+
         if tags != sorted(tags):
             raise ValueError(
                 "tagged query variants must be sorted"
@@ -69,7 +83,7 @@ class TaggedQueryFormat:
     @property
     def variants_by_tag(
         self,
-    ) -> Dict[int, TaggedQueryVariant]:
+    ) -> Dict[Union[int, str], TaggedQueryVariant]:
         return {
             variant.tag: variant
             for variant in self.variants

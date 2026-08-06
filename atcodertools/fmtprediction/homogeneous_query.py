@@ -47,60 +47,99 @@ def _extract_argument_names(
 ) -> Tuple[str, ...]:
     if (
         not isinstance(blocks, list)
-        or len(blocks) != 2
+        or len(blocks) < 2
     ):
         raise NoHomogeneousQueryPredictionError
 
-    definition_block = blocks[1]
-
-    if not isinstance(definition_block, str):
-        raise NoHomogeneousQueryPredictionError
-
-    rows = []
-
-    for segment in tagged_query._line_segments(
-        definition_block
-    ):
-        tokens = tuple(
-            tagged_query._TOKEN_PATTERN.findall(
-                segment
-            )
-        )
-
-        if not tokens:
-            continue
-
-        if tagged_query._COMPARISON_PATTERN.search(
-            segment
-        ):
+    definition_blocks = blocks[1:]
+    if len(definition_blocks) == 1:
+        definition_block = definition_blocks[0]
+        if not isinstance(definition_block, str):
             raise NoHomogeneousQueryPredictionError
 
-        rows.append(tokens)
+        rows = []
+        for segment in tagged_query._line_segments(
+            definition_block
+        ):
+            tokens = tuple(
+                tagged_query._TOKEN_PATTERN.findall(
+                    segment
+                )
+            )
+            if not tokens:
+                continue
+            if tagged_query._COMPARISON_PATTERN.search(
+                segment
+            ):
+                raise NoHomogeneousQueryPredictionError
+            rows.append(tokens)
 
-    if len(rows) != 1:
-        raise NoHomogeneousQueryPredictionError
+        if len(rows) != 1:
+            raise NoHomogeneousQueryPredictionError
+        argument_names = rows[0]
+        if not 1 <= len(argument_names) <= 7:
+            raise NoHomogeneousQueryPredictionError
+        if not all(
+            tagged_query._IDENTIFIER_PATTERN.fullmatch(
+                argument
+            )
+            is not None
+            for argument in argument_names
+        ):
+            raise NoHomogeneousQueryPredictionError
+        if len(argument_names) != len(set(argument_names)):
+            raise NoHomogeneousQueryPredictionError
+        return argument_names
 
-    argument_names = rows[0]
-
-    if not 1 <= len(argument_names) <= 6:
-        raise NoHomogeneousQueryPredictionError
-
-    if not all(
-        tagged_query._IDENTIFIER_PATTERN.fullmatch(
-            argument
+    try:
+        definitions = (
+            tagged_query._extract_variant_definitions(
+                definition_blocks
+            )
         )
-        is not None
-        for argument in argument_names
-    ):
+    except tagged_query.NoTaggedQueryPredictionError:
+        raise NoHomogeneousQueryPredictionError from None
+
+    arities = {
+        len(definition.argument_names)
+        for definition in definitions
+    }
+    if len(arities) != 1:
+        raise NoHomogeneousQueryPredictionError
+    argument_count = next(iter(arities))
+    if argument_count > 6:
         raise NoHomogeneousQueryPredictionError
 
-    if (
-        len(argument_names)
-        != len(set(argument_names))
-    ):
-        raise NoHomogeneousQueryPredictionError
+    names = ["query_type"]
+    used_names = set(names)
+    for position in range(argument_count):
+        candidates = {
+            definition.argument_names[position]
+            for definition in definitions
+        }
+        if len(candidates) == 1:
+            candidate = next(iter(candidates))
+        else:
+            candidate = "query_arg_{}".format(
+                position + 1
+            )
+        if (
+            candidate in used_names
+            or candidate in tagged_query._RESERVED_NAMES
+            or tagged_query._IDENTIFIER_PATTERN.fullmatch(
+                candidate
+            )
+            is None
+        ):
+            candidate = "query_arg_{}".format(
+                position + 1
+            )
+        while candidate in used_names:
+            candidate = "_" + candidate
+        names.append(candidate)
+        used_names.add(candidate)
 
-    return argument_names
+    return tuple(names)
 
 
 def _create_prediction(

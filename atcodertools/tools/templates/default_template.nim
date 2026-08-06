@@ -27,7 +27,11 @@ let NO = "{{ no_str }}"
 
 {% if prediction_success %}
 proc solve({{ formal_arguments }}):void =
+{% if query_dispatch_skeleton %}
+{{ query_dispatch_skeleton }}
+{% else %}
   discard
+{% endif %}
 {% endif %}
 
 proc main():void =

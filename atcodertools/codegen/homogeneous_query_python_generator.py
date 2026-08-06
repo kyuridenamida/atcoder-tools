@@ -1,3 +1,4 @@
+import keyword
 from pathlib import Path
 from typing import List
 
@@ -86,6 +87,41 @@ class HomogeneousQueryPythonGenerator:
 
         return expression
 
+    @staticmethod
+    def _safe_local(name: str) -> str:
+        if keyword.iskeyword(name):
+            return "_query_" + name
+        return name
+
+    def generate_dispatch_skeleton(
+        self,
+        indent: str = "    ",
+    ) -> str:
+        collection = self._format.query_collection_name
+        body_indent = indent + " " * 4
+        names = [
+            self._safe_local(argument.name)
+            for argument in self._format.arguments
+        ]
+        target = (
+            names[0] + ","
+            if len(names) == 1
+            else ", ".join(names)
+        )
+        return "\n".join([
+            "{}for _query in {}:".format(
+                indent,
+                collection,
+            ),
+            "{}{} = _query".format(
+                body_indent,
+                target,
+            ),
+            "{}# TODO: process this query".format(
+                body_indent
+            ),
+        ])
+
     def generate_input_part(
         self,
         indent: str = "",
@@ -94,66 +130,44 @@ class HomogeneousQueryPythonGenerator:
             self._prefix_input_part,
             indent,
         )
-
         body_indent = indent + " " * 4
-        collection = (
-            self._format
-            .query_collection_name
-        )
-
+        collection = self._format.query_collection_name
         lines.append(
-            "{}{} = []".format(
+            "{}{} = []".format(indent, collection)
+        )
+        lines.append(
+            "{}for _query_index in range({}):".format(
                 indent,
-                collection,
+                self._format.query_count_var,
             )
         )
-
         lines.append(
-            "{}for _query_index in "
-            "range({}):".format(
-                indent,
-                self._format
-                .query_count_var,
-            )
-        )
-
-        lines.append(
-            "{}_query_parts = "
-            "input().split()".format(
+            "{}_query_parts = input().split()".format(
                 body_indent
             )
         )
-
         lines.append(
-            "{}if len(_query_parts) "
-            "!= {}:".format(
+            "{}if len(_query_parts) != {}:".format(
                 body_indent,
                 self._format.arity,
             )
         )
-
         lines.append(
             "{}raise ValueError("
             "'invalid query arity')".format(
                 body_indent + " " * 4
             )
         )
-
         tuple_items = []
-
         for position, argument in enumerate(
             self._format.arguments
         ):
-            variable_name = (
-                "_query_arg_{}"
-                .format(position)
+            variable_name = "_query_arg_{}".format(
+                position
             )
-
-            expression = (
-                "_query_parts[{}]"
-                .format(position)
+            expression = "_query_parts[{}]".format(
+                position
             )
-
             lines.append(
                 "{}{} = {}".format(
                     body_indent,
@@ -164,20 +178,14 @@ class HomogeneousQueryPythonGenerator:
                     ),
                 )
             )
-
-            tuple_items.append(
-                variable_name
-            )
-
-        if len(tuple_items) == 1:
-            tuple_expression = "({},)".format(
-                tuple_items[0]
-            )
-        else:
-            tuple_expression = "({})".format(
+            tuple_items.append(variable_name)
+        tuple_expression = (
+            "({},)".format(tuple_items[0])
+            if len(tuple_items) == 1
+            else "({})".format(
                 ", ".join(tuple_items)
             )
-
+        )
         lines.append(
             "{}{}.append({})".format(
                 body_indent,
@@ -185,5 +193,4 @@ class HomogeneousQueryPythonGenerator:
                 tuple_expression,
             )
         )
-
         return "\n".join(lines)

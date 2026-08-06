@@ -158,6 +158,13 @@ def _homogeneous_query_parameters(
         tagged_query=False,
         homogeneous_query=True,
         query_collection_name=collection,
+        query_dispatch_skeleton=(
+            homogeneous_generator
+            .generate_dispatch_skeleton(
+                indent=base_indent,
+            )
+        ),
+        query_storage_names=(collection,),
         prediction_success=True,
     )
 
@@ -265,6 +272,14 @@ def _tagged_query_parameters(
         case_loop_var=None,
         tagged_query=True,
         query_collection_name=collection,
+        homogeneous_query=False,
+        query_dispatch_skeleton=(
+            tagged_generator
+            .generate_dispatch_skeleton(
+                indent=base_indent,
+            )
+        ),
+        query_storage_names=(collection,),
         prediction_success=True,
     )
 

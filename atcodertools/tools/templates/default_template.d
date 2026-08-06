@@ -19,7 +19,11 @@ immutable string NO = "{{ no_str }}";
 {% if prediction_success %}
 
 void solve({{ formal_arguments }}){
+{% if query_dispatch_skeleton %}
+{{ query_dispatch_skeleton }}
+{% else %}
 
+{% endif %}
 }
 
 {% endif %}

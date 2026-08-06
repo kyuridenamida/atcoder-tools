@@ -1,3 +1,4 @@
+from typing import Union
 from atcodertools.fmtprediction.query_ir_producer_seams import (
     _create_prediction_with_shadow,
 )
@@ -54,7 +55,7 @@ class TaggedQueryPrediction:
 
 @dataclass(frozen=True)
 class _VariantDefinition:
-    tag: int
+    tag: Union[int, str]
     argument_names: Tuple[str, ...]
 
 
@@ -80,12 +81,18 @@ _TEX_WRAPPER_PATTERN = re.compile(
 )
 
 _TOKEN_PATTERN = re.compile(
-    r"[A-Za-z][A-Za-z0-9_]*|[+-]?\d+"
+    r"[A-Za-z][A-Za-z0-9_]*|[+-]?\d+|[+?!-]"
 )
 
 _INTEGER_PATTERN = re.compile(
     r"[+-]?\d+"
 )
+_SYMBOL_TAGS = {
+    "+",
+    "-",
+    "?",
+    "!",
+}
 
 _IDENTIFIER_PATTERN = re.compile(
     r"[A-Za-z][A-Za-z0-9_]*"
@@ -252,99 +259,183 @@ def _line_segments(
     return segments
 
 
-def _extract_variant_definitions(
+def _extract_variant_definition_candidates(
     blocks: Sequence[str],
-) -> Tuple[_VariantDefinition, ...]:
-    by_tag = {}
-
-    for block in blocks:
-        if not isinstance(block, str):
-            raise NoTaggedQueryPredictionError
-
-        for segment in _line_segments(block):
-            semantic_tokens = (
-                _TOKEN_PATTERN.findall(
-                    segment
-                )
-            )
-
-            if not semantic_tokens:
-                continue
-
-            first = semantic_tokens[0]
-
-            if not _INTEGER_PATTERN.fullmatch(
-                first
-            ):
-                continue
-
-            tag = int(first)
-
-            if not 1 <= tag <= 3:
-                continue
-
-            if _COMPARISON_PATTERN.search(
-                segment
-            ):
-                continue
-
-            arguments = tuple(
-                semantic_tokens[1:]
-            )
-
-            if len(arguments) > 3:
-                continue
-
-            if not all(
-                _IDENTIFIER_PATTERN.fullmatch(
-                    argument
-                )
-                is not None
-                for argument in arguments
-            ):
-                continue
-
-            by_tag.setdefault(
-                tag,
-                [],
-            ).append(arguments)
-
-    if not 2 <= len(by_tag) <= 3:
-        raise NoTaggedQueryPredictionError
-
-    tags = sorted(by_tag)
-
-    if tags != list(
-        range(
-            1,
-            tags[-1] + 1,
-        )
+) -> Tuple[Tuple[_VariantDefinition, ...], ...]:
+    if any(
+        not isinstance(block, str)
+        for block in blocks
     ):
         raise NoTaggedQueryPredictionError
 
-    definitions = []
+    def extract(
+        candidate_blocks: Sequence[str],
+        legacy_numeric: bool,
+    ) -> Tuple[_VariantDefinition, ...]:
+        by_tag: Dict[
+            Union[int, str],
+            List[Tuple[str, ...]],
+        ] = {}
 
-    for tag in tags:
-        unique_arguments = set(
-            by_tag[tag]
-        )
+        for block in candidate_blocks:
+            for segment in _line_segments(block):
+                semantic_tokens = (
+                    _TOKEN_PATTERN.findall(
+                        segment
+                    )
+                )
+                if not semantic_tokens:
+                    continue
 
-        if len(unique_arguments) != 1:
-            raise NoTaggedQueryPredictionError
+                first = semantic_tokens[0]
+                if legacy_numeric:
+                    if not _INTEGER_PATTERN.fullmatch(
+                        first
+                    ):
+                        continue
+                    tag: Union[int, str] = int(first)
+                    if not 1 <= tag <= 3:
+                        continue
+                    max_arguments = 3
+                else:
+                    if _INTEGER_PATTERN.fullmatch(first):
+                        tag = int(first)
+                        if not 0 <= tag <= 9:
+                            continue
+                    elif first in _SYMBOL_TAGS:
+                        tag = first
+                    elif (
+                        re.fullmatch(
+                            r"[A-Z][A-Z0-9_]{1,23}",
+                            first,
+                        )
+                        is not None
+                        and first.lower()
+                        not in _PLACEHOLDER_BASES
+                        and first.lower()
+                        not in _RESERVED_NAMES
+                    ):
+                        tag = first
+                    else:
+                        continue
+                    max_arguments = 6
 
-        definitions.append(
-            _VariantDefinition(
-                tag=tag,
-                argument_names=next(
-                    iter(unique_arguments)
-                ),
+                if _COMPARISON_PATTERN.search(
+                    segment
+                ):
+                    continue
+
+                arguments = tuple(
+                    semantic_tokens[1:]
+                )
+                if len(arguments) > max_arguments:
+                    continue
+                if not all(
+                    _IDENTIFIER_PATTERN.fullmatch(
+                        argument
+                    )
+                    is not None
+                    for argument in arguments
+                ):
+                    continue
+
+                by_tag.setdefault(
+                    tag,
+                    [],
+                ).append(arguments)
+
+        if legacy_numeric:
+            if not 2 <= len(by_tag) <= 3:
+                raise NoTaggedQueryPredictionError
+            tags = sorted(by_tag)
+            if tags != list(
+                range(
+                    1,
+                    tags[-1] + 1,
+                )
+            ):
+                raise NoTaggedQueryPredictionError
+        else:
+            if not 2 <= len(by_tag) <= 8:
+                raise NoTaggedQueryPredictionError
+            raw_tags = list(by_tag)
+            if len({type(tag) for tag in raw_tags}) != 1:
+                raise NoTaggedQueryPredictionError
+            tags = sorted(raw_tags)
+            if isinstance(tags[0], int):
+                expected_start = tags[0]
+                if expected_start not in {0, 1}:
+                    raise NoTaggedQueryPredictionError
+                if tags != list(
+                    range(
+                        expected_start,
+                        tags[-1] + 1,
+                    )
+                ):
+                    raise NoTaggedQueryPredictionError
+
+        definitions = []
+        for tag in tags:
+            unique_arguments = set(
+                by_tag[tag]
             )
+            if len(unique_arguments) != 1:
+                raise NoTaggedQueryPredictionError
+            definitions.append(
+                _VariantDefinition(
+                    tag=tag,
+                    argument_names=next(
+                        iter(unique_arguments)
+                    ),
+                )
+            )
+        return tuple(definitions)
+
+    attempts = [(blocks, True)]
+    if len(blocks) > 1:
+        attempts.append((blocks[1:], False))
+    attempts.append((blocks, False))
+
+    candidates = []
+    seen = set()
+
+    for candidate_blocks, legacy_numeric in attempts:
+        try:
+            definitions = extract(
+                candidate_blocks,
+                legacy_numeric,
+            )
+        except NoTaggedQueryPredictionError:
+            continue
+
+        signature = tuple(
+            (
+                definition.tag,
+                definition.argument_names,
+            )
+            for definition in definitions
         )
+        if signature in seen:
+            continue
 
-    return tuple(definitions)
+        seen.add(signature)
+        candidates.append(definitions)
+
+    if not candidates:
+        raise NoTaggedQueryPredictionError
+
+    return tuple(candidates)
 
 
-def _query_count_candidates(
+def _extract_variant_definitions(
+    blocks: Sequence[str],
+) -> Tuple[_VariantDefinition, ...]:
+    return _extract_variant_definition_candidates(
+        blocks
+    )[0]
+
+
+def _legacy_query_count_candidates(
     content: ProblemContent,
 ) -> Set[str]:
     specification = (
@@ -399,6 +490,82 @@ def _query_count_candidates(
                 continue
 
             candidates.add(index)
+
+    return candidates
+
+
+def _query_count_candidates(
+    content: ProblemContent,
+) -> Set[str]:
+    candidates = set(
+        _legacy_query_count_candidates(
+            content
+        )
+    )
+
+    texts = []
+    blocks = getattr(
+        content,
+        "input_format_blocks",
+        None,
+    )
+    if isinstance(blocks, list):
+        texts.extend(
+            block
+            for block in blocks
+            if isinstance(block, str)
+        )
+
+    input_format_text = getattr(
+        content,
+        "input_format_text",
+        None,
+    )
+    if isinstance(input_format_text, str):
+        texts.append(input_format_text)
+
+    normalized = "\n".join(texts)
+    normalized = re.sub(
+        r"\\(?:text|textrm|mathrm)\s*\{([^{}]*)\}",
+        r"\1",
+        normalized,
+    )
+    normalized = re.sub(
+        r"\\rm\b",
+        "",
+        normalized,
+    )
+
+    for label in (
+        "query",
+        "event",
+        "operation",
+        "request",
+        "command",
+    ):
+        first_pattern = re.compile(
+            r"\b{}\s*_\s*\{{?\s*1\s*\}}?".format(
+                label
+            ),
+            re.IGNORECASE,
+        )
+        if first_pattern.search(normalized) is None:
+            continue
+
+        indexed_pattern = re.compile(
+            (
+                r"\b{}\s*_\s*\{{?\s*"
+                r"([A-Za-z][A-Za-z0-9_]*)"
+                r"\s*\}}?"
+            ).format(label),
+            re.IGNORECASE,
+        )
+        for match in indexed_pattern.finditer(
+            normalized
+        ):
+            candidates.add(
+                match.group(1)
+            )
 
     return candidates
 
@@ -610,6 +777,17 @@ def _create_prediction(
             )
         )
 
+    variant_schemas = {
+        tuple(
+            argument.type
+            for argument in variant.arguments
+        )
+        for variant in variants
+    }
+    if len(variant_schemas) == 1:
+        # A single fixed schema needs only an ordinary repeated row.
+        raise NoTaggedQueryPredictionError
+
     prefix_names = {
         variable.name
         for variable
@@ -663,8 +841,8 @@ def predict_tagged_queries(
     ):
         raise NoTaggedQueryPredictionError
 
-    definitions = (
-        _extract_variant_definitions(
+    definition_candidates = (
+        _extract_variant_definition_candidates(
             blocks
         )
     )
@@ -690,86 +868,87 @@ def predict_tagged_queries(
     predictions = []
     seen = set()
 
-    for prefix_end in range(
-        1,
-        len(main_lines) + 1,
-    ):
-        prefix_text = "\n".join(
-            line.raw_text
-            for line in main_lines[
-                :prefix_end
-            ]
-        )
-
-        for prefix_format in (
-            _simple_format_candidates(
-                prefix_text
-            )
+    for definitions in definition_candidates:
+        for prefix_end in range(
+            1,
+            len(main_lines) + 1,
         ):
-            scalar_names = (
-                _scalar_variable_names(
-                    prefix_format
-                )
+            prefix_text = "\n".join(
+                line.raw_text
+                for line in main_lines[
+                    :prefix_end
+                ]
             )
 
-            candidate_names = (
-                scalar_names
-                if use_scalar_fallback
-                else scalar_names & query_count_candidates
-            )
-            for query_count_var in sorted(
-                candidate_names
+            for prefix_format in (
+                _simple_format_candidates(
+                    prefix_text
+                )
             ):
-                try:
-                    prediction = (
-                        (
-                            _create_prediction_with_shadow(
-                                _create_prediction,
-                                prefix_format,
-                                query_count_var,
-                                definitions,
-                                samples,
+                scalar_names = (
+                    _scalar_variable_names(
+                        prefix_format
+                    )
+                )
+
+                candidate_names = (
+                    scalar_names
+                    if use_scalar_fallback
+                    else scalar_names & query_count_candidates
+                )
+                for query_count_var in sorted(
+                    candidate_names
+                ):
+                    try:
+                        prediction = (
+                            (
+                                _create_prediction_with_shadow(
+                                    _create_prediction,
+                                    prefix_format,
+                                    query_count_var,
+                                    definitions,
+                                    samples,
+                                )
                             )
                         )
-                    )
-                except Exception:
-                    continue
+                    except Exception:
+                        continue
 
-                signature = (
-                    str(
+                    signature = (
+                        str(
+                            prediction
+                            .format
+                            .prefix_format
+                        ),
                         prediction
                         .format
-                        .prefix_format
-                    ),
-                    prediction
-                    .format
-                    .query_count_var,
-                    tuple(
-                        (
-                            variant.tag,
-                            tuple(
-                                (
-                                    argument.name,
-                                    argument.type.value,
-                                )
-                                for argument
-                                in variant.arguments
-                            ),
-                        )
-                        for variant
-                        in prediction
-                        .format
-                        .variants
-                    ),
-                )
+                        .query_count_var,
+                        tuple(
+                            (
+                                variant.tag,
+                                tuple(
+                                    (
+                                        argument.name,
+                                        argument.type.value,
+                                    )
+                                    for argument
+                                    in variant.arguments
+                                ),
+                            )
+                            for variant
+                            in prediction
+                            .format
+                            .variants
+                        ),
+                    )
 
-                if signature in seen:
-                    continue
+                    if signature in seen:
+                        continue
 
-                seen.add(signature)
-                predictions.append(
-                    prediction
-                )
+                    seen.add(signature)
+                    predictions.append(
+                        prediction
+                    )
 
     if not predictions:
         raise NoTaggedQueryPredictionError

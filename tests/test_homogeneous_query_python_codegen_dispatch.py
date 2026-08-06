@@ -27,61 +27,42 @@ from tests.test_tagged_query_python_codegen_dispatch import (
 class TestHomogeneousQueryPythonCodegenDispatch(
     unittest.TestCase
 ):
-    def test_universal_generator_fails_closed(
+    def test_universal_generator_supports_all_languages(
         self,
     ):
         result = predict_format(
             make_content()
         )
-
         self.assertIsInstance(
             result.format,
             HomogeneousQueryFormat,
         )
-
         args = args_for(
             result.format,
             "{{ input_part }}",
         )
-
         toml_paths = sorted(
             TOML_ROOT.glob("*.toml")
         )
-
-        self.assertEqual(
-            10,
-            len(toml_paths),
-        )
-
+        self.assertEqual(10, len(toml_paths))
         for path in toml_paths:
-            with self.subTest(
-                language=path.stem
-            ):
-                parameters = (
-                    UniversalCodeGenerator(
-                        result.format,
-                        args.config,
-                        path,
-                    )
-                    .generate_parameters()
-                )
-
-                self.assertFalse(
-                    parameters[
-                        "prediction_success"
-                    ]
-                )
-
-                self.assertFalse(
-                    parameters[
-                        "tagged_query"
-                    ]
-                )
-
+            with self.subTest(language=path.stem):
+                parameters = UniversalCodeGenerator(
+                    result.format,
+                    args.config,
+                    path,
+                ).generate_parameters()
                 self.assertTrue(
-                    parameters[
-                        "homogeneous_query"
-                    ]
+                    parameters["prediction_success"]
+                )
+                self.assertFalse(
+                    parameters["tagged_query"]
+                )
+                self.assertTrue(
+                    parameters["homogeneous_query"]
+                )
+                self.assertTrue(
+                    parameters["query_dispatch_skeleton"]
                 )
 
     def test_python_codegen_entry_executes(
