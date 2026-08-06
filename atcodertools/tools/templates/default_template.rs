@@ -12,7 +12,11 @@ const NO: &'static str = "{{ no_str }}";
 {% endif %}
 {% if prediction_success %}
 fn solve({{ formal_arguments }}) {
+{% if query_dispatch_skeleton %}
+{{ query_dispatch_skeleton }}
+{% else %}
 
+{% endif %}
 }
 {% endif %}
 

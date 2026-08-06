@@ -12,6 +12,9 @@ let NO = "{{ no_str }}"
 {% if prediction_success %}
 
 func solve({{ formal_arguments }}) {
+{% if query_dispatch_skeleton %}
+{{ query_dispatch_skeleton }}
+{% else %}
     {% if yes_str %}
     var ans = false
 
@@ -21,6 +24,7 @@ func solve({{ formal_arguments }}) {
 
     print(ans)
     {% endif %}
+{% endif %}
 }
 {% endif %}
 
