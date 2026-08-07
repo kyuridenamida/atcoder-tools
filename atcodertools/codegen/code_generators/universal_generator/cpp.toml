@@ -64,5 +64,12 @@ int = "std::scanf(\"%lld\", &{name});"
 #float = "std::cin >> {name};"
 float = "std::scanf(\"%Lf\", &{name});"
 str = "std::cin >> {name};"
-
-
+[ragged]
+container_type = "std::vector<std::vector<{type}>>"
+declare = "{container_type} {name};"
+allocate_outer = "{name}.assign({length_i}, std::vector<{type}>());"
+declare_and_allocate_outer = "{container_type} {name}({length_i});"
+allocate_inner = "{name}[{index_i}].assign({length_j}, {default});"
+access = "{name}[{index_i}][{index_j}]"
+formal_arg = "{container_type} {name}"
+actual_arg = "std::move({name})"
