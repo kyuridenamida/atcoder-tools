@@ -41,8 +41,10 @@ from atcodertools.fmtprediction.tokenize_format import (
     collapse_string_runs,
 )
 from atcodertools.fmtprediction.query_ir_producer_seams import (
-    _create_homogeneous_query_typed_format_with_shadow,
     _create_tagged_query_typed_format_with_shadow,
+)
+from atcodertools.fmtprediction.query_block_splice import (
+    splice_query_definition_block,
 )
 
 
@@ -1291,35 +1293,24 @@ def _predict_tagged_query_format(
     )
 
 
-def _predict_homogeneous_query_format(
+def _predict_spliced_query_format(
     content: ProblemContent,
 ) -> FormatPredictionResult:
-    from atcodertools.fmtprediction import (
-        homogeneous_query,
-    )
+    """クエリ行の書式が別ブロックにある形式を、展開して通常経路で予測する。"""
+    spliced = splice_query_definition_block(content)
 
-    try:
-        prediction = (
-            homogeneous_query
-            .predict_homogeneous_queries(
-                content
-            )
-        )
-    except (
-        homogeneous_query
-        .NoHomogeneousQueryPredictionError,
-        homogeneous_query
-        .MultipleHomogeneousQueryPredictionsError,
-    ):
-        raise NoPredictionResultError from None
+    if spliced is None:
+        raise NoPredictionResultError
 
-    return (
-        _create_homogeneous_query_typed_format_with_shadow(
-            FormatPredictionResult.create_homogeneous_query_typed_format,
-            prediction.format,
-            prediction.var_to_type,
-        )
-    )
+    return _predict_single_case(spliced)
+
+
+_SINGLE_CASE_PREDICTORS = (
+    _predict_single_case,
+    _predict_same_line_ragged_format,
+    _predict_tagged_query_format,
+    _predict_spliced_query_format,
+)
 
 
 def predict_format(
@@ -1335,30 +1326,13 @@ def predict_format(
             content
         )
     except NoMultiCaseFormatFoundError:
-        try:
-            return _predict_single_case(
-                content
-            )
-        except NoPredictionResultError:
+        for predictor in _SINGLE_CASE_PREDICTORS:
             try:
-                return (
-                    _predict_same_line_ragged_format(
-                        content
-                    )
-                )
+                return predictor(content)
             except NoPredictionResultError:
-                try:
-                    return (
-                        _predict_tagged_query_format(
-                            content
-                        )
-                    )
-                except NoPredictionResultError:
-                    return (
-                        _predict_homogeneous_query_format(
-                            content
-                        )
-                    )
+                continue
+
+        raise NoPredictionResultError
     except MultipleMultiCaseFormatsError as error:
         raise MultiplePredictionResultsError(
             error.candidates

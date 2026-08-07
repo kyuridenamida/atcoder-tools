@@ -22,9 +22,6 @@ from atcodertools.fmtprediction.models.ragged_format import (
 from atcodertools.codegen.ragged_row_contract import (
     RaggedCodegenContract,
 )
-from atcodertools.fmtprediction.models.homogeneous_query_format import (
-    HomogeneousQueryFormat,
-)
 from atcodertools.fmtprediction.models.tagged_query_format import (
     TaggedQueryFormat,
 )
@@ -130,16 +127,8 @@ class UniversalCodeGenerator():
 
         if isinstance(
             self._format,
-            (
-                TaggedQueryFormat,
-                HomogeneousQueryFormat,
-            ),
+            TaggedQueryFormat,
         ):
-            is_tagged = isinstance(
-                self._format,
-                TaggedQueryFormat,
-            )
-
             return dict(
                 formal_arguments="",
                 actual_arguments="",
@@ -151,10 +140,7 @@ class UniversalCodeGenerator():
                 multi_case=False,
                 case_count_var=None,
                 case_loop_var=None,
-                tagged_query=is_tagged,
-                homogeneous_query=(
-                    not is_tagged
-                ),
+                tagged_query=True,
                 prediction_success=False,
             )
 

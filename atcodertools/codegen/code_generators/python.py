@@ -5,12 +5,6 @@ from atcodertools.codegen.code_generators.universal_code_generator import (
     UniversalCodeGenerator,
     get_builtin_code_generator_info_toml_path,
 )
-from atcodertools.codegen.homogeneous_query_python_generator import (
-    HomogeneousQueryPythonGenerator,
-)
-from atcodertools.fmtprediction.models.homogeneous_query_format import (
-    HomogeneousQueryFormat,
-)
 from atcodertools.fmtprediction.models.tagged_query_format import (
     TaggedQueryFormat,
 )
@@ -54,114 +48,6 @@ def _normalize_fragment(
         result.append(line)
 
     return "\n".join(result)
-
-
-def _homogeneous_query_parameters(
-    args,
-    information_path,
-):
-    prefix_generator = (
-        UniversalCodeGenerator(
-            args.format.prefix_format,
-            args.config,
-            information_path,
-        )
-    )
-
-    prefix_parameters = (
-        prefix_generator
-        .generate_parameters()
-    )
-
-    if not prefix_parameters[
-        "prediction_success"
-    ]:
-        return prefix_parameters
-
-    base_indent = args.config.indent(1)
-
-    normalized_prefix = (
-        _normalize_fragment(
-            prefix_parameters[
-                "input_part"
-            ],
-            base_indent,
-        )
-    )
-
-    homogeneous_generator = (
-        HomogeneousQueryPythonGenerator(
-            args.format,
-            normalized_prefix,
-        )
-    )
-
-    nested_input_part = (
-        homogeneous_generator
-        .generate_input_part(
-            indent=base_indent,
-        )
-    )
-
-    if not nested_input_part.startswith(
-        base_indent
-    ):
-        raise ValueError(
-            "homogeneous-query input fragment "
-            "does not start with base indent"
-        )
-
-    input_part = nested_input_part[
-        len(base_indent):
-    ]
-
-    collection = (
-        args.format
-        .query_collection_name
-    )
-
-    parameters = dict(
-        prefix_parameters
-    )
-
-    parameters.update(
-        formal_arguments=(
-            _append_argument(
-                prefix_parameters[
-                    "formal_arguments"
-                ],
-                "{}: List[Tuple]".format(
-                    collection
-                ),
-            )
-        ),
-        actual_arguments=(
-            _append_argument(
-                prefix_parameters[
-                    "actual_arguments"
-                ],
-                collection,
-            )
-        ),
-        input_part=input_part,
-        prefix_input_part=(
-            prefix_parameters[
-                "input_part"
-            ]
-        ),
-        case_input_part="",
-        global_declaration="",
-        global_input_part="",
-        multi_case=False,
-        case_count_var=None,
-        case_loop_var=None,
-        tagged_query=False,
-        homogeneous_query=True,
-        query_collection_name=collection,
-        prediction_success=True,
-    )
-
-    return parameters
 
 
 def _tagged_query_parameters(
@@ -279,16 +165,6 @@ def main(args: CodeGenArgs) -> str:
     )
 
     if isinstance(
-        args.format,
-        HomogeneousQueryFormat,
-    ):
-        code_parameters = (
-            _homogeneous_query_parameters(
-                args,
-                information_path,
-            )
-        )
-    elif isinstance(
         args.format,
         TaggedQueryFormat,
     ):
