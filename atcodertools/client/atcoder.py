@@ -181,8 +181,8 @@ class AtCoderClient(metaclass=Singleton):
 
     def download_problem_content(self, problem: Problem) -> ProblemContent:
         resp = self._request(problem.get_url())
-        # エラーページを問題文としてパースすると、原因が入力形式の
-        # 検出失敗に見えてしまうため、パース前に HTTP エラーとして扱う。
+        # Parsing an error page as a problem statement would misreport the cause
+        # as an input format detection failure, so treat it as an HTTP error first.
         resp.raise_for_status()
 
         try:
@@ -276,9 +276,9 @@ class AtCoderClient(metaclass=Singleton):
         if method == 'GET':
             response = self._get_with_retry(url, **kwargs)
         elif method == 'POST':
-            # 429 は未処理を意味するので再送しても二重提出にはならないが、
-            # 提出のような副作用のあるリクエストを暗黙に再送する挙動は
-            # 避け、リトライは GET に限定する。
+            # A 429 means the request was not processed, so resending would not
+            # double-submit, but we avoid implicitly resending side-effecting
+            # requests such as submissions and retry only GET.
             response = self._session.post(url, **kwargs)
         else:
             raise NotImplementedError
@@ -286,7 +286,7 @@ class AtCoderClient(metaclass=Singleton):
         return response
 
     def _get_with_retry(self, url: str, **kwargs):
-        # 連続リクエストは 429 (Too Many Requests) を返すことがある。
+        # AtCoder may return 429 (Too Many Requests) for consecutive requests.
         for attempt in range(MAX_REQUEST_ATTEMPTS):
             response = self._session.get(url, **kwargs)
             if response.status_code != 429 \
