@@ -31,6 +31,7 @@ class CaptchaError(Exception):
 
 
 default_cookie_path = get_cache_file_path('cookie.txt')
+MAX_REQUEST_ATTEMPTS = 5
 
 
 def save_cookie(session: requests.Session, cookie_path: Optional[str] = None):
@@ -180,6 +181,9 @@ class AtCoderClient(metaclass=Singleton):
 
     def download_problem_content(self, problem: Problem) -> ProblemContent:
         resp = self._request(problem.get_url())
+        # Parsing an error page as a problem statement would misreport the cause
+        # as an input format detection failure, so treat it as an HTTP error first.
+        resp.raise_for_status()
 
         try:
             return ProblemContent.from_html(resp.text)
@@ -195,31 +199,21 @@ class AtCoderClient(metaclass=Singleton):
         contest_ids = set()
 
         def scan_page(page_num: int) -> int:
-            # 連続リクエストは 429 (Too Many Requests) を返すことがある。
-            for attempt in range(5):
-                resp = self._request(
-                    "https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
-                if resp.status_code == 429:
-                    retry_after = resp.headers.get("Retry-After", "")
-                    seconds = int(retry_after) if retry_after.isdigit() \
-                        else 2 ** attempt
-                    time.sleep(seconds)
-                    continue
-                soup = BeautifulSoup(resp.text, "html.parser")
-                table = soup.find("table")
-                if table is None:
-                    raise PageNotFoundError(
-                        "contest archive page {} has no table".format(
-                            page_num))
-                page_ids = set(url_re.findall(str(table)))
-                page_ids.discard("archive")
-                contest_ids.update(page_ids)
-                page_numbers = [int(tag.text) for tag
-                                in soup.select("ul.pagination a")
-                                if tag.text.strip().isdigit()]
-                return max(page_numbers) if page_numbers else page_num
-            raise PageNotFoundError(
-                "contest archive page {} kept returning 429".format(page_num))
+            resp = self._request(
+                "https://atcoder.jp/contests/archive?page={}&lang=ja".format(page_num))
+            soup = BeautifulSoup(resp.text, "html.parser")
+            table = soup.find("table")
+            if table is None:
+                raise PageNotFoundError(
+                    "contest archive page {} has no table (HTTP {})".format(
+                        page_num, resp.status_code))
+            page_ids = set(url_re.findall(str(table)))
+            page_ids.discard("archive")
+            contest_ids.update(page_ids)
+            page_numbers = [int(tag.text) for tag
+                            in soup.select("ul.pagination a")
+                            if tag.text.strip().isdigit()]
+            return max(page_numbers) if page_numbers else page_num
 
         last_page = scan_page(1)
         for page_num in range(2, last_page + 1):
@@ -280,10 +274,27 @@ class AtCoderClient(metaclass=Singleton):
 
     def _request(self, url: str, method='GET', **kwargs):
         if method == 'GET':
-            response = self._session.get(url, **kwargs)
+            response = self._get_with_retry(url, **kwargs)
         elif method == 'POST':
+            # A 429 means the request was not processed, so resending would not
+            # double-submit, but we avoid implicitly resending side-effecting
+            # requests such as submissions and retry only GET.
             response = self._session.post(url, **kwargs)
         else:
             raise NotImplementedError
         response.encoding = response.apparent_encoding
         return response
+
+    def _get_with_retry(self, url: str, **kwargs):
+        # AtCoder may return 429 (Too Many Requests) for consecutive requests.
+        for attempt in range(MAX_REQUEST_ATTEMPTS):
+            response = self._session.get(url, **kwargs)
+            if response.status_code != 429 \
+                    or attempt == MAX_REQUEST_ATTEMPTS - 1:
+                return response
+            retry_after = response.headers.get("Retry-After", "")
+            seconds = int(retry_after) if retry_after.isdigit() \
+                else 2 ** attempt
+            logger.warning("Got 429 from {}. Will retry in {} seconds.".format(
+                url, seconds))
+            time.sleep(seconds)
