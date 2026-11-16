@@ -1,14 +1,13 @@
-from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.code_generators.cpp import CppCodeGenerator
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
-
 # JavaCodeGenerator uses part of CppCodeGenerator just for less code clone.
 
-class JavaCodeGenerator(CppCodeGenerator):
 
+class JavaCodeGenerator(CppCodeGenerator):
     def _convert_type(self, type_: Type) -> str:
         if type_ == Type.float:
             return "double"
@@ -39,35 +38,24 @@ class JavaCodeGenerator(CppCodeGenerator):
             constructor = ""
         elif var.dim_num() == 1:
             assert var.first_index is not None
-            constructor = " = new {type}[(int)({size})]".format(
-                type=self._convert_type(var.type),
-                size=var.first_index.get_length()
-            )
+            constructor = f" = new {self._convert_type(var.type)}[(int)({var.first_index.get_length()})]"
         elif var.dim_num() == 2:
             assert var.first_index is not None and var.second_index is not None
-            constructor = " = new {type}[(int)({row_size})][(int)({col_size})]".format(
-                type=self._convert_type(var.type),
-                row_size=var.first_index.get_length(),
-                col_size=var.second_index.get_length()
-            )
+            constructor = f" = new {self._convert_type(var.type)}[(int)({var.first_index.get_length()})][(int)({var.second_index.get_length()})]"
         else:
             raise NotImplementedError
 
-        line = "{decl_type} {name}{constructor};".format(
-            name=var.name,
-            decl_type=self._get_declaration_type(var),
-            constructor=constructor
-        )
+        line = f"{self._get_declaration_type(var)} {var.name}{constructor};"
         return line
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
         if var.type == Type.float:
-            return '{name} = sc.nextDouble();'.format(name=name)
+            return f"{name} = sc.nextDouble();"
         elif var.type == Type.int:
-            return '{name} = sc.nextLong();'.format(name=name)
+            return f"{name} = sc.nextLong();"
         elif var.type == Type.str:
-            return '{name} = sc.next();'.format(name=name)
+            return f"{name} = sc.next();"
         else:
             raise NotImplementedError
 
@@ -76,12 +64,11 @@ class JavaCodeGenerator(CppCodeGenerator):
 
 
 def main(args: CodeGenArgs) -> str:
-    code_parameters = JavaCodeGenerator(
-        args.format, args.config).generate_parameters()
+    code_parameters = JavaCodeGenerator(args.format, args.config).generate_parameters()
     return render(
         args.template,
         mod=args.constants.mod,
         yes_str=args.constants.yes_str,
         no_str=args.constants.no_str,
-        **code_parameters
+        **code_parameters,
     )

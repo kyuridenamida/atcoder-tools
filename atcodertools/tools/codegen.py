@@ -5,7 +5,7 @@ import posixpath
 import re
 import sys
 import urllib
-from typing import List, TextIO
+from typing import TextIO
 
 from colorama import Fore
 
@@ -19,8 +19,11 @@ from atcodertools.common.logging import logger
 from atcodertools.config.config import Config
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fmtprediction.models.format_prediction_result import FormatPredictionResult
-from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, NoPredictionResultError, \
-    predict_format
+from atcodertools.fmtprediction.predict_format import (
+    MultiplePredictionResultsError,
+    NoPredictionResultError,
+    predict_format,
+)
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.envgen import USER_CONFIG_PATH, get_config, output_splitter
 from atcodertools.tools.utils import with_color
@@ -31,7 +34,7 @@ class UnknownProblemURLError(Exception):
 
 
 def get_problem_from_url(problem_url: str) -> Problem:
-    dummy_alphabet = 'Z'  # it's impossible to reconstruct the alphabet from URL
+    dummy_alphabet = "Z"  # it's impossible to reconstruct the alphabet from URL
     result = urllib.parse.urlparse(problem_url)
 
     normpath = os.path.normpath(result.path)
@@ -39,22 +42,21 @@ def get_problem_from_url(problem_url: str) -> Problem:
 
     # old-style (e.g. http://agc012.contest.atcoder.jp/tasks/agc012_d)
     dirname, basename = posixpath.split(normpath)
-    if result.scheme in ('', 'http', 'https') \
-            and result.netloc.count('.') == 3 \
-            and result.netloc.endswith('.contest.atcoder.jp') \
-            and result.netloc.split('.')[0] \
-            and dirname == '/tasks' \
-            and basename:
-        contest_id = result.netloc.split('.')[0]
+    if (
+        result.scheme in ("", "http", "https")
+        and result.netloc.count(".") == 3
+        and result.netloc.endswith(".contest.atcoder.jp")
+        and result.netloc.split(".")[0]
+        and dirname == "/tasks"
+        and basename
+    ):
+        contest_id = result.netloc.split(".")[0]
         problem_id = basename
         return Problem(Contest(contest_id), dummy_alphabet, problem_id)
 
     # new-style (e.g. https://beta.atcoder.jp/contests/abc073/tasks/abc073_a)
-    m = re.match(
-        r'^/contests/([\w\-_]+)/tasks/([\w\-_]+)$', normpath)
-    if result.scheme in ('', 'http', 'https') \
-            and result.netloc in ('atcoder.jp', 'beta.atcoder.jp') \
-            and m:
+    m = re.match(r"^/contests/([\w\-_]+)/tasks/([\w\-_]+)$", normpath)
+    if result.scheme in ("", "http", "https") and result.netloc in ("atcoder.jp", "beta.atcoder.jp") and m:
         contest_id = m.group(1)
         problem_id = m.group(2)
         return Problem(Contest(contest_id), dummy_alphabet, problem_id)
@@ -62,10 +64,7 @@ def get_problem_from_url(problem_url: str) -> Problem:
     raise UnknownProblemURLError
 
 
-def generate_code(atcoder_client: AtCoderClient,
-                  problem_url: str,
-                  config: Config,
-                  output_file: TextIO) -> None:
+def generate_code(atcoder_client: AtCoderClient, problem_url: str, config: Config, output_file: TextIO) -> None:
     problem = get_problem_from_url(problem_url)
     template_code_path = config.code_style_config.template_file
 
@@ -78,7 +77,7 @@ def generate_code(atcoder_client: AtCoderClient,
     def emit_info(text: str) -> None:
         logger.info(text)
 
-    emit_info('{} is used for template'.format(template_code_path))
+    emit_info(f"{template_code_path} is used for template")
 
     # Fetch problem data from the statement
     try:
@@ -92,8 +91,7 @@ def generate_code(atcoder_client: AtCoderClient,
 
     try:
         prediction_result = predict_format(content)
-        emit_info(
-            with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
+        emit_info(with_color("Format prediction succeeded", Fore.LIGHTGREEN_EX))
     except (NoPredictionResultError, MultiplePredictionResultsError) as e:
         prediction_result = FormatPredictionResult.empty_result()
         if isinstance(e, NoPredictionResultError):
@@ -105,56 +103,51 @@ def generate_code(atcoder_client: AtCoderClient,
     assert content.original_html is not None
     constants = predict_constants(content.original_html)
     code_generator = config.code_style_config.code_generator
-    with open(template_code_path, "r") as f:
+    with open(template_code_path) as f:
         template = f.read()
 
     output_splitter()
 
-    output_file.write(code_generator(
-        CodeGenArgs(
-            template,
-            prediction_result.format,
-            constants,
-            config.code_style_config
-        )))
+    output_file.write(
+        code_generator(CodeGenArgs(template, prediction_result.format, constants, config.code_style_config))
+    )
 
 
-def main(prog: str, args: List[str], output_file: TextIO=sys.stdout) -> None:
-    parser = argparse.ArgumentParser(
-        prog=prog,
-        formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("url",
-                        help="URL (e.g. https://atcoder.jp/contests/abc012/tasks/abc012_3)")
+def main(prog: str, args: list[str], output_file: TextIO = sys.stdout) -> None:
+    parser = argparse.ArgumentParser(prog=prog, formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("url", help="URL (e.g. https://atcoder.jp/contests/abc012/tasks/abc012_3)")
 
-    parser.add_argument("--without-login",
-                        action="store_true",
-                        help="Download data without login")
+    parser.add_argument("--without-login", action="store_true", help="Download data without login")
 
-    parser.add_argument("--lang",
-                        help="Programming language of your template code, {}.\n"
-                        .format(" or ".join([lang.name for lang in ALL_LANGUAGES])) + "[Default] {}".format(CPP.name))
+    parser.add_argument(
+        "--lang",
+        help="Programming language of your template code, {}.\n".format(
+            " or ".join([lang.name for lang in ALL_LANGUAGES])
+        )
+        + f"[Default] {CPP.name}",
+    )
 
-    parser.add_argument("--template",
-                        help="File path to your template code\n{}".format(
-                            "\n".join(
-                                ["[Default ({dname})] {path}".format(
-                                    dname=lang.display_name,
-                                    path=lang.default_template_path
-                                ) for lang in ALL_LANGUAGES]
-                            ))
-                        )
+    parser.add_argument(
+        "--template",
+        help="File path to your template code\n{}".format(
+            "\n".join([f"[Default ({lang.display_name})] {lang.default_template_path}" for lang in ALL_LANGUAGES])
+        ),
+    )
 
-    parser.add_argument("--save-no-session-cache",
-                        action="store_true",
-                        help="Save no session cache to avoid security risk",
-                        default=None)
+    parser.add_argument(
+        "--save-no-session-cache",
+        action="store_true",
+        help="Save no session cache to avoid security risk",
+        default=None,
+    )
 
-    parser.add_argument("--config",
-                        help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
-                            USER_CONFIG_PATH),
-                            "[Default (Secondary)] {}\n".format(
-                                get_default_config_path()))
-                        )
+    parser.add_argument(
+        "--config",
+        help="File path to your config file\n{}{}".format(
+            f"[Default (Primary)] {USER_CONFIG_PATH}\n",
+            f"[Default (Secondary)] {get_default_config_path()}\n",
+        ),
+    )
 
     parsed_args = parser.parse_args(args)
 
@@ -165,20 +158,15 @@ def main(prog: str, args: List[str], output_file: TextIO=sys.stdout) -> None:
     client = AtCoderClient()
     if not config.etc_config.download_without_login:
         try:
-            client.login(
-                save_session_cache=not config.etc_config.save_no_session_cache)
+            client.login(save_session_cache=not config.etc_config.save_no_session_cache)
             logger.info("Login successful.")
         except LoginError:
-            logger.error(
-                "Failed to login (maybe due to wrong username/password combination?)")
+            logger.error("Failed to login (maybe due to wrong username/password combination?)")
             sys.exit(-1)
     else:
         logger.info("Downloading data without login.")
 
-    generate_code(client,
-                  parsed_args.url,
-                  config,
-                  output_file=output_file)
+    generate_code(client, parsed_args.url, config, output_file=output_file)
 
 
 if __name__ == "__main__":

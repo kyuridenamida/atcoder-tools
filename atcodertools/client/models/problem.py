@@ -1,10 +1,9 @@
-from typing import Any, Dict
+from typing import Any
 
 from atcodertools.client.models.contest import Contest
 
 
 class Problem:
-
     def __init__(self, contest: Contest, alphabet: str, problem_id: str) -> None:
         self.contest = contest
         self.alphabet = alphabet
@@ -14,20 +13,16 @@ class Problem:
         return self.contest
 
     def get_url(self) -> str:
-        return "{}tasks/{}".format(self.contest.get_url(), self.problem_id)
+        return f"{self.contest.get_url()}tasks/{self.problem_id}"
 
     def get_alphabet(self) -> str:
         return self.alphabet
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "contest": self.contest.to_dict(),
-            "problem_id": self.problem_id,
-            "alphabet": self.alphabet
-        }
+    def to_dict(self) -> dict[str, Any]:
+        return {"contest": self.contest.to_dict(), "problem_id": self.problem_id, "alphabet": self.alphabet}
 
     @classmethod
-    def from_dict(cls, dic: Dict[str, Any]) -> "Problem":
+    def from_dict(cls, dic: dict[str, Any]) -> "Problem":
         return Problem(
             contest=Contest.from_dict(dic["contest"]),
             problem_id=dic["problem_id"],

@@ -1,26 +1,26 @@
 import re
 import string
 import warnings
-from typing import Any, Dict, List
+from typing import Any
 
 from jinja2 import Environment
 
 from atcodertools.release_management.version import __version__
 
 
-def _substitute(s: str, reps: Dict[str, List[str]]) -> str:
+def _substitute(s: str, reps: dict[str, list[str]]) -> str:
     # http://stackoverflow.com/questions/36739667/python-templates-for-generating-python-code-with-proper-multiline-indentation
     t = string.Template(s)
     i = 0
     cr = {}  # fileutils to iterate through the pattern string
     while True:
         # search for next replaceable token and its prefix
-        m = re.search(r'^(.*?)\$\{(.*?)\}', s[i:], re.MULTILINE)
+        m = re.search(r"^(.*?)\$\{(.*?)\}", s[i:], re.MULTILINE)
 
         if m is None:
             break  # no more : finished
         # the list is joined using the prefix if it contains only blanks
-        sep = ('\n' + m.group(1)) if m.group(1).strip() == '' else '\n'
+        sep = ("\n" + m.group(1)) if m.group(1).strip() == "" else "\n"
 
         cr[m.group(2)] = sep.join(reps[m.group(2)])
         i += m.end()  # continue past last processed replaceable token
@@ -30,16 +30,19 @@ def _substitute(s: str, reps: Dict[str, List[str]]) -> str:
 def render(template: str, **kwargs: Any) -> str:
     # TODO: refactoring: this should not be here.
     # TODO: refactoring: the URL should be imported from other module
-    kwargs['atcodertools'] = {
-        'version': __version__,
-        'url': 'https://github.com/kyuridenamida/atcoder-tools',
+    kwargs["atcodertools"] = {
+        "version": __version__,
+        "url": "https://github.com/kyuridenamida/atcoder-tools",
     }
 
     if "${" in template:
         # If the template is old, render with the old engine.
         # This logic is for backward compatibility
         warnings.warn(
-            "The old template engine with ${} is deprecated. Please use the new Jinja2 template engine.", UserWarning)
+            "The old template engine with ${} is deprecated. Please use the new Jinja2 template engine.",
+            UserWarning,
+            stacklevel=2,
+        )
 
         return old_render(template, **kwargs)
     else:
@@ -57,5 +60,4 @@ def old_render(template: str, **kwargs: Any) -> str:
 
 
 def render_by_jinja(template: str, **kwargs: Any) -> str:
-    return Environment(trim_blocks=True,
-                       lstrip_blocks=True).from_string(template).render(**kwargs) + "\n"
+    return Environment(trim_blocks=True, lstrip_blocks=True).from_string(template).render(**kwargs) + "\n"

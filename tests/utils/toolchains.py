@@ -10,23 +10,27 @@ Detection is probe-based where it matters: PATH existence alone is not
 enough (e.g. macOS ships javac/java stubs that fail at runtime, and
 Apple clang provides g++ without <bits/stdc++.h>).
 """
+
 import os
 import shutil
 import subprocess
 import tempfile
-from typing import Callable, Dict, List, Optional
+from typing import Callable
 
-_PROBE_CACHE: Dict[str, bool] = {}
+_PROBE_CACHE: dict[str, bool] = {}
 
 
-def _run_quietly(argv: List[str], cwd: str) -> bool:
+def _run_quietly(argv: list[str], cwd: str) -> bool:
     try:
-        return subprocess.run(
-            argv,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            cwd=cwd,
-        ).returncode == 0
+        return (
+            subprocess.run(
+                argv,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                cwd=cwd,
+            ).returncode
+            == 0
+        )
     except OSError:
         return False
 
@@ -54,18 +58,14 @@ def _has_commands(*commands: str) -> bool:
 
 
 def _probe_cpp(tmpdir: str) -> bool:
-    src = _write_source(
-        tmpdir, "probe.cpp", "#include <bits/stdc++.h>\nint main() { return 0; }\n")
+    src = _write_source(tmpdir, "probe.cpp", "#include <bits/stdc++.h>\nint main() { return 0; }\n")
     return _run_quietly(["g++", src, "-o", "probe"], tmpdir)
 
 
 def _probe_java(tmpdir: str) -> bool:
     # A public class must live in a file of the same name for javac.
-    _write_source(
-        tmpdir, "Probe.java",
-        "public class Probe { public static void main(String[] a) {} }\n")
-    return _run_quietly(["javac", "Probe.java"], tmpdir) \
-        and _run_quietly(["java", "-cp", ".", "Probe"], tmpdir)
+    _write_source(tmpdir, "Probe.java", "public class Probe { public static void main(String[] a) {} }\n")
+    return _run_quietly(["javac", "Probe.java"], tmpdir) and _run_quietly(["java", "-cp", ".", "Probe"], tmpdir)
 
 
 def _probe_rust(tmpdir: str) -> bool:
@@ -79,10 +79,8 @@ def _probe_dlang(tmpdir: str) -> bool:
 
 
 def _probe_csharp(tmpdir: str) -> bool:
-    _write_source(
-        tmpdir, "probe.cs", "public class Probe { static void Main() {} }\n")
-    return _run_quietly(["mcs", "probe.cs"], tmpdir) \
-        and _run_quietly(["mono", "probe.exe"], tmpdir)
+    _write_source(tmpdir, "probe.cs", "public class Probe { static void Main() {} }\n")
+    return _run_quietly(["mcs", "probe.cs"], tmpdir) and _run_quietly(["mono", "probe.exe"], tmpdir)
 
 
 def _probe_nim(_tmpdir: str) -> bool:
@@ -96,7 +94,7 @@ def _probe_python(_tmpdir: str) -> bool:
 
 
 # lang.name -> (probe, human-readable requirement used in skip reasons)
-TOOLCHAIN_PROBES: Dict[str, Callable[[str], bool]] = {
+TOOLCHAIN_PROBES: dict[str, Callable[[str], bool]] = {
     "cpp": _probe_cpp,
     "java": _probe_java,
     "rust": _probe_rust,
@@ -106,7 +104,7 @@ TOOLCHAIN_PROBES: Dict[str, Callable[[str], bool]] = {
     "cs": _probe_csharp,
 }
 
-TOOLCHAIN_DESCRIPTIONS: Dict[str, str] = {
+TOOLCHAIN_DESCRIPTIONS: dict[str, str] = {
     "cpp": "GNU g++ supporting <bits/stdc++.h>",
     "java": "javac and java",
     "rust": "rustc",
@@ -117,7 +115,7 @@ TOOLCHAIN_DESCRIPTIONS: Dict[str, str] = {
 }
 
 # pytest marker name -> lang.name (must stay in sync with pyproject.toml markers)
-MARKER_TO_LANG: Dict[str, str] = {
+MARKER_TO_LANG: dict[str, str] = {
     "requires_cpp": "cpp",
     "requires_java": "java",
     "requires_rust": "rust",
@@ -135,5 +133,4 @@ def toolchain_available(lang_name: str) -> bool:
 
 
 def skip_reason_for(lang_name: str) -> str:
-    return "requires {} on PATH".format(
-        TOOLCHAIN_DESCRIPTIONS.get(lang_name, lang_name))
+    return f"requires {TOOLCHAIN_DESCRIPTIONS.get(lang_name, lang_name)} on PATH"

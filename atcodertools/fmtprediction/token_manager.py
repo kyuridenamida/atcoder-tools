@@ -1,9 +1,5 @@
-from typing import List
-
-
 class TokenManager:
-
-    def __init__(self, tokens: List[str]) -> None:
+    def __init__(self, tokens: list[str]) -> None:
         self._tokens = tokens
         self._pos = 0
 

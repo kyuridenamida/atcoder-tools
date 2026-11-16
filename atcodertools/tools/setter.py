@@ -3,57 +3,65 @@
 import argparse
 import os
 import shutil
-from typing import List
-from atcodertools.common.judgetype import NormalJudge, DecimalJudge, ErrorType, MultiSolutionJudge, InteractiveJudge, \
-    JudgeType, NoJudgeTypeException, DEFAULT_EPS
+
+from atcodertools.common.judgetype import (
+    DEFAULT_EPS,
+    DecimalJudge,
+    ErrorType,
+    InteractiveJudge,
+    JudgeType,
+    MultiSolutionJudge,
+    NoJudgeTypeException,
+    NormalJudge,
+)
+from atcodertools.common.language import ALL_LANGUAGES, Language
 from atcodertools.common.logging import logger
-from atcodertools.tools.models.metadata import Metadata
-from atcodertools.common.language import Language, ALL_LANGUAGES
-from atcodertools.tools.templates import get_default_judge_template_path
 from atcodertools.tools.codegen import main as codegen_main
+from atcodertools.tools.models.metadata import Metadata
+from atcodertools.tools.templates import get_default_judge_template_path
 
-USER_FACING_JUDGE_TYPE_LIST = [
-    "normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
+USER_FACING_JUDGE_TYPE_LIST = ["normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
 
 
-def main(prog: str, args: List[str]) -> None:
+def main(prog: str, args: list[str]) -> None:
     if len(args) == 0:
         print("Usage: atcoder tools set [options]")
         return
 
-    parser = argparse.ArgumentParser(
-        prog=prog,
-        formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(prog=prog, formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.add_argument('--judge-type', '-j',
-                        help='error type'
-                             ' must be one of [{}]'.format(
-                                 ', '.join(USER_FACING_JUDGE_TYPE_LIST)),
-                        type=str,
-                        default=None)
+    parser.add_argument(
+        "--judge-type",
+        "-j",
+        help="error type must be one of [{}]".format(", ".join(USER_FACING_JUDGE_TYPE_LIST)),
+        type=str,
+        default=None,
+    )
 
-    parser.add_argument('--error-value', '-v',
-                        help='error value for decimal number judge:'
-                             ' [Default] ' + str(DEFAULT_EPS),
-                        type=float,
-                        default=None)
+    parser.add_argument(
+        "--error-value",
+        "-v",
+        help="error value for decimal number judge: [Default] " + str(DEFAULT_EPS),
+        type=float,
+        default=None,
+    )
 
-    parser.add_argument("--lang",
-                        help="Programming language of your template code, {}.\n".format(
-                            " or ".join([lang.name for lang in ALL_LANGUAGES])),
-                        default=None)
+    parser.add_argument(
+        "--lang",
+        help="Programming language of your template code, {}.\n".format(
+            " or ".join([lang.name for lang in ALL_LANGUAGES])
+        ),
+        default=None,
+    )
 
-    parser.add_argument("--dir", '-d',
-                        help="Target directory to test. [Default] Current directory",
-                        default=".")
+    parser.add_argument("--dir", "-d", help="Target directory to test. [Default] Current directory", default=".")
 
     parsed_args = parser.parse_args(args)
 
     old_metadata = Metadata.load_from(os.path.join(parsed_args.dir, "metadata.json"))
 
     # Use the old metadata as base metadata.
-    output_metadata = Metadata.load_from(
-        os.path.join(parsed_args.dir, "metadata.json"))
+    output_metadata = Metadata.load_from(os.path.join(parsed_args.dir, "metadata.json"))
 
     if parsed_args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
         new_metadata_judge_type = "decimal"
@@ -81,21 +89,20 @@ def main(prog: str, args: List[str]) -> None:
         if parsed_args.error_value is not None:
             output_metadata.judge_method.diff = parsed_args.error_value
         else:
-            logger.warning(
-                "Error-value is not specified. Default value will be set.")
+            logger.warning("Error-value is not specified. Default value will be set.")
         output_metadata.judge_method.error_type = ErrorType(parsed_args.judge_type)
 
     elif new_metadata_judge_type == JudgeType.MultiSolution.value:
         if not os.path.exists(judge_code_filename):
-            print("Creating {} (multi-solution)".format(judge_code_filename))
-            judge_template_path = get_default_judge_template_path('cpp')
+            print(f"Creating {judge_code_filename} (multi-solution)")
+            judge_template_path = get_default_judge_template_path("cpp")
             shutil.copy(judge_template_path, judge_code_filename)
         else:
             print("Judge code exists. Skipping creating judge code...")
     elif new_metadata_judge_type == JudgeType.Interactive.value:
         if not os.path.exists(judge_code_filename):
-            print("Creating {} (interactive)".format(judge_code_filename))
-            judge_template_path = get_default_judge_template_path('cpp')
+            print(f"Creating {judge_code_filename} (interactive)")
+            judge_template_path = get_default_judge_template_path("cpp")
             shutil.copy(judge_template_path, judge_code_filename)
         else:
             print("Judge code exists. Skipping creating judge code...")
@@ -104,17 +111,14 @@ def main(prog: str, args: List[str]) -> None:
         assert output_metadata.lang is not None and output_metadata.problem is not None
         if parsed_args.lang != output_metadata.lang.name:
             output_metadata.lang = Language.from_name(parsed_args.lang)
-            output_metadata.code_filename = output_metadata.lang.get_code_filename(
-                'main')
-            url = "https://atcoder.jp/contests/{}/tasks/{}".format(
-                output_metadata.problem.contest.contest_id, output_metadata.problem.problem_id)
-            main_code_filename = os.path.join(
-                parsed_args.dir, output_metadata.code_filename)
+            output_metadata.code_filename = output_metadata.lang.get_code_filename("main")
+            url = f"https://atcoder.jp/contests/{output_metadata.problem.contest.contest_id}/tasks/{output_metadata.problem.problem_id}"
+            main_code_filename = os.path.join(parsed_args.dir, output_metadata.code_filename)
             if not os.path.exists(main_code_filename):
-                codegen_main("", ["--lang", output_metadata.lang.name,
-                                  url], open(main_code_filename, 'w'))
+                with open(main_code_filename, "w") as f:
+                    codegen_main("", ["--lang", output_metadata.lang.name, url], f)
             else:
                 print("File exists: ", output_metadata.code_filename)
         else:
-            print("Already set to {}. Skipping changing language...".format(parsed_args.lang))
+            print(f"Already set to {parsed_args.lang}. Skipping changing language...")
     output_metadata.save_to(os.path.join(parsed_args.dir, "metadata.json"))

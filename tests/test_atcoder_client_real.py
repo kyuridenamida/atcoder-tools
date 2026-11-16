@@ -1,18 +1,16 @@
 import os
-from typing import Tuple
 import tempfile
 import unittest
 
 import pytest
 import requests
 
-from atcodertools.client.atcoder import AtCoderClient, LoginError, save_cookie, load_cookie_to
+from atcodertools.client.atcoder import AtCoderClient, LoginError, load_cookie_to, save_cookie
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
 
 
 class TestAtCoderClientReal(unittest.TestCase):
-
     def setUp(self) -> None:
         self.temp_dir = tempfile.mkdtemp()
         self.client = AtCoderClient()
@@ -20,29 +18,22 @@ class TestAtCoderClientReal(unittest.TestCase):
     @pytest.mark.network
     def test_submit_source_code(self) -> None:
         problem_list = self.client.download_problem_list(Contest("arc002"))
-        self.assertEqual(
-            ['arc002_1',
-             'arc002_2',
-             'arc002_3',
-             'arc002_4'],
-            [p.problem_id for p in problem_list])
+        self.assertEqual(["arc002_1", "arc002_2", "arc002_3", "arc002_4"], [p.problem_id for p in problem_list])
 
     @pytest.mark.network
     def test_download_problem_content(self) -> None:
-        content = self.client.download_problem_content(
-            Problem(Contest("arc002"), "C", "arc002_3"))
+        content = self.client.download_problem_content(Problem(Contest("arc002"), "C", "arc002_3"))
         self.assertEqual("N\nc_{1}c_{2}...c_{N}\n", content.input_format_text)
         assert content.samples is not None
         self.assertEqual(3, len(content.samples))
 
     @pytest.mark.network
     def test_login_failed(self) -> None:
-        def fake_supplier() -> Tuple[str, str]:
+        def fake_supplier() -> tuple[str, str]:
             return "@@@ invalid user name @@@", "@@@ password @@@"
 
         try:
-            self.client.login(credential_supplier=fake_supplier,
-                              use_local_session_cache=False)
+            self.client.login(credential_supplier=fake_supplier, use_local_session_cache=False)
             self.fail("Unexpectedly, this test succeeded to login.")
         except LoginError:
             pass
@@ -55,9 +46,7 @@ class TestAtCoderClientReal(unittest.TestCase):
         self.assertGreaterEqual(len(contests), 523)
 
         # Make sure there is no duplication
-        self.assertEqual(
-            len(set([c.get_id() for c in contests])),
-            len(contests))
+        self.assertEqual(len(set([c.get_id() for c in contests])), len(contests))
 
     @pytest.mark.network
     def test_check_logging_in_is_false(self) -> None:

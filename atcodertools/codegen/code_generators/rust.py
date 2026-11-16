@@ -1,12 +1,9 @@
-from typing import List
-
-from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.code_generators.cpp import CppCodeGenerator
+from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
-from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern
+from atcodertools.fmtprediction.models.format import ParallelPattern, Pattern, SingularPattern, TwoDimensionalPattern
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
-
 
 # RustCodeGenerator uses part of CppCodeGenerator just for less code clone.
 
@@ -21,21 +18,16 @@ def _loop_header(var: Variable, for_second_index: bool) -> str:
 
     assert index is not None
 
-    return "for {loop_var} in 0..({length}) as usize {{".format(
-        loop_var=loop_var,
-        length=index.get_length()
-    )
+    return f"for {loop_var} in 0..({index.get_length()}) as usize {{"
 
 
 class RustCodeGenerator(CppCodeGenerator):
-
     def _input_part(self) -> str:
         assert self._format is not None
-        lines = ["let con = read_string();",
-                 "let mut scanner = Scanner::new(&con);"]
+        lines = ["let con = read_string();", "let mut scanner = Scanner::new(&con);"]
         for pattern in self._format.sequence:
             lines += self._render_pattern(pattern)
-        return "\n{indent}".format(indent=self._indent(1)).join(lines)
+        return f"\n{self._indent(1)}".join(lines)
 
     def _convert_type(self, type_: Type) -> str:
         if type_ == Type.float:
@@ -67,12 +59,7 @@ class RustCodeGenerator(CppCodeGenerator):
         """
             :return the string form of formal arguments e.g. "N: i64, K: i64, a: Vec<i64>"
         """
-        return ", ".join([
-            "{name}: {decl_type}".format(
-                decl_type=self._get_declaration_type(v),
-                name=v.name)
-            for v in self._format.all_vars()
-        ])
+        return ", ".join([f"{v.name}: {self._get_declaration_type(v)}" for v in self._format.all_vars()])
 
     def _generate_declaration(self, var: Variable) -> str:
         if var.dim_num() == 0:
@@ -80,44 +67,28 @@ class RustCodeGenerator(CppCodeGenerator):
         elif var.dim_num() == 1:
             if var.type == Type.str:
                 assert var.first_index is not None
-                constructor = " = vec![String::new(); ({size}) as usize]".format(
-                    size=var.first_index.get_length()
-                )
+                constructor = f" = vec![String::new(); ({var.first_index.get_length()}) as usize]"
             else:
                 assert var.first_index is not None
-                constructor = " = vec![0{type}; ({size}) as usize]".format(
-                    type=self._convert_type(var.type),
-                    size=var.first_index.get_length()
-                )
+                constructor = f" = vec![0{self._convert_type(var.type)}; ({var.first_index.get_length()}) as usize]"
         elif var.dim_num() == 2:
             if var.type == Type.str:
                 assert var.first_index is not None and var.second_index is not None
-                constructor = " = vec![vec![String::new(); ({col_size}) as usize]; ({row_size}) as usize]".format(
-                    row_size=var.first_index.get_length(),
-                    col_size=var.second_index.get_length()
-                )
+                constructor = f" = vec![vec![String::new(); ({var.second_index.get_length()}) as usize]; ({var.first_index.get_length()}) as usize]"
             else:
                 assert var.first_index is not None and var.second_index is not None
-                constructor = " = vec![vec![0{type}; ({col_size}) as usize]; ({row_size}) as usize]".format(
-                    type=self._convert_type(var.type),
-                    row_size=var.first_index.get_length(),
-                    col_size=var.second_index.get_length()
-                )
+                constructor = f" = vec![vec![0{self._convert_type(var.type)}; ({var.second_index.get_length()}) as usize]; ({var.first_index.get_length()}) as usize]"
         else:
             raise NotImplementedError
 
-        line = "let mut {name}: {decl_type}{constructor};".format(
-            name=var.name,
-            decl_type=self._get_declaration_type(var),
-            constructor=constructor
-        )
+        line = f"let mut {var.name}: {self._get_declaration_type(var)}{constructor};"
         return line
 
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
-        return '{name} = scanner.next();'.format(name=name)
+        return f"{name} = scanner.next();"
 
-    def _render_pattern(self, pattern: Pattern[Variable]) -> List[str]:
+    def _render_pattern(self, pattern: Pattern[Variable]) -> list[str]:
         lines = []
         for var in pattern.all_vars():
             lines.append(self._generate_declaration(var))
@@ -128,17 +99,14 @@ class RustCodeGenerator(CppCodeGenerator):
         elif isinstance(pattern, ParallelPattern):
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
-                lines.append("{indent}{line}".format(indent=self._indent(1),
-                                                     line=self._input_code_for_var(var)))
+                lines.append(f"{self._indent(1)}{self._input_code_for_var(var)}")
             lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
-            lines.append(
-                "{indent}{line}".format(indent=self._indent(1), line=_loop_header(representative_var, True)))
+            lines.append(f"{self._indent(1)}{_loop_header(representative_var, True)}")
             for var in pattern.all_vars():
-                lines.append("{indent}{line}".format(indent=self._indent(2),
-                                                     line=self._input_code_for_var(var)))
-            lines.append("{indent}}}".format(indent=self._indent(1)))
+                lines.append(f"{self._indent(2)}{self._input_code_for_var(var)}")
+            lines.append(f"{self._indent(1)}}}")
             lines.append("}")
         else:
             raise NotImplementedError
@@ -147,12 +115,11 @@ class RustCodeGenerator(CppCodeGenerator):
 
 
 def main(args: CodeGenArgs) -> str:
-    code_parameters = RustCodeGenerator(
-        args.format, args.config).generate_parameters()
+    code_parameters = RustCodeGenerator(args.format, args.config).generate_parameters()
     return render(
         args.template,
         mod=args.constants.mod,
         yes_str=args.constants.yes_str,
         no_str=args.constants.no_str,
-        **code_parameters
+        **code_parameters,
     )

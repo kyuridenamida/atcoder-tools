@@ -1,14 +1,15 @@
-from typing import Dict, Any, Optional, List
+from typing import Any, Optional
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
 from atcodertools.fmtprediction.models.format import (
+    Format,
+    ParallelPattern,
     Pattern,
     SingularPattern,
-    ParallelPattern,
     TwoDimensionalPattern,
-    Format)
+)
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
@@ -23,19 +24,15 @@ def _loop_header(var: Variable, for_second_index: bool) -> str:
 
     assert index is not None
 
-    return "foreach ({loop_var}; 0 .. cast(size_t) ({length})) {{".format(
-        loop_var=loop_var,
-        length=index.get_length())
+    return f"foreach ({loop_var}; 0 .. cast(size_t) ({index.get_length()})) {{"
 
 
 class DlangCodeGenerator:
-    def __init__(self,
-                 format_: Optional[Format[Variable]],
-                 config: CodeStyleConfig) -> None:
+    def __init__(self, format_: Optional[Format[Variable]], config: CodeStyleConfig) -> None:
         self._format = format_
         self._config = config
 
-    def generate_parameters(self) -> Dict[str, Any]:
+    def generate_parameters(self) -> dict[str, Any]:
         if self._format is None:
             return dict(prediction_success=False)
 
@@ -43,18 +40,15 @@ class DlangCodeGenerator:
             formal_arguments=self._formal_arguments(),
             actual_arguments=self._actual_arguments(),
             input_part=self._input_part(),
-            prediction_success=True)
+            prediction_success=True,
+        )
 
     def _formal_arguments(self) -> str:
         assert self._format is not None
         """
         :return the string form of formal arguments e.g. "int N, int K, int[] a"
         """
-        return ", ".join([
-            "{decl_type} {name}".format(
-                decl_type=self._get_declaration_type(v),
-                name=v.name)
-            for v in self._format.all_vars()])
+        return ", ".join([f"{self._get_declaration_type(v)} {v.name}" for v in self._format.all_vars()])
 
     def _actual_arguments(self) -> str:
         assert self._format is not None
@@ -75,13 +69,11 @@ class DlangCodeGenerator:
             if line == "":
                 code += "\n"
             else:
-                code += "{indent}{line}\n".format(
-                    indent=self._indent(1),
-                    line=line)
+                code += f"{self._indent(1)}{line}\n"
 
         return code[:-1]
 
-    def _render_pattern(self, pattern: Pattern[Variable]) -> List[str]:
+    def _render_pattern(self, pattern: Pattern[Variable]) -> list[str]:
         lines = []
         for var in pattern.all_vars():
             lines.append(self._generate_declaration(var))
@@ -96,13 +88,10 @@ class DlangCodeGenerator:
             lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
-            lines.append(
-                "{indent}{line}".format(
-                    indent=self._indent(1),
-                    line=_loop_header(representative_var, True)))
+            lines.append(f"{self._indent(1)}{_loop_header(representative_var, True)}")
             for var in pattern.all_vars():
                 lines.extend(self._assignment_code(var, indent_level=2))
-            lines.append("{indent}}}".format(indent=self._indent(1)))
+            lines.append(f"{self._indent(1)}}}")
             lines.append("}")
         else:
             raise NotImplementedError
@@ -120,36 +109,30 @@ class DlangCodeGenerator:
             dims = [var.first_index.get_length()]
         elif var.dim_num() == 2:
             assert var.first_index is not None and var.second_index is not None
-            dims = [var.first_index.get_length(),
-                    var.second_index.get_length()]
+            dims = [var.first_index.get_length(), var.second_index.get_length()]
         else:
             raise NotImplementedError
 
         decl_type = self._get_declaration_type(var)
-        line = "{decl_type} {name}".format(
-            name=var.name,
-            decl_type=decl_type)
+        line = f"{decl_type} {var.name}"
 
         if len(dims) > 0:
-            ctor_args = map(lambda d: "cast(size_t) ({})".format(d), dims)
-            line += ' = new {}({})'.format(decl_type, ", ".join(ctor_args))
+            ctor_args = map(lambda d: f"cast(size_t) ({d})", dims)
+            line += " = new {}({})".format(decl_type, ", ".join(ctor_args))
 
         line += ";"
 
         return line
 
-    def _assignment_code(self, var: Variable, indent_level: int = 0) -> List[str]:
+    def _assignment_code(self, var: Variable, indent_level: int = 0) -> list[str]:
         line1 = "{indent}{varname} = input.front.to!{vartype};"
         line2 = "{indent}input.popFront;"
         indent = self._indent(indent_level)
 
         return [
-            line1.format(
-                indent=indent,
-                varname=self._get_var_name(var),
-                vartype=self._get_var_basetype(var)),
-            line2.format(
-                indent=indent)]
+            line1.format(indent=indent, varname=self._get_var_name(var), vartype=self._get_var_basetype(var)),
+            line2.format(indent=indent),
+        ]
 
     @staticmethod
     def _get_var_name(var: Variable) -> str:
@@ -184,11 +167,11 @@ class DlangCodeGenerator:
 
 
 def main(args: CodeGenArgs) -> str:
-    code_parameters = DlangCodeGenerator(
-        args.format, args.config).generate_parameters()
+    code_parameters = DlangCodeGenerator(args.format, args.config).generate_parameters()
     return render(
         args.template,
         mod=args.constants.mod,
         yes_str=args.constants.yes_str,
         no_str=args.constants.no_str,
-        **code_parameters)
+        **code_parameters,
+    )

@@ -4,36 +4,33 @@ import time
 from typing import Optional
 
 import requests
-from atcodertools.release_management.version import __version__
+
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
+from atcodertools.release_management.version import __version__
 
 
 class VersionCheckError(Exception):
     pass
 
 
-cache_file_path = get_cache_file_path('version_cache.txt')
+cache_file_path = get_cache_file_path("version_cache.txt")
 
 HOUR_IN_SEC = 60 * 60
 
 
 def _fetch_latest_version() -> str:
-    dic = json.loads(requests.get(
-        "https://pypi.org/pypi/atcoder-tools/json").text)
+    dic = json.loads(requests.get("https://pypi.org/pypi/atcoder-tools/json").text)
     return str(dic["info"]["version"])
 
 
 def _get_latest_version_cache() -> Optional[str]:
     if not os.path.exists(cache_file_path):
         return None
-    with open(cache_file_path, 'r') as f:
+    with open(cache_file_path) as f:
         info = f.read().split()
         version, timestamp_sec_str = info[:2]
 
-        if len(info) >= 3:
-            captured_version = info[2]
-        else:
-            captured_version = None
+        captured_version = info[2] if len(info) >= 3 else None
 
         timestamp_sec = float(timestamp_sec_str)
 
@@ -45,8 +42,8 @@ def _get_latest_version_cache() -> Optional[str]:
 
 def store_version_cache(version: str) -> None:
     os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
-    with open(cache_file_path, 'w') as f:
-        f.write("{} {} {}".format(version, time.time(), __version__))
+    with open(cache_file_path, "w") as f:
+        f.write(f"{version} {time.time()} {__version__}")
 
 
 def get_latest_version(use_cache: bool = True) -> str:
@@ -62,5 +59,5 @@ def get_latest_version(use_cache: bool = True) -> str:
             store_version_cache(version)
 
         return version
-    except Exception:
-        raise VersionCheckError
+    except Exception as e:
+        raise VersionCheckError from e

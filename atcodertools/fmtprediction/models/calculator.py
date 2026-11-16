@@ -1,6 +1,6 @@
 import itertools
 import re
-from typing import Dict, Any, Callable, List, Optional, Tuple, Union
+from typing import Any, Callable, Optional, Union
 
 
 class CalcParseError(Exception):
@@ -19,28 +19,28 @@ def add(a: Any, b: Any) -> Any:
     try:
         return a + b
     except TypeError as e:
-        raise EvaluateError(e)
+        raise EvaluateError(e) from e
 
 
 def sub(a: Any, b: Any) -> Any:
     try:
         return a - b
     except TypeError as e:
-        raise EvaluateError(e)
+        raise EvaluateError(e) from e
 
 
 def mul(a: Any, b: Any) -> Any:
     try:
         return a * b
     except TypeError as e:
-        raise EvaluateError(e)
+        raise EvaluateError(e) from e
 
 
 def div(a: Any, b: Any) -> Any:
     try:
         return a // b
     except TypeError as e:
-        raise EvaluateError(e)
+        raise EvaluateError(e) from e
 
 
 def _operator_to_string(operator: Optional[Callable[[Any, Any], Any]]) -> str:
@@ -57,8 +57,13 @@ def _operator_to_string(operator: Optional[Callable[[Any, Any], Any]]) -> str:
 
 
 class CalcNode:
-
-    def __init__(self, content: Optional[Union[str, int]]=None, operator: Optional[Callable[[Any, Any], Any]]=None, lch: Optional["CalcNode"]=None, rch: Optional["CalcNode"]=None) -> None:
+    def __init__(
+        self,
+        content: Optional[Union[str, int]] = None,
+        operator: Optional[Callable[[Any, Any], Any]] = None,
+        lch: Optional["CalcNode"] = None,
+        rch: Optional["CalcNode"] = None,
+    ) -> None:
         self.content = content
         self.lch = lch
         self.rch = rch
@@ -79,14 +84,14 @@ class CalcNode:
     def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)
 
-    def __str__(self, depth: int=0) -> str:
+    def __str__(self, depth: int = 0) -> str:
         opens = []  # Position list of open brackets
         cands = []
         original_formula = self.to_string_strictly()
         for i, c in enumerate(original_formula):
-            if c == '(':
+            if c == "(":
                 opens.append(i)
-            elif c == ')':
+            elif c == ")":
                 assert len(opens) > 0
                 cands.append((opens[-1], i))
                 opens.pop()
@@ -107,15 +112,15 @@ class CalcNode:
         res_formula = list(original_formula)
         for op, cl in cands:
             tmp = res_formula.copy()
-            tmp[op] = ''
-            tmp[cl] = ''
+            tmp[op] = ""
+            tmp[cl] = ""
             if likely_identical("".join(tmp)):
                 res_formula = tmp
         simplified_form = "".join(res_formula)
 
         return simplified_form
 
-    def get_all_variables(self) -> List[str]:
+    def get_all_variables(self) -> list[str]:
         if self.is_operator_node():
             assert self.lch is not None and self.rch is not None
             lv = self.lch.get_all_variables()
@@ -127,7 +132,7 @@ class CalcNode:
             assert isinstance(self.content, str)
             return [self.content]
 
-    def evaluate(self, variables: Optional[Dict[str, Any]] = None) -> Any:
+    def evaluate(self, variables: Optional[dict[str, Any]] = None) -> Any:
         if variables is None:
             variables = {}
         if self.is_operator_node():
@@ -141,8 +146,7 @@ class CalcNode:
         else:
             assert isinstance(self.content, str)
             if self.content not in variables:
-                raise EvaluateError(
-                    "Found an unknown variable '{}'".format(self.content))
+                raise EvaluateError(f"Found an unknown variable '{self.content}'")
             else:
                 return variables[self.content]
 
@@ -163,10 +167,8 @@ class CalcNode:
     def to_string_strictly(self) -> str:
         if self.is_operator_node():
             assert self.lch is not None and self.rch is not None
-            return "({lch}{op}{rch})".format(
-                lch=self.lch.to_string_strictly(),
-                op=_operator_to_string(self.operator),
-                rch=self.rch.to_string_strictly()
+            return (
+                f"({self.lch.to_string_strictly()}{_operator_to_string(self.operator)}{self.rch.to_string_strictly()})"
             )
         else:
             return str(self.content)
@@ -179,11 +181,11 @@ class CalcNode:
         return res
 
 
-def _expr(formula: str, pos: int) -> Tuple[CalcNode, int]:
+def _expr(formula: str, pos: int) -> tuple[CalcNode, int]:
     res, pos = _term(formula, pos)
-    while formula[pos] == '+' or formula[pos] == '-':
+    while formula[pos] == "+" or formula[pos] == "-":
         tmp = CalcNode()
-        tmp.operator = add if formula[pos] == '+' else sub
+        tmp.operator = add if formula[pos] == "+" else sub
         pos += 1
         tmp.lch = res
         tmp.rch, pos = _term(formula, pos)
@@ -191,11 +193,11 @@ def _expr(formula: str, pos: int) -> Tuple[CalcNode, int]:
     return res, pos
 
 
-def _term(formula: str, pos: int) -> Tuple[CalcNode, int]:
+def _term(formula: str, pos: int) -> tuple[CalcNode, int]:
     res, pos = _factor(formula, pos)
-    while formula[pos] == '*' or formula[pos] == '/':
+    while formula[pos] == "*" or formula[pos] == "/":
         tmp = CalcNode()
-        tmp.operator = mul if formula[pos] == '*' else div
+        tmp.operator = mul if formula[pos] == "*" else div
         pos += 1
         tmp.lch = res
         tmp.rch, pos = _factor(formula, pos)
@@ -203,24 +205,24 @@ def _term(formula: str, pos: int) -> Tuple[CalcNode, int]:
     return res, pos
 
 
-def _factor(formula: str, pos: int) -> Tuple[CalcNode, int]:
-    if formula[pos] == '(':
+def _factor(formula: str, pos: int) -> tuple[CalcNode, int]:
+    if formula[pos] == "(":
         pos += 1
         res, pos = _expr(formula, pos)
-        if formula[pos] != ')':
+        if formula[pos] != ")":
             raise CalcParseError
         pos += 1
         return res, pos
     elif formula[pos].isalpha():
         varname = ""
-        while formula[pos].isalpha() or formula[pos] == '_':
+        while formula[pos].isalpha() or formula[pos] == "_":
             varname += formula[pos]
             pos += 1
         res = CalcNode()
         res.content = varname
         return res, pos
-    elif formula[pos].isdigit() or formula[pos] == '-':
-        if formula[pos] == '-':
+    elif formula[pos].isdigit() or formula[pos] == "-":
+        if formula[pos] == "-":
             sign = -1
             pos += 1
             if not formula[pos].isdigit():
@@ -233,7 +235,7 @@ def _factor(formula: str, pos: int) -> Tuple[CalcNode, int]:
             pos += 1
         value *= sign
 
-        if formula[pos].isalpha() or formula[pos] == '(':
+        if formula[pos].isalpha() or formula[pos] == "(":
             # pattern like "123A"
             tmp = CalcNode()
             tmp.content = value

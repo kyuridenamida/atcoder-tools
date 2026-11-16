@@ -1,8 +1,7 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from enum import Enum
-from typing import Dict, Any
+from typing import Any
 
 
 class NoJudgeTypeException(Exception):
@@ -29,7 +28,7 @@ class Judge(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         pass
 
 
@@ -42,13 +41,13 @@ class NormalJudge(Judge):
     def verify(self, output: str, expected: str) -> bool:
         return output == expected
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "judge_type": self.judge_type.value,
         }
 
     @classmethod
-    def from_dict(cls, dic: Dict[str, Any]) -> "NormalJudge":
+    def from_dict(cls, dic: dict[str, Any]) -> "NormalJudge":
         r = NormalJudge()
         return r
 
@@ -59,22 +58,20 @@ DEFAULT_EPS = 0.000000001
 class DecimalJudge(Judge):
     judge_type = JudgeType.Decimal
 
-    def __init__(self,
-                 error_type: ErrorType = ErrorType.AbsoluteOrRelative,
-                 diff: float = DEFAULT_EPS
-                 ) -> None:
+    def __init__(self, error_type: ErrorType = ErrorType.AbsoluteOrRelative, diff: float = DEFAULT_EPS) -> None:
         self.judge_type = JudgeType.Decimal
         self.error_type = error_type
         self.diff = diff
 
     def _verify_sub(self, output: float, expected: float) -> bool:
-        if self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative] and abs(
-                expected - output) <= self.diff:
+        if (
+            self.error_type in [ErrorType.Absolute, ErrorType.AbsoluteOrRelative]
+            and abs(expected - output) <= self.diff
+        ):
             return True
-        if self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(output,
-                                                                                                         expected):
-            return True
-        return False
+        return self.error_type in [ErrorType.Relative, ErrorType.AbsoluteOrRelative] and self._calc_absolute(
+            output, expected
+        )
 
     def _calc_absolute(self, output: float, expected: float) -> bool:
         if expected == 0:
@@ -96,18 +93,12 @@ class DecimalJudge(Judge):
                     return False
         return True
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "judge_type": self.judge_type.value,
-            "error_type": self.error_type.value,
-            "diff": self.diff
-        }
+    def to_dict(self) -> dict[str, Any]:
+        return {"judge_type": self.judge_type.value, "error_type": self.error_type.value, "diff": self.diff}
 
     @classmethod
-    def from_dict(cls, dic: Dict[str, Any]) -> "DecimalJudge":
-        r = DecimalJudge(
-            diff=dic["diff"]
-        )
+    def from_dict(cls, dic: dict[str, Any]) -> "DecimalJudge":
+        r = DecimalJudge(diff=dic["diff"])
         r.error_type = ErrorType(dic["error_type"])
         return r
 
@@ -121,10 +112,8 @@ class MultiSolutionJudge(Judge):
     def verify(self, output: str, expected: str) -> bool:
         raise NotImplementedError()
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "judge_type": self.judge_type.value
-        }
+    def to_dict(self) -> dict[str, Any]:
+        return {"judge_type": self.judge_type.value}
 
 
 class InteractiveJudge(Judge):
@@ -133,7 +122,5 @@ class InteractiveJudge(Judge):
     def verify(self, output: str, expected: str) -> bool:
         raise NotImplementedError()
 
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "judge_type": self.judge_type.value
-        }
+    def to_dict(self) -> dict[str, Any]:
+        return {"judge_type": self.judge_type.value}

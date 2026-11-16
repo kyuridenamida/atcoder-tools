@@ -1,6 +1,6 @@
 import os
-from typing import List, Sequence, Tuple
 import unittest
+from collections.abc import Sequence
 from unittest import mock
 
 import pytest
@@ -8,26 +8,21 @@ import pytest
 from atcodertools.client.models.submission import Submission
 from atcodertools.tools import submit
 
-RESOURCE_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    "./resources/test_submit/"))
+RESOURCE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "./resources/test_submit/"))
 
 
-def fake_credential_suplier() -> Tuple[str, str]:
+def fake_credential_suplier() -> tuple[str, str]:
     return "@@fakeuser@@", "fakepass"
 
 
 class TestTester(unittest.TestCase):
-
     def test_submit_fail_when_metadata_not_found(self) -> None:
-        ok = submit.main(
-            '', ['-d', os.path.join(RESOURCE_DIR, "without_metadata")], fake_credential_suplier, False)
+        ok = submit.main("", ["-d", os.path.join(RESOURCE_DIR, "without_metadata")], fake_credential_suplier, False)
         self.assertFalse(ok)
 
     @pytest.mark.network
     def test_test_fail(self) -> None:
-        ok = submit.main(
-            '', ['-d', os.path.join(RESOURCE_DIR, "with_metadata")], fake_credential_suplier, False)
+        ok = submit.main("", ["-d", os.path.join(RESOURCE_DIR, "with_metadata")], fake_credential_suplier, False)
         self.assertFalse(ok)
 
 
@@ -35,14 +30,16 @@ class TestSubmitWithMockClient(unittest.TestCase):
     """Offline equivalents of the submission flow: AtCoderClient is mocked,
     the local sample test runs for real (python3 only)."""
 
-    def _run_submit(self, client: mock.Mock, extra_args: Sequence[str]=()) -> bool:
-        with mock.patch("atcodertools.tools.submit.AtCoderClient",
-                        return_value=client) as client_cls:
+    def _run_submit(self, client: mock.Mock, extra_args: Sequence[str] = ()) -> bool:
+        with mock.patch("atcodertools.tools.submit.AtCoderClient", return_value=client):
             return submit.main(
-                '', ['-d', os.path.join(RESOURCE_DIR, "with_metadata")] + list(extra_args),
-                fake_credential_suplier, False)
+                "",
+                ["-d", os.path.join(RESOURCE_DIR, "with_metadata")] + list(extra_args),
+                fake_credential_suplier,
+                False,
+            )
 
-    def _make_client(self, submissions: List[Submission]) -> mock.Mock:
+    def _make_client(self, submissions: list[Submission]) -> mock.Mock:
         client = mock.Mock()
         client.download_submission_list.return_value = submissions
         client.submit_source_code.return_value = Submission("arc001_1", 1)
@@ -77,12 +74,10 @@ class TestSubmitWithMockClient(unittest.TestCase):
         self.assertFalse(client.login.call_args[1]["save_session_cache"])
 
     def test_submit_fails_when_local_test_fails(self) -> None:
-        client = self._make_client(submissions=[])
-        ok = submit.main(
-            '', ['-d', os.path.join(RESOURCE_DIR, "without_metadata")],
-            fake_credential_suplier, False)
+        self._make_client(submissions=[])
+        ok = submit.main("", ["-d", os.path.join(RESOURCE_DIR, "without_metadata")], fake_credential_suplier, False)
         self.assertFalse(ok)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

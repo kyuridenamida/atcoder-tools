@@ -44,7 +44,10 @@ Homepage = "https://github.com/kyuridenamida/atcoder-tools"
 atcoder-tools = "atcodertools.atcoder_tools:main"
 
 [tool.setuptools]
-packages = { find = { exclude = ["tests*"] } }
+# `find` uses namespace-package discovery (namespaces=true) by default in
+# pyproject.toml, which would pull in `webapp/` (no __init__.py) — restrict to
+# the real package to match the old setup.py find_packages() behavior.
+packages = { find = { include = ["atcodertools*"] } }
 include-package-data = true
 
 [tool.setuptools.package-data]

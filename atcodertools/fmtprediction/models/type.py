@@ -2,23 +2,23 @@ from enum import Enum
 
 
 class Type(Enum):
-    int = 'int'
-    float = 'float'
-    str = 'str'
+    int = "int"
+    float = "float"
+    str = "str"
 
     def intersect(self, target_type: "Type") -> "Type":
         try:
             return TYPE_INTERSECTION_TABLE[self][target_type]
-        except KeyError:
-            raise NotImplementedError
+        except KeyError as e:
+            raise NotImplementedError from e
 
     @classmethod
     def from_py_type(cls, py_type: type) -> "Type":
-        if py_type == int:
+        if py_type is int:
             return Type.int
-        elif py_type == float:
+        elif py_type is float:
             return Type.float
-        elif py_type == str:
+        elif py_type is str:
             return Type.str
         raise NotImplementedError
 
@@ -47,5 +47,5 @@ TYPE_INTERSECTION_TABLE = {
         Type.int: Type.float,
         Type.str: Type.str,
         Type.float: Type.float,
-    }
+    },
 }

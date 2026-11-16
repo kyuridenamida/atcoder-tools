@@ -1,12 +1,10 @@
 import re
-from typing import Optional, List
-
+from typing import Optional
 
 VALID_VAR_NAME_REG_EXP = re.compile("[a-zA-Z_]+")
 
 
 class VariableToken:
-
     """
     This model is used on the tokenization stage to store variable information with all string indices
     This class supports up to 2 dimensions.
@@ -41,9 +39,7 @@ class VariableToken:
             return False
         if not self._is_valid_index(self.first_index):
             return False
-        if not self._is_valid_index(self.second_index):
-            return False
-        return True
+        return self._is_valid_index(self.second_index)
 
     def _has_valid_var_name(self) -> bool:
         return VALID_VAR_NAME_REG_EXP.fullmatch(self.var_name) is not None
@@ -56,12 +52,9 @@ class VariableToken:
             return False
         if not index[-1].isalpha() and not index[-1].isdigit():
             return False
-        if index.find(',') != -1:
-            return False
-        return True
+        return index.find(",") == -1
 
 
 class TokenizedFormat:
-
-    def __init__(self, var_tokens: List[VariableToken]) -> None:
+    def __init__(self, var_tokens: list[VariableToken]) -> None:
         self.var_tokens = var_tokens

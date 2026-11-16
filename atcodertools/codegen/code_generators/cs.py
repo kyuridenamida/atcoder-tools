@@ -1,10 +1,15 @@
-from typing import Dict, Any, Optional, List
+from typing import Any, Optional
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.template_engine import render
-from atcodertools.fmtprediction.models.format import Pattern, SingularPattern, ParallelPattern, TwoDimensionalPattern, \
-    Format
+from atcodertools.fmtprediction.models.format import (
+    Format,
+    ParallelPattern,
+    Pattern,
+    SingularPattern,
+    TwoDimensionalPattern,
+)
 from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
@@ -19,35 +24,31 @@ def _loop_header(var: Variable, for_second_index: bool) -> str:
 
     assert index is not None
 
-    return "for(int {loop_var} = 0;{loop_var} < {len};{loop_var}++)".format(
-        loop_var=loop_var,
-        len=index.get_length()
-    ) + "{"
+    return f"for(int {loop_var} = 0;{loop_var} < {index.get_length()};{loop_var}++)" + "{"
 
 
 class CSharpCodeGenerator:
-
-    def __init__(self,
-                 format_: Optional[Format[Variable]],
-                 config: CodeStyleConfig) -> None:
+    def __init__(self, format_: Optional[Format[Variable]], config: CodeStyleConfig) -> None:
         self._format = format_
         self._config = config
 
-    def generate_parameters(self) -> Dict[str, Any]:
+    def generate_parameters(self) -> dict[str, Any]:
         if self._format is None:
             return dict(prediction_success=False)
 
-        return dict(formal_arguments=self._formal_arguments(),
-                    actual_arguments=self._actual_arguments(),
-                    input_part=self._input_part(),
-                    prediction_success=True)
+        return dict(
+            formal_arguments=self._formal_arguments(),
+            actual_arguments=self._actual_arguments(),
+            input_part=self._input_part(),
+            prediction_success=True,
+        )
 
     def _input_part(self) -> str:
         assert self._format is not None
         lines = []
         for pattern in self._format.sequence:
             lines += self._render_pattern(pattern)
-        return "\n{indent}".format(indent=self._indent(2)).join(lines)
+        return f"\n{self._indent(2)}".join(lines)
 
     def _convert_type(self, type_: Type) -> str:
         if type_ == Type.float:
@@ -71,21 +72,14 @@ class CSharpCodeGenerator:
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
-        return ", ".join([
-            v.name if v.dim_num() == 0 else '{}'.format(v.name)
-            for v in self._format.all_vars()])
+        return ", ".join([v.name if v.dim_num() == 0 else f"{v.name}" for v in self._format.all_vars()])
 
     def _formal_arguments(self) -> str:
         assert self._format is not None
         """
             :return the string form of formal arguments e.g. "int N, int K, std::vector<int> a"
         """
-        return ", ".join([
-            "{decl_type} {name}".format(
-                decl_type=self._get_declaration_type(v),
-                name=v.name)
-            for v in self._format.all_vars()
-        ])
+        return ", ".join([f"{self._get_declaration_type(v)} {v.name}" for v in self._format.all_vars()])
 
     def _generate_declaration(self, var: Variable) -> str:
         """
@@ -98,12 +92,10 @@ class CSharpCodeGenerator:
             dims = [var.first_index.get_length()]
         elif var.dim_num() == 2:
             assert var.first_index is not None and var.second_index is not None
-            dims = [var.first_index.get_length(),
-                    var.second_index.get_length()]
+            dims = [var.first_index.get_length(), var.second_index.get_length()]
         else:
             raise NotImplementedError
-        ret = "{decl_type} {name}".format(
-            decl_type=self._get_declaration_type(var), name=var.name)
+        ret = f"{self._get_declaration_type(var)} {var.name}"
         if len(dims) > 0:
             t = self._convert_type(var.type)
             d = []
@@ -116,11 +108,11 @@ class CSharpCodeGenerator:
     def _input_code_for_var(self, var: Variable) -> str:
         name = self._get_var_name(var)
         if var.type == Type.float:
-            return '{name} = cin.ReadDouble;'.format(name=name)
+            return f"{name} = cin.ReadDouble;"
         elif var.type == Type.int:
-            return '{name} = cin.ReadLong;'.format(name=name)
+            return f"{name} = cin.ReadLong;"
         elif var.type == Type.str:
-            return '{name} = cin.Read;'.format(name=name)
+            return f"{name} = cin.Read;"
         else:
             raise NotImplementedError
 
@@ -134,7 +126,7 @@ class CSharpCodeGenerator:
             name += "]"
         return name
 
-    def _render_pattern(self, pattern: Pattern[Variable]) -> List[str]:
+    def _render_pattern(self, pattern: Pattern[Variable]) -> list[str]:
         lines = []
         for var in pattern.all_vars():
             lines.append(self._generate_declaration(var))
@@ -145,17 +137,14 @@ class CSharpCodeGenerator:
         elif isinstance(pattern, ParallelPattern):
             lines.append(_loop_header(representative_var, False))
             for var in pattern.all_vars():
-                lines.append("{indent}{line}".format(indent=self._indent(1),
-                                                     line=self._input_code_for_var(var)))
+                lines.append(f"{self._indent(1)}{self._input_code_for_var(var)}")
             lines.append("}")
         elif isinstance(pattern, TwoDimensionalPattern):
             lines.append(_loop_header(representative_var, False))
-            lines.append(
-                "{indent}{line}".format(indent=self._indent(1), line=_loop_header(representative_var, True)))
+            lines.append(f"{self._indent(1)}{_loop_header(representative_var, True)}")
             for var in pattern.all_vars():
-                lines.append("{indent}{line}".format(indent=self._indent(2),
-                                                     line=self._input_code_for_var(var)))
-            lines.append("{indent}}}".format(indent=self._indent(1)))
+                lines.append(f"{self._indent(2)}{self._input_code_for_var(var)}")
+            lines.append(f"{self._indent(1)}}}")
             lines.append("}")
         else:
             raise NotImplementedError
@@ -171,12 +160,11 @@ class NoPredictionResultGiven(Exception):
 
 
 def main(args: CodeGenArgs) -> str:
-    code_parameters = CSharpCodeGenerator(
-        args.format, args.config).generate_parameters()
+    code_parameters = CSharpCodeGenerator(args.format, args.config).generate_parameters()
     return render(
         args.template,
         mod=args.constants.mod,
         yes_str=args.constants.yes_str,
         no_str=args.constants.no_str,
-        **code_parameters
+        **code_parameters,
     )

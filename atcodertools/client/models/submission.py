@@ -1,22 +1,18 @@
 import re
-from typing import List
 
 from bs4 import BeautifulSoup
 
-PROB_URL_RE = re.compile(
-    r'"/contests/.*/tasks/([A-Za-z0-9\'~+\-_]+)"')
-SUBMISSION_URL_RE = re.compile(
-    r'/submissions/([0-9]+)')
+PROB_URL_RE = re.compile(r'"/contests/.*/tasks/([A-Za-z0-9\'~+\-_]+)"')
+SUBMISSION_URL_RE = re.compile(r"/submissions/([0-9]+)")
 
 
 class Submission:
-
     def __init__(self, problem_id: str, submission_id: int) -> None:
         self.problem_id = problem_id
         self.submission_id = submission_id
 
     @staticmethod
-    def make_submissions_from(html: str) -> List["Submission"]:
+    def make_submissions_from(html: str) -> list["Submission"]:
         soup = BeautifulSoup(html, "html.parser")
         text = str(soup)
         submitted_problem_ids = PROB_URL_RE.findall(text)
