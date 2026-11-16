@@ -113,7 +113,6 @@ select = [
 ]
 ignore = [
     "E501", # line length (formatter handles wrapping decisions)
-    "W605", # invalid escape sequence (tests embed raw LaTeX-ish format strings)
 ]
 
 # ---------------------------------------------------------------------------

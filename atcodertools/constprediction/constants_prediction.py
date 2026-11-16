@@ -32,7 +32,7 @@ MOD_STRATEGY_RE_LIST = [re.compile("([0-9]+).?.?.?で割った"), re.compile("mo
 
 DECIMAL_STRATEGY_RE_LIST_KEYWORD = [re.compile("(?:絶対|相対)誤差"), re.compile("(?:absolute|relative)")]
 DECIMAL_STRATEGY_RE_LIST_VAL = [
-    re.compile("10\^(-[0-9]+)"),
+    re.compile(r"10\^(-[0-9]+)"),
 ]
 
 

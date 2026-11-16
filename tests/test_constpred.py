@@ -88,7 +88,7 @@ class TestConstantsPrediction(unittest.TestCase):
         judge_method = predict_judge_method(
             """
             <section>
-            <h3>出力</h3><p><var>\\frac{1}{\\frac{1}{A_1} + \ldots + \\frac{1}{A_N}}</var> の値を表す小数 (または整数) を出力せよ。</p>
+            <h3>出力</h3><p><var>\\frac{1}{\\frac{1}{A_1} + \\ldots + \\frac{1}{A_N}}</var> の値を表す小数 (または整数) を出力せよ。</p>
             <p>出力は、ジャッジの出力との絶対誤差または相対誤差が <var>10^{-5}</var> 以下のとき正解と判定される。</p>
             </section>"""
         )
@@ -162,7 +162,7 @@ class TestConstantsPrediction(unittest.TestCase):
         # Please remove @unittest.expectedFailure when predict_judge_method() behaves
         # correctly.
         judge_method = predict_judge_method(
-            """
+            r"""
             <div class="part">
             <section>
             <h3>問題文</h3><p><var>N</var> 人のクラスがあり、色 <var>1,2,...,M</var> の中から <var>1</var> つの色を選んでテーマカラーを決めることとなりました。</p>
