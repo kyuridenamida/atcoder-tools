@@ -9,12 +9,12 @@ class SimpleVariable:
     def __init__(self,
                  name: str,
                  first_index: Optional[Index],
-                 second_index: Optional[Index]):
+                 second_index: Optional[Index]) -> None:
         self.name = name
         self.first_index = first_index
         self.second_index = second_index
 
-    def dim_num(self):
+    def dim_num(self) -> int:
         if self.second_index:
             return 2
         if self.first_index:
@@ -22,11 +22,11 @@ class SimpleVariable:
         return 0
 
     @classmethod
-    def create(cls, name: str, dim_num: int):
+    def create(cls, name: str, dim_num: int) -> "SimpleVariable":
         assert dim_num <= 2
 
-        first_index = None
-        second_index = None
+        first_index: Optional[Index] = None
+        second_index: Optional[Index] = None
 
         if dim_num >= 2:
             second_index = Index()
@@ -46,6 +46,6 @@ class Variable(SimpleVariable):
                  name: str,
                  first_index: Optional[Index],
                  second_index: Optional[Index],
-                 type_: Type):
+                 type_: Type) -> None:
         super().__init__(name, first_index, second_index)
         self.type = type_

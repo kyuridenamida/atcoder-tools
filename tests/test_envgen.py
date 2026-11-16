@@ -1,4 +1,5 @@
 import os
+from typing import List
 import shutil
 import tempfile
 import unittest
@@ -23,7 +24,7 @@ TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template.cpp")
 REPLACEMENT_PATH = os.path.join(RESOURCE_DIR, "replacement.cpp")
 
 
-def get_all_rel_file_paths(dir_path: str):
+def get_all_rel_file_paths(dir_path: str) -> List[str]:
     res = []
     for root, _, filenames in os.walk(dir_path):
         for filename in filenames:
@@ -33,15 +34,15 @@ def get_all_rel_file_paths(dir_path: str):
 
 class TestEnvGen(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp_dir = tempfile.mkdtemp()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir)
         logger.info(self.temp_dir)
 
     @pytest.mark.network
-    def test_prepare_workspace(self):
+    def test_prepare_workspace(self) -> None:
         answer_data_dir_path = os.path.join(
             RESOURCE_DIR,
             "test_prepare_workspace")
@@ -61,7 +62,7 @@ class TestEnvGen(unittest.TestCase):
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
     @pytest.mark.network
-    def test_backup(self):
+    def test_backup(self) -> None:
         answer_data_dir_path = os.path.join(RESOURCE_DIR, "test_backup")
         # Prepare workspace twice
         for _ in range(2):
@@ -82,7 +83,7 @@ class TestEnvGen(unittest.TestCase):
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
     @mock.patch('time.sleep')
-    def test_prepare_contest_aborts_after_max_retry_attempts(self, mock_sleep):
+    def test_prepare_contest_aborts_after_max_retry_attempts(self, mock_sleep: mock.MagicMock) -> None:
         mock_client = mock.Mock(spec=AtCoderClient)
         mock_client.download_problem_list.return_value = []
         self.assertRaises(
@@ -113,7 +114,7 @@ class TestEnvGen(unittest.TestCase):
                                      mock.call(60.0),
                                      mock.call(60.0)])
 
-    def assertDirectoriesEqual(self, expected_dir_path, dir_path):
+    def assertDirectoriesEqual(self, expected_dir_path: str, dir_path: str) -> None:
         files1 = get_all_rel_file_paths(expected_dir_path)
         files2 = get_all_rel_file_paths(dir_path)
         self.assertListEqual(files1, files2)

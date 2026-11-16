@@ -1,3 +1,5 @@
+from typing import Optional
+
 from atcodertools.fmtprediction.models.calculator import CalcNode
 
 
@@ -10,15 +12,15 @@ class Index:
         In most cases, the minimal value is 1 and the maximal value is some variable like N.
     """
 
-    def __init__(self):
-        self.min_index = None
-        self.max_index = None
+    def __init__(self) -> None:
+        self.min_index: Optional[CalcNode] = None
+        self.max_index: Optional[CalcNode] = None
 
-    def update(self, new_value: str):
+    def update(self, new_value: str) -> None:
         self._update_min(new_value)
         self._update_max(new_value)
 
-    def get_length(self):
+    def get_length(self) -> CalcNode:
         assert self.max_index is not None
         assert self.min_index is not None
         return CalcNode.parse(
@@ -27,14 +29,14 @@ class Index:
                 min_index=self.min_index)
         ).simplify()
 
-    def _update_min(self, new_value: str):
+    def _update_min(self, new_value: str) -> None:
         if not new_value.isdecimal():
             # consider variable is not always could not be minimal.
             return
         if (self.min_index is None) or (self.min_index.evaluate() > CalcNode.parse(new_value).evaluate()):
             self.min_index = CalcNode.parse(new_value)
 
-    def _update_max(self, new_value: str):
+    def _update_max(self, new_value: str) -> None:
         if not new_value.isdecimal():
             self.max_index = CalcNode.parse(new_value)
 

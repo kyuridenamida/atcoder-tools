@@ -2,6 +2,7 @@
 import argparse
 import sys
 import os
+from typing import List, Optional, Callable, Tuple
 
 from colorama import Fore
 
@@ -15,7 +16,7 @@ from atcodertools.common.logging import logger
 from atcodertools.tools.models.metadata import Metadata
 
 
-def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> bool:
+def main(prog: str, args: List[str], credential_supplier: Optional[Callable[[], Tuple[str, str]]]=None, use_local_session_cache: bool=True) -> bool:
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
@@ -67,9 +68,9 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                         type=float,
                         default=None)
 
-    args = parser.parse_args(args)
+    parsed_args = parser.parse_args(args)
 
-    metadata_file = os.path.join(args.dir, "metadata.json")
+    metadata_file = os.path.join(parsed_args.dir, "metadata.json")
     try:
         metadata = Metadata.load_from(metadata_file)
     except IOError:
@@ -79,7 +80,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
 
     try:
         client = AtCoderClient()
-        client.login(save_session_cache=not args.save_no_session_cache,
+        client.login(save_session_cache=not parsed_args.save_no_session_cache,
                      credential_supplier=credential_supplier,
                      use_local_session_cache=use_local_session_cache,
                      )
@@ -88,20 +89,21 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
         return False
 
     tester_args = []
-    if args.exec:
-        tester_args += ["-e", args.exec]
-    if args.dir:
-        tester_args += ["-d", args.dir]
-    if args.timeout:
-        tester_args += ["-t", str(args.timeout)]
-    if args.judge_type is not None:
-        tester_args += ["-j", str(args.judge_type)]
-    if args.error_value is not None:
-        tester_args += ["-v", str(args.error_value)]
+    if parsed_args.exec:
+        tester_args += ["-e", parsed_args.exec]
+    if parsed_args.dir:
+        tester_args += ["-d", parsed_args.dir]
+    if parsed_args.timeout:
+        tester_args += ["-t", str(parsed_args.timeout)]
+    if parsed_args.judge_type is not None:
+        tester_args += ["-j", str(parsed_args.judge_type)]
+    if parsed_args.error_value is not None:
+        tester_args += ["-v", str(parsed_args.error_value)]
 
-    if args.force or tester.main("", tester_args):
+    if parsed_args.force or tester.main("", tester_args):
+        assert metadata.problem is not None and metadata.lang is not None
         submissions = client.download_submission_list(metadata.problem.contest)
-        if not args.unlock_safety:
+        if not parsed_args.unlock_safety:
             for submission in submissions:
                 if submission.problem_id == metadata.problem.problem_id:
                     logger.error(with_color("Cancel submitting because you already sent some code to the problem. Please "
@@ -109,7 +111,8 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
                                                 metadata.problem.contest.get_submissions_url(submission)), Fore.LIGHTRED_EX))
                     return False
 
-        code_path = args.code or os.path.join(args.dir, metadata.code_filename)
+        assert metadata.code_filename is not None
+        code_path = parsed_args.code or os.path.join(parsed_args.dir, metadata.code_filename)
         with open(code_path, 'r') as f:
             source = f.read()
         logger.info(
@@ -120,6 +123,7 @@ def main(prog, args, credential_supplier=None, use_local_session_cache=True) -> 
             with_color("Done!", Fore.LIGHTGREEN_EX),
             metadata.problem.contest.get_submissions_url(submission)))
         return True
+    return False
 
 
 if __name__ == "__main__":

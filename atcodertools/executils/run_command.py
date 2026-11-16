@@ -1,4 +1,5 @@
 import subprocess
+from typing import Tuple
 
 
 def run_command(exec_cmd: str, current_working_dir: str) -> str:
@@ -10,7 +11,7 @@ def run_command(exec_cmd: str, current_working_dir: str) -> str:
     return proc.stdout.decode("utf8")
 
 
-def run_command_with_returncode(exec_cmd: str, current_working_dir: str) -> str:
+def run_command_with_returncode(exec_cmd: str, current_working_dir: str) -> Tuple[int, str]:
     proc = subprocess.run(exec_cmd,
                           shell=True,
                           stdout=subprocess.PIPE,

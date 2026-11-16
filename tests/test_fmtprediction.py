@@ -20,16 +20,16 @@ logger.addHandler(handler)
 
 class TestFormatPrediction(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp_dir = tempfile.mkdtemp()
         self.test_data_controller = make_tst_data_controller(
             tempfile.mkdtemp())
         self.test_dir = self.test_data_controller.create_dir()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.test_data_controller.remove_dir()
 
-    def test_overall(self):
+    def test_overall(self) -> None:
         runner = FormatPredictionTestRunner(self.test_dir)
         case_names = sorted(
             [cand for cand in os.listdir(self.test_dir) if runner.is_valid_case(cand)])
@@ -55,7 +55,7 @@ class TestFormatPrediction(unittest.TestCase):
                 logger.debug("=== {} ===".format(case_name))
                 logger.debug(
                     "Input Format:\n{}".format(content.input_format_text))
-                for idx, s in enumerate(content.samples):
+                for idx, s in enumerate(content.samples or []):
                     logger.debug(
                         "Sample Input {num}:\n{inp}".format(inp=s.get_input(), num=idx + 1))
                 self.assertEqual(ans, out)

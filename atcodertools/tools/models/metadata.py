@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.judgetype import NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, Judge, \
@@ -18,7 +18,7 @@ class Metadata:
                  sample_in_pattern: str,
                  sample_out_pattern: str,
                  lang: Optional[Language],
-                 judge_method: Optional[Judge] = None):
+                 judge_method: Optional[Judge] = None) -> None:
         self.problem = problem
         self.code_filename = code_filename
         self.sample_in_pattern = sample_in_pattern
@@ -26,7 +26,8 @@ class Metadata:
         self.lang = lang
         self.judge_method = judge_method if judge_method is not None else NormalJudge()
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
+        assert self.problem is not None and self.lang is not None
         return {
             "problem": self.problem.to_dict(),
             "code_filename": self.code_filename,
@@ -37,11 +38,11 @@ class Metadata:
         }
 
     @classmethod
-    def from_dict(cls, dic):
+    def from_dict(cls, dic: Dict[str, Any]) -> "Metadata":
         if "judge" in dic:
             judge_type = dic["judge"]["judge_type"]
             if judge_type == "normal":
-                judge_method = NormalJudge.from_dict(dic["judge"])
+                judge_method: Judge = NormalJudge.from_dict(dic["judge"])
             elif judge_type == "decimal":
                 judge_method = DecimalJudge.from_dict(dic["judge"])
             elif judge_type == "multisolution":
@@ -63,11 +64,11 @@ class Metadata:
         )
 
     @classmethod
-    def load_from(cls, filename):
+    def load_from(cls, filename: str) -> "Metadata":
         with open(filename) as f:
             return cls.from_dict(json.load(f))
 
-    def save_to(self, filename):
+    def save_to(self, filename: str) -> None:
         with open(filename, 'w') as f:
             json.dump(self.to_dict(), f, indent=1, sort_keys=True)
             f.write('\n')

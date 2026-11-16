@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
@@ -9,13 +9,15 @@ from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
 
-def _loop_header(var: Variable, for_second_index: bool):
+def _loop_header(var: Variable, for_second_index: bool) -> str:
     if for_second_index:
         index = var.second_index
         loop_var = "j"
     else:
         index = var.first_index
         loop_var = "i"
+
+    assert index is not None
 
     return "for {loop_var} in 0..<{length}:".format(
         loop_var=loop_var,
@@ -27,7 +29,7 @@ class NimCodeGenerator:
 
     def __init__(self,
                  format_: Optional[Format[Variable]],
-                 config: CodeStyleConfig):
+                 config: CodeStyleConfig) -> None:
         self._format = format_
         self._config = config
 
@@ -40,7 +42,8 @@ class NimCodeGenerator:
                     input_part=self._input_part(),
                     prediction_success=True)
 
-    def _input_part(self):
+    def _input_part(self) -> str:
+        assert self._format is not None
         lines = []
         for pattern in self._format.sequence:
             lines += self._render_pattern(pattern)
@@ -66,13 +69,14 @@ class NimCodeGenerator:
         else:
             raise NotImplementedError
 
-    def _get_declaration_type(self, var: Variable):
+    def _get_declaration_type(self, var: Variable) -> str:
         ctype = self._convert_type(var.type)
         for _ in range(var.dim_num()):
             ctype = 'seq[{}]'.format(ctype)
         return ctype
 
     def _actual_arguments(self) -> str:
+        assert self._format is not None
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
@@ -80,7 +84,8 @@ class NimCodeGenerator:
             v.name if v.dim_num() == 0 else '{}'.format(v.name)
             for v in self._format.all_vars()])
 
-    def _formal_arguments(self):
+    def _formal_arguments(self) -> str:
+        assert self._format is not None
         """
             :return the string form of formal arguments e.g. "int N, int K, std::vector<int> a"
         """
@@ -91,15 +96,17 @@ class NimCodeGenerator:
             for v in self._format.all_vars()
         ])
 
-    def _generate_declaration(self, var: Variable):
+    def _generate_declaration(self, var: Variable) -> str:
         """
         :return: Create declaration part E.g. array[1..n] -> std::vector<int> array = std::vector<int>(n-1+1);
         """
         if var.dim_num() == 0:
             dims = []
         elif var.dim_num() == 1:
+            assert var.first_index is not None
             dims = [var.first_index.get_length()]
         elif var.dim_num() == 2:
+            assert var.first_index is not None and var.second_index is not None
             dims = [var.first_index.get_length(),
                     var.second_index.get_length()]
         else:
@@ -121,7 +128,7 @@ class NimCodeGenerator:
             raise NotImplementedError
 
     @staticmethod
-    def _get_var_name(var: Variable):
+    def _get_var_name(var: Variable) -> str:
         name = var.name
         if var.dim_num() >= 1:
             name += "[i]"
@@ -129,7 +136,7 @@ class NimCodeGenerator:
             name += "[j]"
         return name
 
-    def _render_pattern(self, pattern: Pattern):
+    def _render_pattern(self, pattern: Pattern[Variable]) -> List[str]:
         lines = []
         for var in pattern.all_vars():
             lines.append(self._generate_declaration(var))
@@ -154,7 +161,7 @@ class NimCodeGenerator:
 
         return lines
 
-    def _indent(self, depth):
+    def _indent(self, depth: int) -> str:
         return self._config.indent(depth)
 
 

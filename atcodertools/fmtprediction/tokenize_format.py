@@ -1,5 +1,5 @@
 import copy
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from atcodertools.fmtprediction.models.calculator import CalcNode, CalcParseError
 from atcodertools.fmtprediction.models.variable_token import VariableToken, TokenizedFormat
@@ -7,25 +7,25 @@ from atcodertools.fmtprediction.models.variable_token import VariableToken, Toke
 from atcodertools.fmtprediction.token_manager import TokenManager
 
 
-def _is_ascii(s):
+def _is_ascii(s: str) -> bool:
     return all(ord(c) < 128 for c in s)
 
 
 DOTS_PATTERNS = ["ldots", "cdots", "vdots", "ddots", "dots"]
 
 
-def _is_noise(s):
+def _is_noise(s: str) -> bool:
     if any(pattern in s for pattern in DOTS_PATTERNS):
         return True
 
     return s == ":" or s == "...." or s == "..." or s == ".." or s == "."
 
 
-def _normalize_index(text):
+def _normalize_index(text: str) -> str:
     return text.replace("{(", "").replace(")}", "")
 
 
-def _divide_consecutive_vars(text):
+def _divide_consecutive_vars(text: str) -> str:
     res_text = ""
     i = 0
     while i < len(text):
@@ -48,7 +48,7 @@ def _divide_consecutive_vars(text):
     return res_text
 
 
-def _remove_spaces_in_curly_brackets(input_format):
+def _remove_spaces_in_curly_brackets(input_format: str) -> str:
     res = []
     nest = 0
     for c in input_format:
@@ -83,18 +83,19 @@ def _sanitized_tokens(input_format: str) -> List[str]:
 
 class FormatSearcher:
 
-    def __init__(self, tokens):
+    def __init__(self, tokens: List[str]) -> None:
         self._token_manager = TokenManager(tokens)
-        self._answers = None
-        self._max_variables_count = None
+        self._answers: Optional[List[TokenizedFormat]] = None
+        self._max_variables_count: Optional[int] = None
 
-    def search(self, max_variables_count) -> List[TokenizedFormat]:
+    def search(self, max_variables_count: int) -> List[TokenizedFormat]:
         self._max_variables_count = max_variables_count
         self._answers = []
         self._inner_search([], {})
         return self._answers
 
-    def _inner_search(self, var_token_seq, var_to_dim_num: Dict[str, int]):
+    def _inner_search(self, var_token_seq: List[VariableToken], var_to_dim_num: Dict[str, int]) -> None:
+        assert self._max_variables_count is not None and self._answers is not None
         if len(var_to_dim_num) > self._max_variables_count:
             return
 
@@ -130,7 +131,7 @@ class FormatSearcher:
                 var_token_candidates += [
                     VariableToken(token[:i], token[i:j], token[j:])]
 
-        def check_if_possible(var_token: VariableToken):
+        def check_if_possible(var_token: VariableToken) -> bool:
             # check syntax error
             if not var_token.is_valid():
                 return False

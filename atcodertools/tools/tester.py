@@ -6,7 +6,7 @@ import platform
 import re
 import sys
 from pathlib import Path
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Any
 
 from colorama import Fore
 
@@ -39,15 +39,15 @@ class TestSummary:
     # Not a pytest test class; prevent pytest collection warnings.
     __test__ = False
 
-    def __init__(self, success_count: int, has_error_output: bool):
+    def __init__(self, success_count: int, has_error_output: bool) -> None:
         self.success_count = success_count
         self.has_error_output = has_error_output
 
-    def __eq__(self, other):
-        return self.success_count == other.success_count and self.has_error_output == other.has_error_output
+    def __eq__(self, other: Any) -> bool:
+        return bool(self.success_count == other.success_count and self.has_error_output == other.has_error_output)
 
 
-def is_executable_file(file_name):
+def is_executable_file(file_name: str) -> bool:
     if platform.system() == "Windows":
         return any(
             re.match(r"^.*\{ext}$".format(ext=ext), file_name, re.IGNORECASE)
@@ -57,7 +57,7 @@ def is_executable_file(file_name):
             and file_name.find(".cpp") == -1 and not file_name.endswith(".txt")  # cppやtxtを省くのは一応の Cygwin 対策
 
 
-def infer_exec_file(filenames: List[str], excluded_exec_files: List[str]):
+def infer_exec_file(filenames: List[str], excluded_exec_files: List[str]) -> str:
     exec_files = [name for name in sorted(
         filenames) if is_executable_file(name) and (name not in excluded_exec_files)]
 
@@ -73,7 +73,7 @@ def infer_exec_file(filenames: List[str], excluded_exec_files: List[str]):
     return exec_file
 
 
-def infer_case_num(sample_filename: str):
+def infer_case_num(sample_filename: str) -> int:
     sample_basename = os.path.basename(sample_filename)
     result = ""
     for c in sample_basename:
@@ -88,7 +88,7 @@ def infer_case_num(sample_filename: str):
 def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -> str:
     res = ""
 
-    def append(text: str, end='\n'):
+    def append(text: str, end: str='\n') -> None:
         nonlocal res
         res += text + end
 
@@ -105,7 +105,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
         append("judge message: " + exec_res.judge_message)
 
     append(with_color("[Received]", Fore.LIGHTMAGENTA_EX))
-    append(exec_res.output, end='')
+    append(exec_res.output or "", end='')
 
     if exec_res.status != ExecStatus.NORMAL:
         append(with_color("Aborted ({})\n".format(
@@ -113,7 +113,7 @@ def build_details_str(exec_res: ExecResult, input_file: str, output_file: str) -
 
     if exec_res.has_stderr():
         append(with_color("[Error]", Fore.LIGHTYELLOW_EX))
-        append(exec_res.stderr, end='')
+        append(exec_res.stderr or "", end='')
     return res
 
 
@@ -131,6 +131,7 @@ def run_for_samples(
     has_error_output = False
     for in_sample_file, out_sample_file in sample_pair_list:
         if isinstance(judge_method, InteractiveJudge):
+            assert judge_program_language is not None
             exec_res = run_interactive_program(exec_file,
                                                judge_program_language.get_test_command(
                                                    'judge', cwd),
@@ -162,12 +163,8 @@ def run_for_samples(
 
         if exec_res.output is None:
             exec_res.output = ""
-        elif isinstance(exec_res.output, bytes):
-            exec_res.output = exec_res.output.decode()
         if exec_res.stderr is None:
             exec_res.stderr = ""
-        elif isinstance(exec_res.stderr, bytes):
-            exec_res.stderr = exec_res.stderr.decode()
 
         has_error_output = has_error_output or exec_res.has_stderr()
 
@@ -203,7 +200,7 @@ def run_for_samples(
     return TestSummary(success_count, has_error_output)
 
 
-def validate_sample_pair(in_sample_file, out_sample_file):
+def validate_sample_pair(in_sample_file: str, out_sample_file: str) -> None:
     if infer_case_num(in_sample_file) != infer_case_num(out_sample_file):
         logger.error(
             'The file combination of {} and {} is wrong.'.format(
@@ -213,9 +210,9 @@ def validate_sample_pair(in_sample_file, out_sample_file):
         raise IrregularSampleFileError
 
 
-def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, case_num: int,
-                    judge_method: Judge, cwd: str, judge_program_language: Language) -> bool:
-    def single_or_none(lst: List):
+def run_single_test(exec_file: str, in_sample_file_list: List[str], out_sample_file_list: List[str], timeout_sec: int, case_num: int,
+                    judge_method: Judge, cwd: str, judge_program_language: Optional[Language]) -> bool:
+    def single_or_none(lst: List[str]) -> Optional[str]:
         if len(lst) == 1:
             return lst[0]
         if len(lst) == 0:
@@ -244,9 +241,9 @@ def run_single_test(exec_file, in_sample_file_list, out_sample_file_list, timeou
     return test_summary.success_count == 1 and not test_summary.has_error_output
 
 
-def run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, timeout_sec: int, knock_out: bool,
+def run_all_tests(exec_file: str, in_sample_file_list: List[str], out_sample_file_list: List[str], timeout_sec: int, knock_out: bool,
                   skip_stderr_on_success: bool, judge_method: Judge, cwd: str,
-                  judge_program_language: Language) -> bool:
+                  judge_program_language: Optional[Language]) -> bool:
     if len(in_sample_file_list) != len(out_sample_file_list):
         logger.error("{0}{1}{2}".format(
             "The number of the sample inputs and outputs are different.\n",
@@ -311,19 +308,19 @@ def str_to_bool(text: str) -> bool:
         "boolean value must be one of true/false/1/0/yes/no, got '{}'".format(text))
 
 
-def _decide_judge_method(args: argparse.Namespace, metadata: Metadata, lang: Optional[Language]):
-    def _decide_decimal_judge():
-        if args.error_value is not None:
-            diff = args.error_value
+def _decide_judge_method(parsed_args: argparse.Namespace, metadata: Metadata, lang: Optional[Language]) -> Judge:
+    def _decide_decimal_judge() -> DecimalJudge:
+        if parsed_args.error_value is not None:
+            diff = parsed_args.error_value
         elif isinstance(metadata.judge_method, DecimalJudge):
             diff = metadata.judge_method.diff
         else:
             diff = DEFAULT_EPS
 
-        if args.judge_type:
-            assert args.judge_type in ["absolute",
+        if parsed_args.judge_type:
+            assert parsed_args.judge_type in ["absolute",
                                        "relative", "absolute_or_relative"]
-            error_type = ErrorType(args.judge_type)
+            error_type = ErrorType(parsed_args.judge_type)
         elif isinstance(metadata.judge_method, DecimalJudge):
             error_type = metadata.judge_method.error_type
         else:
@@ -331,20 +328,20 @@ def _decide_judge_method(args: argparse.Namespace, metadata: Metadata, lang: Opt
 
         return DecimalJudge(diff=diff, error_type=error_type)
 
-    if args.judge_type is not None:
-        if args.judge_type == "normal":
+    if parsed_args.judge_type is not None:
+        if parsed_args.judge_type == "normal":
             return NormalJudge()
-        elif args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
+        elif parsed_args.judge_type in ["absolute", "relative", "absolute_or_relative"]:
             return _decide_decimal_judge()
-        elif args.judge_type == "multisolution":
+        elif parsed_args.judge_type == "multisolution":
             assert lang is not None
             return MultiSolutionJudge()
-        elif args.judge_type == "interactive":
+        elif parsed_args.judge_type == "interactive":
             assert lang is not None
             return InteractiveJudge()
         else:
             logger.error("Unknown judge type: {}. judge type must be one of [{}]".format(
-                args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))
+                parsed_args.judge_type, ", ".join(USER_FACING_JUDGE_TYPE_LIST)))
             raise InvalidJudgeTypeError()
 
     if isinstance(metadata.judge_method, DecimalJudge):
@@ -353,7 +350,7 @@ def _decide_judge_method(args: argparse.Namespace, metadata: Metadata, lang: Opt
     return metadata.judge_method
 
 
-def main(prog, args) -> bool:
+def main(prog: str, args: List[str]) -> bool:
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
@@ -419,58 +416,59 @@ def main(prog, args) -> bool:
                                 get_default_config_path()))
                         )
 
-    args = parser.parse_args(args)
+    parsed_args = parser.parse_args(args)
 
-    metadata_file = os.path.join(args.dir, "metadata.json")
+    metadata_file = os.path.join(parsed_args.dir, "metadata.json")
     metadata = get_metadata(metadata_file)
     lang = metadata.lang
+    assert lang is not None
 
     # TODO: Stop loading language-specific config because tester doesn't have and shouldn't have --lang params.
     # TODO: All information required to run tester should be from metadata.json except for etc config
     # TODO: https://github.com/kyuridenamida/atcoder-tools/issues/177
-    config = get_config(args, lang)
+    config = get_config(parsed_args, lang)
 
     in_sample_file_list = sorted(
-        glob.glob(os.path.join(args.dir, metadata.sample_in_pattern)))
+        glob.glob(os.path.join(parsed_args.dir, metadata.sample_in_pattern)))
     out_sample_file_list = sorted(
-        glob.glob(os.path.join(args.dir, metadata.sample_out_pattern)))
+        glob.glob(os.path.join(parsed_args.dir, metadata.sample_out_pattern)))
 
-    judge_method = _decide_judge_method(args, metadata, lang)
+    judge_method = _decide_judge_method(parsed_args, metadata, lang)
 
     if isinstance(judge_method, DecimalJudge):
         logger.info("Decimal number judge is enabled. type={}, diff={}".format(
             judge_method.error_type.value, judge_method.diff))
 
-    if args.exec is not None:
-        exec_file = args.exec
+    if parsed_args.exec is not None:
+        exec_file = parsed_args.exec
     elif config.etc_config.compile_before_testing:
         # Use atcoder-tools's functionality to compile source code
         try:
             compile_main_and_judge_programs(
                 metadata,
-                args.dir,
+                parsed_args.dir,
                 force_compile=not config.etc_config.compile_only_when_diff_detected
             )
         except BadStatusCodeException as e:
             raise e
-        exec_file = lang.get_test_command('main', args.dir)
+        exec_file = lang.get_test_command('main', parsed_args.dir)
     else:
         # TODO Have a smarter strategy to detect judge program
         excluded_exec_files = [
-            os.path.join(args.dir, "judge"),
-            os.path.join(args.dir, "judge.exe")
+            os.path.join(parsed_args.dir, "judge"),
+            os.path.join(parsed_args.dir, "judge.exe")
         ]
         exec_file = infer_exec_file(
-            glob.glob(os.path.join(args.dir, '*')), excluded_exec_files)
+            glob.glob(os.path.join(parsed_args.dir, '*')), excluded_exec_files)
         logger.info("Inferred exec file: {}".format(exec_file))
 
-    if args.num is None:
-        return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.knock_out,
-                             args.skip_almost_ac_feedback, judge_method, args.dir,
+    if parsed_args.num is None:
+        return run_all_tests(exec_file, in_sample_file_list, out_sample_file_list, parsed_args.timeout, parsed_args.knock_out,
+                             parsed_args.skip_almost_ac_feedback, judge_method, parsed_args.dir,
                              lang)  # TODO: pass judge_lang instead
     else:
-        return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, args.timeout, args.num,
-                               judge_method, args.dir, lang)
+        return run_single_test(exec_file, in_sample_file_list, out_sample_file_list, parsed_args.timeout, parsed_args.num,
+                               judge_method, parsed_args.dir, lang)
 
 
 if __name__ == "__main__":

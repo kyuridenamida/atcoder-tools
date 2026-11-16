@@ -1,4 +1,5 @@
 import os
+from typing import Tuple
 import tempfile
 import unittest
 
@@ -12,12 +13,12 @@ from atcodertools.client.models.problem import Problem
 
 class TestAtCoderClientReal(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp_dir = tempfile.mkdtemp()
         self.client = AtCoderClient()
 
     @pytest.mark.network
-    def test_submit_source_code(self):
+    def test_submit_source_code(self) -> None:
         problem_list = self.client.download_problem_list(Contest("arc002"))
         self.assertEqual(
             ['arc002_1',
@@ -27,15 +28,16 @@ class TestAtCoderClientReal(unittest.TestCase):
             [p.problem_id for p in problem_list])
 
     @pytest.mark.network
-    def test_download_problem_content(self):
+    def test_download_problem_content(self) -> None:
         content = self.client.download_problem_content(
             Problem(Contest("arc002"), "C", "arc002_3"))
         self.assertEqual("N\nc_{1}c_{2}...c_{N}\n", content.input_format_text)
+        assert content.samples is not None
         self.assertEqual(3, len(content.samples))
 
     @pytest.mark.network
-    def test_login_failed(self):
-        def fake_supplier():
+    def test_login_failed(self) -> None:
+        def fake_supplier() -> Tuple[str, str]:
             return "@@@ invalid user name @@@", "@@@ password @@@"
 
         try:
@@ -46,7 +48,7 @@ class TestAtCoderClientReal(unittest.TestCase):
             pass
 
     @pytest.mark.network
-    def test_download_all_contests(self):
+    def test_download_all_contests(self) -> None:
         contests = self.client.download_all_contests()
         # Check if the number of contests is more than the number when I wrote
         # this unit test.
@@ -58,10 +60,10 @@ class TestAtCoderClientReal(unittest.TestCase):
             len(contests))
 
     @pytest.mark.network
-    def test_check_logging_in_is_false(self):
+    def test_check_logging_in_is_false(self) -> None:
         self.assertFalse(self.client.check_logging_in())
 
-    def test_cookie_save_and_load(self):
+    def test_cookie_save_and_load(self) -> None:
         cookie_path = os.path.join(self.temp_dir, "cookie.txt")
 
         session = requests.Session()

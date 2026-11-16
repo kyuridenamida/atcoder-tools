@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 
 from collections import OrderedDict
 
@@ -15,7 +15,7 @@ class SimpleFormatPredictionFailedError(Exception):
     pass
 
 
-def _predict_period(seq: List[int]):
+def _predict_period(seq: List[int]) -> int:
     if len(seq) >= 2:
         span = seq[1] - seq[0]
         for cur, succ in zip(seq, seq[1:]):
@@ -26,9 +26,9 @@ def _predict_period(seq: List[int]):
         return 1
 
 
-def _predict_simple_format_main(var_tokens: List[VariableToken], to_1d_flag=False) -> Format[SimpleVariable]:
-    var_to_positions = {}
-    var_to_simple_var = OrderedDict()
+def _predict_simple_format_main(var_tokens: List[VariableToken], to_1d_flag: bool=False) -> Format[SimpleVariable]:
+    var_to_positions: Dict[str, List[int]] = {}
+    var_to_simple_var: OrderedDict[str, SimpleVariable] = OrderedDict()
 
     # Pre-computation of the min / max value of each of the first and second
     # indices.
@@ -43,10 +43,16 @@ def _predict_simple_format_main(var_tokens: List[VariableToken], to_1d_flag=Fals
         var_to_positions[var_name].append(pos)
 
         if var_token.dim_num() >= 2:
-            var_to_simple_var[var_name].second_index.update(
+            simple_var = var_to_simple_var[var_name]
+            assert simple_var.second_index is not None
+            assert var_token.second_index is not None
+            simple_var.second_index.update(
                 var_token.second_index)
         if var_token.dim_num() >= 1:
-            var_to_simple_var[var_name].first_index.update(
+            simple_var = var_to_simple_var[var_name]
+            assert simple_var.first_index is not None
+            assert var_token.first_index is not None
+            simple_var.first_index.update(
                 var_token.first_index)
 
     # Building format nodes
@@ -88,7 +94,7 @@ def _predict_simple_format_main(var_tokens: List[VariableToken], to_1d_flag=Fals
     return root
 
 
-def predict_simple_format(var_tokens: List[VariableToken], to_1d_flag=False) -> Format[SimpleVariable]:
+def predict_simple_format(var_tokens: List[VariableToken], to_1d_flag: bool=False) -> Format[SimpleVariable]:
     try:
         return _predict_simple_format_main(var_tokens, to_1d_flag)
     except (WrongGroupingError, UnknownPeriodError):

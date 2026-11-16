@@ -1,4 +1,5 @@
 import unittest
+from typing import Any
 import os
 from argparse import Namespace
 
@@ -15,14 +16,14 @@ RESOURCE_DIR = os.path.join(
 
 class TestConfig(unittest.TestCase):
 
-    def test_load_code_style_config(self):
+    def test_load_code_style_config(self) -> None:
         with open(os.path.join(RESOURCE_DIR, "with_indent_width.toml"), 'r') as f:
             config = Config.load(f).code_style_config
 
         self.assertEqual(8, config.indent_width)
         self.assertEqual(INDENT_TYPE_SPACE, config.indent_type)
 
-    def test_load_config(self):
+    def test_load_config(self) -> None:
         os.chdir(RESOURCE_DIR)
 
         with open(os.path.join(RESOURCE_DIR, "all_options.toml"), 'r') as f:
@@ -54,7 +55,7 @@ class TestConfig(unittest.TestCase):
         with open(config.code_style_config.template_file, 'r') as f:
             self.assertEqual("this is custom_template.cpp", f.read())
 
-    def test_language_specific_options(self):
+    def test_language_specific_options(self) -> None:
         os.chdir(RESOURCE_DIR)
 
         with open(os.path.join(RESOURCE_DIR, "lang_specific_options.toml"), 'r') as f:
@@ -73,18 +74,18 @@ class TestConfig(unittest.TestCase):
 
         self.assertEqual('kept_value', config.etc_config.in_example_format)
 
-    def test_load_config_fails_due_to_typo(self):
+    def test_load_config_fails_due_to_typo(self) -> None:
         try:
             with open(os.path.join(RESOURCE_DIR, "typo_in_postprocess.toml"), 'r') as f:
                 Config.load(f)
         except TypeError:
             pass
 
-    def test_load_default_config(self):
+    def test_load_default_config(self) -> None:
         with open(get_default_config_path(), 'r') as f:
             Config.load(f)
 
-    def test_init_code_style_config_with_invalid_parameters(self):
+    def test_init_code_style_config_with_invalid_parameters(self) -> None:
         self._expect_error_when_init_config(
             indent_type='SPACE', indent_width=4)
         self._expect_error_when_init_config(
@@ -100,7 +101,7 @@ class TestConfig(unittest.TestCase):
             template_file='not existing path'
         )
 
-    def test_load_with_program_args(self):
+    def test_load_with_program_args(self) -> None:
         os.chdir(RESOURCE_DIR)
 
         with open(os.path.join(RESOURCE_DIR, "all_options.toml"), 'r') as f:
@@ -115,7 +116,7 @@ class TestConfig(unittest.TestCase):
 
         self.assertEqual(PYTHON, config.code_style_config.lang)
 
-    def _expect_error_when_init_config(self, **kwargs):
+    def _expect_error_when_init_config(self, **kwargs: Any) -> None:
         try:
             CodeStyleConfig(**kwargs)
             self.fail("Must not reach here")

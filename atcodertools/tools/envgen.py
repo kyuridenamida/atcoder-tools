@@ -6,7 +6,7 @@ import sys
 import traceback
 from multiprocessing import Pool, cpu_count
 import time
-from typing import Tuple
+from typing import Tuple, List
 
 from colorama import Fore
 
@@ -40,18 +40,18 @@ class EnvironmentInitializationError(Exception):
     pass
 
 
-def output_splitter():
+def output_splitter() -> None:
     # for readability
     print("=================================================", file=sys.stderr)
 
 
-def _message_on_execution(cwd: str, cmd: str):
+def _message_on_execution(cwd: str, cmd: str) -> str:
     return "Executing the following command in `{}`: {}".format(cwd, cmd)
 
 
 def prepare_procedure(atcoder_client: AtCoderClient,
                       problem: Problem,
-                      config: Config):
+                      config: Config) -> None:
     workspace_root_path = config.code_style_config.workspace_dir
     template_code_path = config.code_style_config.template_file
     lang = config.code_style_config.lang
@@ -62,13 +62,13 @@ def prepare_procedure(atcoder_client: AtCoderClient,
         problem.get_contest().get_id(),
         pid)
 
-    def emit_error(text):
+    def emit_error(text: str) -> None:
         logger.error(with_color("Problem {}: {}".format(pid, text), Fore.RED))
 
-    def emit_warning(text):
+    def emit_warning(text: str) -> None:
         logger.warning("Problem {}: {}".format(pid, text))
 
-    def emit_info(text):
+    def emit_info(text: str) -> None:
         logger.info("Problem {}: {}".format(pid, text))
 
     emit_info('{} is used for template'.format(template_code_path))
@@ -88,11 +88,12 @@ def prepare_procedure(atcoder_client: AtCoderClient,
             raise e
 
         # Store examples to the directory path
-        if len(content.get_samples()) == 0:
+        samples = content.get_samples() or []
+        if len(samples) == 0:
             emit_info("No samples.")
         else:
             os.makedirs(problem_dir_path, exist_ok=True)
-            create_examples(content.get_samples(), problem_dir_path,
+            create_examples(samples, problem_dir_path,
                             config.etc_config.in_example_format, config.etc_config.out_example_format)
             emit_info("Created examples.")
 
@@ -164,7 +165,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
     output_splitter()
 
 
-def func(argv: Tuple[AtCoderClient, Problem, Config]):
+def func(argv: Tuple[AtCoderClient, Problem, Config]) -> None:
     atcoder_client, problem, config = argv
     prepare_procedure(atcoder_client, problem, config)
 
@@ -174,7 +175,7 @@ def prepare_contest(atcoder_client: AtCoderClient,
                     config: Config,
                     retry_delay_secs: float = 1.5,
                     retry_max_delay_secs: float = 60,
-                    retry_max_tries: int = 10):
+                    retry_max_tries: int = 10) -> None:
     attempt_count = 1
     while True:
         problem_list = atcoder_client.download_problem_list(
@@ -221,7 +222,7 @@ class DeletedFunctionalityError(Exception):
     pass
 
 
-def main(prog, args):
+def main(prog: str, args: List[str]) -> None:
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
@@ -272,18 +273,18 @@ def main(prog, args):
                                 get_default_config_path()))
                         )
 
-    args = parser.parse_args(args)
+    parsed_args = parser.parse_args(args)
 
-    if args.replacement is not None:
+    if parsed_args.replacement is not None:
         logger.error(with_color("Sorry! --replacement argument no longer exists"
                                 " and you can only use --template."
                                 " See the official document for details.", Fore.LIGHTRED_EX))
         raise DeletedFunctionalityError
 
-    config = get_config(args)
+    config = get_config(parsed_args)
 
     try:
-        import AccountInformation  # noqa
+        import AccountInformation  # type: ignore[import-not-found]  # noqa
         raise BannedFileDetectedError(
             "We abolished the logic with AccountInformation.py. Please delete the file.")
     except ImportError:
@@ -303,7 +304,7 @@ def main(prog, args):
         logger.info("Downloading data without login.")
 
     prepare_contest(client,
-                    args.contest_id,
+                    parsed_args.contest_id,
                     config)
 
 

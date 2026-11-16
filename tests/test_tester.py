@@ -32,23 +32,23 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 
 
 class TestTester(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp_dir = tempfile.mkdtemp()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir)
 
-    def test_multiple_exec_files(self):
+    def test_multiple_exec_files(self) -> None:
         all_ok = tester.main(
             '', ['-d', os.path.join(RESOURCE_DIR, "test_multiple_exec_files")])
         self.assertTrue(all_ok)
 
-    def test_run_single_test(self):
+    def test_run_single_test(self) -> None:
         test_dir = os.path.join(RESOURCE_DIR, "test_run_single_test")
         self.assertTrue(tester.main('', ['-d', test_dir, "-n", "1"]))
         self.assertFalse(tester.main('', ['-d', test_dir, "-n", "2"]))
 
-    def test_run_single_test_decimal_addition(self):
+    def test_run_single_test_decimal_addition(self) -> None:
         test_dir = os.path.join(
             RESOURCE_DIR, "test_run_single_test_decimal_addition")
         self.assertTrue(tester.main(
@@ -64,7 +64,7 @@ class TestTester(unittest.TestCase):
         self.assertFalse(tester.main(
             '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
 
-    def test_run_single_test_decimal_multiplication(self):
+    def test_run_single_test_decimal_multiplication(self) -> None:
         test_dir = os.path.join(
             RESOURCE_DIR, "test_run_single_test_decimal_multiplication")
         self.assertTrue(tester.main(
@@ -80,7 +80,7 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "2", "-v", "0.01", "-j", "relative"]))
 
-    def test_run_single_test_decimal_mixed(self):
+    def test_run_single_test_decimal_mixed(self) -> None:
         test_dir = os.path.join(
             RESOURCE_DIR, "test_run_single_test_decimal_mixed")
         self.assertFalse(tester.main(
@@ -93,7 +93,7 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "2", "-v", "0.0001", "-j", "absolute_or_relative"]))
 
     @pytest.mark.requires_cpp
-    def test_run_single_test_multisolution(self):
+    def test_run_single_test_multisolution(self) -> None:
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_run_single_test_multisolution"), test_dir)
@@ -105,6 +105,7 @@ class TestTester(unittest.TestCase):
         # Already set
         setter_main('', ['-d', test_dir, "--lang", "cpp"])
         metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
+        assert metadata.lang is not None
         self.assertTrue(metadata.lang.name == 'cpp')
 
         self.assertTrue(tester.main(
@@ -117,7 +118,7 @@ class TestTester(unittest.TestCase):
             '', ['-d', test_dir, "-n", "4", "-c", "True"]))
 
     @pytest.mark.requires_cpp
-    def test_run_single_test_interactive(self):
+    def test_run_single_test_interactive(self) -> None:
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_run_single_test_interactive"), test_dir)
@@ -127,7 +128,7 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "2", "-j", "interactive", '-c', "True"]))
 
-    def test_compiler_and_tester(self):
+    def test_compiler_and_tester(self) -> None:
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
@@ -150,38 +151,38 @@ class TestTester(unittest.TestCase):
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
-    def test_is_executable_file(self, os_mock, is_file_mock):
+    def test_is_executable_file(self, os_mock: MagicMock, is_file_mock: MagicMock) -> None:
         self.assertTrue(is_executable_file('a.out'))
 
     @patch('os.access', return_value=False)
     @patch('pathlib.Path.is_file', return_value=True)
-    def test_is_executable_file__not_executable(self, os_mock, is_file_mock):
+    def test_is_executable_file__not_executable(self, os_mock: MagicMock, is_file_mock: MagicMock) -> None:
         self.assertFalse(is_executable_file('a.out'))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
-    def test_is_executable_file__source_code(self, os_mock, is_file_mock):
+    def test_is_executable_file__source_code(self, os_mock: MagicMock, is_file_mock: MagicMock) -> None:
         self.assertFalse(is_executable_file('A.cpp'))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
-    def test_is_executable_file__text(self, os_mock, is_file_mock):
+    def test_is_executable_file__text(self, os_mock: MagicMock, is_file_mock: MagicMock) -> None:
         self.assertFalse(is_executable_file('in.txt'))
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=False)
-    def test_is_executable_file__directory(self, os_mock, is_file_mock):
+    def test_is_executable_file__directory(self, os_mock: MagicMock, is_file_mock: MagicMock) -> None:
         self.assertFalse(is_executable_file('directory'))
 
     @patch("platform.system", return_value="Windows")
     @patch("os.environ.get", return_value=".EXE;.out")
-    def test_is_executable_file__windows(self, platform_system_mock, os_environ_get_mock):
+    def test_is_executable_file__windows(self, platform_system_mock: MagicMock, os_environ_get_mock: MagicMock) -> None:
         self.assertTrue(is_executable_file("A.eXe"))
         self.assertTrue(is_executable_file("A.out"))
         self.assertFalse(is_executable_file("A.exe.bak"))
 
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'correct', '', 0))
-    def test_run_for_samples(self, run_program_mock: MagicMock):
+    def test_run_for_samples(self, run_program_mock: MagicMock) -> None:
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
@@ -191,7 +192,7 @@ class TestTester(unittest.TestCase):
 
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'correct', 'stderr', 0))
-    def test_run_for_samples__with_stderr(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock):
+    def test_run_for_samples__with_stderr(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock) -> None:
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
@@ -202,7 +203,7 @@ class TestTester(unittest.TestCase):
 
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'wrong', '', 0))
-    def test_run_for_samples__wrong_answer(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock):
+    def test_run_for_samples__wrong_answer(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock) -> None:
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
@@ -214,7 +215,7 @@ class TestTester(unittest.TestCase):
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'wrong', '', 0))
     def test_run_for_samples__stop_execution_on_first_failure(self, run_program_mock: MagicMock,
-                                                              build_details_str_mock: MagicMock):
+                                                              build_details_str_mock: MagicMock) -> None:
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
@@ -227,7 +228,7 @@ class TestTester(unittest.TestCase):
 
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'correct', 'stderr', 0))
-    def test_run_for_samples__skip_stderr(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock):
+    def test_run_for_samples__skip_stderr(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock) -> None:
         io_mock = mock_open(read_data='correct')
 
         with patch('atcodertools.tools.tester.open', io_mock):
@@ -236,7 +237,7 @@ class TestTester(unittest.TestCase):
             self.assertEqual(1, run_program_mock.call_count)
             self.assertEqual(0, build_details_str_mock.call_count)
 
-    def test_build_details_str(self):
+    def test_build_details_str(self) -> None:
         in_out = 'correct\n'
         output = 'wrong\n'
         stderr = 'stderr\n'
@@ -253,7 +254,7 @@ class TestTester(unittest.TestCase):
                 ExecStatus.NORMAL, output, stderr), 'in.txt', 'out.txt')
             self.assertEqual(expected, result)
 
-    def test_build_details_str__show_testcase_if_there_is_stderr(self):
+    def test_build_details_str__show_testcase_if_there_is_stderr(self) -> None:
         in_out = 'correct\n'
         stderr = 'stderr\n'
         expected = (with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'
@@ -269,7 +270,7 @@ class TestTester(unittest.TestCase):
                 ExecStatus.NORMAL, in_out, stderr), 'in.txt', 'out.txt')
             self.assertEqual(expected, result)
 
-    def test_str_to_bool(self):
+    def test_str_to_bool(self) -> None:
         for text in ("true", "True", "1", "yes"):
             self.assertTrue(str_to_bool(text), text)
         for text in ("false", "False", "0", "no"):
@@ -277,7 +278,7 @@ class TestTester(unittest.TestCase):
         with self.assertRaises(argparse.ArgumentTypeError):
             str_to_bool("maybe")
 
-    def test_infer_case_num(self):
+    def test_infer_case_num(self) -> None:
         self.assertEqual(3, infer_case_num("in_3.txt"))
         self.assertEqual(12, infer_case_num("sample12.out"))
         with self.assertRaises(IrregularSampleFileError):
@@ -285,7 +286,7 @@ class TestTester(unittest.TestCase):
         with self.assertRaises(IrregularSampleFileError):
             infer_case_num("output.txt")
 
-    def test_build_details_str__on_runtime_failure(self):
+    def test_build_details_str__on_runtime_failure(self) -> None:
         in_out = 'correct\n'
         stderr = ''
         expected = (with_color('[Input]', Fore.LIGHTMAGENTA_EX) + '\n'

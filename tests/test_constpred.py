@@ -21,7 +21,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 
-def _to_str(x):
+def _to_str(x: object) -> str:
     if x is None:
         return ""
     return str(x)
@@ -29,16 +29,16 @@ def _to_str(x):
 
 class TestConstantsPrediction(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp_dir = tempfile.mkdtemp()
         self.html_data_controller = make_html_data_controller(
             tempfile.mkdtemp())
         self.test_dir = self.html_data_controller.create_dir()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.html_data_controller.remove_dir()
 
-    def test_predict_constants(self):
+    def test_predict_constants(self) -> None:
         with open(ANSWER_FILE, 'r') as f:
             answers = f.read().split("\n")
 
@@ -55,20 +55,20 @@ class TestConstantsPrediction(unittest.TestCase):
                                                                          _to_str(constants.no_str))
             self.assertEqual(answer_line.rstrip(), output_line.rstrip())
 
-    def test_yes_no_prediction_fails_when_failing_to_parse_html(self):
+    def test_yes_no_prediction_fails_when_failing_to_parse_html(self) -> None:
         try:
             predict_yes_no("broken html")
             self.fail("Must not reach here")
         except YesNoPredictionFailedError:
             pass
 
-    def test_case_only_with_no_str(self):
+    def test_case_only_with_no_str(self) -> None:
         yes_str, no_str = predict_yes_no(self._load("agc001-D.html"))
         self.assertEqual(None, yes_str)
         self.assertEqual("Impossible", no_str)
 
     @unittest.expectedFailure
-    def test_tricky_mod_case_that_can_raise_multi_cands_error(self):
+    def test_tricky_mod_case_that_can_raise_multi_cands_error(self) -> None:
         # This test exists in order to demonstrate the current wrong behavior that throws MultipleModCandidatesError.
         # None is the true answer for ABC103-C. This test shouldn't fail with a better prediction method.
         # Please remove @unittest.expectedFailure when predict_modulo() behaves
@@ -78,7 +78,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertIsNone(modulo)
 
     @unittest.expectedFailure
-    def test_tricky_yes_no_case_difficult_to_recognize(self):
+    def test_tricky_yes_no_case_difficult_to_recognize(self) -> None:
         # This test exists in order to demonstrate the current wrong behavior that doesn't detect some yes/no strings.
         # Please remove @unittest.expectedFailure when predict_yes_no() behaves
         # correctly.
@@ -87,7 +87,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual("War", yes_str)
         self.assertEqual("No War", no_str)
 
-    def test_relative_or_absolute_error_judge_method_case(self):
+    def test_relative_or_absolute_error_judge_method_case(self) -> None:
         judge_method = predict_judge_method(
             """
             <section>
@@ -100,7 +100,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(ErrorType.AbsoluteOrRelative.value,
                          judge_method.to_dict()["error_type"])
 
-    def test_absolute_error_judge_method_case(self):
+    def test_absolute_error_judge_method_case(self) -> None:
         judge_method = predict_judge_method(
             """
             <div class="part">
@@ -117,7 +117,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(ErrorType.Absolute.value,
                          judge_method.to_dict()["error_type"])
 
-    def test_relative_error_judge_method_case(self):
+    def test_relative_error_judge_method_case(self) -> None:
         judge_method = predict_judge_method(
             """
             <div class="part">
@@ -133,7 +133,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(ErrorType.Relative.value,
                          judge_method.to_dict()["error_type"])
 
-    def test_normal_judge_method_case(self):
+    def test_normal_judge_method_case(self) -> None:
         judge_method = predict_judge_method(
             """
             <div class="part">
@@ -145,7 +145,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(JudgeType.Normal.value,
                          judge_method.to_dict()["judge_type"])
 
-    def test_judge_method_prediction_fails_with_multiple_cands(self):
+    def test_judge_method_prediction_fails_with_multiple_cands(self) -> None:
         try:
             predict_judge_method(
                 "<var>10^{-6}</var> もしくは <var>10^{-5}</var>以下の相対誤差")
@@ -153,7 +153,7 @@ class TestConstantsPrediction(unittest.TestCase):
         except MultipleDecimalCandidatesError:
             pass
 
-    def test_predict_constants_falls_back_to_normal_judge_with_multiple_decimal_cands(self):
+    def test_predict_constants_falls_back_to_normal_judge_with_multiple_decimal_cands(self) -> None:
         # predict_judge_method raises MultipleDecimalCandidatesError here;
         # predict_constants must absorb it and fall back to NormalJudge
         # instead of crashing (regression: it used to catch the wrong
@@ -164,7 +164,7 @@ class TestConstantsPrediction(unittest.TestCase):
                          constants.judge_method.to_dict()["judge_type"])
 
     @unittest.expectedFailure
-    def test_tricky_judge_method_case(self):
+    def test_tricky_judge_method_case(self) -> None:
         # This test exists in order to demonstrate the current wrong behavior that detects unrelated mention wrongly.
         # Please remove @unittest.expectedFailure when predict_judge_method() behaves
         # correctly.
@@ -181,7 +181,7 @@ class TestConstantsPrediction(unittest.TestCase):
         self.assertEqual(JudgeType.Normal.value,
                          judge_method.to_dict()["judge_type"])
 
-    def _load(self, html_path):
+    def _load(self, html_path: str) -> str:
         with open(os.path.join(self.test_dir, html_path), 'r') as f:
             return f.read()
 

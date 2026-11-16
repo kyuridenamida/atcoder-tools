@@ -1,9 +1,12 @@
 import importlib.util
 import os
 from os.path import expanduser
-from typing import Optional
+from typing import Optional, Callable, TYPE_CHECKING
 
 from atcodertools.fileutils.normalize import normalize_path
+
+if TYPE_CHECKING:
+    from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 
 INDENT_TYPE_SPACE = 'space'
 INDENT_TYPE_TAB = 'tab'
@@ -26,14 +29,14 @@ class CodeStyleConfig:
                  template_file: Optional[str] = None,
                  workspace_dir: Optional[str] = None,
                  lang: str = DEFAULT_LANGUAGE,
-                 ):
+                 ) -> None:
         from atcodertools.common.language import Language, LanguageNotFoundError, ALL_LANGUAGE_NAMES
 
         code_generator_file = normalize_path(code_generator_file)
         template_file = normalize_path(template_file)
 
         try:
-            lang = Language.from_name(lang)
+            language = Language.from_name(lang)
         except LanguageNotFoundError:
             raise CodeStyleConfigInitError(
                 "language must be one of {}".format(ALL_LANGUAGE_NAMES))
@@ -60,8 +63,8 @@ class CodeStyleConfig:
 
         if indent_width is not None:
             self.indent_width = indent_width
-        elif lang.default_code_style is not None and lang.default_code_style.indent_width is not None:
-            self.indent_width = lang.default_code_style.indent_width
+        elif language.default_code_style is not None and language.default_code_style.indent_width is not None:
+            self.indent_width = language.default_code_style.indent_width
         else:
             self.indent_width = 4
 
@@ -69,22 +72,24 @@ class CodeStyleConfig:
             try:
                 spec = importlib.util.spec_from_file_location(
                     'code_generator', code_generator_file)
+                assert spec is not None
+                assert spec.loader is not None
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module)
-                self.code_generator = getattr(module, 'main')
+                self.code_generator: Callable[["CodeGenArgs"], str] = getattr(module, 'main')
             except AttributeError as e:
                 raise CodeStyleConfigInitError(e, "Error while loading {}".format(
                     code_generator_file))
         else:
-            self.code_generator = lang.default_code_generator
+            self.code_generator = language.default_code_generator
 
         self.template_file = normalize_path(
-            template_file or lang.default_template_path)
+            template_file or language.default_template_path)
         self.workspace_dir = normalize_path(
             workspace_dir or DEFAULT_WORKSPACE_DIR_PATH)
-        self.lang = lang
+        self.lang = language
 
-    def indent(self, depth):
+    def indent(self, depth: int) -> str:
         if self.indent_type == INDENT_TYPE_SPACE:
             return " " * self.indent_width * depth
         return "\t" * self.indent_width * depth

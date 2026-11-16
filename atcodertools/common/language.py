@@ -1,5 +1,5 @@
 import re
-from typing import Pattern, Callable
+from typing import Pattern, Callable, Optional
 
 from atcodertools.codegen.code_generators import cpp, java, rust, python, nim, d, cs
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
@@ -13,8 +13,8 @@ class LanguageNotFoundError(Exception):
 
 class CodeStyle:
     def __init__(self,
-                 indent_width=None
-                 ):
+                 indent_width: Optional[int]=None
+                 ) -> None:
         self.indent_width = indent_width
 
 
@@ -26,11 +26,11 @@ class Language:
                  submission_lang_pattern: Pattern[str],
                  default_code_generator: Callable[[CodeGenArgs], str],
                  default_template_path: str,
-                 default_code_style=None,
-                 compile_command=None,
-                 test_command=None,
-                 exec_filename=None
-                 ):
+                 default_code_style: Optional[CodeStyle]=None,
+                 compile_command: Optional[str]=None,
+                 test_command: Optional[str]=None,
+                 exec_filename: Optional[str]=None
+                 ) -> None:
         self.name = name
         self.display_name = display_name
         self.extension = extension
@@ -41,6 +41,7 @@ class Language:
         self.compile_command = compile_command
         self.test_command = test_command
         self.code_filename = "{filename}." + extension
+        assert exec_filename is not None
         if platform.system() == "Windows":
             self.exec_filename = exec_filename.replace(
                 "{exec_extension}", ".exe")
@@ -51,26 +52,28 @@ class Language:
         # put extension to the name
         return "{}.{}".format(name_without_extension, self.extension)
 
-    def get_compile_command(self, filename: str):
+    def get_compile_command(self, filename: str) -> str:
+        assert self.compile_command is not None
         return self.compile_command.format(filename=filename)
 
-    def get_code_filename(self, filename: str):
+    def get_code_filename(self, filename: str) -> str:
         return self.code_filename.format(filename=filename)
 
-    def get_exec_filename(self, filename: str):
+    def get_exec_filename(self, filename: str) -> str:
         return self.exec_filename.format(filename=filename, capitalized_filename=filename.capitalize())
 
-    def get_test_command(self, filename: str, cwd: str = '.'):
+    def get_test_command(self, filename: str, cwd: str = '.') -> str:
         exec_filename = cwd + '/'
         if platform.system() == "Windows":
             exec_filename += filename + ".exe"
         else:
             exec_filename += filename
         capitalized_filename = filename.capitalize()
+        assert self.test_command is not None
         return self.test_command.format(filename=filename, exec_filename=exec_filename, capitalized_filename=capitalized_filename)
 
     @classmethod
-    def from_name(cls, name: str):
+    def from_name(cls, name: str) -> "Language":
         for l in ALL_LANGUAGES:
             if l.name == name:
                 return l

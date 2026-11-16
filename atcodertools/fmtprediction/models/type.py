@@ -6,14 +6,14 @@ class Type(Enum):
     float = 'float'
     str = 'str'
 
-    def intersect(self, target_type):
+    def intersect(self, target_type: "Type") -> "Type":
         try:
             return TYPE_INTERSECTION_TABLE[self][target_type]
         except KeyError:
             raise NotImplementedError
 
     @classmethod
-    def from_py_type(cls, py_type: type):
+    def from_py_type(cls, py_type: type) -> "Type":
         if py_type == int:
             return Type.int
         elif py_type == float:
@@ -22,7 +22,7 @@ class Type(Enum):
             return Type.str
         raise NotImplementedError
 
-    def to_py_type(self):
+    def to_py_type(self) -> type:
         if self == Type.int:
             return int
         elif self == Type.str:

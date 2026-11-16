@@ -12,7 +12,7 @@ class CodeGenArgs:
                  template: str,
                  format_: Optional[Format[Variable]],
                  constants: ProblemConstantSet,
-                 config: CodeStyleConfig):
+                 config: CodeStyleConfig) -> None:
         self.template = template
         self.format = format_
         self.constants = constants

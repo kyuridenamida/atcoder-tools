@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
@@ -13,13 +13,15 @@ from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
 
-def _loop_header(var: Variable, for_second_index: bool):
+def _loop_header(var: Variable, for_second_index: bool) -> str:
     if for_second_index:
         index = var.second_index
         loop_var = "j"
     else:
         index = var.first_index
         loop_var = "i"
+
+    assert index is not None
 
     return "foreach ({loop_var}; 0 .. cast(size_t) ({length})) {{".format(
         loop_var=loop_var,
@@ -29,7 +31,7 @@ def _loop_header(var: Variable, for_second_index: bool):
 class DlangCodeGenerator:
     def __init__(self,
                  format_: Optional[Format[Variable]],
-                 config: CodeStyleConfig):
+                 config: CodeStyleConfig) -> None:
         self._format = format_
         self._config = config
 
@@ -43,7 +45,8 @@ class DlangCodeGenerator:
             input_part=self._input_part(),
             prediction_success=True)
 
-    def _formal_arguments(self):
+    def _formal_arguments(self) -> str:
+        assert self._format is not None
         """
         :return the string form of formal arguments e.g. "int N, int K, int[] a"
         """
@@ -54,12 +57,14 @@ class DlangCodeGenerator:
             for v in self._format.all_vars()])
 
     def _actual_arguments(self) -> str:
+        assert self._format is not None
         """
         :return the string form of actual arguments e.g. "N, K, a"
         """
         return ", ".join([v.name for v in self._format.all_vars()])
 
-    def _input_part(self):
+    def _input_part(self) -> str:
+        assert self._format is not None
         lines = []
         for pattern in self._format.sequence:
             lines.extend(self._render_pattern(pattern))
@@ -76,7 +81,7 @@ class DlangCodeGenerator:
 
         return code[:-1]
 
-    def _render_pattern(self, pattern: Pattern):
+    def _render_pattern(self, pattern: Pattern[Variable]) -> List[str]:
         lines = []
         for var in pattern.all_vars():
             lines.append(self._generate_declaration(var))
@@ -104,15 +109,17 @@ class DlangCodeGenerator:
 
         return lines
 
-    def _generate_declaration(self, var: Variable):
+    def _generate_declaration(self, var: Variable) -> str:
         """
         :return: Create declaration part e.g. array[1..n] -> int[] array = new int[](n-1+1);
         """
         if var.dim_num() == 0:
             dims = []
         elif var.dim_num() == 1:
+            assert var.first_index is not None
             dims = [var.first_index.get_length()]
         elif var.dim_num() == 2:
+            assert var.first_index is not None and var.second_index is not None
             dims = [var.first_index.get_length(),
                     var.second_index.get_length()]
         else:
@@ -131,7 +138,7 @@ class DlangCodeGenerator:
 
         return line
 
-    def _assignment_code(self, var: Variable, indent_level: int = 0) -> str:
+    def _assignment_code(self, var: Variable, indent_level: int = 0) -> List[str]:
         line1 = "{indent}{varname} = input.front.to!{vartype};"
         line2 = "{indent}input.popFront;"
         indent = self._indent(indent_level)
@@ -145,7 +152,7 @@ class DlangCodeGenerator:
                 indent=indent)]
 
     @staticmethod
-    def _get_var_name(var: Variable):
+    def _get_var_name(var: Variable) -> str:
         name = var.name
         if var.dim_num() >= 1:
             name += "[i]"
@@ -166,13 +173,13 @@ class DlangCodeGenerator:
             raise NotImplementedError
 
     @classmethod
-    def _get_declaration_type(cls, var: Variable):
+    def _get_declaration_type(cls, var: Variable) -> str:
         ctype = cls._get_var_basetype(var)
         for _ in range(var.dim_num()):
             ctype += "[]"
         return ctype
 
-    def _indent(self, depth):
+    def _indent(self, depth: int) -> str:
         return self._config.indent(depth)
 
 

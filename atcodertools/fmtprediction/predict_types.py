@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Iterator, Optional, Union
 
 from atcodertools.fmtprediction.models.calculator import EvaluateError
 from atcodertools.fmtprediction.models.type import Type
@@ -43,11 +43,11 @@ class InvalidLoopIndexError(Exception):
     pass
 
 
-def is_float(text):
+def is_float(text: str) -> bool:
     return re.match(r"-?\d+\.\d+$", text) is not None
 
 
-def is_int(text):
+def is_int(text: str) -> bool:
     if text == "0":
         return True
     if re.match(r"-?\d+$", text) is None:
@@ -59,7 +59,7 @@ def is_int(text):
     return True
 
 
-def _convert_to_proper_type(value: str) -> Any:
+def _convert_to_proper_type(value: str) -> Union[int, float, str]:
     if is_int(value):
         return int(value)
     elif is_float(value):
@@ -69,38 +69,38 @@ def _convert_to_proper_type(value: str) -> Any:
 
 class TypePredictor:
 
-    def __init__(self, fmt: Format[SimpleVariable]):
+    def __init__(self, fmt: Format[SimpleVariable]) -> None:
         self._fmt = fmt
         self._fetch_generator_instance = self._fetch_generator()
         self._var_to_type = {}  # type: Dict[str, Type]
         # If there are multiple values, only the first value is recorded.
-        self._var_to_actual_value = {}
+        self._var_to_actual_value: Dict[str, Any] = {}
 
-    def get_typing_result(self):
+    def get_typing_result(self) -> Dict[str, Type]:
         return self._var_to_type
 
-    def ensure_terminal(self):
+    def ensure_terminal(self) -> None:
         if next(self._fetch_generator_instance) is None:
             return
         raise TooLessFetchesError
 
-    def feed(self, sample_token: str):
+    def feed(self, sample_token: str) -> None:
         var = self._fetch()
         self._refresh(var, _convert_to_proper_type(sample_token))
 
-    def _loop_size(self, loop_index: Index):
+    def _loop_size(self, loop_index: Index) -> int:
         if loop_index.min_index is None or loop_index.max_index is None:
             raise InvalidLoopIndexError
 
-        min_value = loop_index.min_index.evaluate(self._var_to_actual_value)
-        max_value = loop_index.max_index.evaluate(self._var_to_actual_value)
+        min_value: int = loop_index.min_index.evaluate(self._var_to_actual_value)
+        max_value: int = loop_index.max_index.evaluate(self._var_to_actual_value)
 
         try:
             return max_value - min_value + 1
         except Exception:
             raise InvalidLoopSizeError
 
-    def _refresh(self, var: SimpleVariable, value: Any):
+    def _refresh(self, var: SimpleVariable, value: Any) -> None:
         type_ = Type.from_py_type(type(value))
 
         if var.name in self._var_to_type:
@@ -116,7 +116,7 @@ class TypePredictor:
             raise TooManyFetchesError
         return res
 
-    def _fetch_generator(self):
+    def _fetch_generator(self) -> Iterator[Optional[SimpleVariable]]:
         for pattern in self._fmt.sequence:
             if isinstance(pattern, SingularPattern):
                 yield pattern.var
@@ -132,7 +132,7 @@ class TypePredictor:
         raise TooManyFetchesError()
 
 
-def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
+def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]) -> Dict[str, Type]:
     for k, v in src_dict.items():
         if k in to_dict:
             to_dict[k] = to_dict[k].intersect(v)
@@ -142,7 +142,7 @@ def merge_type_dicts(to_dict: Dict[str, Type], src_dict: Dict[str, Type]):
 
 
 def predict_types(simple_format: Format[SimpleVariable], samples: List[Sample]) -> Dict[str, Type]:
-    res_type_dict = {}
+    res_type_dict: Dict[str, Type] = {}
     for sample in samples:
         token_manager = TokenManager(sample.get_input().split())
         predictor = TypePredictor(simple_format)

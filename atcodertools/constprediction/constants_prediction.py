@@ -1,5 +1,5 @@
 import re
-from typing import Tuple, Optional
+from typing import Optional, Set, Tuple
 
 from bs4 import BeautifulSoup
 
@@ -15,13 +15,13 @@ class YesNoPredictionFailedError(Exception):
 
 class MultipleModCandidatesError(Exception):
 
-    def __init__(self, cands):
+    def __init__(self, cands: Set[int]) -> None:
         self.cands = cands
 
 
 class MultipleDecimalCandidatesError(Exception):
 
-    def __init__(self, cands):
+    def __init__(self, cands: Set[int]) -> None:
         self.cands = cands
 
 
@@ -44,14 +44,14 @@ DECIMAL_STRATEGY_RE_LIST_VAL = [
 ]
 
 
-def is_mod_context(sentence):
+def is_mod_context(sentence: str) -> bool:
     for kw in MOD_ANCHORS:
         if kw in sentence:
             return True
     return False
 
 
-def is_decimal_context(sentence):
+def is_decimal_context(sentence: str) -> bool:
     for kw in DECIMAL_ANCHORS:
         if kw in sentence:
             return True
@@ -59,7 +59,7 @@ def is_decimal_context(sentence):
 
 
 def predict_modulo(html: str) -> Optional[int]:
-    def normalize(sentence):
+    def normalize(sentence: str) -> str:
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
             "10^9+7", "1000000007").lower().strip()
 
@@ -88,7 +88,9 @@ def predict_modulo(html: str) -> Optional[int]:
 def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     try:
         outputs = set()
-        for sample in ProblemContent.from_html(html).get_samples():
+        samples = ProblemContent.from_html(html).get_samples()
+        assert samples is not None
+        for sample in samples:
             for x in sample.get_output().split("\n"):
                 outputs.add(x.strip())
     except (InputFormatDetectionError, SampleDetectionError) as e:
@@ -109,7 +111,7 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
 
 
 def predict_judge_method(html: str) -> Judge:
-    def normalize(sentence):
+    def normalize(sentence: str) -> str:
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
             "−", "-").lower().strip()
 

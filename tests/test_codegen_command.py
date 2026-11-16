@@ -17,7 +17,7 @@ TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template_jinja.cpp")
 class TestCodeGenCommand(unittest.TestCase):
 
     @pytest.mark.network
-    def test_generate_code(self):
+    def test_generate_code(self) -> None:
         config_path = os.path.join(RESOURCE_DIR, "test_codegen_command.toml")
         answer_file_path = os.path.join(RESOURCE_DIR, "generated_code.cpp")
         f1 = io.StringIO()
@@ -36,7 +36,7 @@ class TestCodeGenCommand(unittest.TestCase):
         with open(answer_file_path) as f2:
             self.assertEqual(f1.getvalue(), f2.read())
 
-    def test_url_parser(self):
+    def test_url_parser(self) -> None:
         problem = Problem(Contest("utpc2014"), "Z", "utpc2014_k")
         urls = [
             "http://utpc2014.contest.atcoder.jp/tasks/utpc2014_k",

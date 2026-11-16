@@ -1,15 +1,17 @@
 import os
+from atcodertools.fmtprediction.models.format import Format
+from atcodertools.fmtprediction.models.variable import Variable
 import re
 import sys
 import tempfile
 import unittest
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 from atcodertools.client.models.problem_content import ProblemContent
 from atcodertools.client.models.sample import Sample
 from atcodertools.common.language import ALL_LANGUAGES, Language, CPP, JAVA, RUST, PYTHON, NIM, DLANG, CSHARP
 from atcodertools.executils.run_command import run_command
-from atcodertools.executils.run_program import run_program
+from atcodertools.executils.run_program import ExecResult, run_program
 from atcodertools.fileutils.create_contest_file import create_code
 from atcodertools.fileutils.load_text_file import load_text_file
 from atcodertools.fmtprediction.predict_format import predict_format
@@ -28,24 +30,24 @@ RESOURCE_DIR = os.path.join(
     "./resources/test_codegen/")
 
 
-def load_generated_code(py_test_name, lang):
+def load_generated_code(py_test_name: str, lang: Language) -> str:
     with open(os.path.join(RESOURCE_DIR, py_test_name, lang.name, "generated_code.txt"), 'r') as f:
         return f.read()
 
 
-def load_intermediate_types(py_test_name):
+def load_intermediate_types(py_test_name: str) -> str:
     with open(os.path.join(RESOURCE_DIR, py_test_name, "intermediate_types.txt"), 'r') as f:
         return f.read()
 
 
-def load_intermediate_format(py_test_name):
+def load_intermediate_format(py_test_name: str) -> str:
     with open(os.path.join(RESOURCE_DIR, py_test_name, "intermediate_format.txt"), 'r') as f:
         return f.read()
 
 
 class TestCodeGenerator(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp_dir = tempfile.mkdtemp()
         self.test_data_controller = make_tst_data_controller(
             tempfile.mkdtemp())
@@ -92,42 +94,42 @@ class TestCodeGenerator(unittest.TestCase):
         }
         self.maxDiff = None
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.test_data_controller.remove_dir()
 
-    def test_long_case(self):
+    def test_long_case(self) -> None:
         response = self.runner.run('rco-contest-2017-qual-B')
         for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name, l)
 
-    def test_two_dimensional_case(self):
+    def test_two_dimensional_case(self) -> None:
         response = self.runner.run('abc079-D')
         for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name, l)
 
-    def test_float_case(self):
+    def test_float_case(self) -> None:
         response = self.runner.run('tenka1-2014-qualb-E')
         for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name, l)
 
-    def test_mod_case(self):
+    def test_mod_case(self) -> None:
         response = self.runner.run('agc019-E')
         for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name,
                         l, "jinja", ProblemConstantSet(mod=998244353))
 
-    def test_yes_no_case(self):
+    def test_yes_no_case(self) -> None:
         response = self.runner.run('agc021-C')
         for l in ALL_LANGUAGES:
             self.verify(response, sys._getframe().f_code.co_name, l, "jinja",
                         ProblemConstantSet(yes_str="YES", no_str="NO"))
 
-    def test_nested_embeddings_on_template(self):
-        def _load_text_file(filename):
+    def test_nested_embeddings_on_template(self) -> None:
+        def _load_text_file(filename: str) -> str:
             with open(os.path.join(RESOURCE_DIR, "test_nested_embeddings_on_template", filename), 'r') as f:
                 return f.read()
 
-        def _trim(text):
+        def _trim(text: str) -> str:
             return "\n".join([l.rstrip() for l in text.split("\n")])
 
         template = _load_text_file("template.txt")
@@ -136,8 +138,8 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(_load_text_file("answer_x_none_y_2.txt"),
                          _trim(render(template, x=None, y=2)))
 
-    def test_default_code_generators_and_templates(self):
-        def _full_path(filename):
+    def test_default_code_generators_and_templates(self) -> None:
+        def _full_path(filename: str) -> str:
             return os.path.join(RESOURCE_DIR, "test_default_code_generators_and_templates", filename)
 
         input_file = _full_path("echo_test_input.txt")
@@ -145,7 +147,7 @@ class TestCodeGenerator(unittest.TestCase):
         pred_result = predict_format(
             ProblemContent(
                 load_text_file(_full_path("echo_test_format.txt")),
-                [Sample(load_text_file(_full_path("echo_test_input.txt")), None)]))
+                [Sample(load_text_file(_full_path("echo_test_input.txt")), "")]))
 
         tested_lang_count = 0
         for lang in ALL_LANGUAGES:
@@ -182,7 +184,7 @@ class TestCodeGenerator(unittest.TestCase):
         if tested_lang_count == 0:
             self.skipTest("no language toolchain available on this machine")
 
-    def _compile_command(self, lang: Language, code_file: str):
+    def _compile_command(self, lang: Language, code_file: str) -> str:
         if lang == CPP:
             return "g++ {} -o a.out -std=c++14".format(code_file)
         elif lang == JAVA:
@@ -218,7 +220,7 @@ class TestCodeGenerator(unittest.TestCase):
         else:
             raise NotImplementedError()
 
-    def _clean_up(self, lang: Language):
+    def _clean_up(self, lang: Language) -> None:
         if lang == CPP:
             os.remove(os.path.join(self.temp_dir, "a.out"))
         elif lang == JAVA:
@@ -236,7 +238,7 @@ class TestCodeGenerator(unittest.TestCase):
         else:
             raise NotImplementedError()
 
-    def _compile_and_run(self, lang, format, template_file, expected_generated_code_file, input_file):
+    def _compile_and_run(self, lang: Language, format: Optional[Format[Variable]], template_file: str, expected_generated_code_file: str, input_file: str) -> ExecResult:
         code_file = os.path.join(self.temp_dir, lang.source_code_name("main"))
         exec_file, exec_args = self._exec_file_and_args(lang)
         compile_cmd = self._compile_command(lang, code_file)
@@ -270,7 +272,7 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(exec_result.status.NORMAL, exec_result.status)
         return exec_result
 
-    def compare_two_texts_ignoring_trailing_spaces(self, expected: str, output: str):
+    def compare_two_texts_ignoring_trailing_spaces(self, expected: str, output: str) -> None:
         a_list = expected.split()
         b_list = output.split()
         has_diff = False
@@ -285,7 +287,7 @@ class TestCodeGenerator(unittest.TestCase):
                py_test_name: str,
                lang: Language,
                template_type: str = "old",
-               constants: ProblemConstantSet = ProblemConstantSet()):
+               constants: ProblemConstantSet = ProblemConstantSet()) -> None:
         self.assertEqual(
             load_intermediate_format(py_test_name),
             str(response.simple_format))

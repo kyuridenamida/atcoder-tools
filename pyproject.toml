@@ -120,7 +120,9 @@ ignore = [
 mypy_path = "."
 packages = ["atcodertools", "tests"]
 exclude = "(^tests/resources/|^webapp/|^\\.venv/|^atcodertools/tools/templates/)"
-python_version = "3.9"
+# mypy no longer supports targeting 3.9; 3.10 is the closest checkable
+# baseline. Runtime support remains >=3.9 (see requires-python).
+python_version = "3.10"
 strict = false
 disallow_untyped_defs = true
 disallow_incomplete_defs = true

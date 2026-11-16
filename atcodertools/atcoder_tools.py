@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+from typing import NoReturn
 
 from atcodertools.release_management.version_check import (
     get_latest_version,
@@ -15,11 +16,11 @@ from atcodertools.release_management.version import __version__
 from colorama import Fore, Style
 
 
-def exit_program(success: bool):
+def exit_program(success: bool) -> NoReturn:
     sys.exit(0 if success else -1)
 
 
-def notify_if_latest_version_found():
+def notify_if_latest_version_found() -> None:
     try:
         latest = get_latest_version()
         if latest != __version__:
@@ -37,7 +38,7 @@ def notify_if_latest_version_found():
         print(Style.RESET_ALL)
 
 
-def main():
+def main() -> None:
     notify_if_latest_version_found()
 
     if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "set", "version", "compile"):

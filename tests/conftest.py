@@ -13,6 +13,7 @@ Design notes
   and auto-skip when the toolchain is missing.
 """
 import os
+from typing import Iterator, List
 
 import pytest
 
@@ -27,7 +28,7 @@ def _network_enabled() -> bool:
     return os.environ.get("ATCODERTOOLS_TEST_NETWORK") == "1"
 
 
-def pytest_collection_modifyitems(config, items):
+def pytest_collection_modifyitems(config: pytest.Config, items: List[pytest.Item]) -> None:
     network_skip = pytest.mark.skip(
         reason="hits the real atcoder.jp; rerun with ATCODERTOOLS_TEST_NETWORK=1")
     for item in items:
@@ -40,7 +41,7 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(autouse=True)
-def _restore_cwd_after_test():
+def _restore_cwd_after_test() -> Iterator[None]:
     """Tests such as test_config.py os.chdir() into resource dirs; without
     this the changed cwd would leak into subsequent tests and make results
     order-dependent."""

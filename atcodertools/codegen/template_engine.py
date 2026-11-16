@@ -1,13 +1,14 @@
 import re
 import string
 import warnings
+from typing import Any, Dict, List
 
 from jinja2 import Environment
 
 from atcodertools.release_management.version import __version__
 
 
-def _substitute(s, reps):
+def _substitute(s: str, reps: Dict[str, List[str]]) -> str:
     # http://stackoverflow.com/questions/36739667/python-templates-for-generating-python-code-with-proper-multiline-indentation
     t = string.Template(s)
     i = 0
@@ -26,7 +27,7 @@ def _substitute(s, reps):
     return t.substitute(cr)  # we can now substitute
 
 
-def render(template, **kwargs):
+def render(template: str, **kwargs: Any) -> str:
     # TODO: refactoring: this should not be here.
     # TODO: refactoring: the URL should be imported from other module
     kwargs['atcodertools'] = {
@@ -45,7 +46,7 @@ def render(template, **kwargs):
         return render_by_jinja(template, **kwargs)
 
 
-def old_render(template, **kwargs):
+def old_render(template: str, **kwargs: Any) -> str:
     # This render function used to be used before version 1.0.3
     new_args = {}
 
@@ -55,6 +56,6 @@ def old_render(template, **kwargs):
     return _substitute(template, new_args)
 
 
-def render_by_jinja(template, **kwargs):
+def render_by_jinja(template: str, **kwargs: Any) -> str:
     return Environment(trim_blocks=True,
                        lstrip_blocks=True).from_string(template).render(**kwargs) + "\n"

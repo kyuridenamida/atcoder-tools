@@ -34,7 +34,7 @@ class ProgramArgs:
             lang: Optional[str] = None,
             compile_before_testing: Optional[bool] = None,
             compile_only_when_diff_detected: Optional[bool] = None
-    ):
+    ) -> None:
         self.template = template
         self.workspace = workspace
         self.without_login = without_login
@@ -45,7 +45,7 @@ class ProgramArgs:
         self.compile_only_when_diff_detected = compile_only_when_diff_detected
 
     @classmethod
-    def load(cls, program_args: argparse.Namespace):
+    def load(cls, program_args: argparse.Namespace) -> "ProgramArgs":
         return ProgramArgs(
             **{k: v for k, v in program_args.__dict__.items() if k in (
                 "template",
@@ -59,7 +59,7 @@ class ProgramArgs:
             )})
 
 
-def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
+def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]) -> Dict[str, Any]:
     return {
         **target_dic,
         **dict((k, v) for k, v in update_dic.items() if v is not None)
@@ -73,14 +73,14 @@ class Config:
                  postprocess_config: Optional[PostprocessConfig] = None,
                  etc_config: Optional[EtcConfig] = None,
                  run_config: Optional[RunConfig] = None
-                 ):
+                 ) -> None:
         self.code_style_config = code_style_config if code_style_config is not None else CodeStyleConfig()
         self.postprocess_config = postprocess_config if postprocess_config is not None else PostprocessConfig()
         self.etc_config = etc_config if etc_config is not None else EtcConfig()
         self.run_config = run_config if run_config is not None else RunConfig()
 
     @classmethod
-    def load(cls, fp: TextIO, args: Optional[ProgramArgs] = None):
+    def load(cls, fp: TextIO, args: Optional[ProgramArgs] = None) -> "Config":
         """
         :param fp: .toml file's file pointer
         :param args: command line arguments
@@ -155,7 +155,7 @@ USER_CONFIG_PATH = os.path.join(
     expanduser("~"), ".atcodertools.toml")
 
 
-def get_config(args: argparse.Namespace, language: Language = None) -> Config:
+def get_config(args: argparse.Namespace, language: Optional[Language] = None) -> Config:
     def _load(path: str) -> Config:
         logger.info("Going to load {} as config".format(path))
         with open(path, 'r') as f:

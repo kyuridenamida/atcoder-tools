@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from bs4 import BeautifulSoup
 
@@ -10,12 +11,12 @@ SUBMISSION_URL_RE = re.compile(
 
 class Submission:
 
-    def __init__(self, problem_id: str, submission_id: int):
+    def __init__(self, problem_id: str, submission_id: int) -> None:
         self.problem_id = problem_id
         self.submission_id = submission_id
 
     @staticmethod
-    def make_submissions_from(html: str):
+    def make_submissions_from(html: str) -> List["Submission"]:
         soup = BeautifulSoup(html, "html.parser")
         text = str(soup)
         submitted_problem_ids = PROB_URL_RE.findall(text)

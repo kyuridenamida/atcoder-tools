@@ -4,11 +4,11 @@ from atcodertools.fmtprediction.models.calculator import CalcNode, EvaluateError
 
 class TestCalculator(unittest.TestCase):
 
-    def test_parse_to_calc_node(self):
+    def test_parse_to_calc_node(self) -> None:
         self.assertEqual("N-(1-1)+1000*N*(N+1)",
                          str(CalcNode.parse("N-(1-1)+1000*N*(N+1)")))
 
-    def test_evaluate(self):
+    def test_evaluate(self) -> None:
         self.assertEqual(1000, CalcNode.parse(
             "N*(1+99)*(N-(1/N))/N").evaluate({"N": 10}))
 
@@ -19,7 +19,7 @@ class TestCalculator(unittest.TestCase):
         except EvaluateError:
             pass
 
-    def test_simplify(self):
+    def test_simplify(self) -> None:
         self.assertEqual("2*N", str(CalcNode.parse("2*N-1+1").simplify()))
         self.assertEqual(
             "2*N", str(CalcNode.parse("2*N-1+1-1+1-0").simplify()))

@@ -1,3 +1,5 @@
+from typing import List
+
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.codegen.code_generators.cpp import CppCodeGenerator
 from atcodertools.codegen.template_engine import render
@@ -9,13 +11,15 @@ from atcodertools.fmtprediction.models.variable import Variable
 # RustCodeGenerator uses part of CppCodeGenerator just for less code clone.
 
 
-def _loop_header(var: Variable, for_second_index: bool):
+def _loop_header(var: Variable, for_second_index: bool) -> str:
     if for_second_index:
         index = var.second_index
         loop_var = "j"
     else:
         index = var.first_index
         loop_var = "i"
+
+    assert index is not None
 
     return "for {loop_var} in 0..({length}) as usize {{".format(
         loop_var=loop_var,
@@ -25,7 +29,8 @@ def _loop_header(var: Variable, for_second_index: bool):
 
 class RustCodeGenerator(CppCodeGenerator):
 
-    def _input_part(self):
+    def _input_part(self) -> str:
+        assert self._format is not None
         lines = ["let con = read_string();",
                  "let mut scanner = Scanner::new(&con);"]
         for pattern in self._format.sequence:
@@ -42,7 +47,7 @@ class RustCodeGenerator(CppCodeGenerator):
         else:
             raise NotImplementedError
 
-    def _get_declaration_type(self, var: Variable):
+    def _get_declaration_type(self, var: Variable) -> str:
         if var.dim_num() == 0:
             template = "{type}"
         elif var.dim_num() == 1:
@@ -54,9 +59,11 @@ class RustCodeGenerator(CppCodeGenerator):
         return template.format(type=self._convert_type(var.type))
 
     def _actual_arguments(self) -> str:
+        assert self._format is not None
         return ", ".join([v.name for v in self._format.all_vars()])
 
-    def _formal_arguments(self):
+    def _formal_arguments(self) -> str:
+        assert self._format is not None
         """
             :return the string form of formal arguments e.g. "N: i64, K: i64, a: Vec<i64>"
         """
@@ -67,28 +74,30 @@ class RustCodeGenerator(CppCodeGenerator):
             for v in self._format.all_vars()
         ])
 
-    def _generate_declaration(self, var: Variable):
+    def _generate_declaration(self, var: Variable) -> str:
         if var.dim_num() == 0:
             constructor = ""
         elif var.dim_num() == 1:
             if var.type == Type.str:
+                assert var.first_index is not None
                 constructor = " = vec![String::new(); ({size}) as usize]".format(
-                    type=self._convert_type(var.type),
                     size=var.first_index.get_length()
                 )
             else:
+                assert var.first_index is not None
                 constructor = " = vec![0{type}; ({size}) as usize]".format(
                     type=self._convert_type(var.type),
                     size=var.first_index.get_length()
                 )
         elif var.dim_num() == 2:
             if var.type == Type.str:
+                assert var.first_index is not None and var.second_index is not None
                 constructor = " = vec![vec![String::new(); ({col_size}) as usize]; ({row_size}) as usize]".format(
-                    type=self._convert_type(var.type),
                     row_size=var.first_index.get_length(),
                     col_size=var.second_index.get_length()
                 )
             else:
+                assert var.first_index is not None and var.second_index is not None
                 constructor = " = vec![vec![0{type}; ({col_size}) as usize]; ({row_size}) as usize]".format(
                     type=self._convert_type(var.type),
                     row_size=var.first_index.get_length(),
@@ -108,7 +117,7 @@ class RustCodeGenerator(CppCodeGenerator):
         name = self._get_var_name(var)
         return '{name} = scanner.next();'.format(name=name)
 
-    def _render_pattern(self, pattern: Pattern):
+    def _render_pattern(self, pattern: Pattern[Variable]) -> List[str]:
         lines = []
         for var in pattern.all_vars():
             lines.append(self._generate_declaration(var))

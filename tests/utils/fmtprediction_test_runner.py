@@ -10,9 +10,10 @@ from atcodertools.fmtprediction.models.format_prediction_result import FormatPre
 
 class Response:
 
-    def __init__(self, result: Optional[FormatPredictionResult], status):
+    def __init__(self, result: Optional[FormatPredictionResult], status: str) -> None:
         self.status = status
         if result:
+            assert result.format is not None
             self.original_result = result
             self.simple_format = result.format
             var_info = [(var.name, var.type)
@@ -25,10 +26,10 @@ FORMAT_FILE_NAME = "format.txt"
 
 class FormatPredictionTestRunner:
 
-    def __init__(self, test_dir):
+    def __init__(self, test_dir: str) -> None:
         self.test_dir = test_dir
 
-    def is_valid_case(self, case_name):
+    def is_valid_case(self, case_name: str) -> bool:
         return os.path.isdir(self._get_test_case_dir(case_name))
 
     def load_problem_content(self, case_name: str) -> ProblemContent:
@@ -43,7 +44,7 @@ class FormatPredictionTestRunner:
         examples = []
         for ex_file in example_files:
             with open(ex_file, 'r', encoding="utf-8") as f:
-                examples.append(Sample(f.read(), None))
+                examples.append(Sample(f.read(), ""))
 
         return ProblemContent(input_format, examples)
 
@@ -58,5 +59,5 @@ class FormatPredictionTestRunner:
         except NoPredictionResultError:
             return Response(None, "No result")
 
-    def _get_test_case_dir(self, case_name):
+    def _get_test_case_dir(self, case_name: str) -> str:
         return os.path.join(self.test_dir, case_name)

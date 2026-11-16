@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import argparse
+from typing import List
 
 from atcodertools.common.judgetype import MultiSolutionJudge, InteractiveJudge
 from atcodertools.executils.run_command import run_command_with_returncode
@@ -28,8 +29,9 @@ def _compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str,
         raise BadStatusCodeException
 
 
-def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=False) -> None:
+def compile_main_and_judge_programs(metadata: Metadata, cwd: str="./", force_compile: bool=False) -> None:
     lang = metadata.lang
+    assert lang is not None
     print("[Main Program]")
     compile_cmd = lang.get_compile_command('main')
     code_filename = lang.get_code_filename('main')
@@ -54,7 +56,7 @@ def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=
             raise e
 
 
-def main(prog, args):
+def main(prog: str, args: List[str]) -> None:
     parser = argparse.ArgumentParser(
         prog=prog,
         usage="Compile your program in the current directory (no argument)",

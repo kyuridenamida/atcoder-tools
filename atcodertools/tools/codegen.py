@@ -5,7 +5,7 @@ import posixpath
 import re
 import sys
 import urllib
-from io import IOBase
+from typing import List, TextIO
 
 from colorama import Fore
 
@@ -65,17 +65,17 @@ def get_problem_from_url(problem_url: str) -> Problem:
 def generate_code(atcoder_client: AtCoderClient,
                   problem_url: str,
                   config: Config,
-                  output_file: IOBase):
+                  output_file: TextIO) -> None:
     problem = get_problem_from_url(problem_url)
     template_code_path = config.code_style_config.template_file
 
-    def emit_error(text):
+    def emit_error(text: str) -> None:
         logger.error(with_color(text, Fore.RED))
 
-    def emit_warning(text):
+    def emit_warning(text: str) -> None:
         logger.warning(text)
 
-    def emit_info(text):
+    def emit_info(text: str) -> None:
         logger.info(text)
 
     emit_info('{} is used for template'.format(template_code_path))
@@ -102,6 +102,7 @@ def generate_code(atcoder_client: AtCoderClient,
             msg = "Too many prediction -- Failed to understand the input format"
         emit_warning(with_color(msg, Fore.LIGHTRED_EX))
 
+    assert content.original_html is not None
     constants = predict_constants(content.original_html)
     code_generator = config.code_style_config.code_generator
     with open(template_code_path, "r") as f:
@@ -118,7 +119,7 @@ def generate_code(atcoder_client: AtCoderClient,
         )))
 
 
-def main(prog, args, output_file=sys.stdout):
+def main(prog: str, args: List[str], output_file: TextIO=sys.stdout) -> None:
     parser = argparse.ArgumentParser(
         prog=prog,
         formatter_class=argparse.RawTextHelpFormatter)
@@ -155,11 +156,11 @@ def main(prog, args, output_file=sys.stdout):
                                 get_default_config_path()))
                         )
 
-    args = parser.parse_args(args)
+    parsed_args = parser.parse_args(args)
 
-    args.workspace = DEFAULT_WORKSPACE_DIR_PATH  # dummy for get_config()
-    args.parallel = False  # dummy for get_config()
-    config = get_config(args)
+    parsed_args.workspace = DEFAULT_WORKSPACE_DIR_PATH  # dummy for get_config()
+    parsed_args.parallel = False  # dummy for get_config()
+    config = get_config(parsed_args)
 
     client = AtCoderClient()
     if not config.etc_config.download_without_login:
@@ -175,7 +176,7 @@ def main(prog, args, output_file=sys.stdout):
         logger.info("Downloading data without login.")
 
     generate_code(client,
-                  args.url,
+                  parsed_args.url,
                   config,
                   output_file=output_file)
 

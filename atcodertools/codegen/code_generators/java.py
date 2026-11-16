@@ -19,7 +19,7 @@ class JavaCodeGenerator(CppCodeGenerator):
         else:
             raise NotImplementedError
 
-    def _get_declaration_type(self, var: Variable):
+    def _get_declaration_type(self, var: Variable) -> str:
         if var.dim_num() == 0:
             template = "{type}"
         elif var.dim_num() == 1:
@@ -31,17 +31,20 @@ class JavaCodeGenerator(CppCodeGenerator):
         return template.format(type=self._convert_type(var.type))
 
     def _actual_arguments(self) -> str:
+        assert self._format is not None
         return ", ".join([v.name for v in self._format.all_vars()])
 
-    def _generate_declaration(self, var: Variable):
+    def _generate_declaration(self, var: Variable) -> str:
         if var.dim_num() == 0:
             constructor = ""
         elif var.dim_num() == 1:
+            assert var.first_index is not None
             constructor = " = new {type}[(int)({size})]".format(
                 type=self._convert_type(var.type),
                 size=var.first_index.get_length()
             )
         elif var.dim_num() == 2:
+            assert var.first_index is not None and var.second_index is not None
             constructor = " = new {type}[(int)({row_size})][(int)({col_size})]".format(
                 type=self._convert_type(var.type),
                 row_size=var.first_index.get_length(),
@@ -68,7 +71,7 @@ class JavaCodeGenerator(CppCodeGenerator):
         else:
             raise NotImplementedError
 
-    def _indent(self, depth):
+    def _indent(self, depth: int) -> str:
         return "    " * (depth + 1)
 
 

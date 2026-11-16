@@ -14,7 +14,7 @@ from atcodertools.fmtprediction.models.type import Type
 from atcodertools.fmtprediction.models.variable import Variable
 
 
-def _loop_header(var: Variable, for_second_index: bool):
+def _loop_header(var: Variable, for_second_index: bool) -> str:
     if for_second_index:
         index = var.second_index
         loop_var = "j"
@@ -22,12 +22,14 @@ def _loop_header(var: Variable, for_second_index: bool):
         index = var.first_index
         loop_var = "i"
 
+    assert index is not None
+
     return "for {loop_var} in range({length}):".format(
         loop_var=loop_var,
         length=_insert_space_around_operators(index.get_length()))
 
 
-def _insert_space_around_operators(code):
+def _insert_space_around_operators(code: object) -> str:
     code = str(code)
     precode = code
     pattern = r"([0-9a-zA-Z_])([+\-\*/])([0-9a-zA-Z_])"
@@ -42,7 +44,7 @@ class Python3CodeGenerator:
 
     def __init__(self,
                  format_: Optional[Format[Variable]],
-                 config: CodeStyleConfig):
+                 config: CodeStyleConfig) -> None:
         self._format = format_
         self._config = config
 
@@ -55,7 +57,8 @@ class Python3CodeGenerator:
                     input_part=self._input_part(),
                     prediction_success=True)
 
-    def _input_part(self):
+    def _input_part(self) -> str:
+        assert self._format is not None
         lines = []
         for pattern in self._format.sequence:
             lines += self._render_pattern(pattern)
@@ -71,7 +74,7 @@ class Python3CodeGenerator:
         else:
             raise NotImplementedError
 
-    def _get_declaration_type(self, var: Variable):
+    def _get_declaration_type(self, var: Variable) -> str:
         ctype = self._convert_type(var.type)
         for _ in range(var.dim_num()):
             ctype = "List[{}]".format(ctype)
@@ -80,12 +83,14 @@ class Python3CodeGenerator:
         return ctype
 
     def _actual_arguments(self) -> str:
+        assert self._format is not None
         """
             :return the string form of actual arguments e.g. "N, K, a"
         """
         return ", ".join([v.name for v in self._format.all_vars()])
 
-    def _formal_arguments(self):
+    def _formal_arguments(self) -> str:
+        assert self._format is not None
         """
             :return the string form of formal arguments e.g. "N: int, K: int, a: List[int]"
         """
@@ -96,15 +101,17 @@ class Python3CodeGenerator:
             for v in self._format.all_vars()
         ])
 
-    def _generate_declaration(self, var: Variable):
+    def _generate_declaration(self, var: Variable) -> str:
         """
         :return: Create declaration part E.g. array[1..n] -> array = [int()] * (n-1+1)  # type: List[int]
         """
         if var.dim_num() == 0:
             dims = []
         elif var.dim_num() == 1:
+            assert var.first_index is not None
             dims = [var.first_index.get_length()]
         elif var.dim_num() == 2:
+            assert var.first_index is not None and var.second_index is not None
             dims = [var.first_index.get_length(),
                     var.second_index.get_length()]
         else:
@@ -140,7 +147,7 @@ class Python3CodeGenerator:
         else:
             raise NotImplementedError
 
-    def _input_code_for_single_pattern(self, pattern: Pattern) -> str:
+    def _input_code_for_single_pattern(self, pattern: Pattern[Variable]) -> str:
         assert len(pattern.all_vars()) == 1
         var = pattern.all_vars()[0]
 
@@ -148,11 +155,13 @@ class Python3CodeGenerator:
             input_ = self._input_code_for_token(var.type)
 
         elif isinstance(pattern, ParallelPattern):
+            assert var.first_index is not None
             input_ = "[{input_} for _ in range({length})]".format(
                 input_=self._input_code_for_token(var.type),
                 length=_insert_space_around_operators(var.first_index.get_length()))
 
         elif isinstance(pattern, TwoDimensionalPattern):
+            assert var.first_index is not None and var.second_index is not None
             input_ = "[[{input_} for _ in range({second_length})] for _ in range({first_length})]".format(
                 input_=self._input_code_for_token(var.type),
                 first_length=_insert_space_around_operators(
@@ -169,7 +178,7 @@ class Python3CodeGenerator:
             type_=self._get_declaration_type(var))
 
     @staticmethod
-    def _get_var_name(var: Variable):
+    def _get_var_name(var: Variable) -> str:
         name = var.name
         if var.dim_num() >= 1:
             name += "[i]"
@@ -177,7 +186,7 @@ class Python3CodeGenerator:
             name += "[j]"
         return name
 
-    def _input_code_for_non_single_pattern(self, pattern: Pattern) -> List[str]:
+    def _input_code_for_non_single_pattern(self, pattern: Pattern[Variable]) -> List[str]:
         lines = []
         for var in pattern.all_vars():
             lines.append(self._generate_declaration(var))
@@ -208,13 +217,13 @@ class Python3CodeGenerator:
             raise NotImplementedError
         return lines
 
-    def _render_pattern(self, pattern: Pattern):
+    def _render_pattern(self, pattern: Pattern[Variable]) -> List[str]:
         if len(pattern.all_vars()) == 1:
             return [self._input_code_for_single_pattern(pattern)]
         else:
             return self._input_code_for_non_single_pattern(pattern)
 
-    def _indent(self, depth):
+    def _indent(self, depth: int) -> str:
         return self._config.indent(depth)
 
 

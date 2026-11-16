@@ -7,11 +7,11 @@ from atcodertools.fmtprediction.models.variable import Variable, SimpleVariable
 
 class FormatPredictionResult:
 
-    def __init__(self, format_: Optional[Format[Variable]] = None):
+    def __init__(self, format_: Optional[Format[Variable]] = None) -> None:
         self.format = format_
 
     @classmethod
-    def create_typed_format(cls, simple_format: Format[SimpleVariable], var_to_type: Dict[str, Type]):
+    def create_typed_format(cls, simple_format: Format[SimpleVariable], var_to_type: Dict[str, Type]) -> "FormatPredictionResult":
         var_to_info = {}
         for var in simple_format.all_vars():
             assert var.name not in var_to_info
@@ -30,5 +30,5 @@ class FormatPredictionResult:
         return FormatPredictionResult(fmt)
 
     @classmethod
-    def empty_result(cls):
+    def empty_result(cls) -> "FormatPredictionResult":
         return FormatPredictionResult()

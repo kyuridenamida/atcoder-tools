@@ -13,7 +13,7 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 class TestVersionCheck(unittest.TestCase):
 
     @pytest.mark.network
-    def test_get_latest_version_with_no_error(self):
+    def test_get_latest_version_with_no_error(self) -> None:
         get_latest_version(use_cache=False)
 
 
