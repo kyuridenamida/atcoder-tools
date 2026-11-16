@@ -232,43 +232,52 @@ def run_interactive_program(
         main_thread.join()
         judge_thread.join()
 
-        judge_status = None
-        code: ExecStatus
-        if judge_thread.status == ExecStatus.NORMAL:
-            if main_thread.status != ExecStatus.NORMAL:
-                print("main thread didn't ended normally after judge")
-                code = main_thread.status
-            else:
-                code = ExecStatus.NORMAL
-                if judge_thread.return_code == 0:
-                    judge_status = JudgeStatus.AC
-                elif judge_thread.return_code == 1:
-                    judge_status = JudgeStatus.WA
+        try:
+            judge_status = None
+            code: ExecStatus
+            if judge_thread.status == ExecStatus.NORMAL:
+                if main_thread.status != ExecStatus.NORMAL:
+                    print("main thread didn't ended normally after judge")
+                    code = main_thread.status
                 else:
-                    message = f"Your judge program exited with invalid return_code: {judge_thread.return_code:d}\n"
-                    raise JudgeError(message)
-        else:
-            if main_thread.status == ExecStatus.RE:
-                code = ExecStatus.RE
-            elif main_thread.status == ExecStatus.TLE:
-                code = ExecStatus.TLE
+                    code = ExecStatus.NORMAL
+                    if judge_thread.return_code == 0:
+                        judge_status = JudgeStatus.AC
+                    elif judge_thread.return_code == 1:
+                        judge_status = JudgeStatus.WA
+                    else:
+                        message = f"Your judge program exited with invalid return_code: {judge_thread.return_code:d}\n"
+                        raise JudgeError(message)
             else:
-                message = "Your judge program may be incorrect\n"
-                message += f"main_thread_code: {main_thread.status.name}\n"
-                message += f"judge_thread_code: {judge_thread.status.name}\n"
-                raise JudgeError(message)
+                if main_thread.status == ExecStatus.RE:
+                    code = ExecStatus.RE
+                elif main_thread.status == ExecStatus.TLE:
+                    code = ExecStatus.TLE
+                else:
+                    message = "Your judge program may be incorrect\n"
+                    message += f"main_thread_code: {main_thread.status.name}\n"
+                    message += f"judge_thread_code: {judge_thread.status.name}\n"
+                    raise JudgeError(message)
 
-        elapsed_sec += time.time()
+            elapsed_sec += time.time()
 
-        assert judge_thread.proc.stderr is not None
-        result = ExecResult(
-            code,
-            judge_thread.proc.stderr.read().decode(),
-            "",
-            elapsed_sec=elapsed_sec,
-            special_judge_status=judge_status,
-        )
-        return result
+            assert judge_thread.proc.stderr is not None
+            result = ExecResult(
+                code,
+                judge_thread.proc.stderr.read().decode(),
+                "",
+                elapsed_sec=elapsed_sec,
+                special_judge_status=judge_status,
+            )
+            return result
+        finally:
+            for t in (main_thread, judge_thread):
+                if t.proc.poll() is None:
+                    t.proc.kill()
+                    t.proc.wait()
+                for pipe in (t.proc.stdin, t.proc.stdout, t.proc.stderr):
+                    if pipe is not None and not pipe.closed:
+                        pipe.close()
     except subprocess.TimeoutExpired as e:
         return ExecResult(ExecStatus.TLE, e.stdout, e.stderr)
     except subprocess.CalledProcessError as e:
