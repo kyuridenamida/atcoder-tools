@@ -1,4 +1,5 @@
 import argparse
+import glob
 import os
 import shutil
 import tempfile
@@ -110,10 +111,17 @@ class TestTester(unittest.TestCase):
         for lang in ALL_LANGUAGES:
             if not toolchain_available(lang.name):
                 continue
-            tested_lang_count += 1
             setter_main("", ["--lang", lang.name, "-d", test_dir])
             metadata = Metadata.load_from(os.path.join(test_dir, "metadata.json"))
             compile_main_and_judge_programs(metadata, force_compile=True, cwd=test_dir)
+            # tester.main without -c/-e discovers the executable by exec bit.
+            # JVM/VM languages (java, cs, python) produce no executable file
+            # and need -c or -e; their compile+run path is covered by
+            # test_codegen's test_default_code_generators_and_templates.
+            excluded = [os.path.join(test_dir, "judge"), os.path.join(test_dir, "judge.exe")]
+            if not any(is_executable_file(f) for f in glob.glob(os.path.join(test_dir, "*")) if f not in excluded):
+                continue
+            tested_lang_count += 1
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main("", ["-d", test_dir, "-n", f"{i:d}", "-j", "normal"]))
         if tested_lang_count == 0:

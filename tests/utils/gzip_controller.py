@@ -10,8 +10,13 @@ class GZipController:
         self.main_dirname = main_dirname
 
     def create_dir(self) -> str:
+        # `filter` kwarg exists on >=3.12 and on security backports
+        # (3.9.17+/3.10.12+/3.11.4+); data_filter is added by the same patch.
         with tarfile.open(self.gzip_file_path, "r") as tf:
-            tf.extractall(self.target_dir)
+            if hasattr(tarfile, "data_filter"):
+                tf.extractall(self.target_dir, filter="data")
+            else:
+                tf.extractall(self.target_dir)
         main_dir_path = os.path.join(self.target_dir, self.main_dirname)
         if os.path.exists(main_dir_path):
             return main_dir_path
