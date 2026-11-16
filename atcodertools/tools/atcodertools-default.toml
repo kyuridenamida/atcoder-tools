@@ -3,7 +3,7 @@ indent_type = 'space' # 'tab' or 'space'
 indent_width = 4
 
 workspace_dir = '~/atcoder-workspace/'
-lang = 'cpp' # 'cpp' or 'java' (Currently)
+lang = 'cpp' # cpp, java, rust, python, nim, d, or cs
 
 ## template_file is a file path to template code
 #template_file=
@@ -23,10 +23,12 @@ lang = 'cpp' # 'cpp' or 'java' (Currently)
 #exec_on_contest_dir=
 
 [cpp.run]
-## compile_command is used by `atcoder-tools compile`.
+## Reserved for future use: these keys are parsed but currently ignored.
+## The actual compile/run commands come from the language definitions.
+## compile_command is intended to be used by `atcoder-tools compile`.
 # compile_command="g++ main.cpp"
 
-## run_command is used by `atcoder-tools test` to execute your program after compilation.
+## run_command is intended to be used by `atcoder-tools test`.
 # run_command="./main"
 
 [etc]

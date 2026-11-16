@@ -1,5 +1,0 @@
-beautifulsoup4
-requests
-colorama
-toml
-jinja2

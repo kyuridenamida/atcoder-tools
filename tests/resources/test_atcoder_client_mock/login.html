@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<!-- minimal fixture reproducing the current atcoder.jp login page structure:
+     the client takes find_all("form")[1] and reads its hidden input as the
+     csrf token, so the login form must be the SECOND form on the page. -->
+<body>
+<form action="/search" method="GET"></form>
+<form method="POST" action="/login">
+    <input type="hidden" name="csrf_token" value="dummy_csrf_token">
+    <input type="text" name="username">
+    <input type="password" name="password">
+</form>
+</body>
+</html>

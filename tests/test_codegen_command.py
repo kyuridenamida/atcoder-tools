@@ -2,38 +2,42 @@ import io
 import os
 import unittest
 
+import pytest
+
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
-from atcodertools.tools.codegen import main, get_problem_from_url
+from atcodertools.tools.codegen import get_problem_from_url, main
 
-RESOURCE_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    "./resources/test_codegen_command/")
+RESOURCE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "./resources/test_codegen_command/")
 TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template_jinja.cpp")
 
 
 class TestCodeGenCommand(unittest.TestCase):
-
-    def test_generate_code(self):
+    @pytest.mark.network
+    def test_generate_code(self) -> None:
         config_path = os.path.join(RESOURCE_DIR, "test_codegen_command.toml")
         answer_file_path = os.path.join(RESOURCE_DIR, "generated_code.cpp")
         f1 = io.StringIO()
 
         main(
             "",
-            ["https://atcoder.jp/contests/abc012/tasks/abc012_4",
-             "--template", TEMPLATE_PATH,
-             "--lang", "cpp",
-             "--without-login",
-             '--config', config_path
-             ],
-            output_file=f1
+            [
+                "https://atcoder.jp/contests/abc012/tasks/abc012_4",
+                "--template",
+                TEMPLATE_PATH,
+                "--lang",
+                "cpp",
+                "--without-login",
+                "--config",
+                config_path,
+            ],
+            output_file=f1,
         )
 
         with open(answer_file_path) as f2:
             self.assertEqual(f1.getvalue(), f2.read())
 
-    def test_url_parser(self):
+    def test_url_parser(self) -> None:
         problem = Problem(Contest("utpc2014"), "Z", "utpc2014_k")
         urls = [
             "http://utpc2014.contest.atcoder.jp/tasks/utpc2014_k",
@@ -47,9 +51,8 @@ class TestCodeGenCommand(unittest.TestCase):
         ]
 
         for url in urls:
-            self.assertEqual(
-                get_problem_from_url(url).to_dict(), problem.to_dict())
+            self.assertEqual(get_problem_from_url(url).to_dict(), problem.to_dict())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

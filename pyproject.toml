@@ -1,0 +1,146 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atcoder-tools"
+dynamic = ["version"]
+description = "Convenient modules & tools for AtCoder users"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "kyuridenamida", email = "tyotyo3@gmail.com" },
+]
+dependencies = [
+    "beautifulsoup4>=4.9",
+    "requests>=2.25",
+    "colorama>=0.4",
+    "toml>=0.10",
+    "jinja2>=3.0",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+    "ruff>=0.4",
+    "mypy>=1.8",
+    "types-requests>=2.25",
+    "types-colorama>=0.4",
+    "types-toml>=0.10",
+]
+
+[project.urls]
+Homepage = "https://github.com/kyuridenamida/atcoder-tools"
+
+[project.scripts]
+atcoder-tools = "atcodertools.atcoder_tools:main"
+
+[tool.setuptools]
+# `find` uses namespace-package discovery (namespaces=true) by default in
+# pyproject.toml, which would pull in `webapp/` (no __init__.py) — restrict to
+# the real package to match the old setup.py find_packages() behavior.
+packages = { find = { include = ["atcodertools*"] } }
+include-package-data = true
+
+[tool.setuptools.package-data]
+atcodertools = [
+    "tools/atcodertools-default.toml",
+    "tools/templates/*",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "atcodertools.release_management.version.__version__" }
+
+# ---------------------------------------------------------------------------
+# Test harness (pytest)
+# ---------------------------------------------------------------------------
+# tests/resources/**/*.py are NOT pytest tests: they are sample programs that
+# the tester executes as subprocesses (they read stdin, some are intentionally
+# wrong). Never collect them.
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = ["tests/resources", "webapp", ".venv"]
+markers = [
+    "network: tests that access the real atcoder.jp over HTTP (slow, rate-limited; skipped unless ATCODERTOOLS_TEST_NETWORK=1)",
+    "requires_cpp: needs a GNU g++ supporting <bits/stdc++.h> on PATH",
+    "requires_java: needs javac + java on PATH",
+    "requires_rust: needs rustc on PATH",
+    "requires_dlang: needs dmd on PATH",
+    "requires_nim: needs nim on PATH",
+    "requires_csharp: needs mcs + mono on PATH",
+]
+addopts = "--strict-markers"
+filterwarnings = [
+    # Warnings become failures so regressions (deprecated APIs, bad escapes)
+    # surface in tests instead of going unnoticed.
+    "error",
+    # The legacy ${} template engine intentionally warns users to migrate;
+    # tests exercising it on purpose must not fail.
+    "ignore:The old template engine with.*:UserWarning",
+    # Test fixtures embed problem statements containing LaTeX-ish escapes.
+    "ignore::SyntaxWarning",
+]
+
+# ---------------------------------------------------------------------------
+# Linter / formatter (ruff)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+extend-exclude = [
+    "tests/resources",
+    "webapp",
+    "atcodertools/tools/templates",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade (keeps old code idioms modernized mechanically)
+    "B",   # flake8-bugbear (catches mutable defaults, etc.)
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501", # line length (formatter handles wrapping decisions)
+]
+
+# ---------------------------------------------------------------------------
+# Type checking (mypy)
+# ---------------------------------------------------------------------------
+[tool.mypy]
+mypy_path = "."
+packages = ["atcodertools", "tests"]
+exclude = "(^tests/resources/|^webapp/|^\\.venv/|^atcodertools/tools/templates/)"
+# mypy no longer supports targeting 3.9; 3.10 is the closest checkable
+# baseline. Runtime support remains >=3.9 (see requires-python).
+python_version = "3.10"
+strict = false
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+strict_equality = true
+warn_return_any = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+check_untyped_defs = true
+implicit_reexport = false
+
+[[tool.mypy.overrides]]
+module = "tests.resources.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "toml"
+ignore_missing_imports = true

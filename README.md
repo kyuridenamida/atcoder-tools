@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/kyuridenamida/atcoder-tools.svg?branch=master)](https://travis-ci.org/kyuridenamida/atcoder-tools)
+[![CI](https://github.com/kyuridenamida/atcoder-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/kyuridenamida/atcoder-tools/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/kyuridenamida/atcoder-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/kyuridenamida/atcoder-tools)
 [![PyPI](https://img.shields.io/pypi/v/atcoder-tools.svg)](https://pypi.python.org/pypi/atcoder-tools)
 
 AtCoder Tools
 ====
-Python 3.5 以降で動作する [AtCoder](http://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
+Python 3.9 以降で動作する [AtCoder](http://atcoder.jp/) からサンプル入力をダウンロードしたりする際に便利なツールです。
 
 このツールには次のような機能があります。
 - AtCoderへのログイン，入出力例データなどの抽出
@@ -275,8 +275,8 @@ optional arguments:
 - `save_no_session_cache=false` ログイン情報のクッキーを保存する
 - `in_example_format="in_{}.txt"` テストケース(input)のフォーマットを`in_1.txt, in_2.txt, ...`とする
 - `out_example_format="out_{}.txt"` テストケース(output)のフォーマットを`out_1.txt, out_2.txt, ...`とする
-- `compile_command="g++ main.cpp -o main.out"` プログラムを`atcoder-tools compile`でコンパイルする場合に実行されるコマンド
-- `run_command="./main.out"` コンパイルしたプログラムを`atcoder-tools test`で実行する場合に実行されるコマンド
+- `compile_command="g++ main.cpp -o main.out"` `[run]` セクション: 予約済みの設定項目ですが、**現在は読み込まれるだけで使用されていません**。実際のコンパイル・実行コマンドは言語定義 (`atcodertools/common/language.py`) で指定されます。
+- `run_command="./main.out"` 同上: 現在は未使用です。
 
 ```toml
 [codestyle]
@@ -387,7 +387,9 @@ int main(){
 
 
 ## Contribution
-気軽にPRを送ってください。
+気軽にPRを送ってください。開発環境のセットアップとチェック手順は [docs/development.md](docs/development.md)、コードの構成は [docs/architecture.md](docs/architecture.md) を参照してください。
+
+なお、`[<lang>.run]` (`run_command`/`compile_command`) の設定項目は現在パースのみ行われ、テストやコンパイル時の実際のコマンドとしては使用されていません（言語定義の `Language.test_command` / `compile_command` が使われます）。これは既知の未実装項目であり、有効化する際は既存ユーザーの挙動が変わるため別途検討が必要です。
 
 ## Licence
 

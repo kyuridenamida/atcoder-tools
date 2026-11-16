@@ -1,7 +1,7 @@
-from colorama import init, Fore
+from colorama import Fore, init
 
 init()
 
 
-def with_color(msg, color):
-    return "{}{}{}".format(color, msg, Fore.RESET)
+def with_color(msg: str, color: str) -> str:
+    return f"{color}{msg}{Fore.RESET}"

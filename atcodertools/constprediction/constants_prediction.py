@@ -1,10 +1,10 @@
 import re
-from typing import Tuple, Optional
+from typing import Optional
 
 from bs4 import BeautifulSoup
 
-from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
-from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, InteractiveJudge, Judge
+from atcodertools.client.models.problem_content import InputFormatDetectionError, ProblemContent, SampleDetectionError
+from atcodertools.common.judgetype import DecimalJudge, ErrorType, InteractiveJudge, Judge, NormalJudge
 from atcodertools.common.logging import logger
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 
@@ -14,14 +14,12 @@ class YesNoPredictionFailedError(Exception):
 
 
 class MultipleModCandidatesError(Exception):
-
-    def __init__(self, cands):
+    def __init__(self, cands: set[int]) -> None:
         self.cands = cands
 
 
 class MultipleDecimalCandidatesError(Exception):
-
-    def __init__(self, cands):
+    def __init__(self, cands: set[int]) -> None:
         self.cands = cands
 
 
@@ -30,38 +28,34 @@ DECIMAL_ANCHORS = ["誤差", " error "]
 MULTISOLUTION_ANCHORS = ["複数ある場合", "どれを出力しても構わない"]
 INTERACTIVE_ANCHORS = ["インタラクティブ", "リアクティブ", "interactive", "reactive"]
 
-MOD_STRATEGY_RE_LIST = [
-    re.compile("([0-9]+).?.?.?で割った"),
-    re.compile("modu?l?o?[^0-9]?[^0-9]?[^0-9]?([0-9]+)")
-]
+MOD_STRATEGY_RE_LIST = [re.compile("([0-9]+).?.?.?で割った"), re.compile("modu?l?o?[^0-9]?[^0-9]?[^0-9]?([0-9]+)")]
 
-DECIMAL_STRATEGY_RE_LIST_KEYWORD = [
-    re.compile("(?:絶対|相対)誤差"),
-    re.compile("(?:absolute|relative)")
-]
+DECIMAL_STRATEGY_RE_LIST_KEYWORD = [re.compile("(?:絶対|相対)誤差"), re.compile("(?:absolute|relative)")]
 DECIMAL_STRATEGY_RE_LIST_VAL = [
-    re.compile("10\^(-[0-9]+)"),
+    re.compile(r"10\^(-[0-9]+)"),
 ]
 
 
-def is_mod_context(sentence):
-    for kw in MOD_ANCHORS:
-        if kw in sentence:
-            return True
-    return False
+def is_mod_context(sentence: str) -> bool:
+    return any(kw in sentence for kw in MOD_ANCHORS)
 
 
-def is_decimal_context(sentence):
-    for kw in DECIMAL_ANCHORS:
-        if kw in sentence:
-            return True
-    return False
+def is_decimal_context(sentence: str) -> bool:
+    return any(kw in sentence for kw in DECIMAL_ANCHORS)
 
 
 def predict_modulo(html: str) -> Optional[int]:
-    def normalize(sentence):
-        return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
-            "10^9+7", "1000000007").lower().strip()
+    def normalize(sentence: str) -> str:
+        return (
+            sentence.replace("\\", "")
+            .replace("{", "")
+            .replace("}", "")
+            .replace(",", "")
+            .replace(" ", "")
+            .replace("10^9+7", "1000000007")
+            .lower()
+            .strip()
+        )
 
     soup = BeautifulSoup(html, "html.parser")
     sentences = soup.get_text().split("\n")
@@ -85,14 +79,16 @@ def predict_modulo(html: str) -> Optional[int]:
     raise MultipleModCandidatesError(mod_cands)
 
 
-def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
+def predict_yes_no(html: str) -> tuple[Optional[str], Optional[str]]:
     try:
         outputs = set()
-        for sample in ProblemContent.from_html(html).get_samples():
+        samples = ProblemContent.from_html(html).get_samples()
+        assert samples is not None
+        for sample in samples:
             for x in sample.get_output().split("\n"):
                 outputs.add(x.strip())
     except (InputFormatDetectionError, SampleDetectionError) as e:
-        raise YesNoPredictionFailedError(e)
+        raise YesNoPredictionFailedError(e) from e
 
     yes_kws = ["yes", "possible"]
     no_kws = ["no", "impossible"]
@@ -109,9 +105,17 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
 
 
 def predict_judge_method(html: str) -> Judge:
-    def normalize(sentence):
-        return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
-            "−", "-").lower().strip()
+    def normalize(sentence: str) -> str:
+        return (
+            sentence.replace("\\", "")
+            .replace("{", "")
+            .replace("}", "")
+            .replace(",", "")
+            .replace(" ", "")
+            .replace("−", "-")
+            .lower()
+            .strip()
+        )
 
     soup = BeautifulSoup(html, "html.parser")
     sentences = soup.get_text().split("\n")
@@ -126,8 +130,7 @@ def predict_judge_method(html: str) -> Judge:
     if len(interactive_sentences) > 0:
         return InteractiveJudge()
 
-    decimal_sentences = [normalize(s)
-                         for s in sentences if is_decimal_context(s)]
+    decimal_sentences = [normalize(s) for s in sentences if is_decimal_context(s)]
 
     decimal_keyword_cands = set()
     decimal_val_cands = set()
@@ -163,7 +166,7 @@ def predict_judge_method(html: str) -> Judge:
                 assert is_relative
                 error_type = ErrorType.Relative
 
-            return DecimalJudge(error_type, 10.0**(int(list(decimal_val_cands)[0])))
+            return DecimalJudge(error_type, 10.0 ** (int(list(decimal_val_cands)[0])))
 
         raise MultipleDecimalCandidatesError(decimal_val_cands)
 
@@ -179,15 +182,13 @@ def predict_constants(html: str) -> ProblemConstantSet:
     try:
         mod = predict_modulo(html)
     except MultipleModCandidatesError as e:
-        logger.warning("Modulo prediction failed -- "
-                       "two or more candidates {} are detected as modulo values".format(e.cands))
+        logger.warning(f"Modulo prediction failed -- two or more candidates {e.cands} are detected as modulo values")
         mod = None
 
     try:
         judge = predict_judge_method(html)
-    except MultipleModCandidatesError as e:
-        logger.warning("decimal prediction failed -- "
-                       "two or more candidates {} are detected as decimal values".format(e.cands))
+    except MultipleDecimalCandidatesError as e:
+        logger.warning(f"decimal prediction failed -- two or more candidates {e.cands} are detected as decimal values")
         judge = NormalJudge()
 
     return ProblemConstantSet(mod=mod, yes_str=yes_str, no_str=no_str, judge_method=judge)

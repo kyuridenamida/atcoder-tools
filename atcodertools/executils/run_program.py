@@ -1,13 +1,11 @@
 import subprocess
+import tempfile
+import threading
 import time
 from enum import Enum
-import threading
-from typing import Optional
+from typing import Any, Optional, Union
 
-from atcodertools.common.judgetype import Judge, MultiSolutionJudge, InteractiveJudge, DecimalJudge, \
-    NormalJudge
-import tempfile
-
+from atcodertools.common.judgetype import DecimalJudge, InteractiveJudge, Judge, MultiSolutionJudge, NormalJudge
 from atcodertools.common.language import Language
 
 
@@ -28,40 +26,48 @@ class UnknownJudgeError(Exception):
 
 
 class JudgeError(Exception):
-    def __init__(self, stdout: str = "", stderr: str = ""):
+    def __init__(self, stdout: str = "", stderr: str = "") -> None:
         self.stdout = stdout
         self.stderr = stderr
 
 
+def _to_str(value: Optional[Union[str, bytes]]) -> Optional[str]:
+    if value is None or isinstance(value, str):
+        return value
+    return value.decode()
+
+
 class ExecResult:
     def __init__(
-            self,
-            status: ExecStatus, output: str = None,
-            stderr: str = None,
-            elapsed_sec: float = None,
-            special_judge_status: JudgeStatus = None,
-            judge_message: str = None
-    ):
+        self,
+        status: ExecStatus,
+        output: Optional[Union[str, bytes]] = None,
+        stderr: Optional[Union[str, bytes]] = None,
+        elapsed_sec: Optional[float] = None,
+        special_judge_status: Optional[JudgeStatus] = None,
+        judge_message: Optional[Union[str, bytes]] = None,
+    ) -> None:
         self.status = status
-        self.output = output
-        self.stderr = stderr
+        self.output = _to_str(output)
+        self.stderr = _to_str(stderr)
         self.special_judge_status = special_judge_status
-        self.judge_message = judge_message
+        self.judge_message = _to_str(judge_message)
 
+        self.elapsed_ms: Optional[int]
         if elapsed_sec is not None:
             self.elapsed_ms = int(elapsed_sec * 1000 + 0.5)
         else:
             self.elapsed_ms = None
 
     def is_correct_output(
-            self,
-            expected_answer_text: Optional[str] = None,
-            judge_method: Optional[Judge] = None,
-            sample_input_file: Optional[str] = None,
-            sample_output_file: Optional[str] = None,
-            cwd: Optional[str] = None,
-            judge_program_language: Optional[Language] = None
-    ):
+        self,
+        expected_answer_text: Optional[str] = None,
+        judge_method: Optional[Judge] = None,
+        sample_input_file: Optional[str] = None,
+        sample_output_file: Optional[str] = None,
+        cwd: Optional[str] = None,
+        judge_program_language: Optional[Language] = None,
+    ) -> bool:
         if self.status != ExecStatus.NORMAL:
             return False
 
@@ -69,46 +75,53 @@ class ExecResult:
             return self.special_judge_status == JudgeStatus.AC
 
         if isinstance(judge_method, MultiSolutionJudge):
+            assert judge_program_language is not None
+            assert sample_input_file is not None and sample_output_file is not None
             judge_exec_res = run_multisolution_judge_program(
-                judge_program_language.get_test_command('judge', cwd),
-                self.output,
+                judge_program_language.get_test_command("judge", cwd or "."),
+                self.output or "",
                 sample_input_file,
-                sample_output_file
+                sample_output_file,
             )
             self.judge_message = judge_exec_res.stderr
             return judge_exec_res.special_judge_status == JudgeStatus.AC
         elif isinstance(judge_method, InteractiveJudge):
             raise UnknownJudgeError("No judge status error for interactive!!")
-        elif isinstance(judge_method, DecimalJudge):
-            return judge_method.verify(self.output, expected_answer_text)
-        elif isinstance(judge_method, NormalJudge):
+        elif isinstance(judge_method, (DecimalJudge, NormalJudge)):
+            if self.output is None or expected_answer_text is None:
+                return False
             return judge_method.verify(self.output, expected_answer_text)
         else:
             raise NotImplementedError
 
-    def has_stderr(self):
+    def has_stderr(self) -> bool:
         if self.stderr is None:
             return False
         return len(self.stderr) > 0
 
 
-def run_program(exec_cmd: str, input_file: str, timeout_sec: int, args=None,
-                current_working_dir: str = None) -> ExecResult:
+def run_program(
+    exec_cmd: str,
+    input_file: str,
+    timeout_sec: int,
+    args: Optional[list[str]] = None,
+    current_working_dir: Optional[str] = None,
+) -> ExecResult:
     if args is None:
         args = []
     try:
         elapsed_sec = -time.time()
-        proc = subprocess.run(
-            exec_cmd.split() + args, stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=current_working_dir
-        )
+        with open(input_file) as input_stream:
+            proc = subprocess.run(
+                exec_cmd.split() + args,
+                stdin=input_stream,
+                text=True,
+                timeout=timeout_sec,
+                capture_output=True,
+                cwd=current_working_dir,
+            )
 
-        if proc.returncode == 0:
-            code = ExecStatus.NORMAL
-        else:
-            code = ExecStatus.RE
+        code = ExecStatus.NORMAL if proc.returncode == 0 else ExecStatus.RE
 
         elapsed_sec += time.time()
         return ExecResult(code, proc.stdout, proc.stderr, elapsed_sec=elapsed_sec)
@@ -118,21 +131,27 @@ def run_program(exec_cmd: str, input_file: str, timeout_sec: int, args=None,
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
 
 
-def run_multisolution_judge_program(judge_cmd: str, output: str, sample_input_file: str, sample_output_file: str,
-                                    args=None, current_working_dir: str = None) -> ExecResult:
+def run_multisolution_judge_program(
+    judge_cmd: str,
+    output: str,
+    sample_input_file: str,
+    sample_output_file: str,
+    args: Optional[list[str]] = None,
+    current_working_dir: Optional[str] = None,
+) -> ExecResult:
     if args is None:
         args = []
     try:
-        tf = tempfile.TemporaryFile()
-        tf.write(output.encode())
-        tf.seek(0)
-        proc = subprocess.run(
-            judge_cmd.split() + [sample_input_file, sample_output_file] + args,
-            stdin=tf, universal_newlines=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=current_working_dir
-        )
+        with tempfile.TemporaryFile() as tf:
+            tf.write(output.encode())
+            tf.seek(0)
+            proc = subprocess.run(
+                judge_cmd.split() + [sample_input_file, sample_output_file] + args,
+                stdin=tf,
+                text=True,
+                capture_output=True,
+                cwd=current_working_dir,
+            )
 
         code = ExecStatus.NORMAL
 
@@ -149,35 +168,44 @@ def run_multisolution_judge_program(judge_cmd: str, output: str, sample_input_fi
         return ExecResult(ExecStatus.RE, e.stdout, e.stderr)
 
 
-def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: str,
-                            output_file: str, timeout_sec: int, args=None,
-                            current_working_dir: str = None) -> ExecResult:
+def run_interactive_program(
+    exec_file: str,
+    exec_judge_file: str,
+    input_file: str,
+    output_file: str,
+    timeout_sec: int,
+    args: Optional[list[str]] = None,
+    current_working_dir: Optional[str] = None,
+) -> ExecResult:
     if args is None:
         args = []
     try:
         elapsed_sec = -time.time()
 
         class RunThread(threading.Thread):
-            def __init__(self, cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                         input_file=None, timeout_sec=None):
+            def __init__(
+                self,
+                cmd: list[str],
+                stdin: Any = subprocess.PIPE,
+                stdout: Any = subprocess.PIPE,
+                stderr: Any = subprocess.PIPE,
+                input_file: Optional[str] = None,
+                timeout_sec: Optional[int] = None,
+            ) -> None:
                 threading.Thread.__init__(self)
-                self.proc = subprocess.Popen(cmd + args,
-                                             stdin=stdin,
-                                             stdout=stdout,
-                                             stderr=stderr,
-                                             cwd=current_working_dir
-                                             )
+                self.proc = subprocess.Popen(
+                    cmd + (args or []), stdin=stdin, stdout=stdout, stderr=stderr, cwd=current_working_dir
+                )
                 self.timeout_sec = timeout_sec
                 self.input_file = input_file
 
-            def __exit__(self, type, value, traceback):
+            def __exit__(self, type: Any, value: Any, traceback: Any) -> None:
                 self.close()
 
-            def run(self):
+            def run(self) -> None:
                 try:
                     if self.timeout_sec is not None:
-                        self.return_code = self.proc.wait(
-                            timeout=self.timeout_sec)
+                        self.return_code = self.proc.wait(timeout=self.timeout_sec)
                     else:
                         self.return_code = self.proc.wait()
                     self.status = ExecStatus.NORMAL
@@ -186,15 +214,17 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
                 except subprocess.TimeoutExpired:
                     self.status = ExecStatus.TLE
 
-            def close(self):
+            def close(self) -> None:
+                assert self.proc.stdin is not None
                 self.proc.stdin.close()
 
-        main_thread = RunThread(
-            [exec_file], input_file=input_file, timeout_sec=timeout_sec)
-        judge_thread = RunThread(exec_judge_file.split() + [input_file, output_file],
-                                 stdin=main_thread.proc.stdout,
-                                 stdout=main_thread.proc.stdin,
-                                 timeout_sec=timeout_sec + 1)
+        main_thread = RunThread([exec_file], input_file=input_file, timeout_sec=timeout_sec)
+        judge_thread = RunThread(
+            exec_judge_file.split() + [input_file, output_file],
+            stdin=main_thread.proc.stdout,
+            stdout=main_thread.proc.stdin,
+            timeout_sec=timeout_sec + 1,
+        )
 
         main_thread.start()
         judge_thread.start()
@@ -202,39 +232,52 @@ def run_interactive_program(exec_file: str, exec_judge_file: str, input_file: st
         main_thread.join()
         judge_thread.join()
 
-        judge_status = None
-        if judge_thread.status == ExecStatus.NORMAL:
-            if main_thread.status != ExecStatus.NORMAL:
-                print("main thread didn't ended normally after judge")
-                code = main_thread.status
-            else:
-                code = ExecStatus.NORMAL
-                if judge_thread.return_code == 0:
-                    judge_status = JudgeStatus.AC
-                elif judge_thread.return_code == 1:
-                    judge_status = JudgeStatus.WA
+        try:
+            judge_status = None
+            code: ExecStatus
+            if judge_thread.status == ExecStatus.NORMAL:
+                if main_thread.status != ExecStatus.NORMAL:
+                    print("main thread didn't ended normally after judge")
+                    code = main_thread.status
                 else:
-                    message = "Your judge program exited with invalid return_code: {:d}\n".format(
-                        judge_thread.return_code)
-                    raise JudgeError(message)
-        else:
-            if main_thread.status == ExecStatus.RE:
-                code = ExecStatus.RE
-            elif main_thread.status == ExecStatus.TLE:
-                code = ExecStatus.TLE
+                    code = ExecStatus.NORMAL
+                    if judge_thread.return_code == 0:
+                        judge_status = JudgeStatus.AC
+                    elif judge_thread.return_code == 1:
+                        judge_status = JudgeStatus.WA
+                    else:
+                        message = f"Your judge program exited with invalid return_code: {judge_thread.return_code:d}\n"
+                        raise JudgeError(message)
             else:
-                message = "Your judge program may be incorrect\n"
-                message += "main_thread_code: {:d}\n".format(
-                    main_thread.status)
-                message += "judge_thread_code: {:d}\n".format(
-                    judge_thread.status)
-                raise JudgeError(message)
+                if main_thread.status == ExecStatus.RE:
+                    code = ExecStatus.RE
+                elif main_thread.status == ExecStatus.TLE:
+                    code = ExecStatus.TLE
+                else:
+                    message = "Your judge program may be incorrect\n"
+                    message += f"main_thread_code: {main_thread.status.name}\n"
+                    message += f"judge_thread_code: {judge_thread.status.name}\n"
+                    raise JudgeError(message)
 
-        elapsed_sec += time.time()
+            elapsed_sec += time.time()
 
-        result = ExecResult(code, judge_thread.proc.stderr.read().decode(), "",
-                            elapsed_sec=elapsed_sec, special_judge_status=judge_status)
-        return result
+            assert judge_thread.proc.stderr is not None
+            result = ExecResult(
+                code,
+                judge_thread.proc.stderr.read().decode(),
+                "",
+                elapsed_sec=elapsed_sec,
+                special_judge_status=judge_status,
+            )
+            return result
+        finally:
+            for t in (main_thread, judge_thread):
+                if t.proc.poll() is None:
+                    t.proc.kill()
+                    t.proc.wait()
+                for pipe in (t.proc.stdin, t.proc.stdout, t.proc.stderr):
+                    if pipe is not None and not pipe.closed:
+                        pipe.close()
     except subprocess.TimeoutExpired as e:
         return ExecResult(ExecStatus.TLE, e.stdout, e.stderr)
     except subprocess.CalledProcessError as e:

@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 import argparse
-
-from atcodertools.common.judgetype import MultiSolutionJudge, InteractiveJudge
-from atcodertools.executils.run_command import run_command_with_returncode
-from atcodertools.tools.models.metadata import Metadata
 import os
 import pathlib
+
+from atcodertools.common.judgetype import InteractiveJudge, MultiSolutionJudge
+from atcodertools.executils.run_command import run_command_with_returncode
+from atcodertools.tools.models.metadata import Metadata
 
 
 class BadStatusCodeException(Exception):
@@ -21,44 +21,45 @@ def _compile(code_filename: str, exec_filename: str, compile_cmd: str, cwd: str,
             print("No need to compile")
             return
 
-    print("Compiling... (command: `{}`)".format(compile_cmd))
+    print(f"Compiling... (command: `{compile_cmd}`)")
     code, stdout = run_command_with_returncode(compile_cmd, cwd)
     print(stdout)
     if code != 0:
         raise BadStatusCodeException
 
 
-def compile_main_and_judge_programs(metadata: Metadata, cwd="./", force_compile=False) -> None:
+def compile_main_and_judge_programs(metadata: Metadata, cwd: str = "./", force_compile: bool = False) -> None:
     lang = metadata.lang
+    assert lang is not None
     print("[Main Program]")
-    compile_cmd = lang.get_compile_command('main')
-    code_filename = lang.get_code_filename('main')
-    exec_filename = lang.get_exec_filename('main')
+    compile_cmd = lang.get_compile_command("main")
+    code_filename = lang.get_code_filename("main")
+    exec_filename = lang.get_exec_filename("main")
 
     try:
         _compile(code_filename, exec_filename, compile_cmd, cwd, force_compile)
     except BadStatusCodeException as e:
         raise e
 
-    if isinstance(metadata.judge_method, MultiSolutionJudge) or isinstance(metadata.judge_method, InteractiveJudge):
+    if isinstance(metadata.judge_method, (MultiSolutionJudge, InteractiveJudge)):
         print("[Judge Program]")
         # TODO: Use judge_lang instead of lang
-        compile_cmd = lang.get_compile_command('judge')
-        code_filename = lang.get_code_filename('judge')
-        exec_filename = lang.get_exec_filename('judge')
+        compile_cmd = lang.get_compile_command("judge")
+        code_filename = lang.get_code_filename("judge")
+        exec_filename = lang.get_exec_filename("judge")
 
         try:
-            _compile(code_filename, exec_filename,
-                     compile_cmd, cwd, force_compile)
+            _compile(code_filename, exec_filename, compile_cmd, cwd, force_compile)
         except BadStatusCodeException as e:
             raise e
 
 
-def main(prog, args):
+def main(prog: str, args: list[str]) -> None:
     parser = argparse.ArgumentParser(
         prog=prog,
         usage="Compile your program in the current directory (no argument)",
-        formatter_class=argparse.RawTextHelpFormatter)
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
     parser.parse_args(args)
 
     metadata = Metadata.load_from("./metadata.json")

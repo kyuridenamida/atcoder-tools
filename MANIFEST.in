@@ -1,3 +1,0 @@
-include atcodertools/tools/templates/*
-include requirements.txt
-include atcodertools/tools/atcodertools-default.toml
