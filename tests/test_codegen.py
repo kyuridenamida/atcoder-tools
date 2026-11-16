@@ -21,6 +21,7 @@ from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 from tests.utils.gzip_controller import make_tst_data_controller
+from tests.utils.toolchains import toolchain_available
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -146,7 +147,11 @@ class TestCodeGenerator(unittest.TestCase):
                 load_text_file(_full_path("echo_test_format.txt")),
                 [Sample(load_text_file(_full_path("echo_test_input.txt")), None)]))
 
+        tested_lang_count = 0
         for lang in ALL_LANGUAGES:
+            if not toolchain_available(lang.name):
+                continue
+            tested_lang_count += 1
             expected_default_generated_code_file = _full_path(
                 os.path.join(lang.name, lang.source_code_name("expected_default_generated_code")))
 
@@ -173,6 +178,9 @@ class TestCodeGenerator(unittest.TestCase):
             )
             self.assertEqual(load_text_file(
                 expected_output_file), exec_result.output)
+
+        if tested_lang_count == 0:
+            self.skipTest("no language toolchain available on this machine")
 
     def _compile_command(self, lang: Language, code_file: str):
         if lang == CPP:

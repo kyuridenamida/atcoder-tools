@@ -1,9 +1,8 @@
 class TokenManager:
-    _tokens = []
-    _pos = 0
 
     def __init__(self, tokens):
         self._tokens = tokens
+        self._pos = 0
 
     def peek(self):
         assert not self.is_terminal()

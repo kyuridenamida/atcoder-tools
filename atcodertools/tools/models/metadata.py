@@ -18,13 +18,13 @@ class Metadata:
                  sample_in_pattern: str,
                  sample_out_pattern: str,
                  lang: Optional[Language],
-                 judge_method: Judge = NormalJudge()):
+                 judge_method: Optional[Judge] = None):
         self.problem = problem
         self.code_filename = code_filename
         self.sample_in_pattern = sample_in_pattern
         self.sample_out_pattern = sample_out_pattern
         self.lang = lang
-        self.judge_method = judge_method
+        self.judge_method = judge_method if judge_method is not None else NormalJudge()
 
     def to_dict(self):
         return {

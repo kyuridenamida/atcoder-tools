@@ -12,9 +12,10 @@ from atcodertools.client.models.submission import Submission
 from atcodertools.common.language import Language
 from atcodertools.common.logging import logger
 from atcodertools.fileutils.artifacts_cache import get_cache_file_path
-from atcodertools.client.models.contest import Contest
+from atcodertools.client.models.contest import Contest as Contest
 from atcodertools.client.models.problem import Problem
-from atcodertools.client.models.problem_content import ProblemContent, get_problem_content
+from atcodertools.client.models.problem_content import ProblemContent as ProblemContent
+from atcodertools.client.models.problem_content import get_problem_content as get_problem_content
 
 
 class LoginError(Exception):
@@ -89,7 +90,7 @@ class AtCoderClient(metaclass=Singleton):
 
         username, password = credential_supplier()
 
-        soup = BeautifulSoup(self._session.get("https://atcoder.jp/login").text, "html.parser")
+        soup = BeautifulSoup(self._request("https://atcoder.jp/login").text, "html.parser")
         token = soup.find_all("form")[1].find("input", type="hidden").get("value")
         resp = self._request("https://atcoder.jp/login", data={
             'username': username,
@@ -165,12 +166,12 @@ class AtCoderClient(metaclass=Singleton):
             'select', attrs={"id": "select-task"})
         task_field_name = task_select_area.get("name")
         task_number = task_select_area.find(
-            "option", text=re.compile('{} -'.format(problem.get_alphabet()))).get("value")
+            "option", string=re.compile('{} -'.format(problem.get_alphabet()))).get("value")
         language_select_area = soup.find(
             'select', attrs={"data-placeholder": "-"})
         language_field_name = language_select_area.get("name")
         language_number = language_select_area.find(
-            "option", text=lang_option_pattern).get("value")
+            "option", string=lang_option_pattern).get("value")
         postdata = {
             "csrf_token": session_id,
             "data.TaskScreenName": task_number,

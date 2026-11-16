@@ -75,7 +75,8 @@ class Language:
             if l.name == name:
                 return l
         raise LanguageNotFoundError(
-            "No language support for '{}'".format(ALL_LANGUAGE_NAMES))
+            "No language support for '{}'. Supported: {}".format(
+                name, ", ".join(ALL_LANGUAGE_NAMES)))
 
 
 CPP = Language(

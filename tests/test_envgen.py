@@ -3,6 +3,8 @@ import shutil
 import tempfile
 import unittest
 from unittest import mock
+
+import pytest
 from os.path import relpath
 from logging import getLogger
 
@@ -38,6 +40,7 @@ class TestEnvGen(unittest.TestCase):
         shutil.rmtree(self.temp_dir)
         logger.info(self.temp_dir)
 
+    @pytest.mark.network
     def test_prepare_workspace(self):
         answer_data_dir_path = os.path.join(
             RESOURCE_DIR,
@@ -57,6 +60,7 @@ class TestEnvGen(unittest.TestCase):
         )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
+    @pytest.mark.network
     def test_backup(self):
         answer_data_dir_path = os.path.join(RESOURCE_DIR, "test_backup")
         # Prepare workspace twice

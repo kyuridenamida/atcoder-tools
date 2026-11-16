@@ -1,4 +1,4 @@
-import importlib.machinery as imm
+import importlib.util
 import os
 from os.path import expanduser
 from typing import Optional
@@ -67,8 +67,10 @@ class CodeStyleConfig:
 
         if code_generator_file is not None:
             try:
-                module = imm.SourceFileLoader(
-                    'code_generator', code_generator_file).load_module()
+                spec = importlib.util.spec_from_file_location(
+                    'code_generator', code_generator_file)
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
                 self.code_generator = getattr(module, 'main')
             except AttributeError as e:
                 raise CodeStyleConfigInitError(e, "Error while loading {}".format(

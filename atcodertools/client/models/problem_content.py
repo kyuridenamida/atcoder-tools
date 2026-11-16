@@ -62,7 +62,7 @@ class ProblemContent:
     def _extract_input_format_and_samples(soup) -> Tuple[str, List[Sample]]:
 
         # Remove English statements
-        for e in soup.findAll("span", {"class": "lang-en"}):
+        for e in soup.find_all("span", {"class": "lang-en"}):
             e.extract()
 
         # Focus on AtCoder's usual contest's html structure

@@ -69,15 +69,15 @@ def _update_config_dict(target_dic: Dict[str, Any], update_dic: Dict[str, Any]):
 class Config:
 
     def __init__(self,
-                 code_style_config: CodeStyleConfig = CodeStyleConfig(),
-                 postprocess_config: PostprocessConfig = PostprocessConfig(),
-                 etc_config: EtcConfig = EtcConfig(),
-                 run_config: RunConfig = RunConfig()
+                 code_style_config: Optional[CodeStyleConfig] = None,
+                 postprocess_config: Optional[PostprocessConfig] = None,
+                 etc_config: Optional[EtcConfig] = None,
+                 run_config: Optional[RunConfig] = None
                  ):
-        self.code_style_config = code_style_config
-        self.postprocess_config = postprocess_config
-        self.etc_config = etc_config
-        self.run_config = run_config
+        self.code_style_config = code_style_config if code_style_config is not None else CodeStyleConfig()
+        self.postprocess_config = postprocess_config if postprocess_config is not None else PostprocessConfig()
+        self.etc_config = etc_config if etc_config is not None else EtcConfig()
+        self.run_config = run_config if run_config is not None else RunConfig()
 
     @classmethod
     def load(cls, fp: TextIO, args: Optional[ProgramArgs] = None):
@@ -108,7 +108,7 @@ class Config:
             if _CODE_STYLE_CONFIG_KEY in lang_specific_config_dic:
                 lang_code_style = lang_specific_config_dic[_CODE_STYLE_CONFIG_KEY]
                 if "lang" in lang_code_style:
-                    logger.warn(
+                    logger.warning(
                         with_color("'lang' is only valid in common code style config, "
                                    "but detected in language-specific code style config. It will be ignored.",
                                    Fore.RED))

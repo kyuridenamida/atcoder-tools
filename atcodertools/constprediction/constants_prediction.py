@@ -185,7 +185,7 @@ def predict_constants(html: str) -> ProblemConstantSet:
 
     try:
         judge = predict_judge_method(html)
-    except MultipleModCandidatesError as e:
+    except MultipleDecimalCandidatesError as e:
         logger.warning("decimal prediction failed -- "
                        "two or more candidates {} are detected as decimal values".format(e.cands))
         judge = NormalJudge()

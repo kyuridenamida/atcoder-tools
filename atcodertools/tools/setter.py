@@ -79,7 +79,7 @@ def main(prog, args) -> None:
         if args.error_value is not None:
             output_metadata.judge_method.diff = args.error_value
         else:
-            logger.warn(
+            logger.warning(
                 "Error-value is not specified. Default value will be set.")
         output_metadata.judge_method.error_type = ErrorType(args.judge_type)
 

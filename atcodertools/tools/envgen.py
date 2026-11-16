@@ -17,7 +17,9 @@ from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
 from atcodertools.codegen.models.code_gen_args import CodeGenArgs
 from atcodertools.common.language import ALL_LANGUAGES, CPP
 from atcodertools.common.logging import logger
-from atcodertools.config.config import Config, get_config, USER_CONFIG_PATH
+from atcodertools.config.config import Config
+from atcodertools.config.config import get_config as get_config
+from atcodertools.config.config import USER_CONFIG_PATH as USER_CONFIG_PATH
 from atcodertools.constprediction.constants_prediction import predict_constants
 from atcodertools.fileutils.create_contest_file import create_examples, \
     create_code

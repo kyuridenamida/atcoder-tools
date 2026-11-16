@@ -1,3 +1,4 @@
+import contextlib
 import os
 import tempfile
 import unittest
@@ -44,8 +45,10 @@ def restore_client_after_run(func):
     def test_decorated(*args, **kwargs):
         client = AtCoderClient()
         prev = client._request
-        func(*args, **kwargs)
-        client._request = prev
+        try:
+            func(*args, **kwargs)
+        finally:
+            client._request = prev
 
     return test_decorated
 
@@ -83,16 +86,25 @@ class TestAtCoderClientMock(unittest.TestCase):
 
         # test two patterns (str, Language object) for parameter lang
         for lang in [CPP, "C++14 (GCC 5.4.1)"]:
-            submission = self.client.submit_source_code(
-                contest, problem, lang, "x")
+            if isinstance(lang, str):
+                # passing lang as a str is deprecated and must warn
+                ctx = self.assertWarns(UserWarning)
+            else:
+                ctx = contextlib.nullcontext()
+            with ctx:
+                submission = self.client.submit_source_code(
+                    contest, problem, lang, "x")
             self.assertEqual(3905485, submission.submission_id)
             self.assertEqual("arc001_1", submission.problem_id)
 
     @restore_client_after_run
     def test_login_success(self):
         self.client._request = create_fake_request_func(
-            post_url_to_resp={
-                "https://arc001.contest.atcoder.jp/login": fake_resp("after_login.html")
+            {
+                "https://atcoder.jp/login": fake_resp("login.html")
+            },
+            {
+                "https://atcoder.jp/login": fake_resp("after_login.html")
             }
         )
 
@@ -104,13 +116,21 @@ class TestAtCoderClientMock(unittest.TestCase):
 
     @restore_client_after_run
     def test_check_logging_in_success(self):
-        setting_url = "https://arc001.contest.atcoder.jp/settings"
         self.client._request = create_fake_request_func(
             {
-                setting_url: MockResponse(url=setting_url)
+                "https://atcoder.jp/home": fake_resp("home_logged_in.html")
             }
         )
         self.assertTrue(self.client.check_logging_in())
+
+    @restore_client_after_run
+    def test_check_logging_in_failure(self):
+        self.client._request = create_fake_request_func(
+            {
+                "https://atcoder.jp/home": MockResponse(text="<html><body>Sign In</body></html>")
+            }
+        )
+        self.assertFalse(self.client.check_logging_in())
 
 
 if __name__ == "__main__":

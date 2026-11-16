@@ -1,7 +1,7 @@
 class EtcConfig:
 
     def __init__(self,
-                 download_without_login: str = False,
+                 download_without_login: bool = False,
                  parallel_download: bool = False,
                  save_no_session_cache: bool = False,
                  in_example_format: str = "in_{}.txt",

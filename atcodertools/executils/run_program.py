@@ -98,12 +98,13 @@ def run_program(exec_cmd: str, input_file: str, timeout_sec: int, args=None,
         args = []
     try:
         elapsed_sec = -time.time()
-        proc = subprocess.run(
-            exec_cmd.split() + args, stdin=open(input_file, 'r'), universal_newlines=True, timeout=timeout_sec,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd=current_working_dir
-        )
+        with open(input_file, 'r') as input_stream:
+            proc = subprocess.run(
+                exec_cmd.split() + args, stdin=input_stream, universal_newlines=True, timeout=timeout_sec,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=current_working_dir
+            )
 
         if proc.returncode == 0:
             code = ExecStatus.NORMAL

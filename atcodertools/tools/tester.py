@@ -11,7 +11,8 @@ from typing import List, Tuple, Optional
 from colorama import Fore
 
 from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, MultiSolutionJudge, InteractiveJudge, \
-    Judge, DEFAULT_EPS
+    Judge
+from atcodertools.common.judgetype import DEFAULT_EPS as DEFAULT_EPS
 from atcodertools.common.language import Language
 from atcodertools.common.logging import logger
 from atcodertools.executils.run_program import ExecResult, ExecStatus, run_program, run_interactive_program
@@ -35,6 +36,9 @@ class InvalidJudgeTypeError(Exception):
 
 
 class TestSummary:
+    # Not a pytest test class; prevent pytest collection warnings.
+    __test__ = False
+
     def __init__(self, success_count: int, has_error_output: bool):
         self.success_count = success_count
         self.has_error_output = has_error_output
@@ -75,6 +79,9 @@ def infer_case_num(sample_filename: str):
     for c in sample_basename:
         if c.isdigit():
             result += c
+    if result == "":
+        raise IrregularSampleFileError(
+            "Cannot infer case number from file name: {}".format(sample_filename))
     return int(result)
 
 
@@ -291,6 +298,19 @@ USER_FACING_JUDGE_TYPE_LIST = [
     "normal", "absolute", "relative", "absolute_or_relative", "multisolution", "interactive"]
 
 
+def str_to_bool(text: str) -> bool:
+    """argparse `type` for boolean flags given as strings.
+
+    `type=bool` must NOT be used in add_argument: bool("false") is True,
+    which would silently invert the option's meaning."""
+    if text.lower() in ("true", "1", "yes"):
+        return True
+    if text.lower() in ("false", "0", "no"):
+        return False
+    raise argparse.ArgumentTypeError(
+        "boolean value must be one of true/false/1/0/yes/no, got '{}'".format(text))
+
+
 def _decide_judge_method(args: argparse.Namespace, metadata: Metadata, lang: Optional[Language]):
     def _decide_decimal_judge():
         if args.error_value is not None:
@@ -383,13 +403,13 @@ def main(prog, args) -> bool:
     parser.add_argument('--compile-before-testing', '-c',
                         help='compile source before testing [true, false]: '
                              ' [Default]: false',
-                        type=bool,
+                        type=str_to_bool,
                         default=None)
 
     parser.add_argument('--compile-only-when-diff-detected',
                         help='compile only when diff detected [true, false]'
                              ' [Default]: true',
-                        type=bool,
+                        type=str_to_bool,
                         default=None)
 
     parser.add_argument("--config",

@@ -1,15 +1,25 @@
+import argparse
 import os
 import shutil
 import tempfile
 import unittest
 
+import pytest
 from colorama import Fore
 from unittest.mock import patch, mock_open, MagicMock
 
 from atcodertools.executils.run_program import ExecResult, ExecStatus
+from tests.utils.toolchains import skip_reason_for, toolchain_available
 from atcodertools.tools import tester
 from atcodertools.tools.models.metadata import Metadata
-from atcodertools.tools.tester import is_executable_file, TestSummary, build_details_str
+from atcodertools.tools.tester import (
+    IrregularSampleFileError,
+    TestSummary,
+    build_details_str,
+    infer_case_num,
+    is_executable_file,
+    str_to_bool,
+)
 from atcodertools.tools.utils import with_color
 from atcodertools.tools.setter import main as setter_main
 from atcodertools.tools.compiler import compile_main_and_judge_programs
@@ -82,6 +92,7 @@ class TestTester(unittest.TestCase):
         self.assertFalse(tester.main(
             '', ['-d', test_dir, "-n", "2", "-v", "0.0001", "-j", "absolute_or_relative"]))
 
+    @pytest.mark.requires_cpp
     def test_run_single_test_multisolution(self):
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
@@ -105,6 +116,7 @@ class TestTester(unittest.TestCase):
         self.assertTrue(tester.main(
             '', ['-d', test_dir, "-n", "4", "-c", "True"]))
 
+    @pytest.mark.requires_cpp
     def test_run_single_test_interactive(self):
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
@@ -120,7 +132,11 @@ class TestTester(unittest.TestCase):
         shutil.copytree(os.path.join(
             RESOURCE_DIR, "test_compiler_and_tester"), test_dir)
 
+        tested_lang_count = 0
         for lang in ALL_LANGUAGES:
+            if not toolchain_available(lang.name):
+                continue
+            tested_lang_count += 1
             setter_main('', ["--lang", lang.name, '-d', test_dir])
             metadata = Metadata.load_from(
                 os.path.join(test_dir, "metadata.json"))
@@ -129,6 +145,8 @@ class TestTester(unittest.TestCase):
             for i in [1, 2, 3, 4]:
                 self.assertTrue(tester.main(
                     '', ['-d', test_dir, "-n", "{:d}".format(i), "-j", "normal"]))
+        if tested_lang_count == 0:
+            self.skipTest("no language toolchain available on this machine")
 
     @patch('os.access', return_value=True)
     @patch('pathlib.Path.is_file', return_value=True)
@@ -250,6 +268,22 @@ class TestTester(unittest.TestCase):
             result = build_details_str(ExecResult(
                 ExecStatus.NORMAL, in_out, stderr), 'in.txt', 'out.txt')
             self.assertEqual(expected, result)
+
+    def test_str_to_bool(self):
+        for text in ("true", "True", "1", "yes"):
+            self.assertTrue(str_to_bool(text), text)
+        for text in ("false", "False", "0", "no"):
+            self.assertFalse(str_to_bool(text), text)
+        with self.assertRaises(argparse.ArgumentTypeError):
+            str_to_bool("maybe")
+
+    def test_infer_case_num(self):
+        self.assertEqual(3, infer_case_num("in_3.txt"))
+        self.assertEqual(12, infer_case_num("sample12.out"))
+        with self.assertRaises(IrregularSampleFileError):
+            infer_case_num("in_.txt")
+        with self.assertRaises(IrregularSampleFileError):
+            infer_case_num("output.txt")
 
     def test_build_details_str__on_runtime_failure(self):
         in_out = 'correct\n'
