@@ -2,6 +2,7 @@ import os
 import unittest
 
 from atcodertools.release_management.version_check import get_latest_version
+from tests import requires_network
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -10,6 +11,7 @@ RESOURCE_DIR = os.path.abspath(os.path.join(
 
 class TestVersionCheck(unittest.TestCase):
 
+    @requires_network
     def test_get_latest_version_with_no_error(self):
         get_latest_version(use_cache=False)
 

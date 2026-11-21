@@ -9,6 +9,7 @@ import requests
 from atcodertools.client.atcoder import AtCoderClient, LoginError, save_cookie, load_cookie_to
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
+from tests import requires_network
 
 
 def retry_once_on_failure(func):
@@ -24,6 +25,7 @@ def retry_once_on_failure(func):
     return wrapper
 
 
+@requires_network
 class TestAtCoderClientReal(unittest.TestCase):
 
     def setUp(self):
