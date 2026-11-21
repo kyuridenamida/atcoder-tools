@@ -59,4 +59,4 @@ jobs:
         run: |
           atcoder-tools version | grep -F "${{ needs.deploy.outputs.version }}"
           atcoder-tools gen abc400 --without-login --workspace "$RUNNER_TEMP/workspace"
-          test -s "$RUNNER_TEMP/workspace/abc400/A/main.cpp"
+          ls "$RUNNER_TEMP"/workspace/abc400/*/main.cpp

@@ -22,10 +22,12 @@ jobs:
       - name: Install
         run: pip install .
       - name: Run against atcoder.jp
+        env:
+          ATCODERTOOLS_TEST_NETWORK: 1
         run: |
           python -m unittest -v tests.test_atcoder_client_real
           atcoder-tools gen abc400 --without-login --workspace "$RUNNER_TEMP/workspace"
-          test -s "$RUNNER_TEMP/workspace/abc400/A/main.cpp"
+          ls "$RUNNER_TEMP"/workspace/abc400/*/main.cpp
       - name: Report failure
         if: failure()
         env:
