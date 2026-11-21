@@ -1,6 +1,20 @@
+import atexit
+import functools
 import os
 import shutil
 import tarfile
+import tempfile
+
+
+@functools.lru_cache(maxsize=None)
+def _extract(gzip_file_path):
+    # Extracting test_data.tar.gz takes tens of seconds, so do it once per test run rather than per test.
+    # Tests only read the extracted files.
+    extracted_dir = tempfile.mkdtemp()
+    atexit.register(shutil.rmtree, extracted_dir, ignore_errors=True)
+    with tarfile.open(gzip_file_path, 'r') as tf:
+        tf.extractall(extracted_dir)
+    return extracted_dir
 
 
 class GZipController:
@@ -11,9 +25,8 @@ class GZipController:
         self.main_dirname = main_dirname
 
     def create_dir(self):
-        tf = tarfile.open(self.gzip_file_path, 'r')
-        tf.extractall(self.target_dir)
-        main_dir_path = os.path.join(self.target_dir, self.main_dirname)
+        main_dir_path = os.path.join(
+            _extract(self.gzip_file_path), self.main_dirname)
         if os.path.exists(main_dir_path):
             return main_dir_path
         raise FileNotFoundError("{} is not found".format(main_dir_path))
