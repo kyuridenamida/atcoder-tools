@@ -62,7 +62,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install mono-complete binfmt-support
           # The default test command for C# executes the binary built by mcs directly.
-          sudo update-binfmts --enable cli
+          sudo update-binfmts --install cli /usr/bin/mono --magic MZ
 
       - name: Run against atcoder.jp
         if: env.ATCODERTOOLS_TEST_NETWORK == '1'
