@@ -14,6 +14,7 @@ from atcodertools.tools.tester import is_executable_file, TestSummary, build_det
 from atcodertools.tools.utils import with_color
 from atcodertools.common.language import ALL_LANGUAGES
 from atcodertools.tools.compiler import compile_main_and_judge_programs
+from tests import requires_compilers
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -203,6 +204,7 @@ class TestTester(unittest.TestCase):
                 ExecStatus.RE, in_out, stderr), 'in.txt', 'out.txt')
             self.assertEqual(expected, result)
 
+    @requires_compilers
     def test_compiler_and_tester(self):
         test_dir = os.path.join(self.temp_dir, "test1")
         shutil.copytree(os.path.join(
@@ -248,6 +250,7 @@ class TestTester(unittest.TestCase):
         self.assertTrue("compile3" in lst)
         self.assertTrue("compile4" in lst)
 
+    @requires_compilers
     def test_compiler_and_tester_for_each_lang(self):
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
@@ -264,6 +267,7 @@ class TestTester(unittest.TestCase):
                     '', ['-d', lang_dir, "-n", "{:d}".format(i), "--compile-before-testing", "-j", "normal",
                          "--config", config_path]))
 
+    @requires_compilers
     def test_compiler_when_compiler_command_is_specified_in_option_file(self):
         test_dir = os.path.join(self.temp_dir, "test")
         shutil.copytree(os.path.join(
@@ -281,6 +285,7 @@ class TestTester(unittest.TestCase):
         self.assertTrue(
             True if "compile command:  g++ main.cpp -o main -std=c++17" in stdouts else False)
 
+    @requires_compilers
     def test_timeout(self):
         test_dir = os.path.join(self.temp_dir, "test_timeout")
         shutil.copytree(os.path.join(

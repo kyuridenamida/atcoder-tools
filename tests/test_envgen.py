@@ -11,6 +11,7 @@ from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.config import Config
 from atcodertools.config.etc_config import EtcConfig
 from atcodertools.tools.envgen import prepare_contest, main, EnvironmentInitializationError
+from tests import requires_network
 
 logger = getLogger(__name__)
 
@@ -38,6 +39,7 @@ class TestEnvGen(unittest.TestCase):
         shutil.rmtree(self.temp_dir)
         logger.info(self.temp_dir)
 
+    @requires_network
     def test_prepare_workspace(self):
         answer_data_dir_path = os.path.join(
             RESOURCE_DIR,
@@ -57,6 +59,7 @@ class TestEnvGen(unittest.TestCase):
         )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
+    @requires_network
     def test_backup(self):
         answer_data_dir_path = os.path.join(RESOURCE_DIR, "test_backup")
         # Prepare workspace twice
@@ -77,6 +80,7 @@ class TestEnvGen(unittest.TestCase):
             )
         self.assertDirectoriesEqual(answer_data_dir_path, self.temp_dir)
 
+    @requires_network
     def test_skip_existing_problems(self):
         answer_data_dir_path = os.path.join(
             RESOURCE_DIR, "test_skip_existing_problems")
