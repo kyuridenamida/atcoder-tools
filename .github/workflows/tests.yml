@@ -6,19 +6,28 @@ on:
   pull_request:
     branches: [ stable ]
 
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ATCODERTOOLS_TEST_COMPILERS: 1
+      # Only one job talks to atcoder.jp so that the jobs don't make each other rate-limited.
+      ATCODERTOOLS_TEST_NETWORK: ${{ matrix.python-version == '3.13' && '1' || '0' }}
     strategy:
       fail-fast: false
       matrix:
         python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -53,8 +62,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install mono-complete
 
+      - name: Run against atcoder.jp
+        if: env.ATCODERTOOLS_TEST_NETWORK == '1'
+        run: poetry run atcoder-tools gen arc050 --without-login
+
       - name: Run Unit Tests and Integration Tests
         run: |
-          poetry run atcoder-tools gen arc050 --without-login
           poetry run nosetests tests --exe -v --with-coverage --cover-package=atcodertools
           poetry run codecov
