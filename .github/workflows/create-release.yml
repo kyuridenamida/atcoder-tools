@@ -1,3 +1,4 @@
+# Releases a new version in one run: version bump, milestone, GitHub release, change log and PyPI.
 name: Create Release
 on:
   workflow_dispatch:
@@ -6,39 +7,66 @@ on:
         description: 'Specify release version (e.g. 2.0.1)'
         required: true
         default: ''
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: write
+concurrency: release
+defaults:
+  run:
+    shell: bash  # with pipefail
 jobs:
   create-release:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VERSION: ${{ github.event.inputs.releaseversion }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Validate version
+        run: |
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          ! gh release view "$VERSION" --repo "$GITHUB_REPOSITORY"
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Replace Versions
         run: |
-          sed -i "s/^version = .*$/version = \"${{github.event.inputs.releaseversion}}\"/g" pyproject.toml
-          sed -i "s/^__version__ = .*$/__version__ = \"${{github.event.inputs.releaseversion}}\"/g"  atcodertools/release_management/version.py
+          sed -i "s/^version = .*$/version = \"$VERSION\"/g" pyproject.toml
+          sed -i "s/^__version__ = .*$/__version__ = \"$VERSION\"/g"  atcodertools/release_management/version.py
       - name: Make sure diff exists
+        run: test "$(git diff --name-only | wc -l)" -eq 2
+      - name: Commit versions
         run: |
-          ! git diff --stat --exit-code atcodertools/release_management/version.py
-          ! git diff --stat --exit-code pyproject.toml
-      - uses: EndBug/add-and-commit@v7.0.0
-        with:
-          author_name: github-actions
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
+          git config user.name github-actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -am "Commit from GitHub Actions (Create Release)"
+          git push
 
-      - name: Get latest commitish
-        run: echo "COMMITISH=`git rev-parse HEAD`" >> $GITHUB_ENV
+      # The change log lists the pull requests of the milestone titled with the version.
+      - name: Put unreleased pull requests into the milestone
+        run: |
+          previous_release_date=$(gh release view --json publishedAt --jq .publishedAt)
+          gh api "repos/$GITHUB_REPOSITORY/milestones" -f title="$VERSION" || true
+          milestone_number=$(gh api "repos/$GITHUB_REPOSITORY/milestones?state=all&per_page=100" \
+              --jq ".[] | select(.title == \"$VERSION\") | .number")
+          gh pr list --state merged --base "$GITHUB_REF_NAME" --limit 1000 \
+              --search "no:milestone merged:>$previous_release_date" --json number --jq '.[].number' \
+            | xargs -r -I{} gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/{}" -F milestone="$milestone_number"
+          gh api -X PATCH "repos/$GITHUB_REPOSITORY/milestones/$milestone_number" -f state=closed
 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          commitish: ${{ env.COMMITISH }}
-          tag_name: ${{ github.event.inputs.releaseversion }}
-          release_name: Release ${{ github.event.inputs.releaseversion }}
-          body: |
-            Release version ${{ github.event.inputs.releaseversion }}
-          draft: false
-          prerelease: false
+        run: |
+          gh release create "$VERSION" --target "$(git rev-parse HEAD)" \
+              --title "Release $VERSION" --notes "Release version $VERSION"
+
+      - name: Update Changelog
+        run: |
+          python3 dev-tools/create_changelog.py "$VERSION"
+          git commit -am "Commit from GitHub Actions (Update Changelog)"
+          git push
+
+      # Publishing stays in its own workflow because PyPI trusts that workflow file.
+      - name: Upload Python Package
+        run: gh workflow run upload-python-package.yml --ref "$VERSION"
