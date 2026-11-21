@@ -1,0 +1,41 @@
+name: Check against atcoder.jp
+
+# AtCoder changes its pages without notice. Notice it here rather than from user reports.
+on:
+  schedule:
+    - cron: '0 21 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Install
+        run: pip install .
+      - name: Run against atcoder.jp
+        run: |
+          python -m unittest -v tests.test_atcoder_client_real
+          atcoder-tools gen abc400 --without-login --workspace "$RUNNER_TEMP/workspace"
+          test -s "$RUNNER_TEMP/workspace/abc400/A/main.cpp"
+      - name: Report failure
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TITLE: Scheduled check against atcoder.jp failed
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          issue=$(gh issue list --state open --search "in:title \"$TITLE\"" --json number --jq '.[0].number')
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body "Failed again: $RUN_URL"
+          else
+            gh issue create --title "$TITLE" --body "atcoder.jp may have changed. See $RUN_URL"
+          fi
