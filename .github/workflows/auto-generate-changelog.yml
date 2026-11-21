@@ -1,3 +1,4 @@
+# Create Release already updates the change log. Use this to regenerate it, e.g. after editing a milestone.
 name: Update Changelog
 on:
   workflow_dispatch:
@@ -6,6 +7,8 @@ on:
         description: 'Specify release version (e.g. 2.0.1)'
         required: true
         default: ''
+permissions:
+  contents: write
 jobs:
   generate-changelog:
     runs-on: ubuntu-latest
@@ -13,22 +16,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "15.x"
-
-      - name: Install packages
-        run: npm install
-        working-directory: ./dev-tools
+        uses: actions/checkout@v4
 
       - name: Generate CHANGELOG.md
-        run: npm run create-changelog -- --releaseVersion=${{github.event.inputs.releaseversion}}
-        working-directory: ./dev-tools
+        run: python3 dev-tools/create_changelog.py "$VERSION"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.event.inputs.releaseversion }}
 
-      - uses: EndBug/add-and-commit@v7.0.0
-        with:
-          author_name: github-actions
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
+      - name: Commit
+        run: |
+          git config user.name github-actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -am "Commit from GitHub Actions (Update Changelog)"
+          git push
