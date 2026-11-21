@@ -159,6 +159,12 @@ class TestConstantsPrediction(unittest.TestCase):
         except MultipleDecimalCandidatesError:
             pass
 
+    def test_predict_constants_falls_back_to_normal_judge_with_multiple_cands(self):
+        constants = predict_constants(
+            "<var>10^{-6}</var> もしくは <var>10^{-5}</var>以下の相対誤差")
+        self.assertEqual(JudgeType.Normal.value,
+                         constants.judge_method.to_dict()["judge_type"])
+
     @unittest.expectedFailure
     def test_tricky_judge_method_case(self):
         # This test exists in order to demonstrate the current wrong behavior that detects unrelated mention wrongly.
