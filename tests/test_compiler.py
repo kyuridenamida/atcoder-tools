@@ -2,6 +2,7 @@ import os
 import unittest
 import shutil
 import tempfile
+from unittest import mock
 
 from atcodertools.tools import compiler
 
@@ -23,6 +24,14 @@ class TestTester(unittest.TestCase):
             '', ["--compile-command", "touch compile-command-success"])
         lst = os.listdir('./')
         self.assertTrue("compile-command-success" in lst)
+
+    @mock.patch("atcodertools.tools.compiler.compile_main_and_judge_programs")
+    def test_compile_only_when_diff_detected_option(self, compile_mock):
+        os.chdir(os.path.join(RESOURCE_DIR, "test_compiler_and_tester"))
+        for value, force_compile in [("false", True), ("true", False)]:
+            compiler.main('', ["--compile-only-when-diff-detected", value])
+            self.assertEqual(
+                force_compile, compile_mock.call_args[1]["force_compile"])
 
 
 if __name__ == '__main__':

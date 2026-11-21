@@ -59,7 +59,8 @@ def main(prog, args):
     parser.add_argument('--compile-only-when-diff-detected',
                         help='compile only when diff detected [true, false]'
                              ' [Default]: false',
-                        type=bool,
+                        # bool("false") is True, so type=bool can't be used.
+                        type=lambda s: s.lower() == "true",
                         default=None)
 
     parser.add_argument("--config",
