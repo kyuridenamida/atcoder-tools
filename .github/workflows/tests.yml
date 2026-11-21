@@ -48,9 +48,9 @@ jobs:
           compiler: dmd-latest
 
       - name: Install Jilia
-        uses: julia-actions/setup-julia@v1
+        uses: julia-actions/setup-julia@v2
         with:
-          version: 1.9.2
+          version: 1.11.6
 
       - name: Install nim
         uses: iffy/install-nim@v4
