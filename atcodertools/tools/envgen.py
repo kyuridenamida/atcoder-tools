@@ -26,7 +26,11 @@ from atcodertools.fmtprediction.predict_format import NoPredictionResultError, \
     MultiplePredictionResultsError, predict_format
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.models.metadata import Metadata
-from atcodertools.tools.utils import with_color
+from atcodertools.tools.utils import (
+    ConflictingLoginOptionsError,
+    decide_download_without_login,
+    with_color,
+)
 from atcodertools.config.config import ConfigType, USER_CONFIG_PATH
 
 
@@ -248,7 +252,13 @@ def main(prog, args):
 
     parser.add_argument("--without-login",
                         action="store_true",
-                        help="Download data without login")
+                        default=None,
+                        help=argparse.SUPPRESS)
+
+    parser.add_argument("--with-login",
+                        action="store_true",
+                        default=None,
+                        help="Download data with login")
 
     parser.add_argument("--workspace",
                         help="Path to workspace's root directory. This script will create files"
@@ -311,8 +321,15 @@ def main(prog, args):
     except ImportError:
         pass
 
+    try:
+        download_without_login = decide_download_without_login(
+            args, config.etc_config)
+    except ConflictingLoginOptionsError as e:
+        logger.error(with_color(str(e), Fore.LIGHTRED_EX))
+        sys.exit(-1)
+
     client = AtCoderClient()
-    if not config.etc_config.download_without_login:
+    if not download_without_login:
         try:
             client.login(
                 save_session_cache=not config.etc_config.save_no_session_cache)
@@ -323,9 +340,22 @@ def main(prog, args):
     else:
         logger.info("Downloading data without login.")
 
-    prepare_contest(client,
-                    args.contest_id,
-                    config)
+    try:
+        prepare_contest(client,
+                        args.contest_id,
+                        config)
+    except EnvironmentInitializationError:
+        if download_without_login:
+            logger.error(with_color(
+                "Failed to download the contest data. "
+                "The contest may not be publicly accessible. "
+                "Use --with-login to download it with login.",
+                Fore.LIGHTRED_EX))
+        else:
+            logger.error(with_color(
+                "Failed to download the contest data.",
+                Fore.LIGHTRED_EX))
+        sys.exit(-1)
 
 
 if __name__ == "__main__":
