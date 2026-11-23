@@ -51,9 +51,9 @@ void solve(long long N, long long M, std::vector<std::vector<std::string>> H, st
 
 int main(){
     long long N;
-    std::scanf("%lld", &N);
+    std::cin >> N;
     long long M;
-    std::scanf("%lld", &M);
+    std::cin >> M;
     std::vector<std::vector<std::string>> H(N-2+1, std::vector<std::string>(M-1-2+1));
     for(int i = 0 ; i < N-2+1 ; i++){
         for(int j = 0 ; j < M-1-2+1 ; j++){
@@ -63,14 +63,14 @@ int main(){
     std::vector<long long> A(N-2+1);
     std::vector<long double> B(N-2+1);
     for(int i = 0 ; i < N-2+1 ; i++){
-        std::scanf("%lld", &A[i]);
-        std::scanf("%Lf", &B[i]);
+        std::cin >> A[i];
+        std::cin >> B[i];
     }
     long long Q;
-    std::scanf("%lld", &Q);
+    std::cin >> Q;
     std::vector<long long> X(M+Q);
     for(int i = 0 ; i < M+Q ; i++){
-        std::scanf("%lld", &X[i]);
+        std::cin >> X[i];
     }
     solve(N, M, std::move(H), std::move(A), std::move(B), Q, std::move(X));
     return 0;

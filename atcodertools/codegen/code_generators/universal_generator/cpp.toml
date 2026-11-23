@@ -59,10 +59,22 @@ seq = "std::vector<{type}> {name}({length});"
 
 # 入力
 [input]
-#int = "std::cin >> {name};"
-int = "std::scanf(\"%lld\", &{name});"
-#float = "std::cin >> {name};"
-float = "std::scanf(\"%Lf\", &{name});"
+int = "std::cin >> {name};"
+float = "std::cin >> {name};"
 str = "std::cin >> {name};"
+
+# 入力 (std::cin による明示的なバリアント。テンプレートで {{input_part_cin}}
+# を使うとこちらが展開される)
+[input_cin]
+int = "std::cin >> {name};"
+float = "std::cin >> {name};"
+str = "std::cin >> {name};"
+
+# 入力 (std::scanf バリアント。テンプレートで {{input_part_scanf}} を使うと
+# こちらが展開される。std::string は scanf で直接読めないため一時バッファ経由)
+[input_scanf]
+int = "std::scanf(\"%lld\", &{name});"
+float = "std::scanf(\"%Lf\", &{name});"
+str = "{{ static char atcodertools_str_buf[1 << 21]; std::scanf(\"%s\", atcodertools_str_buf); {name} = atcodertools_str_buf; }}"
 
 
