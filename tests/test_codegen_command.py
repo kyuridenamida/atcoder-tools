@@ -5,6 +5,7 @@ import unittest
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
 from atcodertools.tools.codegen import main, get_problem_from_url
+from tests import requires_network
 
 RESOURCE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -14,6 +15,7 @@ TEMPLATE_PATH = os.path.join(RESOURCE_DIR, "template_jinja.cpp")
 
 class TestCodeGenCommand(unittest.TestCase):
 
+    @requires_network
     def test_generate_code(self):
         config_path = os.path.join(RESOURCE_DIR, "test_codegen_command.toml")
         answer_file_path = os.path.join(RESOURCE_DIR, "generated_code.cpp")
