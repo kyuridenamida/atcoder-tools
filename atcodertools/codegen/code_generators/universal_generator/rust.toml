@@ -7,7 +7,7 @@ input_part_prefix = "let con = read_string();\nlet mut scanner = Scanner::new(&c
 
 # ループ
 [loop]
-header = "for {loop_var} in 0..({length}) as usize {{"
+header = "for {loop_var} in 0..{collection}.len() {{"
 footer = "}}"
 
 # タイプ
@@ -46,12 +46,18 @@ seq = "let mut {name}: Vec<{type}>;"
 # 確保
 [allocate]
 seq = "{name} = vec![{default}; ({length}) as usize];"
-2d_seq = "{name} = vec![vec![{default}; ({length_j}) as usize]; ({length_j}) as usize];"
+2d_seq = "{name} = vec![vec![{default}; ({length_j}) as usize]; ({length_i}) as usize];"
 
 # 宣言と確保
 [declare_and_allocate]
 seq = "let mut {name}: Vec<{type}> = vec![{default}; ({length}) as usize];"
 2d_seq = "let mut {name}: Vec<Vec<{type}>> = vec![vec![{default}; ({length_j}) as usize]; ({length_i}) as usize];"
+
+# 宣言と入力 (スカラ変数をmutなしで宣言しつつ読み込む)
+[declare_and_input]
+int = "let {name}: i64 = scanner.next();"
+float = "let {name}: f64 = scanner.next();"
+str = "let {name}: String = scanner.next();"
 
 # 入力
 [input]

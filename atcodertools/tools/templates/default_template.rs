@@ -25,7 +25,7 @@ fn main() {
     let thd = std::thread::Builder::new().stack_size(stack_size);
     thd.spawn(move || {
         {{ prefix_input_part | replace('\n', '\n' ~ "    ") }}
-        for {{ case_loop_var }} in 0..({{ case_count_var }}) as usize {
+        for {{ case_loop_var }} in 0..{{ case_count_var }} as usize {
             {{ case_input_part | replace('\n', '\n' ~ "        ") }}
             solve({{ actual_arguments }});
         }
