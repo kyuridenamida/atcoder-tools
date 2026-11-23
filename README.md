@@ -49,6 +49,9 @@ Python 3.10 から 3.14 で動作する [AtCoder](https://atcoder.jp/) からサ
 ただの`pip`だとPython 2系を使ってインストールされる可能性があるためうまくいかないかもしれません。
 
 ## Userscript by [@kmyk](https://github.com/kmyk/) (NEW! 2019/03/06)
+
+> **現在利用できません**: このUserscriptとそのデータ配信に使っていた GitHub Pages (kyuridenamida.github.io/atcoder-tools) が停止しているため、インストールリンク・APIともに機能していません。ソースコードは `webapp/` 以下に残っています (詳細: [#264](https://github.com/kyuridenamida/atcoder-tools/issues/264))。
+
 Tampermonkey(各種ブラウザで動作)でインストールすることが可能なUserscriptです。公開されている過去問を対象として、atcoder-toolsで自動生成されたコードをそのままAtCoderのスニペット上で利用できます。
 1. Tampermonkey をインストールする ([Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo), [FireFox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/))
 2. https://kyuridenamida.github.io/atcoder-tools/index.user.js にアクセスしてUserscriptをインストール
@@ -60,6 +63,8 @@ Tampermonkey(各種ブラウザで動作)でインストールすることが可
 https://kyuridenamida.github.io/atcoder-tools/
 
 各問題ごとの解析結果などが載っています。
+
+> **注**: 上記のサイトは現在停止しています。
 
 ## Usage
 
