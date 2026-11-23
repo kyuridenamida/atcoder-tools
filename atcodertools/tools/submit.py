@@ -2,6 +2,7 @@
 import argparse
 import os
 import sys
+import webbrowser
 
 from colorama import Fore
 
@@ -16,6 +17,7 @@ from atcodertools.config.config import Config, ConfigType, USER_CONFIG_PATH
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.tools import get_default_config_path
 from atcodertools.executils.run_command import run_command
+from atcodertools.common.language import ALL_LANGUAGES, Language
 
 
 def main(prog, args, cookie_supplier=None, use_local_session_cache=True, client=None) -> bool:
@@ -88,6 +90,20 @@ def main(prog, args, cookie_supplier=None, use_local_session_cache=True, client=
                         type=str,
                         default=None)
 
+    parser.add_argument("--lang", '-l',
+                        help="Language of the submitted code: "
+                             "must be one of [{}]\n"
+                             "[Default] Language written in metadata.json".format(
+                                 ', '.join(lang.name for lang in ALL_LANGUAGES)),
+                        type=str,
+                        choices=[lang.name for lang in ALL_LANGUAGES],
+                        default=None)
+
+    parser.add_argument("--open",
+                        action="store_true",
+                        help="Open the submission result page in a browser after submitting [Default] False",
+                        default=False)
+
     parser.add_argument("--config",
                         help="File path to your config file\n{0}{1}".format("[Default (Primary)] {}\n".format(
                             USER_CONFIG_PATH),
@@ -115,8 +131,10 @@ def main(prog, args, cookie_supplier=None, use_local_session_cache=True, client=
             "{0} is not found! You need {0} to use this submission functionality.".format(metadata_file))
         return False
 
+    lang = Language.from_name(args.lang) if args.lang else metadata.lang
+
     with open(args.config, "r") as f:
-        config = Config.load(f, {ConfigType.SUBMIT}, args, metadata.lang.name)
+        config = Config.load(f, {ConfigType.SUBMIT}, args, lang.name)
     if client is None:
         try:
             client = AtCoderClient()
@@ -169,13 +187,17 @@ def main(prog, args, cookie_supplier=None, use_local_session_cache=True, client=
             except UnicodeDecodeError:
                 logger.warning("code wasn't recognized as {}".format(encoding))
         logger.info(
-            "Submitting {} as {}".format(code_path, metadata.lang.name))
+            "Submitting {} as {}".format(code_path, lang.name))
         try:
             submission = client.submit_source_code(
-                metadata.problem.contest, metadata.problem, metadata.lang, source)
+                metadata.problem.contest, metadata.problem, lang, source)
+            submission_url = metadata.problem.contest.get_submissions_url(
+                submission)
             logger.info("{} {}".format(
                 with_color("Done!", Fore.LIGHTGREEN_EX),
-                metadata.problem.contest.get_submissions_url(submission)))
+                submission_url))
+            if args.open:
+                webbrowser.open(submission_url)
         except CaptchaError as e:
             logger.error(with_color(str(e), Fore.LIGHTRED_EX))
             return False
