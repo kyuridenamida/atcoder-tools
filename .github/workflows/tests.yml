@@ -24,10 +24,10 @@ jobs:
         python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -43,17 +43,17 @@ jobs:
 
       # Install Compilers for integration tests
       - name: Install D compiler
-        uses: dlang-community/setup-dlang@v1
+        uses: dlang-community/setup-dlang@v2
         with:
           compiler: dmd-latest
 
       - name: Install Jilia
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@v3
         with:
           version: 1.11.6
 
       - name: Install nim
-        uses: iffy/install-nim@v4
+        uses: iffy/install-nim@v5
         with:
           version: 1.6.14
 
