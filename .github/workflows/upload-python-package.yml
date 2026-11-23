@@ -6,15 +6,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment: stable
     permissions:
       id-token: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
@@ -23,7 +26,7 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
 
       - name: Add path for Poetry
-        run: echo "$HOME/.poetry/bin" >> $GITHUB_PATH
+        run: echo "$HOME/.poetry/bin" >> "$GITHUB_PATH"
 
       - name: Install Dependencies
         run: poetry install --no-interaction
@@ -31,5 +34,29 @@ jobs:
         run: |
           rm -rf dist/
           poetry build
+      - id: version
+        run: echo "version=$(poetry version --short)" >> "$GITHUB_OUTPUT"
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  # Make sure that what users get from PyPI works.
+  verify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Install the published package
+        run: |
+          for _ in $(seq 20); do
+            pip install "atcoder-tools==${{ needs.deploy.outputs.version }}" && exit 0
+            sleep 30
+          done
+          exit 1
+      - name: Run the published package
+        run: |
+          atcoder-tools version | grep -F "${{ needs.deploy.outputs.version }}"
+          atcoder-tools gen abc400 --without-login --workspace "$RUNNER_TEMP/workspace"
+          ls "$RUNNER_TEMP"/workspace/abc400/*/main.cpp
