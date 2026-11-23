@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 
 from collections import OrderedDict
 
@@ -33,10 +33,76 @@ def _predict_period(seq: List[int]):
         return 1
 
 
+def _vote_inner_dimensions(
+    var_tokens: List[VariableToken],
+) -> Dict[str, List[int]]:
+    """
+    For each multidimensional variable, count how often each index
+    position changes between adjacent occurrences in the token stream.
+
+    Within a compact character row such as ``s_{i,1} s_{i,2} ...`` the
+    column index varies while the row index stays fixed, so the most
+    frequently varying index is the inner dimension that the 1-D
+    collapse should drop.  For the transposed ``c_{(x,y)}`` convention
+    the first index varies within a row instead.
+    """
+    votes: Dict[str, List[int]] = {}
+    prev_token = None
+
+    for var_token in var_tokens:
+        if (
+            prev_token is not None
+            and prev_token.var_name == var_token.var_name
+            and prev_token.dim_num() >= 2
+            and prev_token.dim_num() == var_token.dim_num()
+        ):
+            indices = (
+                var_token.first_index,
+                var_token.second_index,
+                var_token.third_index,
+            )
+            prev_indices = (
+                prev_token.first_index,
+                prev_token.second_index,
+                prev_token.third_index,
+            )
+            diffs = [
+                current != prev
+                for current, prev in zip(indices, prev_indices)
+            ]
+
+            if sum(diffs) == 1:
+                var_votes = votes.setdefault(
+                    var_token.var_name,
+                    [0, 0, 0],
+                )
+                var_votes[diffs.index(True)] += 1
+
+        prev_token = var_token
+
+    return votes
+
+
 def _predict_simple_format_main(
     var_tokens: List[VariableToken],
     to_1d_flag=False,
 ) -> Format[SimpleVariable]:
+    # to_1d_flag collapses the dimension that a compact character row
+    # represents as one string token.  ``"first"`` drops the last
+    # (innermost) dimension, which is the common ``s_{i,j}`` convention
+    # where the surviving index is the row.  ``"second"`` drops the
+    # first (outermost) dimension for the transposed convention such as
+    # ``c_{x,y}`` where the last index is the row.  ``"auto"`` decides
+    # the dropped dimension per variable from which index varies
+    # between adjacent occurrences.  ``True`` is accepted as a legacy
+    # alias of ``"second"``.
+    if to_1d_flag is True:
+        to_1d_flag = "second"
+
+    inner_dim_votes = None
+    if to_1d_flag == "auto":
+        inner_dim_votes = _vote_inner_dimensions(var_tokens)
+
     var_to_positions = {}
     var_to_simple_var = OrderedDict()
 
@@ -87,19 +153,38 @@ def _predict_simple_format_main(
 
         dim = var_token.dim_num()
 
-        if dim == 2 and to_1d_flag:
-            simple_var.first_index = (
-                simple_var.second_index
-            )
-            simple_var.second_index = None
-            dim = 1
+        if dim >= 2 and to_1d_flag:
+            # Collapse the inner (varying) dimension that a compact
+            # character row represents as one string token.
+            if to_1d_flag == "first":
+                drop_dim = dim - 1
+            elif to_1d_flag == "second":
+                drop_dim = 0
+            else:
+                var_votes = inner_dim_votes.get(var_name)
+                if var_votes is None:
+                    drop_dim = dim - 1
+                else:
+                    drop_dim = max(
+                        range(dim),
+                        key=lambda d: (
+                            var_votes[d],
+                            d,
+                        ),
+                    )
 
-        elif dim == 3 and to_1d_flag:
-            # A compact character row represents the innermost
-            # dimension as one string token. Preserve the outer two
-            # indices and collapse only the third dimension.
+            kept = [
+                simple_var.first_index,
+                simple_var.second_index,
+                simple_var.third_index,
+            ][:dim]
+            kept.pop(drop_dim)
+            simple_var.first_index = kept[0]
+            simple_var.second_index = (
+                kept[1] if len(kept) > 1 else None
+            )
             simple_var.third_index = None
-            dim = 2
+            dim -= 1
 
         if dim == 0:
             root.push_back(

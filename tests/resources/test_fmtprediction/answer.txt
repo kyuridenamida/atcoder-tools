@@ -844,7 +844,7 @@ abc175-F                                 OK                   [(Singular: N),(Pa
 abc176-A                                 OK                   [(Singular: N),(Singular: X),(Singular: T)] [('N', <class 'int'>), ('X', <class 'int'>), ('T', <class 'int'>)]
 abc176-B                                 OK                   [(Singular: N)] [('N', <class 'str'>)]
 abc176-C                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
-abc176-D                                 No result
+abc176-D                                 OK                   [(Singular: H),(Singular: W),(Singular: C_h),(Singular: C_w),(Singular: D_h),(Singular: D_w),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('C_h', <class 'int'>), ('C_w', <class 'int'>), ('D_h', <class 'int'>), ('D_w', <class 'int'>), ('S', <class 'str'>)]
 abc176-E                                 OK                   [(Singular: H),(Singular: W),(Singular: M),(Parallel: h,w | 1 to M)] [('H', <class 'int'>), ('W', <class 'int'>), ('M', <class 'int'>), ('h', <class 'int'>), ('w', <class 'int'>)]
 abc176-F                                 OK                   [(Singular: N),(Parallel: A | 1 to 3*N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 abc177-A                                 OK                   [(Singular: D),(Singular: T),(Singular: S)] [('D', <class 'int'>), ('T', <class 'int'>), ('S', <class 'int'>)]
@@ -933,7 +933,7 @@ abc190-E                                 OK                   [(Singular: N),(Si
 abc190-F                                 OK                   [(Singular: N),(Parallel: a | 0 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>)]
 abc191-A                                 OK                   [(Singular: V),(Singular: T),(Singular: S),(Singular: D)] [('V', <class 'int'>), ('T', <class 'int'>), ('S', <class 'int'>), ('D', <class 'int'>)]
 abc191-B                                 OK                   [(Singular: N),(Singular: X),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>)]
-abc191-C                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to W)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
+abc191-C                                 OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 abc191-D                                 OK                   [(Singular: X),(Singular: Y),(Singular: R)] [('X', <class 'float'>), ('Y', <class 'float'>), ('R', <class 'float'>)]
 abc191-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: A,B,C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc191-F                                 OK                   [(Singular: N),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
@@ -994,7 +994,7 @@ abc200-F                                 OK                   [(Singular: S),(Si
 abc201-A                                 OK                   [(Parallel: A | 1 to 3)] [('A', <class 'int'>)]
 abc201-B                                 OK                   [(Singular: N),(Parallel: S,T | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>), ('T', <class 'int'>)]
 abc201-C                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
-abc201-D                                 No result
+abc201-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: A | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'str'>)]
 abc201-E                                 OK                   [(Singular: N),(Parallel: u,v,w | 1 to N-1)] [('N', <class 'int'>), ('u', <class 'int'>), ('v', <class 'int'>), ('w', <class 'int'>)]
 abc201-F                                 OK                   [(Singular: N),(Parallel: P | 1 to N),(Parallel: A,B,C | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 abc202-A                                 OK                   [(Singular: a),(Singular: b),(Singular: c)] [('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>)]
@@ -1478,7 +1478,7 @@ abc264-C                                 No result
 abc264-D                                 OK                   [(Singular: S)] [('S', <class 'str'>)]
 abc264-E                                 OK                   [(Singular: N),(Singular: M),(Singular: E),(Parallel: U,V | 1 to E),(Singular: Q),(Parallel: X | 1 to Q)] [('N', <class 'int'>), ('M', <class 'int'>), ('E', <class 'int'>), ('U', <class 'int'>), ('V', <class 'int'>), ('Q', <class 'int'>), ('X', <class 'int'>)]
 abc264-Ex                                OK                   [(Singular: N),(Parallel: P | 2 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
-abc264-F                                 No result
+abc264-F                                 OK                   [(Singular: H),(Singular: W),(Parallel: R | 1 to H),(Parallel: C | 1 to W),(Parallel: A | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('R', <class 'int'>), ('C', <class 'int'>), ('A', <class 'str'>)]
 abc264-G                                 OK                   [(Singular: N),(Parallel: T,P | 1 to N)] [('N', <class 'int'>), ('T', <class 'str'>), ('P', <class 'int'>)]
 abc265-A                                 OK                   [(Singular: X),(Singular: Y),(Singular: N)] [('X', <class 'int'>), ('Y', <class 'int'>), ('N', <class 'int'>)]
 abc265-B                                 OK                   [(Singular: N),(Singular: M),(Singular: T),(Parallel: A | 1 to N-1),(Parallel: X,Y | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('T', <class 'int'>), ('A', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>)]
@@ -2215,7 +2215,7 @@ abc363-E                                 OK                   [(Singular: H),(Si
 abc363-F                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 abc363-G                                 No result
 abc364-A                                 OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
-abc364-B                                 No result
+abc364-B                                 OK                   [(Singular: H),(Singular: W),(Singular: S_i),(Singular: S_j),(Parallel: C | 1 to H),(Singular: X)] [('H', <class 'int'>), ('W', <class 'int'>), ('S_i', <class 'int'>), ('S_j', <class 'int'>), ('C', <class 'str'>), ('X', <class 'str'>)]
 abc364-C                                 OK                   [(Singular: N),(Singular: X),(Singular: Y),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 abc364-D                                 OK                   [(Singular: N),(Singular: Q),(Parallel: a | 1 to N),(Parallel: b,k | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('k', <class 'int'>)]
 abc364-E                                 OK                   [(Singular: N),(Singular: X),(Singular: Y),(Parallel: A,B | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('Y', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
@@ -3139,7 +3139,7 @@ agc032-C                                 OK                   [(Singular: N),(Si
 agc032-D                                 OK                   [(Singular: N),(Singular: A),(Singular: B),(Parallel: p | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('p', <class 'int'>)]
 agc032-E                                 OK                   [(Singular: N),(Singular: M),(Parallel: a | 1 to 2*N)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>)]
 agc032-F                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
-agc033-A                                 OK                   [(Singular: H),(Singular: W),(Parallel: A | 1 to W)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'str'>)]
+agc033-A                                 OK                   [(Singular: H),(Singular: W),(Parallel: A | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'str'>)]
 agc033-B                                 OK                   [(Singular: H),(Singular: W),(Singular: N),(Singular: s_r),(Singular: s_c),(Singular: S),(Singular: T)] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('s_r', <class 'int'>), ('s_c', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
 agc033-C                                 OK                   [(Singular: N),(Parallel: a,b | 1 to N-1)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>)]
 agc033-D                                 OK                   [(Singular: H),(Singular: W),(Parallel: A | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('A', <class 'str'>)]
@@ -3193,7 +3193,7 @@ agc041-C                                 OK                   [(Singular: N)] [(
 agc041-D                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
 agc041-E                                 OK                   [(Singular: N),(Singular: M),(Singular: T),(Parallel: x,y | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('T', <class 'int'>), ('x', <class 'int'>), ('y', <class 'int'>)]
 agc041-F                                 OK                   [(Singular: N),(Parallel: h | 1 to N)] [('N', <class 'int'>), ('h', <class 'int'>)]
-agc043-A                                 OK                   [(Singular: H),(Singular: W),(Parallel: s | 1 to W)] [('H', <class 'int'>), ('W', <class 'int'>), ('s', <class 'str'>)]
+agc043-A                                 OK                   [(Singular: H),(Singular: W),(Parallel: s | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('s', <class 'str'>)]
 agc043-B                                 OK                   [(Singular: N),(Parallel: a | 1 to 1)] [('N', <class 'int'>), ('a', <class 'int'>)]
 agc043-C                                 No result
 agc043-D                                 OK                   [(Singular: N),(Singular: M)] [('N', <class 'int'>), ('M', <class 'int'>)]
@@ -3394,7 +3394,7 @@ ahc003-A                                 No result
 ahc004-A                                 OK                   [(Singular: N),(Singular: M),(Parallel: s | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('s', <class 'str'>)]
 ahc005-A                                 OK                   [(Singular: N),(Singular: si),(Singular: sj),(Parallel: c | 0 to N-1)] [('N', <class 'int'>), ('si', <class 'int'>), ('sj', <class 'int'>), ('c', <class 'str'>)]
 ahc008-A                                 No result
-ahc009-A                                 OK                   [(Singular: s_i),(Singular: s_j),(Singular: t_i),(Singular: t_j),(Singular: p),(Parallel: h | 0 to 18),(Parallel: v | 0 to 19)] [('s_i', <class 'int'>), ('s_j', <class 'int'>), ('t_i', <class 'int'>), ('t_j', <class 'int'>), ('p', <class 'float'>), ('h', <class 'str'>), ('v', <class 'str'>)]
+ahc009-A                                 OK                   [(Singular: s_i),(Singular: s_j),(Singular: t_i),(Singular: t_j),(Singular: p),(Parallel: h | 0 to 19),(Parallel: v | 0 to 18)] [('s_i', <class 'int'>), ('s_j', <class 'int'>), ('t_i', <class 'int'>), ('t_j', <class 'int'>), ('p', <class 'float'>), ('h', <class 'str'>), ('v', <class 'str'>)]
 ahc011-A                                 OK                   [(Singular: N),(Singular: T),(Parallel: t | 0 to N-1)] [('N', <class 'int'>), ('T', <class 'int'>), ('t', <class 'str'>)]
 ahc013-A                                 No result
 ahc016-A                                 No result
@@ -4494,7 +4494,7 @@ arc214-B                                 OK                   [RepeatedCase: pre
 arc214-C                                 OK                   [(Singular: N),(Parallel: P | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>)]
 arc214-D                                 OK                   [(Singular: N)] [('N', <class 'int'>)]
 arc214-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Parallel: A | 1 to N),(Parallel: B | 1 to N)]] [('T', <class 'int'>)]
-arc214-F                                 No result
+arc214-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Parallel: S | 1 to H)]] [('T', <class 'int'>)]
 arc215-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(Singular: L),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 arc215-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to 2*N)]] [('T', <class 'int'>)]
 arc215-C                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: X,Y,Z | 1 to N)]] [('T', <class 'int'>)]
@@ -4521,7 +4521,7 @@ arc219-A                                 OK                   [(Singular: N),(Si
 arc219-B                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: P | 1 to N)]] [('T', <class 'int'>)]
 arc219-C                                 OK                   [(Singular: H),(Singular: W),(Singular: N),(Parallel: A,B | 1 to N)] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc219-D                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: K),(TwoDimensional: A)]] [('T', <class 'int'>)]
-arc219-E                                 No result
+arc219-E                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Parallel: S | 1 to 2*H)]] [('T', <class 'int'>)]
 arc219-F                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 arc219-G                                 OK                   [(Singular: H),(Singular: W),(Singular: N),(Parallel: A,B | 1 to N)] [('H', <class 'int'>), ('W', <class 'int'>), ('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 arc220-A                                 OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N)]] [('T', <class 'int'>)]
@@ -5964,7 +5964,7 @@ m-solutions2019-B                        OK                   [(Singular: S)] [(
 m-solutions2019-C                        OK                   [(Singular: N),(Singular: A),(Singular: B),(Singular: C)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
 m-solutions2019-D                        OK                   [(Singular: N),(Parallel: a,b | 1 to N-1),(Parallel: c | 1 to N)] [('N', <class 'int'>), ('a', <class 'int'>), ('b', <class 'int'>), ('c', <class 'int'>)]
 m-solutions2019-E                        OK                   [(Singular: Q),(Parallel: x,d,n | 1 to Q)] [('Q', <class 'int'>), ('x', <class 'int'>), ('d', <class 'int'>), ('n', <class 'int'>)]
-m-solutions2019-F                        No result
+m-solutions2019-F                        OK                   [(Singular: N),(Parallel: A | 2 to N)] [('N', <class 'int'>), ('A', <class 'int'>)]
 m-solutions2020-A                        OK                   [(Singular: X)] [('X', <class 'int'>)]
 m-solutions2020-B                        OK                   [(Singular: A),(Singular: B),(Singular: C),(Singular: K)] [('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>), ('K', <class 'int'>)]
 m-solutions2020-C                        OK                   [(Singular: N),(Singular: K),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('A', <class 'int'>)]
@@ -6425,7 +6425,7 @@ pakencamp-2025-day3-C                    OK                   [RepeatedCase: pre
 pakencamp-2025-day3-D                    OK                   [(Singular: N),(Singular: X),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('X', <class 'int'>), ('A', <class 'int'>)]
 pakencamp-2025-day3-E                    No result
 pakencamp-2025-day3-F                    OK                   [(Singular: N),(Parallel: A | 1 to N),(Parallel: B | 1 to N)] [('N', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
-pakencamp-2025-day3-G                    OK                   [(Singular: N),(Parallel: A | 0 to N-2),(Parallel: B | 0 to N-1)] [('N', <class 'int'>), ('A', <class 'str'>), ('B', <class 'str'>)]
+pakencamp-2025-day3-G                    OK                   [(Singular: N),(Parallel: A | 0 to N-1),(Parallel: B | 0 to N-2)] [('N', <class 'int'>), ('A', <class 'str'>), ('B', <class 'str'>)]
 pakencamp-2025-day3-H                    OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Parallel: A | 1 to N)]] [('T', <class 'int'>)]
 pakencamp-2025-day3-I                    OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: N),(Singular: L),(Parallel: P | 1 to N)]] [('T', <class 'int'>)]
 pakencamp-2025-day3-J                    OK                   [(Singular: N),(Singular: P),(Parallel: A | 1 to N)] [('N', <class 'int'>), ('P', <class 'int'>), ('A', <class 'int'>)]
@@ -6596,9 +6596,9 @@ past202012-open-A                        OK                   [(Singular: S)] [(
 past202012-open-B                        OK                   [(Singular: N),(Singular: S)] [('N', <class 'int'>), ('S', <class 'str'>)]
 past202012-open-C                        OK                   [(Singular: N)] [('N', <class 'int'>)]
 past202012-open-D                        OK                   [(Singular: N),(Parallel: S | 1 to N)] [('N', <class 'int'>), ('S', <class 'str'>)]
-past202012-open-E                        No result
+past202012-open-E                        OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H),(Parallel: T | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>), ('T', <class 'str'>)]
 past202012-open-F                        OK                   [(Singular: N),(Singular: M),(Parallel: A,B,C | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>), ('C', <class 'int'>)]
-past202012-open-G                        No result
+past202012-open-G                        OK                   [(Singular: H),(Singular: W),(Parallel: S | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('S', <class 'str'>)]
 past202012-open-H                        OK                   [(Singular: H),(Singular: W),(Singular: r),(Singular: c),(Parallel: s | 1 to H)] [('H', <class 'int'>), ('W', <class 'int'>), ('r', <class 'int'>), ('c', <class 'int'>), ('s', <class 'str'>)]
 past202012-open-I                        OK                   [(Singular: N),(Singular: M),(Singular: K),(Parallel: H | 1 to N),(Parallel: C | 1 to K),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('K', <class 'int'>), ('H', <class 'int'>), ('C', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 past202012-open-J                        OK                   [(Singular: S),(Singular: X)] [('S', <class 'str'>), ('X', <class 'int'>)]
@@ -7361,7 +7361,7 @@ utpc2021-H                               OK                   [(Singular: N),(Si
 utpc2021-I                               OK                   [(Singular: N),(Singular: M),(TwoDimensional: a)] [('N', <class 'int'>), ('M', <class 'int'>), ('a', <class 'int'>)]
 utpc2021-J                               OK                   [(Singular: N)] [('N', <class 'int'>)]
 utpc2021-K                               OK                   [(Singular: N),(Singular: Q),(Parallel: A | 0 to N-1),(Parallel: l,r | 1 to Q)] [('N', <class 'int'>), ('Q', <class 'int'>), ('A', <class 'int'>), ('l', <class 'int'>), ('r', <class 'int'>)]
-utpc2021-L                               No result
+utpc2021-L                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: H),(Singular: W),(Parallel: c | 1 to H)]] [('T', <class 'int'>)]
 utpc2021-M                               OK                   [(Singular: N),(Singular: K),(Parallel: p | 1 to N),(Parallel: q | 1 to N)] [('N', <class 'int'>), ('K', <class 'int'>), ('p', <class 'int'>), ('q', <class 'int'>)]
 utpc2021-N                               OK                   [(Singular: N),(Singular: M),(Parallel: P | 1 to N),(Parallel: A,B | 1 to M)] [('N', <class 'int'>), ('M', <class 'int'>), ('P', <class 'int'>), ('A', <class 'int'>), ('B', <class 'int'>)]
 utpc2022-A                               OK                   [RepeatedCase: prefix=[(Singular: T)], count=T, case=[(Singular: K)]] [('T', <class 'int'>)]
