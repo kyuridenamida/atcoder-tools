@@ -10,7 +10,7 @@ from atcodertools.client.atcoder import AtCoderClient, PageNotFoundError
 from atcodertools.codegen.code_style_config import CodeStyleConfig
 from atcodertools.config.config import Config
 from atcodertools.config.etc_config import EtcConfig
-from atcodertools.tools.envgen import prepare_contest, main, EnvironmentInitializationError
+from atcodertools.tools.envgen import extract_contest_id, prepare_contest, main, EnvironmentInitializationError
 from tests import requires_network
 
 logger = getLogger(__name__)
@@ -156,6 +156,25 @@ class TestEnvGen(unittest.TestCase):
                                      mock.call(60.0),
                                      mock.call(60.0),
                                      mock.call(60.0)])
+
+    def test_extract_contest_id(self):
+        self.assertEqual("arc001", extract_contest_id("arc001"))
+        self.assertEqual(
+            "abc243",
+            extract_contest_id("https://atcoder.jp/contests/abc243"))
+        self.assertEqual(
+            "abc243",
+            extract_contest_id("https://atcoder.jp/contests/abc243/"))
+        self.assertEqual(
+            "abc243",
+            extract_contest_id("https://atcoder.jp/contests/abc243/tasks"))
+        self.assertEqual(
+            "abc243",
+            extract_contest_id(
+                "https://atcoder.jp/contests/abc243/tasks/abc243_a?lang=ja"))
+        self.assertEqual(
+            "agc001",
+            extract_contest_id("http://atcoder.jp/contests/agc001/submit"))
 
     def assertDirectoriesEqual(self, expected_dir_path, dir_path):
         files1 = get_all_rel_file_paths(expected_dir_path)
