@@ -151,7 +151,7 @@ def prepare_procedure(atcoder_client: AtCoderClient,
              config.etc_config.in_example_format.replace("{}", "*"),
              config.etc_config.out_example_format.replace("{}", "*"),
              lang,
-             constants.judge_method,
+             constants.judge_method.to_judge(),
              constants.timeout
              ).save_to(metadata_path)
     emit_info("Saved metadata to {}".format(metadata_path))

@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from logging import getLogger, DEBUG, Formatter, StreamHandler
 
-from atcodertools.common.judgetype import JudgeType, ErrorType
+from atcodertools.common.judgetype import JudgeType, ErrorType, DecimalJudge, NormalJudge
 from atcodertools.constprediction.constants_prediction import predict_constants, predict_modulo, \
     predict_yes_no, YesNoPredictionFailedError, predict_judge_method, \
     MultipleDecimalCandidatesError, predict_limit
@@ -100,11 +100,11 @@ class TestConstantsPrediction(unittest.TestCase):
             <h3>出力</h3><p><var>\\frac{1}{\\frac{1}{A_1} + \ldots + \\frac{1}{A_N}}</var> の値を表す小数 (または整数) を出力せよ。</p>
             <p>出力は、ジャッジの出力との絶対誤差または相対誤差が <var>10^{-5}</var> 以下のとき正解と判定される。</p>
             </section>""")
-        self.assertEqual(0.00001, judge_method.to_dict()["diff"])
-        self.assertEqual(JudgeType.Decimal.value,
-                         judge_method.to_dict()["judge_type"])
-        self.assertEqual(ErrorType.AbsoluteOrRelative.value,
-                         judge_method.to_dict()["error_type"])
+        self.assertEqual(0.00001, judge_method.diff)
+        self.assertEqual(JudgeType.Decimal,
+                         judge_method.judge_type)
+        self.assertEqual(ErrorType.AbsoluteOrRelative,
+                         judge_method.error_type)
 
     def test_absolute_error_judge_method_case(self):
         judge_method = predict_judge_method(
@@ -117,11 +117,11 @@ class TestConstantsPrediction(unittest.TestCase):
                     なお、出力の最後には改行を入れること。
                 </section>
             </div>""")
-        self.assertEqual(0.01, judge_method.to_dict()["diff"])
-        self.assertEqual(JudgeType.Decimal.value,
-                         judge_method.to_dict()["judge_type"])
-        self.assertEqual(ErrorType.Absolute.value,
-                         judge_method.to_dict()["error_type"])
+        self.assertEqual(0.01, judge_method.diff)
+        self.assertEqual(JudgeType.Decimal,
+                         judge_method.judge_type)
+        self.assertEqual(ErrorType.Absolute,
+                         judge_method.error_type)
 
     def test_relative_error_judge_method_case(self):
         judge_method = predict_judge_method(
@@ -133,11 +133,11 @@ class TestConstantsPrediction(unittest.TestCase):
             </section>
             </div>
             </div>""")
-        self.assertEqual(0.000000001, judge_method.to_dict()["diff"])
-        self.assertEqual(JudgeType.Decimal.value,
-                         judge_method.to_dict()["judge_type"])
-        self.assertEqual(ErrorType.Relative.value,
-                         judge_method.to_dict()["error_type"])
+        self.assertEqual(0.000000001, judge_method.diff)
+        self.assertEqual(JudgeType.Decimal,
+                         judge_method.judge_type)
+        self.assertEqual(ErrorType.Relative,
+                         judge_method.error_type)
 
     def test_normal_judge_method_case(self):
         judge_method = predict_judge_method(
@@ -148,8 +148,8 @@ class TestConstantsPrediction(unittest.TestCase):
             </section>
             </div>
             </div>""")
-        self.assertEqual(JudgeType.Normal.value,
-                         judge_method.to_dict()["judge_type"])
+        self.assertEqual(JudgeType.Normal,
+                         judge_method.judge_type)
 
     def test_judge_method_prediction_fails_with_multiple_cands(self):
         try:
@@ -158,6 +158,21 @@ class TestConstantsPrediction(unittest.TestCase):
             self.fail("Must not reach here")
         except MultipleDecimalCandidatesError:
             pass
+
+    def test_judge_method_to_judge_conversion(self):
+        judge = predict_judge_method(
+            """
+            <section>
+            <h3>出力</h3><p>絶対誤差または相対誤差が <var>10^{-5}</var> 以下のとき正解と判定される。</p>
+            </section>""").to_judge()
+        self.assertIsInstance(judge, DecimalJudge)
+        self.assertEqual(0.00001, judge.diff)
+        self.assertEqual(ErrorType.AbsoluteOrRelative, judge.error_type)
+
+        self.assertIsInstance(
+            predict_judge_method(
+                "<section><h3>出力</h3><p>答えを出力せよ。</p></section>").to_judge(),
+            NormalJudge)
 
     @unittest.expectedFailure
     def test_tricky_judge_method_case(self):
@@ -174,8 +189,8 @@ class TestConstantsPrediction(unittest.TestCase):
             <p>ただし、<var>p</var> に <var>10^{-6}</var> 以下の相対誤差が生じても <var>x</var> は変わらないことが保証されるものとします。</p>
             </section>
             </div>""")
-        self.assertEqual(JudgeType.Normal.value,
-                         judge_method.to_dict()["judge_type"])
+        self.assertEqual(JudgeType.Normal,
+                         judge_method.judge_type)
 
     def _load(self, html_path):
         with open(os.path.join(self.test_dir, html_path), 'r') as f:

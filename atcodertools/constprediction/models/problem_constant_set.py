@@ -1,4 +1,4 @@
-from atcodertools.common.judgetype import Judge
+from atcodertools.common.judgetype import JudgeMethod
 
 
 class ProblemConstantSet:
@@ -7,7 +7,7 @@ class ProblemConstantSet:
                  mod: int = None,
                  yes_str: str = None,
                  no_str: str = None,
-                 judge_method: Judge = None,
+                 judge_method: JudgeMethod = None,
                  timeout: float = None,
                  ):
         self.mod = mod
