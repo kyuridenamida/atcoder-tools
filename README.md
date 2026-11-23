@@ -1,6 +1,8 @@
 ![Build Status](https://github.com/kyuridenamida/atcoder-tools/actions/workflows/tests.yml/badge.svg?branch=stable)
 [![codecov](https://codecov.io/gh/kyuridenamida/atcoder-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/kyuridenamida/atcoder-tools)
 [![PyPI](https://img.shields.io/pypi/v/atcoder-tools.svg)](https://pypi.python.org/pypi/atcoder-tools)
+[![Downloads](https://static.pepy.tech/badge/atcoder-tools)](https://pepy.tech/project/atcoder-tools)
+[![Downloads/month](https://static.pepy.tech/badge/atcoder-tools/month)](https://pepy.tech/project/atcoder-tools)
 
 【重要】バージョン2.15.0以降ではABCを含むコンテストの開催期間中においてもコード自動生成が許可されるようになりました (2025/11/9)
 ====
