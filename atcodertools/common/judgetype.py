@@ -23,6 +23,20 @@ class NoJudgeTypeException(Exception):
     pass
 
 
+def _normalize_output(text: str):
+    """
+    Split text into lines for comparison.
+
+    Trailing whitespace of each line and trailing empty lines are
+    ignored so that the result matches AtCoder's judge behavior,
+    where e.g. "a b " and "a b" are both accepted.
+    """
+    lines = [line.rstrip() for line in text.split("\n")]
+    while lines and lines[-1] == "":
+        lines.pop()
+    return lines
+
+
 class Judge(metaclass=ABCMeta):
     @abstractmethod
     def verify(self, output, expected):
@@ -38,7 +52,7 @@ class NormalJudge(Judge):
         self.judge_type = JudgeType.Normal
 
     def verify(self, output, expected):
-        return output == expected
+        return _normalize_output(output) == _normalize_output(expected)
 
     def to_dict(self):
         return {
