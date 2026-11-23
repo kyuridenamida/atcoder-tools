@@ -11,6 +11,7 @@ from atcodertools.tools.submit import main as submit_main
 from atcodertools.tools.codegen import main as codegen_main
 from atcodertools.tools.compiler import main as compiler_main
 from atcodertools.tools.setter import main as setter_main
+from atcodertools.tools.login import main as login_main
 from atcodertools.release_management.version import __version__
 from colorama import Fore, Style
 
@@ -40,7 +41,7 @@ def notify_if_latest_version_found():
 def main():
     notify_if_latest_version_found()
 
-    if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "compile", "set", "version"):
+    if len(sys.argv) < 2 or sys.argv[1] not in ("gen", "test", "submit", "codegen", "compile", "set", "version", "login"):
         print("Usage:")
         print("{} gen -- to generate workspace".format(sys.argv[0]))
         print(
@@ -54,6 +55,8 @@ def main():
             "{} set -- to set some additional option(error value, language)".format(sys.argv[0]))
         print(
             "{} version -- show atcoder-tools version".format(sys.argv[0]))
+        print(
+            "{} login -- to log in to AtCoder and save the session".format(sys.argv[0]))
         sys.exit(-1)
 
     prog = " ".join(sys.argv[:2])
@@ -79,3 +82,6 @@ def main():
 
     if sys.argv[1] == "version":
         print(__version__)
+
+    if sys.argv[1] == "login":
+        exit_program(login_main(prog, args))
