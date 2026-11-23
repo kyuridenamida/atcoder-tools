@@ -10,6 +10,7 @@ from atcodertools.tools.setter import main
 from atcodertools.tools.models.metadata import Metadata
 from atcodertools.common.language import JAVA
 from atcodertools.common.judgetype import ErrorType
+from tests import requires_network
 
 logger = getLogger(__name__)
 
@@ -37,6 +38,7 @@ class TestSetter(unittest.TestCase):
         shutil.rmtree(self.temp_dir)
         logger.info(self.temp_dir)
 
+    @requires_network
     def test_setter_change_lang(self):
         test_dir = os.path.join(self.temp_dir, "test_setter")
         shutil.copytree(os.path.join(RESOURCE_DIR, "test"), test_dir)

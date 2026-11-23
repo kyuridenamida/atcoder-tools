@@ -21,6 +21,7 @@ from atcodertools.codegen.template_engine import render
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 from tests.utils.fmtprediction_test_runner import FormatPredictionTestRunner, Response
 from tests.utils.gzip_controller import make_tst_data_controller
+from tests import requires_compilers
 
 
 RESOURCE_DIR = os.path.join(
@@ -167,6 +168,7 @@ class TestCodeGenerator(unittest.TestCase):
         self.assertEqual(_load_text_file("answer_tab.txt"),
                          _trim(render(template, config=CodeStyleConfig(indent_type=INDENT_TYPE_TAB), input_part=_load_text_file("indent_tab.txt"))))
 
+    @requires_compilers
     def test_default_code_generators_and_templates(self):
         def _full_path(filename):
             return os.path.join(RESOURCE_DIR, "test_default_code_generators_and_templates", filename)

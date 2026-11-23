@@ -14,7 +14,7 @@ AtCoderToolsへのコントリビューションに興味を持って頂きあ�
 
 ### 1. 適切なPythonバージョンを用意
 
-ユーザーの環境にpython 3.6以降がインストールされていることを想定しています。
+ユーザーの環境にpython 3.10以降がインストールされていることを想定しています。
 それらは各自で各々インストールしてください。
 
 ### 2. Poetryを通じたパッケージにインストール
@@ -58,9 +58,19 @@ https://github.com/kyuridenamida/atcoder-tools を開き、右上のForkボタ�
 
 ### 5. Linterをかける
 自動整形や不要なインポートを静的チェックします。
+```
+poetry run flake8 --ignore=E501,W503,W605 --exclude=atcodertools/tools/templates/,tests/resources/test_codegen/ atcodertools tests
+poetry run autopep8 -r . --exclude 'default_template.py,test_codegen' --diff
+```
+`autopep8`は差分が出なければOKです。
 
 ### 6. ユニットテストが通ることを確認する
-TODO: ここ
+```
+poetry run nosetests tests --exe -v
+```
+既定ではネットワークもコンパイラも使わないテストだけが実行されます（2分程度）。
+実際のAtCoderに接続するテストは`ATCODERTOOLS_TEST_NETWORK=1`、各言語のコンパイラが必要なテストは`ATCODERTOOLS_TEST_COMPILERS=1`を付けたときだけ実行されます。
+どちらもCIでは実行されるので、手元で準備できない場合はCIの結果を確認してください。
 
 ### 7. Commitする + Pushする
 

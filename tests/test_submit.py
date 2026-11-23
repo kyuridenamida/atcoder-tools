@@ -1,6 +1,7 @@
 import os
 import unittest
 from atcodertools.tools import submit
+from tests import requires_network
 
 RESOURCE_DIR = os.path.abspath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
@@ -37,6 +38,7 @@ class TestTester(unittest.TestCase):
             '', ['-d', os.path.join(RESOURCE_DIR, "without_metadata")], fake_cookie_supplier, False)
         self.assertFalse(ok)
 
+    @requires_network
     def test_test_fail(self):
         ok = submit.main(
             '', ['-d', os.path.join(RESOURCE_DIR, "with_metadata")], fake_cookie_supplier, False)
