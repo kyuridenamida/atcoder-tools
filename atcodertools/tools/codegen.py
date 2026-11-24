@@ -9,7 +9,7 @@ from io import IOBase
 
 from colorama import Fore
 
-from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError
+from atcodertools.client.atcoder import AtCoderClient, Contest, LoginError, PageNotFoundError
 from atcodertools.client.models.problem import Problem
 from atcodertools.client.models.problem_content import InputFormatDetectionError, SampleDetectionError
 from atcodertools.codegen.code_style_config import DEFAULT_WORKSPACE_DIR_PATH
@@ -22,7 +22,11 @@ from atcodertools.fmtprediction.models.format_prediction_result import FormatPre
 from atcodertools.fmtprediction.predict_format import MultiplePredictionResultsError, NoPredictionResultError, predict_format
 from atcodertools.tools import get_default_config_path
 from atcodertools.tools.envgen import USER_CONFIG_PATH, get_config, output_splitter
-from atcodertools.tools.utils import with_color
+from atcodertools.tools.utils import (
+    ConflictingLoginOptionsError,
+    decide_download_without_login,
+    with_color,
+)
 
 
 class UnknownProblemURLError(Exception):
@@ -128,7 +132,13 @@ def main(prog, args, output_file=sys.stdout):
 
     parser.add_argument("--without-login",
                         action="store_true",
-                        help="Download data without login")
+                        default=None,
+                        help=argparse.SUPPRESS)
+
+    parser.add_argument("--with-login",
+                        action="store_true",
+                        default=None,
+                        help="Download data with login")
 
     parser.add_argument("--lang",
                         help="Programming language of your template code, {}.\n"
@@ -163,8 +173,15 @@ def main(prog, args, output_file=sys.stdout):
     args.skip_existing_problems = False  # dummy for get_config()
     config = get_config(args)
 
+    try:
+        download_without_login = decide_download_without_login(
+            args, config.etc_config)
+    except ConflictingLoginOptionsError as e:
+        logger.error(with_color(str(e), Fore.LIGHTRED_EX))
+        sys.exit(-1)
+
     client = AtCoderClient()
-    if not args.without_login or not config.etc_config.download_without_login:
+    if not download_without_login:
         try:
             client.login(
                 save_session_cache=not config.etc_config.save_no_session_cache)
@@ -175,10 +192,23 @@ def main(prog, args, output_file=sys.stdout):
     else:
         logger.info("Downloading data without login.")
 
-    generate_code(client,
-                  args.url,
-                  config,
-                  output_file=output_file)
+    try:
+        generate_code(client,
+                      args.url,
+                      config,
+                      output_file=output_file)
+    except PageNotFoundError:
+        if download_without_login:
+            logger.error(with_color(
+                "Failed to download the problem page. "
+                "The problem may not be publicly accessible. "
+                "Use --with-login to download it with login.",
+                Fore.LIGHTRED_EX))
+        else:
+            logger.error(with_color(
+                "Failed to download the problem page.",
+                Fore.LIGHTRED_EX))
+        sys.exit(-1)
 
 
 if __name__ == "__main__":

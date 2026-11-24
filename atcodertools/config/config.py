@@ -124,6 +124,8 @@ class Config:
                 etc_config_dic = _update_config_dict(etc_config_dic,
                                                      dict(
                                                          download_without_login=args.without_login,
+                                                         download_with_login=getattr(
+                                                             args, "with_login", None),
                                                          parallel_download=args.parallel,
                                                          save_no_session_cache=args.save_no_session_cache,
                                                          skip_existing_problems=args.skip_existing_problems))
