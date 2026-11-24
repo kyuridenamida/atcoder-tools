@@ -27,18 +27,20 @@ Python 3.10 から 3.14 で動作する [AtCoder](https://atcoder.jp/) からサ
     - カスタムテンプレートに対応
     - 他言語対応のためのコントリビューション(≒中間形式からコードに変換する部分のPR)を募集中です!
 
+<!-- LANGUAGES_TABLE:BEGIN -->
 |対応言語  |Contributor 1|Contributor 2|
 |---:|:---:|:---:|
 |C++|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)|[@asi1024](https://github.com/asi1024/) (template)|
 |Java|[@kyuridenamida](https://github.com/kyuridenamida/) (generator, template)||
 |Rust|[@fukatani](https://github.com/fukatani/) (generator, template)|[@koba-e964](https://github.com/koba-e964/) (template, CR)|
 |Python3|[@kmyk](https://github.com/kmyk/) (generator, template)|[@penpenpng](https://github.com/penpenpng/) (generator)|
-|D|[@penpenpng](https://github.com/penpenpng/) (generator, template)||
 |Nim|[@chaemon](https://github.com/chaemon/) (generator, template)||
+|D|[@penpenpng](https://github.com/penpenpng/) (generator, template)||
 |C#|[@chaemon](https://github.com/chaemon/) (generator, template)||
 |Swift|[@firewood](https://github.com/firewood/) (generator, template)||
 |Go|[@nu50218](https://github.com/nu50218/) (generator, template)|[@chaemon](https://github.com/chaemon/) (generator, template)|
 |Julia|[@yatra9](https://github.com/yatra9/) (generator, template)|[@chaemon](https://github.com/chaemon/) (generator, template)|
+<!-- LANGUAGES_TABLE:END -->
 
 ## Demo
 <img src="https://user-images.githubusercontent.com/233559/52807100-f6e2d300-30cd-11e9-8906-82b9f9b2dff7.gif" width=70%>

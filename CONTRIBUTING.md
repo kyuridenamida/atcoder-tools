@@ -56,6 +56,8 @@ https://github.com/kyuridenamida/atcoder-tools を開き、右上のForkボタ�
 ### 4. ドキュメントを書く
 新しいコマンドラインパラメータやConfigの場合、README.mdにドキュメントを書いてください。
 
+対応言語を追加・変更した場合、READMEの対応言語テーブルは`ALL_LANGUAGES`から自動生成されます。`dev-tools/update_readme_languages.py`を実行してREADME.mdを更新してください(CIでテーブルの鮮度が検証されます)。Contributor列は同ファイル内の`README_LANG_INFO`で管理しています。
+
 ### 5. Linterをかける
 自動整形や不要なインポートを静的チェックします。
 ```
