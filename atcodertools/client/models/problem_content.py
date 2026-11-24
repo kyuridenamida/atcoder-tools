@@ -1,3 +1,4 @@
+import re
 from typing import List, Tuple, Optional
 
 from bs4 import BeautifulSoup
@@ -167,8 +168,12 @@ class ProblemContent:
 
     @staticmethod
     def _primary_strategy(soup):
-        input_tags = []
-        output_tags = []
+        # Samples are paired by the number in their section title
+        # (e.g. "入力例 2" with "出力例 2") so that a page with
+        # unbalanced example sections still yields every consistent
+        # pair instead of failing with SampleDetectionError.
+        input_examples = {}
+        output_examples = {}
         input_format_tags = None
         input_format_context = ""
 
@@ -177,23 +182,51 @@ class ProblemContent:
             if h3tag is None:
                 continue
 
+            raw_title = h3tag.get_text()
+            number_match = re.search(r"\d+", raw_title)
+            number = int(number_match.group()) if number_match else None
+
             # Some problems have strange characters in h3 tags which should
             # be removed.
             section_title = remove_non_jp_characters(
-                h3tag.get_text()
+                raw_title
             )
 
+            pre = tag.find('pre')
+
             if section_title.startswith("入力例"):
-                input_tags.append(tag.find('pre'))
+                if pre is not None and number not in input_examples:
+                    input_examples[number] = pre
+            elif section_title.startswith("出力例"):
+                if pre is not None and number not in output_examples:
+                    output_examples[number] = pre
+            elif section_title.startswith("入力生成"):
+                # AHC-style "入力生成方法" sections describe how inputs
+                # are generated; they are not the input format itself.
+                continue
             elif section_title.startswith("入力"):
                 input_format_tags = tag.find_all('pre')
                 input_format_context = tag.get_text(
                     " ",
                     strip=True,
                 )
+            elif input_format_tags is None and section_title.startswith("入出力"):
+                pres = tag.find_all('pre')
+                if pres:
+                    # Some problems (e.g. AHC) use a combined I/O
+                    # section whose first <pre> is the input format.
+                    input_format_tags = [pres[0]]
+                    input_format_context = tag.get_text(
+                        " ",
+                        strip=True,
+                    )
 
-            if section_title.startswith("出力例"):
-                output_tags.append(tag.find('pre'))
+        input_tags = []
+        output_tags = []
+        for number, input_tag in input_examples.items():
+            if number in output_examples:
+                input_tags.append(input_tag)
+                output_tags.append(output_examples[number])
 
         return (
             input_format_tags,
