@@ -1,5 +1,4 @@
 import os
-import sys
 import tempfile
 import unittest
 
@@ -61,9 +60,9 @@ class TestRunProgram(unittest.TestCase):
         # Regression test for the failure where a relative --dir made
         # the executable unresolvable because subprocess.run looks up a
         # relative executable path relative to cwd.
-        script = self._write(
+        self._write(
             "main.py", "import sys\nsys.stdout.write(sys.stdin.read())")
-        in_file = self._write("in_1.txt", "hi\n")
+        self._write("in_1.txt", "hi\n")
 
         basename = os.path.basename(self.temp_dir)
         parent = os.path.dirname(self.temp_dir)
