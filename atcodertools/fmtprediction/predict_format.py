@@ -263,7 +263,7 @@ def _predict_simple_format_candidate_groups_without_string_collapse(
         group = []
         seen = set()
 
-        for to_1d_flag in (False, True):
+        for to_1d_flag in (False, "auto", "first", "second"):
             try:
                 candidate = predict_simple_format(
                     tokenized_candidate.var_tokens,

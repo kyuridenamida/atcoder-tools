@@ -109,6 +109,38 @@ def test_ldots_grid_becomes_string_rows():
     )
 
 
+def test_transposed_grid_uses_row_index():
+    # tenka1-2012 style ``c_{(x,y)}`` where the FIRST index is the
+    # column: the surviving dimension after the 1-D collapse must be
+    # the second index (the row).
+    actual = _predict(
+        (
+            "H W\n"
+            "c_{(0,0)}c_{(1,0)}"
+            "...c_{(W-1,0)}\n"
+            "c_{(0,1)}c_{(1,1)}"
+            "...c_{(W-1,1)}\n"
+            ":\n"
+            "c_{(0,H-1)}c_{(1,H-1)}"
+            "...c_{(W-1,H-1)}\n"
+        ),
+        [
+            (
+                "3 5\n"
+                "..#..\n"
+                ".#.#.\n"
+                "#...#\n"
+            )
+        ],
+    )
+
+    assert actual == (
+        "[(Singular: H),"
+        "(Singular: W),"
+        "(Parallel: c | 0 to H-1)]"
+    )
+
+
 def test_numeric_grid_is_not_string_collapsed():
     actual = _predict(
         (
