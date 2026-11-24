@@ -26,13 +26,13 @@ void solve(long long N, long long M, long long A, long long B){
 }
 int main(){
     long long N;
-    std::scanf("%lld", &N);
+    std::cin >> N;
     long long M;
-    std::scanf("%lld", &M);
+    std::cin >> M;
     long long A;
-    std::scanf("%lld", &A);
+    std::cin >> A;
     long long B;
-    std::scanf("%lld", &B);
+    std::cin >> B;
     solve(N, M, A, B);
     return 0;
 }

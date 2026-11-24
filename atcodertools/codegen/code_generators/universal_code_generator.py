@@ -142,6 +142,21 @@ class UniversalCodeGenerator():
             prediction_success=True,
         )
 
+        for key, section in self.info.items():
+            if (
+                key.startswith("input_")
+                and key not in ("input_func", "input_part_prefix")
+                and isinstance(section, dict)
+            ):
+                parameters["input_part_" + key[len("input_"):]] = (
+                    self._get_input_part(
+                        global_mode=False,
+                        format_=self._solve_format,
+                        include_prefix=True,
+                        input_key=key,
+                    )
+                )
+
         return parameters
 
     def _input_part(self, global_mode):
@@ -156,6 +171,7 @@ class UniversalCodeGenerator():
         global_mode,
         format_,
         include_prefix=True,
+        input_key="input",
     ):
         lines = []
 
@@ -181,6 +197,7 @@ class UniversalCodeGenerator():
             lines += self._render_pattern(
                 pattern,
                 global_mode,
+                input_key,
             )
 
             # Preserve the existing language-specific layout contract.
@@ -385,10 +402,10 @@ class UniversalCodeGenerator():
             kind = self._get_variable_kind(var)
             return self.info["declare_and_allocate"][kind].format(**kwd)
 
-    def _input_code_for_var(self, var: Variable) -> str:
+    def _input_code_for_var(self, var: Variable, input_key="input") -> str:
         kwd = self._get_format_keywords(var)
         kwd["name"] = self._get_var_name(var)
-        return self.info["input"][var.type.value].format(**kwd)
+        return self.info[input_key][var.type.value].format(**kwd)
 
     def _get_var_name(self, var: Variable):
         name = var.name
@@ -435,7 +452,7 @@ class UniversalCodeGenerator():
                 self._append(
                     lines, self._generate_declaration_and_allocation(var))
 
-    def _append_singular_pattern(self, lines, pattern: Pattern, global_mode):
+    def _append_singular_pattern(self, lines, pattern: Pattern, global_mode, input_key="input"):
         var = pattern.all_vars()[0]
         if not global_mode:
             if "declare_and_input" in self.info:
@@ -444,12 +461,13 @@ class UniversalCodeGenerator():
                     lines, self.info["declare_and_input"][var.type.value].format(**kwd))
                 return
         self._append_declaration_and_allocation(lines, pattern, global_mode)
-        self._append(lines, self._input_code_for_var(var))
+        self._append(lines, self._input_code_for_var(var, input_key))
 
     def _render_pattern(
         self,
         pattern: Pattern,
         global_mode,
+        input_key="input",
     ):
         lines = []
         representative_var = (
@@ -461,6 +479,7 @@ class UniversalCodeGenerator():
                 lines,
                 pattern,
                 global_mode,
+                input_key,
             )
 
         elif isinstance(pattern, ParallelPattern):
@@ -503,7 +522,7 @@ class UniversalCodeGenerator():
                 for var in pattern.all_vars():
                     self._append(
                         lines,
-                        self._input_code_for_var(var),
+                        self._input_code_for_var(var, input_key),
                         1,
                     )
 
@@ -563,7 +582,7 @@ class UniversalCodeGenerator():
                 for var in pattern.all_vars():
                     self._append(
                         lines,
-                        self._input_code_for_var(var),
+                        self._input_code_for_var(var, input_key),
                         2,
                     )
 
@@ -644,7 +663,7 @@ class UniversalCodeGenerator():
                 for var in pattern.all_vars():
                     self._append(
                         lines,
-                        self._input_code_for_var(var),
+                        self._input_code_for_var(var, input_key),
                         3,
                     )
 
