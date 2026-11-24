@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import argparse
 import os
+import re
 import shutil
 import sys
 import traceback
@@ -36,6 +37,17 @@ class BannedFileDetectedError(Exception):
 
 class EnvironmentInitializationError(Exception):
     pass
+
+
+CONTEST_URL_PATTERN = re.compile(
+    r"^https?://[^/]*atcoder\.jp/contests/([^/?#]+)")
+
+
+def extract_contest_id(contest_id_or_url: str) -> str:
+    url_match = CONTEST_URL_PATTERN.match(contest_id_or_url)
+    if url_match:
+        return url_match.group(1)
+    return contest_id_or_url
 
 
 def output_splitter():
@@ -244,7 +256,8 @@ def main(prog, args):
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("contest_id",
-                        help="Contest ID (e.g. arc001)")
+                        help="Contest ID (e.g. arc001) or contest URL "
+                             "(e.g. https://atcoder.jp/contests/arc001)")
 
     parser.add_argument("--without-login",
                         action="store_true",
@@ -295,6 +308,7 @@ def main(prog, args):
                         )
 
     args = parser.parse_args(args)
+    args.contest_id = extract_contest_id(args.contest_id)
 
     if args.replacement is not None:
         logger.error(with_color("Sorry! --replacement argument no longer exists"
