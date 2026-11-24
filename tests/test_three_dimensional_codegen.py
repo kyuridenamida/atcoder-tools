@@ -90,7 +90,7 @@ class TestThreeDimensionalCodeGenerator(unittest.TestCase):
             parameters["actual_arguments"],
         )
         self.assertIn(
-            'A: "List[List[List[int]]]"',
+            'A: "list[list[list[int]]]"',
             parameters["formal_arguments"],
         )
 
@@ -160,7 +160,7 @@ class TestThreeDimensionalCodeGenerator(unittest.TestCase):
                 "",
                 (
                     'def solve(D: int, H: int, W: int, '
-                    'A: "List[List[List[int]]]"):'
+                    'A: "list[list[list[int]]]"):'
                 ),
                 (
                     "    print("

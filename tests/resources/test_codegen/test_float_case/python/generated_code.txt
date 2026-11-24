@@ -2,7 +2,7 @@
 import sys
 
 
-def solve(L: int, N: int, M: int, K: "List[float]", A: "List[int]", S: "List[float]"):
+def solve(L: int, N: int, M: int, K: "list[float]", A: "list[int]", S: "list[float]"):
     return
 
 
@@ -15,9 +15,9 @@ def main():
     L = int(next(tokens))  # type: int
     N = int(next(tokens))  # type: int
     M = int(next(tokens))  # type: int
-    K = [float(next(tokens)) for _ in range(L)]  # type: "List[float]"
-    A = [int()] * (N)  # type: "List[int]"
-    S = [float()] * (N)  # type: "List[float]"
+    K = [float(next(tokens)) for _ in range(L)]  # type: "list[float]"
+    A = [int()] * (N)  # type: "list[int]"
+    S = [float()] * (N)  # type: "list[float]"
     for i in range(N):
         A[i] = int(next(tokens))
         S[i] = float(next(tokens))

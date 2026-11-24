@@ -173,7 +173,7 @@ class TestThreeDimensionalCompactRows(unittest.TestCase):
         parameters = generator.generate_parameters()
 
         self.assertIn(
-            "List[List[str]]",
+            "list[list[str]]",
             parameters["formal_arguments"],
         )
 
