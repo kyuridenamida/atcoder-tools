@@ -131,6 +131,42 @@ class TestTester(unittest.TestCase):
             self.assertEqual(1, build_details_str_mock.call_count)
 
     @patch('atcodertools.tools.tester.build_details_str', return_value='')
+    @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, '3 4 5 1 2 \n', '', 0))
+    def test_run_for_samples__trailing_space(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock):
+        io_mock = mock_open(read_data='3 4 5 1 2\n')
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            self.assertEqual(TestSummary(1, False), tester.run_for_samples(
+                'a.out', [('in_1.txt', 'out_1.txt')], 1))
+
+    @patch('atcodertools.tools.tester.build_details_str', return_value='')
+    @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'correct', '', 0))
+    def test_run_for_samples__no_trailing_newline(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock):
+        io_mock = mock_open(read_data='correct\n')
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            self.assertEqual(TestSummary(1, False), tester.run_for_samples(
+                'a.out', [('in_1.txt', 'out_1.txt')], 1))
+
+    @patch('atcodertools.tools.tester.build_details_str', return_value='')
+    @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, '', '', 0))
+    def test_run_for_samples__empty_output(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock):
+        io_mock = mock_open(read_data='\n')
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            self.assertEqual(TestSummary(1, False), tester.run_for_samples(
+                'a.out', [('in_1.txt', 'out_1.txt')], 1))
+
+    @patch('atcodertools.tools.tester.build_details_str', return_value='')
+    @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'correct\nextra line', '', 0))
+    def test_run_for_samples__extra_output_line_is_wrong(self, run_program_mock: MagicMock, build_details_str_mock: MagicMock):
+        io_mock = mock_open(read_data='correct\n')
+
+        with patch('atcodertools.tools.tester.open', io_mock):
+            self.assertEqual(TestSummary(0, False), tester.run_for_samples(
+                'a.out', [('in_1.txt', 'out_1.txt')], 1))
+
+    @patch('atcodertools.tools.tester.build_details_str', return_value='')
     @patch('atcodertools.tools.tester.run_program', return_value=ExecResult(ExecStatus.NORMAL, 'wrong', '', 0))
     def test_run_for_samples__stop_execution_on_first_failure(self, run_program_mock: MagicMock,
                                                               build_details_str_mock: MagicMock):
