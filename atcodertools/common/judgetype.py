@@ -115,3 +115,27 @@ class DecimalJudge(Judge):
 class OtherJudge(Judge):
     # dummy
     pass
+
+
+class JudgeMethod:
+    """A plain data holder describing a judge method.
+
+    ProblemConstantSet keeps this instead of a Judge subclass so that
+    code-generation templates can read judge settings (type, error type,
+    diff) as simple attributes. Convert to a Judge via to_judge() when
+    the verification behavior is needed (e.g. in tester)."""
+
+    def __init__(self,
+                 judge_type: JudgeType = JudgeType.Normal,
+                 error_type: ErrorType = None,
+                 diff: float = None):
+        self.judge_type = judge_type
+        self.error_type = error_type
+        self.diff = diff
+
+    def to_judge(self) -> Judge:
+        if self.judge_type == JudgeType.Decimal:
+            return DecimalJudge(
+                error_type=self.error_type or ErrorType.AbsoluteOrRelative,
+                diff=self.diff if self.diff is not None else 0.0)
+        return NormalJudge()

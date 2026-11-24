@@ -4,7 +4,7 @@ from typing import Tuple, Optional
 from bs4 import BeautifulSoup
 
 from atcodertools.client.models.problem_content import ProblemContent, InputFormatDetectionError, SampleDetectionError
-from atcodertools.common.judgetype import ErrorType, NormalJudge, DecimalJudge, Judge
+from atcodertools.common.judgetype import ErrorType, JudgeType, JudgeMethod
 from atcodertools.common.logging import logger
 from atcodertools.constprediction.models.problem_constant_set import ProblemConstantSet
 import math
@@ -131,7 +131,7 @@ def predict_yes_no(html: str) -> Tuple[Optional[str], Optional[str]]:
     return yes_str, no_str
 
 
-def predict_judge_method(html: str) -> Judge:
+def predict_judge_method(html: str) -> JudgeMethod:
     def normalize(sentence):
         return sentence.replace('\\', '').replace("{", "").replace("}", "").replace(",", "").replace(" ", "").replace(
             "−", "-").lower().strip()
@@ -173,11 +173,14 @@ def predict_judge_method(html: str) -> Judge:
                 assert is_relative
                 error_type = ErrorType.Relative
 
-            return DecimalJudge(error_type, 10.0**(int(list(decimal_val_cands)[0])))
+            return JudgeMethod(
+                JudgeType.Decimal,
+                error_type,
+                10.0**(int(list(decimal_val_cands)[0])))
 
         raise MultipleDecimalCandidatesError(decimal_val_cands)
 
-    return NormalJudge()
+    return JudgeMethod()
 
 
 def predict_limit(html: str) -> Optional[int]:
@@ -224,7 +227,7 @@ def predict_constants(html: str) -> ProblemConstantSet:
     except MultipleModCandidatesError as e:
         logger.warning("decimal prediction failed -- "
                        "two or more candidates {} are detected as decimal values".format(e.cands))
-        judge = NormalJudge()
+        judge = JudgeMethod()
 
     try:
         timeout = predict_limit(html)
