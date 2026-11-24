@@ -372,14 +372,22 @@ class TestMultiCaseUniversalCodeGenerator(unittest.TestCase):
                     )
                 )
 
-                loop_header = information[
-                    "loop"
-                ]["header"].format(
-                    loop_var=parameters[
-                        "case_loop_var"
-                    ],
-                    length="Q",
-                )
+                if language.name == "rust":
+                    loop_header = (
+                        "for {} in 0..{} as usize {{".format(
+                            parameters["case_loop_var"],
+                            "Q",
+                        )
+                    )
+                else:
+                    loop_header = information[
+                        "loop"
+                    ]["header"].format(
+                        loop_var=parameters[
+                            "case_loop_var"
+                        ],
+                        length="Q",
+                    )
                 solve_call = (
                     EXPECTED_SOLVE_FUNCTIONS[
                         language.name

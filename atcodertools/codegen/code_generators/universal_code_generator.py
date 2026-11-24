@@ -66,16 +66,27 @@ class UniversalCodeGenerator():
         if for_third_index:
             index = var.third_index
             loop_var = self.info["index"]["k"]
+            collection = self.info["access"]["2d_seq"].format(
+                name=var.name,
+                index_i=self.info["index"]["i"],
+                index_j=self.info["index"]["j"],
+            )
         elif for_second_index:
             index = var.second_index
             loop_var = self.info["index"]["j"]
+            collection = self.info["access"]["seq"].format(
+                name=var.name,
+                index=self.info["index"]["i"],
+            )
         else:
             index = var.first_index
             loop_var = self.info["index"]["i"]
+            collection = var.name
 
         return self.info["loop"]["header"].format(
             loop_var=loop_var,
             length=self._get_length(index),
+            collection=collection,
         )
 
     def _insert_space_around_operators(self, code: str):
@@ -438,7 +449,7 @@ class UniversalCodeGenerator():
     def _append_singular_pattern(self, lines, pattern: Pattern, global_mode):
         var = pattern.all_vars()[0]
         if not global_mode:
-            if "declare_and_input" in self.info:
+            if "declare_and_input" in self.info and var.dim_num() == 0:
                 kwd = self._get_format_keywords(var)
                 self._append(
                     lines, self.info["declare_and_input"][var.type.value].format(**kwd))

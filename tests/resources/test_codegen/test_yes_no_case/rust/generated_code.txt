@@ -9,14 +9,10 @@ fn solve(N: i64, M: i64, A: i64, B: i64) {
 fn main() {
     let con = read_string();
     let mut scanner = Scanner::new(&con);
-    let mut N: i64;
-    N = scanner.next();
-    let mut M: i64;
-    M = scanner.next();
-    let mut A: i64;
-    A = scanner.next();
-    let mut B: i64;
-    B = scanner.next();
+    let N: i64 = scanner.next();
+    let M: i64 = scanner.next();
+    let A: i64 = scanner.next();
+    let B: i64 = scanner.next();
     solve(N, M, A, B);
 }
 

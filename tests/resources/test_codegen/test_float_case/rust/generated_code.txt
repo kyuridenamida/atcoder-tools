@@ -7,19 +7,16 @@ fn solve(L: i64, N: i64, M: i64, K: Vec<f64>, A: Vec<i64>, S: Vec<f64>) {
 fn main() {
     let con = read_string();
     let mut scanner = Scanner::new(&con);
-    let mut L: i64;
-    L = scanner.next();
-    let mut N: i64;
-    N = scanner.next();
-    let mut M: i64;
-    M = scanner.next();
+    let L: i64 = scanner.next();
+    let N: i64 = scanner.next();
+    let M: i64 = scanner.next();
     let mut K: Vec<f64> = vec![0f64; (L) as usize];
-    for i in 0..(L) as usize {
+    for i in 0..K.len() {
         K[i] = scanner.next();
     }
     let mut A: Vec<i64> = vec![0i64; (N) as usize];
     let mut S: Vec<f64> = vec![0f64; (N) as usize];
-    for i in 0..(N) as usize {
+    for i in 0..A.len() {
         A[i] = scanner.next();
         S[i] = scanner.next();
     }

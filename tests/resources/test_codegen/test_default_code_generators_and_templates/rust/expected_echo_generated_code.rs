@@ -36,26 +36,23 @@ fn solve(N: i64, M: i64, H: Vec<Vec<String>>, A: Vec<i64>, B: Vec<f64>, Q: i64, 
 fn main() {
     let con = read_string();
     let mut scanner = Scanner::new(&con);
-    let mut N: i64;
-    N = scanner.next();
-    let mut M: i64;
-    M = scanner.next();
+    let N: i64 = scanner.next();
+    let M: i64 = scanner.next();
     let mut H: Vec<Vec<String>> = vec![vec![String::new(); (M-1-2+1) as usize]; (N-2+1) as usize];
-    for i in 0..(N-2+1) as usize {
-        for j in 0..(M-1-2+1) as usize {
+    for i in 0..H.len() {
+        for j in 0..H[i].len() {
             H[i][j] = scanner.next();
         }
     }
     let mut A: Vec<i64> = vec![0i64; (N-2+1) as usize];
     let mut B: Vec<f64> = vec![0f64; (N-2+1) as usize];
-    for i in 0..(N-2+1) as usize {
+    for i in 0..A.len() {
         A[i] = scanner.next();
         B[i] = scanner.next();
     }
-    let mut Q: i64;
-    Q = scanner.next();
+    let Q: i64 = scanner.next();
     let mut X: Vec<i64> = vec![0i64; (M+Q) as usize];
-    for i in 0..(M+Q) as usize {
+    for i in 0..X.len() {
         X[i] = scanner.next();
     }
     // In order to avoid potential stack overflow, spawn a new thread.
