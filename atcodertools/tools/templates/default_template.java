@@ -32,7 +32,11 @@ class Main {
 
     {% if prediction_success %}
     static void solve({{ formal_arguments }}){
+{% if query_dispatch_skeleton %}
+{{ query_dispatch_skeleton }}
+{% else %}
 
+{% endif %}
     }
     {% endif %}
 }

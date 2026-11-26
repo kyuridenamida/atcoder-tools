@@ -15,7 +15,11 @@ const NO = "{{ no_str }}"
 {% if prediction_success %}
 
 function solve({{ formal_arguments }})
+{% if query_dispatch_skeleton %}
+{{ query_dispatch_skeleton }}
+{% else %}
 
+{% endif %}
 end
 {% endif %}
 

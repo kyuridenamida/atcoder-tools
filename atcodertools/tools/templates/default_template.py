@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 {% if prediction_success %}
 import sys
+{% if tagged_query or homogeneous_query %}
+from typing import List, Tuple
+{% endif %}
 {% endif %}
 {% if mod or yes_str or no_str %}
 
@@ -18,7 +21,11 @@ NO = "{{ no_str }}"  # type: str
 
 
 def solve({{ formal_arguments }}):
+{% if query_dispatch_skeleton %}
+{{ query_dispatch_skeleton }}
+{% else %}
     return
+{% endif %}
 {% endif %}
 
 
