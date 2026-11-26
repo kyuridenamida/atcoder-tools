@@ -3,8 +3,11 @@ import tempfile
 import unittest
 import shutil
 from typing import Dict
+from unittest import mock
 
-from atcodertools.client.atcoder import AtCoderClient, CaptchaError
+import requests
+
+from atcodertools.client.atcoder import AtCoderClient, CaptchaError, MAX_REQUEST_ATTEMPTS, PageNotFoundError
 from atcodertools.client.models.contest import Contest
 from atcodertools.client.models.problem import Problem
 from atcodertools.common.language import CPP
@@ -40,6 +43,14 @@ def create_fake_request_func(get_url_to_resp: Dict[str, MockResponse] = None,
         return post_url_to_resp.get(url)
 
     return func
+
+
+def http_resp(status_code: int, headers: Dict[str, str] = None, text: str = ""):
+    resp = requests.Response()
+    resp.status_code = status_code
+    resp.headers.update(headers or {})
+    resp._content = text.encode()
+    return resp
 
 
 def restore_client_after_run(func):
@@ -191,6 +202,56 @@ class TestAtCoderClientMock(unittest.TestCase):
         self.assertEqual(submitted_source_code, "Kyuuridenamida\n")
         self.assertTrue(os.path.exists(os.path.join(
             test_dir, "exec_after_submit_is_completed")))
+
+    @mock.patch('time.sleep')
+    def test_request_retries_get_after_429_and_honors_retry_after(self, mock_sleep):
+        with mock.patch.object(self.client._session, 'get', side_effect=[
+            http_resp(429, {"Retry-After": "7"}),
+            http_resp(429),
+            http_resp(200, text="ok"),
+        ]) as mock_get:
+            resp = self.client._request("https://atcoder.jp/")
+
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(3, mock_get.call_count)
+        mock_sleep.assert_has_calls([mock.call(7), mock.call(2)])
+
+    @mock.patch('time.sleep')
+    def test_request_returns_429_after_max_attempts(self, mock_sleep):
+        with mock.patch.object(self.client._session, 'get',
+                               return_value=http_resp(429)) as mock_get:
+            resp = self.client._request("https://atcoder.jp/")
+
+        self.assertEqual(429, resp.status_code)
+        self.assertEqual(MAX_REQUEST_ATTEMPTS, mock_get.call_count)
+        self.assertEqual(MAX_REQUEST_ATTEMPTS - 1, mock_sleep.call_count)
+
+    @mock.patch('time.sleep')
+    def test_request_does_not_retry_post_on_429(self, mock_sleep):
+        with mock.patch.object(self.client._session, 'post',
+                               return_value=http_resp(429)) as mock_post:
+            resp = self.client._request("https://atcoder.jp/", method="POST")
+
+        self.assertEqual(429, resp.status_code)
+        self.assertEqual(1, mock_post.call_count)
+        mock_sleep.assert_not_called()
+
+    @restore_client_after_run
+    def test_download_problem_content_raises_http_error_on_error_status(self):
+        problem = Problem(Contest("abc436"), "B", "abc436_b")
+        self.client._request = create_fake_request_func(
+            {problem.get_url(): http_resp(429)})
+
+        with self.assertRaises(requests.HTTPError):
+            self.client.download_problem_content(problem)
+
+    @restore_client_after_run
+    def test_download_all_contests_reports_status_when_archive_has_no_table(self):
+        self.client._request = create_fake_request_func(
+            {"https://atcoder.jp/contests/archive?page=1&lang=ja": http_resp(429)})
+
+        with self.assertRaisesRegex(PageNotFoundError, "HTTP 429"):
+            self.client.download_all_contests()
 
 
 if __name__ == "__main__":
