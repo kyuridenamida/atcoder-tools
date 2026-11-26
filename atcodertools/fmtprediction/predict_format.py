@@ -40,6 +40,12 @@ from atcodertools.fmtprediction.tokenize_format import (
 from atcodertools.fmtprediction.tokenize_format import (
     collapse_string_runs,
 )
+from atcodertools.fmtprediction.query_ir_producer_seams import (
+    _create_tagged_query_typed_format_with_shadow,
+)
+from atcodertools.fmtprediction.query_block_splice import (
+    splice_query_definition_block,
+)
 
 
 MAX_SAMPLE_CASE_COUNT = 100000
@@ -1207,6 +1213,106 @@ def predict_multi_case_format(
     return valid_predictions[0]
 
 
+def _predict_same_line_ragged_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    from atcodertools.fmtprediction import (
+        ragged_row,
+        two_line_ragged_row,
+    )
+
+    try:
+        prediction = (
+            ragged_row
+            .predict_same_line_ragged_rows(
+                content
+            )
+        )
+    except (
+        ragged_row
+        .NoRaggedRowPredictionError,
+        ragged_row
+        .MultipleRaggedRowPredictionsError,
+    ):
+        try:
+            prediction = (
+                two_line_ragged_row
+                .predict_two_line_ragged_rows(
+                    content
+                )
+            )
+        except (
+            two_line_ragged_row
+            .NoTwoLineRaggedRowPredictionError,
+            two_line_ragged_row
+            .MultipleTwoLineRaggedRowPredictionsError,
+        ):
+            raise NoPredictionResultError from None
+
+    return (
+        FormatPredictionResult
+        .create_ragged_row_typed_format(
+            prediction.prefix_format,
+            prediction.schema,
+            prediction.var_to_type,
+            prediction.suffix_format,
+        )
+    )
+
+
+def _predict_tagged_query_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    from atcodertools.fmtprediction import (
+        tagged_query,
+    )
+
+    try:
+        prediction = (
+            tagged_query
+            .predict_tagged_queries(
+                content
+            )
+        )
+    except (
+        tagged_query
+        .NoTaggedQueryPredictionError,
+        tagged_query
+        .MultipleTaggedQueryPredictionsError,
+    ):
+        raise NoPredictionResultError from None
+
+    return (
+        (
+            _create_tagged_query_typed_format_with_shadow(
+                FormatPredictionResult.create_tagged_query_typed_format,
+                prediction.format,
+                prediction.var_to_type,
+            )
+        )
+    )
+
+
+def _predict_spliced_query_format(
+    content: ProblemContent,
+) -> FormatPredictionResult:
+    """クエリ行の書式が別ブロックにある形式を、展開して通常経路で予測する。"""
+    spliced = splice_query_definition_block(content)
+
+    if spliced is None:
+        raise NoPredictionResultError
+
+    return _predict_single_case(spliced)
+
+
+_SINGLE_CASE_PREDICTORS = (
+    _predict_single_case,
+    _predict_same_line_ragged_format,
+    _predict_tagged_query_format,
+    _predict_spliced_query_format,
+)
+
+
 def predict_format(
     content: ProblemContent,
 ) -> FormatPredictionResult:
@@ -1220,7 +1326,13 @@ def predict_format(
             content
         )
     except NoMultiCaseFormatFoundError:
-        return _predict_single_case(content)
+        for predictor in _SINGLE_CASE_PREDICTORS:
+            try:
+                return predictor(content)
+            except NoPredictionResultError:
+                continue
+
+        raise NoPredictionResultError
     except MultipleMultiCaseFormatsError as error:
         raise MultiplePredictionResultsError(
             error.candidates
